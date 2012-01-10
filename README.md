@@ -12,8 +12,7 @@ It is comprised of three parts.
 
 # About jQ.Mobi
 
-While doing mobile development, we quickly found there was no place for the famous query selector libraries.  They often performed poorly, were large in size, and targeted legacy desktop browsers (IE6).  There were a few new libraries targeting
-mobile development, but speed tests showed they actually performed worse.
+While doing mobile development, we quickly found there was no place for the famous query selector libraries.  They often performed poorly, were large in size, and targeted legacy desktop browsers (IE6).  There were a few new libraries targeting mobile development, but speed tests showed they actually performed worse.
 
 We started talking to our development community and asked them what they wanted.  The key features were
 
@@ -23,13 +22,14 @@ We started talking to our development community and asked them what they wanted.
 
 3. Only needs to support a small subset of commands
 
-Rather then try to improve another library, we found it easier to build one from the ground up, but recognizing the groundwork other frameworks laid out.  By doing this, we were able to identify simple ways to increase speed performance.  Our tests repeadidtly showed we were 2x or more faster at single operation commands.  
+Rather then try to improve another library, we found it easier to build one from the ground up, but recognizing the groundwork other frameworks laid out.  By doing this, we were able to identify simple ways to increase speed performance.  Our tests repeatedly showed we were 2x or more faster at single operation commands. 
+ 
 All the libraries performed similar when operations were performed on a group of elements.
 
 
 # Using jQ.Mobi
 
-To use jQ.Mobi include the script in your html file.  You can use the pre-build minified version.
+To use jQ.Mobi, include the script in your html file.  You can use the pre-built minified version.
 
 ``` js
 <script src="jq.mobi.min.js"></script>
@@ -150,8 +150,8 @@ If the url contains the pattern =? in it, a jsonP request will be made.  These c
 ``` js
 $.os.webkit     //True if webkit found in the user agent
 $.os.android    //True if anroid useragent
-$.os.ipad      //True if iPad useragent
-$.os.iphone     //Tru if iPhone user agent
+$.os.ipad       //True if iPad useragent
+$.os.iphone     //True if iPhone user agent
 $.os.webos      //True if WebOS detected
 $.os.touchpad   //True if WebOS and Touchpad user agent
 $.os.ios        //True if iPad or iPhone
@@ -173,7 +173,7 @@ jQ.Mobi is built with the extendability to add plugins.  To create a plugin, you
 
 # Contribute
 
-You can contribute to the core code by forking it and make a pull request.  Please keep in mind we do not want to add functionality that is a one-off case.  These are best dealt with plugins
+You can contribute to the core code by forking it and make a pull request.  Please keep in mind we do not want to add functionality that is a one-off case.  These are best dealt with via plugins.
 
 
 # Bugs
@@ -186,7 +186,7 @@ Please use github to report any bugs found.  Please provide the following
 
 3. Test cases
 
-4. Deescription of Error
+4. Description of the Error
 
 5. Expected result
 

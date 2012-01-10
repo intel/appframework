@@ -1,10 +1,10 @@
 # jQ.Ui
 
-jQ.Ui is a UI/UX framework for building jQ.Mobi mobile apps targeted at the Webkit browser
+jQ.Ui is a UI/UX framework for building jQ.Mobi mobile apps targeted at the Webkit browser.
 
 # About
 
-We've had a lot of requests for a UI framework.  There are a numerous mobile frameworks, but cross platform performance is not the best.  Some work great on iOS, but lack performance on android.  We wanted to create a lightweight framework that is simple for users.  We do not want you to be writing crazy HTML, JavaScript, or CSS.  
+We've had a lot of requests for a UI framework.  There are a numerous mobile frameworks, but cross platform performance is not the best.  Some work great on iOS, but lack performance on Android.  We wanted to create a lightweight framework that is simple for users.  We do not want you to be writing crazy HTML, JavaScript, or CSS.  
 
 # Demo
 
@@ -12,8 +12,7 @@ Please see the kitchensink application as it was built using jQ.Ui
 
 # How to use jQ.Ui
 
-To use jQ.Ui, you need to include the javascript files.  We suggest using jq.ui.min.js which has all the necesary files, otherwise include the source for all of them, 
-along with the CSS.  A global variable, $.ui is created by default.  This is what you will use if you need to access it
+To use jQ.Ui, you need to include the javascript files.  We suggest using jq.ui.min.js which has all the necesary files, otherwise include the source for all of them, along with the CSS.  A global variable, $.ui is created by default.  This is what you will use if you need to access it.
 
 We have three special registered div blocks for your layout based off id's.  They are the header, content, and navbar. 
 
@@ -21,7 +20,7 @@ We have three special registered div blocks for your layout based off id's.  The
 
 * content - this is the content area.  You do not need to add anything here.  All page divs will be added here.  If you put a div in there, it will be shown first.
 
-    Each div inside will need the class "panel".  jQ.Ui will search for all elements with that classname and add them automatically.  These will scroll by default
+    Each div inside will need the class "panel".  jQ.Ui will search for all elements with that classname and add them automatically.  These will scroll by default.
 	
 * navbar - this is the bottom navbar.  You can put your navigation buttons here.  We reset the history queue when you switch the navigation buttons.  This is optional.  If you do not include it, it will not be shown.
 
@@ -29,7 +28,7 @@ We have three special registered div blocks for your layout based off id's.  The
 
 * To add divs to the content, simply set the class to "panel".  This is a special css class that we search for at startup.
  
-* jq.scroller is added automatically, along with jq.selectBox, jq.password, and jq.css3animate.
+* jq.scroller is added automatically, along with jq.selectBox, jq.passwordBox, and jq.css3animate.
 
 * Linking to pages - You can link two ways.  You can link to a file by setting the URL, which will load via AJAX.  Or you can set the href property to "#div_id"
 ``` html
@@ -37,7 +36,6 @@ We have three special registered div blocks for your layout based off id's.  The
 ```
 	
 * Ajax - using AppMobi, you can do cross domain requests.   We will crawl the pages and wire any links found.  We added new features to add the content to the dom, force refresh and more.
- 
  
 
 # jQ.Ui semi-public methods
@@ -161,7 +159,7 @@ function getApps(targetDiv,obj)
 
 # Contribute
 
-You can contribute to the core code by forking it and make a pull request.  Please keep in mind we do not want to add functionality that is a one-off case.  These are best dealt with plugins
+You can contribute to the core code by forking it and make a pull request.  Please keep in mind we do not want to add functionality that is a one-off case.  These are best dealt with via plugins.
 
 
 # Bugs

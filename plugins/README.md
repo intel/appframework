@@ -6,7 +6,7 @@ jQ.Plugins are plugins to use with jQ.Mobi
 
 At AppMobi, we use our own tools to build apps and these libraries came out of our internal needs.  Two libraries require AppMobi to use, while the rest can be used for AppMobi and general mobile web development.
 
-jq.web.min.js contains a minified version of functions that can be used for mobile web development
+jq.web.min.js contains a minified version of functions that can be used for mobile web development.
 
 
 The sources are in the src/ folder.  For demos please see the kitchensink app.
@@ -26,31 +26,31 @@ jq.carousel
 
 * A CSS3 carousel library.  You can create vertical or horizontal carousels.
 
-jq.swipeListener
+jq.swipe
 
 * This detects swipe events on an element.  You can set the threshold of pixels they must move for veritcal or horizontal.
 
-* Executes a callback function with an object as a parameter that indicates if the swipe was north, south, east, west.  
+* Executes a callback function with an object as a parameter that indicates if the swipe was north, south, east, or west.  
 
 jq.template
 
-* A template parsing library, similar to popular scripting languages syntax.  The parsing engine is John Resig's micro template engine
+* A template parsing library, similar to popular scripting languages syntax.  The parsing engine is John Resig's micro template engine.
 
 jq.selectBox
 
-* A replacement for HTML select boxes on android devices.  There is a bug when -webkit-transform:translate3d is applied to elements, it causes an issue with painting the active area
+* A replacement for HTML select boxes on Android devices.  There is a bug when -webkit-transform:translate3d is applied to elements, it causes an issue with painting the active area.
 
-* This will find all select boxes in an element and replace them with the new widget
+* This will find all select boxes in an element and replace them with the new widget.
 
 * Old select box stays, so it is backwards compatibile with any code/interaction.  
 
 jq.passwordBox
 
-* A replacement for HTML password boxes on android devices.  There is a bug when -webkit-transform:translate3d is applied to elements, it causes an issue with painting the focused box on the page.
+* A replacement for HTML password boxes on Android devices.  There is a bug when -webkit-transform:translate3d is applied to elements, it causes an issue with painting the focused box on the page.
 
-* This will find all password boxes in an element and replace them with the new widget
+* This will find all password boxes in an element and replace them with the new widget.
 
-* Old password boxes stays, so it is backwards compatibile with any code/interaction
+* Old password boxes stays, so it is backwards compatibile with any code/interaction.
 
 jq.css3animate
 
@@ -61,7 +61,7 @@ jq.drawer
 * This is a pull widget like the notification bar on phones.  
 
 # AppMobi Libraries
-These libraries require AppMobi to work
+These libraries require AppMobi to work.
 
 jq.shake
 
@@ -71,7 +71,7 @@ jq.shake
 
 jq.social (coming soon in 3.4.1)
 
-* A wrapper utility for making oAuth calls using AppMobi
+* A wrapper utility for making oAuth calls using AppMobi.
 
 # How to use jQ.Web libraries
 
@@ -92,7 +92,7 @@ To use jq.alphaTable, you must also include the jq.scroller library and do the f
 </div>
 ``` 
 
-3. Call the javascript function to create the object.  The first paramter is the ID for the scroller, the second is the scroller object.  The third is optional config parameters
+3. Call the javascript function to create the object.  The first paramter is the ID for the scroller, the second is the scroller object.  The third is optional config parameters.
 
 ``` js
 var alphaTable = $("#contentDIV").alphaTable(scroller,{prefix:"contacts_",listCssClass:"cssClassName"});
@@ -103,7 +103,7 @@ There are two optional parameters
 ```` js
 var options{
    prefix:"contacts_", //prefix for your divs
-   listCssClass:"listTable" //CSS class name to style the alphabet list.  Youc an position it, set the background color, etc.
+   listCssClass:"listTable" //CSS class name to style the alphabet list.  You can position it, set the background color, etc.
 }
 ``` 
 
@@ -156,7 +156,7 @@ You can also have it scroll to a specific position
 scroller.scrollTo({x:-100,y:-200});
 ```
 
-If you want to make persistant scrollbars, override the opacity style for the class
+If you want to make persistent scrollbars, override the opacity style for the class
 
 ``` css
 .scrollBarV { opacity:.8 !important}
@@ -229,9 +229,10 @@ var swipeListener = $(document).swipe({vthreshold:30,hthreshold:50,callBack:func
 # jq.template
 
 The template parsing library is John Resig's micro templating, with some fixes and enhancements.  http://ejohn.org/blog/javascript-micro-templating/
+
 To use jq.template you must do the following
 
-1. Create your template.  The easiest way is to create &lt;script> tags with the content type of "text/html" and set an id
+1. Create your template.  The easiest way is to create <script> tags with the content type of "text/html" and set an id
 
 ``` html
 <script type='text/html' id='user_info'>
@@ -267,16 +268,16 @@ var user={
 
 # jq.selectBox
 
-Currently, there exists a bug in Android  webkit with -webkit-transform:translate being applied to an element that has &lt;select> elements in it.  The second the translate position is changed, 
+Currently, there exists a bug in Android webkit with -webkit-transform:translate being applied to an element that has <select> elements in it.  The second the translate position is changed, 
 the active box for the select box changes. It could be above or below the actual select box, making the user experience a disaster.  What this does is replaces all select boxes with a custom widget
-that is similar to the android picker.  The old select is still there and backwards compatible with other libraries for getting/setting values.
+that is similar to the Android picker.  The old select is still there and backwards compatible with other libraries for getting/setting values.
 
 To use jq.selectBox you must do the following
 
 1. Make sure your current select boxes are wrapped in a span tag
 
 ``` html
-<span><select id="myid"><option>1</option></select>
+<span><select id="myid"><option>1</option></select></span>
 ```
 
 2. On the document.load or appMobi.device.ready listener, you must create an object, then call getOldSelects on the elements (div/spans/document) you want.
@@ -285,8 +286,7 @@ To use jq.selectBox you must do the following
 $.selectBox.getOldSelects("selectTest");
 ```
 
-getOldSelects takes in the id of the element you want to search for select tags in.  Ideally, you would call it on all the divs that have select boxes in it.  There are issues with Google Maps, and other libraries, that inject their own select
-boxes into the DOM.
+getOldSelects takes in the id of the element you want to search for select tags in.  Ideally, you would call it on all the divs that have select boxes in it.  There are issues with Google Maps, and other libraries, that inject their own select boxes into the DOM.
 
 To theme this, you can override the inline styles using css.  Please make sure you mark each entry with !important
 
@@ -329,7 +329,7 @@ width:30px !important;
 
 # jq.passwordBox
 
-Currently, there exists a bug in  Android  webkit with -webkit-transform:translate being applied to an element that has &lt;input type="password"> elements in it.  The second the translate position is changed, 
+Currently, there exists a bug in Android webkit with -webkit-transform:translate being applied to an element that has <input type="password"> elements in it.  The second the translate position is changed, 
 the overlay for the password is in a different position, making it look like another input box appears.  What this does is replaces the password box with an input box that updates the content as it goes with an asterik to simulate a password box
 
 To use jq.passwordBox you must do the following
@@ -388,7 +388,7 @@ $("#div").css3animate(options);
 
 ```
 
-You can chain animations by passing in a animation in the callback function
+You can chain animations by passing in an animation in the callback function
 
 ``` js
 $("#animate").css3Animate({x : 20,y : 30,time : "300ms",callback : function() {$("#animate").css3Animate({x : 20,y : 30,time : "500ms",previous : true,callback : function() {reset();}});}});
@@ -414,6 +414,12 @@ This is a pull widget like the nofication bar on phones.  Users can pull down or
 to use jq.draw you must do the following
 
 1) Create the container div and give it an id
+<div id="drawer" style="position:relative;top:-370px;height:320px;background:black;z-index:0">
+   This is some content<br><br>
+   This is some content<br><br>
+   This is some content<br><br>
+   This is some content<br><br>
+</div>
 
 2) Create the handle class inside the above div that the users will "pull" and assign the class 'drawer_handle'
 
@@ -441,7 +447,7 @@ This is a wrapper library for making oAuth requests using AppMobi.oauth function
  
 To use jq.social you must do the following
 
-1. Register the oauth service in the Enterprise Control Panel
+1. Register the oauth service in the Enterprise Control Panel (enterprise.appmobi.com)
 
 2. Create an object for each service
 
@@ -485,7 +491,7 @@ To use jq.shake you must do the following
 jq.shake(function(){console.log("Shake Detected");});
 ```
 
-An optional second parameter is threshold for declaring accelerometer movement as a shake.  The default is 5.  Lowering it will trigger the callback more, raising it will trigger it less.
+An optional second parameter is a threshold for declaring accelerometer movement as a shake.  The default is 5.  Lowering it will trigger the callback more, raising it will trigger it less.
 
 ``` js
 jq.shake(function(){console.log("Shake Detected");},10); //More shakes needed to trigger the callback
@@ -493,7 +499,7 @@ jq.shake(function(){console.log("Shake Detected");},10); //More shakes needed to
 
 # Contribute
 
-You can contribute to the core code by forking it and make a pull request.  Please keep in mind we do not want to add functionality that is a one-off case.  These are best dealt with plugins
+You can contribute to the core code by forking it and make a pull request.  Please keep in mind we do not want to add functionality that is a one-off case.  These are best dealt with via plugins.
 
 
 # Bugs
