@@ -1,0 +1,622 @@
+/**********************************************************
+	GENERAL UI ELEMENTS
+**********************************************************/
+
+* {
+	-webkit-user-select:none; /* Prevent copy paste for all elements except text fields */
+	-webkit-tap-highlight-color:rgba(255, 255, 255, 0); /* set highlight color for user interaction */
+} 
+
+input,textarea { -webkit-user-select:text; } /* allow users to select text that appears in input fields */
+
+* {	
+	margin:0;
+	padding:0;
+} /* Remove default padding and margins for all elements */
+
+img { border:none; } /* Remove default borders for images */
+
+body {
+	overflow-x:hidden;
+	-webkit-text-size-adjust:none;
+	font-family:Arial, Helvetica, sans-serif;
+	color:#fff;
+	font-size:14px;
+	background:rgba(19,29,38,1); /* primary background color */
+	
+	
+		display: -webkit-box;
+        /* We want to layout our first container vertically */
+        -webkit-box-orient: vertical;
+        /* we want our child elements to stretch to fit the container */
+	-webkit-box-align:stretch;
+	
+} /* General styles that apply to elements not contained within other classes and styles */
+
+p {
+	color:#fff;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	line-height:18px;
+	background:#131d26;
+	padding:16px;
+	-webkit-box-shadow:rgba(0,0,0,0.5) 0px 0px 24px inset; box-shadow:rgba(0,0,0,0.5) 0px 0px 24px inset; /* Applies an inner shadow to the text area */
+} /* Paragraph class used for text areas. */
+
+.modal {
+	z-index:9999;
+	position:absolute;
+	background:inherit;
+	overflow:hidden;
+	left:0px;
+	top:0px;
+	height:100%;
+	width:100%;
+	display:none;
+} /* Sets up styles for modal panels, which appear above all other UI elements */
+
+.horzRule {
+	position:relative;
+	display:block;
+	background-image:-webkit-gradient(linear, left top, right top, from(rgba(61,61,61,1)), to(rgba(61,61,61,1)), color-stop(.3,#999), color-stop(.7,#999));
+	width:100%;	height:1px;
+} /* Horizontal line. */
+
+.jqmScrollbar { background:white !important; } /* Sets the color of the scrollbar */
+
+
+
+/**********************************************************
+	CUSTOM FONT SETUP
+**********************************************************/
+/* appMobi has licensed Eurostile web font usage. Unless you have purchased a license for Eurostile, you may NOT legally use these font files. */
+/* There are many free use web fonts available from Font Squirrel, Google Web Fonts and other outlets */
+
+
+
+
+
+/**********************************************************
+	header
+**********************************************************/
+body > #header {
+	display:block;
+	z-index:250;
+	-webkit-box-sizing:border-box; box-sizing:border-box;
+	height:48px;
+	width:100%;
+	background-image:-webkit-gradient(linear, left top, left bottom, from(rgba(16,25,33,1)), to(rgba(14,23,32,1)), color-stop(.5, rgba(27,36,46,1)), color-stop(.5, rgba(14,23,32,1)));
+	-webkit-box-shadow:0px 0px 24px rgba(0,0,0,0.8); box-shadow:0px 0px 24px rgba(0,0,0,0.8);
+} /* This is masthead bar that appears at the top of the UI */
+
+#header > h1 {
+	position:absolute;
+	overflow:hidden;
+	left:45%;
+	margin:1px 0px 0px -75px;
+	height:48px; width:150px;
+	font-family:'Eurostile-Black', Eurostile, Helvetica, Arial, sans-serif;
+	font-weight:normal;
+	font-size:24px;
+	line-height:48px;
+	text-shadow:rgba(0,0,0,0.8) 0px -1px 0px 1px;
+	text-align:center;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+	color:#fff;
+} /* This is text that appears in the header at the top of the screen */
+
+body[orient="landscape"] > #header > h1 {
+	margin-left:-125px;
+	width:250px;
+} /* Updates the available text area and positioning when the screen is held in landscape orientation. */
+
+
+
+/**********************************************************
+	BUTTON STYLES
+**********************************************************/
+#backButton {
+	display:block;
+	position:absolute;
+	left:0px;
+	top:0px;
+	max-width:50px;
+	text-overflow:ellipsis;
+} /* Sets up positioning of the back button which appears in the header */
+
+#backButton > div {
+	max-width:50px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+} /* sets up sizing and handling of excess text for the type in the back button */
+
+.button {
+	color:#333;
+	cursor:pointer;
+	display:inline-block;
+	font-weight:bold;
+	font-size:14px;
+	line-height:36px;
+	position:relative;
+	text-decoration:none;
+	text-align:center;
+	text-shadow:#fff 0 1px 0;
+	height:36px; min-width:40px;
+	padding:0px 8px;
+	margin-top:6px; margin-left:6px; 
+	text-overflow:ellipsis; 
+	-webkit-border-radius:6px; border-radius:6px;
+	background-image:-webkit-gradient(linear, left top, left bottom, from(#fff), to(#999), color-stop(.5,#fff), color-stop(.5,#ccc)); background-image:linear-gradient(left top, left bottom, from(#fff), to(#999), color-stop(.5,#fff), color-stop(.5,#ccc));
+} /* Styling for CSS-generated buttons, including the back button. These buttons can bue used anywhere in the UI. */
+
+.button.pressed {
+	color:#fff;
+	text-shadow:#2e4987 0 1px 0;
+	background-color:#5884d6;
+	border-color:#7488b8;
+	background-image:-webkit-gradient(linear,left top,left bottom, color-stop(0.01, #eee), color-stop(0.05, #709de7), color-stop(0.70, #5884d6), color-stop(1, #4470ca));
+} /* behavior of button for touch interaction */
+
+a.customBackButton {
+	float:right;
+	display:block;
+	width:44px; height:44px;
+	background:url("images/back.png"), -webkit-gradient(linear, left top, left bottom, from(#161F28), to(#1D2730), color-stop(.5,#161F28), color-stop(.5,#1D2730));
+	background-position:0px 0px, left top;
+	background-repeat:no-repeat;
+	border-top-left-radius:6px; border-bottom-left-radius:6px; -webkit-border-top-left-radius:6px; -webkit-border-top-left-radius:6px;
+	-webkit-box-shadow:0px 0px 24px rgba(0,0,0,0.8); box-shadow:0px 0px 24px rgba(0,0,0,0.8);
+	margin-top:2px;
+} /* This is the custom, graphical button shown in JQMobi by default */
+
+a.customBackButton.press {
+	float:right;
+    display:block;
+	width:44px; height:44px;
+	background:url("images/back.png"), -webkit-gradient(linear, left top, left bottom, from(rgba(56,65,74,1)), to(rgba(33,38,43,1)), color-stop(.5,rgba(56,65,74,1)), color-stop(.5,rgba(33,38,43,1)));
+	background-position:0px -44px, left top;
+	background-repeat:no-repeat;
+	border-top-left-radius:6px; border-bottom-left-radius:6px; -webkit-border-top-left-radius:6px; -webkit-border-top-left-radius:6px;
+	-webkit-box-shadow:0px 0px 24px rgba(0,0,0,0.8); box-shadow:0px 0px 24px rgba(0,0,0,0.8);
+	margin-top:2px;
+}
+
+
+
+/**********************************************************
+	CONTENT AREA
+**********************************************************/
+#content{
+	z-index:180;
+	display:block;
+	position:relative;
+} /* Accounts for positioning of the content area, which is everything below the header and above the navbar. */
+
+.panel {
+	z-index:180;
+	width:100%;
+	height:100%;
+	display:none;
+	position:absolute; top:0px; left:-100%;
+	overflow:hidden;
+	background:rgba(19,29,38,1);
+} /* This class is applied to the divs that contain the various "views" or pages of the app. */
+
+
+
+/**********************************************************
+	TOOL BAR
+**********************************************************/
+/* Tool bar appears locked to the bottom of the screen. It is the primary navigation. can contain text or graphical navigation */
+#navbar {
+	z-index:1000;
+	text-align:center;
+	width:100%; height:62px; padding:0px 1px;
+	 background-image:-webkit-gradient(linear, left top, left bottom, from(rgba(16,25,33,1)), to(rgba(14,23,32,1)), color-stop(.5, rgba(27,36,46,1)), color-stop(.5, rgba(14,23,32,1)));
+	-webkit-box-shadow:0px 0px 24px rgba(0,0,0,0.8); box-shadow:0px 0px 24px rgba(0,0,0,0.8);
+}
+
+#navbar a {
+	
+	height:60px;
+	overflow:hidden;
+	display:inline-block;
+	font-family:Helvetica, Arial, sans-serif;
+	font-weight:bold;
+	font-size:12px;
+	text-decoration:none;
+	color:#a7a7a7;
+	text-align:center;
+	text-shadow:rgba(10,12,20,.9) 0px -1px 1px;
+	margin: 0px auto;
+	background-image:url('images/nav_icons.png');
+	width:62px;
+	line-height:100px;
+}
+
+#navbar a:active, #navbar a:focus, #navbar a:active:focus,  #navbar .selected{
+display:inline-block;
+font-family:Helvetica, Arial, sans-serif;
+font-weight:bold;
+color:#fff !important;
+background-image:url('images/nav_icons.png'), -webkit-gradient(linear, left top, left bottom, from(#000), to(#000), color-stop(.5,#000), color-stop(.5,rgba(15,22,29,1)));
+
+}
+
+
+/* CUSTOM NAVBAR */
+#navbar a:not(:last-of-type):after {
+	display: block;
+    content: "";
+    width: 1px;
+    height: 60px;
+    background: url('images/vert_divider.png') top right repeat-y;
+	float:right;
+}
+.navbar_home {
+
+}
+.navbar_js {
+background-position:-62px 0px;
+}
+.navbar_ui {
+background-position:-124px 0px;
+}
+.navbar_plugins {
+background-position:-186px 0px;
+}
+
+
+
+/**********************************************************
+	UL > LI 
+**********************************************************/
+/* The unordered list/list item classes are the basis of the secondary navigation used in JQ.Mobi: the stacked, listed menu system. */
+
+ul {
+	margin:0px; 
+	padding:0px;
+}
+ 
+ul > li {
+	display:block;
+	width:100%; height:34px;
+	list-style:none;
+	background:#39424b;
+} /* A plain, non-interactive list item--best suited to a heading. */
+
+ul > li > a {
+	display:block;
+	width:100%; height:34px;
+	font-family:'Eurostile-Bold', Eurostile, Helvetica, Arial, sans-serif;
+	font-weight:bold;
+	font-size:18px;
+	line-height:34px;
+	text-decoration:none;
+	color:#fff;
+	text-shadow:rgba(10,12,20,.9) 0px -1px 1px;
+	background:url('images/list_arrow.png'), url('images/horz_border.png'), -webkit-gradient(linear, left top, left bottom, from(rgba(56,65,74,1)), to(rgba(33,38,43,1)));
+	background-position:right center, center bottom, left top;
+	background-repeat:no-repeat;
+	background-size:20px 20px, 100% 1px, 100%;
+	padding-left:8px;
+	padding-right:-80px;
+} /* A touchable, interactive list item. */
+
+ ul > li > a[selected], ul > li > a:active {
+	color:#fff !important;
+	background:url('images/list_arrow_sel.png'), url('images/horz_border.png'), -webkit-gradient(linear, left top, left bottom, from(rgba(42,49,56,1)), to(rgba(33,38,43,1)));
+	background-position:right center, center bottom, left top;
+	background-repeat:no-repeat;
+	background-size:20px 20px, 100% 1px, 100%;
+} /* A selected and active states for interactive list items. */
+
+ul > li.group {
+	position:relative;
+	top:-1px;
+	margin-bottom:-2px;
+	border-top:1px solid #7d7d7d;
+	border-bottom:1px solid #999999;
+	padding:1px 10px;
+	background-image:-webkit-gradient(linear, left bottom, left top, color-stop(0.09, rgb(125,125,125)), color-stop(0.49, rgb(153,153,153)), color-stop(0.81, rgb(153,153,153)));
+	font-size:17px;
+	font-weight:bold;
+	text-shadow:rgba(0, 0, 0, 0.4) 0px 1px 0px;
+	color:#fff;
+}
+
+ul > li.group:first-child {
+	top:0;
+}
+
+h2 {
+	display:block;
+	width:95%; height:34px;
+	font-family:'Eurostile-Bold', Eurostile, Helvetica, Arial, sans-serif;
+	font-weight:bold;
+	font-size:18px;
+	line-height:34px; 
+	padding: 0px 8px 0px 8px;
+	color:#fff;
+	text-shadow:rgba(0,0,0,.9) 0px -1px 1px;
+	background:#39424b;
+} /* Header class used for non-navigable header bars (h1 is reserved for the header) */
+
+.collapsed { background:url('images/expand.png') right center no-repeat; }
+.expanded { background:url('images/collapse.png') right center no-repeat; } /* Use these classes in cooperation with LI elements for collapsible content. */
+
+
+
+/**********************************************************
+    MASK
+**********************************************************/
+
+/**********************************************************
+	UI
+**********************************************************/	
+.ui-icon {
+	background: 						#666;
+	background: 						rgba(0,0,0,.4);
+	background-repeat: no-repeat;
+	border-radius: 						9px;
+}
+
+.ui-loader { display: none; position: absolute; opacity: .85; z-index: 100; left: 50%; width: 200px; margin-left: -130px; margin-top: -35px; padding: 10px 30px; background: #666;background:rgba(0,0,0,.4);border-radius:9px;}
+.ui-loader h1 { font-size: 15px; text-align: center; }
+.ui-loader .ui-icon { position: static; display: block; opacity: .9; margin: 0 auto; width: 35px; height: 35px; background-color: transparent; }
+
+.spin  {
+	-webkit-transform: rotate(360deg);
+	-webkit-animation-name: spin;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-iteration-count:  infinite;
+}
+@-webkit-keyframes spin {
+	from {-webkit-transform: rotate(0deg);}
+  	to {-webkit-transform: rotate(360deg);}
+}
+
+.ui-icon-loading {
+	background-image: url(images/ajax-loader.png);
+	width: 40px;
+	height: 40px;
+	border-radius: 20px;
+	background-size: 35px 35px;
+}
+	
+.ui-corner-all {
+	border-radius: 						.6em;
+}
+#jQui_mask {position:absolute;top:45%;}
+
+
+/**********************************************************
+	FORM ELEMENTS
+**********************************************************/
+
+* { -webkit-box-sizing:border-box; box-sizing:border-box; }
+
+fieldset h4 {
+	text-align:left;
+	font-family:'Eurostile-Bold', Eurostile, Helvetica, Arial, sans-serif;
+	color:#a8b4bb;
+	font-weight:bold;
+	font-size:18px;
+	line-height:21px;
+	margin-bottom:-8px; margin-top:8px;
+	text-shadow:1px 1px 3px rgba(0, 0, 0, 0.9);
+} /* Style for subhead for a group of labels/inputs within a fieldset. */
+
+
+fieldset {
+	margin:12px 8px;
+	padding:12px 18px 12px 18px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	border:1px solid #595d61;
+	outline:0;
+	width:95%;
+	background:url('images/stripe_bg.png') repeat;
+} /* Styles the border line, background image and spacing for fieldsets. */
+
+fieldset p {
+	display:block;
+	position:relative;
+	overflow:hidden;
+	padding:0px;
+	padding-bottom:8px;
+	padding-top:8px;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	line-height:10px;
+	background:transparent;
+	height:37px !important;
+	-webkit-box-shadow:none;
+} /* The paragraph within a fieldset is used as a wrapper to help manage the replacement of native input elements. */
+
+legend {
+	margin:0;
+	font-family:'Eurostile-Bold', Eurostile, Helvetica, Arial, sans-serif;
+	font-size:18px;
+	font-weight:bold;
+	overflow:hidden;
+	color:#ccc;
+	text-transform:uppercase;
+	text-shadow:1px 1px 3px rgba(0, 0, 0, 0.9);
+} /* This is the name that appears at the top left of the fieldset. */
+
+textarea.jq-ui-forms { 
+	display:block;
+	margin-top:4px; margin-bottom:18px;
+	padding:8px;
+	border:solid 1px #999;
+	outline:0;
+	color:#fff;
+	background:#595D61;
+	-webkit-border-radius:6px; border-radius:6px;
+	-webkit-box-shadow:inset 2px 2px 6px rgba(0,0,0,.5); box-shadow:inset 2px 2px 6px rgba(0,0,0,.5);
+	width:266px;
+	height:150px;
+	line-height:120%;
+} /* These properties determine the look of textarea inputs. */
+
+
+input.jq-ui-forms { 
+	
+	display:inline-block;
+	width:200px;
+	margin-top:4px; margin-bottom:12px;
+	padding:8px;
+	border:solid 1px #999;
+	outline:0;
+	color:#fff;
+	background:#595D61;
+	-webkit-border-radius:6px; border-radius:6px;
+	-webkit-box-shadow:inset 2px 2px 6px rgba(0,0,0,.5); box-shadow:inset 2px 2px 6px rgba(0,0,0,.5);
+} /* These properties combine to create the look of the input fields. */
+
+
+
+input.jq-ui-forms:hover, textarea.jq-ui-forms:hover, input.jq-ui-forms:focus, textarea.jq-ui-forms:focus { border-color:#ccc; } /* Changes the border color of the input field while active. */
+
+
+input.jq-ui-forms[type=checkbox] ,input.jq-ui-forms[type=radio]  {
+	position:absolute;
+	left:0;
+	opacity:0;
+	margin-bottom:30px;
+} /* Blocks rendering of the native radio controls. */
+
+input.jq-ui-forms[type=checkbox] + label,input.jq-ui-forms[type=radio] + label { 
+	
+	float:left;
+	font-size:15px;
+	font-weight:bold;
+	line-height:26px; /* changing this value will change the vertical relationship to the radios & checkboxes. */
+	margin-left:10px;
+	padding-left:30px;
+	background:url('./images/custom_inputs.png') 0 0px no-repeat;
+	background-repeat:none;
+	height:25px;
+	
+} /* Styling for the labels. */
+
+
+/* Following block of paragraph classes sets up the usage of the custom radio and checkbox graphics. */
+
+
+	input.jq-ui-forms[type=radio] + label { background-position:0 -225px; }
+	input.jq-ui-forms[type=checkbox] + label { background-position:0 -25px; }
+	
+	/* Styles for "checked." */
+	input.jq-ui-forms[type=radio]:checked + label { background-position:0 -300px; }
+	input.jq-ui-forms[type=radio]:hover:checked + label,
+	input.jq-ui-forms[type=radio]:focus:checked + label,
+	input.jq-ui-forms[type=radio]:checked + label:hover,
+	input.jq-ui-forms[type=radio]:focus:checked + label { background-position:0 -300px; }
+	
+	input.jq-ui-forms[type=checkbox]:checked + label { background-position:0 -100px; }
+	input.jq-ui-forms[type=checkbox]:hover:checked + label,
+	input.jq-ui-forms[type=checkbox]:focus:checked + label,
+	input.jq-ui-forms[type=checkbox]:checked + label:hover,
+	input.jq-ui-forms[type=checkbox]:focus:checked + label { background-position:0 -100px; }
+	
+	
+	/* Styles for "hover/focus." */
+	input.jq-ui-forms[type=checkbox]:hover + label,
+	input.jq-ui-forms[type=checkbox]:focus + label,
+	input.jq-ui-forms[type=checkbox] + label:hover { background-position:0 -0x; }
+	
+	input.jq-ui-forms[type=radio]:hover + label,
+	input.jq-ui-forms[type=radio]:focus + label,
+	input.jq-ui-forms[type=radio] + label:hover { background-position:0 -200px; }
+	
+	/* Styles for "active." */
+	input.jq-ui-forms[type=checkbox]:active + label,
+	input.jq-ui-forms[type=checkbox] + label:hover:active { background-position:0 -0px; }
+	
+	input.jq-ui-forms[type=radio]:active + label,
+	input.jq-ui-forms[type=radio] + label:hover:active { background-position:0 -200px; }
+	
+	
+	input.jq-ui-forms[type=checkbox]:active:checked + label,
+	input.jq-ui-forms[type=checkbox]:checked + label:hover:active { background-position:0 -100px; }
+	
+	input.jq-ui-forms[type=radio]:active:checked + label,
+	input.jq-ui-forms[type=radio]:checked + label:hover:active { background-position:0 -300px; }
+	
+	/* Styles for "disabled." */
+	input.jq-ui-forms[type=checkbox]:disabled + label,
+	input.jq-ui-forms[type=checkbox]:hover:disabled + label,
+	input.jq-ui-forms[type=checkbox]:focus:disabled + label,
+	input.jq-ui-forms[type=checkbox]:disabled + label:hover,
+	input.jq-ui-forms[type=checkbox]:disabled + label:hover:active { background-position:0 -175px; opacity:.5 !important; }
+	
+	input.jq-ui-forms[type=radio]:disabled + label,
+	input.jq-ui-forms[type=radio]:hover:disabled + label,
+	input.jq-ui-forms[type=radio]:focus:disabled + label,
+	input.jq-ui-forms[type=radio]:disabled + label:hover,
+	input.jq-ui-forms[type=radio]:disabled + label:hover:active { background-position:0 -250px; opacity:.5 !important; }
+	
+	input.jq-ui-forms[type=checkbox]:disabled:checked + label,
+	input.jq-ui-forms[type=checkbox]:hover:disabled:checked + label,
+	input.jq-ui-forms[type=checkbox]:focus:disabled:checked + label,
+	input.jq-ui-forms[type=checkbox]:disabled:checked + label:hover,
+	input.jq-ui-forms[type=checkbox]:disabled:checked + label:hover:active { background-position:0 -200px; opacity:.5 !important; }
+	
+	input.jq-ui-forms[type=radio]:disabled:checked + label,
+	input.jq-ui-forms[type=radio]:hover:disabled:checked + label,
+	input.jq-ui-forms[type=radio]:focus:disabled:checked + label,
+	input.jq-ui-forms[type=radio]:disabled:checked + label:hover,
+	input.jq-ui-forms[type=radio]:disabled:checked + label:hover:active { background-position:0 -375px; opacity:.5 !important; }
+	
+	
+	
+
+	/********    slider controls */
+input.jq-ui-slider {
+	position:absolute;
+	left:0;
+	opacity:0;
+} /* Blocks rendering of the native radio controls. */
+
+	
+input.jq-ui-slider + label { 
+
+	float:left;
+	font-size:15px;
+	font-weight:normal;
+	line-height:108%; /* changing this value will change the vertical relationship to the radios & checkboxes. */
+	margin-left:10px;
+	padding-left:57px;
+	color:#fff; 
+	background:url('images/Off-On_Slider.png') 0 0px no-repeat;
+	height:16px;
+	width:57px;
+	display:inline-block;
+   -webkit-transition: all 0.3s  ease-in-out;
+
+} 
+	input.jq-ui-forms[type=radio]:active:checked + label,
+	input.jq-ui-forms[type=checkbox]:active:checked + label,
+	input.jq-ui-forms[type=radio]:active + label,
+	input.jq-ui-forms[type=checkbox]:active + label,
+	input.jq-ui-slider[type=checkbox]:checked + label ,
+	input.jq-ui-slider[type=radio]:checked + label 
+	{ background-position:-28px 0px; }
+	
+	input.jq-ui-slider[type=radio]:disabled:checked + label,
+	input.jq-ui-slider[type=radio]:focus:disabled:checked + label,
+	input.jq-ui-slider[type=checkbox]:disabled:checked + label,
+	input.jq-ui-slider[type=checkbox]:focus:disabled:checked + label
+	{ background-position:-28px 0px; opacity:.7 !important;}
+
+	/* Styles for "disabled." */
+	input.jq-ui-slider[type=checkbox]:disabled + label,
+	input.jq-ui-slider[type=checkbox]:focus:disabled + label,
+	input.jq-ui-slider[type=radio]:disabled + label,
+	input.jq-ui-slider[type=radio]:focus:disabled + label
+	{ background-position:0 0; opacity:.7 !important; }
+	
+

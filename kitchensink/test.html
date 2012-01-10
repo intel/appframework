@@ -1,0 +1,63 @@
+<html>
+<style>
+body{ 
+	height:200%;
+        /* This sets the containing element up to use a box layout */
+	display: -webkit-box;
+        /* We want to layout our first container vertically */
+        -webkit-box-orient: vertical;
+        /* we want our child elements to stretch to fit the container */
+	-webkit-box-align:stretch;
+}
+ 
+#header { 
+	height:50px; 
+	background-color:#cdcdcd;
+}
+ 
+#footer { 
+	height:30px; 
+	background-color:#cdcdcd;
+}
+ 
+#content {
+        /* content should take up 100% of the rest of the space */
+	-webkit-box-flex:1;
+}
+</style>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<script>
+
+var getViewportHeight=function(){
+	return window.innerHeight;
+};
+getDocumentHeight= function() {
+        return Math.max(this.getViewportHeight());
+    }
+
+
+window.addEventListener("load",function() {
+//document.body.style.height=getDocumentHeight()+"px"
+	
+
+  // Set a timeout...
+  setTimeout(function(){
+    // Hide the address bar!
+    window.scrollTo(0, 1);
+	document.body.style.height=window.innerHeight+"px";
+  }, 0);
+});
+
+</script>
+<body>
+		<div id="header">This is the header</div>
+		<div id="content">
+			<div id="main">Main Content</div>
+		</div>
+		<div id="footer">
+			&copy; 2010 Awesome Productions Ltd.
+		</div>
+
+</body>
+</html>

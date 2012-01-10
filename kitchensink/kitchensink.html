@@ -1,0 +1,1164 @@
+﻿<!DOCTYPE html><!--HTML5 doctype-->
+<html>
+<head>
+<title>jQ.Mobi Kitche Sink</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+
+<link rel="stylesheet" type="text/css" href="jq.ui.css" />
+
+<style>
+	.scrollBar{background:white;}
+    h3 {text-align:center; font-size:35px;}
+    ul.iconLinks li {font-size:12px; font-weight:normal;}
+    .listbutton {
+        display:block;
+        border:1px solid black;
+        color:black;
+        background:orange;
+        border-radius:5px;
+        width:80%;
+        text-decoration:none;
+        text-align:center;
+        margin:auto;
+        margin-bottom:10px;
+        height:30px;
+        line-height:30px;
+    }
+    .class16 {
+        background:green;
+        color:red;
+    }
+	.jqmscrollBar {background:white !important;}	
+</style>
+
+<script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/appmobi.js"></script> 
+<script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/xhr.js"></script> 	
+<script type="text/javascript" charset="utf-8" src="../jq.mobi.js"></script> 
+<script type="text/javascript" charset="utf-8" src="../plugins/jq.swipe.js"></script> 
+<script type="text/javascript" charset="utf-8" src="../plugins/jq.template.js"></script> 
+<script type="text/javascript" charset="utf-8" src="../plugins/jq.carousel.js"></script> 
+<script type="text/javascript" charset="utf-8" src="../plugins/jq.css3animate.js"></script> 
+<script type="text/javascript" charset="utf-8" src="../plugins/jq.drawer.js"></script> 
+<script type="text/javascript" charset="utf-8" src="../plugins/jq.passwordBox.js"></script> 
+<script type="text/javascript" charset="utf-8" src="../plugins/jq.scroller.js"></script> 
+<script type="text/javascript" charset="utf-8" src="../plugins/jq.shake.js"></script> 
+<script type="text/javascript" charset="utf-8" src="../plugins/jq.selectBox.js"></script> 
+
+<script type="text/javascript" charset="utf-8" src="../ui/jq.ui.js"></script> 
+
+<script type="text/javascript">
+    /* This function runs once the page is loaded, but appMobi is not yet active */
+    
+	var webRoot="./";
+    var init = function(){
+	   $.ui.backButtonText="Back";  
+	   $.useViewport(320,480);
+    };
+    window.addEventListener("load",init,false);  
+	
+    /* This code prevents users from dragging the page */
+    var preventDefaultScroll = function(event) {
+        event.preventDefault();
+        window.scroll(0,0);
+        return false;
+    };
+    document.addEventListener('touchmove', preventDefaultScroll, false);
+
+    /* This code is used to run as soon as appMobi activates */
+    var onDeviceReady=function(){
+		//AppMobi.device.setRotateOrientation("portrait");
+    //    AppMobi.device.setAutoRotate(false);
+		webRoot=AppMobi.webRoot+"kitchensink/";
+	    //hide splash screen
+	    AppMobi.device.hideSplashScreen();	
+		
+    };
+    document.addEventListener("appMobi.device.ready",onDeviceReady,false);    
+	function showHide(obj,objToHide){
+		var el=$("#"+objToHide)[0];
+		if(obj.className=="expanded"){
+			obj.className="collapsed";
+		}
+		else{
+			obj.className="expanded";
+		}
+		$(el).toggle();
+		
+	}
+</script>
+
+</head>
+<body>
+
+<div id="header">
+
+</div>
+
+<div id="content">
+	<div title='Welcome' id="main" class="panel" selected="true">
+
+	<h2 class='expanded' onclick='showHide(this,"main_info");'>Welcome</h2>
+		<p id='main_info'>Welcome to the kitche sink demo for jQ.Mobi.  Here you will find samples of how to use the jQ.Mobi libraries.  Please select an option from below.</p>
+		<ul>
+		 <li><a href="#jqm" >jQ.Mobi</a></li>
+		 <li><a href="#jqmui" >jQ.Ui</a></li>
+		 <li><a href="#jqmweb" >jQ.Plugins</a></li>
+		</ul>
+
+	</div> 
+
+	<!-- ------------------------------------------ -->
+	<!-- aUX -->
+	<div title="jQ.Mobi" id="jqm" class="panel">
+		<h2 class='expanded' onclick='showHide(this,"jqmobi_info");'>jQ.Mobi</h2>
+		<p id='jqmobi_info'>jQ.Mobi is a blazingly fast query selector tool that is optmimized for HTML5 browsers.</p>
+
+		<ul>
+		<li><a href="#jqm1" >$ Selector</a></li>
+		<li><a href="#jqm2" >$().length()</a></li>
+		<li><a href="#jqm3" >$().find()</a></li>
+		<li><a href="#jqm4" >$().html()</a></li>
+		<li><a href="#jqm5" >$().text()</a></li>
+		<li><a href="#jqm6" >$().css()</a></li>
+		<li><a href="#jqm7" >$().empty()</a></li>
+		<li><a href="#jqm8" >$().hide()</a></li>
+		<li><a href="#jqm9" >$().show()</a></li>
+		<li><a href="#jqm10" >$().toggle()</a></li>
+		<li><a href="#jqm11" >$().val()</a></li>
+		<li><a href="#jqm12" >$().attr()</a></li>
+		<li><a href="#jqm13" >$().removeAttr()</a></li>
+		<li><a href="#jqm14" >$().remove()</a></li>
+		<li><a href="#jqm15" >$().addClass()</a></li>
+		<li><a href="#jqm16" >$().removeClass()</a></li>
+		<li><a href="#jqm17" >$().hasClass()</a></li>
+		<li><a href="#jqm18" >$().bind()</a></li>
+		<li><a href="#jqm19" >$().unbind()</a></li>
+		<li><a href="#jqm20" >$().trigger()</a></li>
+		<li><a href="#jqm21" >$().append()</a></li>
+		<li><a href="#jqm22" >$().prepend()</a></li>
+		<li><a href="#jqm32" >$().get()</a></li>
+		<li><a href="#jqm31" >$().offset()</a></li>
+		<li><a href="#jqm33" >$().isArray()</a></li>
+		<li><a href="#jqm34" >$().isFunction()</a></li>
+		<li><a href="#jqm23" >$.jsonP()</a></li>
+		<li><a href="#jqm24" >$.ajax()</a></li>
+		<li><a href="#jqm25" >$.get()</a></li>
+		<li><a href="#jqm26" >$.post()</a></li>
+		<li><a href="#jqm27" >$.getJSON()</a></li>
+		<li><a href="#jqm28" >$.serialize()</a></li>
+		<li><a href="#jqm29" >$.parseJSON()</a></li>
+		<li><a href="#jqm30" >$.os</a></li>
+		<li><a href="#jqmviewport" >$.useViewPort</a></li>
+		<li><a href="javascript:;" onClick="$.ui.scrollToTop('jqm')" >Go To Top</a></li>
+		</ul>
+		<br/><br/>
+	</div>
+
+	<!-- jqm > jqm Selector -->
+	<div id="jqm1"  class="panel">
+		<span id="jqmtest2">This is some html</span><br /><br />
+		<a class="button" href="javascript:;" onclick="alert($('#jqmtest2')[0])">Click to get Object</a><br /><br />
+		<a class="button" href="javascript:;" onclick="alert($('#jqmtest2').html())">Click to get Content</a>
+	</div>
+
+	<!-- jqm > jqm length() -->
+	<div id="jqm2"  class="panel">
+		<div class='jqm2'>Div 1 (class="jqm2")</div>
+		<div class='jqm2'>Div 2 (class="jqm2")</div>
+		<div class='jqm2'>Div 3 (class="jqm2")</div>
+		<div class='jqm4'>Div 4 (class="jqm4")</div>
+		<br />
+		<a  class="button"href="javascript:;" onclick="alert($('.jqm2').length)">Click to get the Length by classname</a>
+	</div>
+
+	<!-- jqm > jqm find() -->
+	<div id="jqm3"  class="panel">
+		$("#div").find("li") find all element(s) inside a container<br /><br />
+		<ul>
+			<li>Item 1</li>
+			<li>Item 2</li>
+		</ul>
+		<a  class="button"href="javascript:;" onclick="alert($('#jqm3').find('li').length)">Click to get the count of li's in the div</a><br /><br />
+	</div>
+
+	<!-- jqm > jqm html() -->
+	<div id="jqm4" class="panel">
+		$("#div").html() allows you to get or set a contents HTML.<br /><br />
+		<div id="jqm4_content" style='border:1px solid black'>This is some content</div><br /><br />
+		<a class="button" href='javascript:;' onclick='alert($("#jqm4_content").html())'>Get Content</a> | <a href='javascript:;' class="button" onclick='$("#jqm4_content").html("New Content")'>Set Content</a>
+	</div>
+
+	<!-- jqm > jqm text() -->
+	<div id="jqm5" class="panel">
+		$("#div").text() allows you to get or set a contents text.<br /><br />
+		<div id="jqm5_content" style='border:1px solid black'><span>This is some text</span> other text</div><br /><br />
+		<a class="button" href='javascript:;' onclick='alert($("#jqm5_content").text())'>Get Text</a> | <a  class="button" href='javascript:;' onclick='$("#jqm5_content").text("New Text")'>Set Text</a>
+	</div>
+
+	<!-- jqm > jqm css() -->
+	<div id="jqm6" class="panel">
+		$("#div").css() - allows you to get or set a CSS property.<br /><br />
+		<div style="background:red;color:white;border:1px solid black" id="jqm6_content">This is some content</div><br /><br />
+		<a class="button" href='javascript:;' onclick='alert($("#jqm6_content").css("background"))'>Get background color</a><br />
+		<a class="button" href='javascript:;' onclick='$("#jqm6_content").css("background","green")'>Set background color</a>
+	</div>
+
+	<!-- jqm > jqm empty() -->
+	<div id="jqm7" class="panel">
+		$("#div").empty() - will empty out the contents of the element.<br /><br />
+		<div id="jqm7_content" style="border:1px solid black">This is some content</div><br/><br/>
+		<a class="button" href='javascript:;' onclick='$("#jqm7_content").empty()'>$().empty()</a>
+	</div>
+
+	<!-- jqm > jqm hide() -->
+	<div id="jqm8" class="panel">
+		$("#div").hide() - will set the elements display property to "none".<br /><br />
+		<div id="jqm8_content" style="border:1px solid black">This is some content</div><br/>
+		<a class="button" href='javascript:;' onclick='$("#jqm8_content").hide()'>Hide the div</a>
+	</div>
+
+	<!-- jqm > jqm show() -->
+	<div id="jqm9" class="panel">
+		$("#div").show() - will set the elements display property to "block".<br /><br />
+		<div id="jqm9_content" style="border:1px solid black;display:none;">This is some content</div><br/>
+		<a  class="button" href='javascript:;' onclick='$("#jqm9_content").show()'>Show the div</a>
+	</div>
+
+	<!-- jqm > jqm toggle() -->
+	<div id="jqm10" class="panel">
+		$("#div").toggle() - will toggle the elements display property.<br /><br />
+		<div id="jqm10_content" style="border:1px solid black;display:block;">This is some content</div><br/><br />
+		<a class="button" href='javascript:;' onclick='$("#jqm10_content").toggle()'>Toggle a div</a>
+	</div>
+
+	<!-- jqm > jqm val() -->
+	<div id="jqm11" class="panel">
+		$("#div").val() - will get or set the value of an HTML element.<br /><br />
+		<input type="text" id="jqm11_input" size=15><br /><br />
+		<a class="button" href='javascript:;' onclick='alert($("#jqm11_input").val())'>Get Value</a><br />
+		<a class="button" href='javascript:;' onclick='($("#jqm11_input").val("set value"))'>Set Value</a> 
+	</div>
+
+	<!-- jqm > jqm attr() -->
+	<div id="jqm12" class="panel">
+		$("#div").attr() - will get or set an attribute of an HTML element.<br /><br />
+		<div id="jqm12_content" data-test="foo">The data-test attribute is set to "foo" - data-test="foo"</div><br /><br />
+		<a class="button" href='javascript:;' onclick='alert($("#jqm12_content").attr("data-test"))'>Get Attribute Value</a><br />
+		<a class="button" href='javascript:;' onclick='($("#jqm12_content").attr("data-test","bar"))'>Set Attribute Value</a> 
+	</div>
+
+	<!-- jqm > jqm removeAttr() -->
+	<div id="jqm13" class="panel">
+		$("#div").removeAttr() - will remove an attribute of an HTML element.<br /><br />
+		<div id="jqm13_content" data-test="foo">The data-test attribute is set to "foo" - data-test="foo"</div><br />
+		<a class="button" href='javascript:;' onclick='alert($("#jqm13_content").attr("data-test"))'>Get Attribute Value</a><br />
+		<a class="button" href='javascript:;' onclick='($("#jqm13_content").removeAttr("data-test"))'>Remove Attribute Value</a> 
+	</div>
+
+	<!-- jqm > jqm remove() -->
+	<div id="jqm14" class="panel">
+		$("#div").remove() - will remove an element from the parent container.<br /><br />
+		<div id="jqm14_content" style="border:1px solid black">This is content that will be removed from the DOM.</div><br />
+		<a class="button" href='javascript:;' onclick='$("#jqm14_content").remove()'>Remove the Element</a> 
+	</div>
+
+	<!-- jqm > jqm addClass() -->
+	<div id="jqm15" class="panel">
+		$("#div").addClass() - adds a css class to the element.<br /><br />
+		<div style='border:1px solid black' id="jqm15_content">This is some content</div><br /><br />
+		<a class="button" href='javascript:;' onclick='($("#jqm15_content").addClass("class16"))'>Add a Class</a>
+	</div>
+
+	<!-- jqm > jqm removeClass() -->
+	<div id="jqm16" class="panel">
+		$("#div").removeClass() - removes a css class to the element.<br /><br />
+		<div style='border:1px solid black' id="jqm16_content" class="class16">This is some content</div><br />
+		<a class="button" href='javascript:;' onclick='($("#jqm16_content").removeClass("class16"))'>Remove the Class</a>
+	</div>
+
+	<!-- jqm > jqm hassClass() -->
+	<div id="jqm17" class="panel">
+		$("#div").hassClass() - returns a boolean if an element has a class.<br /><br />
+		<div style='border:1px solid black' id="jqm17_content" class="class16">This is some content</div><br />
+		<a class="button" href='javascript:;' onclick='alert($("#jqm17_content").hasClass("class16"))'>Check if it has the class</a>
+	</div>
+
+	<!-- jqm > jqm bind() -->
+	<div id="jqm18" class="panel">
+		$("#div").bind() - binds an event to an element.<br /><br />
+		<a class="button" href="javascript:;" id="jqm18_content">Test Link to bind event to</a><br /><br />
+		<a class="button" href='javascript:;' onclick='$("#jqm18_content").bind("click",function(evt){alert("I was clicked");});alert("click event is bound");'>Bind Event</a><br />
+	</div>
+
+	<!-- jqm > jqm unbind() -->
+	<div id="jqm19" class="panel">
+		$("#div").unbind() - unbinds an event from an element.<br /><br />
+		<a class="button" href="javascript:;" id="jqm19_content">This is a test link</a><br /><br />
+		<a class="button" href='javascript:;' onclick='$("#jqm19_content").bind("click",function(){alert("I was clicked");});alert("click event is bound");'>Bind Event</a><br />
+		<a class="button" href="javascript:;" onclick='$("#jqm19_content").unbind("click")'>Unbind Event</a>
+	</div>
+
+	<!-- jqm > jqm trigger() -->
+	<div id="jqm20" class="panel">
+		$("#div").trigger() - triggers an event on an element.<br /><br />
+		<a id="jqm20_content" href="javascript:;" onclick="alert('I was clicked')">Click to test me</a><br /><br />
+		<a class="button" href="javascript:;" onclick='$("#jqm20_content").trigger("click")'>Trigger Event</a>
+	</div>
+
+	<!-- jqm > jqm append() -->
+	<div id="jqm21" class="panel">
+		$("#div").append() - appends an element or content.<br /><br />
+		<div id="jqm21_content">I'll append content after the &lt;hr> <hr>
+		</div><br /><br />
+		<a class="button" href="javascript:;" onclick='$("#jqm21_content").append("Some more content<br />");'>Append Content</a>
+	</div>
+
+	<!-- jqm > jqm prepend() -->
+	<div id="jqm22" class="panel">
+		$("#div").prepend() - prepends an element or content.<br /><br />
+		<div id="jqm22_content"><hr>I'll prepend content before the &lt;hr>
+		</div><br /><br />
+		<a class="button" href="javascript:;" onclick='$("#jqm22_content").prepend("Some more content<br />");'>Prepend Content</a>
+	</div>
+	<!-- jqm > jqm offset() -->
+	<div id="jqm31" class="panel">
+	<script>
+	function getElementOffset(){
+	var data=$("#jqm31").offset();
+	alert("Top: "+data.top+" - Left: "+data.left);
+	}
+	</script>
+		$("#div").offset() - Gets the left and top offset of an element.<br /><br />
+
+		<a class="button" href="javascript:;" onclick='getElementOffset()'>Get Offsett</a>
+	</div>
+
+	<!-- jqm > jqm get() -->
+	<div id="jqm32" class="panel">
+		$("#div").get() - Get's an individual element by index.<br /><br />
+	<script>
+	function getElementByIndex(){
+		var obj=$(".panel").get(0);
+		alert("This is the first panel = "+obj.id);
+	}
+	</script>
+		<a class="button" href="javascript:;" onclick='getElementByIndex();'>Get first panel</a>
+	</div>
+
+
+	<!-- jqm > jqm jsonP() -->
+	<div id="jqm23" class="panel">
+		$.jsonP(url:"URL",
+		   success:function(){},
+		   timeout:"1000",
+		   error:function(){}
+		) - makes a jsonP call for cross domain scripting<br /><br />
+		<div id="jqm23_content" style="border:1px solid black;">This will get updated with content from the jsonP call</div><br /><br />
+		<a class="button" href="javascript:;" onclick="$.jsonP({url:'http://jsfiddle.net/echo/jsonp/?test=some+html+content&callback=?',success:function(data){$('#jqm23_content').html(data.test)}});">
+		Make jsonP call</a>
+	</div>
+	<!-- jqm > jqm ajax() -->
+	<div id="jqm24" class="panel">
+		$.ajax(url:"URL",
+		   success:function(){},
+		   timeout:"1000",
+		   error:function(){}
+		) - makes an Ajax call<br /><br />
+		<script type="text/javascript">
+		function doAjax(){
+		$.ajax({url:webRoot+'ajax.html',success:function(data){$('#jqm24_content').html(data)}});
+		}
+		</script>
+		<div id="jqm24_content" style="border:1px solid black;">This will get updated with content from the ajax call</div><br /><br />
+		<a class="button" href="javascript:;" onclick="doAjax()">
+		Make Ajax Call</a>
+	</div>
+
+	<!-- jqm > jqm get() -->
+	<div id="jqm25" class="panel">
+		$.get(url:"URL",
+		success:function(){},
+		timeout:"1000",
+		error:function(){}
+		) - makes an Ajax call<br /><br />
+		<script type="text/javascript">
+		function doGet(){
+		$.get(webRoot+'ajax.html',function(data){$('#jqm25_content').html(data)});
+		}
+		</script>
+		<div id="jqm25_content" style="border:1px solid black;">This will get updated with content from the ajax call</div><br /><br />
+		<a class="button" href="javascript:;" onclick="doGet()">
+		Make Get Call</a>
+	</div>
+
+	<!-- jqm > jqm post() -->
+	<div id="jqm26" class="panel">
+		$.post(url,data:{foo:"bar"},
+			  success:function(){},
+			  timeout:"1000",error:
+			  function(){}
+		) - makes an Ajax call<br /><br />
+						<script type="text/javascript">
+	function doPost(){
+	$.post(webRoot+'ajax.html',{foo:"bar"},function(data){$('#jqm26_content').html(data)});
+	}
+	</script>
+		<div id="jqm26_content" style="border:1px solid black;">This will get updated with content from the ajax call</div><br /><br />
+		<a class="button" href="javascript:;" onclick="doPost()">
+		Make Post Call</a>
+	</div>
+
+	<!-- jqm > jqm getJSON() -->
+	<div id="jqm27" class="panel">
+		$.getJSON(url,data,success); - Makes a XMLHpttRequest GET request and returns a JSON object.<br /><br />
+		<script>
+			function doJSON(){
+				$.getJSON(webRoot+'json.html',function(data){$('#jqm27_content').html(JSON.stringify(data))});
+			}
+		</script>
+		<div style="border:1px solid black" id="jqm27_content">Returned object</div><br />
+		<a class="button" href="javascript:;" onclick="doJSON()">Make GetJson Call</a>
+	</div>
+
+	<!-- jqm > jqm serialize() -->
+	<div id="jqm28" class="panel">
+		$.serialize() - serializes an object into key/value pairs for a querystring.<br /><br />
+		<code>
+			var obj= {foo:"foo",bar:"bar"};
+		</code><br /><br />
+		<script>
+			function doSerialize(){
+				var obj= {foo:"foo",bar:"bar"};
+				$("#jqm28_content").html($.serialize(obj));
+			}
+		</script>
+		<div id="jqm28_content" style="border:1px solid black">Serialized parameters will show here.</div><br /><br />
+		<a class="button" href='javascript:;' onclick="doSerialize()">Make Serialize Call</a>
+	</div>
+	<!-- jqm > jqm parseJSON() -->
+	<div id="jqm29" class="panel">
+	   $.parseJSON() - parses a string and converts it into a JSON object.  Uses the native JSON parser, but is added for backwards compatibility.<br><br>
+	   <code>
+		   var obj='{"foo":"bar"}';
+		</code>
+		<script>
+		   function doParseJson(){
+			  var obj='{"foo":"bar"}';
+			  alert($.parseJSON(obj));
+		   }
+		  </script>
+		  <a class="button" href='javascript:;' onclick="doParseJson()">Parse JSON string</a>
+	</div>
+
+	<!-- jqm > os -->
+	<div id="jqm30" class="panel">
+	   $.os  - holds information about the OS of the device, and if it is a webkit browser<br><br>
+	   <pre>
+	$.os.webkit  = <script>document.write($.os.webkit);</script>
+	$.os.android = <script>document.write($.os.android);</script>
+	$.os.ipad = <script>document.write($.os.ipad);</script>
+	$.os.iphone = <script>document.write($.os.iphone);</script>
+	$.os.ios = <script>document.write($.os.ios);</script>
+	$.os.webos = <script>document.write($.os.webos);</script>
+	$.os.touchpad = <script>document.write($.os.touchpad);</script>
+	   </pre>
+
+	</div>
+
+	<!-- jqm > isArray -->
+	<div id="jqm33" class="panel" title="isArray">
+	$.isArray(param)  - returns a boolean if the parameter is an array.<br><br>
+	<pre>
+	var notArrayTest="foo";
+	var isArrayTest=[];
+
+	</pre>
+	<script>
+	var notArrayTest="foo";
+	var isArrayTest=[];
+	function isNotAnArray(){
+	alert($.isArray(notArrayTest));
+	}
+	function isAnArray(){
+	alert($.isArray(isArrayTest));
+	}
+	</script>
+
+	<br>
+	<a class="button" href="javascript:;" onclick="isNotAnArray()">test notArrayTest</a><br>
+	<a class="button" href="javascript:;" onclick="isAnArray()">test isArrayTest</a><br>
+
+	</div>
+
+	<!-- jqm > isFunction -->
+	<div id="jqm34" class="panel" title="isFunction">
+	$.isFunction(param)  - returns a boolean if the parameter is a function.<br><br>
+	<pre>
+	var notFunctionTest="foo";
+	var isFunctionTest=function(){};
+
+	</pre>
+	<script>
+	var notFunctionTest="foo";
+	var isFunctionTest=[];
+	function notAFunction(){
+	alert($.isArray(notFunctionTest));
+	}
+	function isAFunction(){
+	alert($.isArray(isFunctionTest));
+	}
+	</script>
+
+	<br>
+	<a class="button" href="javascript:;" onclick="notAFunction()">test notFunctionTest</a><br>
+	<a class="button" href="javascript:;" onclick="isAFunction()">test isFunctionTest</a><br>
+
+	</div>
+
+	<!-- jqm > useViewPort -->
+
+	<div id="jqmviewport" class="panel" title="Viewport">
+	$.useViewport(portrait,landscape) allows you to set a viewport for your app that can scale properly on mobile devices.  <br>
+	It's best to use this over the device meta tag.<br><br>
+	<pre>
+	$.useViewport(320,480) //phone
+	$.useViewport(768,1024) //tablet
+	</pre>
+
+	</div>
+
+	<!-- ------------------------------------------ -->
+
+	<!-- ------------------------------------------ -->
+	<!-- jq.ui -->
+	<div title="jQ.Ui" id="jqmui" class="panel">
+
+
+	<h2 class='expanded' onclick='showHide(this,"jqui_info");'>jQ.Ui</h2><p id='jqui_info'>jQ.Ui is AppMobi's User Interface/User Experience library for mobile applications. It uses HTML5 and CSS3 for animations and transitions.<br />
+	We built the kitchen sink using jQ.Ui.  It is comprised of components from the jQ.Plugins library and additional features.
+	<br>
+		* Fixed navigation bar<br>
+		* Auto scrolling content panels<br>
+		* Optional footer to segment your application<br>
+		</p>
+		<ul>
+		<li><a href="#jqmtransitions" >Transitions</a></li>
+		<li><a href="#jqmforms" >Form Styles</a></li>
+		<li><a href="#uiapi" >$.ui API</a></li>
+		</ul>
+	</div>
+
+	<div id="jqmforms" title="Form Styles" class="panel">
+	<form>
+
+			<fieldset>
+				<legend>Field elements</legend>
+				
+				<label for="name">Full Name</label>
+				<input type="text" id="name" class='jq-ui-forms'/><br/>
+		
+				<label for="email">E-mail</label><br/>
+				<input type="text" id="email" class='jq-ui-forms' /><br/>
+		
+				<label for="password">Password</label><br/>
+				<span><input type="password" id="password" class='jq-ui-forms' /></span><br/> <!-- span is needed for android password fix -->
+		
+					<label for="country">Country</label><br/>
+					<span><!-- span is needed for android select box fix -->
+				<select id="country" class='jq-ui-forms'>
+					<option value='1'>USA 1</option>
+					<option value='2'>USA 2</option>
+					<option value='3'>USA 3</option>
+					<option value='4'>USA 4</option>
+					<option value='5'>USA 5</option>
+					<option value='6'>USA 6</option>
+					<option value='7'>USA 7</option>
+					<option value='8'>USA 8</option>
+					<option value='9'>USA 9</option>
+					<option value='10'>USA 10</option>
+					</select>
+				</span> <br/>
+
+		
+	<br/>
+				<label for="web">Comments</label>
+				<textarea name="web" class='jq-ui-forms'></textarea><br/>
+				
+			</fieldset>
+		
+			<fieldset>
+				<legend>Radios and checkboxes</legend>
+				
+				<h4>Gender:</h4>
+				<br>
+				<p><input type="radio" value="male" id="male" name="gender" class="jq-ui-forms"/> <label for="male">Male</label></p>
+				<p><input type="radio" value="Female" id="female" name="gender" class="jq-ui-forms" /> <label for="female">Female</label></p>
+				
+				<h4>Stuff you like:</h4>
+				<br>
+				<p><input type="checkbox" value="CSS3" id="css3" class="jq-ui-forms" /> <label for="css3">CSS3</label></p>
+				<p><input type="checkbox" value="HTML5" id="html5" class="jq-ui-forms" /> <label for="html5">HTML5</label></p>
+				<p><input type="checkbox" value="JavaScript" id="javascript" class="jq-ui-forms" /> <label for="javascript">JavaScript</label></p>
+				<p><input type="checkbox" value="Other" id="other" class="jq-ui-forms" /> <label for="other">Other</label></p>
+				
+			</fieldset>
+			
+			<fieldset>
+				<legend>Disabled and pre-selected</legend>
+				
+				<h4>Disabling and checking radio inputs:</h4>
+				<br>
+				<p><input type="radio" value="disabled" id="disabled" name="disabled" disabled class="jq-ui-forms"/> <label for="disabled">This is disabled</label></p>
+				<p><input type="radio" value="check" id="check" name="check" checked class="jq-ui-forms" /> <label for="check">This is checked</label></p>
+				
+				<h4>Disabling and checking checkbox inputs:</h4>
+				<br>
+				<p><input type="checkbox" value="disabled" id="disabled2" disabled class="jq-ui-forms"/> <label for="disabled2">This is disabled</label></p>
+				<p><input type="checkbox" value="check" id="check2" checked class="jq-ui-forms" /> <label for="check2">This is checked</label></p>
+				<p><input type="checkbox" value="Stop" id="disablecheck" disabled checked class="jq-ui-forms"/> <label for="disablecheck">This is checked and disabled</label></p>
+				<p><input type="checkbox" value="Other" id="other2" class="jq-ui-forms"/> <label for="other2">Other</label></p>
+				
+				
+				
+			</fieldset>
+			
+			<fieldset>
+				<legend>Sliders</legend>
+				
+				<h4>Gender:</h4>
+				<p><input type="radio" value="maleslider" id="slidermale" name="gender" class="jq-ui-slider"/> <label  for="slidermale">Male</label></p>
+				<p><input type="radio" value="femaleslider" id="sliderfemale" name="gender" class="jq-ui-slider" /> <label for="sliderfemale">Female</label></p>
+				
+				<h4>Stuff you like:</h4>
+				<p><input type="checkbox" value="CSS3" id="css3slider" class="jq-ui-slider" /> <label for="css3slider">CSS3</label></p>
+				<p><input type="checkbox" value="HTML5" id="html5slider" class="jq-ui-slider"/> <label for="html5slider">HTML5</label></p>
+				<p><input type="checkbox" value="JavaScript" id="javascriptslider" class="jq-ui-slider"/> <label for="javascriptslider">JavaScript</label></p>
+				<p><input type="checkbox" value="Other" id="otherslider" class="jq-ui-slider"/> <label for="otherslider">Other</label></p>
+				<p><input type="checkbox" value="Other" id="otherd" class="jq-ui-slider" disabled /> <label for="otherd">Disabled</label></p>
+				<p><input type="checkbox" value="Other" id="otherdc" class="jq-ui-slider" disabled checked /> <label for="otherdc">Disabled</label></p>
+				
+			</fieldset>
+			
+		</form>
+		<br><br><br>
+
+	</div>
+
+	<div title="Transitions" id="jqmtransitions" class="panel">
+	<h2 class='expanded' onclick='showHide(this,"jqui_transitions");'>jQ.ui</h2><p id='jqui_transitions'>
+	<strong>jq.ui transitions</strong> the following are transitions built in.  You can easily add/extend with your own.  Set the data-transition attribute on an anchor to change the transition.</p>
+	<ul>
+	<li><a href="#transition1"  data-transition="slide">Slide</a></li>
+	<li><a href="#transition2"  data-transition="up">Slide Up</a></li>
+	<li><a href="#transition3"  data-transition="down">Slide Down</a></li>
+	<li><a href="#transition4"  data-transition="pop">Pop</a></li>
+	<li><a href="#transition5"  data-transition="flip">Flip</a></li>
+	<li><a href="#transition6"  data-transition="fade">Fade</a></li>
+	<li><a href="#transition7"  >Modal</a></li>
+	</ul>
+	<br/><br/>
+	</div>
+
+	<div id="uiapi" title="jQ.Ui API" class="panel">
+	<ul>
+		<li><a href="#uigoback">.goBack()</a></li>
+		<li><a href="#uiclearhistory">.clearHistory()</a></li>
+		<li><a href="#uiaddcontentdiv">.addContentDiv ()</a></li>
+		<li><a href="#uiupdateanchors">.updateAnchors() </a></li>
+		<li><a href="#uisettitle">.setTitle(text) </a></li>
+		<li><a href="#uisetbackbutton">.setBackButtonText() </a></li>
+		<li><a href="#uishowmask">.showMask() </a></li>
+		<li><a href="#uihidemask">.hideMask() </a></li>
+		<li><a href="#uiloadcontent">.loadContent(); </a></li>
+		<li><a href="#uiscrolltotop">.scrollToTop() </a></li>
+
+	</ul>
+	</div>
+
+	<div id="uigoback" title="Go Back" class="panel">
+	You can use this command to go back in history.
+	<pre>
+	$.ui.goBack()
+	</pre>
+	<a href="javascript:;" onclick="$.ui.goBack()" class="button">Go Back</a>
+	</div>
+
+	<div id="uiclearhistory" title="Clear History" class="panel">
+	You can use this command to clear the history stack manually
+	<pre>
+	$.ui.clearHistory()
+	</pre>
+	<a href="javascript:;" onclick="$.ui.clearHistory()" class="button">Clear History Stack</a>
+
+	</div>
+	<div id="uiaddcontentdiv" title="Add Content Div" class="panel">
+	You can use this command to add a new div programatically.  This will setup scrolling, etc.
+	<pre>
+	$.ui.addContentDiv(id, content,title
+	, pullToRefresh, refreshFunc)
+	</pre>
+	<script>
+	function addDiv(){
+	$.ui.addContentDiv("myAddedDiv","I was added dynamically","Added Div");
+	$("#addContent").show();
+	$("#addContentButton").hide();
+	}
+	</script>
+	<span id="addContent" style='display:none'>
+	<a href="#myAddedDiv" class="button">View new div</a>
+	<br/>
+	</span>
+	<a id='addContentButton' href="javascript:;" onclick="addDiv();" class="button">Add Content Div</a>
+
+
+
+	</div>
+	<div id="uiupdateanchors" title="Update Anchors" class="panel">
+	This will loop through content and parse any anchors to automagically wire them.<br>
+	<pre>
+	$.ui.updateAnchors(div,resetHistory)
+	</pre>
+	</div>
+
+	<div id="uisettitle" title="Set Title" class="panel">
+	This will set the page title of the current page programatically.  It will not be retained.
+	<pre>
+	$.ui.setTitle('Title Change');
+	</pre>
+
+	<a href='javascript:;' onclick="$.ui.setTitle('Title Change');" class="button">Change Title</a>
+
+	</div>
+	<div id="uisetbackbutton" title="Change Back Button Text" class="panel">
+	This will set the back button text.  You can also override this at the start, which we have done.
+	<pre>
+	$.ui.setBackButtonText('GO BACK');
+
+	$.ui.backButtonText="Back" //override
+	</pre>
+	</div>
+	<div id="uishowmask" title="Show Mask" class="panel">
+	This will show the loading mask.  You can trigger this manually for long operations.
+	<pre>
+	$.ui.showMask();
+	</pre>
+
+	<script>
+	function showMask(){
+
+	$.ui.showMask();
+	window.setTimeout(function(){$.ui.hideMask();},2000);
+	}
+	</script>
+	<a href="javascript:;" onclick="showMask()" class="button">Show Mask</a>
+	</div>
+	<div id="uihidemask" title="Hide Mask" class="panel">
+	This will hide the loading mask.  You can trigger this manually for long operations.
+	<pre>
+	$.ui.hideMask();
+	</pre>
+
+	<a href="javascript:;" onclick="$.ui.showMask()" class="button">Show Mask</a> | <a href="javascript:;" onclick="$.ui.hideMask()" class="button">Hide Mask</a>
+
+	</div>
+	<div id="uiloadcontent" title="Load Div" class="panel">
+	This allows you to programatically trigger a page transition/navigation event.
+	<pre>
+	$.ui.loadContent()
+	</pre>
+
+	<a href="javascript:;" onclick="$.ui.loadContent('uiapi',false,false,'flip')" class="button">Load $.ui API page with a flip</a>
+
+	</div>
+	<div id="uiscrolltotop" title="Scroll to Top" class="panel">
+	This allows you to scroll to the top of a page.  Scroll to the bottom for the link.
+	<pre>
+	$.ui.scrollToTop(div_id)
+	</pre>
+	<br><br>
+	Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>
+
+	<a href="javascript:;" onclick="$.ui.scrollToTop('uiscrolltotop')" class="button">Scroll to Top</a>
+	<br/><br/>
+	</div>
+
+	<!-- jq.ui > API -->
+
+	<!-- jq.ui > Transitions -->
+	<div title="Slide" id="transition1" class="panel">I'm a sliding transition</div>
+	<div title="Slide Up" id="transition2" class="panel">I'm a sliding up transition</div>
+	<div title="Slide Down" id="transition3" class="panel">I'm a sliding down transition</div>
+	<div title="Pop" id="transition4" class="panel">I'm a pop transition</div>
+	<div title="Flip" id="transition5" class="panel">I'm a flip transition</div>
+	<div title="Fade" id="transition6" class="panel">I'm a fade transition</div>
+	<div title="Modal" id="transition7" class="panel" modal="true">I'm a modal window...woot woot</div>
+	<!-- ------------------------------------------ -->
+
+	<!-- ------------------------------------------ -->
+	<!-- jQ.Plugins -->
+	<div title="jQ.Plugins" id="jqmweb" class="panel">
+	<h2 class='expanded' onclick='showHide(this,"jqweb_info");'>jQ.plugins</h2><p id='jqweb_info'>
+		This is our plugin library of widgets to assist you with developing mobile applications.  Some of these are used in jq.ui.</p>
+		<ul>
+		<li><a href="#webslider" >jq.scroller</a></li>
+		<li><a href="#webcarousel" >jq.carousel</a></li>
+		<li><a href="#webswipe" >jq.swipeListener</a></li>
+		<li><a href="#webtemplate" >jq.template</a></li>
+		<li><a href="#webselect" >jq.selectBox</a></li>
+		<li><a href="#webpassword" >jq.passwordBox</a></li>
+		<li><a href="#webanimate" >jq.css3animate</a></li>
+		<li><a href="#webdrawer" >jq.drawer</a></li>
+		
+		</ul>
+		<br/><br/>
+	</div>
+
+	<!-- jQ.Plugins > jQ.scroller -->
+	<div title="Scroller" class="panel" id="webslider" scrolling="no">
+	<script>
+		var init_scroller = function () {
+		   $("#scroller").scroller({
+				scrollBars: true,
+				verticalScroll: true,
+				horizontalScroll: true,
+				vScrollCSS: "jqmScrollbar",
+				hScrollCSS: "jqmScrollbar"
+			});
+		};
+		window.addEventListener("load", init_scroller, false);
+	</script>
+	<div id="outercontent"
+			style="height: 95%; width: 130%; overflow: hidden; position: relative">
+			<div id="scroller">Lorem ipsum dolor sit amet, consectetur
+				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
+				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
+				sed convallis elementum, magna diam pharetra magna, id vestibulum est
+				eros vitae ante. Ut auctor erat a tellus venenatis eu fermentum lorem
+				scelerisque. Cras dignissim leo ornare massa sollicitudin sit amet
+				pulvinar turpis hendrerit. Morbi hendrerit nunc eget turpis luctus id
+				ultricies lorem consequat. Donec eu lacus sed mauris sollicitudin
+				laoreet. Cras vitae sodales diam. Donec mollis, libero ut
+				pellentesque dignissim, risus orci ornare nisi, sed eleifend enim
+				purus malesuada neque. Nulla tellus sem, scelerisque sed sagittis id,
+				eleifend venenatis ligula. Vivamus placerat neque sit amet metus
+				ultricies facilisis. Nulla a odio magna. Pellentesque habitant morbi
+				tristique senectus et netus et malesuada fames ac turpis egestas. Sed
+				commodo quam eu enim lacinia vitae ultrices nulla mollis. Aenean eget
+				lectus turpis, at ultrices leo. Nulla vehicula magna in risus ornare
+				vestibulum. Integer gravida magna quam. Donec augue ante, fringilla
+				non congue eu, aliquam lacinia nisi. Class aptent taciti sociosqu ad
+				litora torquent per conubia nostra, per inceptos himenaeos. Maecenas
+				nisl ante, suscipit ut suscipit nec, dictum sit amet orci. Maecenas
+				fermentum sapien turpis, sit amet eleifend justo. Aenean auctor
+				interdum sem sed tincidunt. Aliquam ullamcorper malesuada fermentum.
+				Nunc consectetur, ipsum et pulvinar ultrices, lorem nibh egestas
+				sapien, at egestas lorem metus sit amet lacus. Maecenas non feugiat
+				orci. Curabitur imperdiet tempus lacus, volutpat fermentum diam
+				convallis a. In hac habitasse platea dictumst. Pellentesque nec ipsum
+				diam, at consectetur elit. Duis feugiat ullamcorper libero tincidunt
+				aliquet. Sed leo nisl, iaculis non pellentesque nec, scelerisque vel
+				felis</div>
+		</div>
+	</div>
+
+	<!-- jQ.Plugins > jQ.carousel -->
+	<div title="Carousel" class="panel" id="webcarousel" scrolling="no">
+		<style>
+		.carousel_paging2 {
+			border-radius: 10px;
+			
+			background: #ccc;
+			width: 10px;
+			height: 10px;
+			float: left;
+		}
+
+		.carousel_paging2_selected {
+			border-radius: 10px;
+			
+			background: #000;
+			width: 10px;
+			height: 10px;
+			float: left;
+		}
+
+		.spacer {
+			width: 10px;
+			float: left;
+		}
+
+		.carousel_content {
+			-webkit-transform: translate3d(0, 0, 0);
+		}
+		</style>
+		<script>
+			function init_carousel() {
+				$("#carousel").carousel({
+					pagingDiv: "carousel_dots",
+					totalPages: 4,
+					pagingCssName: "carousel_paging2",
+					pagingCssNameSelected: "carousel_paging2_selected"
+				});
+			}
+			window.addEventListener("load", init_carousel, false);
+		</script>
+		<div id="carousel"
+				style="overflow: hidden; height: 300px; width: 318px; float: left;">
+				<div
+					style="float: left; width: 318px; height: 300px;  background: yellow;">
+					<a href="javascript:alert('test');" id="med_icon_6x3" class="med_icon">
+							Test Link
+						</a>
+					</div>
+				<div
+					style="float: left; width: 318px; height: 300px;  background: green;"></div>
+				<div
+					style="float: left; width: 318px; height: 300px;  background: blue;"></div>
+				<div
+					style="float: left; width: 318px; height: 300px;  background: pink;"></div>
+			</div>
+		<div id="carousel_dots"
+			style="text-align: center; margin-left: auto; margin-right: auto; clear: both; position: relative; top: 10px; z-index: 200">
+		</div>
+	</div>
+
+	<!-- jQ.Plugins > jQ.swipeListener -->
+	<div title="Swipe" class="panel" id="webswipe" scrolling="no">
+		<style>
+			.result {position:absolute;left:100px;}
+		</style>
+		<script>
+			/* This function runs once the page is loaded, but appMobi is not yet active */
+			var init_swipe = function () {
+			$("#swiper").swipe({
+					vthreshold: 30,
+					hthreshold: 50,
+					callBack: function (dir) {
+						debugMsg(dir)
+					}
+				});
+			};
+			window.addEventListener("load", init_swipe, false);
+
+			function debugMsg(direction) {
+				document.getElementById("debug").innerHTML =
+				"Up: <span class='result'>" + direction.up + "</span><br />" +
+				"Down: <span class='result'>" + direction.down + "</span><br />" +
+				"Left: <span class='result'>" + direction.left + "</span><br />" +
+				"Right: <span class='result'>" + direction.right + "</span><br />";
+			}
+		</script>
+		Swipe Below
+		<div id="swiper"
+			style="height: 200px; width: 95%; background:#ccc"></div>
+		<div id="debug"></div>
+	</div>
+
+	<!-- jQ.Plugins > jQ.template -->
+	<div title="Template" class="panel" id="webtemplate">
+		<div id="template_content"></div>
+		<script type="text/html" id="my_template">
+			<% for (i=0;i<5;i++) %>
+			This is item <%=i%><br />
+		</script>
+		<script type="text/javascript">
+			var init_template = function () {
+				$("#template_content").html($.template("my_template"));
+			};
+			window.addEventListener("load", init_template, false);
+		</script>
+	</div>
+
+	<!-- jQ.Plugins > jQ.appMobiSelect -->
+	<div title="Select" class="panel" id="webselect" scrolling="yes">
+		<script>
+			var init_select = function () {
+				$.selectBox.getOldSelects("selectTest");
+				$.selectBox.getOldSelects("selectTest2");
+			};
+			window.addEventListener("load", init_select, false);
+		</script>
+		On android devices, this will change select boxes to a custom control to fix a bug in Webkit with css3 transform3d.<br /><br />
+		<div id="selectTest" style="-webkit-transform: translate3d(0, 0, 0)">
+			<!-- content goes here-->
+			
+			<br>
+			<span>
+				<select id="test">
+					<option value="1">One</option>
+					<option value="2">Two</option>
+					<option value="3">Three</option>
+				</select> 
+			</span><br /><br /> 
+			<br /><br /> 
+			</div>
+			 <div id="selectTest2" style="position:relative;top:10;">
+			<span>
+				<select id="test2">
+					<option value="1">One</option>
+					<option value="2">Two</option>
+					<option value="3">Three</option>
+					<option value="11">1One</option>
+					<option value="22">2Two</option>
+					<option value="33">3Three</option>
+					<option value="43">4Three</option>
+					<option value="53">5Three</option>
+					<option value="63">6Three</option>
+					<option value="73">7Three</option>
+				</select>
+			</span>
+		</div>
+		<br/>
+		<br/>
+		This is just some filler content<br><br>
+		This is just some filler content<br><br>This is just some filler content<br><br>
+		
+	</div>
+
+	<!-- jQ.Plugins > jQ.appMobiPassword -->
+	<div title="Password" class="panel" id="webpassword" scrolling="no">
+		<script>
+			var pwFixer = new $.passwordBox();
+			var init_password = function () {
+				var succ=pwFixer.getOldPasswords("selectPassword");
+				
+				if(succ!=-1)
+				   $("#showPassword").show();
+			};
+			window.addEventListener("load", init_password, false);
+
+			var pwState = false;
+			function ShowHidePW() {
+				if (!pwState) {
+					pwFixer.changePasswordVisiblity(1, "one");
+					pwState = true;
+				}
+				else {
+					pwFixer.changePasswordVisiblity(0, "one");
+					pwState = false;
+				}
+			}
+		</script>
+		On android devices, this replaces password boxes with a custom control to fix the Webkit css3 transform3d bug. you can also show/hide passwords.<br /><br />
+		<div id="selectPassword" style=" -webkit-transform: translate3d(0, 0, 0)">
+			<span><input type="password" id="one" name="one" placeholder="Password" style="width:200px;color:black;"></span>
+			<br />
+			<span id="showPassword" style="display:none">Show password:<input type="checkbox" onClick="ShowHidePW()"></span>
+		</div>
+	</div>
+
+	<!-- jQ.Plugins > jQ.css3animate -->
+	<div title="Animate" class="panel" id="webanimate" scrolling="no">
+		<script>
+			function moveOnce() {
+				$("#animate").css3Animate({
+					width: "100px",
+					height: "100px",
+					x: "20%",
+					y: "30%",
+					time: "1000ms",
+					opacity: .5,
+					callback: function () {
+						reset()
+					}
+				});
+			}
+			function reset() {
+				$("#animate").css3Animate({
+					y: 0,
+					x: 0,
+					opacity: 1,
+					width: "50px",
+					height: "50px",
+					time: "0ms"
+				});
+			}
+			function moveTwice() {
+				$("#animate").css3Animate({
+					x: 20,
+					y: 30,
+					time: "300ms",
+					callback: function () {
+						window.setTimeout(function(){
+						$("#animate").css3Animate({
+							x: 20,
+							y: 30,
+							time: "500ms",
+							previous: true,
+							callback: function () {
+								reset();
+							}
+						});},300);
+
+					}
+				});
+			}
+			function animQueue(){
+			var tmp = new $.css3AnimateQueue();
+			tmp.push({id:"animate",x:20,y:30,time:"300ms"});
+			tmp.push({id:"animate",x:20,y:30,time:"500ms",previous:true});
+			tmp.push({id:"animate",x:0,y:0,time:"0ms"});
+			tmp.push({id:"animate",x:20,y:30,time:"300ms"});
+			tmp.push({id:"animate",x:20,y:30,time:"500ms",previous:true});
+			tmp.push(function(){reset()});
+			tmp.run();
+			}
+		</script>
+		<a class="button" href="javascript:;" onClick="moveOnce()">Move Once</a> |
+		<a class="button" href="javascript:;" onClick="moveTwice()">Move Twice</a> | 
+		<a class="button" href="javascript:;" onClick="animQueue()">Queue</a>
+		<br />
+		<div id="animate"
+			style="width: 50px; height: 50px; border: 1px solid black; background: red"></div>
+	</div>
+	<!-- ------------------------------------------ -->
+
+	<!-- jQ.Plugins > jQ.drawer -->
+	<div title="Drawer" class="panel" id="webdrawer" scrolling="no">
+	<br><br>
+	<p>a pulldown tool like the notifications bar</p>
+	<div id="drawer" style="position:relative;top:-370px;height:320px;background:black;width:100%">
+	This is some content<br><br>
+	This is some content<br><br>
+	This is some content<br><br>
+	This is some content<br><br>
+
+	<div class="drawer_handle" style="z-index:1;height:30px;width:100%;background:orange;position:absolute;bottom:0px;text-align:center;line-height:30px;font-size:14px;color:black;background:white">PULL DOWN</div>
+	</div>
+
+	<div style="position:absolute;bottom:15px;width:100%;">
+			<div id="drawer_2" style="z-index:1;position:relative;top:105px;height:120px;width:100%;">
+			<div class="drawer_handle" style="height:30px;width:100%;background:orange;position:absolute;top:0px;line-height:30px;text-align:center;font-size:14px;color:black;">PULL UP</div>
+			<br><br>
+			This is content that is pulled up. This could be a menu system.
+			
+			</div>
+		</div>
+		
+	<script>
+	window.addEventListener("load",function(){
+	$("#drawer").drawer();
+	$("#drawer_2").drawer({direction:"up"});},false);
+	</script>
+
+	</div>
+
+</div>
+
+<!-- ------------------------------------------ -->
+<!-- navbar -->
+<div id="navbar">
+	<div class="horzRule"></div>
+    <a href="#main" class='navbar_home' ontouchstart="">home</a>
+    <a href="#jqm" class="navbar_js" ontouchstart="">selectors</a>
+    <a href="#jqmui"  class="navbar_ui" ontouchstart="">ui</a>
+	<a href="#jqmweb"  class="navbar_plugins" ontouchstart="">plugins</a>
+</div>
+	
+<!-- ------------------------------------------ -->
+
+</body>
+</html>
