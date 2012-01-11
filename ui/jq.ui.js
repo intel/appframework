@@ -190,12 +190,19 @@ $.ui =  (function () {
 			var links=$(this.navbar).find("a");
 			for(var i=0;i<links.length;i++)
 			{
-				links[i].tmpClick=links[i].onclick;
-				links[i].onclick=function(){
+				links[i].ontouchstart=function(){
+					var that=this;
+					this.interval=window.setTimeout(function(){that.ontouchend()},200);
+				}
+				links[i].ontouchend=function(){
+					var that=this;
+					window.clearTimeout(that.interval);
+					this.interval=null;
 					$("#navbar a").removeClass("selected");
 					$(this).addClass("selected");
-					this.tmpClick();
+					this.onclick();
 				}
+				
 			}
 			links=null;
 		},
@@ -378,11 +385,15 @@ $.ui =  (function () {
                     modal.innerHTML = "";
                     var button = document.createElement("div");
                     button.style.position="absolute";
-					button.style.right="0px";
+					button.style.right="30px";
 					button.style.top="0px";
 					button.style.zIndex=2000;
-                    button.onclick = function () {console.log('called'); that.hideModal(); }
-                    button.innerHTML = "[x]";
+                    button.ontouchend = function () { that.hideModal(); }
+                    button.innerHTML = "[close]";
+					button.style.height="30px";
+					button.style.width="30px";
+					button.style["line-height"]="30px";
+					button.style["text-algin"]="center";
                     var content = document.createElement("div");
                     content.innerHTML = $am(id).innerHTML;
                     modal.appendChild(button);
@@ -988,7 +999,6 @@ $.ui =  (function () {
 		navBar=document.getElementById("navbar");
 		headerBar=document.getElementById("header");	
 		orientationPos={};
-		console.log($("#content").css("height"));
 		fixTopBar(1);
 	}
 	document.addEventListener("appMobi.device.ready",function(){AppMobi.device.hideSplashScreen();setTimeout(function(){initJQUi()},300);},false);    
@@ -1005,4 +1015,6 @@ $.ui =  (function () {
 			return false;
 	};
 	document.addEventListener('touchmove', preventDefaultScroll, false);
+	
+	
 })();

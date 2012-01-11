@@ -69,8 +69,8 @@
 
     /* This code is used to run as soon as appMobi activates */
     var onDeviceReady=function(){
-		//AppMobi.device.setRotateOrientation("portrait");
-    //    AppMobi.device.setAutoRotate(false);
+		AppMobi.device.setRotateOrientation("portrait");
+        AppMobi.device.setAutoRotate(false);
 		webRoot=AppMobi.webRoot+"kitchensink/";
 	    //hide splash screen
 	    AppMobi.device.hideSplashScreen();	
