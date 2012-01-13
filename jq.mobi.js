@@ -347,7 +347,7 @@ var jq = (function () {
 				if(element.length&&typeof(element)!=="string")
 				   element=element[0];
                 if (typeof (element) == "string")this[i].innerHTML = element +this[i].innerHTML;
-                else this[i].appendChild(element,this[i].firstChild);
+                else this[i].insertBefore(element,this[i].firstChild);
             }
             return this;
         },

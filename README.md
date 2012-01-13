@@ -111,7 +111,7 @@ var myDiv=$("<div id='foo'>") //Creates a div object and returns it
 .offset() //Calculates the first elements offset on the screen
 .isArray(param) //Returns true/false if param is an array
 .isFunction(param) //Returns true/false if param is a function
-.useViewPort(portrait/landscape) //Sets viewport for portrait or landscape
+.useViewPort(portrait,landscape) //Sets viewport for portrait or landscape
 ```
 
 # jQ.Mobi Ajax calls

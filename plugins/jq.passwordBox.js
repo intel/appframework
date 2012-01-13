@@ -19,8 +19,7 @@
 			var isNotAppMobiAndroid = window.AppMobi && AppMobi.device && AppMobi.device.platform && AppMobi.device.platform.toLowerCase().indexOf("android") == -1;
 			if (isNotAppMobiAndroid === undefined)
 				isNotAppMobiAndroid = true;
-			if(navigator.userAgent.toLowerCase().indexOf("android")==-1&&(isNotAppMobiAndroid))
-			   return -1;
+			if (navigator.userAgent.toLowerCase().indexOf("android") == -1 && (isNotAppMobiAndroid)&&navigator.userAgent.toLowerCase().indexOf("silk-accelerated")==-1) return;
 
 			var container = elID && document.getElementById(elID) ? document
 					.getElementById(elID) : document;
