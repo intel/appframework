@@ -58,7 +58,7 @@ var jq = (function () {
     var $jqm = function (toSelect, what) {
             var elements = [];
 			this.length=0;
-            if (!toSelect) return emptyArray;
+            if (!toSelect) return this;
 			
 			else if (toSelect instanceof $jqm)
 				return toSelect;
