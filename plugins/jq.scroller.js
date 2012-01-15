@@ -42,15 +42,7 @@
 			try {
 				this.container = this.el.parentNode;
 				var that = this;
-				this.el.addEventListener('touchmove', function(e) {
-					that.touchMove(e);
-				}, false);
-				this.el.addEventListener('touchstart', function(e) {
-					that.touchStart(e);
-				}, false);
-				this.el.addEventListener('touchend', function(e) {
-					that.touchEnd(e);
-				}, false);
+				this.initEvents();
 				var windowHeight = window.innerHeight;
 				var windowWidth = window.innerWidth;
 									
@@ -128,7 +120,25 @@
 			refresh:false,
 			refreshFunction:null,
 			decelerating:false,
-			
+			listeners:{start:"",move:"",end:""},
+			initEvents:function(){
+			var that=this;
+			this.el.addEventListener('touchmove', this.listeners.start=function(e) {
+					that.touchMove(e);
+				}, false);
+				this.el.addEventListener('touchstart', this.listeners.move=function(e) {
+					that.touchStart(e);
+				}, false);
+				this.el.addEventListener('touchend', this.listeners.end=function(e) {
+					that.touchEnd(e);
+				}, false);	
+			},
+			removeEvents:function(){
+
+				this.el.removeEventListener('touchmove', this.listeners.start,false);
+				this.el.removeEventListener('touchstart', this.listeners.move,false);
+				this.el.removeEventListener('touchend', this.listeners.end,false);	
+			},
 			initScrollbars:function(){
 				var windowHeight = window.innerHeight;
 				var windowWidth = window.innerWidth;

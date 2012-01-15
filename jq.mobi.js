@@ -528,6 +528,7 @@ var jq = (function () {
                     } else result = xhr.responseText;
                     if (error) settings.error.call(context, xhr, 'parsererror', error);
                     else {
+
                         settings.success.call(context, result, 'success', xhr);
                     }
                 } else {
@@ -656,7 +657,7 @@ var jq = (function () {
 	(function($,userAgent){
 			$.os={};
 			$.os.webkit = userAgent.match(/WebKit\/([\d.]+)/)?true:false,
-			$.os.android = userAgent.match(/(Android)\s+([\d.]+)/)?true:false,
+			$.os.android = userAgent.match(/(Android)\s+([\d.]+)/)||userAgent.match(/Silk-Accelerated/)?true:false,
 			$.os.ipad = userAgent.match(/(iPad).*OS\s([\d_]+)/)?true:false,
 			$.os.iphone = !$.os.ipad  && userAgent.match(/(iPhone\sOS)\s([\d_]+)/)?true:false,
 			$.os.webos = userAgent.match(/(webOS|hpwOS)[\s\/]([\d.]+)/)?true:false,

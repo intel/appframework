@@ -165,6 +165,9 @@ $.ui =  (function () {
                 var that = this;
                 // Fix a bug in iOS where translate3d makes the content blurry
                 this.activeDiv = this.firstDiv;
+                if(this.scrollingDivs[this.activeDiv.id]){
+					this.scrollingDivs[this.activeDiv.id].initEvents();
+				}
                 window.setTimeout(function () {
                     //activeDiv = firstDiv;
 					that.firstDiv.style.display="block";
@@ -266,7 +269,9 @@ $.ui =  (function () {
                     refresh: refreshPull,
                     refreshFunction: refreshFunc
                 }));
+                this.scrollingDivs[myDiv.id].removeEvents();
             }
+            
 			
 			myDiv=null;
 			tmp=null;
@@ -553,7 +558,7 @@ $.ui =  (function () {
                     default:
                         this.slideTransition(oldDiv, currWhat, back);
                 }
-
+                
                 if (back) {
 					
                     if (this.history.length > 0) {
@@ -579,7 +584,12 @@ $.ui =  (function () {
                 } else if(this.showBackbutton)
                     this.backButton.style.visibility = "visible";
                 this.activeDiv = what;
-
+				if(this.scrollingDivs[this.activeDiv.id]){
+					this.scrollingDivs[this.activeDiv.id].initEvents();
+				}
+				if(this.scrollingDivs[oldDiv.id]){
+				   this.scrollingDivs[oldDiv.id].removeEvents();
+				}
                 //Let's check if it has a function to run to update the data
                 if (dataObj && dataObj.dataFunction && window[dataObj.dataFunction]) {
                     window[dataObj.dataFunction](what, dataObj.dataParams);
@@ -981,11 +991,12 @@ $.ui =  (function () {
 			window.scrollTo(0,1); 
 		if(!orientationPos[orientation]){
 			window.setTimeout(function(){
-				document.body.style.height=window.innerHeight;
+
 				$("#content").css("height",window.innerHeight-navBarH-headerBarH+"px");
 				orientationPos[orientation]=$("#content").css("height");
 				if(parseInt($("#content").css("height"))==0)
 				   fixTopBar(1);
+				$(document.body).css('height',window.innerHeight+"px");
 			},200);
 		}
 		else {
