@@ -126,9 +126,7 @@
 			this.el.addEventListener('touchmove', this.listeners.start=function(e) {
 					that.touchMove(e);
 				}, false);
-				this.el.addEventListener('touchstart', this.listeners.move=function(e) {
-					that.touchStart(e);
-				}, false);
+				
 				this.el.addEventListener('touchend', this.listeners.end=function(e) {
 					that.touchEnd(e);
 				}, false);	
@@ -136,7 +134,7 @@
 			removeEvents:function(){
 
 				this.el.removeEventListener('touchmove', this.listeners.start,false);
-				this.el.removeEventListener('touchstart', this.listeners.move,false);
+				
 				this.el.removeEventListener('touchend', this.listeners.end,false);	
 			},
 			initScrollbars:function(){
@@ -181,10 +179,10 @@
 			// handle the moving function
 			touchMove : function(event) {
 				try {
-					//if(!touchStarted){
-						//touchStarted=true;
-						//this.touchStart(event);
-					//}
+					if(!touchStarted){
+						touchStarted=true;
+						this.touchStart(event);
+					}
 
 					if (this.currentScrollingObject != null) {
 						event.preventDefault();
