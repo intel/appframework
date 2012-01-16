@@ -667,7 +667,9 @@ var jq = (function () {
 			$.os.webos = userAgent.match(/(webOS|hpwOS)[\s\/]([\d.]+)/)?true:false,
 			$.os.touchpad = $.os.webos && userAgent.match(/TouchPad/)?true:false;
 			$.os.ios=$.os.ipad||$.os.iphone;
-			$.os.blackberry=UserAgent.match(/BlackBerry/)||UserAgent.match(/PlayBook/)?true:false;
+			$.os.blackberry=userAgent.match(/BlackBerry/)||userAgent.match(/PlayBook/)?true:false;
+			$.os.opera=userAgent.match(/Opera/)?true:false;
+			$.os.fennec=userAgent.match(/fennec/)?true:false;
 	})($,navigator.userAgent);
 	
 	if(typeof String.prototype.trim !== 'function') {
