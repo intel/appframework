@@ -991,13 +991,12 @@ $.ui =  (function () {
 			window.scrollTo(0,1); 
 		if(!orientationPos[orientation]){
 			window.setTimeout(function(){
-
 				$("#content").css("height",window.innerHeight-navBarH-headerBarH+"px");
+				document.body.style.height=window.innerHeight;
 				orientationPos[orientation]=$("#content").css("height");
 				if(parseInt($("#content").css("height"))==0)
 				   fixTopBar(1);
-				$(document.body).css('height',window.innerHeight+"px");
-			},200);
+			},300);
 		}
 		else {
 			$("#content").css("height",orientationPos[orientation]);

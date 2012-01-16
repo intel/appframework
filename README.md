@@ -155,6 +155,7 @@ $.os.iphone     //True if iPhone user agent
 $.os.webos      //True if WebOS detected
 $.os.touchpad   //True if WebOS and Touchpad user agent
 $.os.ios        //True if iPad or iPhone
+$.os.blackberry //True if Blackberry PlayBook or OS >=6
 ```
 
 # Plugins

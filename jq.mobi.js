@@ -1,4 +1,5 @@
 /**
+/**
  * jQ.Mobi is a query selector class for HTML5 mobile apps on a WebkitBrowser.
  * Since most mobile devices (Android, iOS, webOS) use a WebKit browser, you only need to target one browser.
  * We are able to increase the speed greatly by removing support for legacy desktop browsers and taking advantage of browser features, like native JSON parsing and querySelectorAll
@@ -264,7 +265,10 @@ var jq = (function () {
                 name.split(/\s+/g).forEach(function (cname) {
                     classList = classList.replace(classRE(cname), "");
                 });
-               this[i].className = classList.trim();
+				if(classList.length>0)
+					this[i].className = classList.trim();
+			    else
+				   classList="";
             }
             return this;
         },
@@ -663,9 +667,18 @@ var jq = (function () {
 			$.os.webos = userAgent.match(/(webOS|hpwOS)[\s\/]([\d.]+)/)?true:false,
 			$.os.touchpad = $.os.webos && userAgent.match(/TouchPad/)?true:false;
 			$.os.ios=$.os.ipad||$.os.iphone;
-			
+			$.os.blackberry=UserAgent.match(/BlackBerry/)||UserAgent.match(/PlayBook/)?true:false;
 	})($,navigator.userAgent);
+	
+	if(typeof String.prototype.trim !== 'function') {
+		String.prototype.trim = function() {
+		return this.replace(/^\s+|\s+$/, ''); 
+		}
+	}
+	
     return $;
+	
+	
 })();
 '$' in window || (window.$ = jq);
 
