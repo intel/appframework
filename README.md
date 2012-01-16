@@ -1,199 +1,107 @@
-# jQ.Mobi - a HTML5 targeted Javascript Framework
+jQuery Mobile Framework
+=======================
+[Official Site: http://jquerymobile.com](http://jquerymobile.com)
 
-jQ.Mobi is a Javascript framework targeted at HTML5 browsers with a blazingly fast query selector library that supports W3C queries.  
+[Demos and Documentation](http://jquerymobile.com/test/)
 
-It is comprised of three parts.
+How to build your own jQuery Mobile CSS and JS files
+====================================================
+Clone this repo and build the js and css files (you'll need Git and Make installed):
 
-1) jQ.Mobi  - query selector library
+    git clone git://github.com/jquery/jquery-mobile.git
+    cd jquery-mobile
+    make
 
-2) jQ.Ui - UI/UX library for mobile applications in a webkit browser.  Please see the Kitchen Sink folder for a demo
+A full version and a minified version of the jQuery Mobile JavaScript and CSS files will be created
+in a folder named "compiled". There is also now a Structure only css file so you can add your own theme on top of it.
 
-3) jQ.Plugins - plugins for mobile applications in a webkit browser.
+How to build a self-contained version of the Docs/Demos
+=======================================================
+Once you have your own cloned repo on your computer:
 
-# About jQ.Mobi
+    make docs
 
-While doing mobile development, we quickly found there was no place for the famous query selector libraries.  They often performed poorly, were large in size, and targeted legacy desktop browsers (IE6).  There were a few new libraries targeting mobile development, but speed tests showed they actually performed worse.
-
-We started talking to our development community and asked them what they wanted.  The key features were
-
-1. Fast performance
-
-2. Small code base
-
-3. Only needs to support a small subset of commands
-
-Rather then try to improve another library, we found it easier to build one from the ground up, but recognizing the groundwork other frameworks laid out.  By doing this, we were able to identify simple ways to increase speed performance.  Our tests repeatedly showed we were 2x or more faster at single operation commands. 
- 
-All the libraries performed similar when operations were performed on a group of elements.
+The docs will be built and available in the compiled/demos folder. You can move this folder to your web server or
+other location. It has no dependencies on anything other than a basic HTML web server.
 
 
-# Using jQ.Mobi
+Submitting bugs
+===============
+If you think you've found a bug, please report it by following these instructions:
 
-To use jQ.Mobi, include the script in your html file.  You can use the pre-built minified version.
+1. Visit the [Issue tracker: https://github.com/jquery/jquery-mobile/issues](https://github.com/jquery/jquery-mobile/issues)
+2. Create an issue explaining the problem and expected result
+    - Be sure to include any relevant information for reproducing the issue
+    - Include information such as:
+        * Browser/device (with version #)
+        * The version of the jQuery Mobile code you're running
+        * If you are running from a git version, include the date and/or hash number
+    - Make sure that the bug still exists at http://jquerymobile.com/test/ as it may be fixed already
+    - You can use the CDN hosted JS and CSS files to test in your own code by using:
+        * [JS](http://code.jquery.com/mobile/latest/jquery.mobile.min.js)
+        * [CSS](http://code.jquery.com/mobile/latest/jquery.mobile.min.css)
+    - Include a link to some code of the bug in action. You can use either of these services to host your code
+        * [jsbin](http://jsbin.com)
+        * [jsfiddle](http://jsfiddle.net)
+3. Submit the issue.
 
-``` js
-<script src="jq.mobi.min.js"></script>
-```
+Recommended: [JS Bin issue template with instructions](http://jsbin.com/obowiw/edit)
 
-This will then create two objects that you can work with.  It will NOT override a pre-existing $ object.
-``` js
-$("#main")
-jq("#main")
-```
+Submitting patches
+==================
+To contribute code and bug fixes to jQuery Mobile: fork this project on Github, make changes to the code in your fork,
+and then send a "pull request" to notify the team of updates that are ready to be reviewed for inclusion.
 
-# Query Selector
+Detailed instructions can be found at [jQuery Mobile Patching](https://gist.github.com/1294035)
 
-W3C spec'ed queries are supported.  What this means is you can do the following
+Running the jQuery Mobile demos & docs locally
+==============================================
+To preview locally, you'll need to clone a local copy of this repository and point your Apache & PHP webserver at its
+root directory (a webserver is required, as PHP and .htaccess are used for combining development files).
 
-``` js
-$("input[type='text']")
-```
+If you don't currently have a webserver running locally, there are a few options.
 
-You can NOT do the following, as it's not supported by the browsers.
+If you're on a Mac, you can try dropping jQuery Mobile into your sites folder and turning on Web Sharing via System
+Prefs. From there, you'll find a URL where you can browse folders in your sites directory from a browser.
 
-``` js
-$("input:text")
-```
+Another quick way to get up and running is to download and install MAMP for Mac OSX. Once installed, just open MAMP,
+click preferences, go to the Apache tab, and select your local jQuery Mobile folder as the root. Then you can open a
+browser to http://localhost:8888 to preview the code.
 
+Another alternative is XAMPP (Mac, Windows). You need to actually modify Apache's httpd.conf to point to your checkout:
+[Instructions](http://www.apachefriends.org/en/xampp.html)
 
+You need the following Apache modules loaded:
 
-# Syntax:
+* Rewrite (mod\_rewrite.so)
+* Expire (mod\_expires.so)
+* Header (mod\_headers.so)
 
-Basic call
+Alternatively, with the addition of async loading, you can use the python simple http server from the project root:
 
-``` js
-$("#id").hide()
-```
+    $ python -m SimpleHTTPServer 8000
 
-You can specify a Dom element, selector, list of nodes, or HTML string.	
+And in your browser visit [localhost:8000](http://localhost:8000).
 
-``` js
-$("span").bind("click",function(){console.log("clicked");}); // -> find all span elements and attach a click event
-```
-You can pass in an HTML string and it will create the object for you.
+AMD Support in Development
+==========================
 
-``` js
-var myDiv=$("<div id='foo'>") //Creates a div object and returns it
-```
+Please bear in mind that async loading is not supported for production and is primarily used for the project's build process. As a result developers should expect an initial flash of unstyled content, which will not occur when the library is compiled.
 
-# jQ.Mobi API functions
-``` js
+If you find dependency bugs when using the async loading support for development please log them in the github issue tracker.
 
-.length() // return the count of all elements found
-.find() // Find all chidlren that match the given selcetor
-.html() // Returns the first elements .innerHTML
-.html('new html') // set the elements .innerHTML with the given HTML
-.text() // Returns the first elements .innerTEXT
-.text('new text') // Set the elements .innerTEXT with the given string
-.css('property') //Gets the first elements desired css property
-.css('property','value') //Sets the elements css property to value
-.empty() //Sets the elements .innerHTML to an empty string
-.hide() //Sets the elements display css attribute to "none"
-.show() //Sets the elements display css attribute to "block"
-.toggle() //Toggles the elements display css attribute
-.val() //Gets the first elements value  property
-.val("value") //Sets the elements value property
-.attr("attribute")// Gets the first elements desired attribute
-.attr("attribute","value") //Sets the elements attribute with the value
-.removeAttr("attribute")  //Removes the attribute from the elements
-.remove() //Remove an element from the Dom
-.addClass("className") //Adds the css clas name to the selected elements
-.removeClass("className") //Removes a css class from the selected elements
-.hasClass("className")  //Checks the first element to see if the css class exists
-.hasClass("className",_element)  //Checks the passed in element to see if the css class exists
-.bind("event",function(){}) //Binds a function to the event listener selected to the selected elements
-.unbind("event") //Unbinds a function to the event listener selected to the selected elements
-.trigger("event",data) //Trigger an event on the selected elements and pass in optional data
-.append(element) //Appends an element to the selected elements
-.prepend() //Prepends an element to the selected elements
-.get() //Returns the first element from the selected elements
-.get(2) //Returns the third element from the selected elements 
-.offset() //Calculates the first elements offset on the screen
-.isArray(param) //Returns true/false if param is an array
-.isFunction(param) //Returns true/false if param is a function
-.useViewPort(portrait,landscape) //Sets viewport for portrait or landscape
-```
+Building With A Custom Theme
+============================
+To use a custom theme in your own build, you'll need Make installed. You can find the themes in the CSS/Themes folder.
+To create a new theme:
 
-# jQ.Mobi Ajax calls
+1. Copy the `Default` folder from CSS/Themes to a new folder in the same location. The name of the folder will be the
+theme's name. For testing locally, make sure the index.php file is copied as well.
+2. Edit the `jquery.mobile.theme.css` file so it contains your custom fonts and colors.
+3. Once you are done editing your files and saving them, open a terminal.
+4. Navigate to the jQuery-Mobile folder's root.
+5. Run the following command to build jQuery-Mobile (THEME is the name of the folder for your theme from step 1.):
 
-``` js
+    make THEME=YourThemeName
 
-.get(url,callback) //Makes an Ajax request to the URL and executes the callback funtion with the result
-.post(url,data,callback,dataType) //Makes an Ajax POST request to the URL with the data and executes the callback with the result.  An optional dataType can be passed in, as some webservices require the header
-.getJSON(url,data,callback) //Makes an ajax request with the data and executes callback function passing in a JSON object from the Ajax response into the callback function.
-```
-If you need more access, you can use the following.
-
-``` js
-.ajax {
-   type:'POST', //defaults to GET
-   url:'/api/getinfo', //defaults to window.location
-   contentType:'application/json', //defaults to application/x-www-form-urlencoded
-   headers:{},
-   dataType:'application/json', //defaults to text/html
-   data:{username:foo}, //Can be a Key/Value pair string or object.  If it's an object, $.serialize is called to turn it into a Key/Value pair string
-   success:function(data){}, //function to call on successful Ajax request
-   error:function(data){}, //function to call when an error exists in the Ajax request
-}
-```
-
-If the url contains the pattern =? in it, a jsonP request will be made.  These can ONLY be GET requests
-
-# jQ.Mobi Helper calls
-``` js
-.serialize() //Serialize a JSON object into KVP for a querystring
-.parseJSON() //Backwards compatability JSON parsing call.  Uses the browsers native JSON parser
-```
-
-# jQ.Mobi OS detectors
-
-``` js
-$.os.webkit     //True if webkit found in the user agent
-$.os.android    //True if anroid useragent
-$.os.ipad       //True if iPad useragent
-$.os.iphone     //True if iPhone user agent
-$.os.webos      //True if WebOS detected
-$.os.touchpad   //True if WebOS and Touchpad user agent
-$.os.ios        //True if iPad or iPhone
-$.os.blackberry //True if Blackberry PlayBook or OS >=6
-```
-
-# Plugins
-
-jQ.Mobi is built with the extendability to add plugins.  To create a plugin, you will most likely extend the $.fn object by passing a reference of the main jQ.Mobi object
-
-``` js
-
-(function($){
-  $.fn['foo']=function(){
-     alert("bar");
-  }
-})(jq);
-
-```
-
-# Contribute
-
-You can contribute to the core code by forking it and make a pull request.  Please keep in mind we do not want to add functionality that is a one-off case.  These are best dealt with via plugins.
-
-
-# Bugs
-
-Please use github to report any bugs found.  Please provide the following
-
-1. Any error messages from the console
-
-2. Line numbers of offending code
-
-3. Test cases
-
-4. Description of the Error
-
-5. Expected result
-
-6. Browser/Device you are testing on
-
-
-# License
-
-jQ.Mobi is is licensed under the terms of the MIT License, see the included license.txt file.
+6. The compiled files will be located in the "compiled" folder in the root of jQuery-Mobile.
