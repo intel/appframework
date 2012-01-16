@@ -204,14 +204,31 @@ var jq = (function () {
             return this;
         },
         hide: function () {
-            return this.css("display", "none");
+			if(this.length==0) return null;
+			for(var i=0;i<this.length;i++){
+				this[i]['data-jqm-old-style']=this[i].style['display'];
+				this[i].style['display']="none";
+			}
+            return this;
         },
         show: function () {
-            return this.css("display", "block");
+            if(this.length==0) return null;
+			for(var i=0;i<this.length;i++){
+				this[i].style['display']=this[i]['data-jqm-old-style']!=null?this[i]['data-jqm-old-style']:'block';
+				delete this[i]['data-jqm-old-style'];
+			}
+            return this;
         },
         toggle: function () {
             for (var i = 0; i < this.length; i++) {
-                this[0].style.display = this[0].style.display == "none" ? "block" : "none";
+				if(this[i].style['display']!="none"){
+					this[i]['data-jqm-old-style']=this[i].style['display'];
+				this[i].style['display']="none";
+                }
+				else {
+					this[i].style['display']=this[i]['data-jqm-old-style']!=""?this[i]['data-jqm-old-style']:'block';
+					delete this[i]['data-jqm-old-style'];
+				}
             }
             return this;
         },
