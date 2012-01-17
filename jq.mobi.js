@@ -40,7 +40,6 @@ var jq = (function () {
     }
 
     var $jqm = function (toSelect, what) {
-        var elements = [];
         this.length = 0;
         if (!toSelect) {
             return this;
@@ -65,7 +64,7 @@ var jq = (function () {
         }
         var dom = this.selector(toSelect, what);
         if (!dom) {
-            return this; //create empty array
+            return this; 
         }
         else if (dom.length === undefined) {
             this[this.length++] = dom;

@@ -158,6 +158,15 @@ body[orient="landscape"] > #header > h1 {
 	background-image:-webkit-gradient(linear,left top,left bottom, color-stop(0.01, #eee), color-stop(0.05, #709de7), color-stop(0.70, #5884d6), color-stop(1, #4470ca));
 } /* behavior of button for touch interaction */
 
+.modalbutton {
+	position:absolute;
+	top:0px;
+	right:5px;
+	height:32px;
+	width:58px;
+	line-height:32px;
+}
+
 a.customBackButton {
 	float:right;
 	display:block;
@@ -294,22 +303,21 @@ ul > li > a {
 	font-size:18px;
 	line-height:48px;
 	text-decoration:none;
+	border-bottom:1px solid black;
 	color:#fff;
-	text-shadow:rgba(10,12,20,.9) 0px -1px 1px;
-	background:url('images/list_arrow.png'), url('images/horz_border.png'), -webkit-gradient(linear, left top, left bottom, from(rgba(56,65,74,1)), to(rgba(33,38,43,1)));
-	background-position:right center, center bottom, left top;
-	background-repeat:no-repeat;
-	background-size:20px 20px, 100% 1px, 100%;
 	padding-left:8px;
 	padding-right:-80px;
 } /* A touchable, interactive list item. */
 
+ul > li > a:after {
+content:">";
+position:absolute;
+right:15px;
+}
+
  ul > li > a[selected], ul > li > a:active {
 	color:#fff !important;
-	background:url('images/list_arrow_sel.png'), url('images/horz_border.png'), -webkit-gradient(linear, left top, left bottom, from(rgba(42,49,56,1)), to(rgba(33,38,43,1)));
-	background-position:right center, center bottom, left top;
-	background-repeat:no-repeat;
-	background-size:20px 20px, 100% 1px, 100%;
+
 } /* A selected and active states for interactive list items. */
 
 ul > li.group {
