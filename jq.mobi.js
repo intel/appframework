@@ -383,67 +383,10 @@ var jq = (function () {
 				left: obj.left + window.pageXOffset,
 				top: obj.top + window.pageYOffset
 			}	
-		},
-		//The following is from other frameworks to provide compatibility
-		data:function(name,value){
-			return this.attr("data-"+name,value);
-		},
-		filter:function(sel){
-			return $([].filter.call(this,(function(elem){
-			   return elem.parentNode&&$(elem.parentNode,sel).indexOf(elem)>=0;
-			})));
-		},
-		is:function(sel){
-			return this.length>0&&$(this[0]).filter(sel).length>0;
-		},
-		submit:function(cb){
-		   return this.bind("submit",cb);
-		},
-		end:function(){
-			return this.prevObject || $();
-		},
-		closest: function(selector, context){
-		var node = this[0], candidates = $(context || document, selector);
-		if (!candidates.length) node = null;
-			while (node && candidates.indexOf(node) < 0)
-				node = node !== context && node !== document && node.parentNode;
-		return $(node);
-		},
-		parents: function(selector){
-			var ancestors = [], nodes = this;
-			while (nodes.length > 0)
-			nodes = $.map(nodes, function(node){
-			  if ((node = node.parentNode) && node !== document && ancestors.indexOf(node) < 0) {
-				ancestors.push(node);
-				return node;
-			  }
-		   });
-		  return filtered(ancestors, selector);
-		},
-		parent: function(selector){
-		  return filtered(uniq(this.pluck('parentNode')), selector);
-		},
-		children: function(selector){
-		  return filtered(this.map(function(){ return slice.call(this.children) }), selector);
-		},
-		siblings: function(selector){
-		  return filtered(this.map(function(i, el){
-			return slice.call(el.parentNode.children).filter(function(child){ return child!==el });
-		  }), selector);
-		}
+		}		
     };
-	'filter,find,closest,parents,parent,children,siblings'.split(',').forEach(function(property){
-    var fn = $.fn[property];
-		$.fn[property] = function() {
-		  var ret = fn.apply(this, arguments);
-		  ret.prevObject = this;
-		  return ret;
-		}
-	 });
-  
-	function filtered(nodes, selector){
-		return selector === undefined ? $(nodes) : $(nodes).filter(selector);
-	}
+	  
+	
 	/* end compatibilty */
 	
 
