@@ -293,7 +293,7 @@ var jq = (function () {
                 if (classList.length > 0)
                     this[i].className = classList.trim();
                 else
-                    classList = "";
+                    this[i].className="";
             }
             return this;
         },
