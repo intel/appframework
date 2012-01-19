@@ -365,7 +365,12 @@ var jq = (function (window) {
             for (i = 0; i < this.length; i++) {
                 if (element.length && typeof element != "string")
                     element = element[0];
-                if (typeof element == "string") this[i].innerHTML += element;
+                if (typeof element == "string"){
+				   var obj=$(element).get();
+				   if(obj===undefined)
+				      obj=$("<span>"+element+"</span>").get();
+				   this[i].appendChild(obj);
+				}
                 else this[i].appendChild(element);
             }
             return this;
@@ -376,7 +381,12 @@ var jq = (function (window) {
             for (i = 0; i < this.length; i++) {
                 if (element.length && typeof element != "string")
                     element = element[0];
-                if (typeof element == "string") this[i].innerHTML = element + this[i].innerHTML;
+                if (typeof element == "string"){
+				   var obj=$(element).get();
+				   if(obj===undefined)
+				      obj=$("<span>"+element+"</span>").get();
+				   this[i].insertBefore(obj,this[i].firstChild);
+				}
                 else this[i].insertBefore(element, this[i].firstChild);
             }
             return this;
@@ -655,5 +665,4 @@ var jq = (function (window) {
 
 })(window);
 '$' in window || (window.$ = jq);
-
 
