@@ -147,6 +147,7 @@
             pagingDiv: null,
             pagingCssName: "carousel_paging",
             pagingCssNameSelected: "carousel_paging_selected",
+			preventDefaultEvents: true,
             // handle the moving function
             touchStart: function (e) {
 				
@@ -234,7 +235,9 @@
 
                 //	if (!this.movingElement)
                 //	this.touchStart(e);
-                e.preventDefault();
+                if ( this.preventDefaultEvents ) {
+					e.preventDefault();
+				}
                 e.stopPropagation();
                 if (e.touches.length > 1) {
                     this.dx = 0;
