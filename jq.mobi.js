@@ -11,9 +11,11 @@
  * @author AppMobi
  */
 
-var jq = (function () {
+var jq = (function (window) {
     "use strict";
-    var emptyArray = [],
+    var undefined,
+        document = window.document,
+        emptyArray = [],
         slice = emptyArray.slice,
         classCache = [],
         eventHandlers = [],
@@ -27,7 +29,7 @@ var jq = (function () {
 
     function compact(array) {
         return array.filter(function (item) {
-            return item !== undefined && item !== null;
+            return item == undefined;
         });
     }
 
@@ -47,10 +49,10 @@ var jq = (function () {
         else if (toSelect instanceof $jqm) {
             return toSelect;
         }
-        else if (typeof (toSelect) === "function") {
+        else if (typeof toSelect === "function") {
             return $(document).ready(toSelect);
         }
-        else if (typeof (toSelect) === "object") {
+        else if (typeof toSelect === "object") {
             this[this.length++] = toSelect;
             return this;
         }
@@ -105,10 +107,10 @@ var jq = (function () {
             i, key;
         if (likeArray(elements)) for (i = 0; i < elements.length; i++) {
             value = callback(elements[i], i);
-            if (value !== null) values.push(value);
+            if (value !== undefined) values.push(value);
         } else for (key in elements) {
             value = callback(elements[key], key);
-            if (value !== null) values.push(value);
+            if (value !== undefined) values.push(value);
         }
         return flatten(values);
     };
@@ -124,7 +126,7 @@ var jq = (function () {
     };
 
     $.extend = function (target) {
-        if (target === null || typeof (target) === "undefined") target = this;
+        if (target == undefined) target = this;
         if (arguments.length === 1) {
             for (var key in target)
                 this[key] = target[key];
@@ -144,7 +146,7 @@ var jq = (function () {
     };
 
     $.isFunction = function (obj) {
-        return typeof (obj) === "function";
+        return typeof obj == "function";
     };
 
     $.fn = $jqm.prototype = {
@@ -172,11 +174,11 @@ var jq = (function () {
             return this;
         },
         find: function (sel) {
-            if (this.length === 0) return null;
+            if (this.length === 0) return undefined;
             return $(sel, this[0]);
         },
         html: function (html) {
-            if (this.length === 0) return null;
+            if (this.length === 0) return undefined;
             if (html === undefined) return this[0].innerHTML;
             for (var i = 0; i < this.length; i++) {
                 this[i].innerHTML = html;
@@ -184,7 +186,7 @@ var jq = (function () {
             return this;
         },
         text: function (text) {
-            if (this.length === 0) return null;
+            if (this.length === 0) return undefined;
             if (text === undefined) return this[0].textContent;
             for (var i = 0; i < this.length; i++) {
                 this[i].textContent = text;
@@ -192,7 +194,7 @@ var jq = (function () {
             return this;
         },
         css: function (attribute, value) {
-            if (this.length === 0) return null;
+            if (this.length === 0) return undefined;
             if (value === undefined && typeof (attribute) === "string") return this[0].style[attribute];
             for (var i = 0; i < this.length; i++) {
                 if (typeof (attribute) === "object") {
@@ -212,7 +214,7 @@ var jq = (function () {
             return this;
         },
         hide: function () {
-            if (this.length === 0) return null;
+            if (this.length === 0) return undefined;
             for (var i = 0; i < this.length; i++) {
                 this[i]['data-jqm-old-style'] = this[i].style.display;
                 this[i].style.display = "none";
@@ -220,9 +222,9 @@ var jq = (function () {
             return this;
         },
         show: function () {
-            if (this.length === 0) return null;
+            if (this.length === 0) return undefined;
             for (var i = 0; i < this.length; i++) {
-                this[i].style.display = this[i]['data-jqm-old-style'] != null ? this[i]['data-jqm-old-style'] : 'block';
+                this[i].style.display = this[i]['data-jqm-old-style'] != undefined ? this[i]['data-jqm-old-style'] : 'block';
                 delete this[i]['data-jqm-old-style'];
             }
             return this;
@@ -241,7 +243,7 @@ var jq = (function () {
             return this;
         },
         val: function (value) {
-            if (this.length === 0) return null;
+            if (this.length === 0) return undefined;
             if (value === undefined) return this[0].value;
             for (var i = 0; i < this.length; i++) {
                 this[i].value = value;
@@ -249,7 +251,7 @@ var jq = (function () {
             return this;
         },
         attr: function (attr, value) {
-            if (this.length === 0) return null;
+            if (this.length === 0) return undefined;
 
             if (value === undefined) return this[0].getAttribute(attr);
 
@@ -303,7 +305,7 @@ var jq = (function () {
             return classRE(name).test(element.className);
         },
         bind: function (event, callback) {
-            if (event === "" || event === null)
+            if (event === "" || event == undefined)
                 return;
             for (var i = 0; i < this.length; i++) {
                 (function (obj) {
@@ -327,7 +329,7 @@ var jq = (function () {
             return this;
         },
         unbind: function (event) {
-            if (event === "" || event === null)
+            if (event === "" || event == undefined)
                 return;
             for (var i = 0; i < this.length; i++) {
                 (function (obj) {
@@ -361,9 +363,9 @@ var jq = (function () {
         append: function (element) {
             var i;
             for (i = 0; i < this.length; i++) {
-                if (element.length && typeof (element) !== "string")
+                if (element.length && typeof element != "string")
                     element = element[0];
-                if (typeof (element) === "string") this[i].innerHTML += element;
+                if (typeof element == "string") this[i].innerHTML += element;
                 else this[i].appendChild(element);
             }
             return this;
@@ -372,19 +374,19 @@ var jq = (function () {
             var i;
             var that = this;
             for (i = 0; i < this.length; i++) {
-                if (element.length && typeof (element) !== "string")
+                if (element.length && typeof element != "string")
                     element = element[0];
-                if (typeof (element) === "string") this[i].innerHTML = element + this[i].innerHTML;
+                if (typeof element == "string") this[i].innerHTML = element + this[i].innerHTML;
                 else this[i].insertBefore(element, this[i].firstChild);
             }
             return this;
         },
         get: function (index) {
             index = index === undefined ? 0 : index;
-            return (this[index]) ? this[index] : null;
+            return (this[index]) ? this[index] : undefined;
         },
         offset: function () {
-            if (this.length === 0) return null;
+            if (this.length === 0) return undefined;
             var obj = this[0].getBoundingClientRect();
             return {
                 left: obj.left + window.pageXOffset,
@@ -406,7 +408,7 @@ var jq = (function () {
         success: empty,
         error: empty,
         complete: empty,
-        context: null,
+        context: undefined,
         timeout: 0
     };
 
@@ -540,7 +542,7 @@ var jq = (function () {
             success = data;
             data = {};
         }
-        if (typeof (dataType) === "undefined") dataType = "html";
+        if (dataType === undefined) dataType = "html";
         return this.ajax({
             url: url,
             type: "POST",
@@ -651,7 +653,7 @@ var jq = (function () {
     return $;
 
 
-})();
+})(window);
 '$' in window || (window.$ = jq);
 
 
