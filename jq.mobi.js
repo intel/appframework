@@ -29,7 +29,7 @@ var jq = (function (window) {
 
     function compact(array) {
         return array.filter(function (item) {
-            return item !== undefined;
+            return item != undefined;
         });
     }
 
