@@ -465,7 +465,7 @@ if (!window.jq || typeof (jq) !== "function") {
                         element = element[0];
                     if (typeof element == "string") {
                         var obj = $(element).get();
-                        if (obj == undefined) {
+                        if (obj == undefined||obj.length==0) {
                             obj = document.createTextNode(element);
                         }
                         this[i].appendChild(obj);
@@ -483,8 +483,9 @@ if (!window.jq || typeof (jq) !== "function") {
                         element = element[0];
                     if (typeof element == "string") {
                         var obj = $(element).get();
-                        if (obj == undefined)
+                        if (obj == undefined||obj.length==0) {
                             obj = document.createTextNode(element);
+						}
                         this[i].insertBefore(obj, this[i].firstChild);
                     } 
                     else

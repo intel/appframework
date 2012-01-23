@@ -55,6 +55,8 @@ You can NOT do the following, as it's not supported by the browsers.
 $("input:text")
 ```
 
+In some functions, an additional selector can be used.  This can be a string, array, or a jQ.Mobi object.  We currently do not support functions
+
 
 
 # Syntax:
@@ -109,8 +111,17 @@ var myDiv=$("<div id='foo'>") //Creates a div object and returns it
 .get() //Returns the first element from the selected elements
 .get(2) //Returns the third element from the selected elements 
 .offset() //Calculates the first elements offset on the screen
+.data(param,value)// Sets a data-* attribute for the param
+.data(param) //Gets a data-* attribute for the param
+.parent(selector) //Returns the parent nodes based off selector
+.children(selector) //Returns the children of the elements
+.siblings(selector) //Returns the siblings the elemnts
+.filter(selector) //Filters the elements based off selector
+.not(selector) //Filters the elements based off the selector. Returns matches that do NOT match the selector
+.end() //Used in conjuction with filtered results to get the previous jQ.Mobi object
 .isArray(param) //Returns true/false if param is an array
 .isFunction(param) //Returns true/false if param is a function
+.isObject(param) //Returns true/false if param is an object
 .useViewPort(portrait,landscape) //Sets viewport for portrait or landscape
 ```
 
@@ -141,8 +152,9 @@ If the url contains the pattern =? in it, a jsonP request will be made.  These c
 
 # jQ.Mobi Helper calls
 ``` js
-.serialize() //Serialize a JSON object into KVP for a querystring
-.parseJSON() //Backwards compatability JSON parsing call.  Uses the browsers native JSON parser
+.param() //Serialize a JSON object into KVP for a querystring
+.parseJSON(string) //Backwards compatability JSON parsing call.  Uses the browsers native JSON parser
+.parseXML(string) //Parses a string and returns a XML document version
 ```
 
 # jQ.Mobi OS detectors
