@@ -54,6 +54,17 @@ $.ui = (function () {
         scrollingDivs: [],
         firstDiv: "",
         remoteJSPages: {},
+        /* Added by Tim Fisher */
+        ready : function(callback){
+        	var that = this;
+        	if (this.launchCompleted){
+        		callback();
+        	} else {
+        		setTimeout(function(){
+        			that.ready(callback);
+        		}, 10);
+        	}
+        },
         setBackButtonStyle: function (className) {
             $am("backButton").className = className;
         },
