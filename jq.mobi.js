@@ -465,10 +465,15 @@ if (!window.jq || typeof (jq) !== "function") {
                         element = element[0];
                     if (typeof element == "string") {
                         var obj = $(element).get();
+						
                         if (obj == undefined||obj.length==0) {
                             obj = document.createTextNode(element);
                         }
-                        this[i].appendChild(obj);
+						if(obj.nodeName!=undefined&&obj.nodeName.toLowerCase()=="script"&&(!obj.type || obj.type.toLowerCase() === 'text/javascript')){
+						   window.eval(obj.innerHTML);
+						}
+						else
+                           this[i].appendChild(obj);
                     } 
                     else
                         this[i].appendChild(element);
@@ -486,7 +491,11 @@ if (!window.jq || typeof (jq) !== "function") {
                         if (obj == undefined||obj.length==0) {
                             obj = document.createTextNode(element);
 						}
-                        this[i].insertBefore(obj, this[i].firstChild);
+						if(obj.nodeName!=undefined&&obj.nodeName.toLowerCase()=="script"&&(!obj.type || obj.type.toLowerCase() === 'text/javascript')){
+						   window.eval(obj.innerHTML);
+						}
+                        else
+						   this[i].insertBefore(obj, this[i].firstChild);
                     } 
                     else
                         this[i].insertBefore(element, this[i].firstChild);
@@ -583,7 +592,12 @@ if (!window.jq || typeof (jq) !== "function") {
             },
             end: function() {
                 return this.oldElement != undefined ? this.oldElement : $();
-            }
+            },
+			clone:function(deep){
+			   if(this.length==0)
+			     return undefined;
+			   
+			}
         
         };
 
