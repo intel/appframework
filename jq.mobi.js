@@ -157,6 +157,16 @@ var jq = (function (window) {
         indexOf: emptyArray.indexOf,
         concat: emptyArray.concat,
         selector: _selector,
+        parent:function(){
+			if(this.length==0) return this;
+			var elems=[];
+			var newObj=$();
+			for(var i=0;i<this.length;i++)
+			{
+				newObj.push(this[i].parentNode);
+			}
+			return newObj;
+		},
         map: function (fn) {
             return $.map(this, function (el, i) {
                 return fn.call(el, i, el);
@@ -402,7 +412,16 @@ var jq = (function (window) {
                 left: obj.left + window.pageXOffset,
                 top: obj.top + window.pageYOffset
             };
-        }
+        },
+        clone : function ( value ) {
+        	if (this.length === 0) return undefined;
+			if (value === true || !value) {
+				return this[0].cloneNode(true);
+			} else {
+				return this[0].cloneNode(false);
+			}
+		}
+		
     };
 
 
@@ -659,6 +678,10 @@ var jq = (function (window) {
             return this.replace(/^\s+|\s+$/, '');
         };
     }
+    
+    $.replace = function ( newElem, oldElem ) {
+		 oldElem[0].parentNode.replaceChild(newElem, oldElem[0]);
+	};
 
     return $;
 
