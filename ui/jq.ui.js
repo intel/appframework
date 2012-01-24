@@ -281,7 +281,7 @@ $.ui = (function () {
             var that = this;
             var theTransition;
             for (var i = 0; i < anchors.length; i++) {
-                if (anchors[i].href.indexOf(":") != -1 && ((anchors[i].href.indexOf("http:") != 0 && anchors[i].href.indexOf("https:") != 0) || anchors[i].href.indexOf("http://maps.google.com/maps") != -1)) { //allow execution of tel: and protocol handlers
+                if (!(anchors[i].href.indexOf("file:///") !== -1 && anchors[i].href.indexOf("#") !== -1) && anchors[i].href.indexOf(":") != -1 && ((anchors[i].href.indexOf("http:") != 0 && anchors[i].href.indexOf("https:") != 0) || anchors[i].href.indexOf("http://maps.google.com/maps") != -1)) { //allow execution of tel: and protocol handlers
                     if (anchors[i].href.indexOf("javascript:") != 0) {
                         anchors[i].oldonclick = anchors[i].onclick;
                         anchors[i].oldhref = anchors[i].href;
