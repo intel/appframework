@@ -1,5 +1,5 @@
 /**
- * $.ui - A User Interface library for creating jQ.Mobi applications
+ * $.ui - A User Interface library for creating jqMobi applications
  * 
  * @copyright 2011 - AppMobi
  */

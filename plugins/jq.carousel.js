@@ -1,4 +1,3 @@
-/*jslint newcap:false */  
 /**
  * jq.web.carousel - a carousel library for html5 mobile apps
  * @copyright AppMobi 2011 - AppMobi

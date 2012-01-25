@@ -1,16 +1,16 @@
-# jQ.Mobi - a HTML5 targeted Javascript Framework
+# jqMobi - a HTML5 targeted Javascript Framework
 
-jQ.Mobi is a Javascript framework targeted at HTML5 browsers with a blazingly fast query selector library that supports W3C queries.  
+jqMobi is a Javascript framework targeted at HTML5 browsers with a blazingly fast query selector library that supports W3C queries.  
 
 It is comprised of three parts.
 
-1) jQ.Mobi  - query selector library
+1) jqMobi  - query selector library
 
 2) jQ.Ui - UI/UX library for mobile applications in a webkit browser.  Please see the Kitchen Sink folder for a demo
 
-3) jQ.Plugins - plugins for mobile applications in a webkit browser.
+3) jqPlugins - plugins for mobile applications in a webkit browser.
 
-# About jQ.Mobi
+# About jqMobi
 
 While doing mobile development, we quickly found there was no place for the famous query selector libraries.  They often performed poorly, were large in size, and targeted legacy desktop browsers (IE6).  There were a few new libraries targeting mobile development, but speed tests showed they actually performed worse.
 
@@ -27,9 +27,9 @@ Rather then try to improve another library, we found it easier to build one from
 All the libraries performed similar when operations were performed on a group of elements.
 
 
-# Using jQ.Mobi
+# Using jqMobi
 
-To use jQ.Mobi, include the script in your html file.  You can use the pre-built minified version.
+To use jqMobi, include the script in your html file.  You can use the pre-built minified version.
 
 ``` js
 <script src="jq.mobi.min.js"></script>
@@ -55,7 +55,7 @@ You can NOT do the following, as it's not supported by the browsers.
 $("input:text")
 ```
 
-In some functions, an additional selector can be used.  This can be a string, array, or a jQ.Mobi object.  We currently do not support functions
+In some functions, an additional selector can be used.  This can be a string, array, or a jqMobi object.  We currently do not support functions
 
 
 
@@ -78,7 +78,7 @@ You can pass in an HTML string and it will create the object for you.
 var myDiv=$("<div id='foo'>") //Creates a div object and returns it
 ```
 
-# jQ.Mobi API functions
+# jqMobi API functions
 ``` js
 
 .length() // return the count of all elements found
@@ -118,14 +118,15 @@ var myDiv=$("<div id='foo'>") //Creates a div object and returns it
 .siblings(selector) //Returns the siblings the elemnts
 .filter(selector) //Filters the elements based off selector
 .not(selector) //Filters the elements based off the selector. Returns matches that do NOT match the selector
-.end() //Used in conjuction with filtered results to get the previous jQ.Mobi object
+.end() //Used in conjuction with filtered results to get the previous jqMobi object
+.clone(deep)//Clones an object and returns the new clone
 .isArray(param) //Returns true/false if param is an array
 .isFunction(param) //Returns true/false if param is a function
 .isObject(param) //Returns true/false if param is an object
-.useViewPort(portrait,landscape) //Sets viewport for portrait or landscape
+
 ```
 
-# jQ.Mobi Ajax calls
+# jqMobi Ajax calls
 
 ``` js
 
@@ -150,14 +151,14 @@ If you need more access, you can use the following.
 
 If the url contains the pattern =? in it, a jsonP request will be made.  These can ONLY be GET requests
 
-# jQ.Mobi Helper calls
+# jqMobi Helper calls
 ``` js
 .param() //Serialize a JSON object into KVP for a querystring
 .parseJSON(string) //Backwards compatability JSON parsing call.  Uses the browsers native JSON parser
 .parseXML(string) //Parses a string and returns a XML document version
 ```
 
-# jQ.Mobi OS detectors
+# jqMobi OS detectors
 
 ``` js
 $.os.webkit     //True if webkit found in the user agent
@@ -172,7 +173,7 @@ $.os.blackberry //True if Blackberry PlayBook or OS >=6
 
 # Plugins
 
-jQ.Mobi is built with the extendability to add plugins.  To create a plugin, you will most likely extend the $.fn object by passing a reference of the main jQ.Mobi object
+jqMobi is built with the extendability to add plugins.  To create a plugin, you will most likely extend the $.fn object by passing a reference of the main jqMobi object
 
 ``` js
 
@@ -208,4 +209,4 @@ Please use github to report any bugs found.  Please provide the following
 
 # License
 
-jQ.Mobi is is licensed under the terms of the MIT License, see the included license.txt file.
+jqMobi is is licensed under the terms of the MIT License, see the included license.txt file.

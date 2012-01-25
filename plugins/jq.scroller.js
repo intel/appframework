@@ -1,5 +1,5 @@
 /**
- * jq.scroller - a scrolling library for jQ.Mobi apps
+ * jq.scroller - a scrolling library for jqMobi apps
  * Copyright 2011 - AppMobi 
  */ (function ($) {
     $.fn["scroller"] = function (opts) {

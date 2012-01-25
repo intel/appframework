@@ -1,6 +1,6 @@
-# jQ.Plugins
+# jqPlugins
 
-jQ.Plugins are plugins to use with jQ.Mobi
+jqPlugins are plugins to use with jqMobi
 
 # About
 

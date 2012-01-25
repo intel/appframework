@@ -1,8 +1,8 @@
- /*
+/*
  jshint newcap:false
  */
 /**
- * jQ.Mobi is a query selector class for HTML5 mobile apps on a WebkitBrowser.
+ * jqMobi is a query selector class for HTML5 mobile apps on a WebkitBrowser.
  * Since most mobile devices (Android, iOS, webOS) use a WebKit browser, you only need to target one browser.
  * We are able to increase the speed greatly by removing support for legacy desktop browsers and taking advantage of browser features, like native JSON parsing and querySelectorAll
  
@@ -22,15 +22,6 @@ if (!window.jq || typeof (jq) !== "function") {
         _eventID = 1, 
         jsonPHandlers = [], 
         _jsonPID = 1;
-        
-        function likeArray(obj) {
-            return typeof obj.length === 'number';
-        }
-        
-        function flatten(array) {
-            return array.length > 0 ? [].concat.apply([], array) : array;
-        }
-        
         function classRE(name) {
             return name in classCache ? classCache[name] : (classCache[name] = new RegExp('(^|\\s)' + name + '(\\s|$)'));
         }
@@ -59,12 +50,11 @@ if (!window.jq || typeof (jq) !== "function") {
             }
             return elems;
         }
-		
-		
+        
+        
         var $jqm = function(toSelect, what) {
             this.length = 0;
-            
-            if (!toSelect) {
+			if (!toSelect) {
                 return this;
             } 
             else if (toSelect instanceof $jqm && what == undefined) {
@@ -73,45 +63,54 @@ if (!window.jq || typeof (jq) !== "function") {
             else if ($.isFunction(toSelect)) {
                 return $(document).ready(toSelect);
             } 
-            else if ($.isObject(toSelect) && toSelect.length != undefined && what == undefined) //Passing in an array or object
+            else if ($.isArray(toSelect) && toSelect.length != undefined)  //Passing in an array or object
             {
-                
                 for (var i = 0; i < toSelect.length; i++)
                     this[this.length++] = toSelect[i];
                 return this;
             } 
-            else if ($.isObject(toSelect) && $.isObject(what))  //var tmp=$("span");  $("p").find(tmp);
+			else if ($.isObject(toSelect) && $.isObject(what))  //var tmp=$("span");  $("p").find(tmp);
             {
-                
+			    if(toSelect.length==undefined)
+				{
+				  if(toSelect.parentNode==what)
+				     this[this.length++]=toSelect;
+				}
+				else{
                 for (var i = 0; i < toSelect.length; i++)
                     if (toSelect[i].parentNode == what)
                         this[this.length++] = toSelect[i];
+			    }
                 return this;
             } 
             else if ($.isObject(toSelect) && what == undefined) { //Single object 
-                
                 this[this.length++] = toSelect;
                 return this;
             } 
             
             else if (what !== undefined) {
                 if (what instanceof $jqm) {
-                    return $(what).find(toSelect);
+                    return what.find(toSelect);
                 }
+
             } 
             else {
                 what = document;
             }
+			
             var dom = this.selector(toSelect, what);
             if (!dom) {
                 return this;
             } 
-            else if (dom.length === undefined) {
+            //reverse the query selector all storage
+			else if($.isArray(dom)){
+               for (var j = 0; j <dom.length; j++) {
+                   this[this.length++] = dom[j];
+               }
+			 }
+			 else  {
                 this[this.length++] = dom;
                 return this;
-            }
-            for (var j = 0; j < dom.length; j++) {
-                this[this.length++] = dom[j];
             }
             return this;
         };
@@ -123,17 +122,20 @@ if (!window.jq || typeof (jq) !== "function") {
         function _selector(selector, what) {
             var dom;
             try {
-                if (selector[0] === "#" && selector.indexOf(" ") === -1) {
-                    dom = what.getElementById(selector.replace("#", ""));
+                if (selector[0] === "#" && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
+				    if(what==document)
+						dom = what.getElementById(selector.replace("#", ""));
+					else
+					   dom=[].slice.call(what.querySelectorAll(selector));
                 } 
                 else if (selector[0] === "<" && selector[selector.length - 1] === ">")  //html
                 {
                     var tmp = document.createElement("div");
                     tmp.innerHTML = selector;
-                    dom = tmp.childNodes;
+                    dom = [].slice.call(tmp.childNodes);
                 } 
                 else {
-                    dom = (what.querySelectorAll(selector));
+                    dom = [].slice.call(what.querySelectorAll(selector));
                 }
             } 
             catch (e) {
@@ -144,30 +146,32 @@ if (!window.jq || typeof (jq) !== "function") {
         $.map = function(elements, callback) {
             var value, values = [], 
             i, key;
-            if (likeArray(elements))
+            if ($.isArray(elements))
                 for (i = 0; i < elements.length; i++) {
                     value = callback(elements[i], i);
                     if (value !== undefined)
                         values.push(value);
                 }
-            else
+            else if($.isObject(elements))
                 for (key in elements) {
+				    if(!elements.hasOwnProperty(key)) continue;
                     value = callback(elements[key], key);
                     if (value !== undefined)
                         values.push(value);
                 }
-            return flatten(values);
+            return $([values]);
         };
         
         $.each = function(elements, callback) {
             var i, key;
-            if (likeArray(elements))
+            if ($.isArray(elements))
                 for (i = 0; i < elements.length; i++) {
                     if (callback(i, elements[i]) === false)
                         return elements;
                 }
-            else
+            else if($.isObject(elements))
                 for (key in elements) {
+				   if(!elements.hasOwnProperty(key)) continue;
                     if (callback(key, elements[key]) === false)
                         return elements;
                 }
@@ -213,13 +217,13 @@ if (!window.jq || typeof (jq) !== "function") {
             selector: _selector,
             oldElement: undefined,
             slice: emptyArray.slice,
-			setupOld:function(params){
-			   if(params==undefined)
-			     return undefined;
-  		      params.oldElement=this;
-			  return params;
-
-			},
+            setupOld: function(params) {
+                if (params == undefined)
+                    return $();
+                params.oldElement = this;
+                return params;
+            
+            },
             map: function(fn) {
                 return $.map(this, function(el, i) {
                     return fn.call(el, i, el);
@@ -241,11 +245,11 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (this.length === 0)
                     return undefined;
                 var elems = [];
-                var tmpElems = sel;
-                
+                var tmpElems;
                 for (var i = 0; i < this.length; i++) 
                 {
                     tmpElems = ($(sel, this[i]));
+				
                     for (var j = 0; j < tmpElems.length; j++) 
                     {
                         elems.push(tmpElems[j]);
@@ -299,8 +303,10 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (this.length === 0)
                     return undefined;
                 for (var i = 0; i < this.length; i++) {
-                    this[i].setAttribute("jqmOldStyle", this[i].style.display);
-                    this[i].style.display = "none";
+				    if(this[i].style.display!="none"){
+                       this[i].setAttribute("jqmOldStyle", this[i].style.display);
+                       this[i].style.display = "none";
+					}
                 }
                 return this;
             },
@@ -308,14 +314,17 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (this.length === 0)
                     return undefined;
                 for (var i = 0; i < this.length; i++) {
-                    this[i].style.display = this[i].getAttribute("jqmOldStyle") ? this[i].getAttribute("jqmOldStyle") : 'block';
-                    this[i].removeAttribute("jqmOldStyle");
+				    if(this[i].style.display=="none"){
+                       this[i].style.display = this[i].getAttribute("jqmOldStyle") ? this[i].getAttribute("jqmOldStyle") : 'block';
+                       this[i].removeAttribute("jqmOldStyle");
+					}
                 }
                 return this;
             },
-            toggle: function() {
+            toggle: function(show) {
+			    var show2=show===true?true:false;
                 for (var i = 0; i < this.length; i++) {
-                    if (this[i].style.display !== "none") {
+                    if (this[i].style.display !== "none"||(show!==undefined&&show2===false)) {
                         this[i].setAttribute("jqmOldStyle", this[i].style.display)
                         this[i].style.display = "none";
                     } 
@@ -329,7 +338,7 @@ if (!window.jq || typeof (jq) !== "function") {
             val: function(value) {
                 if (this.length === 0)
                     return undefined;
-                if (value === undefined)
+                if (value == undefined)
                     return this[0].value;
                 for (var i = 0; i < this.length; i++) {
                     this[i].value = value;
@@ -339,26 +348,48 @@ if (!window.jq || typeof (jq) !== "function") {
             attr: function(attr, value) {
                 if (this.length === 0)
                     return undefined;
-                
-                if (value === undefined)
-                    return this[0].getAttribute(attr);
-                
+                if (value === undefined&&!$.isObject(attr)){
+                    var val= this[0].getAttribute(attr);
+					
+					try{
+					   val=JSON.parse(val);
+					}catch(e){}
+					return val;
+				}
+                value=$.isArray(value)||$.isObject(value)?JSON.stringify(value):value;
                 for (var i = 0; i < this.length; i++) {
-                    this[i].setAttribute(attr, value);
+				    if($.isObject(attr)){
+					   for(var key in attr)
+					   { 
+					      if(value==null&&value!==undefined)
+						     this[i].removeAttribute(key);
+					      else
+							this[i].setAttribute(key,attr[key]);
+					   }
+					}
+					else
+					   if(value==null&&value!==undefined)
+						this[i].removeAttribute(attr);
+					      else
+                       this[i].setAttribute(attr, value);
                 }
                 return this;
             },
             removeAttr: function(attr) {
+			    var that=this;
                 for (var i = 0; i < this.length; i++) {
-                    this[i].removeAttribute(attr);
+				    attr.split(/\s+/g).forEach(function(param){
+						that[i].removeAttribute(param);
+					});
                 }
                 return this;
             },
-            remove: function() {
-                for (var i = 0; i < this.length; i++) {
-                    this[i].parentNode.removeChild(this[i]);
+            remove: function(selector) {
+			    var elems=$(this).filter(selector);
+                for (var i = 0; i < elems.length; i++) {
+                    elems[i].parentNode.removeChild(elems[i]);
                 }
-                return this;
+                return elems;
             },
             addClass: function(name) {
                 for (var i = 0; i < this.length; i++) {
@@ -371,12 +402,13 @@ if (!window.jq || typeof (jq) !== "function") {
                     });
                     
                     this[i].className += (cls ? " " : "") + classList.join(" ");
+					this[i].className=this[i].className.trim();
                 }
                 return this;
             },
             removeClass: function(name) {
                 for (var i = 0; i < this.length; i++) {
-                    if (name === undefined) {
+                    if (name == undefined) {
                         this[i].className = '';
                         return this;
                     }
@@ -430,7 +462,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     (function(obj) {
                         var id = obj._eventID;
                         var that = obj;
-                        event.split(/s+g/).forEach(function(name) {
+                        event.split(/\s+/g).forEach(function(name) {
                             if (eventHandlers[id + "_" + name]) {
                                 var prxFn = eventHandlers[id + "_" + name];
                                 delete eventHandlers[id + "_" + name];
@@ -458,52 +490,42 @@ if (!window.jq || typeof (jq) !== "function") {
                 this[0].dispatchEvent(newEvent);
                 return this;
             },
-            append: function(element) {
+            append: function(element, insert) {
+                if (element && element.length != undefined && element.length === 0)
+                    return this;
+                if ($.isArray(element) || $.isObject(element))
+                    element = $(element);
                 var i;
+                
                 for (i = 0; i < this.length; i++) {
-                    if (element.length && typeof element != "string")
-                        element = element[0];
-                    if (typeof element == "string") {
+                    if (element.length && typeof element != "string") {
+                        element = $(element);
+                        for (var j = 0; j < element.length; j++)
+                            insert != undefined ? this[i].insertBefore(element[j], this[i].firstChild) : this[i].appendChild(element[j]);
+                    } 
+                    else {
                         var obj = $(element).get();
-						
-                        if (obj == undefined||obj.length==0) {
+                        
+                        if (obj == undefined || obj.length == 0) {
                             obj = document.createTextNode(element);
                         }
-						if(obj.nodeName!=undefined&&obj.nodeName.toLowerCase()=="script"&&(!obj.type || obj.type.toLowerCase() === 'text/javascript')){
-						   window.eval(obj.innerHTML);
-						}
-						else
-                           this[i].appendChild(obj);
-                    } 
-                    else
-                        this[i].appendChild(element);
+                        if (obj.nodeName != undefined && obj.nodeName.toLowerCase() == "script" && (!obj.type || obj.type.toLowerCase() === 'text/javascript')) {
+                            window.eval(obj.innerHTML);
+                        } 
+                        
+                        else
+                            insert != undefined ? this[i].insertBefore(obj, this[i].firstChild) : this[i].appendChild(obj);
+                    }
                 }
                 return this;
             },
             prepend: function(element) {
-                var i;
-                var that = this;
-                for (i = 0; i < this.length; i++) {
-                    if (element.length && typeof element != "string")
-                        element = element[0];
-                    if (typeof element == "string") {
-                        var obj = $(element).get();
-                        if (obj == undefined||obj.length==0) {
-                            obj = document.createTextNode(element);
-						}
-						if(obj.nodeName!=undefined&&obj.nodeName.toLowerCase()=="script"&&(!obj.type || obj.type.toLowerCase() === 'text/javascript')){
-						   window.eval(obj.innerHTML);
-						}
-                        else
-						   this[i].insertBefore(obj, this[i].firstChild);
-                    } 
-                    else
-                        this[i].insertBefore(element, this[i].firstChild);
-                }
-                return this;
+                return this.append(element, 1);
             },
             get: function(index) {
-                index = index === undefined ? 0 : index;
+                index = index == undefined ? 0 : index;
+				if(index<0)
+				   index+=this.length;
                 return (this[index]) ? this[index] : undefined;
             },
             offset: function() {
@@ -512,7 +534,9 @@ if (!window.jq || typeof (jq) !== "function") {
                 var obj = this[0].getBoundingClientRect();
                 return {
                     left: obj.left + window.pageXOffset,
-                    top: obj.top + window.pageYOffset
+                    top: obj.top + window.pageYOffset,
+					width:parseInt(this[0].style.width),
+					height:parseInt(this[0].style.height)
                 };
             },
             parent: function(selector) {
@@ -521,12 +545,13 @@ if (!window.jq || typeof (jq) !== "function") {
                 var elems = [];
                 for (var i = 0; i < this.length; i++) 
                 {
-				    if(this[i].parentNode)
-						elems.push(this[i].parentNode);
+                    if (this[i].parentNode)
+                        elems.push(this[i].parentNode);
                 }
                 return this.setupOld($(unique(elems)).filter(selector));
             },
             children: function(selector) {
+			
                 if (this.length == 0)
                     return undefined;
                 var elems = [];
@@ -534,7 +559,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 {
                     elems = elems.concat(siblings(this[i].firstChild));
                 }
-               return this.setupOld($((elems)).filter(selector));
+                return this.setupOld($((elems)).filter(selector));
             
             },
             siblings: function(selector) {
@@ -543,8 +568,8 @@ if (!window.jq || typeof (jq) !== "function") {
                 var elems = [];
                 for (var i = 0; i < this.length; i++) 
                 {
-				    if(this[i].parentNode)
-						elems = elems.concat(siblings(this[i].parentNode.firstChild, this[i]));
+                    if (this[i].parentNode)
+                        elems = elems.concat(siblings(this[i].parentNode.firstChild, this[i]));
                 }
                 return this.setupOld($(elems).filter(selector));
             },
@@ -552,7 +577,8 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (this.length == 0)
                     return undefined;
                 var elems = [], cur = this[0];
-                var start = $(selector, context || document);
+				
+                var start = $(selector, context);
                 if (start.length == 0)
                     return $();
                 while (cur && start.indexOf(cur) == -1) {
@@ -593,11 +619,12 @@ if (!window.jq || typeof (jq) !== "function") {
             end: function() {
                 return this.oldElement != undefined ? this.oldElement : $();
             },
-			clone:function(deep){
-			   if(this.length==0)
-			     return undefined;
-			   
-			}
+            clone: function(deep) {
+                if (this.length == 0)
+                    return undefined;
+				return this[0].cloneNode(deep);
+            },
+			size:function(){ return this.length;}
         
         };
 
@@ -811,66 +838,8 @@ if (!window.jq || typeof (jq) !== "function") {
         $.parseXML = function(string) {
             return (new DOMParser).parseFromString(string, "text/xml");
         };
-        /* Viewport commands from AppMobi.js*/
-        var _viewport = {};
-        var _updateViewportContent = function(content) {
-            //get reference to head																								
-            var head, heads = document.getElementsByTagName('head');
-            if (heads.length > 0)
-                head = heads[0];
-            else
-                return;
-            //remove any viewport meta tags																								
-            var metas = document.getElementsByTagName('meta');
-            for (var i = 0; i < metas.length; i++) {
-                if (metas[i].name === 'viewport')
-                    try {
-                        head.removeChild(metas[i]);
-                    } catch (e) {
-                    }
-            }
-            //add the new viewport meta tag																								
-            var viewport = document.createElement('meta');
-            viewport.setAttribute('name', 'viewport');
-            viewport.setAttribute('id', 'viewport');
-            viewport.setAttribute('content', content);
-            head.appendChild(viewport);
-        };
         
-        var _updateViewportOrientation = function(orientation) {
-            var width;
-            orientation = parseInt(orientation, 10);
-            if (isNaN(orientation))
-                orientation = 0;
-            if (orientation === 0 || orientation === 180) {
-                width = _viewport.portraitWidth;
-            } else {
-                width = _viewport.landscapeWidth;
-            }
-            var content = "width=" + width + ", initial-scale=1, maximum-scale=1,user-scalable=no";
-            _updateViewportContent(content);
-        };
-        
-        var AppMobi = AppMobi || {};
-        
-        $.useViewport = function(portraitWidthInPx, landscapeWidthInPx) {
-            _viewport.portraitWidth = parseInt(portraitWidthInPx, 10);
-            _viewport.landscapeWidth = parseInt(landscapeWidthInPx, 10);
-            if (isNaN(_viewport.portraitWidth) || isNaN(_viewport.landscapeWidth))
-                return;
-            
-            window.addEventListener('orientationchange', function(e) {
-                _updateViewportOrientation(window.orientation);
-            }, false);
-            document.addEventListener('appMobi.device.orientation.change', function(e) {
-                if (AppMobi.device) {
-                    _updateViewportOrientation(AppMobi.device.orientation);
-                }
-            }, false);
-            _updateViewportOrientation(window.orientation);
-        };
-        
-        (function($, userAgent) {
+        function detectUA($, userAgent) {
             $.os = {};
             $.os.webkit = userAgent.match(/WebKit\/([\d.]+)/) ? true : false;
             $.os.android = userAgent.match(/(Android)\s+([\d.]+)/) || userAgent.match(/Silk-Accelerated/) ? true : false;
@@ -881,9 +850,10 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os.ios = $.os.ipad || $.os.iphone;
             $.os.blackberry = userAgent.match(/BlackBerry/) || userAgent.match(/PlayBook/) ? true : false;
             $.os.opera = userAgent.match(/Opera Mobi/) ? true : false;
-            $.os.fennec = userAgent.match(/fennec/) ? true : false;
-        })($, navigator.userAgent);
-        
+            $.os.fennec = userAgent.match(/fennec/i) ? true : false;
+        }
+		detectUA($, navigator.userAgent);
+        $.__detectUA=detectUA; //needed for unit tests
         if (typeof String.prototype.trim !== 'function') {
             String.prototype.trim = function() {
                 return this.replace(/^\s+|\s+$/, '');
@@ -894,5 +864,5 @@ if (!window.jq || typeof (jq) !== "function") {
     
     
     })(window);
-    '$' in window || (window.$ = jq);
+	'$' in window || (window.$ = jq);
 }
