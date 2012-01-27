@@ -1,6 +1,6 @@
-# jQ.Ui
+# jqUi
 
-jQ.Ui is a UI/UX framework for building jQ.Mobi mobile apps targeted at the Webkit browser.
+jqUi is a UI/UX framework for building jqMobi mobile apps targeted at the Webkit browser.
 
 # About
 
@@ -8,11 +8,11 @@ We've had a lot of requests for a UI framework.  There are a numerous mobile fra
 
 # Demo
 
-Please see the kitchensink application as it was built using jQ.Ui
+Please see the kitchensink application as it was built using jqUi
 
-# How to use jQ.Ui
+# How to use jqUi
 
-To use jQ.Ui, you need to include the javascript files.  We suggest using jq.ui.min.js which has all the necesary files, otherwise include the source for all of them, along with the CSS.  A global variable, $.ui is created by default.  This is what you will use if you need to access it.
+To use jqUi, you need to include the javascript files.  We suggest using jq.ui.min.js which has all the necesary files, otherwise include the source for all of them, along with the CSS.  A global variable, $.ui is created by default.  This is what you will use if you need to access it.
 
 We have three special registered div blocks for your layout based off id's.  They are the header, content, and navbar. 
 
@@ -20,7 +20,7 @@ We have three special registered div blocks for your layout based off id's.  The
 
 * content - this is the content area.  You do not need to add anything here.  All page divs will be added here.  If you put a div in there, it will be shown first.
 
-    Each div inside will need the class "panel".  jQ.Ui will search for all elements with that classname and add them automatically.  These will scroll by default.
+    Each div inside will need the class "panel".  jqUi will search for all elements with that classname and add them automatically.  These will scroll by default.
 	
 * navbar - this is the bottom navbar.  You can put your navigation buttons here.  We reset the history queue when you switch the navigation buttons.  This is optional.  If you do not include it, it will not be shown.
 
@@ -38,7 +38,7 @@ We have three special registered div blocks for your layout based off id's.  The
 * Ajax - using AppMobi, you can do cross domain requests.   We will crawl the pages and wire any links found.  We added new features to add the content to the dom, force refresh and more.
  
 
-# jQ.Ui semi-public methods
+# jqUi semi-public methods
 
 ``` js
 
@@ -55,7 +55,7 @@ We have three special registered div blocks for your layout based off id's.  The
 
 ```
 
-#jQ.Ui anchor properties
+#jqUi anchor properties
 
 Anchors can have special properties for wiring transitions and events
 
@@ -181,6 +181,6 @@ Please use github to report any bugs found.  Please provide the following
 
 # License
 
-jQ.Ui is is licensed under the terms of the MIT License, see the included license.txt file.
+jqUi is is licensed under the terms of the MIT License, see the included license.txt file.
 
 

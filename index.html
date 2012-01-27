@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html><!--HTML5 doctype-->
 <html>
 <head>
-<title>jQ.Mobi Kitchen Sink</title>
+<title>jqMobi Kitchen Sink</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8"> 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -49,14 +49,19 @@
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.selectBox.js"></script> 
 
 <script type="text/javascript" charset="utf-8" src="./ui/jq.ui.js"></script> 
-
+<script>
+if(!((window.DocumentTouch&&document instanceof DocumentTouch)||'ontouchstart' in window)){
+var script=document.createElement("script");
+script.src="touch.js";
+var tag=$("head").append(script);
+}
+</script>
 <script type="text/javascript">
     /* This function runs once the page is loaded, but appMobi is not yet active */
     
 	var webRoot="./kitchensink/";
     var init = function(){
 	   $.ui.backButtonText="Back";  
-	   $.useViewport(320,480);
     };
     window.addEventListener("load",init,false);  
 	
@@ -102,20 +107,20 @@
 	<div title='Welcome' id="main" class="panel" selected="true">
 
 	<h2 class='expanded' onclick='showHide(this,"main_info");'>Welcome</h2>
-		<p id='main_info'>Welcome to the kitchen sink demo for jQ.Mobi.  Here you will find samples of how to use the jQ.Mobi libraries.  Please select an option from below.</p>
+		<p id='main_info'>Welcome to the kitchen sink demo for jqMobi.  Here you will find samples of how to use the jqMobi libraries.  Please select an option from below.</p>
 		<ul>
-		 <li><a href="#jqm" >jQ.Mobi</a></li>
-		 <li><a href="#jqmui" >jQ.Ui</a></li>
-		 <li><a href="#jqmweb" >jQ.Plugins</a></li>
+		 <li><a href="#jqm" >jqMobi</a></li>
+		 <li><a href="#jqmui" >jqUi</a></li>
+		 <li><a href="#jqmweb" >jqPlugins</a></li>
 		</ul>
 
 	</div> 
 
 	<!-- ------------------------------------------ -->
 	<!-- aUX -->
-	<div title="jQ.Mobi" id="jqm" class="panel">
-		<h2 class='expanded' onclick='showHide(this,"jqmobi_info");'>jQ.Mobi</h2>
-		<p id='jqmobi_info'>jQ.Mobi is a blazingly fast query selector tool that is optmimized for HTML5 browsers.</p>
+	<div title="jqMobi" id="jqm" class="panel">
+		<h2 class='expanded' onclick='showHide(this,"jqmobi_info");'>jqMobi</h2>
+		<p id='jqmobi_info'>jqMobi is a blazingly fast query selector tool that is optmimized for HTML5 browsers.</p>
 
 		<ul>
 		<li><a href="#jqm1" >$ Selector</a></li>
@@ -152,7 +157,6 @@
 		<li><a href="#jqm28" >$.serialize()</a></li>
 		<li><a href="#jqm29" >$.parseJSON()</a></li>
 		<li><a href="#jqm30" >$.os</a></li>
-		<li><a href="#jqmviewport" >$.useViewPort</a></li>
 		<li><a href="javascript:;" onClick="$.ui.scrollToTop('jqm')" >Go To Top</a></li>
 		</ul>
 		<br/><br/>
@@ -537,12 +541,12 @@
 	<!-- ------------------------------------------ -->
 
 	<!-- ------------------------------------------ -->
-	<!-- jq.ui -->
-	<div title="jQ.Ui" id="jqmui" class="panel">
+	<!-- jqUi -->
+	<div title="jqUi" id="jqmui" class="panel">
 
 
-	<h2 class='expanded' onclick='showHide(this,"jqui_info");'>jQ.Ui</h2><p id='jqui_info'>jQ.Ui is AppMobi's User Interface/User Experience library for mobile applications. It uses HTML5 and CSS3 for animations and transitions.<br />
-	We built the kitchen sink using jQ.Ui.  It is comprised of components from the jQ.Plugins library and additional features.
+	<h2 class='expanded' onclick='showHide(this,"jqui_info");'>jqUi</h2><p id='jqui_info'>jqUi is AppMobi's User Interface/User Experience library for mobile applications. It uses HTML5 and CSS3 for animations and transitions.<br />
+	We built the kitchen sink using jqUi.  It is comprised of components from the jqPlugins library and additional features.
 	<br>
 		* Fixed navigation bar<br>
 		* Auto scrolling content panels<br>
@@ -652,8 +656,8 @@
 	</div>
 
 	<div title="Transitions" id="jqmtransitions" class="panel">
-	<h2 class='expanded' onclick='showHide(this,"jqui_transitions");'>jQ.ui</h2><p id='jqui_transitions'>
-	<strong>jq.ui transitions</strong> the following are transitions built in.  You can easily add/extend with your own.  Set the data-transition attribute on an anchor to change the transition.</p>
+	<h2 class='expanded' onclick='showHide(this,"jqui_transitions");'>jqUi</h2><p id='jqui_transitions'>
+	<strong>jqUi transitions</strong> the following are transitions built in.  You can easily add/extend with your own.  Set the data-transition attribute on an anchor to change the transition.</p>
 	<ul>
 	<li><a href="#transition1"  data-transition="slide">Slide</a></li>
 	<li><a href="#transition2"  data-transition="up">Slide Up</a></li>
@@ -666,7 +670,7 @@
 	<br/><br/>
 	</div>
 
-	<div id="uiapi" title="jQ.Ui API" class="panel">
+	<div id="uiapi" title="jqUi API" class="panel">
 	<ul>
 		<li><a href="#uigoback">.goBack()</a></li>
 		<li><a href="#uiclearhistory">.clearHistory()</a></li>
@@ -789,10 +793,10 @@
 	<br/><br/>
 	</div>
 
-	<!-- jq.ui > API -->
+	<!-- jqUi > API -->
 
-	<!-- jq.ui > Transitions -->
-	<div title="Slide" id="transition1" class="panel">I'm a sliding transition</div>
+	<!-- jqUi > Transitions -->
+	<div title="Slide" id="transition1" class="panel food">I'm a sliding transition</div>
 	<div title="Slide Up" id="transition2" class="panel">I'm a sliding up transition</div>
 	<div title="Slide Down" id="transition3" class="panel">I'm a sliding down transition</div>
 	<div title="Pop" id="transition4" class="panel">I'm a pop transition</div>
@@ -802,10 +806,10 @@
 	<!-- ------------------------------------------ -->
 
 	<!-- ------------------------------------------ -->
-	<!-- jQ.Plugins -->
-	<div title="jQ.Plugins" id="jqmweb" class="panel">
-	<h2 class='expanded' onclick='showHide(this,"jqweb_info");'>jQ.plugins</h2><p id='jqweb_info'>
-		This is our plugin library of widgets to assist you with developing mobile applications.  Some of these are used in jq.ui.</p>
+	<!-- jqPlugins -->
+	<div title="jqPlugins" id="jqmweb" class="panel">
+	<h2 class='expanded' onclick='showHide(this,"jqweb_info");'>jqPlugins</h2><p id='jqweb_info'>
+		This is our plugin library of widgets to assist you with developing mobile applications.  Some of these are used in jqUi.</p>
 		<ul>
 		<li><a href="#webslider" >jq.scroller</a></li>
 		<li><a href="#webcarousel" >jq.carousel</a></li>
@@ -820,7 +824,7 @@
 		<br/><br/>
 	</div>
 
-	<!-- jQ.Plugins > jQ.scroller -->
+	<!-- jqPlugins > jQ.scroller -->
 	<div title="Scroller" class="panel" id="webslider" scrolling="no">
 	<script>
 		var init_scroller = function () {
@@ -868,7 +872,7 @@
 		</div>
 	</div>
 
-	<!-- jQ.Plugins > jQ.carousel -->
+	<!-- jqPlugins > jQ.carousel -->
 	<div title="Carousel" class="panel" id="webcarousel" scrolling="no">
 		<style>
 		.carousel_paging2 {
@@ -929,7 +933,7 @@
 		</div>
 	</div>
 
-	<!-- jQ.Plugins > jQ.swipeListener -->
+	<!-- jqPlugins > jQ.swipeListener -->
 	<div title="Swipe" class="panel" id="webswipe" scrolling="no">
 		<style>
 			.result {position:absolute;left:100px;}
@@ -961,7 +965,7 @@
 		<div id="debug"></div>
 	</div>
 
-	<!-- jQ.Plugins > jQ.template -->
+	<!-- jqPlugins > jQ.template -->
 	<div title="Template" class="panel" id="webtemplate">
 		<div id="template_content"></div>
 		<script type="text/html" id="my_template">
@@ -976,7 +980,7 @@
 		</script>
 	</div>
 
-	<!-- jQ.Plugins > jQ.appMobiSelect -->
+	<!-- jqPlugins > jQ.appMobiSelect -->
 	<div title="Select" class="panel" id="webselect" scrolling="yes">
 		<script>
 			var init_select = function () {
@@ -1022,7 +1026,7 @@
 		
 	</div>
 
-	<!-- jQ.Plugins > jQ.appMobiPassword -->
+	<!-- jqPlugins > jQ.appMobiPassword -->
 	<div title="Password" class="panel" id="webpassword" scrolling="no">
 		<script>
 			var pwFixer = new $.passwordBox();
@@ -1054,7 +1058,7 @@
 		</div>
 	</div>
 
-	<!-- jQ.Plugins > jQ.css3animate -->
+	<!-- jqPlugins > jQ.css3animate -->
 	<div title="Animate" class="panel" id="webanimate" scrolling="no">
 		<script>
 			function moveOnce() {
@@ -1120,7 +1124,7 @@
 	</div>
 	<!-- ------------------------------------------ -->
 
-	<!-- jQ.Plugins > jQ.drawer -->
+	<!-- jqPlugins > jQ.drawer -->
 	<div title="Drawer" class="panel" id="webdrawer" scrolling="no">
 	<br><br>
 	<p>a pulldown tool like the notifications bar</p>

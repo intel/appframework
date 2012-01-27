@@ -1,6 +1,6 @@
-# jQ.Plugins
+# jqPlugins
 
-jQ.Plugins are plugins to use with jQ.Mobi
+jqPlugins are plugins to use with jqMobi
 
 # About
 
@@ -232,7 +232,7 @@ The template parsing library is John Resig's micro templating, with some fixes a
 
 To use jq.template you must do the following
 
-1. Create your template.  The easiest way is to create <script> tags with the content type of "text/html" and set an id
+1. Create your template.  The easiest way is to create script tags with the content type of "text/html" and set an id
 
 ``` html
 <script type='text/html' id='user_info'>
