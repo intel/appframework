@@ -127,7 +127,7 @@ test("text", function() {
 test("css", function() {
 	expect(3);
 
-	
+	QUnit.reset();
 	var defBackground="green";
 	equals($("#foo").css("background"),defBackground,"Test getting a css property");
     QUnit.reset();

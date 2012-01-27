@@ -282,16 +282,19 @@ if (!window.jq || typeof (jq) !== "function") {
             css: function(attribute, value) {
                 if (this.length === 0)
                     return undefined;
-                if (value === undefined && typeof (attribute) === "string")
-                    return this[0].style[attribute];
+                if (value === undefined && typeof (attribute) === "string"){
+				    var styles=window.getComputedStyle(this[0]);
+                    return styles[attribute]?styles[attribute]:this[0].style[attribute];
+				}
                 for (var i = 0; i < this.length; i++) {
                     if ($.isObject(attribute)) {
                         for (var j in attribute) {
                             this[i].style[j] = attribute[j];
                         }
                     } 
-                    else
+                    else{
                         this[i].style[attribute] = value;
+					}
                 }
                 return this;
             },
