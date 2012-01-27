@@ -66,7 +66,7 @@
                 }
                 this.initScrollbars();
             } catch (e) {
-                alert("error adding scroller" + e);
+                alert("error adding scroller " + e);
             }
         
         };
@@ -119,21 +119,22 @@
                 move: "",
                 end: ""
             },
-            initEvents: function() {
-                var that = this;
-                this.el.addEventListener('touchmove', this.listeners.move = function(e) {
-                    that.touchMove(e);
-                }, false);
-                
-                this.el.addEventListener('touchend', this.listeners.end = function(e) {
-                    that.touchEnd(e);
-                }, false);
+            handleEvent: function(e) {
+        		switch(e.type) {
+        			case 'touchstart': this.onTouchStart(e); break;
+        			case 'touchmove': this.touchMove(e); break;
+        			case 'touchend': this.touchEnd(e); break;
+        		}
+        	},
+            initEvents: function () {
+        		this.el.addEventListener('touchstart', this, false);
             },
-            removeEvents: function() {
-                
-                this.el.removeEventListener('touchmove', this.listeners.move, false);
-                
-                this.el.removeEventListener('touchend', this.listeners.end, false);
+            onTouchStart : function(e){
+    			this.el.addEventListener('touchmove', this, false);
+    			this.el.addEventListener('touchend', this, false);
+            },
+            removeEvents: function () {
+            	this.el.removeEventListener('touchstart', this.listeners.start, false);
             },
             initScrollbars: function() {
                 var windowHeight = window.innerHeight;
@@ -305,7 +306,6 @@
                     
                     if (event.touches.length == 1 && this.boolScrollLock == false) {
                         try {
-                            
                             this.startTop = numOnly(new WebKitCSSMatrix(window.getComputedStyle(eleScrolling).webkitTransform).f)
                             this.startLeft = numOnly(new WebKitCSSMatrix(window.getComputedStyle(eleScrolling).webkitTransform).e);
                         } catch (e) {
@@ -313,7 +313,6 @@
                             this.startLeft = 0;
                             console.log("error scroller touchstart " + e);
                         }
-                        
                         
                         this.currentScrollingObject = eleScrolling;
                         this.scrollerMoveCSS(eleScrolling, {
@@ -364,6 +363,8 @@
             // touchend callback. Set the current scrolling object and scrollbar to
             // null
             touchEnd: function(event) {
+            	this.el.removeEventListener('touchmove', this, false);
+                this.el.removeEventListener('touchend', this, false);
                 if (this.currentScrollingObject != null) {
                     event.preventDefault();
                     event.stopPropagation();
@@ -378,8 +379,7 @@
                     if (this.verticalScroll) {
                         var myDistance = -this.vdistanceMoved;
                         var time = this.timeMoved;
-                        
-                        
+
                         var move = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform).f);
                         moveY = move;
                         
@@ -440,8 +440,9 @@
                             x: 0,
                             y: pos
                         }, time, "cubic-bezier(0.33,0.66,0.66,1)");
-                        this.vscrollBar.style.opacity = '0';
-                    
+                        setTimeout(function(){
+                        	that.vscrollBar.style.opacity = '0';
+                        }, time/2);
                     }
                     if (this.hscrollBar) {
                         var pos = (this.rightMargin - numOnly(this.hscrollBar.style.width)) - (((this.maxLeft + scrollPoints.x) / this.maxLeft) * (this.rightMargin - numOnly(this.hscrollBar.style.width)));
@@ -453,7 +454,9 @@
                             x: pos,
                             y: 0
                         }, time, "cubic-bezier(0.33,0.66,0.66,1)");
-                        this.hscrollBar.style.opacity = '0';
+                        setTimeout(function(){
+                        	that.hscrollBar.style.opacity = '0';
+                        }, time);
                     }
                 }
                 this.hdistanceMoved = 0;
