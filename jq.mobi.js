@@ -1,4 +1,4 @@
-/*
+ /*
  jshint newcap:false
  */
 /**
@@ -54,7 +54,7 @@ if (!window.jq || typeof (jq) !== "function") {
         
         var $jqm = function(toSelect, what) {
             this.length = 0;
-			if (!toSelect) {
+            if (!toSelect) {
                 return this;
             } 
             else if (toSelect instanceof $jqm && what == undefined) {
@@ -69,18 +69,18 @@ if (!window.jq || typeof (jq) !== "function") {
                     this[this.length++] = toSelect[i];
                 return this;
             } 
-			else if ($.isObject(toSelect) && $.isObject(what))  //var tmp=$("span");  $("p").find(tmp);
+            else if ($.isObject(toSelect) && $.isObject(what))  //var tmp=$("span");  $("p").find(tmp);
             {
-			    if(toSelect.length==undefined)
-				{
-				  if(toSelect.parentNode==what)
-				     this[this.length++]=toSelect;
-				}
-				else{
-                for (var i = 0; i < toSelect.length; i++)
-                    if (toSelect[i].parentNode == what)
-                        this[this.length++] = toSelect[i];
-			    }
+                if (toSelect.length == undefined) 
+                {
+                    if (toSelect.parentNode == what)
+                        this[this.length++] = toSelect;
+                } 
+                else {
+                    for (var i = 0; i < toSelect.length; i++)
+                        if (toSelect[i].parentNode == what)
+                            this[this.length++] = toSelect[i];
+                }
                 return this;
             } 
             else if ($.isObject(toSelect) && what == undefined) { //Single object 
@@ -92,23 +92,23 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (what instanceof $jqm) {
                     return what.find(toSelect);
                 }
-
+            
             } 
             else {
                 what = document;
             }
-			
+            
             var dom = this.selector(toSelect, what);
             if (!dom) {
                 return this;
             } 
             //reverse the query selector all storage
-			else if($.isArray(dom)){
-               for (var j = 0; j <dom.length; j++) {
-                   this[this.length++] = dom[j];
-               }
-			 }
-			 else  {
+            else if ($.isArray(dom)) {
+                for (var j = 0; j < dom.length; j++) {
+                    this[this.length++] = dom[j];
+                }
+            } 
+            else {
                 this[this.length++] = dom;
                 return this;
             }
@@ -123,10 +123,10 @@ if (!window.jq || typeof (jq) !== "function") {
             var dom;
             try {
                 if (selector[0] === "#" && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
-				    if(what==document)
-						dom = what.getElementById(selector.replace("#", ""));
-					else
-					   dom=[].slice.call(what.querySelectorAll(selector));
+                    if (what == document)
+                        dom = what.getElementById(selector.replace("#", ""));
+                    else
+                        dom = [].slice.call(what.querySelectorAll(selector));
                 } 
                 else if (selector[0] === "<" && selector[selector.length - 1] === ">")  //html
                 {
@@ -152,9 +152,10 @@ if (!window.jq || typeof (jq) !== "function") {
                     if (value !== undefined)
                         values.push(value);
                 }
-            else if($.isObject(elements))
+            else if ($.isObject(elements))
                 for (key in elements) {
-				    if(!elements.hasOwnProperty(key)) continue;
+                    if (!elements.hasOwnProperty(key))
+                        continue;
                     value = callback(elements[key], key);
                     if (value !== undefined)
                         values.push(value);
@@ -169,9 +170,10 @@ if (!window.jq || typeof (jq) !== "function") {
                     if (callback(i, elements[i]) === false)
                         return elements;
                 }
-            else if($.isObject(elements))
+            else if ($.isObject(elements))
                 for (key in elements) {
-				   if(!elements.hasOwnProperty(key)) continue;
+                    if (!elements.hasOwnProperty(key))
+                        continue;
                     if (callback(key, elements[key]) === false)
                         return elements;
                 }
@@ -249,7 +251,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 for (var i = 0; i < this.length; i++) 
                 {
                     tmpElems = ($(sel, this[i]));
-				
+                    
                     for (var j = 0; j < tmpElems.length; j++) 
                     {
                         elems.push(tmpElems[j]);
@@ -303,10 +305,10 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (this.length === 0)
                     return undefined;
                 for (var i = 0; i < this.length; i++) {
-				    if(this[i].style.display!="none"){
-                       this[i].setAttribute("jqmOldStyle", this[i].style.display);
-                       this[i].style.display = "none";
-					}
+                    if (this[i].style.display != "none") {
+                        this[i].setAttribute("jqmOldStyle", this[i].style.display);
+                        this[i].style.display = "none";
+                    }
                 }
                 return this;
             },
@@ -314,17 +316,17 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (this.length === 0)
                     return undefined;
                 for (var i = 0; i < this.length; i++) {
-				    if(this[i].style.display=="none"){
-                       this[i].style.display = this[i].getAttribute("jqmOldStyle") ? this[i].getAttribute("jqmOldStyle") : 'block';
-                       this[i].removeAttribute("jqmOldStyle");
-					}
+                    if (this[i].style.display == "none") {
+                        this[i].style.display = this[i].getAttribute("jqmOldStyle") ? this[i].getAttribute("jqmOldStyle") : 'block';
+                        this[i].removeAttribute("jqmOldStyle");
+                    }
                 }
                 return this;
             },
             toggle: function(show) {
-			    var show2=show===true?true:false;
+                var show2 = show === true ? true : false;
                 for (var i = 0; i < this.length; i++) {
-                    if (this[i].style.display !== "none"||(show!==undefined&&show2===false)) {
+                    if (this[i].style.display !== "none" || (show !== undefined && show2 === false)) {
                         this[i].setAttribute("jqmOldStyle", this[i].style.display)
                         this[i].style.display = "none";
                     } 
@@ -348,44 +350,45 @@ if (!window.jq || typeof (jq) !== "function") {
             attr: function(attr, value) {
                 if (this.length === 0)
                     return undefined;
-                if (value === undefined&&!$.isObject(attr)){
-                    var val= this[0].getAttribute(attr);
-					
-					try{
-					   val=JSON.parse(val);
-					}catch(e){}
-					return val;
-				}
-                value=$.isArray(value)||$.isObject(value)?JSON.stringify(value):value;
+                if (value === undefined && !$.isObject(attr)) {
+                    var val = this[0].getAttribute(attr);
+                    
+                    try {
+                        val = JSON.parse(val);
+                    } catch (e) {
+                    }
+                    return val;
+                }
+                value = $.isArray(value) || $.isObject(value) ? JSON.stringify(value) : value;
                 for (var i = 0; i < this.length; i++) {
-				    if($.isObject(attr)){
-					   for(var key in attr)
-					   { 
-					      if(value==null&&value!==undefined)
-						     this[i].removeAttribute(key);
-					      else
-							this[i].setAttribute(key,attr[key]);
-					   }
-					}
-					else
-					   if(value==null&&value!==undefined)
-						this[i].removeAttribute(attr);
-					      else
-                       this[i].setAttribute(attr, value);
+                    if ($.isObject(attr)) {
+                        for (var key in attr) 
+                        {
+                            if (value == null && value !== undefined)
+                                this[i].removeAttribute(key);
+                            else
+                                this[i].setAttribute(key, attr[key]);
+                        }
+                    } 
+                    else 
+                    if (value == null && value !== undefined)
+                        this[i].removeAttribute(attr);
+                    else
+                        this[i].setAttribute(attr, value);
                 }
                 return this;
             },
             removeAttr: function(attr) {
-			    var that=this;
+                var that = this;
                 for (var i = 0; i < this.length; i++) {
-				    attr.split(/\s+/g).forEach(function(param){
-						that[i].removeAttribute(param);
-					});
+                    attr.split(/\s+/g).forEach(function(param) {
+                        that[i].removeAttribute(param);
+                    });
                 }
                 return this;
             },
             remove: function(selector) {
-			    var elems=$(this).filter(selector);
+                var elems = $(this).filter(selector);
                 for (var i = 0; i < elems.length; i++) {
                     elems[i].parentNode.removeChild(elems[i]);
                 }
@@ -402,7 +405,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     });
                     
                     this[i].className += (cls ? " " : "") + classList.join(" ");
-					this[i].className=this[i].className.trim();
+                    this[i].className = this[i].className.trim();
                 }
                 return this;
             },
@@ -524,8 +527,8 @@ if (!window.jq || typeof (jq) !== "function") {
             },
             get: function(index) {
                 index = index == undefined ? 0 : index;
-				if(index<0)
-				   index+=this.length;
+                if (index < 0)
+                    index += this.length;
                 return (this[index]) ? this[index] : undefined;
             },
             offset: function() {
@@ -535,8 +538,8 @@ if (!window.jq || typeof (jq) !== "function") {
                 return {
                     left: obj.left + window.pageXOffset,
                     top: obj.top + window.pageYOffset,
-					width:parseInt(this[0].style.width),
-					height:parseInt(this[0].style.height)
+                    width: parseInt(this[0].style.width),
+                    height: parseInt(this[0].style.height)
                 };
             },
             parent: function(selector) {
@@ -551,7 +554,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 return this.setupOld($(unique(elems)).filter(selector));
             },
             children: function(selector) {
-			
+                
                 if (this.length == 0)
                     return undefined;
                 var elems = [];
@@ -577,7 +580,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (this.length == 0)
                     return undefined;
                 var elems = [], cur = this[0];
-				
+                
                 var start = $(selector, context);
                 if (start.length == 0)
                     return $();
@@ -622,9 +625,11 @@ if (!window.jq || typeof (jq) !== "function") {
             clone: function(deep) {
                 if (this.length == 0)
                     return undefined;
-				return this[0].cloneNode(deep);
+                return this[0].cloneNode(deep);
             },
-			size:function(){ return this.length;}
+            size: function() {
+                return this.length;
+            }
         
         };
 
@@ -852,8 +857,8 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os.opera = userAgent.match(/Opera Mobi/) ? true : false;
             $.os.fennec = userAgent.match(/fennec/i) ? true : false;
         }
-		detectUA($, navigator.userAgent);
-        $.__detectUA=detectUA; //needed for unit tests
+        detectUA($, navigator.userAgent);
+        $.__detectUA = detectUA; //needed for unit tests
         if (typeof String.prototype.trim !== 'function') {
             String.prototype.trim = function() {
                 return this.replace(/^\s+|\s+$/, '');
@@ -864,5 +869,5 @@ if (!window.jq || typeof (jq) !== "function") {
     
     
     })(window);
-	'$' in window || (window.$ = jq);
+    '$' in window || (window.$ = jq);
 }

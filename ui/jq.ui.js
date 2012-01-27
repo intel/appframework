@@ -251,9 +251,10 @@ $.ui = (function () {
 
             tmp.title = null;
             tmp.id = null;
-            tmp.className = null;
+            $(tmp).removeClass("panel");
             myDiv.appendChild(tmp);
 
+			myDiv.className="panel"
             this.content.appendChild(myDiv);
             this.updateAnchors(tmp);
 

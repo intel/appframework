@@ -863,6 +863,21 @@ test("clone",function(){
 
 });
 
+test("parseXML",function(){
+
+  var str="<xml><foo>bar</foo></xml>";
+  var parser = new DOMParser();
+  var obj=parser.parseFromString(str,"text/xml");  
+  equals(obj.foo,jq.parseXML(str).foo,"Testing Parse XML");
+
+});
+test("param",function(){
+var elems=[];
+elems["foo"]="bar";
+elems["name"]="jqMobi";
+
+equals(jq.param(elems),"foo=bar&name=jqMobi");
+});
 test("ajaxGet",function(){
     stop();
 	
