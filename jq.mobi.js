@@ -131,7 +131,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 else if (selector[0] === "<" && selector[selector.length - 1] === ">")  //html
                 {
                     var tmp = document.createElement("div");
-                    tmp.innerHTML = selector;
+                    tmp.innerHTML = selector.trim();
                     dom = [].slice.call(tmp.childNodes);
                 } 
                 else {
@@ -628,7 +628,13 @@ if (!window.jq || typeof (jq) !== "function") {
             clone: function(deep) {
                 if (this.length == 0)
                     return undefined;
-                return this[0].cloneNode(deep);
+			    var elems=[];
+				for(var i=0;i<this.length;i++)
+				{
+				   elems.push(this[i].cloneNode(deep));
+				}
+				
+                return $(elems);
             },
             size: function() {
                 return this.length;

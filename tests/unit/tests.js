@@ -850,16 +850,19 @@ test("end",function(){
 test("clone",function(){
 
 
-   expect(2);
+   expect(3);
    
    var elem=$("#foo").get();
-   var cloned=$("#foo").clone();
+   var cloned=$("#foo").clone().get();
    ok(elem.id==cloned.id&&cloned.childNodes.length==0,"Shallow clone with no children");
    QUnit.reset();
    
    var elem=$("#foo").get();
-   var cloned=$("#foo").clone(true);
+   var cloned=$("#foo").clone(true).get();
    ok(elem.id==cloned.id&&cloned.childNodes.length==elem.childNodes.length,"Deep clone with children");
+   
+   var cloned=$(".foo").clone(true);
+   equals(cloned.length,$(".foo").length,"Cloning a collection of children");
 
 });
 
