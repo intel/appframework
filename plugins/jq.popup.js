@@ -85,11 +85,12 @@
     	
     	popup.prototype = {
     		show : function(){
+    			var self = this;
     			this.positionPopup();
     			$.blockUI(0.5);
     			$('#'+id).removeClass('hidden');
     			$('#'+id).bind("orientationchange", function() {
-    	    		$.positionPopup(opts.id);
+    	    		self.positionPopup();
     	    	});
     		},
     		
