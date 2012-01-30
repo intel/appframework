@@ -874,6 +874,10 @@ if (!window.jq || typeof (jq) !== "function") {
             };
         }
         
+        $.replace = function ( newElem, oldElem ) {
+   		 	oldElem[0].parentNode.replaceChild(newElem, oldElem[0]);
+        };
+        
         return $;
     
     

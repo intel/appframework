@@ -54,6 +54,16 @@ $.ui = (function () {
         scrollingDivs: [],
         firstDiv: "",
         remoteJSPages: {},
+        ready : function(callback){
+        	var that = this;
+        	if (this.launchCompleted){
+        		callback();
+        	} else {
+        		setTimeout(function(){
+        			that.ready(callback);
+        		}, 10);
+        	}
+        },
         setBackButtonStyle: function (className) {
             $am("backButton").className = className;
         },
@@ -413,7 +423,6 @@ $.ui = (function () {
                 what = null;
                 var that = this;
                 var urlHash = "url" + crc32(target); //Ajax urls
-                //
                 that.hideMask();
                 var loadAjax = true;
                 if ($am(urlHash)) {
@@ -425,65 +434,91 @@ $.ui = (function () {
                 }
                 if (target.indexOf("#") == -1 && anchor && loadAjax) {
 
-                    // XML Request
-                    if (this.activeDiv.id == "jQui_ajax" && target == this.ajaxUrl) return;
-                    if (target.indexOf("http") == -1) target = AppMobi.webRoot + target;
-                    var xmlhttp = new XMLHttpRequest();
-                    xmlhttp.onreadystatechange = function () {
-                        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                            /**
-                             * Now we'll find any <script> tags and eval the JS or include them. We also keep a reference to the files included so we only
-                             * include them once
-                             */
-                            var div = document.createElement("div");
-                            div.innerHTML = xmlhttp.responseText;
-                            var scripts = div.getElementsByTagName("script");
-                            div = null;
-                            for (var i = 0; i < scripts.length; i++) {
-                                if (scripts[i].src.length > 0 && !that.remoteJSPages[scripts[i].src]) {
-                                    var doc = document.createElement("script");
-                                    doc.type = scripts[i].type;
-                                    doc.src = scripts[i].src;
-                                    document.getElementsByTagName('head')[0].appendChild(doc);
-                                    that.remoteJSPages[scripts[i].src] = 1;
-                                    doc = null;
-                                } else {
+                	var iframe = (anchor.getAttribute("data-iframe") === 'true') ? true : false;
+                	
+                	/* Load content as iframe and not ajax */
+                	if (iframe === true){
+                		this.showMask();
+                		
+                		/* If there is already a frame then use that */
+                		if ($('#jQui_ajax IFRAME')[0]){
+                			var frame = $('#jQui_ajax IFRAME')[0];
+                		} else {
+                			var frame = new IFrame($am("jQui_ajax"));
+                		}
+                		frame.src = target;
+                		frame.style.width = "100%";
+                		frame.style.height = "400px";
+                		frame.scrolling = "no";
+                		$am("jQui_ajax").title = anchor.title ? anchor.title : target;
+                		
+                		frame.onload = function(){
+                			that.loadContent("#jQui_ajax", newTab, back);
+                		};
 
-                                    window.eval(scripts[i].innerHTML);
-                                }
-                            }
-                            if ($am(urlHash) !== null) {
-                                that.updateContentDiv(urlHash, xmlhttp.responseText);
-                                $am(urlHash).title = anchor.title ? anchor.title : target;
-                            } else if (anchor.getAttribute("data-persist-ajax")) {
-
-                                var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
-                                refreshFunction = refresh ?
-                                function () {
-                                    anchor.refresh = true;
-                                    that.loadContent(target, newTab, back, transition, dataObj, anchor);
-                                    anchor.refresh = false;
-                                } : null
-                                that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
-                                $am(urlHash).title = anchor.title ? anchor.title : target;
-                            } else {
-                                that.updateContentDiv("jQui_ajax", xmlhttp.responseText);
-                                $am("jQui_ajax").title = anchor.title ? anchor.title : target;
-                                that.loadContent("#jQui_ajax", newTab, back);
-                                return;
-                            }
-                            //Let's load the content now.
-                            return that.loadContent("#" + urlHash);
-
-                        }
-                    };
-                    ajaxUrl = target;
-                    var newtarget = target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000;
-                    xmlhttp.open("GET", newtarget, true);
-                    xmlhttp.send();
-                    // show Ajax Mask
-                    this.showMask();
-                    return;
+                	} else {
+	                    // XML Request
+	                    if (this.activeDiv.id == "jQui_ajax" && target == this.ajaxUrl) return;
+	                    if (target.indexOf("http") == -1) target = AppMobi.webRoot + target;
+	                    var xmlhttp = new XMLHttpRequest();
+	                    xmlhttp.onreadystatechange = function () {
+	                        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	                            /**
+	                             * Now we'll find any <script> tags and eval the JS or include them. We also keep a reference to the files included so we only
+	                             * include them once
+	                             */
+	                        	if (iframe === false){
+		                            var div = document.createElement("div");
+		                            div.innerHTML = xmlhttp.responseText;
+		                            var scripts = div.getElementsByTagName("script");
+		                            div = null;
+		                            for (var i = 0; i < scripts.length; i++) {
+		                                if (scripts[i].src.length > 0 && !that.remoteJSPages[scripts[i].src]) {
+		                                    var doc = document.createElement("script");
+		                                    doc.type = scripts[i].type;
+		                                    doc.src = scripts[i].src;
+		                                    document.getElementsByTagName('head')[0].appendChild(doc);
+		                                    that.remoteJSPages[scripts[i].src] = 1;
+		                                    doc = null;
+		                                } else {
+		
+		                                    window.eval(scripts[i].innerHTML);
+		                                }
+		                            }
+	                        	}
+	                        	
+	                            if ($am(urlHash) !== undefined) {
+	                                that.updateContentDiv(urlHash, xmlhttp.responseText);
+	                                $am(urlHash).title = anchor.title ? anchor.title : target;
+	                            } else if (anchor.getAttribute("data-persist-ajax")) {
+	
+	                                var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
+	                                refreshFunction = refresh ?
+	                                function () {
+	                                    anchor.refresh = true;
+	                                    that.loadContent(target, newTab, back, transition, dataObj, anchor);
+	                                    anchor.refresh = false;
+	                                } : null
+	                                that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
+	                                $am(urlHash).title = anchor.title ? anchor.title : target;
+	                            } else {
+	                                that.updateContentDiv("jQui_ajax", xmlhttp.responseText);
+	                                $am("jQui_ajax").title = anchor.title ? anchor.title : target;
+	                                that.loadContent("#jQui_ajax", newTab, back);
+	                                return;
+	                            }
+	                            //Let's load the content now.
+	                            return that.loadContent("#" + urlHash);
+	                        }
+	                    };
+	                    ajaxUrl = target;
+	                    var newtarget = target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000;
+	                    xmlhttp.open("GET", newtarget, true);
+	                    xmlhttp.send();
+	                    // show Ajax Mask
+	                    this.showMask();
+	                    return;
+                	}
                 } else {
                     // load a div
                     what = target.replace("#", "");
