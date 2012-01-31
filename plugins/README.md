@@ -132,10 +132,10 @@ To use jq.scroller you must do the following
 3. Call the javascript function on the ID of the area you want to scroll
 
 ```` js
-var scroller = $("#my_div").scroller();
+var scroller = $("#my_div").scroller({});
 ````
 
-There are additional configuration options that are passed in as an object parameter
+There are  configuration options that are passed in as an object parameter
 
 ``` js
 var options={
@@ -200,6 +200,13 @@ var options={
 var carousel = $("#my_div").carousel(options);
 ```
 
+There are two functions for adding/removing items
+``` js
+carousel.addItem(element);
+carousel.removeItem(); //remove all items
+carousel.removeItem(index); //remove an item by index
+```
+
 
 # jq.swipe
 
@@ -232,7 +239,7 @@ The template parsing library is John Resig's micro templating, with some fixes a
 
 To use jq.template you must do the following
 
-1. Create your template.  The easiest way is to create script tags with the content type of "text/html" and set an id
+1. Create your template.  The easiest way is to create <script> tags with the content type of "text/html" and set an id
 
 ``` html
 <script type='text/html' id='user_info'>

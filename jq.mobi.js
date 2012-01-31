@@ -282,19 +282,19 @@ if (!window.jq || typeof (jq) !== "function") {
             css: function(attribute, value) {
                 if (this.length === 0)
                     return undefined;
-                if (value === undefined && typeof (attribute) === "string"){
-				    var styles=window.getComputedStyle(this[0]);
-                    return styles[attribute]?styles[attribute]:this[0].style[attribute];
-				}
+                if (value === undefined && typeof (attribute) === "string") {
+                    var styles = window.getComputedStyle(this[0]);
+                    return styles[attribute] ? styles[attribute] : this[0].style[attribute];
+                }
                 for (var i = 0; i < this.length; i++) {
                     if ($.isObject(attribute)) {
                         for (var j in attribute) {
                             this[i].style[j] = attribute[j];
                         }
                     } 
-                    else{
+                    else {
                         this[i].style[attribute] = value;
-					}
+                    }
                 }
                 return this;
             },
@@ -626,14 +626,15 @@ if (!window.jq || typeof (jq) !== "function") {
                 return this.oldElement != undefined ? this.oldElement : $();
             },
             clone: function(deep) {
+                deep = deep === false ? false : true;
                 if (this.length == 0)
                     return undefined;
-			    var elems=[];
-				for(var i=0;i<this.length;i++)
-				{
-				   elems.push(this[i].cloneNode(deep));
-				}
-				
+                var elems = [];
+                for (var i = 0; i < this.length; i++) 
+                {
+                    elems.push(this[i].cloneNode(deep));
+                }
+                
                 return $(elems);
             },
             size: function() {

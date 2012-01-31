@@ -3,34 +3,44 @@
  * Copyright 2011 - AppMobi 
  * Executes a callback function and passes in the direction return
  * @string (left,right,up,down)
- */ (function ($) {
-    $.fn["swipe"] = function (opts) {
-        var tmp;
+ */ 
+(function($) {
+    var cache = [];
+    $.fn["swipe"] = function(opts) {
+        
+        if (opts === undefined && this.length > 0) 
+        {
+            return cache[this[0].id] ? cache[this[0].id] : null;
+        }
         for (var i = 0; i < this.length; i++) {
             tmp = new swipeListener(this[i], opts);
+            if (this[i].id)
+                cache[this[i].id] = tmp;
         }
         return this.length == 1 ? tmp : this;
     };
-    var swipeListener = (function () {
-        var swipeListener = function (elID, opts) {
-                var that = this;
-                if (typeof (elID) == "string") this.el = document.getElementById(elID);
-                else this.el = elID
-                if (!this.el) {
-                    alert("Error adding swipe listener for " + elID);
-                    return;
-                }
-                this.el.addEventListener('touchmove', function (e) {
-                    that.touchMove(e);
-                }, false);
-                this.el.addEventListener('touchend', function (e) {
-                    that.touchEnd(e);
-                }, false);
-                for (j in opts) {
-                    this[j] = opts[j];
-                }
-            };
-
+    var swipeListener = (function() {
+        var swipeListener = function(elID, opts) {
+            var that = this;
+            if (typeof (elID) == "string")
+                this.el = document.getElementById(elID);
+            else
+                this.el = elID
+            if (!this.el) {
+                alert("Error adding swipe listener for " + elID);
+                return;
+            }
+            this.el.addEventListener('touchmove', function(e) {
+                that.touchMove(e);
+            }, false);
+            this.el.addEventListener('touchend', function(e) {
+                that.touchEnd(e);
+            }, false);
+            for (j in opts) {
+                this[j] = opts[j];
+            }
+        };
+        
         swipeListener.prototype = {
             startX: 0,
             startY: 0,
@@ -46,8 +56,8 @@
                 right: false
             },
             callBack: null,
-
-            cancel: function () {
+            
+            cancel: function() {
                 this.startX = 0;
                 this.startY = 0;
                 this.movingX = 0;
@@ -60,7 +70,7 @@
                     right: false
                 };
             },
-            touchStart: function (event) {
+            touchStart: function(event) {
                 if (event.touches[0].target && event.touches[0].target.type != undefined) {
                     return;
                 }
@@ -71,8 +81,9 @@
                     event.preventDefault();
                 }
             },
-            touchMove: function (event) {
-                if (this.movingElement == false) this.touchStart(event);
+            touchMove: function(event) {
+                if (this.movingElement == false)
+                    this.touchStart(event);
                 event.preventDefault();
                 if (event.touches.length > 1 || !this.movingElement) {
                     this.cancel();
@@ -81,8 +92,9 @@
                 this.movingX = event.touches[0].pageX - this.startX;
                 this.movingY = event.touches[0].pageY - this.startY;
             },
-            touchEnd: function (event) {
-                if (!this.movingElement) return;
+            touchEnd: function(event) {
+                if (!this.movingElement)
+                    return;
                 event.preventDefault();
                 var swiped = false;
                 if (Math.abs(this.movingX) > this.hthreshold) {
@@ -95,8 +107,9 @@
                     this.swipeDirection.down = this.movingY > 0;
                     swiped = true;
                 }
-                if (swiped && typeof (this.callBack == "function")) this.callBack(this.swipeDirection);
-
+                if (swiped && typeof (this.callBack == "function"))
+                    this.callBack(this.swipeDirection);
+                
                 this.cancel();
             }
         };
@@ -106,8 +119,9 @@
     // Helper function to get only
     if (!window.numOnly) {
         function numOnly(val) {
-            if (isNaN(parseFloat(val))) val = val.replace(/[^0-9.-]/, "");
-
+            if (isNaN(parseFloat(val)))
+                val = val.replace(/[^0-9.-]/, "");
+            
             return parseFloat(val);
         }
     }

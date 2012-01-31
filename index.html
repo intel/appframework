@@ -49,21 +49,35 @@
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.selectBox.js"></script> 
 
 <script type="text/javascript" charset="utf-8" src="./ui/jq.ui.js"></script> 
+<script type="text/javascript" charset="utf-8" src="./jq.mobi.js"></script> 
+<!-- include touch.js on desktop browsers only -->
 <script>
+function loadedPanel(what){
+	console.log("loaded "+what.id);
+	}
+	function unloadedPanel(what){
+	console.log("unloaded "+what.id);
+	}
 if(!((window.DocumentTouch&&document instanceof DocumentTouch)||'ontouchstart' in window)){
 var script=document.createElement("script");
 script.src="touch.js";
 var tag=$("head").append(script);
+$.os.android=true; //let's make it run like an android device
 }
 </script>
+
+
+
 <script type="text/javascript">
     /* This function runs once the page is loaded, but appMobi is not yet active */
-    
 	var webRoot="./kitchensink/";
+	$.ui.autoLaunch=false;
+	
     var init = function(){
 	   $.ui.backButtonText="Back";  
+	   window.setTimeout(function(){$.ui.launch();},1500);
     };
-    window.addEventListener("load",init,false);  
+    document.addEventListener("DOMContentLoaded",init,false);  
 	
     /* This code prevents users from dragging the page */
     var preventDefaultScroll = function(event) {
@@ -71,7 +85,8 @@ var tag=$("head").append(script);
         window.scroll(0,0);
         return false;
     };
-    document.addEventListener('touchmove', preventDefaultScroll, false);
+	
+	document.addEventListener('touchmove', preventDefaultScroll, false);
 
     /* This code is used to run as soon as appMobi activates */
     var onDeviceReady=function(){
@@ -85,6 +100,7 @@ var tag=$("head").append(script);
     document.addEventListener("appMobi.device.ready",onDeviceReady,false);    
 	function showHide(obj,objToHide){
 		var el=$("#"+objToHide)[0];
+		
 		if(obj.className=="expanded"){
 			obj.className="collapsed";
 		}
@@ -94,17 +110,24 @@ var tag=$("head").append(script);
 		$(el).toggle();
 		
 	}
+	
 </script>
 
 </head>
 <body>
-
+<div id="jQUi">
+<div id="splashscreen" class='ui-loader'>
+<img src="kitchensink/images/splash.png">
+<br><br>
+<span class='ui-icon ui-icon-loading spin'></span><h1 >Starting app</h1>
+</div>
 <div id="header">
-
+<span id='badgephone' onclick='jq.ui.toggleSideMenu()' style='float:right;padding-top:7px;padding-right:5px;'><img src='kitchensink/images/badge.png'></span>
+<span id='badgetablet'  style='float:right;padding-top:7px;padding-right:5px;'><img src='kitchensink/images/badge.png'></span>
 </div>
 
 <div id="content">
-	<div title='Welcome' id="main" class="panel" selected="true">
+	<div title='Welcome' id="main" class="panel" selected="true" data-load="loadedPanel" data-unload="unloadedPanel" data-tab="navbar_home">
 
 	<h2 class='expanded' onclick='showHide(this,"main_info");'>Welcome</h2>
 		<p id='main_info'>Welcome to the kitchen sink demo for jqMobi.  Here you will find samples of how to use the jqMobi libraries.  Please select an option from below.</p>
@@ -118,7 +141,7 @@ var tag=$("head").append(script);
 
 	<!-- ------------------------------------------ -->
 	<!-- aUX -->
-	<div title="jqMobi" id="jqm" class="panel">
+	<div title="jqMobi" id="jqm" class="panel" data-nav="menu_jqmobi">
 		<h2 class='expanded' onclick='showHide(this,"jqmobi_info");'>jqMobi</h2>
 		<p id='jqmobi_info'>jqMobi is a blazingly fast query selector tool that is optmimized for HTML5 browsers.</p>
 
@@ -147,6 +170,7 @@ var tag=$("head").append(script);
 		<li><a href="#jqm22" >$().prepend()</a></li>
 		<li><a href="#jqm32" >$().get()</a></li>
 		<li><a href="#jqm31" >$().offset()</a></li>
+		<li><a href="#jqmparent" >$().parent()</a></li>
 		<li><a href="#jqm33" >$().isArray()</a></li>
 		<li><a href="#jqm34" >$().isFunction()</a></li>
 		<li><a href="#jqm23" >$.jsonP()</a></li>
@@ -154,7 +178,7 @@ var tag=$("head").append(script);
 		<li><a href="#jqm25" >$.get()</a></li>
 		<li><a href="#jqm26" >$.post()</a></li>
 		<li><a href="#jqm27" >$.getJSON()</a></li>
-		<li><a href="#jqm28" >$.serialize()</a></li>
+		<li><a href="#jqm28" >$.param()</a></li>
 		<li><a href="#jqm29" >$.parseJSON()</a></li>
 		<li><a href="#jqm30" >$.os</a></li>
 		<li><a href="javascript:;" onClick="$.ui.scrollToTop('jqm')" >Go To Top</a></li>
@@ -163,14 +187,14 @@ var tag=$("head").append(script);
 	</div>
 
 	<!-- jqm > jqm Selector -->
-	<div id="jqm1"  class="panel">
+	<div id="jqm1"  class="panel" title="$()" data-nav="menu_jqmobi">
 		<span id="jqmtest2">This is some html</span><br /><br />
 		<a class="button" href="javascript:;" onclick="alert($('#jqmtest2')[0])">Click to get Object</a><br /><br />
 		<a class="button" href="javascript:;" onclick="alert($('#jqmtest2').html())">Click to get Content</a>
 	</div>
 
 	<!-- jqm > jqm length() -->
-	<div id="jqm2"  class="panel">
+	<div id="jqm2"  class="panel"  title=".length()" data-nav="menu_jqmobi">
 		<div class='jqm2'>Div 1 (class="jqm2")</div>
 		<div class='jqm2'>Div 2 (class="jqm2")</div>
 		<div class='jqm2'>Div 3 (class="jqm2")</div>
@@ -180,31 +204,31 @@ var tag=$("head").append(script);
 	</div>
 
 	<!-- jqm > jqm find() -->
-	<div id="jqm3"  class="panel">
+	<div id="jqm3"  class="panel"  title=".find()" data-nav="menu_jqmobi">
 		$("#div").find("li") find all element(s) inside a container<br /><br />
 		<ul>
-			<li>Item 1</li>
+			<li id='find1'>Item 1</li>
 			<li>Item 2</li>
 		</ul>
 		<a  class="button"href="javascript:;" onclick="alert($('#jqm3').find('li').length)">Click to get the count of li's in the div</a><br /><br />
 	</div>
 
 	<!-- jqm > jqm html() -->
-	<div id="jqm4" class="panel">
+	<div id="jqm4" class="panel"  title=".html()" data-nav="menu_jqmobi">
 		$("#div").html() allows you to get or set a contents HTML.<br /><br />
 		<div id="jqm4_content" style='border:1px solid black'>This is some content</div><br /><br />
 		<a class="button" href='javascript:;' onclick='alert($("#jqm4_content").html())'>Get Content</a> | <a href='javascript:;' class="button" onclick='$("#jqm4_content").html("New Content")'>Set Content</a>
 	</div>
 
 	<!-- jqm > jqm text() -->
-	<div id="jqm5" class="panel">
+	<div id="jqm5" class="panel"  title=".text()" data-nav="menu_jqmobi">
 		$("#div").text() allows you to get or set a contents text.<br /><br />
 		<div id="jqm5_content" style='border:1px solid black'><span>This is some text</span> other text</div><br /><br />
 		<a class="button" href='javascript:;' onclick='alert($("#jqm5_content").text())'>Get Text</a> | <a  class="button" href='javascript:;' onclick='$("#jqm5_content").text("New Text")'>Set Text</a>
 	</div>
 
 	<!-- jqm > jqm css() -->
-	<div id="jqm6" class="panel">
+	<div id="jqm6" class="panel"  title=".css()" data-nav="menu_jqmobi">
 		$("#div").css() - allows you to get or set a CSS property.<br /><br />
 		<div style="background:red;color:white;border:1px solid black" id="jqm6_content">This is some content</div><br /><br />
 		<a class="button" href='javascript:;' onclick='alert($("#jqm6_content").css("background"))'>Get background color</a><br />
@@ -212,35 +236,35 @@ var tag=$("head").append(script);
 	</div>
 
 	<!-- jqm > jqm empty() -->
-	<div id="jqm7" class="panel">
+	<div id="jqm7" class="panel"  title=".empty()" data-nav="menu_jqmobi">
 		$("#div").empty() - will empty out the contents of the element.<br /><br />
 		<div id="jqm7_content" style="border:1px solid black">This is some content</div><br/><br/>
 		<a class="button" href='javascript:;' onclick='$("#jqm7_content").empty()'>$().empty()</a>
 	</div>
 
 	<!-- jqm > jqm hide() -->
-	<div id="jqm8" class="panel">
+	<div id="jqm8" class="panel"  title=".hide()" data-nav="menu_jqmobi">
 		$("#div").hide() - will set the elements display property to "none".<br /><br />
 		<div id="jqm8_content" style="border:1px solid black">This is some content</div><br/>
 		<a class="button" href='javascript:;' onclick='$("#jqm8_content").hide()'>Hide the div</a>
 	</div>
 
 	<!-- jqm > jqm show() -->
-	<div id="jqm9" class="panel">
+	<div id="jqm9" class="panel"  title=".show()" data-nav="menu_jqmobi">
 		$("#div").show() - will set the elements display property to "block".<br /><br />
 		<div id="jqm9_content" style="border:1px solid black;display:none;">This is some content</div><br/>
 		<a  class="button" href='javascript:;' onclick='$("#jqm9_content").show()'>Show the div</a>
 	</div>
 
 	<!-- jqm > jqm toggle() -->
-	<div id="jqm10" class="panel">
+	<div id="jqm10" class="panel"  title=".toggle()" data-nav="menu_jqmobi">
 		$("#div").toggle() - will toggle the elements display property.<br /><br />
 		<div id="jqm10_content" style="border:1px solid black;display:block;">This is some content</div><br/><br />
 		<a class="button" href='javascript:;' onclick='$("#jqm10_content").toggle()'>Toggle a div</a>
 	</div>
 
 	<!-- jqm > jqm val() -->
-	<div id="jqm11" class="panel">
+	<div id="jqm11" class="panel"  title=".val()" data-nav="menu_jqmobi">
 		$("#div").val() - will get or set the value of an HTML element.<br /><br />
 		<input type="text" id="jqm11_input" size=15><br /><br />
 		<a class="button" href='javascript:;' onclick='alert($("#jqm11_input").val())'>Get Value</a><br />
@@ -248,7 +272,7 @@ var tag=$("head").append(script);
 	</div>
 
 	<!-- jqm > jqm attr() -->
-	<div id="jqm12" class="panel">
+	<div id="jqm12" class="panel"  title=".attr()" data-nav="menu_jqmobi">
 		$("#div").attr() - will get or set an attribute of an HTML element.<br /><br />
 		<div id="jqm12_content" data-test="foo">The data-test attribute is set to "foo" - data-test="foo"</div><br /><br />
 		<a class="button" href='javascript:;' onclick='alert($("#jqm12_content").attr("data-test"))'>Get Attribute Value</a><br />
@@ -256,7 +280,7 @@ var tag=$("head").append(script);
 	</div>
 
 	<!-- jqm > jqm removeAttr() -->
-	<div id="jqm13" class="panel">
+	<div id="jqm13" class="panel"  title=".removeAttr()" data-nav="menu_jqmobi">
 		$("#div").removeAttr() - will remove an attribute of an HTML element.<br /><br />
 		<div id="jqm13_content" data-test="foo">The data-test attribute is set to "foo" - data-test="foo"</div><br />
 		<a class="button" href='javascript:;' onclick='alert($("#jqm13_content").attr("data-test"))'>Get Attribute Value</a><br />
@@ -264,42 +288,42 @@ var tag=$("head").append(script);
 	</div>
 
 	<!-- jqm > jqm remove() -->
-	<div id="jqm14" class="panel">
+	<div id="jqm14" class="panel"  title=".remove()" data-nav="menu_jqmobi">
 		$("#div").remove() - will remove an element from the parent container.<br /><br />
 		<div id="jqm14_content" style="border:1px solid black">This is content that will be removed from the DOM.</div><br />
 		<a class="button" href='javascript:;' onclick='$("#jqm14_content").remove()'>Remove the Element</a> 
 	</div>
 
 	<!-- jqm > jqm addClass() -->
-	<div id="jqm15" class="panel">
+	<div id="jqm15" class="panel"  title=".addClass()"data-nav="menu_jqmobi">
 		$("#div").addClass() - adds a css class to the element.<br /><br />
 		<div style='border:1px solid black' id="jqm15_content">This is some content</div><br /><br />
 		<a class="button" href='javascript:;' onclick='($("#jqm15_content").addClass("class16"))'>Add a Class</a>
 	</div>
 
 	<!-- jqm > jqm removeClass() -->
-	<div id="jqm16" class="panel">
+	<div id="jqm16" class="panel"  title=".removeClass()" data-nav="menu_jqmobi">
 		$("#div").removeClass() - removes a css class to the element.<br /><br />
 		<div style='border:1px solid black' id="jqm16_content" class="class16">This is some content</div><br />
 		<a class="button" href='javascript:;' onclick='($("#jqm16_content").removeClass("class16"))'>Remove the Class</a>
 	</div>
 
 	<!-- jqm > jqm hassClass() -->
-	<div id="jqm17" class="panel">
+	<div id="jqm17" class="panel"  title=".hasClass()" data-nav="menu_jqmobi">
 		$("#div").hassClass() - returns a boolean if an element has a class.<br /><br />
 		<div style='border:1px solid black' id="jqm17_content" class="class16">This is some content</div><br />
 		<a class="button" href='javascript:;' onclick='alert($("#jqm17_content").hasClass("class16"))'>Check if it has the class</a>
 	</div>
 
 	<!-- jqm > jqm bind() -->
-	<div id="jqm18" class="panel">
+	<div id="jqm18" class="panel"  title=".bind()" data-nav="menu_jqmobi">
 		$("#div").bind() - binds an event to an element.<br /><br />
 		<a class="button" href="javascript:;" id="jqm18_content">Test Link to bind event to</a><br /><br />
 		<a class="button" href='javascript:;' onclick='$("#jqm18_content").bind("click",function(evt){alert("I was clicked");});alert("click event is bound");'>Bind Event</a><br />
 	</div>
 
 	<!-- jqm > jqm unbind() -->
-	<div id="jqm19" class="panel">
+	<div id="jqm19" class="panel"  title=".unbind()" data-nav="menu_jqmobi">
 		$("#div").unbind() - unbinds an event from an element.<br /><br />
 		<a class="button" href="javascript:;" id="jqm19_content">This is a test link</a><br /><br />
 		<a class="button" href='javascript:;' onclick='$("#jqm19_content").bind("click",function(){alert("I was clicked");});alert("click event is bound");'>Bind Event</a><br />
@@ -307,29 +331,29 @@ var tag=$("head").append(script);
 	</div>
 
 	<!-- jqm > jqm trigger() -->
-	<div id="jqm20" class="panel">
+	<div id="jqm20" class="panel"  title=".trigger()" data-nav="menu_jqmobi">
 		$("#div").trigger() - triggers an event on an element.<br /><br />
 		<a id="jqm20_content" href="javascript:;" onclick="alert('I was clicked')">Click to test me</a><br /><br />
 		<a class="button" href="javascript:;" onclick='$("#jqm20_content").trigger("click")'>Trigger Event</a>
 	</div>
 
 	<!-- jqm > jqm append() -->
-	<div id="jqm21" class="panel">
+	<div id="jqm21" class="panel"  title=".append()" data-nav="menu_jqmobi">
 		$("#div").append() - appends an element or content.<br /><br />
 		<div id="jqm21_content">I'll append content after the &lt;hr> <hr>
 		</div><br /><br />
-		<a class="button" href="javascript:;" onclick='$("#jqm21_content").append("Some more content<br />");'>Append Content</a>
+		<a class="button" href="javascript:;" onclick='$("#jqm21_content").append("<span>Some more content<br /></span>");'>Append Content</a>
 	</div>
 
 	<!-- jqm > jqm prepend() -->
-	<div id="jqm22" class="panel">
+	<div id="jqm22" class="panel"  title=".prepend()" data-nav="menu_jqmobi">
 		$("#div").prepend() - prepends an element or content.<br /><br />
 		<div id="jqm22_content"><hr>I'll prepend content before the &lt;hr>
 		</div><br /><br />
-		<a class="button" href="javascript:;" onclick='$("#jqm22_content").prepend("Some more content<br />");'>Prepend Content</a>
+		<a class="button" href="javascript:;" onclick='$("#jqm22_content").prepend("<span>Some more content<br /></span>");'>Prepend Content</a>
 	</div>
 	<!-- jqm > jqm offset() -->
-	<div id="jqm31" class="panel">
+	<div id="jqm31" class="panel"  title=".offset()" data-nav="menu_jqmobi">
 	<script>
 	function getElementOffset(){
 	var data=$("#jqm31").offset();
@@ -342,7 +366,7 @@ var tag=$("head").append(script);
 	</div>
 
 	<!-- jqm > jqm get() -->
-	<div id="jqm32" class="panel">
+	<div id="jqm32" class="panel"  title=".get()" data-nav="menu_jqmobi">
 		$("#div").get() - Get's an individual element by index.<br /><br />
 	<script>
 	function getElementByIndex(){
@@ -355,7 +379,7 @@ var tag=$("head").append(script);
 
 
 	<!-- jqm > jqm jsonP() -->
-	<div id="jqm23" class="panel">
+	<div id="jqm23" class="panel"  title=".jsonP()" data-nav="menu_jqmobi">
 		$.jsonP(url:"URL",
 		   success:function(){},
 		   timeout:"1000",
@@ -366,7 +390,7 @@ var tag=$("head").append(script);
 		Make jsonP call</a>
 	</div>
 	<!-- jqm > jqm ajax() -->
-	<div id="jqm24" class="panel">
+	<div id="jqm24" class="panel"  title=".ajax()" data-nav="menu_jqmobi">
 		$.ajax(url:"URL",
 		   success:function(){},
 		   timeout:"1000",
@@ -383,7 +407,7 @@ var tag=$("head").append(script);
 	</div>
 
 	<!-- jqm > jqm get() -->
-	<div id="jqm25" class="panel">
+	<div id="jqm25" class="panel"  title=".get()" data-nav="menu_jqmobi">
 		$.get(url:"URL",
 		success:function(){},
 		timeout:"1000",
@@ -400,7 +424,7 @@ var tag=$("head").append(script);
 	</div>
 
 	<!-- jqm > jqm post() -->
-	<div id="jqm26" class="panel">
+	<div id="jqm26" class="panel"  title=".post()" data-nav="menu_jqmobi">
 		$.post(url,data:{foo:"bar"},
 			  success:function(){},
 			  timeout:"1000",error:
@@ -417,7 +441,7 @@ var tag=$("head").append(script);
 	</div>
 
 	<!-- jqm > jqm getJSON() -->
-	<div id="jqm27" class="panel">
+	<div id="jqm27" class="panel"  title=".getJSON()" data-nav="menu_jqmobi">
 		$.getJSON(url,data,success); - Makes a XMLHpttRequest GET request and returns a JSON object.<br /><br />
 		<script>
 			function doJSON(){
@@ -429,22 +453,22 @@ var tag=$("head").append(script);
 	</div>
 
 	<!-- jqm > jqm serialize() -->
-	<div id="jqm28" class="panel">
-		$.serialize() - serializes an object into key/value pairs for a querystring.<br /><br />
+	<div id="jqm28" class="panel"  title=".param()">
+		$.param() - serializes an object into key/value pairs for a querystring.<br /><br />
 		<code>
 			var obj= {foo:"foo",bar:"bar"};
 		</code><br /><br />
 		<script>
 			function doSerialize(){
 				var obj= {foo:"foo",bar:"bar"};
-				$("#jqm28_content").html($.serialize(obj));
+				$("#jqm28_content").html($.param(obj));
 			}
 		</script>
 		<div id="jqm28_content" style="border:1px solid black">Serialized parameters will show here.</div><br /><br />
-		<a class="button" href='javascript:;' onclick="doSerialize()">Make Serialize Call</a>
+		<a class="button" href='javascript:;' onclick="doSerialize()">Make param Call</a>
 	</div>
 	<!-- jqm > jqm parseJSON() -->
-	<div id="jqm29" class="panel">
+	<div id="jqm29" class="panel"  title=".parseJSON()" data-nav="menu_jqmobi">
 	   $.parseJSON() - parses a string and converts it into a JSON object.  Uses the native JSON parser, but is added for backwards compatibility.<br><br>
 	   <code>
 		   var obj='{"foo":"bar"}';
@@ -455,11 +479,12 @@ var tag=$("head").append(script);
 			  alert($.parseJSON(obj));
 		   }
 		  </script>
+		  <br>
 		  <a class="button" href='javascript:;' onclick="doParseJson()">Parse JSON string</a>
 	</div>
 
 	<!-- jqm > os -->
-	<div id="jqm30" class="panel">
+	<div id="jqm30" class="panel"  title=".os" data-nav="menu_jqmobi">
 	   $.os  - holds information about the OS of the device, and if it is a webkit browser<br><br>
 	   <pre>
 	$.os.webkit  = <script>document.write($.os.webkit);</script>
@@ -477,7 +502,7 @@ var tag=$("head").append(script);
 	</div>
 
 	<!-- jqm > isArray -->
-	<div id="jqm33" class="panel" title="isArray">
+	<div id="jqm33" class="panel" title=".isArray()" data-nav="menu_jqmobi">
 	$.isArray(param)  - returns a boolean if the parameter is an array.<br><br>
 	<pre>
 	var notArrayTest="foo";
@@ -502,7 +527,7 @@ var tag=$("head").append(script);
 	</div>
 
 	<!-- jqm > isFunction -->
-	<div id="jqm34" class="panel" title="isFunction">
+	<div id="jqm34" class="panel" title=".isFunction()" data-nav="menu_jqmobi">
 	$.isFunction(param)  - returns a boolean if the parameter is a function.<br><br>
 	<pre>
 	var notFunctionTest="foo";
@@ -526,23 +551,23 @@ var tag=$("head").append(script);
 
 	</div>
 
-	<!-- jqm > useViewPort -->
-
-	<div id="jqmviewport" class="panel" title="Viewport">
-	$.useViewport(portrait,landscape) allows you to set a viewport for your app that can scale properly on mobile devices.  <br>
-	It's best to use this over the device meta tag.<br><br>
+	
+	
+	<div id="jqmparent" class="panel" title=".parent()" data-nav="menu_jqmobi">
+	This returns the parent elements for the previously found elements in the container
 	<pre>
-	$.useViewport(320,480) //phone
-	$.useViewport(768,1024) //tablet
+	$("#jqmparent").parent();
 	</pre>
 
+	The parent id for this div is "content".  Let's verify it.<br>
+	<a href="javascript:;" onclick="alert($('#jqmparent').parent().get().id);" class="button">Get Parent ID</a>
 	</div>
 
 	<!-- ------------------------------------------ -->
 
 	<!-- ------------------------------------------ -->
 	<!-- jqUi -->
-	<div title="jqUi" id="jqmui" class="panel">
+	<div title="jqUi" id="jqmui" class="panel"  data-footer='footerui' data-tab="navbar_ui">
 
 
 	<h2 class='expanded' onclick='showHide(this,"jqui_info");'>jqUi</h2><p id='jqui_info'>jqUi is AppMobi's User Interface/User Experience library for mobile applications. It uses HTML5 and CSS3 for animations and transitions.<br />
@@ -556,10 +581,25 @@ var tag=$("head").append(script);
 		<li><a href="#jqmtransitions" >Transitions</a></li>
 		<li><a href="#jqmforms" >Form Styles</a></li>
 		<li><a href="#uiapi" >$.ui API</a></li>
+		<li><a href="#uifooter">Custom Footers</a></li>
+		<li><a href="#uiside">Side Navigation Menu</a></li>
+		<li><a href="kitchensink/external.html" data-persist-ajax="true" data-refresh-ajax="true">Load External Content</a></li>
 		</ul>
+
 	</div>
 
-	<div id="jqmforms" title="Form Styles" class="panel">
+	<div id="uiside" title="Side Menu Navigation" class="panel" data-footer="footerui">
+	<b>Side Menu Navigation</b><br>
+	  If you are on a tablet, you'll already see the side menu.  If you are on a phone, click the "Powered by jqMobi" button to expand it.<br><Br>
+	  Side menu's are created using the &lt;nav&gt; tags.  You can set the id and then refer to them on each panel by setting the data-menu='id' property.  The side menu's
+	  will only show if you have &lt;nav&gt; defined.
+	</div>
+	<div id="uifooter" title="Custom Footers" class="panel" data-footer='footerui'>
+     <p>You should notice that the footer is no longer the default.  It is specific to jqUi, with options for Transitions, UI and API</p>
+	 You can create custom fotoers using the &lt;footer&gt; tag.  You then set the id on each panel to change them using the data-footer='id' property. 
+	
+	</div>
+	<div id="jqmforms" title="Form Styles" class="panel" data-footer='footerui'>
 	<form>
 
 			<fieldset>
@@ -655,9 +695,9 @@ var tag=$("head").append(script);
 
 	</div>
 
-	<div title="Transitions" id="jqmtransitions" class="panel">
+	<div title="Transitions" id="jqmtransitions" class="panel" data-footer='footerui'>
 	<h2 class='expanded' onclick='showHide(this,"jqui_transitions");'>jqUi</h2><p id='jqui_transitions'>
-	<strong>jqUi transitions</strong> the following are transitions built in.  You can easily add/extend with your own.  Set the data-transition attribute on an anchor to change the transition.</p>
+	<strong>jq.ui transitions</strong> the following are transitions built in.  You can easily add/extend with your own.  Set the data-transition attribute on an anchor to change the transition.</p>
 	<ul>
 	<li><a href="#transition1"  data-transition="slide">Slide</a></li>
 	<li><a href="#transition2"  data-transition="up">Slide Up</a></li>
@@ -670,7 +710,7 @@ var tag=$("head").append(script);
 	<br/><br/>
 	</div>
 
-	<div id="uiapi" title="jqUi API" class="panel">
+	<div id="uiapi" title="jqUi API" class="panel" data-pull-scroller='true' data-footer='footerui'>
 	<ul>
 		<li><a href="#uigoback">.goBack()</a></li>
 		<li><a href="#uiclearhistory">.clearHistory()</a></li>
@@ -681,20 +721,76 @@ var tag=$("head").append(script);
 		<li><a href="#uishowmask">.showMask() </a></li>
 		<li><a href="#uihidemask">.hideMask() </a></li>
 		<li><a href="#uiloadcontent">.loadContent(); </a></li>
+		<li><a href="#uilaunch">.launch(); </a></li>
+		<li><a href="#uiready">.ready(); </a></li>
+		<li><a href="#uibadge">.updateBadge(); </a></li>
+		<li><a href="#uiremovebadge">.removeBadge(); </a></li>
+		<li><a href="#uitoggleheader">.toggleHeaderMenu(); </a></li>
+		<li><a href="#uitoggleside">.toggleSideMenu(); </a></li>
+		<li><a href="#uitogglenav">.toggleNavMenu(); </a></li>
 		<li><a href="#uiscrolltotop">.scrollToTop() </a></li>
 
 	</ul>
 	</div>
 
-	<div id="uigoback" title="Go Back" class="panel">
+	<div id="uibadge" title="updateBadge" class="panel" data-footer='footerui'>
+	Updates a badge with the given value or creates one.<br>
+	Position can be
+	<pre>
+	bl - bottom left
+	tl - top left
+	br - bottom right
+	tr - top right (default)
+	</pre>
+	<ul>
+	<li id='libadge'><a href="javascript:;">Badge</a></li>
+	</ul>
+	<pre>
+	$.ui.updateBadge("#libadge","Badge Created","bl");
+	</pre>
+	
+	<a href="javascript:;" onclick="$.ui.updateBadge('#libadge','Badge Created','tl');" class="button">Create Badge</a>
+	<br>
+	</div>
+
+	<div id="uiremovebadge" title="removeBadge" class="panel" data-footer='footerui'>
+	Removes a badge.
+	<ul>
+	<li id='libadge2'><a href="javascript:;">Badge</a></li>
+	</ul>
+	<pre>
+	$.ui.removeBadge("#target");
+	</pre>
+	
+	<a href="javascript:;" onclick="$.ui.updateBadge('#libadge2','2','tl');" class="button">Create Badge</a>
+	<br>
+	<a href="javascript:;" onclick="$.ui.removeBadge('#libadge2');" class="button">Remove Badge</a>
+	</div>
+	
+	<div id="uiready" title="Ready" class="panel" data-footer='footerui'>
+	Execute a function when $.ui.launch has completed
+	<pre>
+	$.ui.ready(function(){});
+	</pre>
+	</div>
+	
+	<div id="uigoback" title="Go Back" class="panel" data-footer='footerui'>
 	You can use this command to go back in history.
 	<pre>
 	$.ui.goBack()
 	</pre>
 	<a href="javascript:;" onclick="$.ui.goBack()" class="button">Go Back</a>
 	</div>
+	
+	<div id="uilaunch" title="Launch" class="panel" data-footer='footerui'>
+	You can use this command to launch your jqUi app if you set autoLaunch=false;
+	<pre>
+	$.ui.autoLaunch=false;
+	$.ui.golaunch()
+	</pre>
+	</div>
 
-	<div id="uiclearhistory" title="Clear History" class="panel">
+	<div id="uiclearhistory" title="Clear History" class="panel" data-footer='footerui' >
 	You can use this command to clear the history stack manually
 	<pre>
 	$.ui.clearHistory()
@@ -702,7 +798,7 @@ var tag=$("head").append(script);
 	<a href="javascript:;" onclick="$.ui.clearHistory()" class="button">Clear History Stack</a>
 
 	</div>
-	<div id="uiaddcontentdiv" title="Add Content Div" class="panel">
+	<div id="uiaddcontentdiv" title="Add Content Div" class="panel" data-footer='footerui'>
 	You can use this command to add a new div programatically.  This will setup scrolling, etc.
 	<pre>
 	$.ui.addContentDiv(id, content,title
@@ -724,14 +820,14 @@ var tag=$("head").append(script);
 
 
 	</div>
-	<div id="uiupdateanchors" title="Update Anchors" class="panel">
+	<div id="uiupdateanchors" title="Update Anchors" class="panel" data-footer='footerui'>
 	This will loop through content and parse any anchors to automagically wire them.<br>
 	<pre>
 	$.ui.updateAnchors(div,resetHistory)
 	</pre>
 	</div>
 
-	<div id="uisettitle" title="Set Title" class="panel">
+	<div id="uisettitle" title="Set Title" class="panel" data-footer='footerui'>
 	This will set the page title of the current page programatically.  It will not be retained.
 	<pre>
 	$.ui.setTitle('Title Change');
@@ -740,7 +836,7 @@ var tag=$("head").append(script);
 	<a href='javascript:;' onclick="$.ui.setTitle('Title Change');" class="button">Change Title</a>
 
 	</div>
-	<div id="uisetbackbutton" title="Change Back Button Text" class="panel">
+	<div id="uisetbackbutton" title="Change Back Button Text" class="panel" data-footer='footerui'>
 	This will set the back button text.  You can also override this at the start, which we have done.
 	<pre>
 	$.ui.setBackButtonText('GO BACK');
@@ -748,7 +844,7 @@ var tag=$("head").append(script);
 	$.ui.backButtonText="Back" //override
 	</pre>
 	</div>
-	<div id="uishowmask" title="Show Mask" class="panel">
+	<div id="uishowmask" title="Show Mask" class="panel" data-footer='footerui'>
 	This will show the loading mask.  You can trigger this manually for long operations.
 	<pre>
 	$.ui.showMask();
@@ -763,7 +859,7 @@ var tag=$("head").append(script);
 	</script>
 	<a href="javascript:;" onclick="showMask()" class="button">Show Mask</a>
 	</div>
-	<div id="uihidemask" title="Hide Mask" class="panel">
+	<div id="uihidemask" title="Hide Mask" class="panel" data-footer='footerui'>
 	This will hide the loading mask.  You can trigger this manually for long operations.
 	<pre>
 	$.ui.hideMask();
@@ -772,7 +868,7 @@ var tag=$("head").append(script);
 	<a href="javascript:;" onclick="$.ui.showMask()" class="button">Show Mask</a> | <a href="javascript:;" onclick="$.ui.hideMask()" class="button">Hide Mask</a>
 
 	</div>
-	<div id="uiloadcontent" title="Load Div" class="panel">
+	<div id="uiloadcontent" title="Load Div" class="panel" data-footer='footerui'>
 	This allows you to programatically trigger a page transition/navigation event.
 	<pre>
 	$.ui.loadContent()
@@ -781,7 +877,32 @@ var tag=$("head").append(script);
 	<a href="javascript:;" onclick="$.ui.loadContent('uiapi',false,false,'flip')" class="button">Load $.ui API page with a flip</a>
 
 	</div>
-	<div id="uiscrolltotop" title="Scroll to Top" class="panel">
+	
+	<div id="uitoggleheader" title="Toggle Header" class="panel" data-footer="footerui">
+		This allows you to hide/show the header bar if you have one.  When you do this, the content area will expand up for you.
+		<pre>
+		$.ui.toggleHeaderMenu();
+		</pre>
+		<a href="javascript:;" onclick="$.ui.toggleHeaderMenu()" class="button">Toggle Header Menu</a>
+	</div>
+	
+	<div id="uitogglenav" title="Toggle Footer Nav" class="panel" data-footer="footerui">
+		This lets you toggle the footer navigation menu if you have one.   when you do this, the content area will expand down for you.
+		<pre>
+		$.ui.toggleNavMenu();
+		</pre>
+		<a href="javascript:;" onclick="$.ui.toggleNavMenu()" class="button">Toggle Nav Menu</a>
+	</div>
+	
+	<div id="uitoggleside" title="Toggle Side Nav" class="panel" data-footer="footerui">
+		This lets you toggle the side navigation menu if you have one.   On a tablet, this will be persistent by default.
+		<pre>
+		$.ui.toggleSideNav();
+		</pre>
+		<a href="javascript:;" onclick="$.ui.toggleSideNav()" class="button">Toggle Nav Menu</a>
+	</div>
+	
+	<div id="uiscrolltotop" title="Scroll to Top" class="panel" data-footer='footerui'>
 	This allows you to scroll to the top of a page.  Scroll to the bottom for the link.
 	<pre>
 	$.ui.scrollToTop(div_id)
@@ -796,13 +917,13 @@ var tag=$("head").append(script);
 	<!-- jqUi > API -->
 
 	<!-- jqUi > Transitions -->
-	<div title="Slide" id="transition1" class="panel food">I'm a sliding transition</div>
-	<div title="Slide Up" id="transition2" class="panel">I'm a sliding up transition</div>
-	<div title="Slide Down" id="transition3" class="panel">I'm a sliding down transition</div>
-	<div title="Pop" id="transition4" class="panel">I'm a pop transition</div>
-	<div title="Flip" id="transition5" class="panel">I'm a flip transition</div>
-	<div title="Fade" id="transition6" class="panel">I'm a fade transition</div>
-	<div title="Modal" id="transition7" class="panel" modal="true">I'm a modal window...woot woot</div>
+	<div title="Slide" id="transition1" class="panel splashscreen" data-footer='footerui' style="padding-left:0px"><img src="kitchensink/images/splash.png"></div>
+	<div title="Slide Up" id="transition2" class="panel splashscreen" data-footer='footerui' style="padding-left:0px"><img src="kitchensink/images/splash.png"></div>
+	<div title="Slide Down" id="transition3" class="panel splashscreen" data-footer='footerui' style="padding-left:0px"><img src="kitchensink/images/splash.png"></div>
+	<div title="Pop" id="transition4" class="panel splashscreen" data-footer='footerui' style="padding-left:0px"><img src="kitchensink/images/splash.png"></div>
+	<div title="Flip" id="transition5" class="panel splashscreen" data-footer='footerui' style="padding-left:0px"><img src="kitchensink/images/splash.png"></div>
+	<div title="Fade" id="transition6" class="panel splashscreen" data-footer='footerui' style="padding-left:0px"><img src="kitchensink/images/splash.png"></div>
+	<div title="Modal" id="transition7" class="panel splashscreen" modal="true" data-footer='footerui' style="padding-left:0px;width:100%;min-height:100%;">I'm a modal window...woot woot</div>
 	<!-- ------------------------------------------ -->
 
 	<!-- ------------------------------------------ -->
@@ -831,7 +952,7 @@ var tag=$("head").append(script);
 		   $("#scroller").scroller({
 				scrollBars: true,
 				verticalScroll: true,
-				horizontalScroll: true,
+				horizontalScroll: false,
 				vScrollCSS: "jqmScrollbar",
 				hScrollCSS: "jqmScrollbar"
 			});
@@ -839,8 +960,8 @@ var tag=$("head").append(script);
 		window.addEventListener("load", init_scroller, false);
 	</script>
 	<div id="outercontent"
-			style="height: 95%; width: 130%; overflow: hidden; position: relative">
-			<div id="scroller">Lorem ipsum dolor sit amet, consectetur
+			style="height: 95%; width: 99%; overflow: hidden; position: relative">
+			<div id="scroller"><div>Lorem ipsum dolor sit amet, consectetur
 				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
 				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
 				sed convallis elementum, magna diam pharetra magna, id vestibulum est
@@ -869,6 +990,296 @@ var tag=$("head").append(script);
 				diam, at consectetur elit. Duis feugiat ullamcorper libero tincidunt
 				aliquet. Sed leo nisl, iaculis non pellentesque nec, scelerisque vel
 				felis</div>
+				<div>Lorem ipsum dolor sit amet, consectetur
+				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
+				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
+				sed convallis elementum, magna diam pharetra magna, id vestibulum est
+				eros vitae ante. Ut auctor erat a tellus venenatis eu fermentum lorem
+				scelerisque. Cras dignissim leo ornare massa sollicitudin sit amet
+				pulvinar turpis hendrerit. Morbi hendrerit nunc eget turpis luctus id
+				ultricies lorem consequat. Donec eu lacus sed mauris sollicitudin
+				laoreet. Cras vitae sodales diam. Donec mollis, libero ut
+				pellentesque dignissim, risus orci ornare nisi, sed eleifend enim
+				purus malesuada neque. Nulla tellus sem, scelerisque sed sagittis id,
+				eleifend venenatis ligula. Vivamus placerat neque sit amet metus
+				ultricies facilisis. Nulla a odio magna. Pellentesque habitant morbi
+				tristique senectus et netus et malesuada fames ac turpis egestas. Sed
+				commodo quam eu enim lacinia vitae ultrices nulla mollis. Aenean eget
+				lectus turpis, at ultrices leo. Nulla vehicula magna in risus ornare
+				vestibulum. Integer gravida magna quam. Donec augue ante, fringilla
+				non congue eu, aliquam lacinia nisi. Class aptent taciti sociosqu ad
+				litora torquent per conubia nostra, per inceptos himenaeos. Maecenas
+				nisl ante, suscipit ut suscipit nec, dictum sit amet orci. Maecenas
+				fermentum sapien turpis, sit amet eleifend justo. Aenean auctor
+				interdum sem sed tincidunt. Aliquam ullamcorper malesuada fermentum.
+				Nunc consectetur, ipsum et pulvinar ultrices, lorem nibh egestas
+				sapien, at egestas lorem metus sit amet lacus. Maecenas non feugiat
+				orci. Curabitur imperdiet tempus lacus, volutpat fermentum diam
+				convallis a. In hac habitasse platea dictumst. Pellentesque nec ipsum
+				diam, at consectetur elit. Duis feugiat ullamcorper libero tincidunt
+				aliquet. Sed leo nisl, iaculis non pellentesque nec, scelerisque vel
+				felis</div>
+				<div>Lorem ipsum dolor sit amet, consectetur
+				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
+				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
+				sed convallis elementum, magna diam pharetra magna, id vestibulum est
+				eros vitae ante. Ut auctor erat a tellus venenatis eu fermentum lorem
+				scelerisque. Cras dignissim leo ornare massa sollicitudin sit amet
+				pulvinar turpis hendrerit. Morbi hendrerit nunc eget turpis luctus id
+				ultricies lorem consequat. Donec eu lacus sed mauris sollicitudin
+				laoreet. Cras vitae sodales diam. Donec mollis, libero ut
+				pellentesque dignissim, risus orci ornare nisi, sed eleifend enim
+				purus malesuada neque. Nulla tellus sem, scelerisque sed sagittis id,
+				eleifend venenatis ligula. Vivamus placerat neque sit amet metus
+				ultricies facilisis. Nulla a odio magna. Pellentesque habitant morbi
+				tristique senectus et netus et malesuada fames ac turpis egestas. Sed
+				commodo quam eu enim lacinia vitae ultrices nulla mollis. Aenean eget
+				lectus turpis, at ultrices leo. Nulla vehicula magna in risus ornare
+				vestibulum. Integer gravida magna quam. Donec augue ante, fringilla
+				non congue eu, aliquam lacinia nisi. Class aptent taciti sociosqu ad
+				litora torquent per conubia nostra, per inceptos himenaeos. Maecenas
+				nisl ante, suscipit ut suscipit nec, dictum sit amet orci. Maecenas
+				fermentum sapien turpis, sit amet eleifend justo. Aenean auctor
+				interdum sem sed tincidunt. Aliquam ullamcorper malesuada fermentum.
+				Nunc consectetur, ipsum et pulvinar ultrices, lorem nibh egestas
+				sapien, at egestas lorem metus sit amet lacus. Maecenas non feugiat
+				orci. Curabitur imperdiet tempus lacus, volutpat fermentum diam
+				convallis a. In hac habitasse platea dictumst. Pellentesque nec ipsum
+				diam, at consectetur elit. Duis feugiat ullamcorper libero tincidunt
+				aliquet. Sed leo nisl, iaculis non pellentesque nec, scelerisque vel
+				felis</div>
+				<div>Lorem ipsum dolor sit amet, consectetur
+				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
+				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
+				sed convallis elementum, magna diam pharetra magna, id vestibulum est
+				eros vitae ante. Ut auctor erat a tellus venenatis eu fermentum lorem
+				scelerisque. Cras dignissim leo ornare massa sollicitudin sit amet
+				pulvinar turpis hendrerit. Morbi hendrerit nunc eget turpis luctus id
+				ultricies lorem consequat. Donec eu lacus sed mauris sollicitudin
+				laoreet. Cras vitae sodales diam. Donec mollis, libero ut
+				pellentesque dignissim, risus orci ornare nisi, sed eleifend enim
+				purus malesuada neque. Nulla tellus sem, scelerisque sed sagittis id,
+				eleifend venenatis ligula. Vivamus placerat neque sit amet metus
+				ultricies facilisis. Nulla a odio magna. Pellentesque habitant morbi
+				tristique senectus et netus et malesuada fames ac turpis egestas. Sed
+				commodo quam eu enim lacinia vitae ultrices nulla mollis. Aenean eget
+				lectus turpis, at ultrices leo. Nulla vehicula magna in risus ornare
+				vestibulum. Integer gravida magna quam. Donec augue ante, fringilla
+				non congue eu, aliquam lacinia nisi. Class aptent taciti sociosqu ad
+				litora torquent per conubia nostra, per inceptos himenaeos. Maecenas
+				nisl ante, suscipit ut suscipit nec, dictum sit amet orci. Maecenas
+				fermentum sapien turpis, sit amet eleifend justo. Aenean auctor
+				interdum sem sed tincidunt. Aliquam ullamcorper malesuada fermentum.
+				Nunc consectetur, ipsum et pulvinar ultrices, lorem nibh egestas
+				sapien, at egestas lorem metus sit amet lacus. Maecenas non feugiat
+				orci. Curabitur imperdiet tempus lacus, volutpat fermentum diam
+				convallis a. In hac habitasse platea dictumst. Pellentesque nec ipsum
+				diam, at consectetur elit. Duis feugiat ullamcorper libero tincidunt
+				aliquet. Sed leo nisl, iaculis non pellentesque nec, scelerisque vel
+				felis</div>
+				<div>Lorem ipsum dolor sit amet, consectetur
+				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
+				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
+				sed convallis elementum, magna diam pharetra magna, id vestibulum est
+				eros vitae ante. Ut auctor erat a tellus venenatis eu fermentum lorem
+				scelerisque. Cras dignissim leo ornare massa sollicitudin sit amet
+				pulvinar turpis hendrerit. Morbi hendrerit nunc eget turpis luctus id
+				ultricies lorem consequat. Donec eu lacus sed mauris sollicitudin
+				laoreet. Cras vitae sodales diam. Donec mollis, libero ut
+				pellentesque dignissim, risus orci ornare nisi, sed eleifend enim
+				purus malesuada neque. Nulla tellus sem, scelerisque sed sagittis id,
+				eleifend venenatis ligula. Vivamus placerat neque sit amet metus
+				ultricies facilisis. Nulla a odio magna. Pellentesque habitant morbi
+				tristique senectus et netus et malesuada fames ac turpis egestas. Sed
+				commodo quam eu enim lacinia vitae ultrices nulla mollis. Aenean eget
+				lectus turpis, at ultrices leo. Nulla vehicula magna in risus ornare
+				vestibulum. Integer gravida magna quam. Donec augue ante, fringilla
+				non congue eu, aliquam lacinia nisi. Class aptent taciti sociosqu ad
+				litora torquent per conubia nostra, per inceptos himenaeos. Maecenas
+				nisl ante, suscipit ut suscipit nec, dictum sit amet orci. Maecenas
+				fermentum sapien turpis, sit amet eleifend justo. Aenean auctor
+				interdum sem sed tincidunt. Aliquam ullamcorper malesuada fermentum.
+				Nunc consectetur, ipsum et pulvinar ultrices, lorem nibh egestas
+				sapien, at egestas lorem metus sit amet lacus. Maecenas non feugiat
+				orci. Curabitur imperdiet tempus lacus, volutpat fermentum diam
+				convallis a. In hac habitasse platea dictumst. Pellentesque nec ipsum
+				diam, at consectetur elit. Duis feugiat ullamcorper libero tincidunt
+				aliquet. Sed leo nisl, iaculis non pellentesque nec, scelerisque vel
+				felis</div>
+				<div>Lorem ipsum dolor sit amet, consectetur
+				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
+				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
+				sed convallis elementum, magna diam pharetra magna, id vestibulum est
+				eros vitae ante. Ut auctor erat a tellus venenatis eu fermentum lorem
+				scelerisque. Cras dignissim leo ornare massa sollicitudin sit amet
+				pulvinar turpis hendrerit. Morbi hendrerit nunc eget turpis luctus id
+				ultricies lorem consequat. Donec eu lacus sed mauris sollicitudin
+				laoreet. Cras vitae sodales diam. Donec mollis, libero ut
+				pellentesque dignissim, risus orci ornare nisi, sed eleifend enim
+				purus malesuada neque. Nulla tellus sem, scelerisque sed sagittis id,
+				eleifend venenatis ligula. Vivamus placerat neque sit amet metus
+				ultricies facilisis. Nulla a odio magna. Pellentesque habitant morbi
+				tristique senectus et netus et malesuada fames ac turpis egestas. Sed
+				commodo quam eu enim lacinia vitae ultrices nulla mollis. Aenean eget
+				lectus turpis, at ultrices leo. Nulla vehicula magna in risus ornare
+				vestibulum. Integer gravida magna quam. Donec augue ante, fringilla
+				non congue eu, aliquam lacinia nisi. Class aptent taciti sociosqu ad
+				litora torquent per conubia nostra, per inceptos himenaeos. Maecenas
+				nisl ante, suscipit ut suscipit nec, dictum sit amet orci. Maecenas
+				fermentum sapien turpis, sit amet eleifend justo. Aenean auctor
+				interdum sem sed tincidunt. Aliquam ullamcorper malesuada fermentum.
+				Nunc consectetur, ipsum et pulvinar ultrices, lorem nibh egestas
+				sapien, at egestas lorem metus sit amet lacus. Maecenas non feugiat
+				orci. Curabitur imperdiet tempus lacus, volutpat fermentum diam
+				convallis a. In hac habitasse platea dictumst. Pellentesque nec ipsum
+				diam, at consectetur elit. Duis feugiat ullamcorper libero tincidunt
+				aliquet. Sed leo nisl, iaculis non pellentesque nec, scelerisque vel
+				felis</div>
+				<div>Lorem ipsum dolor sit amet, consectetur
+				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
+				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
+				sed convallis elementum, magna diam pharetra magna, id vestibulum est
+				eros vitae ante. Ut auctor erat a tellus venenatis eu fermentum lorem
+				scelerisque. Cras dignissim leo ornare massa sollicitudin sit amet
+				pulvinar turpis hendrerit. Morbi hendrerit nunc eget turpis luctus id
+				ultricies lorem consequat. Donec eu lacus sed mauris sollicitudin
+				laoreet. Cras vitae sodales diam. Donec mollis, libero ut
+				pellentesque dignissim, risus orci ornare nisi, sed eleifend enim
+				purus malesuada neque. Nulla tellus sem, scelerisque sed sagittis id,
+				eleifend venenatis ligula. Vivamus placerat neque sit amet metus
+				ultricies facilisis. Nulla a odio magna. Pellentesque habitant morbi
+				tristique senectus et netus et malesuada fames ac turpis egestas. Sed
+				commodo quam eu enim lacinia vitae ultrices nulla mollis. Aenean eget
+				lectus turpis, at ultrices leo. Nulla vehicula magna in risus ornare
+				vestibulum. Integer gravida magna quam. Donec augue ante, fringilla
+				non congue eu, aliquam lacinia nisi. Class aptent taciti sociosqu ad
+				litora torquent per conubia nostra, per inceptos himenaeos. Maecenas
+				nisl ante, suscipit ut suscipit nec, dictum sit amet orci. Maecenas
+				fermentum sapien turpis, sit amet eleifend justo. Aenean auctor
+				interdum sem sed tincidunt. Aliquam ullamcorper malesuada fermentum.
+				Nunc consectetur, ipsum et pulvinar ultrices, lorem nibh egestas
+				sapien, at egestas lorem metus sit amet lacus. Maecenas non feugiat
+				orci. Curabitur imperdiet tempus lacus, volutpat fermentum diam
+				convallis a. In hac habitasse platea dictumst. Pellentesque nec ipsum
+				diam, at consectetur elit. Duis feugiat ullamcorper libero tincidunt
+				aliquet. Sed leo nisl, iaculis non pellentesque nec, scelerisque vel
+				felis</div>
+				<div>Lorem ipsum dolor sit amet, consectetur
+				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
+				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
+				sed convallis elementum, magna diam pharetra magna, id vestibulum est
+				eros vitae ante. Ut auctor erat a tellus venenatis eu fermentum lorem
+				scelerisque. Cras dignissim leo ornare massa sollicitudin sit amet
+				pulvinar turpis hendrerit. Morbi hendrerit nunc eget turpis luctus id
+				ultricies lorem consequat. Donec eu lacus sed mauris sollicitudin
+				laoreet. Cras vitae sodales diam. Donec mollis, libero ut
+				pellentesque dignissim, risus orci ornare nisi, sed eleifend enim
+				purus malesuada neque. Nulla tellus sem, scelerisque sed sagittis id,
+				eleifend venenatis ligula. Vivamus placerat neque sit amet metus
+				ultricies facilisis. Nulla a odio magna. Pellentesque habitant morbi
+				tristique senectus et netus et malesuada fames ac turpis egestas. Sed
+				commodo quam eu enim lacinia vitae ultrices nulla mollis. Aenean eget
+				lectus turpis, at ultrices leo. Nulla vehicula magna in risus ornare
+				vestibulum. Integer gravida magna quam. Donec augue ante, fringilla
+				non congue eu, aliquam lacinia nisi. Class aptent taciti sociosqu ad
+				litora torquent per conubia nostra, per inceptos himenaeos. Maecenas
+				nisl ante, suscipit ut suscipit nec, dictum sit amet orci. Maecenas
+				fermentum sapien turpis, sit amet eleifend justo. Aenean auctor
+				interdum sem sed tincidunt. Aliquam ullamcorper malesuada fermentum.
+				Nunc consectetur, ipsum et pulvinar ultrices, lorem nibh egestas
+				sapien, at egestas lorem metus sit amet lacus. Maecenas non feugiat
+				orci. Curabitur imperdiet tempus lacus, volutpat fermentum diam
+				convallis a. In hac habitasse platea dictumst. Pellentesque nec ipsum
+				diam, at consectetur elit. Duis feugiat ullamcorper libero tincidunt
+				aliquet. Sed leo nisl, iaculis non pellentesque nec, scelerisque vel
+				felis</div>
+				<div>Lorem ipsum dolor sit amet, consectetur
+				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
+				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
+				sed convallis elementum, magna diam pharetra magna, id vestibulum est
+				eros vitae ante. Ut auctor erat a tellus venenatis eu fermentum lorem
+				scelerisque. Cras dignissim leo ornare massa sollicitudin sit amet
+				pulvinar turpis hendrerit. Morbi hendrerit nunc eget turpis luctus id
+				ultricies lorem consequat. Donec eu lacus sed mauris sollicitudin
+				laoreet. Cras vitae sodales diam. Donec mollis, libero ut
+				pellentesque dignissim, risus orci ornare nisi, sed eleifend enim
+				purus malesuada neque. Nulla tellus sem, scelerisque sed sagittis id,
+				eleifend venenatis ligula. Vivamus placerat neque sit amet metus
+				ultricies facilisis. Nulla a odio magna. Pellentesque habitant morbi
+				tristique senectus et netus et malesuada fames ac turpis egestas. Sed
+				commodo quam eu enim lacinia vitae ultrices nulla mollis. Aenean eget
+				lectus turpis, at ultrices leo. Nulla vehicula magna in risus ornare
+				vestibulum. Integer gravida magna quam. Donec augue ante, fringilla
+				non congue eu, aliquam lacinia nisi. Class aptent taciti sociosqu ad
+				litora torquent per conubia nostra, per inceptos himenaeos. Maecenas
+				nisl ante, suscipit ut suscipit nec, dictum sit amet orci. Maecenas
+				fermentum sapien turpis, sit amet eleifend justo. Aenean auctor
+				interdum sem sed tincidunt. Aliquam ullamcorper malesuada fermentum.
+				Nunc consectetur, ipsum et pulvinar ultrices, lorem nibh egestas
+				sapien, at egestas lorem metus sit amet lacus. Maecenas non feugiat
+				orci. Curabitur imperdiet tempus lacus, volutpat fermentum diam
+				convallis a. In hac habitasse platea dictumst. Pellentesque nec ipsum
+				diam, at consectetur elit. Duis feugiat ullamcorper libero tincidunt
+				aliquet. Sed leo nisl, iaculis non pellentesque nec, scelerisque vel
+				felis</div>
+				<div>Lorem ipsum dolor sit amet, consectetur
+				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
+				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
+				sed convallis elementum, magna diam pharetra magna, id vestibulum est
+				eros vitae ante. Ut auctor erat a tellus venenatis eu fermentum lorem
+				scelerisque. Cras dignissim leo ornare massa sollicitudin sit amet
+				pulvinar turpis hendrerit. Morbi hendrerit nunc eget turpis luctus id
+				ultricies lorem consequat. Donec eu lacus sed mauris sollicitudin
+				laoreet. Cras vitae sodales diam. Donec mollis, libero ut
+				pellentesque dignissim, risus orci ornare nisi, sed eleifend enim
+				purus malesuada neque. Nulla tellus sem, scelerisque sed sagittis id,
+				eleifend venenatis ligula. Vivamus placerat neque sit amet metus
+				ultricies facilisis. Nulla a odio magna. Pellentesque habitant morbi
+				tristique senectus et netus et malesuada fames ac turpis egestas. Sed
+				commodo quam eu enim lacinia vitae ultrices nulla mollis. Aenean eget
+				lectus turpis, at ultrices leo. Nulla vehicula magna in risus ornare
+				vestibulum. Integer gravida magna quam. Donec augue ante, fringilla
+				non congue eu, aliquam lacinia nisi. Class aptent taciti sociosqu ad
+				litora torquent per conubia nostra, per inceptos himenaeos. Maecenas
+				nisl ante, suscipit ut suscipit nec, dictum sit amet orci. Maecenas
+				fermentum sapien turpis, sit amet eleifend justo. Aenean auctor
+				interdum sem sed tincidunt. Aliquam ullamcorper malesuada fermentum.
+				Nunc consectetur, ipsum et pulvinar ultrices, lorem nibh egestas
+				sapien, at egestas lorem metus sit amet lacus. Maecenas non feugiat
+				orci. Curabitur imperdiet tempus lacus, volutpat fermentum diam
+				convallis a. In hac habitasse platea dictumst. Pellentesque nec ipsum
+				diam, at consectetur elit. Duis feugiat ullamcorper libero tincidunt
+				aliquet. Sed leo nisl, iaculis non pellentesque nec, scelerisque vel
+				felis</div>
+				<div>Lorem ipsum dolor sit amet, consectetur
+				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
+				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
+				sed convallis elementum, magna diam pharetra magna, id vestibulum est
+				eros vitae ante. Ut auctor erat a tellus venenatis eu fermentum lorem
+				scelerisque. Cras dignissim leo ornare massa sollicitudin sit amet
+				pulvinar turpis hendrerit. Morbi hendrerit nunc eget turpis luctus id
+				ultricies lorem consequat. Donec eu lacus sed mauris sollicitudin
+				laoreet. Cras vitae sodales diam. Donec mollis, libero ut
+				pellentesque dignissim, risus orci ornare nisi, sed eleifend enim
+				purus malesuada neque. Nulla tellus sem, scelerisque sed sagittis id,
+				eleifend venenatis ligula. Vivamus placerat neque sit amet metus
+				ultricies facilisis. Nulla a odio magna. Pellentesque habitant morbi
+				tristique senectus et netus et malesuada fames ac turpis egestas. Sed
+				commodo quam eu enim lacinia vitae ultrices nulla mollis. Aenean eget
+				lectus turpis, at ultrices leo. Nulla vehicula magna in risus ornare
+				vestibulum. Integer gravida magna quam. Donec augue ante, fringilla
+				non congue eu, aliquam lacinia nisi. Class aptent taciti sociosqu ad
+				litora torquent per conubia nostra, per inceptos himenaeos. Maecenas
+				nisl ante, suscipit ut suscipit nec, dictum sit amet orci. Maecenas
+				fermentum sapien turpis, sit amet eleifend justo. Aenean auctor
+				interdum sem sed tincidunt. Aliquam ullamcorper malesuada fermentum.
+				Nunc consectetur, ipsum et pulvinar ultrices, lorem nibh egestas
+				sapien, at egestas lorem metus sit amet lacus. Maecenas non feugiat
+				orci. Curabitur imperdiet tempus lacus, volutpat fermentum diam
+				convallis a. In hac habitasse platea dictumst. Pellentesque nec ipsum
+				diam, at consectetur elit. Duis feugiat ullamcorper libero tincidunt
+				aliquet. Sed leo nisl, iaculis non pellentesque nec, scelerisque vel
+				felis</div></div>
 		</div>
 	</div>
 
@@ -903,34 +1314,59 @@ var tag=$("head").append(script);
 		}
 		</style>
 		<script>
+		 var carousel;
 			function init_carousel() {
-				$("#carousel").carousel({
+				carousel=$("#carousel").carousel({
 					pagingDiv: "carousel_dots",
-					totalPages: 4,
 					pagingCssName: "carousel_paging2",
-					pagingCssNameSelected: "carousel_paging2_selected"
+					pagingCssNameSelected: "carousel_paging2_selected",
+					preventDefaults:false
+				});
+				carousel=$("#carousel2").carousel({
+					pagingDiv: "carousel_dots2",
+					pagingCssName: "carousel_paging2",
+					pagingCssNameSelected: "carousel_paging2_selected",
+					vertical:true,
+					horizontal:false
 				});
 			}
 			window.addEventListener("load", init_carousel, false);
 		</script>
-		<div id="carousel"
-				style="overflow: hidden; height: 300px; width: 318px; float: left;">
+		<div id="carousel_dots"
+			style="text-align: center; margin-left:25%; clear: both; position: relative; top: 40%; z-index: 200">
+		</div>
+		<div id="carousel" style="float:left;height:50%;width:100%;">
 				<div
-					style="float: left; width: 318px; height: 300px;  background: yellow;">
+					style="background: yellow;">
 					<a href="javascript:alert('test');">
-							Test Link
+							I'm a horizontal carousel
 						</a>
 					</div>
 				<div
-					style="float: left; width: 318px; height: 300px;  background: green;"></div>
+					style="background: green;"></div>
 				<div
-					style="float: left; width: 318px; height: 300px;  background: blue;"></div>
+					style="background: blue;"></div>
 				<div
-					style="float: left; width: 318px; height: 300px;  background: pink;"></div>
+					style="background: pink;"></div>
 			</div>
-		<div id="carousel_dots"
-			style="text-align: center; margin-left: auto; margin-right: auto; clear: both; position: relative; top: 10px; z-index: 200">
+		
+		<div id="carousel2" style="float:left;height:50%;width:100%;">
+				<div
+					style="background: yellow;">
+					<span style='color:black'>I'm a vertical carousel</span>
+					</div>
+				<div
+					style="background: green;"></div>
+				<div
+					style="background: blue;"></div>
+				<div
+					style="background: pink;"></div>
+			</div>
+		<div id="carousel_dots2"
+			style="text-align: center; clear: both; position: absolute; bottom: 0px;left:40%; z-index: 200">
 		</div>
+		<div style='clear:both'></div>
+		<br><br>"Stuff after
 	</div>
 
 	<!-- jqPlugins > jQ.swipeListener -->
@@ -1018,6 +1454,22 @@ var tag=$("head").append(script);
 					<option value="73">7Three</option>
 				</select>
 			</span>
+			<br><br><br>
+			This is disabled<br>
+			<span>
+				<select id="test3" disabled>
+					<option value="1">One</option>
+					<option value="2">Two</option>
+					<option value="3">Three</option>
+					<option value="11">1One</option>
+					<option value="22">2Two</option>
+					<option value="33">3Three</option>
+					<option value="43">4Three</option>
+					<option value="53">5Three</option>
+					<option value="63">6Three</option>
+					<option value="73">7Three</option>
+				</select>
+			</span>
 		</div>
 		<br/>
 		<br/>
@@ -1033,8 +1485,7 @@ var tag=$("head").append(script);
 			var init_password = function () {
 				var succ=pwFixer.getOldPasswords("selectPassword");
 				
-				if(succ!=-1)
-				   $("#showPassword").show();
+				$("#showPassword").show();
 			};
 			window.addEventListener("load", init_password, false);
 
@@ -1128,16 +1579,16 @@ var tag=$("head").append(script);
 	<div title="Drawer" class="panel" id="webdrawer" scrolling="no">
 	<br><br>
 	<p>a pulldown tool like the notifications bar</p>
-	<div id="drawer" style="position:relative;top:-370px;height:320px;background:black;width:100%">
+	<div id="drawer" style="position:relative;top:-270px;height:220px;background:black;width:100%;z-index:100">
 	This is some content<br><br>
 	This is some content<br><br>
 	This is some content<br><br>
 	This is some content<br><br>
 
-	<div class="drawer_handle" style="z-index:1;height:30px;width:100%;background:orange;position:absolute;bottom:0px;text-align:center;line-height:30px;font-size:14px;color:black;background:white">PULL DOWN</div>
+	<div class="drawer_handle" style="z-index:;height:30px;width:100%;background:orange;position:absolute;bottom:0px;text-align:center;line-height:30px;font-size:14px;color:black;background:white">PULL DOWN</div>
 	</div>
 
-	<div style="position:absolute;bottom:15px;width:100%;">
+	<div style="position:absolute;bottom:15px;width:100%;z-index:101">
 			<div id="drawer_2" style="z-index:1;position:relative;top:105px;height:120px;width:100%;">
 			<div class="drawer_handle" style="height:30px;width:100%;background:orange;position:absolute;top:0px;line-height:30px;text-align:center;font-size:14px;color:black;">PULL UP</div>
 			<br><br>
@@ -1148,25 +1599,106 @@ var tag=$("head").append(script);
 		
 	<script>
 	window.addEventListener("load",function(){
-	$("#drawer").drawer();
+	$("#drawer").drawer({});
 	$("#drawer_2").drawer({direction:"up"});},false);
 	</script>
 
 	</div>
 
-</div>
 
+
+
+</div>
 <!-- ------------------------------------------ -->
 <!-- navbar -->
 <div id="navbar">
 	<div class="horzRule"></div>
-    <a href="#main" class='navbar_home' ontouchstart="">home</a>
-    <a href="#jqm" class="navbar_js" ontouchstart="">selectors</a>
-    <a href="#jqmui"  class="navbar_ui" ontouchstart="">ui</a>
-	<a href="#jqmweb"  class="navbar_plugins" ontouchstart="">plugins</a>
+    <a href="#main" id='navbar_home' class='navbar_home' >home <span class='jq-badge lr'>3</span></a>
+    <a href="#jqm" id='navbar_js' class="navbar_js" >selectors</a>
+    <a href="#jqmui" id='navbar_ui'  class="navbar_ui" >ui</a>
+	<a href="#jqmweb" id='navbar_plugins'  class="navbar_plugins" >plugins</a>
 </div>
-	
-<!-- ------------------------------------------ -->
 
+ <footer id='footerui'>
+	 <div class="horzRule"></div>
+      <a href="#main" id='navbar_home' class='navbar_home' >Home <span class='jq-badge lr'>6</span></a>
+      <a href="#jqmtransitions" id='navbar_js' class="navbar_js" >Trans</a>
+	  <a href="#jqmui" id='navbar_ui'  class="navbar_ui" >ui</a>
+	  <a href="#uiapi" id='navbar_plugins'  class="navbar_plugins" >api</a>
+	  
+</footer>
+ <footer id='footerui2'>
+	 <div class="horzRule"></div>
+      <a href="#main" id='navbar_home' class='navbar_home' >Home <span class='jq-badge lr'>6</span></a>
+      <a href="#jqmtransitions" id='navbar_js' class="navbar_js" >Trans</a>
+	  <a href="#jqmui" id='navbar_ui'  class="navbar_ui" >ui</a>
+	  <a href="#uiapi" id='navbar_plugins'  class="navbar_plugins" >api</a>
+</footer>	
+<!-- ------------------------------------------ -->
+<nav>
+   <div class='title'>Home</div>
+   <ul>
+      <li><a href="#jqm">Selectors</a></li>
+   </ul>
+   <div class='title'>UI</div>
+     <ul>
+	    <li><a href="#jqmtransitions" >Trans</a></li>
+	   <li><a href="#jqmui" >ui</a></li>
+	   <li><a href="#uiapi"  >api</a></li>
+	  </ul>
+    <div class='title'>Plugins</div>
+     <ul>
+	   <li> <a href="#webslider"  >Scroller</a></li>
+	   <li><a href="#webcarousel" >Carousel</a></li>
+	   <li><a href="#webswipe"  >Swipe</a></li>
+	  </ul>
+	 <div class='title'>Menus</div>
+     <ul>
+	   <li> <a href="javascript:;" onclick="$.ui.toggleHeaderMenu()"  >Toggle Header</a></li>
+	   <li> <a href="javascript:;" onclick="$.ui.toggleSideMenu()"  >Toggle Side</a></li>
+	   <li> <a href="javascript:;" onclick="$.ui.toggleNavMenu()"  >Toggle Footer</a></li>
+	  </ul>
+</nav>
+<nav id="menu_jqmobi">
+   <div class='title'>Selectors</div>
+   <ul>
+      <li><a href="#jqm1" >$ Selector</a></li>
+		<li><a href="#jqm2" >$().length()</a></li>
+		<li><a href="#jqm3" >$().find()</a></li>
+		<li><a href="#jqm4" >$().html()</a></li>
+		<li><a href="#jqm5" >$().text()</a></li>
+		<li><a href="#jqm6" >$().css()</a></li>
+		<li><a href="#jqm7" >$().empty()</a></li>
+		<li><a href="#jqm8" >$().hide()</a></li>
+		<li><a href="#jqm9" >$().show()</a></li>
+		<li><a href="#jqm10" >$().toggle()</a></li>
+		<li><a href="#jqm11" >$().val()</a></li>
+		<li><a href="#jqm12" >$().attr()</a></li>
+		<li><a href="#jqm13" >$().removeAttr()</a></li>
+		<li><a href="#jqm14" >$().remove()</a></li>
+		<li><a href="#jqm15" >$().addClass()</a></li>
+		<li><a href="#jqm16" >$().removeClass()</a></li>
+		<li><a href="#jqm17" >$().hasClass()</a></li>
+		<li><a href="#jqm18" >$().bind()</a></li>
+		<li><a href="#jqm19" >$().unbind()</a></li>
+		<li><a href="#jqm20" >$().trigger()</a></li>
+		<li><a href="#jqm21" >$().append()</a></li>
+		<li><a href="#jqm22" >$().prepend()</a></li>
+		<li><a href="#jqm32" >$().get()</a></li>
+		<li><a href="#jqm31" >$().offset()</a></li>
+		<li><a href="#jqmparent" >$().parent()</a></li>
+		<li><a href="#jqm33" >$().isArray()</a></li>
+		<li><a href="#jqm34" >$().isFunction()</a></li>
+		<li><a href="#jqm23" >$.jsonP()</a></li>
+		<li><a href="#jqm24" >$.ajax()</a></li>
+		<li><a href="#jqm25" >$.get()</a></li>
+		<li><a href="#jqm26" >$.post()</a></li>
+		<li><a href="#jqm27" >$.getJSON()</a></li>
+		<li><a href="#jqm28" >$.param()</a></li>
+		<li><a href="#jqm29" >$.parseJSON()</a></li>
+		<li><a href="#jqm30" >$.os</a></li>
+   </ul>
+</nav>
+</div>
 </body>
 </html>

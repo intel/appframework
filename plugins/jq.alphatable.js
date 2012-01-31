@@ -1,5 +1,5 @@
 /**
- * $.alphaTable - a list table for jQ.Mobi apps
+ * $.alphaTable - a list table for jqMobi apps
  * 
  * @copyright AppMobi 2011 - AppMobi
  * 

@@ -12,9 +12,11 @@ Please see the kitchensink application as it was built using jqUi
 
 # How to use jqUi
 
-To use jqUi, you need to include the javascript files.  We suggest using jq.ui.min.js which has all the necesary files, otherwise include the source for all of them, along with the CSS.  A global variable, $.ui is created by default.  This is what you will use if you need to access it.
+To use jqUi, you need to include the javascript files.  We suggest using jqUi.min.js which has all the necesary files, otherwise include the source for all of them, along with the CSS.  A global variable, $.ui is created by default.  This is what you will use if you need to access it.
 
-We have three special registered div blocks for your layout based off id's.  They are the header, content, and navbar. 
+We have four special registered div blocks for your layout based off id's.  They are the header, content, navbar and app container
+
+* jQUi - This is the container div.  If you do not include it, we create it and move everything inside.  This is for people who want to use jqUi inside a prexisting project
 
 * header - this is the top header.  You can add additional buttons, turn other events on/off on clicks if you need.  We handle the back button and the title for you.  If this is not present, we will create it. 
 
@@ -34,14 +36,28 @@ We have three special registered div blocks for your layout based off id's.  The
 ``` html
 <a href="#login">Login</a>
 ```
-	
+
+* We automatically launch the app for you.  If you would like to launch jqUi yourself, do the following
+``` js
+<script>
+jq.ui.autoLaunch=false;
+<script>
+```	
+
+* We throw an event when jqUi.launch has completed if you need one.  There is also a ready function
+``` js
+document.addEventListener("jq.ui.ready",jqUiLaunched,false);
+jq.ui.ready(function(){});
+```
+
 * Ajax - using AppMobi, you can do cross domain requests.   We will crawl the pages and wire any links found.  We added new features to add the content to the dom, force refresh and more.
  
 
 # jqUi semi-public methods
 
 ``` js
-
+.ready(function) //Takes in a function and executes it when .launch has completed
+.launch() //Manually invoke the launch of jqUi
 .goBack() //Takes the user back in the history
 .clearHistory() //Clears the history stack
 .addContentDiv (el, content, refresh, refreshFunc) //Adds a div to the DOM and wires it up.  refresh and refreshFunc are used for the jq.scroller pull to refresh functions
@@ -51,9 +67,43 @@ We have three special registered div blocks for your layout based off id's.  The
 .showMask() //Shows the loading mask
 .hideMask() //Hides the loading mask
 .loadContent(target,newTab,goBackInHistory,transition); //Force a transition call via javascript. target is an element ID or URL.  newTab clears the stack as if a bottom navbar button was pressed.  goBackInHistory is the same as a back button being pressed.  Transition is the transition to show.
+.updateBage(target,value) //Creates a badge on a target
+.removeBadge(target) //Roves the bagde for the target
 .scrollToTop(div_id) //Will scroll a content panel to the top of the page.  Usefull for "Go to Top" links
-
+.toggleSideMenu() //Will hide or show the side menu
+.toggleNavMenu() //will hide or show the bottom nav menu
+.toggleHeaderMenu() //Will hide or show the header menu
 ```
+
+
+#jqUi Side Menu
+
+You can add a side menu by creating <nav> elements.  You can assign them to panels by setting the data-nav attribute.  Note, the first nav is the default and will be shown unless specificied with the data-nav attribute.
+On tablets, this will be shown by default
+
+``` html
+<div id="welcome" data-nav="mainnav">
+</div>
+<nav id="mainnav">
+ <h2>This is a custom nav</h2>
+</nav>
+```
+
+#jqUi Custom Footers
+You can add additional footer menus that can be assigned to each panel.
+
+``` html
+<div id="welcome" data-footer="footerui2">
+</div>
+ <footer id='footerui2'>
+	 <div class="horzRule"></div>
+      <a href="#main" id='navbar_home' class='navbar_home' >Home <span class='jq-badge lr'>6</span></a>
+      <a href="#jqmtransitions" id='navbar_js' class="navbar_js" >Trans</a>
+	  <a href="#jqmui" id='navbar_ui'  class="navbar_ui" >ui</a>
+	  <a href="#uiapi" id='navbar_plugins'  class="navbar_plugins" >api</a>
+</footer>	
+```
+
 
 #jqUi anchor properties
 
@@ -66,6 +116,15 @@ Anchors can have special properties for wiring transitions and events
 <a href="http://www.mysite.com/api/twitterfeed" data-persist-ajax="true">Add this to the dom</a> // data-persist-ajax will take the result and add it to the dom.  When users navigate to that URL now, it will no longer make an Ajax refresh and adds the div to the container. 
 ``` 
 
+#jqUi panel properties
+
+Each div/panel has properties you can set that will change the app.  Below are the properties
+``` html
+   data-footer = "_id_"  //Change the custom footer
+   data-nav = "_id_" //Change the custom nav
+   data-load="function_name" //Function that is called when a panel is loaded - passes in the div
+   data-unload="function_name" //Function that is called when a panel is unloaded - passes in the div
+```
 # Tips
 
 * Ajax - you can add an ajax request into the DOM that will be accessible by the URL referenced by setting the data-persist attribute.  You can force a refresh by setting data-refresh-ajax="true".  You can also make the scroller "pull to refresh" by setting data-pull-scroller="true"
@@ -155,7 +214,7 @@ function getApps(targetDiv,obj)
 <a href="#games" data-function="getApps" data-params="id:1,drawer:2" > Games </a>
 ```
 	
-* Please see jq.ui.css for additional button colors and ways to change the theme				
+* Please see jqUi.css for additional button colors and ways to change the theme				
 
 # Contribute
 

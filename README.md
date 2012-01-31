@@ -6,7 +6,7 @@ It is comprised of three parts.
 
 1) jqMobi  - query selector library
 
-2) jQ.Ui - UI/UX library for mobile applications in a webkit browser.  Please see the Kitchen Sink folder for a demo
+2) jqUi - UI/UX library for mobile applications in a webkit browser.  Please see the Kitchen Sink folder for a demo
 
 3) jqPlugins - plugins for mobile applications in a webkit browser.
 
@@ -119,11 +119,10 @@ var myDiv=$("<div id='foo'>") //Creates a div object and returns it
 .filter(selector) //Filters the elements based off selector
 .not(selector) //Filters the elements based off the selector. Returns matches that do NOT match the selector
 .end() //Used in conjuction with filtered results to get the previous jqMobi object
-.clone(deep)//Clones an object and returns the new clone
 .isArray(param) //Returns true/false if param is an array
 .isFunction(param) //Returns true/false if param is a function
 .isObject(param) //Returns true/false if param is an object
-
+.useViewPort(portrait,landscape) //Sets viewport for portrait or landscape
 ```
 
 # jqMobi Ajax calls
