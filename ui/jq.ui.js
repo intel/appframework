@@ -274,7 +274,10 @@
             var el = $am(id);
             if (!el)
                 return;
-            el.childNodes[0].innerHTML = content;
+			if(el.getAttribute("scrolling") && el.getAttribute("scrolling").toLowerCase() == "no")
+			   el.innerHTML=content;
+			else
+               el.childNodes[0].innerHTML = content;
             this.updateAnchors(el);
         },
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
