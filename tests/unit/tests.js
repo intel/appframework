@@ -853,7 +853,7 @@ test("clone",function(){
    expect(3);
    
    var elem=$("#foo").get();
-   var cloned=$("#foo").clone().get();
+   var cloned=$("#foo").clone(false).get();
    ok(elem.id==cloned.id&&cloned.childNodes.length==0,"Shallow clone with no children");
    QUnit.reset();
    

@@ -199,14 +199,14 @@ if (!window.jq || typeof (jq) !== "function") {
         };
         
         $.isArray = function(obj) {
-            return Array.isArray(obj);
+             return obj!=undefined&&Array.isArray(obj);
         };
         
         $.isFunction = function(obj) {
-            return typeof obj === "function";
+             return obj!=undefined&&typeof obj === "function";
         };
         $.isObject = function(obj) {
-            return typeof obj === "object";
+             return obj!=undefined&&typeof obj === "object";
         }
         
         $.fn = $jqm.prototype = {
