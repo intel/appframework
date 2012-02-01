@@ -122,7 +122,6 @@ var myDiv=$("<div id='foo'>") //Creates a div object and returns it
 .isArray(param) //Returns true/false if param is an array
 .isFunction(param) //Returns true/false if param is a function
 .isObject(param) //Returns true/false if param is an object
-.useViewPort(portrait,landscape) //Sets viewport for portrait or landscape
 ```
 
 # jqMobi Ajax calls

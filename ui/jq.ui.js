@@ -584,7 +584,7 @@
                     }
                     what.style.display = "block";
                     
-                    this.doingTransition = true;
+                    
                     //fix scroller
                     if (this.scrollingDivs[what.id]) {
                         this.scrollingDivs[what.id].scrollTo({
@@ -625,7 +625,7 @@
                     if (oldDiv == currWhat) //prevent it from going to itself
                         return;
                     
-                    
+                    this.doingTransition = true;
                     switch (transition) {
                         case "up":
                             this.slideUpTransition(oldDiv, currWhat, back);
