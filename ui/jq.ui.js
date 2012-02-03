@@ -403,6 +403,9 @@
                         case "pop":
                             transition = "pop";
                             break;
+                        case "slideLeft":
+                            transition = "slideLeft";
+                            break;    
                         default:
                             transition = "slide";
                     }
@@ -645,6 +648,9 @@
                         case "pop":
                             this.popTransition(oldDiv, currWhat, back);
                             break;
+                        case "slideLeft":
+                            this.slideLeftTransition(oldDiv, currWhat, back);
+                            break;    
                         default:
                             this.slideTransition(oldDiv, currWhat, back);
                     }
@@ -870,6 +876,55 @@
                 });
                 that.css3animate(currDiv, {
                     x: "200%",
+                    time: "1ms",
+                    callback: function() {
+                        that.css3animate(currDiv, {
+                            x: "100%",
+                            time: "200ms"
+                        });
+                    }
+                });
+            }
+        },
+        slideLeftTransition: function(oldDiv, currDiv, back) {
+            oldDiv.style.display = "block";
+            currDiv.style.display = "block";
+            var that = this
+            
+            if (back) {
+                that.css3animate(oldDiv, {
+                    x: "0%",
+                    time: "200ms",
+                    callback: function() {
+                        that.finishTransition(oldDiv);
+                    }
+                });
+                that.css3animate(currDiv, {
+                    x: "200%",
+                    time: "1ms",
+                    callback: function() {
+                        that.css3animate(currDiv, {
+                            x: "100%",
+                            time: "200ms"
+                        });
+                    }
+                });
+            } else {
+            	that.css3animate(oldDiv, {
+                    x: "200%",
+                    time: "200ms",
+                    callback: function() {
+                        that.css3animate(oldDiv, {
+                            x: 0,
+                            time: "1ms",
+                            callback: function() {
+                                that.finishTransition(oldDiv);
+                            }
+                        });
+                    }
+                });
+                that.css3animate(currDiv, {
+                    x: "0%",
                     time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
