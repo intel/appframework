@@ -338,7 +338,7 @@ test("filter",function(){
 
 test("remove",function(){
 
-   expect(4);
+   expect(5);
    
    $("#foo").remove();
    equals($("#foo").length,0,"Removing an element");
@@ -351,6 +351,8 @@ test("remove",function(){
 	QUnit.reset();
 	$("div").remove(document.getElementById("foo"))
 	equals($("div").size(),3,"Removing by an element");
+	QUnit.reset();
+	ok($("#fadfasfdnotfound").remove());
 	QUnit.reset();
 });
 

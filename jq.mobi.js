@@ -199,7 +199,7 @@ if (!window.jq || typeof (jq) !== "function") {
         };
         
         $.isArray = function(obj) {
-             return obj!=undefined&&Array.isArray(obj);
+             return obj!=undefined&&obj instanceof Array&&obj['push']!=undefined; //ios 3.1.3 doesn't have Array.isArray
         };
         
         $.isFunction = function(obj) {
@@ -279,12 +279,13 @@ if (!window.jq || typeof (jq) !== "function") {
                 }
                 return this;
             },
-            css: function(attribute, value) {
+            css: function(attribute, value,obj) {
+			    var toAct=obj!=undefined?obj:this[0];
                 if (this.length === 0)
                     return undefined;
-                if (value === undefined && typeof (attribute) === "string") {
-                    var styles = window.getComputedStyle(this[0]);
-                    return styles[attribute] ? styles[attribute] : this[0].style[attribute];
+                if (value == undefined && typeof (attribute) === "string") {
+                    var styles = window.getComputedStyle(toAct);
+                    return styles[attribute] ? styles[attribute] : toAct.style[attribute];
                 }
                 for (var i = 0; i < this.length; i++) {
                     if ($.isObject(attribute)) {
@@ -308,8 +309,8 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (this.length === 0)
                     return undefined;
                 for (var i = 0; i < this.length; i++) {
-                    if (this[i].style.display != "none") {
-                        this[i].setAttribute("jqmOldStyle", this[i].style.display);
+                    if (this.css("display",null,this[i]) != "none") {
+                        this[i].setAttribute("jqmOldStyle", this.css("display",null,this[i]));
                         this[i].style.display = "none";
                     }
                 }
@@ -319,7 +320,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (this.length === 0)
                     return undefined;
                 for (var i = 0; i < this.length; i++) {
-                    if (this[i].style.display == "none") {
+                    if (this.css("display",null,this[i]) == "none") {
                         this[i].style.display = this[i].getAttribute("jqmOldStyle") ? this[i].getAttribute("jqmOldStyle") : 'block';
                         this[i].removeAttribute("jqmOldStyle");
                     }
@@ -392,10 +393,12 @@ if (!window.jq || typeof (jq) !== "function") {
             },
             remove: function(selector) {
                 var elems = $(this).filter(selector);
+				if(!elems)
+				  return this;
                 for (var i = 0; i < elems.length; i++) {
                     elems[i].parentNode.removeChild(elems[i]);
                 }
-                return elems;
+                return this;
             },
             addClass: function(name) {
                 for (var i = 0; i < this.length; i++) {
@@ -593,8 +596,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 return $(cur);
             
             },
-            filter: function(selector) 
-            {
+            filter: function(selector) {
                 if (this.length == 0)
                     return undefined;
                 
@@ -871,7 +873,8 @@ if (!window.jq || typeof (jq) !== "function") {
         $.__detectUA = detectUA; //needed for unit tests
         if (typeof String.prototype.trim !== 'function') {
             String.prototype.trim = function() {
-                return this.replace(/^\s+|\s+$/, '');
+                this.replace(/(\r\n|\n|\r)/gm, "").replace(/^\s+|\s+$/, '');
+                return this
             };
         }
         
