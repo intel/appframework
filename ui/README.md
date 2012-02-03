@@ -141,10 +141,11 @@ Each div/panel has properties you can set that will change the app.  Below are t
     <a href="http://www.appmobi.com" target="_blank">AppMobi</a>
 ```
 
-* We handle history and transitions.  You can select from six transitions by setting the data-transition property.  The default is slide.
+* We handle history and transitions.  You can select from seven transitions by setting the data-transition property.  The default is slide.
 
 ``` html
     <a href="#login" data-transition="slide">Login</a>  //slide left/right
+    <a href="#login" data-transition="slideLeft">Login</a>  //slide right/left
     <a href="#login" data-transition="up">Login</a>  //slide up/down
     <a href="#login" data-transition="down">Login</a>  //slide down/up
     <a href="#login" data-transition="flip">Login</a>  //Flip the page
