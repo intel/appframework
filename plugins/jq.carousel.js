@@ -126,18 +126,18 @@
                 if (e.touches.length === 1) {
                     
                     this.movingElement = true;
-                    //e.preventDefault();
+                    this.startY = e.touches[0].pageY;
+        			this.startX = e.touches[0].pageX;
+					//e.preventDefault();
                     //e.stopPropagation();
                     if (this.vertical) {
-                        this.startY = e.touches[0].pageY;
                         try {
                             this.cssMoveStart = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el, null).webkitTransform).f);
                         } catch (ex1) {
                             this.cssMoveStart = 0;
                         }
                     } else {
-                        this.startX = e.touches[0].pageX;
-                        try {
+						try {
                             this.cssMoveStart = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el, null).webkitTransform).e);
                         } catch (ex1) {
                             this.cssMoveStart = 0;
@@ -146,8 +146,8 @@
                 }
             },
             touchMove: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                // e.preventDefault();
+                // e.stopPropagation();
                 if (e.touches.length > 1) {
                     this.dx = 0;
                     this.movingElement = false;
@@ -155,18 +155,26 @@
                     this.dy = 0;
                     this.startY = 0;
                 }
-                var movePos = {
-                    x: 0,
-                    y: 0
+                
+				var rawDelta = {
+                    x: e.touches[0].pageX - this.startX,
+                    y: e.touches[0].pageY - this.startY
                 };
+				
                 if (this.vertical) {
+					var movePos = { x: 0, y: 0 };
                     this.dy = e.touches[0].pageY - this.startY;
                     this.dy += this.cssMoveStart;
                     movePos.y = this.dy;
                 } else {
-                    this.dx = e.touches[0].pageX - this.startX;
-                    this.dx += this.cssMoveStart;
-                    movePos.x = this.dx;
+					if (isHorizontalSwipe(rawDelta.x, rawDelta.y)) {
+                        var movePos = {x: 0,y: 0};
+                        this.dx = e.touches[0].pageX - this.startX;
+                        this.dx += this.cssMoveStart;
+                        e.preventDefault();
+                        e.stopPropagation();
+                        movePos.x = this.dx;
+                    }
                 }
                 
                 var totalMoved = this.vertical ? ((this.dy % this.myDivHeight) / this.myDivHeight * 100) * -1 : ((this.dx % this.myDivWidth) / this.myDivWidth * 100) * -1; // get a percentage of movement.
@@ -176,8 +184,8 @@
                 if (!this.movingElement) {
                     return;
                 }
-                e.preventDefault();
-                e.stopPropagation();
+                // e.preventDefault();
+                // e.stopPropagation();
                 var runFinal = false;
                 try {
                     var endPos = this.vertical ? numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el, null).webkitTransform).f) : numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el, null).webkitTransform).e);
@@ -389,4 +397,17 @@
             return parseFloat(val);
         }
     }
+	
+	function isHorizontalSwipe(xAxis, yAxis) {
+				var X = xAxis;
+				var Y = yAxis;
+				var Z = Math.round(Math.sqrt(Math.pow(X,2)+Math.pow(Y,2))); //the distance - rounded - in pixels
+				var r = Math.atan2(Y,X); //angle in radians 
+				var swipeAngle = Math.round(r*180/Math.PI); //angle in degrees
+				if ( swipeAngle < 0 ) { swipeAngle =  360 - Math.abs(swipeAngle); } // for negative degree values
+				if (((swipeAngle <= 215) && (swipeAngle >= 155)) || ((swipeAngle <= 45) && (swipeAngle >= 0)) || ((swipeAngle <= 360) && (swipeAngle >= 315))) // horizontal angles with threshold
+				{return true; }
+				else {return false}
+	}
+	
 })(jq);
