@@ -393,12 +393,10 @@ if (!window.jq || typeof (jq) !== "function") {
             },
             remove: function(selector) {
                 var elems = $(this).filter(selector);
-				if(!elems)
-				  return this;
                 for (var i = 0; i < elems.length; i++) {
                     elems[i].parentNode.removeChild(elems[i]);
                 }
-                return this;
+                return elems;
             },
             addClass: function(name) {
                 for (var i = 0; i < this.length; i++) {
@@ -596,7 +594,8 @@ if (!window.jq || typeof (jq) !== "function") {
                 return $(cur);
             
             },
-            filter: function(selector) {
+            filter: function(selector) 
+            {
                 if (this.length == 0)
                     return undefined;
                 
