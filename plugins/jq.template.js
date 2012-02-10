@@ -6,6 +6,9 @@
     $["template"] = function(tmpl, data) {
         return (template(tmpl, data));
     };
+    $["tmpl"] = function(tmpl, data) {
+        return (template(tmpl, data));
+    };
     var template = function(str, data) {
         //If there's no data, let's pass an empty object so the user isn't forced to.
         if (!data)

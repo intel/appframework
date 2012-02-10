@@ -121,9 +121,13 @@ Anchors can have special properties for wiring transitions and events
 Each div/panel has properties you can set that will change the app.  Below are the properties
 ``` html
    data-footer = "_id_"  //Change the custom footer
+   
    data-nav = "_id_" //Change the custom nav
+   
    data-load="function_name" //Function that is called when a panel is loaded - passes in the div
+   
    data-unload="function_name" //Function that is called when a panel is unloaded - passes in the div
+   
 ```
 # Tips
 
@@ -201,17 +205,20 @@ Each div/panel has properties you can set that will change the app.  Below are t
 <script $.ui.updateAnchors(_element);</script>	
 ```
 	
-* You can assign a javascript function to be executed and parameters by setting data properties.  The function expects paramter 1 to be the div that is being displayed and the second parameter is an object.
-This is helpful if you want to use templates to generate layouts.
+* You can assign a javascript function to be executed on panel load and unload.
    
 ``` html
 <script>
-function getApps(targetDiv,obj)
+function getApps(targetDiv)
 {
-    targetDiv.innerHTML="The id called = "+obj.id+" and drawer="+obj.drawer;
+    targetDiv.innerHTML="The id called = "+obj.id;
+}
+function getAppsClosed(targetDiv)
+{
+    targetDiv.innerHTML="The id called = "+obj.id+" and the panel was unloaded";
 }
 </script>
-<a href="#games" data-function="getApps" data-params="id:1,drawer:2" > Games </a>
+<a href="#games" data-function="getApps" data-load="getApps" data-onunload="getAppsClosed"> Games </a>
 ```
 	
 * Please see jqUi.css for additional button colors and ways to change the theme				

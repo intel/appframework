@@ -403,6 +403,7 @@ test("bind",function(){
   equals(counter,1,"Test binding single event");
    QUnit.reset();
    counter=0;
+  $("#foo").unbind();
    $("#foo").bind("click mousedown",function(){counter++;});
   click($("#foo").get(0));
   mousedown($("#foo").get(0));
@@ -446,6 +447,109 @@ test("trigger",function(){
    
    equals(counter,5,"Trigger click event and set the data to 5");
    QUnit.reset();
+});
+
+test("Delegate/Undelegate",function(){
+
+  expect(7);
+  var counter=0;
+
+  $("#qunit-fixture").delegate("div","click",function(){counter++;});
+  click($("#foo").get(0));
+  equals(counter,1,"Test delegating single event");
+  QUnit.reset();
+  $("#qunit-fixture").undelegate("div","click");
+  counter=0;
+  click($("#foo").get(0));
+  equals(counter,0,"Test undelegating single events");
+  
+  $("#qunit-fixture").delegate("div","click mousedown",function(){counter++;});
+  click($("#foo").get(0));
+  mousedown($("#foo").get(0));
+  equals(counter,2,"Test delegating multiple events");
+  QUnit.reset();
+  
+  counter=0;
+  $("#qunit-fixture").undelegate("div","click");
+  click($("#foo").get(0));
+  mousedown($("#foo").get(0));
+  equals(counter,1,"Test undelegating single event from multiple list");
+
+  counter=0;
+  $("#qunit-fixture").undelegate("div");
+  click($("#foo").get(0));
+  mousedown($("#foo").get(0));
+  equals(counter,0,"Test undelegating all events");
+  
+  counter=0;
+  $("#qunit-fixture").delegate("div","click mousedown",function(){counter++;});
+  $("#qunit-fixture").undelegate("div","click mousedown");
+  click($("#foo").get(0));
+  mousedown($("#foo").get(0));
+  equals(counter,0,"Test undelegating multiple events");
+  QUnit.reset();
+  
+  counter=0;
+  
+  $("#qunit-fixture").delegate("div","click",function(){counter++;});
+  
+  click($("#foo").get(0));
+  mousedown($("#foo").get(0));
+  $("#qunit-fixture").undelegate("div","click",function(){counter++;});
+  click($("#foo").get(0));
+  equals(counter,1,"Test undelegating anonymous function");
+  QUnit.reset();
+  
+});
+
+test("On/Off",function(){
+
+  expect(6);
+  var counter=0;
+
+  $("#qunit-fixture").on("click","div",function(){counter++;});
+  click($("#foo").get(0));
+  equals(counter,1,"Test on single event");
+  QUnit.reset();
+  $("#qunit-fixture").off("click","div");
+  counter=0;
+  click($("#foo").get(0));
+  equals(counter,0,"Test off single events");
+  
+  $("#qunit-fixture").on("click mousedown","div",function(){counter++;});
+  click($("#foo").get(0));
+  mousedown($("#foo").get(0));
+  equals(counter,2,"Test on multiple events");
+  QUnit.reset();
+  
+  counter=0;
+  $("#qunit-fixture").off("click","div");
+  click($("#foo").get(0));
+  mousedown($("#foo").get(0));
+  equals(counter,1,"Test off single event from multiple list");
+
+  counter=0;
+
+  
+  counter=0;
+  $("#qunit-fixture").on("click mousedown","div",function(){counter++;});
+  $("#qunit-fixture").off("click mousedown","div");
+  click($("#foo").get(0));
+  mousedown($("#foo").get(0));
+  equals(counter,0,"Test off multiple events");
+  QUnit.reset();
+  
+  counter=0;
+  
+  $("#qunit-fixture").on("click","div",function(){counter++;});
+  
+  click($("#foo").get(0));
+  mousedown($("#foo").get(0));
+  $("#qunit-fixture").off("click","div",function(){counter++;});
+  click($("#foo").get(0));
+  equals(counter,1,"Test off anonymous function");
+  QUnit.reset();
+  
 });
 
 test("append",function(){

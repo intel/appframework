@@ -43,18 +43,23 @@ p {
 	-webkit-box-shadow:rgba(0,0,0,0.5) 0px 0px 24px inset; box-shadow:rgba(0,0,0,0.5) 0px 0px 24px inset; /* Applies an inner shadow to the text area */
 } /* Paragraph class used for text areas. */
 
-.modal {
-	z-index:9999;
-	position:absolute;
-	background:rgba(19,29,38,1);
-	color:inherit;
-	overflow:hidden;
-	left:0px;
-	top:0px;
-	height:100%;
+
+#jQui_modal{
+    -webkit-transform:translate3d(100%,0,0);
+    -webkit-backface-visibility: hidden;
+	z-index:9999 !important;
 	width:100%;
+	height:100%;
 	display:none;
-} /* Sets up styles for modal panels, which appear above all other UI elements */
+	position:absolute; top:0px; left:-100%;
+	overflow:hidden;
+	background:rgba(29,29,28,1) !important;
+	-webkit-perspective: 1000;
+}
+
+#modalContainer {
+width:100%;
+}
 
 .horzRule {
 	position:relative;
@@ -66,10 +71,10 @@ p {
 .jqmScrollbar { background:white !important; } /* Sets the color of the scrollbar */
 
 #jQUi {
-	position:relative;
-	display:box;
-	-webkit-box-flex:1;
-	position:relative;
+	position:absolute;
+	width:100%;
+	top:0px;
+	bottom:0px;
 }
 
 #jQUi > #splashscreen {
@@ -180,6 +185,7 @@ body[orient="landscape"] > #header > h1 {
 	height:32px;
 	width:58px;
 	line-height:32px;
+	z-index:9999;
 }
 
 a.customBackButton {
@@ -237,6 +243,7 @@ a.customBackButton.press {
 	-webkit-backface-visibility: hidden;
 	-webkit-perspective: 1000;
 }
+
 
 
 /**********************************************************
@@ -455,6 +462,7 @@ a.customBackButton.press {
 	background:rgba(29,29,28,1) !important;
 	padding-left:40px;
 	padding-top:30px !important;
+	min-height:100%;
 }
 
 /* A touchable, interactive list item. */
@@ -641,7 +649,7 @@ textarea.jq-ui-forms {
 	background:#595D61;
 	-webkit-border-radius:6px; border-radius:6px;
 	-webkit-box-shadow:inset 2px 2px 6px rgba(0,0,0,.5); box-shadow:inset 2px 2px 6px rgba(0,0,0,.5);
-	width:266px;
+	width:85%;
 	min-height:150px;
 	line-height:120%;
 } /* These properties determine the look of textarea inputs. */
@@ -650,7 +658,7 @@ textarea.jq-ui-forms {
 input.jq-ui-forms { 
 	
 	display:inline-block;
-	width:200px;
+	width:65%;
 	margin-top:4px; margin-bottom:12px;
 	padding:8px;
 	border:solid 1px #999;
@@ -818,6 +826,7 @@ select[disabled]~div {
 #badgetablet{
 	display:none !important;
 }
+
 @media handheld, only screen and (min-width: 768px){
 	.hasMenu  {
 		position:absolute !important;

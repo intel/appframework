@@ -54,9 +54,9 @@ emulateTouchEvents = function()
             var touchevt = redirectMouseToTouch("touchstart", e);
             if (document.ontouchstart)
                 document.ontouchstart(touchevt);
-			if(originalEvent.target.ontouchstart)
-				originalEvent.target.ontouchstart(touchevt);
-			
+            if(originalEvent.target.ontouchstart)
+                originalEvent.target.ontouchstart(touchevt);
+            
         } catch (e) {
         }
     });
@@ -73,8 +73,8 @@ emulateTouchEvents = function()
             var touchevt = redirectMouseToTouch("touchend", e);
             if (document.ontouchend)
                 document.ontouchend(touchevt);
-			if(originalEvent.target.ontouchend)
-				originalEvent.target.ontouchend(touchevt);
+            if(originalEvent.target.ontouchend)
+                originalEvent.target.ontouchend(touchevt);
         } 
         catch (e) {
         }
@@ -92,8 +92,8 @@ emulateTouchEvents = function()
             var touchevt = redirectMouseToTouch("touchmove", e);
             if (document.ontouchmove)
                 document.ontouchmove(touchevt);
-						if(originalEvent.target.ontouchmove)
-				originalEvent.target.ontouchmove(touchevt);
+                        if(originalEvent.target.ontouchmove)
+                originalEvent.target.ontouchmove(touchevt);
         } 
         catch (e) {
         }

@@ -32,23 +32,12 @@
         color:red;
     }
 	.jqmscrollBar {background:white !important;}	
+	pre{margin-left:-110px;}
 </style>
 <!-- uncomment for AppMobi apps
 <script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/appmobi.js"></script> 
 <script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/xhr.js"></script> 	
 -->
-<script type="text/javascript" charset="utf-8" src="./jq.mobi.js"></script> 
-<script type="text/javascript" charset="utf-8" src="./plugins/jq.swipe.js"></script> 
-<script type="text/javascript" charset="utf-8" src="./plugins/jq.template.js"></script> 
-<script type="text/javascript" charset="utf-8" src="./plugins/jq.carousel.js"></script> 
-<script type="text/javascript" charset="utf-8" src="./plugins/jq.css3animate.js"></script> 
-<script type="text/javascript" charset="utf-8" src="./plugins/jq.drawer.js"></script> 
-<script type="text/javascript" charset="utf-8" src="./plugins/jq.passwordBox.js"></script> 
-<script type="text/javascript" charset="utf-8" src="./plugins/jq.scroller.js"></script> 
-<script type="text/javascript" charset="utf-8" src="./plugins/jq.shake.js"></script> 
-<script type="text/javascript" charset="utf-8" src="./plugins/jq.selectBox.js"></script> 
-
-<script type="text/javascript" charset="utf-8" src="./ui/jq.ui.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./jq.mobi.js"></script> 
 <!-- include touch.js on desktop browsers only -->
 <script>
@@ -63,8 +52,24 @@ var script=document.createElement("script");
 script.src="touch.js";
 var tag=$("head").append(script);
 $.os.android=true; //let's make it run like an android device
+$.os.desktop=true;
 }
 </script>
+
+
+<script type="text/javascript" charset="utf-8" src="./plugins/jq.swipe.js"></script> 
+<script type="text/javascript" charset="utf-8" src="./plugins/jq.template.js"></script> 
+<script type="text/javascript" charset="utf-8" src="./plugins/jq.carousel.js"></script> 
+<script type="text/javascript" charset="utf-8" src="./plugins/jq.css3animate.js"></script> 
+<script type="text/javascript" charset="utf-8" src="./plugins/jq.drawer.js"></script> 
+<script type="text/javascript" charset="utf-8" src="./plugins/jq.passwordBox.js"></script> 
+<script type="text/javascript" charset="utf-8" src="./plugins/jq.scroller.js"></script> 
+<script type="text/javascript" charset="utf-8" src="./plugins/jq.shake.js"></script> 
+<script type="text/javascript" charset="utf-8" src="./plugins/jq.selectBox.js"></script> 
+
+<script type="text/javascript" charset="utf-8" src="./ui/jq.ui.js"></script> 
+
+
 
 
 
@@ -72,7 +77,6 @@ $.os.android=true; //let's make it run like an android device
     /* This function runs once the page is loaded, but appMobi is not yet active */
 	var webRoot="./kitchensink/";
 	$.ui.autoLaunch=false;
-	
     var init = function(){
 	   $.ui.backButtonText="Back";  
 	   window.setTimeout(function(){$.ui.launch();},1500);
@@ -132,7 +136,7 @@ $.os.android=true; //let's make it run like an android device
 	<h2 class='expanded' onclick='showHide(this,"main_info");'>Welcome</h2>
 		<p id='main_info'>Welcome to the kitchen sink demo for jqMobi.  Here you will find samples of how to use the jqMobi libraries.  Please select an option from below.</p>
 		<ul>
-		 <li><a href="#jqm" >jqMobi</a></li>
+		 <li><a href="#jqm" data-transition="none">jqMobi</a></li>
 		 <li><a href="#jqmui" >jqUi</a></li>
 		 <li><a href="#jqmweb" >jqPlugins</a></li>
 		</ul>
@@ -140,8 +144,8 @@ $.os.android=true; //let's make it run like an android device
 	</div> 
 
 	<!-- ------------------------------------------ -->
-	<!-- aUX -->
-	<div title="jqMobi" id="jqm" class="panel" data-nav="menu_jqmobi">
+	
+	<div title="jqMobi" id="jqm" class="panel" data-nav="menu_jqmobi" >
 		<h2 class='expanded' onclick='showHide(this,"jqmobi_info");'>jqMobi</h2>
 		<p id='jqmobi_info'>jqMobi is a blazingly fast query selector tool that is optmimized for HTML5 browsers.</p>
 
@@ -605,7 +609,7 @@ $.os.android=true; //let's make it run like an android device
 			<fieldset>
 				<legend>Field elements</legend>
 				
-				<label for="name">Full Name</label>
+				<label for="name">Full Name</label><br/>
 				<input type="text" id="name" class='jq-ui-forms'/><br/>
 		
 				<label for="email">E-mail</label><br/>
@@ -888,6 +892,8 @@ $.os.android=true; //let's make it run like an android device
 	
 	<div id="uitogglenav" title="Toggle Footer Nav" class="panel" data-footer="footerui">
 		This lets you toggle the footer navigation menu if you have one.   when you do this, the content area will expand down for you.
+		<br>
+		You can also do this by setting data-footer="none" on the panel
 		<pre>
 		$.ui.toggleNavMenu();
 		</pre>
@@ -899,7 +905,7 @@ $.os.android=true; //let's make it run like an android device
 		<pre>
 		$.ui.toggleSideNav();
 		</pre>
-		<a href="javascript:;" onclick="$.ui.toggleSideNav()" class="button">Toggle Nav Menu</a>
+		<a href="javascript:;" onclick="$.ui.toggleSideMenu();" class="button">Toggle Side Menu</a>
 	</div>
 	
 	<div id="uiscrolltotop" title="Scroll to Top" class="panel" data-footer='footerui'>
@@ -923,7 +929,11 @@ $.os.android=true; //let's make it run like an android device
 	<div title="Pop" id="transition4" class="panel splashscreen" data-footer='footerui' style="padding-left:0px"><img src="kitchensink/images/splash.png"></div>
 	<div title="Flip" id="transition5" class="panel splashscreen" data-footer='footerui' style="padding-left:0px"><img src="kitchensink/images/splash.png"></div>
 	<div title="Fade" id="transition6" class="panel splashscreen" data-footer='footerui' style="padding-left:0px"><img src="kitchensink/images/splash.png"></div>
-	<div title="Modal" id="transition7" class="panel splashscreen" modal="true" data-footer='footerui' style="padding-left:0px;width:100%;min-height:100%;">I'm a modal window...woot woot</div>
+	<div title="Modal" id="transition7" class="panel splashscreen" data-modal="true" data-footer='footerui' >I'm a modal window...woot woot
+	<br><br><br>
+	Check the input box out below.  <br>
+	<input type="text" class="jq-ui-forms">
+	</div>
 	<!-- ------------------------------------------ -->
 
 	<!-- ------------------------------------------ -->
@@ -960,7 +970,8 @@ $.os.android=true; //let's make it run like an android device
 		window.addEventListener("load", init_scroller, false);
 	</script>
 	<div id="outercontent"
-			style="height: 95%; width: 99%; overflow: hidden; position: relative">
+			style="height: 95%; width:95%; overflow: hidden; position: relative">
+			
 			<div id="scroller"><div>Lorem ipsum dolor sit amet, consectetur
 				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
 				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
@@ -1280,11 +1291,12 @@ $.os.android=true; //let's make it run like an android device
 				diam, at consectetur elit. Duis feugiat ullamcorper libero tincidunt
 				aliquet. Sed leo nisl, iaculis non pellentesque nec, scelerisque vel
 				felis</div></div>
+				
 		</div>
 	</div>
 
 	<!-- jqPlugins > jQ.carousel -->
-	<div title="Carousel" class="panel" id="webcarousel" scrolling="no">
+	<div title="Carousel" class="panel" id="webcarousel"  scrolling="no">
 		<style>
 		.carousel_paging2 {
 			border-radius: 10px;
@@ -1331,42 +1343,30 @@ $.os.android=true; //let's make it run like an android device
 				});
 			}
 			window.addEventListener("load", init_carousel, false);
-		</script>
-		<div id="carousel_dots"
-			style="text-align: center; margin-left:25%; clear: both; position: relative; top: 40%; z-index: 200">
-		</div>
-		<div id="carousel" style="float:left;height:50%;width:100%;">
-				<div
-					style="background: yellow;">
-					<a href="javascript:alert('test');">
-							I'm a horizontal carousel
-						</a>
-					</div>
-				<div
-					style="background: green;"></div>
-				<div
-					style="background: blue;"></div>
-				<div
-					style="background: pink;"></div>
-			</div>
 		
-		<div id="carousel2" style="float:left;height:50%;width:100%;">
-				<div
-					style="background: yellow;">
-					<span style='color:black'>I'm a vertical carousel</span>
-					</div>
-				<div
-					style="background: green;"></div>
-				<div
-					style="background: blue;"></div>
-				<div
-					style="background: pink;"></div>
+		</script>
+			<div id="carousel_dots" style="text-align: center; margin-left:25%; clear: both; position: relative; top: 40%; z-index: 200">
 			</div>
-		<div id="carousel_dots2"
-			style="text-align: center; clear: both; position: absolute; bottom: 0px;left:40%; z-index: 200">
-		</div>
-		<div style='clear:both'></div>
-		<br><br>"Stuff after
+			<div id="carousel" style="display:block;height:50%;width:100%;">
+					<div style="background: yellow;">
+						<a href="javascript:alert('test');">
+								I'm a horizontal carousel
+							</a>
+						</div>
+					<div style="background: green;"></div>
+					<div style="background: blue;"></div>
+					<div style="background: pink;"></div>
+				</div>
+			
+			<div id="carousel2" style="display:block;height:50%;width:100%;">
+					<div style="background: yellow;">
+						<span style='color:black'>I'm a vertical carousel</span>
+						</div>
+					<div style="background: green;"></div>
+					<div style="background: blue;"></div>
+					<div style="background: pink;"></div>
+				</div>
+			<div id="carousel_dots2" style="text-align: center; clear: both; position: absolute; bottom: 0px;left:40%; z-index: 200"></div>
 	</div>
 
 	<!-- jqPlugins > jQ.swipeListener -->
@@ -1479,7 +1479,7 @@ $.os.android=true; //let's make it run like an android device
 	</div>
 
 	<!-- jqPlugins > jQ.appMobiPassword -->
-	<div title="Password" class="panel" id="webpassword" scrolling="no">
+	<div title="Password" class="panel" id="webpassword" >
 		<script>
 			var pwFixer = new $.passwordBox();
 			var init_password = function () {
@@ -1654,7 +1654,7 @@ $.os.android=true; //let's make it run like an android device
 	  </ul>
 	 <div class='title'>Menus</div>
      <ul>
-	   <li> <a href="javascript:;" onclick="$.ui.toggleHeaderMenu()"  >Toggle Header</a></li>
+	   <li> <a href="javascript:;" onclick="$.ui.toggleHeaderMenu();console.log('called');"  >Toggle Header</a></li>
 	   <li> <a href="javascript:;" onclick="$.ui.toggleSideMenu()"  >Toggle Side</a></li>
 	   <li> <a href="javascript:;" onclick="$.ui.toggleNavMenu()"  >Toggle Footer</a></li>
 	  </ul>

@@ -60,18 +60,9 @@ jq.drawer
 
 * This is a pull widget like the notification bar on phones.  
 
-# AppMobi Libraries
-These libraries require AppMobi to work.
+jq.fx
 
-jq.shake
-
-* This taps into the accelerometer to trigger an event when the device has been shook.  You can set a threshold to indicate movement required to trigger the shake.
-
-* Executes a callback function when it recieves a shake.
-
-jq.social (coming soon in 3.4.1)
-
-* A wrapper utility for making oAuth calls using AppMobi.
+* These are fx helpers for providing some animations
 
 # How to use jQ.Web libraries
 
@@ -448,60 +439,19 @@ var drawer = new jq.drawer("drawer",{direction:"down"}); //direction can be up o
 ```
 
 
-# jq.social
+#jq.fx
 
-This is a wrapper library for making oAuth requests using AppMobi.oauth functions.   Please see the AppMobi.oauth documentation for full details (coming in 3.4.1).
- 
-To use jq.social you must do the following
+This is a library to provide basic effects.  We currently have three implemented
 
-1. Register the oauth service in the Enterprise Control Panel (enterprise.appmobi.com)
-
-2. Create an object for each service
+1) .fadeOut()
+2) .fadeIn()
+3) .slideToggle()
 
 ``` js
-var serviceName="twitter";
-var twitter= new jq.social(serviceName);
- ```
- 
-3. Make the oAuth request for the service
+$(selector).fadeOut("300ms") //fade out for 300 ms
+$(selector).fadeIn("300ms") //fade in for 300 ms
 
-``` js
-twitter.makeRequest("https://api.twitter.com/1/statuses/user_timeline.json","get_timeline","GET",printTimeline);
-```
-
-makeRequest is the main function you will interact with.  It takes in the following parameters
-
-1. API request url
-
-2. Service id - this should be unique per request url
-
-3. Method - GET/POST (optional defaults to GET) 
-
-4. Callback function (optional) - takes in an event from appMobi.oauth.protected.data
-
-5. Request Body - url parameters to pass in the request
-
-
-Below is a sample of posting a status update to twitter
-
-``` js
-twitter.makeRequest("https://api.twitter.com/1/statuses/update.json","set_update","POST",checkResult,"status=foobar"
-```
-
-# jq.shake
-
-To use jq.shake you must do the following
-
-1. Call the javascript function and pass in a callback function to be executed when a shake is detected
-
-``` js
-jq.shake(function(){console.log("Shake Detected");});
-```
-
-An optional second parameter is a threshold for declaring accelerometer movement as a shake.  The default is 5.  Lowering it will trigger the callback more, raising it will trigger it less.
-
-``` js
-jq.shake(function(){console.log("Shake Detected");},10); //More shakes needed to trigger the callback
+$(selector).slideToggle() //Will slide the content in or out
 ```
 
 # Contribute

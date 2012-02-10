@@ -83,8 +83,8 @@
                     that.touchStart(e);
                 }, false);
                 var that = this;
-                document.addEventListener("orientationchange", function() {
-                    that.onMoveIndex(that.carouselIndex);
+                window.addEventListener("orientationchange", function() {
+                    that.onMoveIndex(that.carouselIndex,0);
                 }, false);
             
             } catch (e) {
@@ -111,7 +111,7 @@
             pagingCssName: "carousel_paging",
             pagingCssNameSelected: "carousel_paging_selected",
             pagingCallback: null,
-			lockMove:false,
+            lockMove:false,
             // handle the moving function
             touchStart: function(e) {
                 this.myDivWidth = numOnly(this.container.clientWidth);
@@ -128,8 +128,8 @@
                     
                     this.movingElement = true;
                     this.startY = e.touches[0].pageY;
-    				this.startX = e.touches[0].pageX;
-					//e.preventDefault();
+                    this.startX = e.touches[0].pageX;
+                    //e.preventDefault();
                     //e.stopPropagation();
                     if (this.vertical) {
                         try {
@@ -138,7 +138,7 @@
                             this.cssMoveStart = 0;
                         }
                     } else {
-						try {
+                        try {
                             this.cssMoveStart = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el, null).webkitTransform).e);
                         } catch (ex1) {
                             this.cssMoveStart = 0;
@@ -149,27 +149,27 @@
             touchMove: function(e) {
                 // e.preventDefault();
                 // e.stopPropagation();
-				if(!this.movingElement)
-				   return;
+                if(!this.movingElement)
+                   return;
                 if (e.touches.length > 1) {
                     return this.touchEnd(e);
                 }
                 
-				var rawDelta = {
+                var rawDelta = {
                     x: e.touches[0].pageX - this.startX,
                     y: e.touches[0].pageY - this.startY
                 };
-				
+                
                 if (this.vertical) {
-					var movePos = { x: 0, y: 0 };
+                    var movePos = { x: 0, y: 0 };
                     this.dy = e.touches[0].pageY - this.startY;
                     this.dy += this.cssMoveStart;
                     movePos.y = this.dy;
-					e.preventDefault();
+                    e.preventDefault();
                         e.stopPropagation();
                 } else {
-					if (!this.lockMove&&isHorizontalSwipe(rawDelta.x, rawDelta.y)) {
-					     
+                    if (!this.lockMove&&isHorizontalSwipe(rawDelta.x, rawDelta.y)) {
+                         
                         var movePos = {x: 0,y: 0};
                         this.dx = e.touches[0].pageX - this.startX;
                         this.dx += this.cssMoveStart;
@@ -177,13 +177,13 @@
                         e.stopPropagation();
                         movePos.x = this.dx;
                     }
-					else
-					   return this.lockMove=true;
+                    else
+                       return this.lockMove=true;
                 }
                 
                 var totalMoved = this.vertical ? ((this.dy % this.myDivHeight) / this.myDivHeight * 100) * -1 : ((this.dx % this.myDivWidth) / this.myDivWidth * 100) * -1; // get a percentage of movement.
-				if(movePos)
-					this.moveCSS3(this.el, movePos);
+                if(movePos)
+                    this.moveCSS3(this.el, movePos);
             },
             touchEnd: function(e) {
                 if (!this.movingElement) {
@@ -247,7 +247,7 @@
                 if (runFinal && this.pagingFunction && typeof this.pagingFunction == "function")
                     this.pagingFunction(this.carouselIndex);
             },
-            onMoveIndex: function(newInd) {
+            onMoveIndex: function(newInd,transitionTime) {
                 
                 this.myDivWidth = numOnly(this.container.clientWidth);
                 this.myDivHeight = numOnly(this.container.clientHeight);
@@ -274,7 +274,7 @@
                         movePos.x = (ind * this.myDivWidth * -1);
                     }
                     
-                    var time = 50 + parseInt((newTime * 20));
+                    var time =transitionTime?transitionTime: 50 + parseInt((newTime * 20));
                     this.moveCSS3(this.el, movePos, time);
                     if (this.carouselIndex != ind)
                         runFinal = true;
@@ -374,7 +374,7 @@
                         var spacerEl = document.createElement("div");
                         spacerEl.style.cssFloat = "left";
                         spacerEl.style.width = "20px";
-                        spacerEl.innerHTML = "&nbsp";
+                        spacerEl.innerHTML = "&nbsp;";
                         
                         this.pagingDiv.appendChild(pagingEl);
                         if (i + 1 < (this.childrenCount))
@@ -402,17 +402,17 @@
             return parseFloat(val);
         }
     }
-	
-	function isHorizontalSwipe(xAxis, yAxis) {
-				var X = xAxis;
-				var Y = yAxis;
-				var Z = Math.round(Math.sqrt(Math.pow(X,2)+Math.pow(Y,2))); //the distance - rounded - in pixels
-				var r = Math.atan2(Y,X); //angle in radians 
-				var swipeAngle = Math.round(r*180/Math.PI); //angle in degrees
-				if ( swipeAngle < 0 ) { swipeAngle =  360 - Math.abs(swipeAngle); } // for negative degree values
-				if (((swipeAngle <= 215) && (swipeAngle >= 155)) || ((swipeAngle <= 45) && (swipeAngle >= 0)) || ((swipeAngle <= 360) && (swipeAngle >= 315))) // horizontal angles with threshold
-				{return true; }
-				else {return false}
-	}
-	
+    
+    function isHorizontalSwipe(xAxis, yAxis) {
+                var X = xAxis;
+                var Y = yAxis;
+                var Z = Math.round(Math.sqrt(Math.pow(X,2)+Math.pow(Y,2))); //the distance - rounded - in pixels
+                var r = Math.atan2(Y,X); //angle in radians 
+                var swipeAngle = Math.round(r*180/Math.PI); //angle in degrees
+                if ( swipeAngle < 0 ) { swipeAngle =  360 - Math.abs(swipeAngle); } // for negative degree values
+                if (((swipeAngle <= 215) && (swipeAngle >= 155)) || ((swipeAngle <= 45) && (swipeAngle >= 0)) || ((swipeAngle <= 360) && (swipeAngle >= 315))) // horizontal angles with threshold
+                {return true; }
+                else {return false}
+    }
+    
 })(jq);
