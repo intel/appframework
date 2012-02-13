@@ -1,7 +1,3 @@
-/*!
-jshint newcap:false
-* @ignore
-*/
 /**
 * jqMobi is a query selector class for HTML5 mobile apps on a WebkitBrowser.
 * Since most mobile devices (Android, iOS, webOS) use a WebKit browser, you only need to target one browser.
@@ -19,16 +15,16 @@ if (!window.jq || typeof (jq) !== "function") {
      * @title jqMobi
      * @api private
      */
-    var jq = (function (window) {
+    var jq = (function(window) {
         "use strict";
-        var undefined, document = window.document,
-            emptyArray = [],
-            slice = emptyArray.slice,
-            classCache = [],
-            eventHandlers = [],
-            _eventID = 1,
-            jsonPHandlers = [],
-            _jsonPID = 1;
+        var undefined, document = window.document, 
+        emptyArray = [], 
+        slice = emptyArray.slice, 
+        classCache = [], 
+        eventHandlers = [], 
+        _eventID = 1, 
+        jsonPHandlers = [], 
+        _jsonPID = 1;
 
         /**
          * Internal function to test if a class name fits in a regular expression
@@ -66,8 +62,9 @@ if (!window.jq || typeof (jq) !== "function") {
          */
         function siblings(nodes, element) {
             var elems = [];
-            if (nodes == undefined) return elems;
-
+            if (nodes == undefined)
+                return elems;
+            
             for (; nodes; nodes = nodes.nextSibling) {
                 if (nodes.nodeType == 1 && nodes !== element) {
                     elems.push(nodes);
@@ -82,64 +79,64 @@ if (!window.jq || typeof (jq) !== "function") {
          * @param {String|Element|Object|Array} selector
          * @param {String|Element|Object} [context]
          */
-        var $jqm = function (toSelect, what) {
-                this.length = 0;
-                if (!toSelect) {
-                    return this;
-                } else if (toSelect instanceof $jqm && what == undefined) {
-                    return toSelect;
-                } else if ($.isFunction(toSelect)) {
-                    return $(document).ready(toSelect);
-                } else if ($.isArray(toSelect) && toSelect.length != undefined) //Passing in an array or object
-                {
-                    for (var i = 0; i < toSelect.length; i++)
+        var $jqm = function(toSelect, what) {
+            this.length = 0;
+            if (!toSelect) {
+                return this;
+            } else if (toSelect instanceof $jqm && what == undefined) {
+                return toSelect;
+            } else if ($.isFunction(toSelect)) {
+                return $(document).ready(toSelect);
+            } else if ($.isArray(toSelect) && toSelect.length != undefined) { //Passing in an array or object
+                for (var i = 0; i < toSelect.length; i++)
                     this[this.length++] = toSelect[i];
-                    return this;
-                } else if ($.isObject(toSelect) && $.isObject(what)) //var tmp=$("span");  $("p").find(tmp);
-                {
-                    if (toSelect.length == undefined) {
-                        if (toSelect.parentNode == what) this[this.length++] = toSelect;
-                    } else {
-                        for (var i = 0; i < toSelect.length; i++)
-                        if (toSelect[i].parentNode == what) this[this.length++] = toSelect[i];
-                    }
-                    return this;
-                } else if ($.isObject(toSelect) && what == undefined) { //Single object
-                    this[this.length++] = toSelect;
-                    return this;
-                } else if (what !== undefined) {
-                    if (what instanceof $jqm) {
-                        return what.find(toSelect);
-                    }
-
+                return this;
+            } else if ($.isObject(toSelect) && $.isObject(what)) { //var tmp=$("span");  $("p").find(tmp);
+                if (toSelect.length == undefined) {
+                    if (toSelect.parentNode == what)
+                        this[this.length++] = toSelect;
                 } else {
-                    what = document;
-                }
-
-                var dom = this.selector(toSelect, what);
-                if (!dom) {
-                    return this;
-                }
-                //reverse the query selector all storage
-                else if ($.isArray(dom)) {
-                    for (var j = 0; j < dom.length; j++) {
-                        this[this.length++] = dom[j];
-                    }
-                } else {
-                    this[this.length++] = dom;
-                    return this;
+                    for (var i = 0; i < toSelect.length; i++)
+                        if (toSelect[i].parentNode == what)
+                            this[this.length++] = toSelect[i];
                 }
                 return this;
-            };
+            } else if ($.isObject(toSelect) && what == undefined) { //Single object
+                this[this.length++] = toSelect;
+                return this;
+            } else if (what !== undefined) {
+                if (what instanceof $jqm) {
+                    return what.find(toSelect);
+                }
+            
+            } else {
+                what = document;
+            }
+            
+            var dom = this.selector(toSelect, what);
+            if (!dom) {
+                return this;
+            } 
+            //reverse the query selector all storage
+            else if ($.isArray(dom)) {
+                for (var j = 0; j < dom.length; j++) {
+                    this[this.length++] = dom[j];
+                }
+            } else {
+                this[this.length++] = dom;
+                return this;
+            }
+            return this;
+        };
 
         /**
          * This calls the $jqm function
          * @param {String|Element|Object|Array} selector
          * @param {String|Element|Object} [context]
          */
-        var $ = function (selector, what) {
-                return new $jqm(selector, what);
-            };
+        var $ = function(selector, what) {
+            return new $jqm(selector, what);
+        };
 
         /**
          * this is the query selector library for elements
@@ -147,14 +144,16 @@ if (!window.jq || typeof (jq) !== "function") {
          * @param {String|Element|Object} [context]
          * @api private
          */
-
+        
         function _selector(selector, what) {
             var dom;
             try {
                 if (selector[0] === "#" && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
-                    if (what == document) dom = what.getElementById(selector.replace("#", ""));
-                    else dom = [].slice.call(what.querySelectorAll(selector));
-                } else if (selector[0] === "<" && selector[selector.length - 1] === ">") //html
+                    if (what == document)
+                        dom = what.getElementById(selector.replace("#", ""));
+                    else
+                        dom = [].slice.call(what.querySelectorAll(selector));
+                } else if (selector[0] === "<" && selector[selector.length - 1] === ">")  //html
                 {
                     var tmp = document.createElement("div");
                     tmp.innerHTML = selector.trim();
@@ -162,7 +161,8 @@ if (!window.jq || typeof (jq) !== "function") {
                 } else {
                     dom = [].slice.call(what.querySelectorAll(selector));
                 }
-            } catch (e) {}
+            } catch (e) {
+            }
             return dom;
         }
 
@@ -177,17 +177,23 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Object} jqMobi object with elements in it
         * @title $.map(elements,callback)
         */
-        $.map = function (elements, callback) {
-            var value, values = [],
-                i, key;
-            if ($.isArray(elements)) for (i = 0; i < elements.length; i++) {
-                value = callback(elements[i], i);
-                if (value !== undefined) values.push(value);
-            } else if ($.isObject(elements)) for (key in elements) {
-                if (!elements.hasOwnProperty(key)) continue;
-                value = callback(elements[key], key);
-                if (value !== undefined) values.push(value);
-            }
+        $.map = function(elements, callback) {
+            var value, values = [], 
+            i, key;
+            if ($.isArray(elements))
+                for (i = 0; i < elements.length; i++) {
+                    value = callback(elements[i], i);
+                    if (value !== undefined)
+                        values.push(value);
+                }
+            else if ($.isObject(elements))
+                for (key in elements) {
+                    if (!elements.hasOwnProperty(key))
+                        continue;
+                    value = callback(elements[key], key);
+                    if (value !== undefined)
+                        values.push(value);
+                }
             return $([values]);
         };
 
@@ -202,14 +208,20 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Array} elements
         * @title $.each(elements,callback)
         */
-        $.each = function (elements, callback) {
+        $.each = function(elements, callback) {
             var i, key;
-            if ($.isArray(elements)) for (i = 0; i < elements.length; i++) {
-                if (callback(i, elements[i]) === false) return elements;
-            } else if ($.isObject(elements)) for (key in elements) {
-                if (!elements.hasOwnProperty(key)) continue;
-                if (callback(key, elements[key]) === false) return elements;
-            }
+            if ($.isArray(elements))
+                for (i = 0; i < elements.length; i++) {
+                    if (callback(i, elements[i]) === false)
+                        return elements;
+                }
+            else if ($.isObject(elements))
+                for (key in elements) {
+                    if (!elements.hasOwnProperty(key))
+                        continue;
+                    if (callback(key, elements[key]) === false)
+                        return elements;
+                }
             return elements;
         };
 
@@ -225,16 +237,17 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Object} [target]
         * @title $.extend(target,{params})
         */
-        $.extend = function (target) {
-            if (target == undefined) target = this;
+        $.extend = function(target) {
+            if (target == undefined)
+                target = this;
             if (arguments.length === 1) {
                 for (var key in target)
-                this[key] = target[key];
+                    this[key] = target[key];
                 return this;
             } else {
-                slice.call(arguments, 1).forEach(function (source) {
+                slice.call(arguments, 1).forEach(function(source) {
                     for (var key in source)
-                    target[key] = source[key];
+                        target[key] = source[key];
                 });
             }
             return target;
@@ -252,7 +265,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @example $.isArray([1]);
         * @title $.isArray(param)
         */
-        $.isArray = function (obj) {
+        $.isArray = function(obj) {
             return obj != undefined && obj instanceof Array && obj['push'] != undefined; //ios 3.1.3 doesn't have Array.isArray
         };
 
@@ -267,7 +280,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Boolean}
         * @title $.isFunction(param)
         */
-        $.isFunction = function (obj) {
+        $.isFunction = function(obj) {
             return obj != undefined && typeof obj === "function";
         };
         /**
@@ -281,7 +294,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Boolean}
         * @title $.isObject(param)
         */
-        $.isObject = function (obj) {
+        $.isObject = function(obj) {
             return obj != undefined && typeof obj === "object";
         }
 
@@ -305,11 +318,12 @@ if (!window.jq || typeof (jq) !== "function") {
              * @return {Object} a jqMobi with params.oldElement set to this
              * @api private
              */
-            setupOld: function (params) {
-                if (params == undefined) return $();
+            setupOld: function(params) {
+                if (params == undefined)
+                    return $();
                 params.oldElement = this;
                 return params;
-
+            
             },
             /**
             * This is a wrapper to $.map on the selected elements
@@ -321,8 +335,8 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} a jqMobi object
             * @title $().map(function)
             */
-            map: function (fn) {
-                return $.map(this, function (el, i) {
+            map: function(fn) {
+                return $.map(this, function(el, i) {
                     return fn.call(el, i, el);
                 });
             },
@@ -336,8 +350,8 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} a jqMobi object
             * @title $().each(function)
             */
-            each: function (callback) {
-                this.forEach(function (el, idx) {
+            each: function(callback) {
+                this.forEach(function(el, idx) {
                     callback.call(el, idx, el);
                 });
                 return this;
@@ -352,9 +366,10 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} a jqMobi object
             * @title $().ready(function)
             */
-
-            ready: function (callback) {
-                if (document.readyState === "complete" || document.readyState === "loaded") callback();
+            
+            ready: function(callback) {
+                if (document.readyState === "complete" || document.readyState === "loaded")
+                    callback();
                 document.addEventListener("DOMContentLoaded", callback, false);
                 return this;
             },
@@ -371,13 +386,14 @@ if (!window.jq || typeof (jq) !== "function") {
             * @title $().find(selector)
 
             */
-            find: function (sel) {
-                if (this.length === 0) return undefined;
+            find: function(sel) {
+                if (this.length === 0)
+                    return undefined;
                 var elems = [];
                 var tmpElems;
                 for (var i = 0; i < this.length; i++) {
                     tmpElems = ($(sel, this[i]));
-
+                    
                     for (var j = 0; j < tmpElems.length; j++) {
                         elems.push(tmpElems[j]);
                     }
@@ -396,9 +412,11 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} a jqMobi object
             * @title $().html([html])
             */
-            html: function (html) {
-                if (this.length === 0) return undefined;
-                if (html === undefined) return this[0].innerHTML;
+            html: function(html) {
+                if (this.length === 0)
+                    return undefined;
+                if (html === undefined)
+                    return this[0].innerHTML;
                 for (var i = 0; i < this.length; i++) {
                     this[i].innerHTML = html;
                 }
@@ -416,9 +434,11 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} a jqMobi object
             * @title $().text([text])
             */
-            text: function (text) {
-                if (this.length === 0) return undefined;
-                if (text === undefined) return this[0].textContent;
+            text: function(text) {
+                if (this.length === 0)
+                    return undefined;
+                if (text === undefined)
+                    return this[0].textContent;
                 for (var i = 0; i < this.length; i++) {
                     this[i].textContent = text;
                 }
@@ -437,9 +457,10 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} a jqMobi object
             * @title $().css(attribute,[value])
             */
-            css: function (attribute, value, obj) {
+            css: function(attribute, value, obj) {
                 var toAct = obj != undefined ? obj : this[0];
-                if (this.length === 0) return undefined;
+                if (this.length === 0)
+                    return undefined;
                 if (value == undefined && typeof (attribute) === "string") {
                     var styles = window.getComputedStyle(toAct);
                     return styles[attribute] ? styles[attribute] : toAct.style[attribute];
@@ -464,7 +485,7 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} a jqMobi object
             * @title $().empty()
             */
-            empty: function () {
+            empty: function() {
                 for (var i = 0; i < this.length; i++) {
                     this[i].innerHTML = '';
                 }
@@ -480,8 +501,9 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} a jqMobi object
             * @title $().hide()
             */
-            hide: function () {
-                if (this.length === 0) return this;
+            hide: function() {
+                if (this.length === 0)
+                    return this;
                 for (var i = 0; i < this.length; i++) {
                     if (this.css("display", null, this[i]) != "none") {
                         this[i].setAttribute("jqmOldStyle", this.css("display", null, this[i]));
@@ -500,8 +522,9 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} a jqMobi object
             * @title $().show()
             */
-            show: function () {
-                if (this.length === 0) return this;
+            show: function() {
+                if (this.length === 0)
+                    return this;
                 for (var i = 0; i < this.length; i++) {
                     if (this.css("display", null, this[i]) == "none") {
                         this[i].style.display = this[i].getAttribute("jqmOldStyle") ? this[i].getAttribute("jqmOldStyle") : 'block';
@@ -521,7 +544,7 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} a jqMobi object
             * @title $().toggle([show])
             */
-            toggle: function (show) {
+            toggle: function(show) {
                 var show2 = show === true ? true : false;
                 for (var i = 0; i < this.length; i++) {
                     if (this[i].style.display !== "none" || (show !== undefined && show2 === false)) {
@@ -546,9 +569,11 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {String|Object} A string as a getter, jqMobi object as a setter
             * @title $().val([value])
             */
-            val: function (value) {
-                if (this.length === 0) return undefined;
-                if (value == undefined) return this[0].value;
+            val: function(value) {
+                if (this.length === 0)
+                    return undefined;
+                if (value == undefined)
+                    return this[0].value;
                 for (var i = 0; i < this.length; i++) {
                     this[i].value = value;
                 }
@@ -568,25 +593,31 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {String|Object|Array} If used as a getter, return the attribute value.  If a setter, return a jqMobi object
             * @title $().attr(attribute,[value])
             */
-            attr: function (attr, value) {
-                if (this.length === 0) return undefined;
+            attr: function(attr, value) {
+                if (this.length === 0)
+                    return undefined;
                 if (value === undefined && !$.isObject(attr)) {
                     var val = this[0].getAttribute(attr);
-
+                    
                     try {
                         val = JSON.parse(val);
-                    } catch (e) {}
+                    } catch (e) {
+                    }
                     return val;
                 }
                 value = $.isArray(value) || $.isObject(value) ? JSON.stringify(value) : value;
                 for (var i = 0; i < this.length; i++) {
                     if ($.isObject(attr)) {
                         for (var key in attr) {
-                            if (value == null && value !== undefined) this[i].removeAttribute(key);
-                            else this[i].setAttribute(key, attr[key]);
+                            if (value == null && value !== undefined)
+                                this[i].removeAttribute(key);
+                            else
+                                this[i].setAttribute(key, attr[key]);
                         }
-                    } else if (value == null && value !== undefined) this[i].removeAttribute(attr);
-                    else this[i].setAttribute(attr, value);
+                    } else if (value == null && value !== undefined)
+                        this[i].removeAttribute(attr);
+                    else
+                        this[i].setAttribute(attr, value);
                 }
                 return this;
             },
@@ -600,10 +631,10 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} jqMobi object
             * @title $().removeAttr(attribute)
             */
-            removeAttr: function (attr) {
+            removeAttr: function(attr) {
                 var that = this;
                 for (var i = 0; i < this.length; i++) {
-                    attr.split(/\s+/g).forEach(function (param) {
+                    attr.split(/\s+/g).forEach(function(param) {
                         that[i].removeAttribute(param);
                     });
                 }
@@ -622,9 +653,10 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} jqMobi object
             * @title $().remove(selector)
             */
-            remove: function (selector) {
+            remove: function(selector) {
                 var elems = $(this).filter(selector);
-                if (elems == undefined) return this;
+                if (elems == undefined)
+                    return this;
                 for (var i = 0; i < elems.length; i++) {
                     elems[i].parentNode.removeChild(elems[i]);
                 }
@@ -640,15 +672,16 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} jqMobi object
             * @title $().addClass(name)
             */
-            addClass: function (name) {
+            addClass: function(name) {
                 for (var i = 0; i < this.length; i++) {
                     var cls = this[i].className;
                     var classList = [];
                     var that = this;
-                    name.split(/\s+/g).forEach(function (cname) {
-                        if (!that.hasClass(cname, that[i])) classList.push(cname);
+                    name.split(/\s+/g).forEach(function(cname) {
+                        if (!that.hasClass(cname, that[i]))
+                            classList.push(cname);
                     });
-
+                    
                     this[i].className += (cls ? " " : "") + classList.join(" ");
                     this[i].className = this[i].className.trim();
                 }
@@ -665,18 +698,20 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} jqMobi object
             * @title $().removeClass(name)
             */
-            removeClass: function (name) {
+            removeClass: function(name) {
                 for (var i = 0; i < this.length; i++) {
                     if (name == undefined) {
                         this[i].className = '';
                         return this;
                     }
                     var classList = this[i].className;
-                    name.split(/\s+/g).forEach(function (cname) {
+                    name.split(/\s+/g).forEach(function(cname) {
                         classList = classList.replace(classRE(cname), "");
                     });
-                    if (classList.length > 0) this[i].className = classList.trim();
-                    else this[i].className = "";
+                    if (classList.length > 0)
+                        this[i].className = classList.trim();
+                    else
+                        this[i].className = "";
                 }
                 return this;
             },
@@ -692,9 +727,11 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Boolean}
             * @title $().hasClass(name,[element])
             */
-            hasClass: function (name, element) {
-                if (this.length === 0) return false;
-                if (!element) element = this[0];
+            hasClass: function(name, element) {
+                if (this.length === 0)
+                    return false;
+                if (!element)
+                    element = this[0];
                 return classRE(name).test(element.className);
             },
             /**
@@ -712,25 +749,28 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} jqMobi object
             * @title $().append(element,[insert])
             */
-            append: function (element, insert) {
-                if (element && element.length != undefined && element.length === 0) return this;
-                if ($.isArray(element) || $.isObject(element)) element = $(element);
+            append: function(element, insert) {
+                if (element && element.length != undefined && element.length === 0)
+                    return this;
+                if ($.isArray(element) || $.isObject(element))
+                    element = $(element);
                 var i;
-
+                
                 for (i = 0; i < this.length; i++) {
                     if (element.length && typeof element != "string") {
                         element = $(element);
                         for (var j = 0; j < element.length; j++)
-                        insert != undefined ? this[i].insertBefore(element[j], this[i].firstChild) : this[i].appendChild(element[j]);
+                            insert != undefined ? this[i].insertBefore(element[j], this[i].firstChild) : this[i].appendChild(element[j]);
                     } else {
                         var obj = $(element).get();
-
+                        
                         if (obj == undefined || obj.length == 0) {
                             obj = document.createTextNode(element);
                         }
                         if (obj.nodeName != undefined && obj.nodeName.toLowerCase() == "script" && (!obj.type || obj.type.toLowerCase() === 'text/javascript')) {
                             window.eval(obj.innerHTML);
-                        } else insert != undefined ? this[i].insertBefore(obj, this[i].firstChild) : this[i].appendChild(obj);
+                        } else
+                            insert != undefined ? this[i].insertBefore(obj, this[i].firstChild) : this[i].appendChild(obj);
                     }
                 }
                 return this;
@@ -747,8 +787,40 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} jqMobi object
             * @title $().prepend(element)
             */
-            prepend: function (element) {
+            prepend: function(element) {
                 return this.append(element, 1);
+            },
+            /**
+             * Inserts collection before the target (adjacent)
+                ```
+                $().insertBefore(jq("#target"));
+                ```
+             
+             * @param {String|Object} Target
+             * @title $().insertBefore(target);
+             */
+            insertBefore: function(target, after) {
+                if (this.length == 0)
+                    return this;
+                target = $(target).get(0);
+                if (!target || target.length == 0)
+                    return this;
+                for (var i = 0; i < this.length; i++) 
+                {
+                    after ? target.parentNode.insertBefore(this[i], target.nextSibling) : target.parentNode.insertBefore(this[i], target);
+                }
+                return this;
+            },
+            /**
+             * Inserts collection after the target (adjacent)
+                ```
+                $().insertAfter(jq("#target"));
+                ```
+             * @param {String|Object} target
+             * @title $.insertAfter(target);
+             */
+            insertAfter: function(target) {
+                this.insertBefore(target, true);
             },
             /**
             * Returns the raw DOM element.
@@ -761,9 +833,10 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} raw DOM element
             * @title $().get([index])
             */
-            get: function (index) {
+            get: function(index) {
                 index = index == undefined ? 0 : index;
-                if (index < 0) index += this.length;
+                if (index < 0)
+                    index += this.length;
                 return (this[index]) ? this[index] : undefined;
             },
             /**
@@ -775,8 +848,9 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} with left, top, width and height properties
             * @title $().offset()
             */
-            offset: function () {
-                if (this.length === 0) return undefined;
+            offset: function() {
+                if (this.length === 0)
+                    return undefined;
                 var obj = this[0].getBoundingClientRect();
                 return {
                     left: obj.left + window.pageXOffset,
@@ -797,11 +871,13 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} jqMobi object with unique parents
             * @title $().parent(selector)
             */
-            parent: function (selector) {
-                if (this.length == 0) return undefined;
+            parent: function(selector) {
+                if (this.length == 0)
+                    return undefined;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
-                    if (this[i].parentNode) elems.push(this[i].parentNode);
+                    if (this[i].parentNode)
+                        elems.push(this[i].parentNode);
                 }
                 return this.setupOld($(unique(elems)).filter(selector));
             },
@@ -817,15 +893,16 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} jqMobi object with unique children
             * @title $.children(selector)
             */
-            children: function (selector) {
-
-                if (this.length == 0) return undefined;
+            children: function(selector) {
+                
+                if (this.length == 0)
+                    return undefined;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     elems = elems.concat(siblings(this[i].firstChild));
                 }
                 return this.setupOld($((elems)).filter(selector));
-
+            
             },
             /**
             * Returns the siblings of the element based off the selector
@@ -839,11 +916,13 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} jqMobi object with unique siblings
             * @title $().siblings(selector)
             */
-            siblings: function (selector) {
-                if (this.length == 0) return undefined;
+            siblings: function(selector) {
+                if (this.length == 0)
+                    return undefined;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
-                    if (this[i].parentNode) elems = elems.concat(siblings(this[i].parentNode.firstChild, this[i]));
+                    if (this[i].parentNode)
+                        elems = elems.concat(siblings(this[i].parentNode.firstChild, this[i]));
                 }
                 return this.setupOld($(elems).filter(selector));
             },
@@ -860,18 +939,20 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} Returns a jqMobi object with the closest element based off the selector
             * @title $().closest(selector,[context]);
             */
-            closest: function (selector, context) {
-                if (this.length == 0) return undefined;
-                var elems = [],
-                    cur = this[0];
-
+            closest: function(selector, context) {
+                if (this.length == 0)
+                    return undefined;
+                var elems = [], 
+                cur = this[0];
+                
                 var start = $(selector, context);
-                if (start.length == 0) return $();
+                if (start.length == 0)
+                    return $();
                 while (cur && start.indexOf(cur) == -1) {
                     cur = cur !== context && cur !== document && cur.parentNode;
                 }
                 return $(cur);
-
+            
             },
             /**
             * Filters elements based off the selector
@@ -885,14 +966,17 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} Returns a jqMobi object after the filter was run
             * @title $().filter(selector);
             */
-            filter: function (selector) {
-                if (this.length == 0) return undefined;
-
-                if (selector == undefined) return this;
+            filter: function(selector) {
+                if (this.length == 0)
+                    return undefined;
+                
+                if (selector == undefined)
+                    return this;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     var val = this[i];
-                    if (val.parentNode && $(selector, val.parentNode).indexOf(val) >= 0) elems.push(val);
+                    if (val.parentNode && $(selector, val.parentNode).indexOf(val) >= 0)
+                        elems.push(val);
                 }
                 return this.setupOld($(unique(elems)));
             },
@@ -908,12 +992,14 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} Returns a jqMobi object after the filter was run
             * @title $().not(selector);
             */
-            not: function (selector) {
-                if (this.length == 0) return undefined;
+            not: function(selector) {
+                if (this.length == 0)
+                    return undefined;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     var val = this[i];
-                    if (val.parentNode && $(selector, val.parentNode).indexOf(val) == -1) elems.push(val);
+                    if (val.parentNode && $(selector, val.parentNode).indexOf(val) == -1)
+                        elems.push(val);
                 }
                 return this.setupOld($(unique(elems)));
             },
@@ -931,7 +1017,7 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {String|Object} returns the value or jqMobi object
             * @title $().data(key,[value]);
             */
-            data: function (key, value) {
+            data: function(key, value) {
                 return this.attr('data-' + key, value);
             },
             /**
@@ -944,7 +1030,7 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} returns the previous jqMobi object before filter was applied
             * @title $().end();
             */
-            end: function () {
+            end: function() {
                 return this.oldElement != undefined ? this.oldElement : $();
             },
             /**
@@ -958,14 +1044,15 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} jqMobi object of cloned nodes
             * @title $().clone();
             */
-            clone: function (deep) {
+            clone: function(deep) {
                 deep = deep === false ? false : true;
-                if (this.length == 0) return undefined;
+                if (this.length == 0)
+                    return undefined;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     elems.push(this[i].cloneNode(deep));
                 }
-
+                
                 return $(elems);
             },
             /**
@@ -977,15 +1064,16 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Int}
             * @title $().size();
             */
-            size: function () {
+            size: function() {
                 return this.length;
             }
         };
 
 
         /* AJAX functions */
-
-        function empty() {}
+        
+        function empty() {
+        }
         var ajaxSettings = {
             type: 'GET',
             beforeSend: empty,
@@ -1007,16 +1095,17 @@ if (!window.jq || typeof (jq) !== "function") {
         * @param {Object} options
         * @title $.jsonP(options)
         */
-        $.jsonP = function (options) {
+        $.jsonP = function(options) {
             var callbackName = 'jsonp_callback' + (++_jsonPID);
-            var abortTimeout = "",
-                context;
+            var abortTimeout = "", 
+            context;
             var script = document.createElement("script");
-            var abort = function () {
-                    $(script).remove();
-                    if (window[callbackName]) window[callbackName] = empty;
-                };
-            window[callbackName] = function (data) {
+            var abort = function() {
+                $(script).remove();
+                if (window[callbackName])
+                    window[callbackName] = empty;
+            };
+            window[callbackName] = function(data) {
                 clearTimeout(abortTimeout);
                 $(script).remove();
                 delete window[callbackName];
@@ -1024,9 +1113,10 @@ if (!window.jq || typeof (jq) !== "function") {
             };
             script.src = options.url.replace(/=\?/, '=' + callbackName);
             $('head').append(script);
-            if (options.timeout > 0) abortTimeout = setTimeout(function () {
-                options.error.call(context, "", 'timeout');
-            }, options.timeout);
+            if (options.timeout > 0)
+                abortTimeout = setTimeout(function() {
+                    options.error.call(context, "", 'timeout');
+                }, options.timeout);
             return {};
         };
 
@@ -1056,61 +1146,69 @@ if (!window.jq || typeof (jq) !== "function") {
         * @param {Object} options
         * @title $.ajax(options)
         */
-        $.ajax = function (opts) {
+        $.ajax = function(opts) {
             var xhr;
             try {
                 xhr = new window.XMLHttpRequest();
                 var settings = opts || {};
                 for (var key in ajaxSettings) {
-                    if (!settings[key]) settings[key] = ajaxSettings[key];
+                    if (!settings[key])
+                        settings[key] = ajaxSettings[key];
                 }
-
-                if (!settings.url) settings.url = window.location;
-                if (!settings.contentType) settings.contentType = "application/x-www-form-urlencoded";
-                if (!settings.headers) settings.headers = {};
+                
+                if (!settings.url)
+                    settings.url = window.location;
+                if (!settings.contentType)
+                    settings.contentType = "application/x-www-form-urlencoded";
+                if (!settings.headers)
+                    settings.headers = {};
                 settings.headers = $.extend({
                     'X-Requested-With': 'XMLHttpRequest'
                 }, settings.headers);
-                if (!settings.dataType) settings.dataType = "text/html";
+                if (!settings.dataType)
+                    settings.dataType = "text/html";
                 else {
                     switch (settings.dataType) {
-                    case "script":
-                        settings.dataType = 'text/javascript, application/javascript';
-                        break;
-                    case "json":
-                        settings.dataType = 'application/json';
-                        break;
-                    case "xml":
-                        settings.dataType = 'application/xml, text/xml';
-                        break;
-                    case "html":
-                        settings.dataType = 'text/html';
-                        break;
-                    case "text":
-                        settings.dataType = 'text/plain';
-                        break;
-                    default:
-                        settings.dataType = "text/html";
-                        break;
-                    case "jsonp":
-                        return $.jsonP(opts);
-                        break;
+                        case "script":
+                            settings.dataType = 'text/javascript, application/javascript';
+                            break;
+                        case "json":
+                            settings.dataType = 'application/json';
+                            break;
+                        case "xml":
+                            settings.dataType = 'application/xml, text/xml';
+                            break;
+                        case "html":
+                            settings.dataType = 'text/html';
+                            break;
+                        case "text":
+                            settings.dataType = 'text/plain';
+                            break;
+                        default:
+                            settings.dataType = "text/html";
+                            break;
+                        case "jsonp":
+                            return $.jsonP(opts);
+                            break;
                     }
                 }
-                if ($.isObject(settings.data)) settings.data = $.param(settings.data);
+                if ($.isObject(settings.data))
+                    settings.data = $.param(settings.data);
                 if (settings.type.toLowerCase() === "get" && settings.data) {
-                    if (settings.url.indexOf("?") === -1) settings.url += "?" + settings.data;
-                    else settings.url += "&" + settings.data;
+                    if (settings.url.indexOf("?") === -1)
+                        settings.url += "?" + settings.data;
+                    else
+                        settings.url += "&" + settings.data;
                 }
-
+                
                 if (/=\?/.test(settings.url)) {
                     return $.jsonP(settings);
                 }
-
+                
                 var abortTimeout;
                 var context = settings.context;
-
-                xhr.onreadystatechange = function () {
+                
+                xhr.onreadystatechange = function() {
                     var mime = settings.dataType;
                     if (xhr.readyState === 4) {
                         clearTimeout(abortTimeout);
@@ -1122,10 +1220,12 @@ if (!window.jq || typeof (jq) !== "function") {
                                 } catch (e) {
                                     error = e;
                                 }
-                            } else result = xhr.responseText;
-                            if (error) settings.error.call(context, xhr, 'parsererror', error);
+                            } else
+                                result = xhr.responseText;
+                            if (error)
+                                settings.error.call(context, xhr, 'parsererror', error);
                             else {
-
+                                
                                 settings.success.call(context, result, 'success', xhr);
                             }
                         } else {
@@ -1136,20 +1236,22 @@ if (!window.jq || typeof (jq) !== "function") {
                     }
                 };
                 xhr.open(settings.type, settings.url, true);
-
-                if (settings.contentType) settings.headers['Content-Type'] = settings.contentType;
+                
+                if (settings.contentType)
+                    settings.headers['Content-Type'] = settings.contentType;
                 for (var name in settings.headers)
-                xhr.setRequestHeader(name, settings.headers[name]);
+                    xhr.setRequestHeader(name, settings.headers[name]);
                 if (settings.beforeSend.call(context, xhr, settings) === false) {
                     xhr.abort();
                     return false;
                 }
-
-                if (settings.timeout > 0) abortTimeout = setTimeout(function () {
-                    xhr.onreadystatechange = empty;
-                    xhr.abort();
-                    settings.error.call(context, xhr, 'timeout');
-                }, settings.timeout);
+                
+                if (settings.timeout > 0)
+                    abortTimeout = setTimeout(function() {
+                        xhr.onreadystatechange = empty;
+                        xhr.abort();
+                        settings.error.call(context, xhr, 'timeout');
+                    }, settings.timeout);
                 xhr.send(settings.data);
             } catch (e) {
                 console.log(e);
@@ -1166,7 +1268,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @param {Function} success
         * @title $.get(url,success)
         */
-        $.get = function (url, success) {
+        $.get = function(url, success) {
             return this.ajax({
                 url: url,
                 success: success
@@ -1184,12 +1286,13 @@ if (!window.jq || typeof (jq) !== "function") {
         * @param {String} [dataType]
         * @title $.post(url,[data],success,[dataType])
         */
-        $.post = function (url, data, success, dataType) {
+        $.post = function(url, data, success, dataType) {
             if (typeof (data) === "function") {
                 success = data;
                 data = {};
             }
-            if (dataType === undefined) dataType = "html";
+            if (dataType === undefined)
+                dataType = "html";
             return this.ajax({
                 url: url,
                 type: "POST",
@@ -1209,7 +1312,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @param {Function} [success]
         * @title $.getJSON(url,data,success)
         */
-        $.getJSON = function (url, data, success) {
+        $.getJSON = function(url, data, success) {
             if (typeof (data) === "function") {
                 success = data;
                 data = {};
@@ -1236,18 +1339,18 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {String} Key/value pair representation
         * @title $.param(object,[prefix];
         */
-        $.param = function (obj, prefix) {
+        $.param = function(obj, prefix) {
             var str = [];
             if (obj instanceof $jqm) {
-                obj.each(function () {
-                    var k = prefix ? prefix + "[]" : this.id,
-                        v = this.value;
+                obj.each(function() {
+                    var k = prefix ? prefix + "[]" : this.id, 
+                    v = this.value;
                     str.push((k) + "=" + encodeURIComponent(v));
                 });
             } else {
                 for (var p in obj) {
-                    var k = prefix ? prefix + "[" + p + "]" : p,
-                        v = obj[p];
+                    var k = prefix ? prefix + "[" + p + "]" : p, 
+                    v = obj[p];
                     str.push($.isObject(v) ? $.param(v, k) : (k) + "=" + encodeURIComponent(v));
                 }
             }
@@ -1263,7 +1366,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Object}
         * @title $.parseJSON(string)
         */
-        $.parseJSON = function (string) {
+        $.parseJSON = function(string) {
             return JSON.parse(string);
         };
         /**
@@ -1276,7 +1379,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Object} DOM nodes
         * @title $.parseXML(string)
         */
-        $.parseXML = function (string) {
+        $.parseXML = function(string) {
             return (new DOMParser).parseFromString(string, "text/xml");
         };
         /**
@@ -1304,6 +1407,7 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os.blackberry = userAgent.match(/BlackBerry/) || userAgent.match(/PlayBook/) ? true : false;
             $.os.opera = userAgent.match(/Opera Mobi/) ? true : false;
             $.os.fennec = userAgent.match(/fennec/i) ? true : false;
+            $.os.desktop = !($.os.ios || $.os.android || $.os.blackberry || $.os.opera || $.os.fennec);
         }
         detectUA($, navigator.userAgent);
         $.__detectUA = detectUA; //needed for unit tests
@@ -1312,7 +1416,7 @@ if (!window.jq || typeof (jq) !== "function") {
             /**
              * Helper function for iOS 3.1.3
              */
-            String.prototype.trim = function () {
+            String.prototype.trim = function() {
                 this.replace(/(\r\n|\n|\r)/gm, "").replace(/^\s+|\s+$/, '');
                 return this
             };
@@ -1321,10 +1425,10 @@ if (!window.jq || typeof (jq) !== "function") {
 
         //The following is modified from Zepto.js / events.js
         //We've removed depricated jQuery events like .live and allow anonymous functions to be removed
-        var $$ = $.qsa,
-            handlers = {},
-            _jqmid = 1,
-            specialEvents = {};
+        var $$ = $.qsa, 
+        handlers = {}, 
+        _jqmid = 1, 
+        specialEvents = {};
         /**
          * Gets or sets the expando property on a javascript element
          * Also increments the internal counter for elements;
@@ -1348,8 +1452,9 @@ if (!window.jq || typeof (jq) !== "function") {
          */
         function findHandlers(element, event, fn, selector) {
             event = parse(event);
-            if (event.ns) var matcher = matcherFor(event.ns);
-            return (handlers[jqmid(element)] || []).filter(function (handler) {
+            if (event.ns)
+                var matcher = matcherFor(event.ns);
+            return (handlers[jqmid(element)] || []).filter(function(handler) {
                 return handler && (!event.e || handler.e == event.e) && (!event.ns || matcher.test(handler.ns)) && (!fn || handler.fn == fn || (typeof handler.fn === 'function' && typeof fn === 'function' && "" + handler.fn === "" + fn)) && (!selector || handler.sel == selector);
             });
         }
@@ -1384,10 +1489,12 @@ if (!window.jq || typeof (jq) !== "function") {
          * @api private
          */
         function eachEvent(events, fn, iterator) {
-            if ($.isObject(events)) $.each(events, iterator);
-            else events.split(/\s/).forEach(function (type) {
-                iterator(type, fn)
-            });
+            if ($.isObject(events))
+                $.each(events, iterator);
+            else
+                events.split(/\s/).forEach(function(type) {
+                    iterator(type, fn)
+                });
         }
 
         /**
@@ -1402,16 +1509,17 @@ if (!window.jq || typeof (jq) !== "function") {
          * @api private
          */
         function add(element, events, fn, selector, getDelegate) {
-            var id = jqmid(element),
-                set = (handlers[id] || (handlers[id] = []));
-            eachEvent(events, fn, function (event, fn) {
-                var delegate = getDelegate && getDelegate(fn, event),
-                    callback = delegate || fn;
-                var proxyfn = function (event) {
-                        var result = callback.apply(element, [event].concat(event.data));
-                        if (result === false) event.preventDefault();
-                        return result;
-                    };
+            var id = jqmid(element), 
+            set = (handlers[id] || (handlers[id] = []));
+            eachEvent(events, fn, function(event, fn) {
+                var delegate = getDelegate && getDelegate(fn, event), 
+                callback = delegate || fn;
+                var proxyfn = function(event) {
+                    var result = callback.apply(element, [event].concat(event.data));
+                    if (result === false)
+                        event.preventDefault();
+                    return result;
+                };
                 var handler = $.extend(parse(event), {
                     fn: fn,
                     proxy: proxyfn,
@@ -1435,14 +1543,14 @@ if (!window.jq || typeof (jq) !== "function") {
          */
         function remove(element, events, fn, selector) {
             var id = jqmid(element);
-            eachEvent(events || '', fn, function (event, fn) {
-                findHandlers(element, event, fn, selector).forEach(function (handler) {
+            eachEvent(events || '', fn, function(event, fn) {
+                findHandlers(element, event, fn, selector).forEach(function(handler) {
                     delete handlers[id][handler.i];
                     element.removeEventListener(handler.e, handler.proxy, false);
                 });
             });
         }
-
+        
         $.event = {
             add: add,
             remove: remove
@@ -1459,7 +1567,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Object} jqMobi object
         * @title $.bind(event,callback)
         */
-        $.fn.bind = function (event, callback) {
+        $.fn.bind = function(event, callback) {
             for (var i = 0; i < this.length; i++) {
                 add(this[i], event, callback);
             }
@@ -1477,7 +1585,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Object} jqMobi object
         * @title $().unbind(event,[callback]);
         */
-        $.fn.unbind = function (event, callback) {
+        $.fn.unbind = function(event, callback) {
             for (var i = 0; i < this.length; i++) {
                 remove(this[i], event, callback);
             }
@@ -1495,10 +1603,10 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return jqMobi object
         * @title $().one(event,callback);
         */
-        $.fn.one = function (event, callback) {
-            return this.each(function (i, element) {
-                add(this, event, callback, null, function (fn, type) {
-                    return function () {
+        $.fn.one = function(event, callback) {
+            return this.each(function(i, element) {
+                add(this, event, callback, null, function(fn, type) {
+                    return function() {
                         var result = fn.apply(element, arguments);
                         remove(element, type, fn);
                         return result;
@@ -1506,18 +1614,18 @@ if (!window.jq || typeof (jq) !== "function") {
                 });
             });
         };
-
-        var returnTrue = function () {
-                return true
-            },
-            returnFalse = function () {
-                return false
-            },
-            eventMethods = {
-                preventDefault: 'isDefaultPrevented',
-                stopImmediatePropagation: 'isImmediatePropagationStopped',
-                stopPropagation: 'isPropagationStopped'
-            };
+        
+        var returnTrue = function() {
+            return true
+        }, 
+        returnFalse = function() {
+            return false
+        }, 
+        eventMethods = {
+            preventDefault: 'isDefaultPrevented',
+            stopImmediatePropagation: 'isImmediatePropagationStopped',
+            stopPropagation: 'isPropagationStopped'
+        };
         /**
          * Creates a proxy function for event handlers
          * @param {String} event
@@ -1528,8 +1636,8 @@ if (!window.jq || typeof (jq) !== "function") {
             var proxy = $.extend({
                 originalEvent: event
             }, event);
-            $.each(eventMethods, function (name, predicate) {
-                proxy[name] = function () {
+            $.each(eventMethods, function(name, predicate) {
+                proxy[name] = function() {
                     this[predicate] = returnTrue;
                     return event[name].apply(event, arguments);
                 };
@@ -1550,11 +1658,11 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Object} jqMobi object
         * @title $().delegate(selector,event,callback)
         */
-        $.fn.delegate = function (selector, event, callback) {
+        $.fn.delegate = function(selector, event, callback) {
             for (var i = 0; i < this.length; i++) {
                 var element = this[i];
-                add(element, event, callback, selector, function (fn) {
-                    return function (e) {
+                add(element, event, callback, selector, function(fn) {
+                    return function(e) {
                         var evt, match = $(e.target).closest(selector, element).get(0);
                         if (match) {
                             evt = $.extend(createProxy(e), {
@@ -1582,7 +1690,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Object} jqMobi object
         * @title $().undelegate(selector,event,[callback]);
         */
-        $.fn.undelegate = function (selector, event, callback) {
+        $.fn.undelegate = function(selector, event, callback) {
             for (var i = 0; i < this.length; i++) {
                 remove(this[i], event, callback, selector);
             }
@@ -1602,7 +1710,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Object} jqMobi object
         * @title $.on(event,selector,callback);
         */
-        $.fn.on = function (event, selector, callback) {
+        $.fn.on = function(event, selector, callback) {
             return selector === undefined || $.isFunction(selector) ? this.bind(event, selector) : this.delegate(selector, event, callback);
         };
         /**
@@ -1619,7 +1727,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Object} jqMobi object
         * @title $().off(event,selector,[callback])
         */
-        $.fn.off = function (event, selector, callback) {
+        $.fn.off = function(event, selector, callback) {
             return selector === undefined || $.isFunction(selector) ? this.unbind(event, selector) : this.undelegate(selector, event, callback);
         };
 
@@ -1634,10 +1742,11 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Object} jqMobi object
         * @title $().trigger(event,data);
         */
-        $.fn.trigger = function (event, data) {
-            if (typeof event == 'string') event = $.Event(event);
+        $.fn.trigger = function(event, data) {
+            if (typeof event == 'string')
+                event = $.Event(event);
             event.data = data;
-            for(var i=0;i<this.length;i++){
+            for (var i = 0; i < this.length; i++) {
                 this[i].dispatchEvent(event)
             }
             return this;
@@ -1650,19 +1759,21 @@ if (!window.jq || typeof (jq) !== "function") {
          * @return {event} a custom event that can then be dispatched
          * @title $.Event(type,props);
          */
-
-        $.Event = function (type, props) {
-            var event = document.createEvent(specialEvents[type] || 'Events'),
-                bubbles = true;
-            if (props) for (var name in props)(name == 'bubbles') ? (bubbles = !! props[name]) : (event[name] = props[name]);
+        
+        $.Event = function(type, props) {
+            var event = document.createEvent(specialEvents[type] || 'Events'), 
+            bubbles = true;
+            if (props)
+                for (var name in props)
+                    (name == 'bubbles') ? (bubbles = !!props[name]) : (event[name] = props[name]);
             event.initEvent(type, bubbles, true, null, null, null, null, null, null, null, null, null, null, null, null);
             return event;
         };
 
         //End zepto/events.js
         return $;
-
-
+    
+    
     })(window);
     '$' in window || (window.$ = jq);
 }

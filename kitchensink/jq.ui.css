@@ -380,6 +380,7 @@ a.customBackButton.press {
 	position:absolute; top:0px; left:-200px;
 	background:rgba(29,29,28,1);
 	-webkit-transform:translate3d(0,0,0);
+    -webkit-transition: all 300ms !important;
 }
 #menu_scroller {
 	padding-bottom:10px;
@@ -820,18 +821,34 @@ select[disabled]~div {
 	opacity:.7;
 }
 
-	
+
+
+/* Side Menu CSS */	
 .hasMenu{
+-webkit-transition: all 300ms;
+ position:absolute !important;
+ left:0px !important;
 }
+.hasMenu.on {
+  position:absolute !important;
+  left:200px !important;
+}
+
+#menu.on {
+left:0px !important;
+}
+
 #badgetablet{
 	display:none !important;
 }
 
 @media handheld, only screen and (min-width: 768px){
-	.hasMenu  {
+	.hasMenu, .hasMenu.on  {
 		position:absolute !important;
 		left:256px !important;
+        -webkit-transition: all 0ms !important;
 	}
+
 	#badgephone{
 		display:none !important;
 	}

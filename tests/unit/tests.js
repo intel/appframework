@@ -607,6 +607,43 @@ test("prepend",function(){
   equals($("#foo").html(),"<div>something</div><div>something</div>","Prepending multiple objects at once");
   QUnit.reset();
 });
+test("insertBefore",function(){
+
+  expect(2);
+
+  $("<span id='before'/>").insertBefore("#foo");
+  var parent=$("#foo").parent().children();
+  var sp=$("#before").get();
+  var foo=$("#foo").get();
+  ok(parent.indexOf(sp)<parent.indexOf(foo));
+  QUnit.reset();
+  //let's move an object.
+  $("#foo").parent().append("<span id='before'/>");
+  $("#before").insertBefore("#foo");
+  var parent=$("#foo").parent().children();
+  var sp=$("#before").get();
+  var foo=$("#foo").get();
+  ok(parent.indexOf(sp)<parent.indexOf(foo));
+  
+});
+test("insertAfter",function(){
+
+  expect(2);
+
+  $("<span id='before'/>").insertAfter("#foo");
+  var parent=$("#foo").parent().children();
+  var sp=$("#before").get();
+  var foo=$("#foo").get();
+  ok(parent.indexOf(sp)>parent.indexOf(foo));
+  QUnit.reset();
+  //let's move an object.
+  $("#foo").parent().prepend("<span id='before'/>");
+  $("#before").insertAfter("#foo");
+  var parent=$("#foo").parent().children();
+  var sp=$("#before").get();
+  var foo=$("#foo").get();
+  ok(parent.indexOf(sp)>parent.indexOf(foo));
+});
 
 test("get",function(){
 

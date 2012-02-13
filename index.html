@@ -80,6 +80,7 @@ $.os.desktop=true;
     var init = function(){
 	   $.ui.backButtonText="Back";  
 	   window.setTimeout(function(){$.ui.launch();},1500);
+       //$.ui.removeFooterMenu(); This would remove the bottom nav menu
     };
     document.addEventListener("DOMContentLoaded",init,false);  
 	
@@ -490,7 +491,7 @@ $.os.desktop=true;
 	<!-- jqm > os -->
 	<div id="jqm30" class="panel"  title=".os" data-nav="menu_jqmobi">
 	   $.os  - holds information about the OS of the device, and if it is a webkit browser<br><br>
-	   <pre>
+	   <pre style="padding-left:15px">
 	$.os.webkit  = <script>document.write($.os.webkit);</script>
 	$.os.android = <script>document.write($.os.android);</script>
 	$.os.ipad = <script>document.write($.os.ipad);</script>
@@ -588,6 +589,7 @@ $.os.desktop=true;
 		<li><a href="#uifooter">Custom Footers</a></li>
 		<li><a href="#uiside">Side Navigation Menu</a></li>
 		<li><a href="kitchensink/external.html" data-persist-ajax="true" data-refresh-ajax="true">Load External Content</a></li>
+        <li><a href="http://www.jqmobi.com" target="_blank">Open a new page</a></li>
 		</ul>
 
 	</div>
