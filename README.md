@@ -78,7 +78,7 @@ You can pass in an HTML string and it will create the object for you.
 var myDiv=$("<div id='foo'>") //Creates a div object and returns it
 ```
 
-# jqMobi API functions
+# jqMobi API functions - Please see http://api.jqmobi.com for all functions
 ``` js
 
 .length() // return the count of all elements found
@@ -106,6 +106,11 @@ var myDiv=$("<div id='foo'>") //Creates a div object and returns it
 .bind("event",function(){}) //Binds a function to the event listener selected to the selected elements
 .unbind("event") //Unbinds a function to the event listener selected to the selected elements
 .trigger("event",data) //Trigger an event on the selected elements and pass in optional data
+.one(event,callback)//Bind an event to happen only once
+.delegate(selector,event,callback)  //delegate an event listener for the selectors
+.undelegate(selector,event,callback) //remove the delegate listener
+.on(event,selector,callback) //same as delegate, just different param orders
+.off(event,selector,callback) //remove the on listener
 .append(element) //Appends an element to the selected elements
 .prepend() //Prepends an element to the selected elements
 .get() //Returns the first element from the selected elements
@@ -117,11 +122,15 @@ var myDiv=$("<div id='foo'>") //Creates a div object and returns it
 .children(selector) //Returns the children of the elements
 .siblings(selector) //Returns the siblings the elemnts
 .filter(selector) //Filters the elements based off selector
+.closest(selector) //find the closes element traversing up the parent nodes
 .not(selector) //Filters the elements based off the selector. Returns matches that do NOT match the selector
 .end() //Used in conjuction with filtered results to get the previous jqMobi object
+.clone(deep) //Clone all the nodes in the collection - deep is default to true
 .isArray(param) //Returns true/false if param is an array
 .isFunction(param) //Returns true/false if param is a function
 .isObject(param) //Returns true/false if param is an object
+.insertBefore(target) //insert collection before the target
+.insertAfter (target) //insert collection after the target
 ```
 
 # jqMobi Ajax calls

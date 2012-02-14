@@ -547,11 +547,11 @@ if (!window.jq || typeof (jq) !== "function") {
             toggle: function(show) {
                 var show2 = show === true ? true : false;
                 for (var i = 0; i < this.length; i++) {
-                    if (this[i].style.display !== "none" || (show !== undefined && show2 === false)) {
+                    if (window.getComputedStyle(this[i])['display'] !== "none" || (show !== undefined && show2 === false)) {
                         this[i].setAttribute("jqmOldStyle", this[i].style.display)
                         this[i].style.display = "none";
                     } else {
-                        this[i].style.display = this[i].getAttribute("jqmOldStyle") !== "" ? this[i].getAttribute("jqmOldStyle") : 'block';
+                        this[i].style.display = this[i].getAttribute("jqmOldStyle") !=undefined ? this[i].getAttribute("jqmOldStyle") : 'block';
                         this[i].removeAttribute("jqmOldStyle");
                     }
                 }

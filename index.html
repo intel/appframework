@@ -589,11 +589,15 @@ $.os.desktop=true;
 		<li><a href="#uifooter">Custom Footers</a></li>
 		<li><a href="#uiside">Side Navigation Menu</a></li>
 		<li><a href="kitchensink/external.html" data-persist-ajax="true" data-refresh-ajax="true">Load External Content</a></li>
-        <li><a href="http://www.jqmobi.com" target="_blank">Open a new page</a></li>
+        <li><a onclick="return window.open('http://www.appmobi.com')">Open a new page</a></li>
+        <li><a href="#uidefer">Defer loading</a></li>
 		</ul>
 
 	</div>
 
+    <div id="uidefer" title="Defer Loading" class="panel" data-defer="defer/index.html">
+      Deferred loading requires a web browser for Ajax to work.  What we do is load the html after $.ui.ready is called, so you can speed up the initial loading time of your app.
+    </div>
 	<div id="uiside" title="Side Menu Navigation" class="panel" data-footer="footerui">
 	<b>Side Menu Navigation</b><br>
 	  If you are on a tablet, you'll already see the side menu.  If you are on a phone, click the "Powered by jqMobi" button to expand it.<br><Br>

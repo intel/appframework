@@ -128,6 +128,9 @@ Each div/panel has properties you can set that will change the app.  Below are t
    
    data-unload="function_name" //Function that is called when a panel is unloaded - passes in the div
    
+   data-modal="true" //Load the panel in a modal window
+   
+   data-defer="filename.html" //Defer loading teh panel until $.ui.ready and specify the path of the html file to load
 ```
 # Tips
 
