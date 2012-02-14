@@ -237,15 +237,16 @@
          * @param {Boolean} [force]
          * @title $.ui.toggleNavMenu([force])
          */
-        toggleNavMenu: function(force) {
+         toggleNavMenu: function(force) {
             if (!jq.ui.showNavMenu)
                 return;
             if (jq("#navbar").css("display") != "none" && ((force !== undefined && force === true) || force === undefined)) {
                 jq("#content").css("bottom", "0px");
                 jq("#navbar").hide();
-            } else {
-                jq("#content").css("bottom", jq("#navbar").css("height"));
+            } else  {
                 jq("#navbar").show();
+                jq("#content").css("bottom", jq("#navbar").css("height"));
+                
             }
         },
         /**
@@ -308,12 +309,12 @@
          * @api private
          */
         updateNavbar: function() {
+            var that=this;
             var links = jq(this.navbar).find("a");
             for (var i = 0; i < links.length; i++) {
                 links[i].setAttribute("resetHistory", "true");
-                links[i].onclick = function(e) {
-                    var that = this;
-                    if (this.doingTransition)
+                links[i].ontouchend = function(e) {
+                    if (that.doingTransition)
                         return;
                     jq("#navbar a").removeClass("selected");
                     jq(this).addClass("selected");
@@ -631,8 +632,10 @@
             var hasFooter = what.getAttribute("data-footer");
             if (hasFooter == "none") {
                 this.toggleNavMenu(true);
-            } else
+            }else 
                 this.toggleNavMenu(false);
+            
+            
             if (hasFooter && this.customFooter != hasFooter) {
                 this.customFooter = hasFooter;
                 this.updateNavbarElements(jq("#" + hasFooter).children());
@@ -874,7 +877,7 @@
                     }
                     //Let's check if it has a function to run to update the data
                     this.parsePanelFunctions(what, oldDiv);
-                
+                    
                 }
             } catch (e) {
                 console.log("Error with loading content " + e + "  - " + target);
@@ -1524,8 +1527,8 @@
                 // retry scrolling
                 if (window.innerHeight == 0)
                     return; //XDK reports 0 sometimes
-                if (!jq.os.android)
-                    window.scrollTo(0, 1); // Android has issues removing the address bar
+               // if (!jq.os.android)
+                 //   window.scrollTo(0, 1); // Android has issues removing the address bar
                 if (window.innerHeight > startHeight || --iterations < 0)  // iOS is comparably easy!
                 {
                     document.body.style.height = document.documentElement.style.minHeight = window.innerHeight + 'px';
@@ -1702,15 +1705,16 @@
     }
     
     function checkAnchorClick(theTarget) {
+        var parent=false;
         if(theTarget.tagName.toLowerCase() != "a"&&theTarget.parentNode)
-           theTarget=theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
+           parent=true,theTarget=theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
         if (theTarget.tagName.toLowerCase() == "a") {
-            if (typeof (theTarget.onclick) == "function"&&!jq.os.desktop)
-                        theTarget.onclick();
-            if (theTarget.hash == "#"||theTarget.href.length==0){
+            if(parent&&theTarget.onclick&&!jq.os.desktop)
+               theTarget.onclick();
+            if (theTarget.hash == "#"||theTarget.href.length==0||theTarget.href.toLowerCase().indexOf("javascript:")!==-1){
                   return false;
             }
-             
+            
             
             if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) 
             {
