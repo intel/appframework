@@ -1705,18 +1705,22 @@
         if(theTarget.tagName.toLowerCase() != "a"&&theTarget.parentNode)
            theTarget=theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
         if (theTarget.tagName.toLowerCase() == "a") {
-            if (theTarget.hash == "#"||theTarget.href.length==0)
-                return false;
+            if (typeof (theTarget.onclick) == "function"&&!jq.os.desktop)
+                        theTarget.onclick();
+            if (theTarget.hash == "#"||theTarget.href.length==0){
+                  return false;
+            }
+             
             
             if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) 
             {
                 if (theTarget.href.toLowerCase().indexOf("javascript:") != 0) {
                     if (jq.ui.isAppMobi)
                         AppMobi.device.launchExternal(theTarget.href);
+                    else if(!jq.os.desktop)
+                        brokerClickEventMobile(theTarget);
                     else
-                        window.open(theTarget.href);
-                    if (typeof (theTarget.onclick) == "function")
-                        theTarget.onclick();
+                       window.open(theTarget);
                     return true;
                 }
                 return false;
@@ -1727,11 +1731,16 @@
             resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
             var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
             jq.ui.loadContent(href, theTarget.resetHistory, 0, mytransition, theTarget);
-            if (typeof (theTarget.onclick) !== "undefined" && theTarget.onclick) {
-                theTarget.onclick();
-            }
+           
             return true;
         }
+    }
+    function brokerClickEventMobile(theTarget){
+        if(jq.os.desktop) return;
+        var clickevent = document.createEvent('Event');
+        clickevent.initEvent('click', true, false);
+        theTarget.target="_blank";
+        theTarget.dispatchEvent(clickevent);
     }
 })();
 
