@@ -551,7 +551,7 @@ if (!window.jq || typeof (jq) !== "function") {
                         this[i].setAttribute("jqmOldStyle", this[i].style.display)
                         this[i].style.display = "none";
                     } else {
-                        this[i].style.display = this[i].getAttribute("jqmOldStyle") !=undefined ? this[i].getAttribute("jqmOldStyle") : 'block';
+                        this[i].style.display = this[i].getAttribute("jqmOldStyle") != undefined ? this[i].getAttribute("jqmOldStyle") : 'block';
                         this[i].removeAttribute("jqmOldStyle");
                     }
                 }
@@ -1066,6 +1066,30 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             size: function() {
                 return this.length;
+            },
+            /**
+             * Serailizes a form into a query string
+               ```
+               $().serialize(grouping);
+               ```
+             * @param {String} [grouping] - optional grouping to the fields -e.g users[name]
+             * @return {String}
+             * @title $().serialize(grouping)
+             */
+            serialize: function(grouping) {
+                if (this.length == 0)
+                    return "";
+                var params = {};
+                for (var i = 0; i < this.length; i++) 
+                {
+                    this.slice.call(this[i].elements).forEach(function(elem) {
+                        var type = elem.getAttribute("type");
+                        if (elem.nodeName.toLowerCase() != "fieldset" && !elem.disabled && type != "submit" 
+                        && type != "reset" && type != "button" && ((type != "radio" && type != "checkbox") || elem.checked))
+                            params[elem.getAttribute("name")] = elem.value;
+                    });
+                }
+                return $.param(params,grouping);
             }
         };
 
@@ -1324,6 +1348,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 dataType: "json"
             });
         };
+
         /**
         * Converts an object into a key/value par with an optional prefix.  Used for converting objects to a query string
             ```

@@ -176,8 +176,9 @@ $.os.desktop=true;
 		<li><a href="#jqm32" >$().get()</a></li>
 		<li><a href="#jqm31" >$().offset()</a></li>
 		<li><a href="#jqmparent" >$().parent()</a></li>
-		<li><a href="#jqm33" >$().isArray()</a></li>
-		<li><a href="#jqm34" >$().isFunction()</a></li>
+        <li><a href="#jqmserialize" >$().serialize()</a></li>
+		<li><a href="#jqm33" >$.isArray()</a></li>
+		<li><a href="#jqm34" >$.isFunction()</a></li>
 		<li><a href="#jqm23" >$.jsonP()</a></li>
 		<li><a href="#jqm24" >$.ajax()</a></li>
 		<li><a href="#jqm25" >$.get()</a></li>
@@ -191,6 +192,22 @@ $.os.desktop=true;
 		<br/><br/>
 	</div>
 
+    <div id="jqmserialize" class="panel" title="$().serialize" data-nav="menu_jqmobi">
+    <script>
+    function serializeForm(){
+       alert($("#form").serialize());
+    }
+    </script>
+    $("#form").serialize() - will return a key/value pair string of the form elements<br><Br>
+    <form id="form" onsubmit="return false">
+       Name: <input type='text' class='jq-ui-forms' name='name' value='John Smith'><br>
+       <input type='checkbox' class='jq-ui-forms' value='yes' checked name='human'><label for='human'>Are you human?</label><br><br>
+       Gender: <span><select id='serialize_gender' name="gender"><option value='m'>Male</option><option value='f'>Female</option><select></span><br><br>
+       <br>
+       <input type="button" onclick="serializeForm()" value="Serialize">
+    </form>
+    
+    </div>
 	<!-- jqm > jqm Selector -->
 	<div id="jqm1"  class="panel" title="$()" data-nav="menu_jqmobi">
 		<span id="jqmtest2">This is some html</span><br /><br />

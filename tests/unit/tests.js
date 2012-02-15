@@ -1024,6 +1024,23 @@ elems["name"]="jqMobi";
 
 equals(jq.param(elems),"foo=bar&name=jqMobi");
 });
+
+test("serialize",function(){
+   var basestr="name=jqMobi&available=true&version=0.9.5"
+   equals(jq("#myform").serialize(),basestr,"Testing serialize");
+   QUnit.reset();
+
+   var basestr="name=jqMobi&version=1.0"
+   $("#available").get().checked=false;
+   $("#version").val("1.0");
+   equals(jq("#myform").serialize(),basestr,"Testing serialize");
+   $("#available").get().checked=true;
+   $("#version").val("0.9.5");
+    var basestr="test[name]=jqMobi&test[available]=true&test[version]=0.9.5"
+   equals(jq("#myform").serialize('test'),basestr,"Testing serialize");
+   QUnit.reset();
+});
+
 test("ajaxGet",function(){
     stop();
 	

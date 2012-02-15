@@ -633,11 +633,9 @@
             var hasFooter = what.getAttribute("data-footer");
             
             window.setTimeout(function(){
-                
                 if (hasFooter&&hasFooter.toLowerCase() == "none") {
                   that.toggleNavMenu(true);
                 } else{
-                   console.log("showing");
                 that.toggleNavMenu(false);
                 }
                 if (hasFooter && that.customFooter != hasFooter) {
@@ -1806,7 +1804,8 @@
                 
                 touchTimeout = setTimeout(function() {
                     touchTimeout = null;
-                    touch.el.trigger('singleTap');
+                    if(touch.el)
+                        touch.el.trigger('singleTap');
                     touch = {};
                 }, 250);
             }
