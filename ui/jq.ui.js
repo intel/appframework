@@ -629,21 +629,30 @@
          */
         parsePanelFunctions: function(what, oldDiv) {
             //check for custom footer
+            var that=this;
             var hasFooter = what.getAttribute("data-footer");
-            if (hasFooter == "none") {
-                this.toggleNavMenu(true);
-            }else 
-                this.toggleNavMenu(false);
             
-            
-            if (hasFooter && this.customFooter != hasFooter) {
-                this.customFooter = hasFooter;
-                this.updateNavbarElements(jq("#" + hasFooter).children());
-            } else if (hasFooter != this.customFooter) {
-                if (this.customFooter)
-                    this.updateNavbarElements(this.defaultFooter);
-                this.customFooter = false;
-            }
+            window.setTimeout(function(){
+                
+                if (hasFooter&&hasFooter.toLowerCase() == "none") {
+                  that.toggleNavMenu(true);
+                } else{
+                   console.log("showing");
+                that.toggleNavMenu(false);
+                }
+                if (hasFooter && that.customFooter != hasFooter) {
+                    that.customFooter = hasFooter;
+                    that.updateNavbarElements(jq("#" + hasFooter).children());
+                } else if (hasFooter != that.customFooter) {
+                    if (that.customFooter)
+                        that.updateNavbarElements(that.defaultFooter);
+                    that.customFooter = false;
+                }
+                if (what.getAttribute("data-tab")) { //Allow the dev to force the footer menu
+                   jq("#navbar a").removeClass("selected");
+                   jq("#" + what.getAttribute("data-tab")).addClass("selected");
+                }
+            },10);
             var hasMenu = what.getAttribute("data-nav");
             if (hasMenu && this.customMenu != hasMenu) {
                 this.customMenu = hasMenu;
@@ -667,10 +676,7 @@
             }
             if (this.menu.style.display == "block")
                 this.toggleSideMenu(); //Close on phones to prevent orientation change bug.
-            if (what.getAttribute("data-tab")) { //Allow the dev to force the footer menu
-                jq("#navbar a").removeClass("selected");
-                jq("#" + what.getAttribute("data-tab")).addClass("selected");
-            }
+           
         },
         /**
          * Helper function that parses a contents html for any script tags and either adds them or executes the code
@@ -1527,8 +1533,8 @@
                 // retry scrolling
                 if (window.innerHeight == 0)
                     return; //XDK reports 0 sometimes
-               // if (!jq.os.android)
-                 //   window.scrollTo(0, 1); // Android has issues removing the address bar
+                if (!jq.os.android)
+                    window.scrollTo(0, 1); // Android has issues removing the address bar
                 if (window.innerHeight > startHeight || --iterations < 0)  // iOS is comparably easy!
                 {
                     document.body.style.height = document.documentElement.style.minHeight = window.innerHeight + 'px';
@@ -1709,12 +1715,12 @@
         if(theTarget.tagName.toLowerCase() != "a"&&theTarget.parentNode)
            parent=true,theTarget=theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
         if (theTarget.tagName.toLowerCase() == "a") {
-            if(parent&&theTarget.onclick&&!jq.os.desktop)
-               theTarget.onclick();
             if (theTarget.hash == "#"||theTarget.href.length==0||theTarget.href.toLowerCase().indexOf("javascript:")!==-1){
                   return false;
             }
-            
+             if(parent&&theTarget.onclick&&!jq.os.desktop)
+               theTarget.onclick();
+           
             
             if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) 
             {
