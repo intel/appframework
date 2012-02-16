@@ -229,7 +229,7 @@
             jq(target).find("span.jq-badge").remove();
         },
         /**
-         * Toggles the bottom nav nav menu.  If force is set, it will show it.
+         * Toggles the bottom nav nav menu.  Force is a boolean to force show or hide.
            ```
            $.ui.toggleNavMenu();//toggle it
            $.ui.toggleNavMenu(true); //force show it
@@ -240,10 +240,10 @@
          toggleNavMenu: function(force) {
             if (!jq.ui.showNavMenu)
                 return;
-            if (jq("#navbar").css("display") != "none" && ((force !== undefined && force === true) || force === undefined)) {
+            if (jq("#navbar").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
                 jq("#content").css("bottom", "0px");
                 jq("#navbar").hide();
-            } else  {
+            } else  if(force!==false) {
                 jq("#navbar").show();
                 jq("#content").css("bottom", jq("#navbar").css("height"));
                 
@@ -266,7 +266,7 @@
             jq("#header").toggle();
         },
         /**
-         * Toggles the side menu
+         * Toggles the side menu.  Force is a boolean to force show or hide.
            ```
            $.ui.toggleSideMenu();//toggle it
            ```
@@ -277,8 +277,7 @@
             var that = this;
             if (!jq("#content").hasClass("hasMenu"))
                 return;
-            if (jq("#menu").css("display") != "block" || force == 1) {
-                
+            if (jq("#menu").css("display") != "block" &&((force !== undefined && force !== false) || force === undefined))  {
                 this.scrollingDivs["menu_scroller"].initEvents();
                 jq("#menu").show();
                 window.setTimeout(function() {
@@ -288,7 +287,7 @@
                     jq("#content").addClass("on");
                 }, 1); //needs to run after
             
-            } else {
+            } else if(force!==true) {
                 this.scrollingDivs["menu_scroller"].removeEvents();
                 
                 jq("#header").removeClass("on");
@@ -415,9 +414,9 @@
          */
         setBackButtonText: function(text) {
             if (this.backButtonText.length > 0)
-                this.backButton.innerHTML = "<div>" + this.backButtonText + "</div>";
+                this.backButton.innerHTML = this.backButtonText;
             else
-                this.backButton.innerHTML = "<div>" + text + "</div>";
+                this.backButton.innerHTML =  text ;
         },
         /**
          * Show the loading mask
@@ -950,7 +949,7 @@
                 this.content.id = "content";
                 this.viewportContainer.append(this.content);
             }
-            this.header.innerHTML = '<a id="backButton"  href="javascript:;"><div>Back</div></a> <h1 id="pageTitle"></h1>' + header.innerHTML;
+            this.header.innerHTML = '<a id="backButton"  href="javascript:;"></a> <h1 id="pageTitle"></h1>' + header.innerHTML;
             this.backButton = $am("backButton");
             this.backButton.className = "button";
             
