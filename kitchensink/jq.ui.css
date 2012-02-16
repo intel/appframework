@@ -104,7 +104,7 @@ width:100%;
 	z-index:250;
 	-webkit-box-sizing:border-box; box-sizing:border-box;
 	height:48px;
-	left:0px;right:0px;
+	width:100%;
 	background-image:-webkit-gradient(linear, left top, left bottom, from(rgba(16,25,33,1)), to(rgba(14,23,32,1)), color-stop(.5, rgba(27,36,46,1)), color-stop(.5, rgba(14,23,32,1)));
 	-webkit-box-shadow:0px 0px 24px rgba(0,0,0,0.8); box-shadow:0px 0px 24px rgba(0,0,0,0.8);
 } /* This is masthead bar that appears at the top of the UI */
