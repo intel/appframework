@@ -26,7 +26,7 @@ jq.carousel
 
 * A CSS3 carousel library.  You can create vertical or horizontal carousels.
 
-jq.swipe
+jq.swipeListener
 
 * This detects swipe events on an element.  You can set the threshold of pixels they must move for veritcal or horizontal.
 
@@ -199,16 +199,16 @@ carousel.removeItem(index); //remove an item by index
 ```
 
 
-# jq.swipe
+# jq.swipeListener
 
-To use jq.swipe you must do the following
+To use jq.swipeListener you must do the following
 
 1. Create an html elemenet you want to detect the swipe on.  This could also be the whole document.
 
 2. Call the javascript function to listen for the swipe event
 
 ``` js
-var swipe=$(document).swipe(); //string or element to listen on
+var swipe=$(document).swipeListener(); //string or element to listen on
 ```
 
 There are additional configuration options that are passed in as an object parameter
@@ -220,8 +220,8 @@ var options={
    callback:null //callback function to execute.  It takes one parameter that is an object of the swipe directions {up:true,down:false,left:true,right:false}
 }
 
-var swipeListener = $("#mydiv").swipe(options);
-var swipeListener = $(document).swipe({vthreshold:30,hthreshold:50,callBack:function(dir){console.log(dir)}});
+var swipeListener = $("#mydiv").swipeListener(options);
+var swipeListener = $(document).swipeListener({vthreshold:30,hthreshold:50,callBack:function(dir){console.log(dir)}});
 ```
 
 # jq.template

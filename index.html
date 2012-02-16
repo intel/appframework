@@ -1400,7 +1400,7 @@ $.os.desktop=true;
 		<script>
 			/* This function runs once the page is loaded, but appMobi is not yet active */
 			var init_swipe = function () {
-			$("#swiper").swipe({
+			$("#swiper").swipeListener({
 					vthreshold: 30,
 					hthreshold: 50,
 					callBack: function (dir) {

@@ -6,7 +6,7 @@
  */ 
 (function($) {
     var cache = [];
-    $.fn["swipe"] = function(opts) {
+    $.fn["swipeListener"] = function(opts) {
         
         if (opts === undefined && this.length > 0) 
         {
