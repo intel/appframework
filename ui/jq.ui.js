@@ -1595,6 +1595,10 @@
     }
     var prevClickField;
     NoClickDelay.prototype = {
+        dX:0,
+        dY:0,
+        cX:0,
+        cY:0,
         handleEvent: function(e) {
             switch (e.type) {
                 case 'touchstart':
@@ -1610,9 +1614,11 @@
         },
         
         onTouchStart: function(e) {
+            
             if (fixInputHandlers(e))
                 return;
-            
+            this.dX=e.touches[0].pageX;
+            this.dY=e.touches[0].pageY;
             if (prevClickField !== null && prevClickField !== undefined) {
                 prevClickField.blur(); //We need to blur any input fields on android
                 prevClickField = null;
@@ -1624,15 +1630,18 @@
         },
         
         onTouchMove: function(e) {
-            this.moved = true;
+            //this.moved = true;
+            this.cX=e.touches[0].pageX-this.dX;
+            this.cY=e.touches[0].pageY-this.dY;
         },
         
         onTouchEnd: function(e) {
+            
             document.removeEventListener('touchmove', this, false);
             document.removeEventListener('touchend', this, false);
             
-            if (!this.moved) {
-                var theTarget = document.elementFromPoint(e.changedTouches[0].pageX, e.changedTouches[0].pageY);
+            if (Math.abs(this.cX)<5||Math.abs(this.cY)<5) {
+                var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
                 if (checkAnchorClick(theTarget))
@@ -1644,11 +1653,14 @@
             
             }
             prevClickField = null;
+            this.dX=0=this.cX=this.cY=this.dY=0;
         }
     };
     
     
     function fixInputHandlers(e) {
+       if(!jq.os.android)
+          return;
         var theTarget = e.touches[0].target;
         if (theTarget && theTarget.type != undefined) {
             var tagname = theTarget.tagName.toLowerCase();

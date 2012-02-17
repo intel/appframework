@@ -139,6 +139,10 @@
                 this.el.addEventListener('touchend', this.listeners.end = function(e) {
                     that.touchEnd(e);
                 }, false);
+                this.el.addEventListener('touchcancel', this.listeners.cancel = function(e) {
+                alert("cancel");
+                    that.touchEnd(e);
+                }, false);
                 this.el.addEventListener('touchstart', this.listeners.start = function(e) {
                     that.touchStart(e);
                 }, false);
@@ -147,6 +151,7 @@
                 this.el.removeEventListener('touchstart', this.listeners.start, false);
                 this.el.removeEventListener('touchmove', this.listeners.move, false);
                 this.el.removeEventListener('touchend', this.listeners.end, false);
+                this.el.removeEventListener('touchcancel', this.listeners.cancel, false);
             
             },
             hideScrollbars: function() {
@@ -200,7 +205,7 @@
                 if (!container)
                     return;
                 if(this.elementScrolling){
-                   this.el.removeEventListener("webkitTransitionEnd", that.scrollingFinishCB, true);
+                   clearTimeout(that.scrollingFinishCB);
                 }
                 touchStarted = true
                 try {
@@ -294,10 +299,7 @@
             },
             touchMove: function(event) {
                 try {
-                    if (!touchStarted) {
-                        touchStarted = true;
-                        this.touchStart(event);
-                    }
+                  
                     if (this.currentScrollingObject != null) {
                         event.preventDefault();
                         var scrollPoints = {
@@ -381,7 +383,7 @@
                             var tmpDistanceY = Math.abs(prevTop) - Math.abs(newTop);
                             var tmpDistanceX = Math.abs(prevLeft) - Math.abs(newLeft);
                             var tmpTime = event.timeStamp - this.prevTime;
-                            if (tmpTime < 1000) { // movement is under a second,
+                            if (tmpTime < 500) { // movement is under a second,
                                 // keep adding the differences
                                 this.timeMoved += tmpTime;
                                 this.vdistanceMoved += tmpDistanceY;
@@ -401,17 +403,16 @@
             },
             touchEnd: function(event) {
                 
-                
                 if (this.currentScrollingObject != null) {
-                    if (this.timeMoved == 0) 
-                    {
+                    //if (this.timeMoved == 0) 
+                    //{
                         //event.preventDefault();
-                        if (this.onclick !== undefined)
-                            this.onclick();
-                        return false;
-                    }
+                       // if (this.onclick !== undefined)
+                     //       this.onclick();
+                      //  return false;
+                   // }
+                   
                     event.preventDefault();
-                   // event.stopPropagation();
                     this.finishScrollingObject = this.currentScrollingObject;
                     this.currentScrollingObject = null;
                     var scrollPoints = {
@@ -497,7 +498,11 @@
                             y: 0
                         }, time, "cubic-bezier(0.33,0.66,0.66,1)");
                     }
-                    this.el.addEventListener("webkitTransitionEnd",this.scrollingFinishCB=function(){that.hideScrollbars();that.elementScrolling=false},false);
+                    
+                    if(isNaN(time))
+                        that.hideScrollbars(),that.elementScrolling=false
+                    else
+                        this.scrollingFinishCB=setTimeout(function(){that.hideScrollbars();that.elementScrolling=false},time);
                     this.elementScrolling=true;
                 }
                 this.hdistanceMoved = 0;
