@@ -1653,7 +1653,7 @@
             
             }
             prevClickField = null;
-            this.dX=0=this.cX=this.cY=this.dY=0;
+            this.dX=this.cX=this.cY=this.dY=0;
         }
     };
     

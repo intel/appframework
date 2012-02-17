@@ -123,7 +123,6 @@
             divWidth: 0,
             refresh: false,
             refreshFunction: null,
-            decelerating: false,
             listeners: {
                 start: "",
                 move: "",
@@ -152,6 +151,8 @@
                 this.el.removeEventListener('touchmove', this.listeners.move, false);
                 this.el.removeEventListener('touchend', this.listeners.end, false);
                 this.el.removeEventListener('touchcancel', this.listeners.cancel, false);
+                this.hideScrollbars();
+                clearTimeout(this.scrollingFinishCB);
             
             },
             hideScrollbars: function() {
