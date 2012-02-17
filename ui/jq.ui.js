@@ -243,7 +243,7 @@
             if (jq("#navbar").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
                 jq("#content").css("bottom", "0px");
                 jq("#navbar").hide();
-            } else  if(force!==false) {
+            } else  if(force===undefined||(force!==undefined&&force===true)) {
                 jq("#navbar").show();
                 jq("#content").css("bottom", jq("#navbar").css("height"));
                 
@@ -277,7 +277,7 @@
             var that = this;
             if (!jq("#content").hasClass("hasMenu"))
                 return;
-            if (jq("#menu").css("display") != "block" &&((force !== undefined && force !== false) || force === undefined))  {
+            if (jq("#menu").css("display") != "block" && ((force !== undefined && force !== false) || force === undefined))  {
                 this.scrollingDivs["menu_scroller"].initEvents();
                 jq("#menu").show();
                 window.setTimeout(function() {
@@ -287,7 +287,7 @@
                     jq("#content").addClass("on");
                 }, 1); //needs to run after
             
-            } else if(force!==true) {
+            } else  if(force===undefined||(force!==undefined&&force===false)) {
                 this.scrollingDivs["menu_scroller"].removeEvents();
                 
                 jq("#header").removeClass("on");
@@ -497,7 +497,7 @@
          * @param {String|Object} Element to add
          * @param {String} Content
          * @param {String} title
-         * @title $.ui.updateContentDiv(id,content,title);
+         * @title $.ui.addeContentDiv(id,content,title);
          */
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
             var myEl = $am(el);
@@ -633,9 +633,9 @@
             
             window.setTimeout(function(){
                 if (hasFooter&&hasFooter.toLowerCase() == "none") {
-                  that.toggleNavMenu(true);
+                  that.toggleNavMenu(false);
                 } else{
-                that.toggleNavMenu(false);
+                that.toggleNavMenu(true);
                 }
                 if (hasFooter && that.customFooter != hasFooter) {
                     that.customFooter = hasFooter;
