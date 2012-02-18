@@ -706,7 +706,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     }
                     var classList = this[i].className;
                     name.split(/\s+/g).forEach(function(cname) {
-                        classList = classList.replace(classRE(cname), "");
+                        classList = classList.replace(classRE(cname), " ");
                     });
                     if (classList.length > 0)
                         this[i].className = classList.trim();

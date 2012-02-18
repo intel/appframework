@@ -394,6 +394,30 @@ test("hasClass",function(){
    equals($("#foo").hasClass("foobar"),false,"Verifies the class does not exist");
    QUnit.reset();
 });
+test("removeClass",function(){
+   expect(3);
+   QUnit.reset();
+   $("#foo").get().className="";
+   $("#foo").addClass("bar");
+   $("#foo").removeClass("bar");
+   equals($("#foo").get().className,"","Remove a single class");
+   QUnit.reset();
+   $("#foo").className="";
+   $("#foo").addClass("bar");
+   $("#foo").addClass("panel");
+   $("#foo").addClass("foo");
+   $("#foo").removeClass("bar panel");
+   equals($("#foo").get().className,"foo","Remove mutliple classes");
+   QUnit.reset();
+   $("#foo").className="";
+   $("#foo").addClass("bar");
+   $("#foo").addClass("panel");
+   $("#foo").addClass("foo");
+   $("#foo").removeClass("panel");
+   equals($("#foo").get().className,"foo bar","Remove middle class element");
+   QUnit.reset();
+});
+
 test("bind",function(){
    expect(2);
   var counter=0;
