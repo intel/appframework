@@ -791,8 +791,11 @@
                     what = target.replace("#", "");
                     what = $am(what);
                     
-                    if (!what)
-                        throw ("Target: " + target + " was not found");
+                    if (!what){
+                        //this is inspired by jQuery Mobile, the event is useful for dynamic loading pages.
+                        $('#jQUi').trigger('contentnotfound', {toPage: target});
+                        return;
+                    }
                     if (what == this.activeDiv && !back)
                         return;
                     
