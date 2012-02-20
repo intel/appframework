@@ -32,14 +32,8 @@ redirectMouseToTouch = function(type, originalEvent)
 
 emulateTouchEvents = function() 
 {
-    //return;
-    //if(emulatorReady)
-    //frm.contentWindow.AppMobi.setReady();
-    // var ee=window.querySelectorAll("*");
     var ee = document;
-    // for(var x=0;x<ee.length;x++)
-    //{
-    //ee[x].mouseMoving=false;
+
     document.mouseMoving = false;
     
     
@@ -47,15 +41,12 @@ emulateTouchEvents = function()
     {
         try 
         {
-            // if (e.target != e.currentTarget)
-            // return;
             this.mouseMoving = true;
-            //fire off a touchstart event
             var touchevt = redirectMouseToTouch("touchstart", e);
             if (document.ontouchstart)
                 document.ontouchstart(touchevt);
-            if(originalEvent.target.ontouchstart)
-                originalEvent.target.ontouchstart(touchevt);
+            if(e.target.ontouchstart)
+                e.target.ontouchstart(e);
             
         } catch (e) {
         }
@@ -66,15 +57,13 @@ emulateTouchEvents = function()
     {
         try 
         {
-            // if (e.target != e.currentTarget)
-            // return;
             this.mouseMoving = false;
-            //fire off a touchstart event
+
             var touchevt = redirectMouseToTouch("touchend", e);
             if (document.ontouchend)
                 document.ontouchend(touchevt);
-            if(originalEvent.target.ontouchend)
-                originalEvent.target.ontouchend(touchevt);
+            if(e.target.ontouchend)
+                e.target.ontouchend(e);
         } 
         catch (e) {
         }
@@ -84,16 +73,13 @@ emulateTouchEvents = function()
     {
         try 
         {
-            // if (e.target != e.currentTarget)
-            // return;
             if (!this.mouseMoving)
-                return;
-            //fire off a touchstart event
+                return
             var touchevt = redirectMouseToTouch("touchmove", e);
             if (document.ontouchmove)
                 document.ontouchmove(touchevt);
-                        if(originalEvent.target.ontouchmove)
-                originalEvent.target.ontouchmove(touchevt);
+            if(e.target.ontouchmove)
+                e.target.ontouchmove(e);
         } 
         catch (e) {
         }

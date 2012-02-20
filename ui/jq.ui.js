@@ -311,6 +311,7 @@
             var that=this;
             var links = jq(this.navbar).find("a");
             for (var i = 0; i < links.length; i++) {
+                links[i].setAttribute("data-ignore-pressed", "true");
                 links[i].setAttribute("resetHistory", "true");
                 links[i].ontouchend = function(e) {
                     if (that.doingTransition)
@@ -1798,10 +1799,15 @@
                 touch.isDoubleTap = true;
             touch.last = now;
             setTimeout(longTap, longTapDelay);
+            if(!touch.el.data("ignore-pressed"))
+               touch.el.addClass("selected");
         }).bind('touchmove', function(e) {
             touch.x2 = e.touches[0].pageX;
             touch.y2 = e.touches[0].pageY;
         }).bind('touchend', function(e) {
+            if(!touch.el) return;
+            if(!touch.el.data("ignore-pressed"))
+               touch.el.removeClass("selected");
             if (touch.isDoubleTap) {
                 touch.el.trigger('doubleTap');
                 touch = {};
