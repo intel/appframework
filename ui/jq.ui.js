@@ -1620,7 +1620,7 @@
                 return;
             this.dX=e.touches[0].pageX;
             this.dY=e.touches[0].pageY;
-            if (prevClickField !== null && prevClickField !== undefined) {
+            if (prevClickField !== null && prevClickField !== undefined&&jq.os.android) {
                 prevClickField.blur(); //We need to blur any input fields on android
                 prevClickField = null;
             }
@@ -1631,7 +1631,7 @@
         },
         
         onTouchMove: function(e) {
-            //this.moved = true;
+            this.moved = true;
             this.cX=e.touches[0].pageX-this.dX;
             this.cY=e.touches[0].pageY-this.dY;
         },
@@ -1640,8 +1640,7 @@
             
             document.removeEventListener('touchmove', this, false);
             document.removeEventListener('touchend', this, false);
-            
-            if (Math.abs(this.cX)<5||Math.abs(this.cY)<5) {
+            if ((!jq.os.blackberry&&!this.moved)||(jq.os.blackberry&&(Math.abs(this.cX)<5||Math.abs(this.cY)<5))) {
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
@@ -1651,7 +1650,12 @@
                 var theEvent = document.createEvent('MouseEvents');
                 theEvent.initEvent('click', true, true);
                 theTarget.dispatchEvent(theEvent);
-            
+                if (theTarget && theTarget.type != undefined) {
+                    var tagname = theTarget.tagName.toLowerCase();
+                    if (tagname == "select" || tagname == "input" || tagname == "button" || tagname == "textarea") {
+                        theTarget.focus();
+                    }
+                }
             }
             prevClickField = null;
             this.dX=this.cX=this.cY=this.dY=0;
@@ -1725,7 +1729,7 @@
         if(theTarget.tagName.toLowerCase() != "a"&&theTarget.parentNode)
            parent=true,theTarget=theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
         if (theTarget.tagName.toLowerCase() == "a") {
-            if (theTarget.hash == "#"||theTarget.href.length==0||theTarget.href.toLowerCase().indexOf("javascript:")!==-1){
+            if (theTarget.href.length==0||theTarget.href.toLowerCase().indexOf("javascript:")!==-1||(theTarget.href.indexOf("#")!==-1&&theTarget.hash.length==0)){
                   return false;
             }
              if(parent&&theTarget.onclick&&!jq.os.desktop)

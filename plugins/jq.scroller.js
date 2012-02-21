@@ -562,7 +562,7 @@
 
             //Momentum adapted from iscroll4 http://www.cubiq.org
             calculateMomentum: function(dist, time) {
-                var deceleration = 0.0006, 
+                var deceleration = 0.0012, 
                 speed = Math.abs(dist) / time, 
                 newDist = (speed * speed) / (2 * deceleration), newTime = 0
                 
