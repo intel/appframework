@@ -228,6 +228,12 @@ var swipeListener = $(document).swipeListener({vthreshold:30,hthreshold:50,callB
 
 The template parsing library is John Resig's micro templating, with some fixes and enhancements.  http://ejohn.org/blog/javascript-micro-templating/
 
+There are two functions
+
+1. $.template()  - returns an HTML string
+
+2. $.tmpl() - returns a jqMobi object (similar to jquery's $.tmpl)
+
 To use jq.template you must do the following
 
 1. Create your template.  The easiest way is to create &lt;script&lt; tags with the content type of "text/html" and set an id
@@ -243,7 +249,9 @@ To use jq.template you must do the following
 2. To process the template you call a javascript function with the id of the template, and optional data to pass in
 
 ``` js
- $("#output").template("my_template");
+ $("#output").html(template("my_template"));
+ 
+ $.tmpl("my_template").appendTo("#output");
 ```
 
 You can pass in an optional object parameter that provides data to be used within the template.  Below is a sample that could display user information based on a user object
@@ -260,7 +268,7 @@ var user={
    company:"appMobi",
    awesome:"of course"
 }
- $("#template_content").templatetemplate("user_info",{userinfo:user});
+ $("#template_content").html($.template("user_info",{userinfo:user}));
 </script>
 ```
 

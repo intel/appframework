@@ -104,7 +104,7 @@ width:100%;
 	z-index:250;
 	-webkit-box-sizing:border-box; box-sizing:border-box;
 	height:48px;
-	width:100%;
+    left:0px;right:0px;
 	background-image:-webkit-gradient(linear, left top, left bottom, from(rgba(16,25,33,1)), to(rgba(14,23,32,1)), color-stop(.5, rgba(27,36,46,1)), color-stop(.5, rgba(14,23,32,1)));
 	-webkit-box-shadow:0px 0px 24px rgba(0,0,0,0.8); box-shadow:0px 0px 24px rgba(0,0,0,0.8);
 } /* This is masthead bar that appears at the top of the UI */
@@ -238,6 +238,8 @@ a.customBackButton.press {
 	background:rgba(19,29,38,1);
 	-webkit-transform:translate3d(0,0,0);
 	-webkit-perspective: 1000;
+    margin-top:10px;
+    margin-bottom:10px;
 } /* This class is applied to the divs that contain the various "views" or pages of the app. */
 .panel > * {
 	-webkit-backface-visibility: hidden;
@@ -530,7 +532,7 @@ ul > li.group:first-child {
 
 h2 {
 	display:block;
-	width:95%; height:34px;
+	width:100%; height:34px;
 	font-family:'Eurostile-Bold', Eurostile, Helvetica, Arial, sans-serif;
 	font-weight:bold;
 	font-size:18px;
@@ -541,9 +543,8 @@ h2 {
 	background:#39424b;
 } /* Header class used for non-navigable header bars (h1 is reserved for the header) */
 
-.collapsed { background:url('images/expand.png') right center no-repeat; }
-.expanded { background:url('images/collapse.png') right center no-repeat; } /* Use these classes in cooperation with LI elements for collapsible content. */
-
+.collapsed:after{content:url("images/collapse.png");position:absolute;top:5px;right:5px;}
+.expanded:after{content:url("images/expand.png");position:absolute;top:5px;right:5px;}
 
 
 /**********************************************************
@@ -821,9 +822,7 @@ select[disabled]~div {
 	opacity:.7;
 }
 
-
-
-/* Side Menu CSS */	
+	
 .hasMenu{
 -webkit-transition: all 300ms;
  position:absolute !important;
@@ -833,7 +832,6 @@ select[disabled]~div {
   position:absolute !important;
   left:200px !important;
 }
-
 #menu.on {
 left:0px !important;
 }
@@ -848,7 +846,6 @@ left:0px !important;
 		left:256px !important;
         -webkit-transition: all 0ms !important;
 	}
-
 	#badgephone{
 		display:none !important;
 	}
@@ -869,4 +866,134 @@ left:0px !important;
 		background:rgba(29,29,28,1) !important;
 		-webkit-transform:translate3d(0,0,0) !important;
 	}
+    
+}
+
+/** jq.popup.css and jq.actionsheet.css */
+#jq_actionsheet {
+    position:absolute;
+    left:0px;
+    right:0px;
+    padding-left:10px;
+    padding-right:10px;
+    padding-top:10px;
+    margin:auto;
+    background:black;
+    float:left;
+    z-index:1000;
+    border-top:#fff 1px solid;
+	background:rgba(71,71,71,.95);
+	background-image:-webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,.4)), to(rgba(255,255,255,0)), color-stop(.08,rgba(255,255,255,.1)), color-stop(.08,rgba(255,255,255,0)));
+	background-image:-webkit-linear-gradient(top, rgba(255,255,255,.4) 0%, rgba(255,255,255,.1) 8%, rgba(255,255,255,0) 8%);
+	box-shadow:0px -1px 2px rgba(0,0,0,.4);
+    
+}
+#jq_actionsheet a {
+    text-decoration:none;
+    -webkit-transition:all 0.4s ease; 
+     text-shadow:0px -1px rgba(0,0,0,.8);
+	padding:0px .25em;
+	border:1px solid rgba(0,0,0,.8);
+	text-overflow:ellipsis; 
+	-webkit-border-radius:.75em; border-radius:.75em;
+	background-image:-webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,.4)), to(rgba(255,255,255,0)), color-stop(.5,rgba(255,255,255,.1)), color-stop(.5,rgba(255,255,255,0)));
+	background-image:-webkit-linear-gradient(top, rgba(255,255,255,.5) 0%, rgba(255,255,255,.2) 50%, rgba(255,255,255,0) 50%);
+	-webkit-box-shadow:0px 1px 1px rgba(255,255,255,0.7); box-shadow:0px 1px 1px rgba(255,255,255,0.7);
+    display:block;
+    color:white;
+    text-align:center;
+    line-height:36px;
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:10px;
+    background-color:rgba(130,130,130,1);
+}
+
+#jq_actionsheet a.selected {
+    background-color:rgba(150,150,150,1);
+}
+
+#jq_actionsheet a.cancel {
+ background-color:rgba(43,43,43,1);
+}
+
+#jq_actionsheet a.cancel.selected {
+    background-color:rgba(73,73,73,1);
+}
+#jq_actionsheet a.red {
+     color:white;
+     background-color:rgba(204,0,0,1);
+}
+
+#jq_actionsheet a.red.selected {
+     background-color:rgba(255,0,0,1); 
+}
+
+BODY>DIV#mask{
+	display:block;
+	width:100%; 
+	height:100%; 
+	background:#000; 
+	z-index: 999999; 
+	position:absolute; 
+	top:0; 
+	left:0;
+}
+
+.jqPopup {
+	display: block;
+	width: 300px;
+	border: solid 1px #72767b;
+	-webkit-box-shadow: 0px 4px 6px #555, 0 0 20px rgba(255,255,255,0.5);
+	-webkit-border-radius: 10px;
+	padding: 10px;
+	opacity: 1;
+	-webkit-transform: scale(1);
+	-webkit-transition: all 0.20s  ease-in-out;
+	position: absolute;
+	z-index: 1000000;
+	margin-left: auto!important;
+	margin-right: auto!important;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(70,70,70,0.8)),	to(rgba(0,20,20,0.8)));
+}
+
+.jqPopup.hidden {
+	opacity: 0;
+	-webkit-transform: scale(0);
+	top: 50%;
+	left: 50%;
+	margin: 0px auto;
+}
+
+.jqPopup>HEADER{
+	font-weight:bold;
+	font-size:20px;	
+	margin:0;
+	padding:0;
+}
+
+.jqPopup>DIV{
+	font-size:12px;
+	margin:8px;
+}
+
+.jqPopup>FOOTER{
+	width:100%;	
+	text-align:center;
+    display:block !important;
+}
+
+.jqPopup>FOOTER>BUTTON#cancel{
+	float:left;
+}
+
+.jqPopup>FOOTER>BUTTON#action{
+	float:right;
+	margin-right:4px;
+}
+
+.jqPopup>FOOTER>BUTTON.center{
+	float:none!important;
+	width:80%;
+	margin:8px;
 }

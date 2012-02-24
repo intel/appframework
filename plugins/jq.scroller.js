@@ -74,7 +74,6 @@
                 }
                 if (this.horizontalScroll)
                     this.el.style['float'] = "left";
-                this.initScrollbars();
                 this.el.hasScroller=true;
             } catch (e) {
                 alert("error adding scroller" + e);
@@ -139,7 +138,6 @@
                     that.touchEnd(e);
                 }, false);
                 this.el.addEventListener('touchcancel', this.listeners.cancel = function(e) {
-                alert("cancel");
                     that.touchEnd(e);
                 }, false);
                 this.el.addEventListener('touchstart', this.listeners.start = function(e) {
@@ -164,39 +162,6 @@
                 if (this.vscrollBar){
                     this.vscrollBar.style.opacity = 0
                     this.vscrollBar.style.webkitTransitionDuration = "0ms";
-                }
-            },
-            initScrollbars: function() {
-                var windowHeight = window.innerHeight;
-                var windowWidth = window.innerWidth;
-                var container = this.container;
-                var eleScrolling = this.el;
-                this.bottomMargin = container.clientHeight > window.innerHeight ? window.innerHeight : container.clientHeight;
-                this.maxTop = eleScrolling.clientHeight - this.bottomMargin;
-                this.divHeight = eleScrolling.clientHeight;
-                this.rightMargin = container.clientWidth > window.innerWidth ? window.innerWidth : container.clientWidth;
-                this.maxLeft = eleScrolling.clientWidth - this.rightMargin;
-                this.divWidth = eleScrolling.clientWidth;
-                
-                if (this.verticalScroll && this.verticalScroll == true && this.scrollBars == true) {
-                    if (this.container.clientWidth > window.innerWidth)
-                        this.vscrollBar.style.left = (window.innerWidth - numOnly(this.vscrollBar.style.width) * 3) + "px";
-                    else
-                        this.vscrollBar.style.right = "0px";
-                    this.vscrollBar.style.height = (parseFloat(this.bottomMargin / this.divHeight) * this.bottomMargin) + "px";
-                    
-                    if (this.el.clientHeight <= this.container.clientHeight)
-                        this.vscrollBar.style.opacity = 0;
-                }
-                if (this.horizontalScroll && this.horizontalScroll == true && this.scrollBars == true) {
-                    if (this.container.clientHeight > window.innerHeight)
-                        this.hscrollBar.style.top = (window.innerHeight - numOnly(this.hscrollBar.style.height)) + "px";
-                    else
-                        this.hscrollBar.style.bottom = this.hscrollBar.style.height;
-                    this.hscrollBar.style.width = (parseFloat(this.rightMargin / this.divWidth) * this.rightMargin) + "px";
-                    
-                    if (this.el.clientWidth <= this.container.clientWidth)
-                        this.hscrollBar.style.opacity = 0;
                 }
             },
             touchStart: function(event) {
@@ -231,10 +196,11 @@
                     this.hdistanceMoved = 0;
                     this.prevTime = null;
                     this.finishScrollingObject = null;
-                    this.bottomMargin = container.clientHeight > window.innerHeight ? window.innerHeight : container.clientHeight;
+                    var cnt=$(container);
+                    this.bottomMargin = container.clientHeight > window.innerHeight ? window.innerHeight : container.clientHeight-numOnly(cnt.css("marginTop"))-numOnly(cnt.css("paddingTop"))-numOnly(cnt.css("marginBottom"))-numOnly(cnt.css("paddingBottom")); //handle css offsets
                     this.maxTop = eleScrolling.clientHeight - this.bottomMargin;
                     this.divHeight = eleScrolling.clientHeight;
-                    this.rightMargin = container.clientWidth > window.innerWidth ? window.innerWidth : container.clientWidth;
+                    this.rightMargin = container.clientWidth > window.innerWidth ? window.innerWidth : container.clientWidth-numOnly(cnt.css("marginLeft"))-numOnly(cnt.css("paddingLeft"))-numOnly(cnt.css("marginRight"))-numOnly(cnt.css("paddingRight"));
                     this.maxLeft = eleScrolling.clientWidth - this.rightMargin;
                     this.divWidth = eleScrolling.clientWidth;
                     if (this.maxTop < 0 && this.maxLeft < 0)
@@ -573,14 +539,4 @@
         };
         return scroller;
     })();
-
-    // Helper function to get only
-    if (!window.numOnly) {
-        function numOnly(val) {
-            if (isNaN(parseFloat(val)))
-                val = val.replace(/[^0-9.-]/, "");
-            
-            return parseFloat(val);
-        }
-    }
 })(jq);

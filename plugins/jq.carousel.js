@@ -372,9 +372,16 @@
                             that.onMoveIndex(this.pageId);
                         };
                         var spacerEl = document.createElement("div");
-                        spacerEl.style.cssFloat = "left";
+                     
                         spacerEl.style.width = "20px";
-                        spacerEl.innerHTML = "&nbsp;";
+                        if(this.horizontal){
+                            spacerEl.style.cssFloat = "left";
+                            spacerEl.innerHTML = "&nbsp;";
+                        }
+                        else{
+                           spacerEl.innerHTML="&nbsp;";
+                           spacerEl.style.display="block";
+                        }
                         
                         this.pagingDiv.appendChild(pagingEl);
                         if (i + 1 < (this.childrenCount))
@@ -392,16 +399,6 @@
         };
         return carousel;
     })();
-
-    // Helper function to get only
-    if (!window.numOnly) {
-        function numOnly(val) {
-            if (isNaN(parseFloat(val)))
-                val = val.replace(/[^0-9.-]/, "");
-            
-            return parseFloat(val);
-        }
-    }
     
     function isHorizontalSwipe(xAxis, yAxis) {
                 var X = xAxis;

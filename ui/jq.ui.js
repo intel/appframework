@@ -15,7 +15,6 @@
             document.addEventListener("appMobi.device.ready", function() {
                 that.hasLaunched = true;
                 if (that.autoLaunch) {
-                    AppMobi.device.hideSplashScreen();
                     that.launch();
                 }
             }, false);
@@ -86,12 +85,66 @@
         hasLaunched: false,
         launchCompleted: false,
         activeDiv: "",
+       
         css3animate: function(el, opts) {
             try {
                 jq(el).css3Animate(opts);
             } catch (e) {
                 console.log("Error animating " + e.message + "  " + el.id);
             }
+        },
+        /**
+         * This is a shorthand call to the jq.actionsheet plugin.  We wire it to the jQUi div automatically
+           ```
+           $.ui.actionsheet("<a href='javascript:;' class='button'>Settings</a> <a href='javascript:;' class='button red'>Logout</a>")
+           $.ui.actionsheet("[{
+                        text: 'back',
+                        cssClasses: 'red',
+                        handler: function () { $.ui.goBack(); ; }
+                    }, {
+                        text: 'show alert 5',
+                        cssClasses: 'blue',
+                        handler: function () { alert("hi"); }
+                    }, {
+                        text: 'show alert 6',
+                        cssClasses: '',
+                        handler: function () { alert("goodbye"); }
+                    }]");
+           ```
+         * @param {String,Array} links
+         * @title $.ui.actionsheet()
+         */
+        actionsheet:function(opts){
+           return jq("#jQUi").actionsheet(opts);
+        },
+        /**
+         * This is a wrapper to jq.popup.js plugin.  If you pass in a text string, it acts like an alert box and just gives a message
+           ```
+           $.ui.popup(opts);
+           $.ui.popup( {
+                        title:"Alert! Alert!",
+                        message:"This is a test of the emergency alert system!! Don't PANIC!",
+                        cancelText:"Cancel me", 
+                        cancelCallback: function(){console.log("cancelled");},
+                        doneText:"I'm done!",
+                        doneCallback: function(){console.log("Done for!");},
+                        cancelOnly:false
+                      });
+           $.ui.popup('Hi there');
+           ```
+         * @param {Object|String} options
+         * @title $.ui.popup(opts)
+         */
+        popup:function(opts){
+           return $("#jQUi").popup(opts);
+        },
+        
+        blockUI:function ( opacity ) {
+            $.blockUI(opacity);
+        },
+       
+        unblockUI:function ( ) {
+           $.unblockUI();
         },
         /**
          * Will remove the bottom nav bar menu from your application
@@ -421,9 +474,18 @@
         },
         /**
          * Show the loading mask
-         * @title $.ui.showMask();
+           ```
+           $.ui.showMask()
+           $.ui.showMask(;Doing work')
+           ```
+           
+         * @param {String} [text]
+         * @title $.ui.showMask(text);
          */
-        showMask: function() {
+        showMask: function(text) {
+            if(!text)
+               text="Loading Content";
+            jq("#jQui_mask>h1").html(text);
             $am("jQui_mask").style.display = "block";
         },
         /**
@@ -445,8 +507,8 @@
             var that = this;
             try {
                 if ($am(id)) {
-                    $("#modalContainer").html($am(id).childNodes[0].innerHTML);
-                    $('#modalContainer').append("<a href='javascript:;' onclick='$.ui.hideModal();' class='closebutton modalbutton'></a><div style='width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right'></div>");
+                    jq("#modalContainer").html($am(id).childNodes[0].innerHTML);
+                    jq('#modalContainer').append("<a href='javascript:;' onclick='$.ui.hideModal();' class='closebutton modalbutton'></a><div style='width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right'></div>");
                     this.modalWindow.style.display = "block";
                     
                     button = null;
@@ -804,37 +866,32 @@
                     
                     
                     
-                    
-                    var oldHistory = [];
-                    if (newTab) {
-                        
-                        this.history = [];
-                        this.history.push({
-                            target: "#" + this.firstDiv.id,
-                            transition: transition
-                        });
-                        try {
-                            window.history.pushState('', this.firstDiv.id, startPath);
-                        } catch (e) {
-                        }
-                    
-                    } else if (!back) {
-                        this.history.push({
-                            target: "#" + this.activeDiv.id,
-                            transition: transition
-                        });
-                        try {
-                            window.history.pushState('', this.activeDiv.id, startPath);
-                        } catch (e) {
-                        }
-                    
-                    }
                     this.transitionType = transition;
                     var oldDiv = this.activeDiv;
                     var currWhat = what;
                     
                     if (oldDiv == currWhat) //prevent it from going to itself
                         return;
+                    
+                    if (newTab) {
+                        this.history = [];
+                        this.history.push({
+                            target: "#" + this.firstDiv.id,
+                            transition: transition
+                        });
+                    } else if (!back) {
+                        this.history.push({
+                            target: "#" + this.activeDiv.id,
+                            transition: transition
+                        });
+                    }
+                    try {
+                        window.history.pushState(what.id, what.id, startPath+"#"+what.id);
+                        $(window).trigger("hashchange",{newUrl:startPath+"#"+what.id,oldURL:startPath+"#"+oldDiv.id});                    
+                    } 
+                    catch (e) {
+                    }
+                    
                     
                     if (this.resetScrollers && this.scrollingDivs[what.id]) {
                         this.scrollingDivs[what.id].scrollTo({
@@ -849,7 +906,6 @@
                         this.availableTransitions['default'].call(this, oldDiv, currWhat, back);
                     
                     if (back) {
-                        
                         if (this.history.length > 0) {
                             var val = this.history[this.history.length - 1];
                             
@@ -1056,6 +1112,7 @@
             
             this.updateSideMenu(this.defaultMenu);
         },
+    
         /**
          * Initiate a sliding transition.  This is a sample to show how transitions are implemented.  These are registered in $.ui.availableTransitions and take in three parameters.
          * @param {Object} previous panel
@@ -1677,8 +1734,8 @@
                     var headerHeight = 0, 
                     containerHeight = 0;
                     if (jq(theTarget).closest("#content").length > 0) {
-                        headerHeight = parseInt($("#header").css("height"));
-                        containerHeight = parseInt($("#content").css("height")) / 2;
+                        headerHeight = parseInt(jq("#header").css("height"));
+                        containerHeight = parseInt(jq("#content").css("height")) / 2;
                         var theHeight = e.touches[0].clientY - headerHeight / 2;
                         if (theHeight > containerHeight && containerHeight > 0) {
                             var el = jq(theTarget).closest(".panel").get();
@@ -1689,7 +1746,7 @@
                     } else if (jq(theTarget).closest("#jQui_modal").length > 0) {
                         
                         headerHeight = 0;
-                        containerHeight = parseInt($("#modalContainer").css("height")) / 2;
+                        containerHeight = parseInt(jq("#modalContainer").css("height")) / 2;
                         var theHeight = e.touches[0].clientY - headerHeight / 2;
                         
                         if (theHeight > containerHeight && containerHeight > 0) {
@@ -1708,10 +1765,10 @@
     }
     
     
-    if (!jq.os.desktop)
-        new NoClickDelay(document.getElementById("jQUi"));
-    else {
-        jq(document).ready(function() {
+    jq(document).ready(function() {
+        if (!jq.os.desktop)
+           new NoClickDelay(document.getElementById("jQUi"));
+        else {
             document.getElementById("jQUi").addEventListener("click", function(e) {
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
@@ -1721,15 +1778,15 @@
                     return false;
                 }
             }, false);
-        });
-    }
+        }
+    });
     
     function checkAnchorClick(theTarget) {
         var parent=false;
         if(theTarget.tagName.toLowerCase() != "a"&&theTarget.parentNode)
            parent=true,theTarget=theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
         if (theTarget.tagName.toLowerCase() == "a") {
-            if (theTarget.href.length==0||theTarget.href.toLowerCase().indexOf("javascript:")!==-1||(theTarget.href.indexOf("#")!==-1&&theTarget.hash.length==0)){
+            if (theTarget.href.toLowerCase().indexOf("javascript:")!==-1){
                   return false;
             }
              if(parent&&theTarget.onclick&&!jq.os.desktop)
@@ -1749,13 +1806,14 @@
                 }
                 return false;
             }
+            if((theTarget.href.indexOf("#")!==-1&&theTarget.hash.length==0))
+               return true;
             
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
             resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
             var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
             jq.ui.loadContent(href, theTarget.resetHistory, 0, mytransition, theTarget);
-           
             return true;
         }
     }

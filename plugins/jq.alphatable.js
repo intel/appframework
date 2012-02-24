@@ -13,7 +13,6 @@
         return this.length == 1 ? tmp : this;
     };
 
-
     var alphaTable = (function () {
         if (!window.WebKitCSSMatrix) return;
         var translateOpen = 'm11' in new WebKitCSSMatrix() ? "3d(" : "(";
@@ -63,9 +62,8 @@
                 var that = this;
                 var containerDiv = document.createElement("div");
                 containerDiv.id = "indexDIV_" + this.el.id;
-                containerDiv.style.cssText = "position:absolute;top:10px;left:290px;width:20px;font-size:8pt;font-weight:bold;color:#000;opacity:.5;border-radius:5px;text-align:center;z-index:9999;border:1px solid black;background:#666;padding-top:5px;padding-bottom:5px;";
-                containerDiv.className = this.listCssClass;
-                setCssProperties(containerDiv);
+                containerDiv.style.cssText = "position:absolute;top:0px;right:20px;width:20px;font-size:6pt;font-weight:bold;color:#000;opacity:.5;border-radius:5px;text-align:center;z-index:9999;border:1px solid black;background:#666;padding-top:5px;padding-bottom:5px;";
+                containerDiv.className = this.listCssClass;                
                 containerDiv.addEventListener("touchend", function (event) {
                     that.isMoving = false;
                     that.clearLetterBox()
@@ -73,36 +71,34 @@
                 //To allow updating as we "scroll" with our finger, we need to capture the position on the containerDiv element and calculate the Y coordinates.
                 //On mobile devices, you can not do an "onmouseover" over multiple items and trigger events.
                 containerDiv.addEventListener("touchstart", function (event) {
-
+                    if(event.touches[0].target==this) return;
                     that.isMoving = true;
-                    var pos = (event.touches[0].clientY - offset.y) / clientHeight;
-
-                    var letter = Math.ceil(pos * 26) - 1;
-                    if (letter < 0) letter = 0;
-                    else if (letter > 25) letter = 25;
-                    that.showLetter(arrAlphabet[letter]);
-                    that.scrollToLetter(arrAlphabet[letter]);
+                    
+                    var letter = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
+                    if(!letter||!letter.getAttribute("alphatable-item")||letter.getAttribute("alphatable-item").length==0)
+                       return;
+                    that.showLetter(letter.innerHTML);
+                    that.scrollToLetter(letter.innerHTML);
+                    event.preventDefault();
                 }, false);
                 containerDiv.addEventListener("touchmove", function (event) {
+                    var letter = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
+                    if(!letter||!letter.getAttribute("alphatable-item")||letter.getAttribute("alphatable-item").length==0)
+                       return;
                     if (!that.isMoving) return;
-                    var pos = (event.touches[0].clientY - offset.y) / clientHeight;
-                    var letter = Math.ceil(pos * 26) - 1;
-                    if (letter < 0) letter = 0;
-                    else if (letter > 25) letter = 25;
-                    that.showLetter(arrAlphabet[letter]);
-                    that.scrollToLetter(arrAlphabet[letter]);
+                    that.showLetter(letter.innerHTML);
+                    that.scrollToLetter(letter.innerHTML);
+                    event.preventDefault();
                 }, false);
 
                 //Create the alphabet
                 for (i = 0; i < arrAlphabet.length; i++) {
                     var tmpDiv = document.createElement("div");
                     tmpDiv.innerHTML = arrAlphabet[i];
+                    tmpDiv.setAttribute("alphatable-item","true");
                     containerDiv.appendChild(tmpDiv);
                 }
                 this.container.appendChild(containerDiv);
-
-                var offset = findPos(containerDiv); //Need to calculate the offset so we can use the event.touches[0].clientY position to calculate the letter being pressed
-                offset.y += numOnly(containerDiv.style.top)
 
                 var clientHeight = numOnly(containerDiv.clientHeight) - numOnly(containerDiv.style.top) - numOnly(containerDiv.style.paddingTop);
                 this.scroller.scrollTo({
@@ -137,57 +133,4 @@
         };
         return alphaTable;
     })();
-
-    // Helper function to get only
-    if (!window.numOnly) {
-        function numOnly(val) {
-            if (isNaN(parseFloat(val))) val = val.replace(/[^0-9.-]/, "");
-            if (val.length == 0) val = 0;
-            return parseFloat(val);
-        }
-    }
-    if (!window.findPos) {
-        function findPos(obj) {
-            var curleft = curtop = 0;
-            if (obj.offsetParent) {
-                do {
-                    curleft += obj.offsetLeft;
-                    curtop += obj.offsetTop;
-                } while (obj = obj.offsetParent);
-            }
-            return {
-                x: curleft,
-                y: curtop
-            };
-        }
-    }
-    /*
-     * Function to get the css class texts into an array.  Users can specify the CSS class for the alphabet selection, but we need the properties set so JavaScript can access them.
-     * Does not work wtih nested items, or items based off an id.
-     */
-    var cssClassess = {};
-    (function () {
-
-        for (var j = 0; j < document.styleSheets.length; j++) {
-            var rules = document.styleSheets.item(j).cssRules;
-            for (var i = 0; i < rules.length; i++) {
-                var name = rules.item(i).selectorText;
-                var text = rules.item(i).cssText.replace(name, "").replace("{", "").replace("}", "");
-                if (name == undefined || (!name.length || name.length == 0)) continue;
-                var names = name.split(",");
-                var k = 0;
-                do {
-                    if (names[k].indexOf(".") == 0) names[k] = names[k].substr(1);
-                    if (names[k].indexOf("#") == 0) names[k] = names[k].substr(1);
-                    cssClassess[names[k]] = text;
-                    k++;
-                } while (names[k]);
-            }
-        }
-    })();
-
-
-    function setCssProperties(object) {
-        if (cssClassess[object.className]) object.style.cssText = cssClassess[object.className];
-    }
 })(jq);

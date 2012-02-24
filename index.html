@@ -7,8 +7,12 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
 
-<link rel="stylesheet" type="text/css" href="kitchensink/jq.ui.css" />
-
+<link rel="stylesheet" type="text/css" href="kitchensink/jq.ui.css" title="default"/>
+<link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.carbon.css" title="carbon" disabled='true'/>
+<link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.eco.css" title="eco" disabled='true' />
+<link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.frosty.css" title="frosty" disabled='true'/>
+<link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.slate.css" title="slate" disabled='true'/>
+<link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.volcano.css" title="volcano" disabled='true' />
 <style>
 	.scrollBar{background:white;}
     h3 {text-align:center; font-size:35px;}
@@ -32,7 +36,7 @@
         color:red;
     }
 	.jqmscrollBar {background:white !important;}	
-	pre{margin-left:-110px;}
+	
 </style>
 <!-- uncomment for AppMobi apps
 <script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/appmobi.js"></script> 
@@ -55,6 +59,29 @@ var tag=$("head").append(script);
 $.os.android=true; //let's make it run like an android device
 $.os.desktop=true;
 }
+var oldElem;
+function setActiveStyleSheet(title) {
+   var a = document.getElementsByTagName("link");
+   var currElem;
+   
+   for(i=0; i<a.length; i++) {
+       if(a[i].getAttribute("title")==title){
+         currElem=a[i];
+       }
+       else if(!a[i].getAttribute("disabled"))
+          oldElem=a[i];
+   }
+   
+   currElem.removeAttribute("disabled");
+   jq.ui.showMask();
+   window.setTimeout(function(){
+      jq.ui.hideMask();
+      oldElem.setAttribute("disabled","true");
+   },500);
+}
+$(document).ready(function(){
+oldElem=document.getElementsByTagName("link")[0];
+});
 </script>
 
 
@@ -67,7 +94,9 @@ $.os.desktop=true;
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.scroller.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.shake.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.selectBox.js"></script> 
-
+<script type="text/javascript" charset="utf-8" src="./plugins/jq.alphatable.js"></script> 
+<script type="text/javascript" charset="utf-8" src="./plugins/jq.actionsheet.js"></script> 
+<script type="text/javascript" charset="utf-8" src="./plugins/jq.popup.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./ui/jq.ui.js"></script> 
 
 
@@ -85,6 +114,7 @@ $.os.desktop=true;
     };
     document.addEventListener("DOMContentLoaded",init,false);  
 	
+   
     /* This code prevents users from dragging the page */
     var preventDefaultScroll = function(event) {
         event.preventDefault();
@@ -129,7 +159,7 @@ $.os.desktop=true;
 </div>
 <div id="header">
 <span id='badgephone' onclick='jq.ui.toggleSideMenu()' style='position:absolute;right:0px;padding-top:7px;padding-right:5px;'><img src='kitchensink/images/badge.png'></span>
-<span id='badgetablet'  style='position:absolute;right:0px;padding-top:7px;padding-right:5px;'><img src='kitchensink/images/badge.png'></span>
+<span id='badgetablet'  style='float:right;padding-top:7px;padding-right:5px;'><img src='kitchensink/images/badge.png'></span>
 </div>
 
 <div id="content">
@@ -607,7 +637,7 @@ $.os.desktop=true;
 		<li><a href="#uifooter">Custom Footers</a></li>
 		<li><a href="#uiside">Side Navigation Menu</a></li>
 		<li><a href="kitchensink/external.html" data-persist-ajax="true" data-refresh-ajax="true">Load External Content</a></li>
-        <li><a onclick="return window.open('http://www.appmobi.com')">Open a new page</a></li>
+        <li><a href="http://www.jqmobi.com" target="_blank">Open a new page</a></li>
         <li><a href="#uidefer">Defer loading</a></li>
 		</ul>
 
@@ -756,6 +786,8 @@ $.os.desktop=true;
 		<li><a href="#uitoggleheader">.toggleHeaderMenu(); </a></li>
 		<li><a href="#uitoggleside">.toggleSideMenu(); </a></li>
 		<li><a href="#uitogglenav">.toggleNavMenu(); </a></li>
+        <li><a href="#uiactionsheet">.actionsheet() </a></li>
+        
 		<li><a href="#uiscrolltotop">.scrollToTop() </a></li>
 
 	</ul>
@@ -879,13 +911,13 @@ $.os.desktop=true;
 	</pre>
 
 	<script>
-	function showMask(){
+	function showMask(text){
 
-	$.ui.showMask();
+	$.ui.showMask(text);
 	window.setTimeout(function(){$.ui.hideMask();},2000);
 	}
 	</script>
-	<a href="javascript:;" onclick="showMask()" class="button">Show Mask</a>
+	<a href="javascript:;" onclick="showMask('Mask will hide in 2 seconds')" class="button">Show Mask</a>
 	</div>
 	<div id="uihidemask" title="Hide Mask" class="panel" data-footer='footerui'>
 	This will hide the loading mask.  You can trigger this manually for long operations.
@@ -931,6 +963,17 @@ $.os.desktop=true;
 		</pre>
 		<a href="javascript:;" onclick="$.ui.toggleSideMenu();" class="button">Toggle Side Menu</a>
 	</div>
+    
+    <div id="uiactionsheet" title="Actionsheet" class="panel" data-footer='footerui'>
+	 This is a shortcut to the actionsheet plugin.  This will wire it correctly to jQUi div
+	<pre>
+	$.ui.actionsheet()
+	</pre>
+	<br><br>
+	
+	<a href="javascript:;" onclick="$.ui.actionsheet('<a href=\'#\' class=\'button\'>Test</a>')" class="button">Show a custom sheet</a>
+	<br/><br/>
+	</div>
 	
 	<div id="uiscrolltotop" title="Scroll to Top" class="panel" data-footer='footerui'>
 	This allows you to scroll to the top of a page.  Scroll to the bottom for the link.
@@ -974,7 +1017,9 @@ $.os.desktop=true;
 		<li><a href="#webpassword" >jq.passwordBox</a></li>
 		<li><a href="#webanimate" >jq.css3animate</a></li>
 		<li><a href="#webdrawer" >jq.drawer</a></li>
-		
+        <li><a href="#webalphatable" >jq.alphatable</a></li>
+		<li><a href="#webactionsheet" >jq.actionsheet</a></li>
+        <li><a href="#webpopup" >jq.popup</a></li>
 		</ul>
 		<br/><br/>
 	</div>
@@ -1369,7 +1414,7 @@ $.os.desktop=true;
 			window.addEventListener("load", init_carousel, false);
 		
 		</script>
-			<div id="carousel_dots" style="text-align: center; margin-left:25%; clear: both; position: relative; top: 40%; z-index: 200">
+			<div id="carousel_dots" style="text-align: center; margin:auto; clear: both; position: relative; top: 40%; z-index: 200">
 			</div>
 			<div id="carousel" style="display:block;height:50%;width:100%;">
 					<div style="background: yellow;">
@@ -1390,7 +1435,7 @@ $.os.desktop=true;
 					<div style="background: blue;"></div>
 					<div style="background: pink;"></div>
 				</div>
-			<div id="carousel_dots2" style="text-align: center; clear: both; position: absolute; bottom: 0px;left:40%; z-index: 200"></div>
+			<div id="carousel_dots2" style="text-align: center; clear: both; position: relative; top: -30%; left: 98%; z-index: 200; width: 20px;"></div>
 	</div>
 
 	<!-- jqPlugins > jQ.swipeListener -->
@@ -1628,6 +1673,136 @@ $.os.desktop=true;
 	</script>
 
 	</div>
+ 
+    <!-- jqPlugins > jqActionSheet -->
+    <div title="Action Sheet" class="panel" id="webactionsheet">
+
+		<script>
+            function showCustomHtmlSheet(){
+                $("#jQUi").actionsheet('<a href="#" >Back</a><a href="javascript:;" onclick="alert(\'hi\');" >Show Alert 3</a><a href="javascript:;" onclick="alert(\'goodbye\');">Show Alert 4</a>');
+            }
+            function showCustomJsonSheet(){
+                $("#jQUi").actionsheet(
+                    [{
+                        text: 'back',
+                        cssClasses: 'red',
+                        handler: function () { $.ui.goBack(); ; }
+                    }, {
+                        text: 'show alert 5',
+                        cssClasses: 'blue',
+                        handler: function () { alert("hi"); }
+                    }, {
+                        text: 'show alert 6',
+                        cssClasses: '',
+                        handler: function () { alert("goodbye"); }
+                    }]
+                );
+            }
+		</script>
+		This creates a slide in action sheet from the bottom.<br /><br />
+		<a class="button" href="javascript:;" onClick="showCustomHtmlSheet()">Show Custom Html Sheet</a>
+		<a class="button" href="javascript:;" onClick="showCustomJsonSheet()">Show Custom Json Sheet</a>
+        
+	</div>
+    
+    
+     <div title="Popup" class="panel" id="webpopup">
+        
+		<script>
+            function showPopup1(){
+                $("#jQUi").popup("I'm replacing an alert box");
+            }
+            function showPopup2(){
+                $("#jQUi").popup({ title:"Alert! Alert!",
+	    message:"This is a test of the emergency alert system!! Don't PANIC!",
+	    cancelText:"Cancel me", 
+	    cancelCallback: function(){console.log("cancelled");},
+	    doneText:"I'm done!",
+	    doneCallback: function(){console.log("Done for!");},
+	    cancelOnly:false}
+                );
+            }
+                function showPopup3(){
+                $("#jQUi").popup({ title:"Login",
+	    message:"Username: <input type='text' class='jq-ui-forms'><br>Password: <input type='text' class='jq-ui-forms' style='webkit-text-security:disc'>",
+	    cancelText:"Cancel", 
+	    cancelCallback: function(){},
+	    doneText:"Login",
+	    doneCallback: function(){alert("Logging in")},
+	    cancelOnly:false
+                }
+                );
+            }
+		</script>
+		This creates a popup dialog to interact with users.  You can pass in an HTML string, which acts (and replaces) an alert dialog.  You can also pass in an object to get more interaction.<br><br>
+		<a class="button" href="javascript:;" onClick="showPopup1()">Alert style diaglog</a><br>
+		<a class="button" href="javascript:;" onClick="showPopup2()">Detailed ineraction</a><br>
+        <a class="button" href="javascript:;" onClick="showPopup3()">HTML markup</a><br>
+        
+	</div>
+    
+    <!-- jqPlugins -> jqAlphaTable-->
+    <div title="Alpha Table" class="panel" id="webalphatable" scrolling="no">
+	<br><br>
+	<p>Scroll an alphabetical list like contacts</p>
+	<div id="listControl" style="margin-left:auto;margin-right:auto;position:absolute;top:20px;bottom:0px;left:0px;overflow:hidden;width:100%;">
+        <div id="contentDIV_container" style="width:100%;height:100%; background-color:white;overflow:hidden;">
+            <div id="contentDIV" style='color:black'>
+                <div style="background-color:blue;" id="itm_anchor_A">A</div> 
+                
+                <li id="item1">These are all</li>
+                <div id="item2">sample entries that</div>
+                <div id="item3">could be DIVs or</div>
+                
+                <div style="background-color:blue;" id="itm_anchor_B">B</div> 
+                
+                <div id="item4">any sort of styled</div>
+                <div id="item5">entries you might wish</div>
+                <div id="item6">that way you don't have to</div>
+                <div id="item7">deal with all the crazy</div>
+                <div id="item8">CSS that is in iScroll.js</div>
+                
+                <div style="background-color:blue;" id="itm_anchor_C">C</div> 
+                <li id="testItem1"/>nec tincidunt lacus suscipit a
+                <li id="testItem2"/>Morbi mollis dui vel urna 
+                <li id="testItem3"/>facilisis ut condimentum 
+                <li id="testItem4"/>mi ullamcorper
+                <div style="background-color:blue;" id="itm_anchor_D">D</div> 
+                <li id="testItem5"/>Sed rhoncus mollis est
+                <li id="testItem6"/>vitae vestibulum massa fringilla id
+                <li id="testItem7"/>Vestibulum rhoncus lorem nec 
+                <li id="testItem8"/>Aenean volutpat nisi quis 
+                <div style="background-color:blue;" id="itm_anchor_E">E</div> 
+                <li id="testItem9"/>Pellentesque porttitor ornare
+                <li id="testItem10"/>Aliquam luctus dui
+                <li id="testItem11"/>Cras facilisis arcu ac 
+                <li id="testItem12"/>Sed id leo quis massa 
+                <li id="testItem13"/>Duis vitae elit vel eros 
+                <div style="background-color:blue;" id="itm_anchor_F">F</div> 
+                <li id="testItem14"/>Morbi sed purus enim
+                <li id="testItem15"/>Nunc volutpat odio vulputate 
+                <li id="testItem16"/>Fusce id ligula erat
+                <li id="testItem17"/>Vestibulum adipiscing 
+                <div style="background-color:blue;" id="itm_anchor_G">G</div> 
+                <li id="testItem18"/>Cras eu augue nec est 
+                <li id="testItem19"/>Cras sit amet neque 
+                <li id="testItem20"/>Mauris bibendum condimentum 
+            </div>
+        </div>
+    </div>
+	<script>
+	window.addEventListener("load",function(){
+	$("#contentDIV").scroller({});  
+	$("#contentDIV").alphatable($("#contentDIV").scroller(),{listCssClass:"tableListContainer",prefix:"itm_anchor_"});
+    },false);
+	</script>
+    <style>
+    .tableListContainer {
+	position:absolute;top:10px;right:0px;width:20px;font-size:8pt;font-weight:bold;color:#000;opacity:.5;border-radius:5px;text-align:center;z-index:9999;border:1px solid black;background:#666;padding-top:5px;padding-bottom:5px;
+	}
+    </style>
+
+	</div>
 
 
 
@@ -1682,6 +1857,15 @@ $.os.desktop=true;
 	   <li> <a href="javascript:;" onclick="$.ui.toggleSideMenu()"  >Toggle Side</a></li>
 	   <li> <a href="javascript:;" onclick="$.ui.toggleNavMenu()"  >Toggle Footer</a></li>
 	  </ul>
+      <div class="title">Themes</div>
+      <ul>
+        <li><a href="javascript:;" onclick="setActiveStyleSheet('default')">Default</a></li>
+        <li><a href="javascript:;" onclick="setActiveStyleSheet('carbon')">Carbon</a></li>
+        <li><a href="javascript:;" onclick="setActiveStyleSheet('eco')">Eco</a></li>
+        <li><a href="javascript:;" onclick="setActiveStyleSheet('frosty')">Frosty</a></li>
+        <li><a href="javascript:;" onclick="setActiveStyleSheet('slate')">Slate</a></li>
+        <li><a href="javascript:;" onclick="setActiveStyleSheet('volcano')">Volcano</a></li>
+      </ul>
 </nav>
 <nav id="menu_jqmobi">
    <div class='title'>Selectors</div>

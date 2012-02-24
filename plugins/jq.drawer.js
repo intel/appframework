@@ -48,6 +48,7 @@
                 } catch (e) {
                     alert("error adding drawer" + e);
                 }
+                this.zIndex=$(this.el).css("zIndex");
             };
 
         drawer.prototype = {
@@ -65,6 +66,7 @@
             direction: "down",
             prevTime: 0,
             handle: null,
+            zIndex:1,
             // horizontal scrolling
             // handle the moving function
             touchMove: function (event) {
@@ -92,7 +94,6 @@
                                 var prevTop = 0;
                             }
                             drawerPoints.y = newTop;
-                            if (newTop >= Math.abs(this.maxTop)) return;
                             this.vdistanceMoved += Math.abs(prevTop) - Math.abs(newTop);
                         }
                         else {
@@ -108,7 +109,6 @@
                                 var prevLeft = 0;
                             }
                             drawerPoints.x = newLeft;
-                            if (newLeft >= Math.abs(this.maxLeft)) return;
                             this.hdistanceMoved += Math.abs(prevLeft) - Math.abs(newLeft);
                         }
                         this.drawerMove(this.currentDrawer, drawerPoints, 0);
@@ -197,6 +197,10 @@
                             else drawerPoints.x = this.maxLeft;
                         }                        
                     }
+                    if(drawerPoints.y>0||drawerPoints.x>0)
+                       this.el.zIndex="9999";
+                    else
+                       this.el.zIndex=this.zIndex;
 
                     this.drawerMove(this.currentDrawer, drawerPoints, 300, "ease-out");
                     this.currentDrawer = null;
@@ -217,13 +221,4 @@
         };
         return drawer;
     })();
-
-    // Helper function to get only
-    if (!window.numOnly) {
-        function numOnly(val) {
-            if (isNaN(parseFloat(val))) val = val.replace(/[^0-9.-]/, "");
-
-            return parseFloat(val);
-        }
-    }
 })(jq);

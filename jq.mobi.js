@@ -817,7 +817,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 $().insertAfter(jq("#target"));
                 ```
              * @param {String|Object} target
-             * @title $.insertAfter(target);
+             * @title $().insertAfter(target);
              */
             insertAfter: function(target) {
                 this.insertBefore(target, true);
@@ -891,7 +891,7 @@ if (!window.jq || typeof (jq) !== "function") {
 
             * @param {String|Array|Object} [selector]
             * @return {Object} jqMobi object with unique children
-            * @title $.children(selector)
+            * @title $().children(selector)
             */
             children: function(selector) {
                 
@@ -1446,6 +1446,20 @@ if (!window.jq || typeof (jq) !== "function") {
                 return this
             };
         }
+        
+        /**
+         * Utility function to create a psuedo GUID
+           ```
+           var id= $.uuid();
+           ```
+         * @title $.uuid
+         */
+        $.uuid = function () {
+            var S4 = function () {
+                return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+            }
+            return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+        };
 
 
         //The following is modified from Zepto.js / events.js
@@ -1536,6 +1550,7 @@ if (!window.jq || typeof (jq) !== "function") {
         function add(element, events, fn, selector, getDelegate) {
             var id = jqmid(element), 
             set = (handlers[id] || (handlers[id] = []));
+            
             eachEvent(events, fn, function(event, fn) {
                 var delegate = getDelegate && getDelegate(fn, event), 
                 callback = delegate || fn;
@@ -1567,6 +1582,7 @@ if (!window.jq || typeof (jq) !== "function") {
          * @api private
          */
         function remove(element, events, fn, selector) {
+            
             var id = jqmid(element);
             eachEvent(events || '', fn, function(event, fn) {
                 findHandlers(element, event, fn, selector).forEach(function(handler) {
@@ -1590,7 +1606,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @param {String|Object} event
         * @param {Function} callback
         * @return {Object} jqMobi object
-        * @title $.bind(event,callback)
+        * @title $().bind(event,callback)
         */
         $.fn.bind = function(event, callback) {
             for (var i = 0; i < this.length; i++) {
@@ -1733,7 +1749,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @param {String|Object} event
         * @param {Function} callback
         * @return {Object} jqMobi object
-        * @title $.on(event,selector,callback);
+        * @title $().on(event,selector,callback);
         */
         $.fn.on = function(event, selector, callback) {
             return selector === undefined || $.isFunction(selector) ? this.bind(event, selector) : this.delegate(selector, event, callback);
@@ -1797,8 +1813,16 @@ if (!window.jq || typeof (jq) !== "function") {
 
         //End zepto/events.js
         return $;
-    
-    
+
     })(window);
     '$' in window || (window.$ = jq);
+    //Helper function used in jq.mobi.plugins.
+    if (!window.numOnly) {
+        function numOnly(val) {
+            if (isNaN(parseFloat(val)))
+                val = val.replace(/[^0-9.-]/, "");
+            
+            return parseFloat(val);
+        }
+    }
 }
