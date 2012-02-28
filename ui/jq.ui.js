@@ -85,7 +85,7 @@
         hasLaunched: false,
         launchCompleted: false,
         activeDiv: "",
-       
+        
         css3animate: function(el, opts) {
             try {
                 jq(el).css3Animate(opts);
@@ -114,8 +114,8 @@
          * @param {String,Array} links
          * @title $.ui.actionsheet()
          */
-        actionsheet:function(opts){
-           return jq("#jQUi").actionsheet(opts);
+        actionsheet: function(opts) {
+            return jq("#jQUi").actionsheet(opts);
         },
         /**
          * This is a wrapper to jq.popup.js plugin.  If you pass in a text string, it acts like an alert box and just gives a message
@@ -135,16 +135,16 @@
          * @param {Object|String} options
          * @title $.ui.popup(opts)
          */
-        popup:function(opts){
-           return $("#jQUi").popup(opts);
+        popup: function(opts) {
+            return $("#jQUi").popup(opts);
         },
         
-        blockUI:function ( opacity ) {
+        blockUI: function(opacity) {
             $.blockUI(opacity);
         },
-       
-        unblockUI:function ( ) {
-           $.unblockUI();
+        
+        unblockUI: function() {
+            $.unblockUI();
         },
         /**
          * Will remove the bottom nav bar menu from your application
@@ -290,16 +290,16 @@
          * @param {Boolean} [force]
          * @title $.ui.toggleNavMenu([force])
          */
-         toggleNavMenu: function(force) {
+        toggleNavMenu: function(force) {
             if (!jq.ui.showNavMenu)
                 return;
             if (jq("#navbar").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
                 jq("#content").css("bottom", "0px");
                 jq("#navbar").hide();
-            } else  if(force===undefined||(force!==undefined&&force===true)) {
+            } else if (force === undefined || (force !== undefined && force === true)) {
                 jq("#navbar").show();
                 jq("#content").css("bottom", jq("#navbar").css("height"));
-                
+            
             }
         },
         /**
@@ -330,7 +330,7 @@
             var that = this;
             if (!jq("#content").hasClass("hasMenu"))
                 return;
-            if (jq("#menu").css("display") != "block" && ((force !== undefined && force !== false) || force === undefined))  {
+            if (jq("#menu").css("display") != "block" && ((force !== undefined && force !== false) || force === undefined)) {
                 this.scrollingDivs["menu_scroller"].initEvents();
                 jq("#menu").show();
                 window.setTimeout(function() {
@@ -340,7 +340,7 @@
                     jq("#content").addClass("on");
                 }, 1); //needs to run after
             
-            } else  if(force===undefined||(force!==undefined&&force===false)) {
+            } else if (force === undefined || (force !== undefined && force === false)) {
                 this.scrollingDivs["menu_scroller"].removeEvents();
                 
                 jq("#header").removeClass("on");
@@ -361,16 +361,22 @@
          * @api private
          */
         updateNavbar: function() {
-            var that=this;
+            var that = this;
             var links = jq(this.navbar).find("a");
             for (var i = 0; i < links.length; i++) {
                 links[i].setAttribute("data-ignore-pressed", "true");
                 links[i].setAttribute("resetHistory", "true");
-                links[i].ontouchend = function(e) {
+                links[i].oldclick = links[i].onclick;
+                
+                links[i].onclick = function(e) {
                     if (that.doingTransition)
                         return;
                     jq("#navbar a").removeClass("selected");
                     jq(this).addClass("selected");
+                    console.log("Clicked");
+                    console.log(jq(this)[0].className)
+                    if (this.oldclick)
+                        this.oldclick(e);
                 }
             
             }
@@ -470,7 +476,7 @@
             if (this.backButtonText.length > 0)
                 this.backButton.innerHTML = this.backButtonText;
             else
-                this.backButton.innerHTML =  text ;
+                this.backButton.innerHTML = text;
         },
         /**
          * Show the loading mask
@@ -483,8 +489,8 @@
          * @title $.ui.showMask(text);
          */
         showMask: function(text) {
-            if(!text)
-               text="Loading Content";
+            if (!text)
+                text = "Loading Content";
             jq("#jQui_mask>h1").html(text);
             $am("jQui_mask").style.display = "block";
         },
@@ -691,14 +697,14 @@
          */
         parsePanelFunctions: function(what, oldDiv) {
             //check for custom footer
-            var that=this;
+            var that = this;
             var hasFooter = what.getAttribute("data-footer");
             
-            window.setTimeout(function(){
-                if (hasFooter&&hasFooter.toLowerCase() == "none") {
-                  that.toggleNavMenu(false);
-                } else{
-                that.toggleNavMenu(true);
+            window.setTimeout(function() {
+                if (hasFooter && hasFooter.toLowerCase() == "none") {
+                    that.toggleNavMenu(false);
+                } else {
+                    that.toggleNavMenu(true);
                 }
                 if (hasFooter && that.customFooter != hasFooter) {
                     that.customFooter = hasFooter;
@@ -709,10 +715,10 @@
                     that.customFooter = false;
                 }
                 if (what.getAttribute("data-tab")) { //Allow the dev to force the footer menu
-                   jq("#navbar a").removeClass("selected");
-                   jq("#" + what.getAttribute("data-tab")).addClass("selected");
+                    jq("#navbar a").removeClass("selected");
+                    jq("#" + what.getAttribute("data-tab")).addClass("selected");
                 }
-            },10);
+            }, 10);
             var hasMenu = what.getAttribute("data-nav");
             if (hasMenu && this.customMenu != hasMenu) {
                 this.customMenu = hasMenu;
@@ -736,14 +742,15 @@
             }
             if (this.menu.style.display == "block")
                 this.toggleSideMenu(); //Close on phones to prevent orientation change bug.
-           
+        
         },
         /**
          * Helper function that parses a contents html for any script tags and either adds them or executes the code
          * @api private
          */
-         parseScriptTags:function(div){
-            if(!div) return;
+        parseScriptTags: function(div) {
+            if (!div)
+                return;
             var scripts = div.getElementsByTagName("script");
             div = null;
             for (var i = 0; i < scripts.length; i++) {
@@ -754,7 +761,7 @@
                     document.getElementsByTagName('head')[0].appendChild(doc);
                     that.remoteJSPages[scripts[i].src] = 1;
                     doc = null;
-                } else { 
+                } else {
                     window.eval(scripts[i].innerHTML);
                 }
             }
@@ -886,8 +893,8 @@
                         });
                     }
                     try {
-                        window.history.pushState(what.id, what.id, startPath+"#"+what.id);
-                        $(window).trigger("hashchange",{newUrl:startPath+"#"+what.id,oldURL:startPath+"#"+oldDiv.id});                    
+                        window.history.pushState(what.id, what.id, startPath + "#" + what.id);
+                        $(window).trigger("hashchange", {newUrl: startPath + "#" + what.id,oldURL: startPath + "#" + oldDiv.id});
                     } 
                     catch (e) {
                     }
@@ -937,7 +944,7 @@
                     }
                     //Let's check if it has a function to run to update the data
                     this.parsePanelFunctions(what, oldDiv);
-                    
+                
                 }
             } catch (e) {
                 console.log("Error with loading content " + e + "  - " + target);
@@ -1036,7 +1043,7 @@
             
             this.modalWindow = modalDiv;
             this.updateNavbar();
-            var defer={};
+            var defer = {};
             var contentDivs = this.viewportContainer.get().querySelectorAll(".panel");
             for (var i = 0; i < contentDivs.length; i++) {
                 var el = contentDivs[i];
@@ -1056,19 +1063,20 @@
                     if (tmp.getAttribute("selected"))
                         this.firstDiv = $am(id);
                 }
-                if(el.getAttribute("data-defer"))
-                  defer[id]=el.getAttribute("data-defer");
+                if (el.getAttribute("data-defer"))
+                    defer[id] = el.getAttribute("data-defer");
                 el = null;
             }
             contentDivs = null;
-             for(var j in defer){
-               (function(j){
-               jq.get(AppMobi.webRoot+defer[j],function(data){
-                  if(data.length==0) return;
-                  $.ui.updateContentDiv(j,data);
-                  that.parseScriptTags(jq(j).get());
-               });
-               })(j);
+            for (var j in defer) {
+                (function(j) {
+                    jq.get(AppMobi.webRoot + defer[j], function(data) {
+                        if (data.length == 0)
+                            return;
+                        $.ui.updateContentDiv(j, data);
+                        that.parseScriptTags(jq(j).get());
+                    });
+                })(j);
             }
             if (this.firstDiv) {
                 
@@ -1112,7 +1120,7 @@
             
             this.updateSideMenu(this.defaultMenu);
         },
-    
+
         /**
          * Initiate a sliding transition.  This is a sample to show how transitions are implemented.  These are registered in $.ui.availableTransitions and take in three parameters.
          * @param {Object} previous panel
@@ -1528,7 +1536,7 @@
     };
     
     function $am(el) {
-        el=el.indexOf("#")==-1?"#"+el:el;
+        el = el.indexOf("#") == -1 ? "#" + el : el;
         return jq(el).get(0);
     }
     
@@ -1552,57 +1560,9 @@
 })(jq);
 
 //The following functions are utilitiy functions for jqUi.  They are not apart of the base class, but help with locking the page scroll,
-//input box issues, remove the address bar on iOS, etc
+//input box issues, remove the address bar on iOS and android, etc
 (function() {
-    //Hacks for address bar
-    var oldOrientation = 0, 
-    orientationPos = {}, 
-    jQUi;
-    var hasRun = false;
-
-    //The following is to setup the viewport properly on mobile devices.  The checking code
-    //is from https://github.com/zynga/viewporter
-    fixTopBar = function fixTopBar(force) {
-        jQUi.css("position", "absolute");
-        jQUi.css("display", "block");
-        if (jq.os.desktop) {
-            document.body.style.height = "100%";
-            jQUi.css("height", "100%");
-            return;
-        }
-        var startHeight = window.innerHeight;
-        var orientation = Math.abs(parseInt(window.orientation));
-        if (isNaN(orientation))
-            orientation = 0;
-        if (oldOrientation == orientation && !force)
-            return;
-        oldOrientation = orientation;
-        
-        if (!orientationPos[orientation])
-            document.body.style.height = document.documentElement.style.minHeight = '5000px';
-        
-        document.body.style.overflow = "hidden";
-        if (!orientationPos[orientation]) {
-            var iterations = jq.os.android ? 20 : 5;
-            var check = window.setInterval(function() {
-                // retry scrolling
-                if (window.innerHeight == 0)
-                    return; //XDK reports 0 sometimes
-                if (!jq.os.android)
-                    window.scrollTo(0, 1); // Android has issues removing the address bar
-                if (window.innerHeight > startHeight || --iterations < 0)  // iOS is comparably easy!
-                {
-                    document.body.style.height = document.documentElement.style.minHeight = window.innerHeight + 'px';
-                    jQUi.css("height", window.innerHeight + "px");
-                    clearInterval(check);
-                    orientationPos[orientation] = jQUi.css("height");
-                }
-            }, 10);
-        } else {
-            document.body.style.height = document.documentElement.style.minHeight = window.innerHeight + 'px';
-            jQUi.css("height", orientationPos[orientation]);
-        }
-    }
+    var jQUi;
 
     //Check to see if any <nav> items are found. If so, add the CSS classes
     jq(document).ready(function() {
@@ -1612,7 +1572,7 @@
             jq("#jQUi #navbar").addClass("hasMenu");
         }
         jQUi = jq("#jQUi");
-        fixTopBar(1);
+        hideAddressBar();
     });
     
     document.addEventListener("appMobi.device.ready", function() { //in AppMobi, we need to undo the height stuff since it causes issues.
@@ -1625,38 +1585,38 @@
     
     window.addEventListener("orientationchange", function() {
         jq.ui.updateOrientation()
-        fixTopBar(1)
+        hideAddressBar();
+    }, false);
     
-    }, true);
-    
-    var preventDefaultTouch = function(e) {
-        if (fixInputHandlers(e))
-            return;
-        e.preventDefault()
-        window.scroll(0, 0);
-        return false;
-    
-    };
-    var preventDefaultScroll = function(e) {
-        e.preventDefault();
-        window.scroll(0, 0);
-        return false;
+    function hideAddressBar() {
+        if (jq.os.desktop)
+            return jQUi.css("height", "100%");
+        if (jq.os.android) {
+            window.scrollTo(1, 1);
+            if (document.documentElement.scrollHeight < window.outerHeight / window.devicePixelRatio)
+                jQUi.css("height", (window.outerHeight / window.devicePixelRatio) + 'px');
+        } 
+        else {
+            document.documentElement.style.height = "5000px";
+            
+            window.scrollTo(0, 1);
+            document.documentElement.style.height = window.innerHeight + "px";
+            jQUi.css("height", window.innerHeight + "px");
+        }
     }
-    document.addEventListener('touchmove', preventDefaultScroll, false);
-    if (jq.os.android && !jq.os.desktop)
-        document.addEventListener('touchstart', preventDefaultTouch, false); //Android only to prevent the browser from scrolling
-
-    //The following is from Cubiq.org - iOS no click delay.  We use this to capture events to input boxes to fix Android...and fix iOS ;)
+    //The following is based on Cubiq.org - iOS no click delay.  We use this to capture events to input boxes to fix Android...and fix iOS ;)
+    //We had to make a lot of fixes to allow access to input elements on android, etc.
     function NoClickDelay(el) {
-        
-        document.addEventListener('touchstart', this, false);
+        if (typeof (el) === "string")
+            el = document.getElementById(el);
+        el.addEventListener('touchstart', this, false);
     }
     var prevClickField;
     NoClickDelay.prototype = {
-        dX:0,
-        dY:0,
-        cX:0,
-        cY:0,
+        dX: 0,
+        dY: 0,
+        cX: 0,
+        cY: 0,
         handleEvent: function(e) {
             switch (e.type) {
                 case 'touchstart':
@@ -1675,32 +1635,35 @@
             
             if (fixInputHandlers(e))
                 return;
-            this.dX=e.touches[0].pageX;
-            this.dY=e.touches[0].pageY;
-            if (prevClickField !== null && prevClickField !== undefined&&jq.os.android) {
+            this.dX = e.touches[0].pageX;
+            this.dY = e.touches[0].pageY;
+            if (prevClickField !== null && prevClickField !== undefined && jq.os.android) {
                 prevClickField.blur(); //We need to blur any input fields on android
                 prevClickField = null;
             }
             e.preventDefault();
             this.moved = false;
-            document.addEventListener('touchmove', this, false);
-            document.addEventListener('touchend', this, false);
+            document.addEventListener('touchmove', this, true);
+            document.addEventListener('touchend', this, true);
         },
         
         onTouchMove: function(e) {
             this.moved = true;
-            this.cX=e.touches[0].pageX-this.dX;
-            this.cY=e.touches[0].pageY-this.dY;
+            this.cX = e.touches[0].pageX - this.dX;
+            this.cY = e.touches[0].pageY - this.dY;
+            e.preventDefault();
         },
         
         onTouchEnd: function(e) {
             
             document.removeEventListener('touchmove', this, false);
             document.removeEventListener('touchend', this, false);
-            if ((!jq.os.blackberry&&!this.moved)||(jq.os.blackberry&&(Math.abs(this.cX)<5||Math.abs(this.cY)<5))) {
+            
+            if ((!jq.os.blackberry && !this.moved) || (jq.os.blackberry && (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5))) {
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
+                
                 if (checkAnchorClick(theTarget))
                     return false;
                 
@@ -1715,14 +1678,14 @@
                 }
             }
             prevClickField = null;
-            this.dX=this.cX=this.cY=this.dY=0;
+            this.dX = this.cX = this.cY = this.dY = 0;
         }
     };
     
     
     function fixInputHandlers(e) {
-       if(!jq.os.android)
-          return;
+        if (!jq.os.android)
+            return;
         var theTarget = e.touches[0].target;
         if (theTarget && theTarget.type != undefined) {
             var tagname = theTarget.tagName.toLowerCase();
@@ -1766,8 +1729,12 @@
     
     
     jq(document).ready(function() {
+        document.body.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }, false);
         if (!jq.os.desktop)
-           new NoClickDelay(document.getElementById("jQUi"));
+            new NoClickDelay(document.getElementById("jQUi"));
         else {
             document.getElementById("jQUi").addEventListener("click", function(e) {
                 var theTarget = e.target;
@@ -1782,32 +1749,33 @@
     });
     
     function checkAnchorClick(theTarget) {
-        var parent=false;
-        if(theTarget.tagName.toLowerCase() != "a"&&theTarget.parentNode)
-           parent=true,theTarget=theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
+        var parent = false;
+        if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
+            parent = true, theTarget = theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
         if (theTarget.tagName.toLowerCase() == "a") {
-            if (theTarget.href.toLowerCase().indexOf("javascript:")!==-1){
-                  return false;
+            if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1) {
+                return false;
             }
-             if(parent&&theTarget.onclick&&!jq.os.desktop)
-               theTarget.onclick();
-           
+            
+            if (theTarget.onclick && !jq.os.desktop)
+                theTarget.onclick();
+            
             
             if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) 
             {
                 if (theTarget.href.toLowerCase().indexOf("javascript:") != 0) {
                     if (jq.ui.isAppMobi)
                         AppMobi.device.launchExternal(theTarget.href);
-                    else if(!jq.os.desktop)
+                    else if (!jq.os.desktop)
                         brokerClickEventMobile(theTarget);
                     else
-                       window.open(theTarget);
+                        window.open(theTarget);
                     return true;
                 }
                 return false;
             }
-            if((theTarget.href.indexOf("#")!==-1&&theTarget.hash.length==0))
-               return true;
+            if ((theTarget.href.indexOf("#") !== -1 && theTarget.hash.length == 0))
+                return true;
             
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
@@ -1817,16 +1785,18 @@
             return true;
         }
     }
-    function brokerClickEventMobile(theTarget){
-        if(jq.os.desktop) return;
+    function brokerClickEventMobile(theTarget) {
+        if (jq.os.desktop)
+            return;
         var clickevent = document.createEvent('Event');
         clickevent.initEvent('click', true, false);
-        theTarget.target="_blank";
+        theTarget.target = "_blank";
         theTarget.dispatchEvent(clickevent);
     }
 })();
 
 //Touch events are from zepto/touch.js
+
 (function($) {
     var touch = {}, touchTimeout;
     
@@ -1861,15 +1831,16 @@
                 touch.isDoubleTap = true;
             touch.last = now;
             setTimeout(longTap, longTapDelay);
-            if(!touch.el.data("ignore-pressed"))
-               touch.el.addClass("selected");
+            if (!touch.el.data("ignore-pressed"))
+                touch.el.addClass("selected");
         }).bind('touchmove', function(e) {
             touch.x2 = e.touches[0].pageX;
             touch.y2 = e.touches[0].pageY;
         }).bind('touchend', function(e) {
-            if(!touch.el) return;
-            if(!touch.el.data("ignore-pressed"))
-               touch.el.removeClass("selected");
+            if (!touch.el)
+                return;
+            if (!touch.el.data("ignore-pressed"))
+                touch.el.removeClass("selected");
             if (touch.isDoubleTap) {
                 touch.el.trigger('doubleTap');
                 touch = {};
@@ -1883,7 +1854,7 @@
                 
                 touchTimeout = setTimeout(function() {
                     touchTimeout = null;
-                    if(touch.el)
+                    if (touch.el)
                         touch.el.trigger('singleTap');
                     touch = {};
                 }, 250);

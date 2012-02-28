@@ -112,9 +112,11 @@ width:100%;
 #header > h1 {
 	position:absolute;
 	overflow:hidden;
-	left:45%;
-	margin:1px 0px 0px -75px;
-	height:48px; width:130px;
+	width:100%;
+    z-index:-11;
+    left:-10px;
+    text-align:center;
+	height:48px; 
 	font-family:'Eurostile-Black', Eurostile, Helvetica, Arial, sans-serif;
 	font-weight:normal;
 	font-size:24px;
@@ -126,10 +128,6 @@ width:100%;
 	color:#fff;
 } /* This is text that appears in the header at the top of the screen */
 
-body[orient="landscape"] > #header > h1 {
-	margin-left:-125px;
-	width:250px;
-} /* Updates the available text area and positioning when the screen is held in landscape orientation. */
 
 
 
@@ -831,6 +829,7 @@ select[disabled]~div {
 .hasMenu.on {
   position:absolute !important;
   left:200px !important;
+  
 }
 #menu.on {
 left:0px !important;

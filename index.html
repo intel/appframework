@@ -7,7 +7,10 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
 
+
 <link rel="stylesheet" type="text/css" href="kitchensink/jq.ui.css" title="default"/>
+<link rel="stylesheet" type="text/css" href="kitchensink/icons.css" /> 
+
 <link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.carbon.css" title="carbon" disabled='true'/>
 <link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.eco.css" title="eco" disabled='true' />
 <link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.frosty.css" title="frosty" disabled='true'/>
@@ -61,14 +64,16 @@ $.os.desktop=true;
 }
 var oldElem;
 function setActiveStyleSheet(title) {
+console.log("called");
    var a = document.getElementsByTagName("link");
    var currElem;
    
    for(i=0; i<a.length; i++) {
+   
        if(a[i].getAttribute("title")==title){
          currElem=a[i];
        }
-       else if(!a[i].getAttribute("disabled"))
+       else if(!a[i].getAttribute("disabled")&&a[i].getAttribute("title"))
           oldElem=a[i];
    }
    
@@ -158,8 +163,8 @@ oldElem=document.getElementsByTagName("link")[0];
 <span class='ui-icon ui-icon-loading spin'></span><h1 >Starting app</h1>
 </div>
 <div id="header">
-<span id='badgephone' onclick='jq.ui.toggleSideMenu()' style='position:absolute;right:0px;padding-top:7px;padding-right:5px;'><img src='kitchensink/images/badge.png'></span>
-<span id='badgetablet'  style='float:right;padding-top:7px;padding-right:5px;'><img src='kitchensink/images/badge.png'></span>
+<div id='badgephone' onclick='jq.ui.toggleSideMenu()' style='width:100%;padding-top:7px;padding-right:5px;'><img align="right" src='kitchensink/images/badge.png'></div>
+<div id='badgetablet'  style='width:100%;padding-top:7px;padding-right:5px;'><img align="right" src='kitchensink/images/badge.png'></div>
 </div>
 
 <div id="content">
@@ -168,7 +173,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	<h2 class='expanded' onclick='showHide(this,"main_info");'>Welcome</h2>
 		<p id='main_info'>Welcome to the kitchen sink demo for jqMobi.  Here you will find samples of how to use the jqMobi libraries.  Please select an option from below.</p>
 		<ul>
-		 <li><a href="#jqm" data-transition="none" id='jqmlink'>jqMobi</a></li>
+		 <li class='icon home big'><a href="#jqm" data-transition="none" id='jqmlink'>jqMobi</a></li>
 		 <li><a href="#jqmui" >jqUi</a></li>
 		 <li><a href="#jqmweb" >jqPlugins</a></li>
 		</ul>
@@ -636,6 +641,7 @@ oldElem=document.getElementsByTagName("link")[0];
 		<li><a href="#uiapi" >$.ui API</a></li>
 		<li><a href="#uifooter">Custom Footers</a></li>
 		<li><a href="#uiside">Side Navigation Menu</a></li>
+        <li><a href="#uiicons">SVG Icons</a></li>
 		<li><a href="kitchensink/external.html" data-persist-ajax="true" data-refresh-ajax="true">Load External Content</a></li>
         <li><a href="http://www.jqmobi.com" target="_blank">Open a new page</a></li>
         <li><a href="#uidefer">Defer loading</a></li>
@@ -643,6 +649,77 @@ oldElem=document.getElementsByTagName("link")[0];
 
 	</div>
 
+    <div id="uiicons" title="SVG Icons" class="panel">
+       <h2 class='expanded' onclick='showHide(this,"icons_info");'>SVG Icons</h2><p id='icons_info'>jqUi provides SVG icons to use throughout your app.  Simply add the icon class, along with the image class name and additional sizes you want.
+       <br>
+       .mini - 20 pixels high<br>
+       .big - 40 pixels hight<br>
+       The default is 28 pixels.<br>
+       </p>
+       <ul>
+          <li class="icon home big"><a href="#">Home Big</a></li>
+          <li class="icon home"><a href="#">Home Default</a></li>
+          <li class="icon home mini"><a href="#">Home Mini</a></li>
+          <li class="icon pencil big"><a href="#">Pencil</a></li>
+          <li class="icon picture big"><a href="#">Picture</a></li>
+          <li class="icon camera big"><a href="#">Camera</a></li>
+          <li class="icon headset big"><a href="#">Headset</a></li>
+          <li class="icon paper big"><a href="#">Paper</a></li>
+          <li class="icon stack big"><a href="#">Stack</a></li>
+          <li class="icon folder big"><a href="#">Folder</a></li>
+          <li class="icon tag big"><a href="#">Tag</a></li>
+          <li class="icon basket big"><a href="#">Basket</a></li>
+          <li class="icon phone big"><a href="#">Phone</a></li>
+          <li class="icon mail big"><a href="#">Mail</a></li>
+          <li class="icon location big"><a href="#">Location</a></li>
+          <li class="icon clock big"><a href="#">Clock</a></li>
+          <li class="icon calendar big"><a href="#">Calendar</a></li>
+          <li class="icon message big"><a href="#">Message</a></li>
+          <li class="icon chat big"><a href="#">Chat</a></li>
+          <li class="icon user big"><a href="#">User</a></li>
+          <li class="icon loading big"><a href="#">Loading</a></li>
+          <li class="icon refresh big"><a href="#">Refresh</a></li>
+          <li class="icon magnifier big"><a href="#">Magnifier</a></li>
+          <li class="icon key big"><a href="#">Key</a></li>
+          <li class="icon settings big"><a href="#">Settings</a></li>
+          <li class="icon graph big"><a href="#">Graph</a></li>
+          <li class="icon trash big"><a href="#">Trash</a></li>
+          <li class="icon pin big"><a href="#">Pin</a></li>
+          <li class="icon target big"><a href="#">Target</a></li>
+          <li class="icon download big"><a href="#">Download</a></li>
+          <li class="icon upload big"><a href="#">Upload</a></li>
+          <li class="icon star big"><a href="#">Star</a></li>
+          <li class="icon heart big"><a href="#">Heart</a></li>
+          <li class="icon warning big"><a href="#">Warning</a></li>
+          <li class="icon add big"><a href="#">Add</a></li>
+          <li class="icon remove big"><a href="#">Remove</a></li>
+          <li class="icon question big"><a href="#">Question</a></li>
+          <li class="icon info big"><a href="#">Info</a></li>
+          <li class="icon error big"><a href="#">Error</a></li>
+          <li class="icon check big"><a href="#">Check</a></li>
+          <li class="icon minimize big"><a href="#">Minimize</a></li>
+          <li class="icon close big"><a href="#">Close</a></li>
+          <li class="icon up big"><a href="#">Up</a></li>
+          <li class="icon down big"><a href="#">Down</a></li>
+          <li class="icon left big"><a href="#">Left</a></li>
+          <li class="icon right big"><a href="#">Right</a></li>
+          <li class="icon tools big"><a href="#">Tools</a></li>
+          <li class="icon html5 big"><a href="#">HTML5</a></li>
+          <li class="icon css big"><a href="#">CSS</a></li>
+          <li class="icon js big"><a href="#">JS</a></li>
+          <li class="icon cloud big"><a href="#">Cloud</a></li>
+          <li class="icon tv big"><a href="#">TV</a></li>
+          <li class="icon wifi big"><a href="#">Wifi</a></li>
+          <li class="icon new big"><a href="#">New</a></li>
+          <li class="icon mic big"><a href="#">Mic</a></li>
+          <li class="icon database big"><a href="#">Database</a></li>
+          <li class="icon busy big"><a href="#">Busy</a></li>
+          <li class="icon bug big"><a href="#">Bug</a></li>
+          <li class="icon lamp big"><a href="#">Lamp</a></li>
+        </ul>
+    </div>
+    
+    
     <div id="uidefer" title="Defer Loading" class="panel" data-defer="defer/index.html">
       Deferred loading requires a web browser for Ajax to work.  What we do is load the html after $.ui.ready is called, so you can speed up the initial loading time of your app.
     </div>
@@ -1837,7 +1914,7 @@ oldElem=document.getElementsByTagName("link")[0];
 <nav>
    <div class='title'>Home</div>
    <ul>
-      <li><a href="#jqm">Selectors</a></li>
+      <li class="icon home mini"><a href="#jqm">Selectors</a></li>
    </ul>
    <div class='title'>UI</div>
      <ul>
