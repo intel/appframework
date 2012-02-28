@@ -373,8 +373,6 @@
                         return;
                     jq("#navbar a").removeClass("selected");
                     jq(this).addClass("selected");
-                    console.log("Clicked");
-                    console.log(jq(this)[0].className)
                     if (this.oldclick)
                         this.oldclick(e);
                 }
@@ -1583,9 +1581,9 @@
     });
     
     
-    window.addEventListener("orientationchange", function() {
+    window.addEventListener("orientationchange", function(e) {
         jq.ui.updateOrientation()
-        hideAddressBar();
+        window.setTimeout(function(){hideAddressBar();},200);
     }, false);
     
     function hideAddressBar() {

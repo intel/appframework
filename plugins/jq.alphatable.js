@@ -122,7 +122,7 @@
             },
             setupLetterBox: function () {
                 var div = document.createElement("div");
-                div.style.cssText = "-webkit-transform:translate3d(0,0,0);display:none;position:absolute;top:35%;left:35%;height:15%;width:15%;text-align:center;font-size:150%;color:blue;background:#666;z-index:999999;border:1px solid black;border-raidus:10px;";
+                div.style.cssText = "-webkit-transform:translate3d(0,0,0);display:none;position:absolute;top:35%;left:35%;height:2em;width:15%;line-height:2em;text-align:center;font-size:2em;color:blue;background:#666;z-index:999999;border:1px solid black;border-raidus:10px;";
                 div.className = this.letterBoxCssClass;
                 div.innerHTML = "";
                 this.letterBox = div;

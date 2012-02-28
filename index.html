@@ -62,12 +62,13 @@ var tag=$("head").append(script);
 $.os.android=true; //let's make it run like an android device
 $.os.desktop=true;
 }
-var oldElem;
+var oldElem="default";
 function setActiveStyleSheet(title) {
-console.log("called");
    var a = document.getElementsByTagName("link");
    var currElem;
    
+   if(title==oldElem.getAttribute("title")||oldElem=="default")
+      return;
    for(i=0; i<a.length; i++) {
    
        if(a[i].getAttribute("title")==title){
@@ -1820,50 +1821,59 @@ oldElem=document.getElementsByTagName("link")[0];
     
     <!-- jqPlugins -> jqAlphaTable-->
     <div title="Alpha Table" class="panel" id="webalphatable" scrolling="no">
+    <style>
+    #contentDIV .alphaItem {padding:5px;}
+    #contentDIV .alphaItem:nth-child(even) {background: #CCC}
+    #contentDIV .alphaItem:nth-child(odd) {background: #FFF}
+     .tableHeader {
+        background:blue;font-weight:bold;text-align:center;height:24px;
+        color:white;font-size:20px;line-height:24px;
+    }
+    </style>
 	<br><br>
 	<p>Scroll an alphabetical list like contacts</p>
-	<div id="listControl" style="margin-left:auto;margin-right:auto;position:absolute;top:20px;bottom:0px;left:0px;overflow:hidden;width:100%;">
+	<div id="listControl" style="margin-left:auto;margin-right:auto;position:absolute;top:20px;bottom:0px;left:0px;overflow:hidden;width:100%;padding-bottom:10px;">
         <div id="contentDIV_container" style="width:100%;height:100%; background-color:white;overflow:hidden;">
             <div id="contentDIV" style='color:black'>
-                <div style="background-color:blue;" id="itm_anchor_A">A</div> 
+                <div class="tableHeader" id="itm_anchor_A">A</div> 
                 
-                <li id="item1">These are all</li>
-                <div id="item2">sample entries that</div>
-                <div id="item3">could be DIVs or</div>
+                <li class='alphaItem' id="item1">These are all</li>
+                <div class='alphaItem' id="item2">sample entries that</div>
+                <div class='alphaItem' id="item3">could be DIVs or</div>
                 
-                <div style="background-color:blue;" id="itm_anchor_B">B</div> 
+                <div class="tableHeader" id="itm_anchor_B">B</div> 
                 
-                <div id="item4">any sort of styled</div>
-                <div id="item5">entries you might wish</div>
-                <div id="item6">that way you don't have to</div>
-                <div id="item7">deal with all the crazy</div>
-                <div id="item8">CSS that is in iScroll.js</div>
+                <div class='alphaItem' id="item4">any sort of styled</div>
+                <div class='alphaItem' id="item5">entries you might wish</div>
+                <div class='alphaItem' id="item6">that way you don't have to</div>
+                <div class='alphaItem' id="item7">deal with all the crazy</div>
+                <div class='alphaItem' id="item8">CSS that is in iScroll.js</div>
                 
-                <div style="background-color:blue;" id="itm_anchor_C">C</div> 
-                <li id="testItem1"/>nec tincidunt lacus suscipit a
-                <li id="testItem2"/>Morbi mollis dui vel urna 
-                <li id="testItem3"/>facilisis ut condimentum 
-                <li id="testItem4"/>mi ullamcorper
-                <div style="background-color:blue;" id="itm_anchor_D">D</div> 
-                <li id="testItem5"/>Sed rhoncus mollis est
-                <li id="testItem6"/>vitae vestibulum massa fringilla id
-                <li id="testItem7"/>Vestibulum rhoncus lorem nec 
-                <li id="testItem8"/>Aenean volutpat nisi quis 
-                <div style="background-color:blue;" id="itm_anchor_E">E</div> 
-                <li id="testItem9"/>Pellentesque porttitor ornare
-                <li id="testItem10"/>Aliquam luctus dui
-                <li id="testItem11"/>Cras facilisis arcu ac 
-                <li id="testItem12"/>Sed id leo quis massa 
-                <li id="testItem13"/>Duis vitae elit vel eros 
-                <div style="background-color:blue;" id="itm_anchor_F">F</div> 
-                <li id="testItem14"/>Morbi sed purus enim
-                <li id="testItem15"/>Nunc volutpat odio vulputate 
-                <li id="testItem16"/>Fusce id ligula erat
-                <li id="testItem17"/>Vestibulum adipiscing 
-                <div style="background-color:blue;" id="itm_anchor_G">G</div> 
-                <li id="testItem18"/>Cras eu augue nec est 
-                <li id="testItem19"/>Cras sit amet neque 
-                <li id="testItem20"/>Mauris bibendum condimentum 
+                <div class="tableHeader" id="itm_anchor_C">C</div> 
+                <li class='alphaItem' id="testItem1">nec tincidunt lacus suscipit a</li>
+                <li class='alphaItem' id="testItem2">Morbi mollis dui vel urna </li>
+                <li class='alphaItem' id="testItem3">facilisis ut condimentum </li>
+                <li class='alphaItem' id="testItem4">mi ullamcorper</li>
+                <div class="tableHeader" id="itm_anchor_D">D</div> 
+                <li class='alphaItem' id="testItem5">Sed rhoncus mollis est</li>
+                <li class='alphaItem' id="testItem6">vitae vestibulum massa fringilla id</li>
+                <li class='alphaItem' id="testItem7">Vestibulum rhoncus lorem nec </li>
+                <li class='alphaItem' id="testItem8">Aenean volutpat nisi quis </li>
+                <div class="tableHeader" id="itm_anchor_E">E</div> 
+                <li class='alphaItem' id="testItem9">Pellentesque porttitor ornare</li>
+                <li class='alphaItem' id="testItem10">Aliquam luctus dui</li>
+                <li class='alphaItem' id="testItem11">Cras facilisis arcu ac </li>
+                <li class='alphaItem' id="testItem12">Sed id leo quis massa </li>
+                <li class='alphaItem' id="testItem13">Duis vitae elit vel eros </li>
+                <div class="tableHeader" id="itm_anchor_F">F</div> 
+                <li class='alphaItem' id="testItem14">Morbi sed purus enim</li>
+                <li class='alphaItem' id="testItem15">Nunc volutpat odio vulputate </li>
+                <li class='alphaItem' id="testItem16">Fusce id ligula erat</li>
+                <li class='alphaItem' id="testItem17">Vestibulum adipiscing </li>
+                <div class="tableHeader" id="itm_anchor_G">G</div> 
+                <li class='alphaItem' id="testItem18">Cras eu augue nec est </li>
+                <li class='alphaItem' id="testItem19">Cras sit amet neque </li>
+                <li class='alphaItem' id="testItem20">Mauris bibendum condimentum </li>
             </div>
         </div>
     </div>
