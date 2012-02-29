@@ -1751,12 +1751,14 @@
         if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
             parent = true, theTarget = theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
         if (theTarget.tagName.toLowerCase() == "a") {
-            if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1) {
+            if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1||theTarget.getAttribute("data-ignore")) {
                 return false;
             }
             
-            if (theTarget.onclick && !jq.os.desktop)
+            if (theTarget.onclick && !jq.os.desktop){
                 theTarget.onclick();
+                $(theTarget).trigger("click");
+            }
             
             
             if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) 

@@ -273,7 +273,6 @@ a.customBackButton.press {
 	text-align:center;
 	text-shadow:rgba(10,12,20,.9) 0px -1px 1px;
 	margin: 0px auto;
-	background-image:url('images/nav_icons.png');
 	width:62px;
 	line-height:100px;
 	position:relative;
@@ -284,7 +283,7 @@ a.customBackButton.press {
 	font-family:Helvetica, Arial, sans-serif;
 	font-weight:bold;
 	color:#fff !important;
-	background-image:url('images/nav_icons.png'), -webkit-gradient(linear, left top, left bottom, from(#000), to(#000), color-stop(.5,#000), color-stop(.5,rgba(15,22,29,1)));
+	background-image:-webkit-gradient(linear, left top, left bottom, from(#000), to(#000), color-stop(.5,#000), color-stop(.5,rgba(15,22,29,1)));
 }
 
 
@@ -297,16 +296,14 @@ a.customBackButton.press {
     background: url('images/vert_divider.png') top right repeat-y;
 	float:right;
 }
-.navbar_home {
-}
-.navbar_js {
-	background-position:-62px 0px;
-}
-.navbar_ui {
-	background-position:-124px 0px;
-}
-.navbar_plugins {
-	background-position:-186px 0px;
+
+#navbar .icon:before {
+line-height:62px;
+text-align:center;
+position:absolute;
+top:-10px;
+left:10px;
+font-size:48px;
 }
 
 .jq-badge {

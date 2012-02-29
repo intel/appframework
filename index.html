@@ -158,15 +158,16 @@ oldElem=document.getElementsByTagName("link")[0];
 </head>
 <body>
 <div id="jQUi">
-<div id="splashscreen" class='ui-loader'>
-<img src="kitchensink/images/splash.png">
-<br><br>
-<span class='ui-icon ui-icon-loading spin'></span><h1 >Starting app</h1>
-</div>
-<div id="header">
-<div id='badgephone' onclick='jq.ui.toggleSideMenu()' style='width:100%;padding-top:7px;padding-right:5px;'><img align="right" src='kitchensink/images/badge.png'></div>
-<div id='badgetablet'  style='width:100%;padding-top:7px;padding-right:5px;'><img align="right" src='kitchensink/images/badge.png'></div>
-</div>
+<!-- this is the splashscreen you see. -->
+    <div id="splashscreen" class='ui-loader'>
+        <img src="kitchensink/images/splash.png">
+        <br><br>
+        <span class='ui-icon ui-icon-loading spin'></span><h1 >Starting app</h1>
+    </div>
+    <div id="header">
+        <div id='badgephone' onclick='jq.ui.toggleSideMenu()' style='width:100%;padding-top:7px;padding-right:5px;'><img align="right" src='kitchensink/images/badge.png'></div>
+        <div id='badgetablet'  style='width:100%;padding-top:7px;padding-right:5px;'><img align="right" src='kitchensink/images/badge.png'></div>
+    </div>
 
 <div id="content">
 	<div title='Welcome' id="main" class="panel" selected="true" data-load="loadedPanel" data-unload="unloadedPanel" data-tab="navbar_home">
@@ -174,7 +175,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	<h2 class='expanded' onclick='showHide(this,"main_info");'>Welcome</h2>
 		<p id='main_info'>Welcome to the kitchen sink demo for jqMobi.  Here you will find samples of how to use the jqMobi libraries.  Please select an option from below.</p>
 		<ul>
-		 <li class='icon home big'><a href="#jqm" data-transition="none" id='jqmlink'>jqMobi</a></li>
+		 <li class='icon home big'><a href="#jqm" id='jqmlink'>jqMobi</a></li>
 		 <li><a href="#jqmui" >jqUi</a></li>
 		 <li><a href="#jqmweb" >jqPlugins</a></li>
 		</ul>
@@ -1897,28 +1898,29 @@ oldElem=document.getElementsByTagName("link")[0];
 </div>
 <!-- ------------------------------------------ -->
 <!-- navbar -->
+<!-- navbar -->
 <div id="navbar">
 	<div class="horzRule"></div>
-    <a href="#main" id='navbar_home' class='navbar_home' onclick="$.ui.removeBadge(this)">home <span class='jq-badge lr'>3</span></a>
-    <a href="#jqm" id='navbar_js' class="navbar_js" >selectors</a>
-    <a href="#jqmui" id='navbar_ui'  class="navbar_ui" >ui</a>
-	<a href="#jqmweb" id='navbar_plugins'  class="navbar_plugins" >plugins</a>
+    <a href="#main" id='navbar_home' class='icon home' >home <span class='jq-badge lr'>3</span></a>
+    <a href="#jqm" id='navbar_js' class="icon target" >selectors</a>
+    <a href="#jqmui" id='navbar_ui'  class="icon picture" >ui</a>
+	<a href="#jqmweb" id='navbar_plugins'  class="icon key" >plugins</a>
 </div>
 
  <footer id='footerui'>
 	 <div class="horzRule"></div>
-      <a href="#main" id='navbar_home' class='navbar_home' >Home <span class='jq-badge lr'>6</span></a>
-      <a href="#jqmtransitions" id='navbar_js' class="navbar_js" >Trans</a>
-	  <a href="#jqmui" id='navbar_ui'  class="navbar_ui" >ui</a>
-	  <a href="#uiapi" id='navbar_plugins'  class="navbar_plugins" >api</a>
+      <a href="#main" id='navbar_home' class='icon home' >Home <span class='jq-badge lr'>6</span></a>
+      <a href="#jqmtransitions" id='navbar_js' class="icon stack" >Trans</a>
+	  <a href="#jqmui" id='navbar_ui'  class="icon picture" >ui</a>
+	  <a href="#uiapi" id='navbar_plugins'  class="icon info" >api</a>
 	  
 </footer>
  <footer id='footerui2'>
 	 <div class="horzRule"></div>
-      <a href="#main" id='navbar_home' class='navbar_home' onclick="$.ui.removeBadge(this)">Home <span class='jq-badge lr'>6</span></a>
-      <a href="#jqmtransitions" id='navbar_js' class="navbar_js" >Trans</a>
-	  <a href="#jqmui" id='navbar_ui'  class="navbar_ui" >ui</a>
-	  <a href="#uiapi" id='navbar_plugins'  class="navbar_plugins" >api</a>
+  <a href="#main" id='navbar_home' class='icon home' >Home <span class='jq-badge lr'>6</span></a>
+      <a href="#jqmtransitions" id='navbar_js' class="icon stack" >Trans</a>
+	  <a href="#jqmui" id='navbar_ui'  class="icon picture" >ui</a>
+	  <a href="#uiapi" id='navbar_plugins'  class="icon info" >api</a>
 </footer>	
 <!-- ------------------------------------------ -->
 <nav>
