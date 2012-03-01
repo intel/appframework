@@ -1105,7 +1105,8 @@ if (!window.jq || typeof (jq) !== "function") {
             error: empty,
             complete: empty,
             context: undefined,
-            timeout: 0
+            timeout: 0,
+            crossDomain:false
         };
         /**
         * Execute a jsonP call, allowing cross domain scripting
@@ -1136,6 +1137,13 @@ if (!window.jq || typeof (jq) !== "function") {
                 options.success.call(context, data);
             };
             script.src = options.url.replace(/=\?/, '=' + callbackName);
+            if(options.error)
+            {
+               script.onerror=function(){
+                  clearTimeout(abortTimeout);
+                  options.error.call(context, "", 'error');
+               }
+            }
             $('head').append(script);
             if (options.timeout > 0)
                 abortTimeout = setTimeout(function() {
@@ -1186,9 +1194,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     settings.contentType = "application/x-www-form-urlencoded";
                 if (!settings.headers)
                     settings.headers = {};
-                settings.headers = $.extend({
-                    'X-Requested-With': 'XMLHttpRequest'
-                }, settings.headers);
+               
                 if (!settings.dataType)
                     settings.dataType = "text/html";
                 else {
@@ -1229,15 +1235,20 @@ if (!window.jq || typeof (jq) !== "function") {
                     return $.jsonP(settings);
                 }
                 
+                if (!settings.crossDomain) settings.crossDomain = /^([\w-]+:)?\/\/([^\/]+)/.test(settings.url) &&
+                    RegExp.$2 != window.location.host;
+                
+                if(!settings.crossDomain)
+                    settings.headers = $.extend({'X-Requested-With': 'XMLHttpRequest'}, settings.headers);
                 var abortTimeout;
                 var context = settings.context;
-                
+                var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
                 xhr.onreadystatechange = function() {
                     var mime = settings.dataType;
                     if (xhr.readyState === 4) {
                         clearTimeout(abortTimeout);
                         var result, error = false;
-                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0) {
+                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0&&protocol=='file:') {
                             if (mime === 'application/json' && !(/^\s*$/.test(xhr.responseText))) {
                                 try {
                                     result = JSON.parse(xhr.responseText);
@@ -1246,10 +1257,12 @@ if (!window.jq || typeof (jq) !== "function") {
                                 }
                             } else
                                 result = xhr.responseText;
+                            //If we're looking at a local file, we assume that no response sent back means there was an error
+                            if(xhr.status===0&&result.length===0)
+                                error=true;
                             if (error)
                                 settings.error.call(context, xhr, 'parsererror', error);
                             else {
-                                
                                 settings.success.call(context, result, 'success', xhr);
                             }
                         } else {
@@ -1282,6 +1295,8 @@ if (!window.jq || typeof (jq) !== "function") {
             }
             return xhr;
         };
+        
+        
         /**
         * Shorthand call to an Ajax GET request
             ```
