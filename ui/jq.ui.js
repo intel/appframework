@@ -1068,12 +1068,12 @@
             contentDivs = null;
             for (var j in defer) {
                 (function(j) {
-                    jq.get(AppMobi.webRoot + defer[j], function(data) {
+                    jq.ajax({url:AppMobi.webRoot + defer[j], success:function(data) {
                         if (data.length == 0)
                             return;
                         $.ui.updateContentDiv(j, data);
                         that.parseScriptTags(jq(j).get());
-                    });
+                    },error:function(msg){console.log("Error with deferred load "+defer[j])}});
                 })(j);
             }
             if (this.firstDiv) {

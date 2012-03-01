@@ -46,6 +46,10 @@
             try {
                 this.container = this.el.parentNode;
                 var that = this;
+                this.listeners.move = function(e) {that.touchMove(e);}
+                this.listeners.end = function(e) {that.touchEnd(e);}
+                this.listeners.cancel = function(e) {that.touchEnd(e);}
+                this.listeners.start = function(e) {that.touchStart(e);}
                 this.initEvents();
                 var windowHeight = window.innerHeight;
                 var windowWidth = window.innerWidth;
@@ -131,27 +135,19 @@
             scrollingFinishCB:false,
             initEvents: function() {
                 var that = this;
-                this.el.addEventListener('touchmove', this.listeners.move = function(e) {
-                    that.touchMove(e);
-                }, false);
-                this.el.addEventListener('touchend', this.listeners.end = function(e) {
-                    that.touchEnd(e);
-                }, false);
-                this.el.addEventListener('touchcancel', this.listeners.cancel = function(e) {
-                    that.touchEnd(e);
-                }, false);
-                this.el.addEventListener('touchstart', this.listeners.start = function(e) {
-                    that.touchStart(e);
-                }, false);
+                this.el.addEventListener('touchmove',that.listeners.move , false);
+                this.el.addEventListener('touchend',that.listeners.end , false);
+                this.el.addEventListener('touchcancel', that.listeners.cancel, false);
+                this.el.addEventListener('touchstart', that.listeners.start, false);
             },
             removeEvents: function() {
-                this.el.removeEventListener('touchstart', this.listeners.start, false);
-                this.el.removeEventListener('touchmove', this.listeners.move, false);
-                this.el.removeEventListener('touchend', this.listeners.end, false);
-                this.el.removeEventListener('touchcancel', this.listeners.cancel, false);
+                var that=this;
+                this.el.removeEventListener('touchstart', that.listeners.start);
+                this.el.removeEventListener('touchmove', that.listeners.move);
+                this.el.removeEventListener('touchend', that.listeners.end);
+                this.el.removeEventListener('touchcancel', that.listeners.cancel);
                 this.hideScrollbars();
                 clearTimeout(this.scrollingFinishCB);
-            
             },
             hideScrollbars: function() {
                 if (this.hscrollBar)
