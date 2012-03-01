@@ -45,11 +45,6 @@
             }
             try {
                 this.container = this.el.parentNode;
-                var that = this;
-                this.listeners.move = function(e) {that.touchMove(e);}
-                this.listeners.end = function(e) {that.touchEnd(e);}
-                this.listeners.cancel = function(e) {that.touchEnd(e);}
-                this.listeners.start = function(e) {that.touchStart(e);}
                 this.initEvents();
                 var windowHeight = window.innerHeight;
                 var windowWidth = window.innerWidth;
@@ -133,21 +128,22 @@
             },
             elementScrolling:false,
             scrollingFinishCB:false,
-            initEvents: function() {
-                var that = this;
-                this.el.addEventListener('touchmove',that.listeners.move , false);
-                this.el.addEventListener('touchend',that.listeners.end , false);
-                this.el.addEventListener('touchcancel', that.listeners.cancel, false);
-                this.el.addEventListener('touchstart', that.listeners.start, false);
+            handleEvent: function(e) {
+        		switch(e.type) {
+        			case 'touchstart': this.touchStart(e); break;
+        			case 'touchmove': this.touchMove(e); break;
+        			case 'touchend': this.touchEnd(e); break;
+        		}
+        	},
+            initEvents: function () {
+        		this.el.addEventListener('touchstart', this, false);
+                this.el.addEventListener('touchmove', this, false);
+    			this.el.addEventListener('touchend', this, false);
             },
-            removeEvents: function() {
-                var that=this;
-                this.el.removeEventListener('touchstart', that.listeners.start);
-                this.el.removeEventListener('touchmove', that.listeners.move);
-                this.el.removeEventListener('touchend', that.listeners.end);
-                this.el.removeEventListener('touchcancel', that.listeners.cancel);
-                this.hideScrollbars();
-                clearTimeout(this.scrollingFinishCB);
+            removeEvents: function () {
+            	this.el.removeEventListener('touchstart', this);
+                this.el.removeEventListener('touchmove', this);
+    			this.el.removeEventListener('touchend', this);
             },
             hideScrollbars: function() {
                 if (this.hscrollBar)
