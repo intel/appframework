@@ -511,7 +511,7 @@
             var that = this;
             try {
                 if ($am(id)) {
-                    jq("#modalContainer").html($am(id).childNodes[0].innerHTML);
+                    jq("#modalContainer").html('<div class="androidFixer">'+$am(id).childNodes[0].innerHTML+'</div>');
                     jq('#modalContainer').append("<a href='javascript:;' onclick='$.ui.hideModal();' class='closebutton modalbutton'></a><div style='width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right'></div>");
                     this.modalWindow.style.display = "block";
                     
@@ -1585,6 +1585,15 @@
         jq.ui.updateOrientation()
         window.setTimeout(function(){hideAddressBar();},200);
     }, false);
+    
+    if(jq.os.android&&!jq.os.desktop)
+    {
+        window.addEventListener("resize", function(e) {
+            jq.ui.updateOrientation()
+            window.setTimeout(function(){hideAddressBar();},200);
+        }, false);
+    }
+     
     
     function hideAddressBar() {
         if (jq.os.desktop)

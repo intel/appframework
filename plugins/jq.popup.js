@@ -71,12 +71,12 @@
                 var self = this;
                 var markup = '<div id="' + this.id + '" class="jqPopup hidden">\
 	        				<header>' + this.title + '</header>\
-	        				<div>' + this.message + '</div>\
+	        				<div><div style="width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right"></div>' + this.message + '</div>\
 	        				<footer>\
 	        					<button class="button" id="cancel">' + this.cancelText + '</button>\
 	        					<button class="button" id="action">' + this.doneText + '</button>\
 	        				</footer>\
-	        			</div>';
+	        			</div></div>';
                 $(this.container).append($(markup));
                 
                 if (this.cancelOnly) {

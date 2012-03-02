@@ -168,7 +168,7 @@ oldElem=document.getElementsByTagName("link")[0];
     </div>
 
 <div id="content">
-	<div title='Welcome' id="main" class="panel" selected="true" data-load="loadedPanel" data-unload="unloadedPanel" data-tab="navbar_home">
+	<div title='Welcome' id="main" class="panel" selected="true" data-load="loadedPanel" data-unload="unloadedPanel" data-tab="navbar_home" >
 
 	<h2 class='expanded' onclick='showHide(this,"main_info");'>Welcome</h2>
 		<p id='main_info'>Welcome to the kitchen sink demo for jqMobi.  Here you will find samples of how to use the jqMobi libraries.  Please select an option from below.</p>
@@ -182,7 +182,7 @@ oldElem=document.getElementsByTagName("link")[0];
 
 	<!-- ------------------------------------------ -->
 	
-	<div title="jqMobi" id="jqm" class="panel" data-nav="menu_jqmobi" >
+	<div title="jqMobi" id="jqm" class="panel" data-nav="menu_jqmobi" data-footer="none" >
 		<h2 class='expanded' onclick='showHide(this,"jqmobi_info");'>jqMobi</h2>
 		<p id='jqmobi_info'>jqMobi is a blazingly fast query selector tool that is optmimized for HTML5 browsers.</p>
 
@@ -228,7 +228,7 @@ oldElem=document.getElementsByTagName("link")[0];
 		<br/><br/>
 	</div>
 
-    <div id="jqmserialize" class="panel" title="$().serialize" data-nav="menu_jqmobi">
+    <div id="jqmserialize" class="panel" title="$().serialize" data-nav="menu_jqmobi" >
     <script>
     function serializeForm(){
        alert($("#form").serialize());
