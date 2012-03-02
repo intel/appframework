@@ -463,7 +463,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     return undefined;
                 if (value == undefined && typeof (attribute) === "string") {
                     var styles = window.getComputedStyle(toAct);
-                    return styles[attribute] ? styles[attribute] : toAct.style[attribute];
+                    return  toAct.style[attribute] ? toAct.style[attribute]: window.getComputedStyle(toAct)[attribute] ;
                 }
                 for (var i = 0; i < this.length; i++) {
                     if ($.isObject(attribute)) {
