@@ -73,17 +73,17 @@
 	        				<header>' + this.title + '</header>\
 	        				<div><div style="width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right"></div>' + this.message + '</div>\
 	        				<footer>\
-	        					<button class="button" id="cancel">' + this.cancelText + '</button>\
-	        					<button class="button" id="action">' + this.doneText + '</button>\
+	        					<a href="javascript:;" class="button" id="cancel">' + this.cancelText + '</a>\
+	        					<a href="javascript:;" class="button" id="action">' + this.doneText + '</a>\
 	        				</footer>\
 	        			</div></div>';
                 $(this.container).append($(markup));
                 
                 if (this.cancelOnly) {
-                    $("#" + this.id).find('BUTTON#action').hide();
-                    $("#" + this.id).find('BUTTON#cancel').addClass('center');
+                    $("#" + this.id).find('A#action').hide();
+                    $("#" + this.id).find('A#cancel').addClass('center');
                 }
-                $("#" + this.id).find('BUTTON').each(function() {
+                $("#" + this.id).find('A').each(function() {
                     var button = $(this);
                     button.bind('click', function(e) {
                         if (button.attr('id') == 'cancel') {

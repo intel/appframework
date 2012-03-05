@@ -57,16 +57,16 @@ color:white;
     display:block !important;
 }
 
-.jqPopup>FOOTER>BUTTON#cancel{
+.jqPopup>FOOTER>A#cancel{
     float:left;
 }
 
-.jqPopup>FOOTER>BUTTON#action{
+.jqPopup>FOOTER>A#action{
     float:right;
     margin-right:4px;
 }
 
-.jqPopup>FOOTER>BUTTON.center{
+.jqPopup>FOOTER>A.center{
     float:none!important;
     width:80%;
     margin:8px;
