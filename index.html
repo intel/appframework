@@ -89,6 +89,7 @@ function setActiveStyleSheet(title) {
 $(document).ready(function(){
 oldElem=document.getElementsByTagName("link")[0];
 });
+
 </script>
 
 
@@ -117,7 +118,7 @@ oldElem=document.getElementsByTagName("link")[0];
        //$.ui.removeFooterMenu(); This would remove the bottom nav menu
     };
     document.addEventListener("DOMContentLoaded",init,false);  
-	
+	$.ui.ready(function(){console.log('ready');});
    
     /* This code prevents users from dragging the page */
     var preventDefaultScroll = function(event) {
@@ -177,12 +178,11 @@ oldElem=document.getElementsByTagName("link")[0];
 		 <li><a href="#jqmui" >jqUi</a></li>
 		 <li><a href="#jqmweb" >jqPlugins</a></li>
 		</ul>
-
 	</div> 
 
 	<!-- ------------------------------------------ -->
 	
-	<div title="jqMobi" id="jqm" class="panel" data-nav="menu_jqmobi" data-footer="none" >
+	<div title="jqMobi" id="jqm" class="panel" data-nav="menu_jqmobi" >
 		<h2 class='expanded' onclick='showHide(this,"jqmobi_info");'>jqMobi</h2>
 		<p id='jqmobi_info'>jqMobi is a blazingly fast query selector tool that is optmimized for HTML5 browsers.</p>
 
@@ -1048,7 +1048,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	</pre>
 	<br><br>
 	
-	<a href="javascript:;" onclick="$.ui.actionsheet('<a href=\'#\' class=\'button\'>Test</a>')" class="button">Show a custom sheet</a>
+	<a href="javascript:;" onclick="$.ui.actionsheet('<a href=\'javascript:;\' class=\'button\'>Test</a>')" class="button">Show a custom sheet</a>
 	<br/><br/>
 	</div>
 	
@@ -1756,7 +1756,7 @@ oldElem=document.getElementsByTagName("link")[0];
 
 		<script>
             function showCustomHtmlSheet(){
-                $("#jQUi").actionsheet('<a href="#" >Back</a><a href="javascript:;" onclick="alert(\'hi\');" >Show Alert 3</a><a href="javascript:;" onclick="alert(\'goodbye\');">Show Alert 4</a>');
+                $("#jQUi").actionsheet('<a href="javascript:;" >Back</a><a href="javascript:;" onclick="alert(\'hi\');" >Show Alert 3</a><a href="javascript:;" onclick="alert(\'goodbye\');">Show Alert 4</a>');
             }
             function showCustomJsonSheet(){
                 $("#jQUi").actionsheet(

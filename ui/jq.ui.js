@@ -201,7 +201,10 @@
          * @title $.ui.ready
          */
         ready: function(param) {
-            this._readyFunc = param;
+            if(this.launchCompleted) 
+                param();
+            else
+                document.addEventListener("jq.ui.ready",param,false);
         },
         /**
          * Override the back button class name
@@ -1099,24 +1102,19 @@
                     {
                         that.loadContent(defaultHash);
                     }
+                    modalDiv = null;
+                    maskDiv = null;
+                    that.launchCompleted = true;
+                    jq(document).trigger("jq.ui.ready");
+                    jq("#splashscreen").remove();
+                    that.defaultFooter = jq("#navbar").children();
+                    var firstMenu = jq("nav").get();
+                    that.defaultMenu = jq(firstMenu).children();
+                    
+                    that.updateSideMenu(that.defaultMenu);
                 }, 100);
             }
-            modalDiv = null;
-            maskDiv = null;
-            this.launchCompleted = true;
-            var e = document.createEvent('Events');
-            e.initEvent('jq.ui.ready', true, true);
-            document.dispatchEvent(e);
-            jq("#splashscreen").remove();
-            if (typeof (this._readyFunc) == "function") {
-                this._readyFunc();
-            }
-            
-            this.defaultFooter = jq("#navbar").children();
-            var firstMenu = jq("nav").get();
-            this.defaultMenu = jq(firstMenu).children();
-            
-            this.updateSideMenu(this.defaultMenu);
+           
         },
 
         /**
@@ -1679,7 +1677,7 @@
                 theTarget.dispatchEvent(theEvent);
                 if (theTarget && theTarget.type != undefined) {
                     var tagname = theTarget.tagName.toLowerCase();
-                    if (tagname == "select" || tagname == "input" || tagname == "button" || tagname == "textarea") {
+                    if (tagname == "select" || (theTarget.type=="text"&&tagname == "input")||  tagname == "textarea") {
                         theTarget.focus();
                     }
                 }
@@ -1696,7 +1694,8 @@
         var theTarget = e.touches[0].target;
         if (theTarget && theTarget.type != undefined) {
             var tagname = theTarget.tagName.toLowerCase();
-            if (tagname == "select" || tagname == "input" || tagname == "button" || tagname == "textarea") { // stuff we need to allow
+            var type=theTarget.type;
+            if (tagname == "select" || (theTarget.type=="text"&&tagname == "input")||tagname == "textarea") { // stuff we need to allow
                 //On Android 2.2+, the keyboard is broken when we apply -webkit-transform.  The hit box is moved and it no longer loses focus when you click out.
                 //What the following does is moves the div up so the text is not covered by the keyboard.
                 if (jq.os.android && (theTarget.type.toLowerCase() == "text" || theTarget.type.toLowerCase() == "textarea")) {
@@ -1744,6 +1743,7 @@
             new NoClickDelay(document.getElementById("jQUi"));
         else {
             document.getElementById("jQUi").addEventListener("click", function(e) {
+              
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
