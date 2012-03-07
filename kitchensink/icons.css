@@ -2,7 +2,7 @@
     font-family: 'IcoMoon';
     src: 
          url('icons.ttf') format('truetype'),
-         url('icons.svg#') format('svg');
+         url('icons.svg#IcoMoon') format('svg');
     font-weight: normal;
     font-style: normal;
 

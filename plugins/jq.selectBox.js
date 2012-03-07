@@ -46,7 +46,6 @@
                     fakeInput.style.color = "black";
                     fakeInput.linkId = theSel.id;
                     fakeInput.onclick = function(e) {
-                        e.preventDefault();
                         that.initDropDown(this.linkId);
                     };
                     theSel.parentNode.appendChild(fakeInput);
@@ -146,7 +145,7 @@
                 var anchor = document.createElement("a");
                 anchor.href = "javascript:;";
                 div.tmpValue = j;
-                div.onclick = function() {
+                div.onclick = function(e) {
                     that.setDropDownValue(elID, this.tmpValue);
                 };
                 anchor.style.cssText = "text-decoration:none;color:black;";
@@ -249,9 +248,13 @@
             modalDiv.appendChild(myDiv);
             
             $(document).ready(function() {
-                document.body.appendChild(modalDiv);
+               
+                if(jq("#jQUi"))
+                   jq("#jQUi").append(modalDiv);
+                else
+                    document.body.appendChild(modalDiv);
                 var close = $("#jqmobiSelectClose").get();
-                close.ontouchstart = close.onclick = function() {
+                close.onclick = function() {
                     that.hideDropDown();
                 };
                 

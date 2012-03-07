@@ -313,13 +313,16 @@
          * @param {Boolean} [force]
          * @title $.ui.toggleHeaderMenu([force])
          */
-        toggleHeaderMenu: function() {
-            if (jq("#header").css("display") == "block") {
+         toggleHeaderMenu: function(force) {
+
+            if (jq("#header").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
                 jq("#content").css("top", "0px");
-            } else {
+                jq("#header").hide();
+            } else if (force === undefined || (force !== undefined && force === true)) {
+                jq("#header").show();
                 jq("#content").css("top", jq("#header").css("height"));
+            
             }
-            jq("#header").toggle();
         },
         /**
          * Toggles the side menu.  Force is a boolean to force show or hide.
@@ -514,8 +517,8 @@
             var that = this;
             try {
                 if ($am(id)) {
-                    jq("#modalContainer").html('<div class="androidFixer">'+$am(id).childNodes[0].innerHTML+'</div>');
-                    jq('#modalContainer').append("<a href='javascript:;' onclick='$.ui.hideModal();' class='closebutton modalbutton'></a><div style='width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right'></div>");
+                    jq("#modalContainer").html('<div style="width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right"></div>'+$am(id).childNodes[0].innerHTML+'');
+                    jq('#modalContainer').append("<a href='javascript:;' onclick='$.ui.hideModal();' class='closebutton modalbutton'></a>");
                     this.modalWindow.style.display = "block";
                     
                     button = null;
@@ -1584,14 +1587,14 @@
         window.setTimeout(function(){hideAddressBar();},200);
     }, false);
     
-    if(jq.os.android&&!jq.os.desktop)
+    if(jq.os.desktop)
     {
         window.addEventListener("resize", function(e) {
             jq.ui.updateOrientation()
-            window.setTimeout(function(){hideAddressBar();},200);
+            window.setTimeout(function(){hideAddressBar();},100);
         }, false);
     }
-     
+
     
     function hideAddressBar() {
         if (jq.os.desktop)
@@ -1783,7 +1786,7 @@
                 }
                 return false;
             }
-            if ((theTarget.href.indexOf("#") !== -1 && theTarget.hash.length == 0))
+            if ((theTarget.href.indexOf("#") !== -1 && theTarget.hash.length == 0)||theTarget.href.length==0)
                 return true;
             
             var mytransition = theTarget.getAttribute("data-transition");

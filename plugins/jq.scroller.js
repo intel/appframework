@@ -514,7 +514,6 @@
              scrollBy:function(pos,time) {
                 this.startTop = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform).f) - numOnly(this.container.scrollTop);
                 this.startLeft = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform).e) - numOnly(this.container.scrollLeft);
-                console.log(this.startTop+"  "+this.startLeft);
                 this.scrollTo({y:this.startTop-pos.y,x:this.startLeft-pos.x},time);
             },
 
