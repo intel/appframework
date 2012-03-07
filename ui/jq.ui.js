@@ -1769,7 +1769,7 @@
             
             if (theTarget.onclick && !jq.os.desktop){
                 theTarget.onclick();
-                $(theTarget).trigger("click");
+                //$(theTarget).trigger("click");
             }
             
             
