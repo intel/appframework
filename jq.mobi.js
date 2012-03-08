@@ -716,6 +716,34 @@ if (!window.jq || typeof (jq) !== "function") {
                 return this;
             },
             /**
+            * Replaces a css class on elements.
+                ```
+                $().replaceClass("on", "off");
+                ```
+
+            * @param {String} classes that are space delimited
+            * @return {Object} jqMobi object
+            * @title $().replaceClass(old, new)
+            */
+            replaceClass: function(name, newName) {
+                for (var i = 0; i < this.length; i++) {
+                    if (name == undefined) {
+                        this[i].className = newName;
+                        return this;
+                    }
+                    var classList = this[i].className;
+                    name.split(/\s+/g).concat(newName.split(/\s+/g)).forEach(function(cname) {
+                        classList = classList.replace(classRE(cname), " ");
+                    });
+					classList += newName;
+                    if (classList.length > 0)
+                        this[i].className = classList.trim();
+                    else
+                        this[i].className = "";
+                }
+                return this;
+            },
+            /**
             * Checks to see if an element has a class.
                 ```
                 $().hasClass('foo');

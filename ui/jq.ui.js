@@ -324,6 +324,8 @@
             
             }
         },
+		
+		
         /**
          * Toggles the side menu.  Force is a boolean to force show or hide.
            ```
@@ -336,26 +338,31 @@
             var that = this;
             if (!jq("#content").hasClass("hasMenu"))
                 return;
-            if (jq("#menu").css("display") != "block" && ((force !== undefined && force !== false) || force === undefined)) {
+            var menu = jq("#menu");
+			var els = jq("#content, #menu, #header, #navbar");
+			
+            if (menu.css("display") != "block" && ((force !== undefined && force !== false) || force === undefined)) {
                 this.scrollingDivs["menu_scroller"].initEvents();
-                jq("#menu").show();
-                window.setTimeout(function() {
-                    jq("#menu").addClass("on");
-                    jq("#header").addClass("on");
-                    jq("#navbar").addClass("on");
-                    jq("#content").addClass("on");
+				menu.show();
+                setTimeout(function() {
+                    els.replaceClass("off", "to-on");
+					els.one("webkitTransitionEnd", function(e){
+						var el = jq(e.target);
+						el.replaceClass("to-on", "on");
+						console.log("Change menu ended for "+e.target.id);
+					});
                 }, 1); //needs to run after
+				
             
             } else if (force === undefined || (force !== undefined && force === false)) {
                 this.scrollingDivs["menu_scroller"].removeEvents();
-                
-                jq("#header").removeClass("on");
-                jq("#menu").removeClass("on");
-                jq("#navbar").removeClass("on");
-                jq("#content").removeClass("on");
-                setTimeout(function() {
-                    jq("#menu").hide();
-                }, 300); //lame I know
+				els.replaceClass("on", "to-off");
+				els.one("webkitTransitionEnd", function(e){
+					var el = jq(e.target);
+					el.replaceClass("to-off", "off");
+					if(el.id == 'menu') el.hide();
+					console.log("Change menu ended for "+e.target.id);
+				});
             }
         },
         /**
@@ -1558,9 +1565,9 @@
     //Check to see if any <nav> items are found. If so, add the CSS classes
     jq(document).ready(function() {
         if (jq("nav").length > 0) {
-            jq("#jQUi #header").addClass("hasMenu");
-            jq("#jQUi #content").addClass("hasMenu");
-            jq("#jQUi #navbar").addClass("hasMenu");
+            jq("#jQUi #header").addClass("hasMenu off");
+            jq("#jQUi #content").addClass("hasMenu off");
+            jq("#jQUi #navbar").addClass("hasMenu off");
         }
         jQUi = jq("#jQUi");
         hideAddressBar();

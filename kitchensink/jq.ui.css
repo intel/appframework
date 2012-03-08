@@ -387,9 +387,7 @@ font-size:48px;
 	display:none;
 	position:absolute; top:0px; left:-200px;
 	background:rgba(29,29,28,1);
-	-webkit-transform:translate3d(0,0,0);
-    -webkit-transition-property: -webkit-transform, opacity;
-	-webkit-transition-duration: 300ms;
+    -webkit-transform:translate3d(-200px,0px,0px);
 }
 #menu_scroller {
 	padding-bottom:10px;
@@ -799,9 +797,8 @@ input.jq-ui-slider + label {
 	height:24px;
 	width:57px;
 	display:inline-block;
-   	-webkit-transition-property: -webkit-transform, opacity;
-	-webkit-transition-duration: 300ms;
-	-webkit-transition-timing-function: ease-in-out;
+   -webkit-transition: all 0.3s  ease-in-out;
+
 } 
 input.jq-ui-forms[type=radio]:active:checked + label,
 input.jq-ui-forms[type=checkbox]:active:checked + label,
@@ -832,19 +829,33 @@ select[disabled]~div {
 
 	
 .hasMenu{
- -webkit-transition-property: -webkit-transform, opacity;
- -webkit-transition-duration: 300ms;
  position:absolute !important;
  left:0px !important;
 }
+/*menu on/off mechanism, note .hasMenu.off and #menu.on default to no transform*/
 .hasMenu.on {
-  position:absolute !important;
-  left:200px !important;
-  
+  -webkit-transform:translate3d(200px,0px,0px);
 }
-#menu.on {
-left:0px !important;
+.hasMenu.to-on {
+  -webkit-transition: -webkit-transform 300ms;
+  -webkit-transform:translate3d(200px,0px,0px);
 }
+.hasMenu.to-off {
+  -webkit-transition: -webkit-transform 300ms;
+  -webkit-transform:translate3d(0px,0px,0px);
+}
+#menu.to-on {
+    -webkit-transition: -webkit-transform 300ms;
+    -webkit-transform:translate3d(0px,0px,0px);
+}
+#menu.to-off {
+    -webkit-transition: -webkit-transform 300ms;
+    -webkit-transform:translate3d(-200px,0px,0px);
+}
+#menu.off {
+    -webkit-transform:translate3d(-200px,0px,0px);
+}
+
 
 #badgetablet{
 	display:none !important;
@@ -854,7 +865,6 @@ left:0px !important;
 	.hasMenu, .hasMenu.on  {
 		position:absolute !important;
 		left:256px !important;
-        -webkit-transition: all 0ms !important;
 	}
 	#badgephone{
 		display:none !important;
@@ -872,9 +882,11 @@ left:0px !important;
 		bottom:0px !important;
 		height:100% !important;
 		display:block !important;
-		position:absolute !important; top:0px !important; left:0px !important;
+		position:absolute !important; top:0px !important; 
+		left:0px !important;
 		background:rgba(29,29,28,1) !important;
-		-webkit-transform:translate3d(0,0,0) !important;
+		-webkit-transform:translate3d(0px,0px,0px) !important;
+		-webkit-transition:none !important;
 	}
     
 }
