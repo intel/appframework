@@ -244,8 +244,8 @@
                 this.startX = 0;
                 this.dy = 0;
                 this.startY = 0;
-                if (runFinal && this.pagingFunction && typeof this.pagingFunction == "function")
-                    this.pagingFunction(this.carouselIndex);
+                if (runFinal && this.pagingCallback && typeof this.pagingCallback == "function")
+                    this.pagingCallback(this.carouselIndex);
             },
             onMoveIndex: function(newInd,transitionTime) {
                 
@@ -286,8 +286,8 @@
                 } catch (e) {
                     console.log("Error " + e);
                 }
-                if (runFinal && this.pagingFunction && typeof this.pagingFunction == "function")
-                    this.pagingFunction(currInd);
+                if (runFinal && this.pagingCallback && typeof this.pagingCallback == "function")
+                    this.pagingCallback(currInd);
             },
             
             moveCSS3: function(el, distanceToMove, time, timingFunction) {
