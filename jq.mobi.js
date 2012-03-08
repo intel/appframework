@@ -24,7 +24,9 @@ if (!window.jq || typeof (jq) !== "function") {
         eventHandlers = [], 
         _eventID = 1, 
         jsonPHandlers = [], 
-        _jsonPID = 1;
+        _jsonPID = 1,
+        fragementRE=/^\s*<(\w+)[^>]*>/;
+        
 
         /**
          * Internal function to test if a class name fits in a regular expression
@@ -762,7 +764,7 @@ if (!window.jq || typeof (jq) !== "function") {
                         for (var j = 0; j < element.length; j++)
                             insert != undefined ? this[i].insertBefore(element[j], this[i].firstChild) : this[i].appendChild(element[j]);
                     } else {
-                        var obj = $(element).get();
+                        var obj =fragementRE.test(element)?$(element).get():undefined;
                         
                         if (obj == undefined || obj.length == 0) {
                             obj = document.createTextNode(element);
@@ -1833,6 +1835,26 @@ if (!window.jq || typeof (jq) !== "function") {
             event.initEvent(type, bubbles, true, null, null, null, null, null, null, null, null, null, null, null, null);
             return event;
         };
+        
+        /**
+         * Creates a proxy function so you can change the 'this' context in the function
+         ```
+            var newObj={foo:bar}
+            $("#main").bind("click",$.proxy(function(evt){console.log(this)},newObj);
+         ```
+         
+         * @param {Function} Callback
+         * @param {Object} Context
+         * @title $.proxy(callback,context);
+         */
+         
+        $.proxy=function(fnc,ctx){
+           var tmp=function(evt){
+           
+              return fnc.call(ctx,evt);
+           }
+           return tmp;
+        }
         
          /**
          * End of APIS
