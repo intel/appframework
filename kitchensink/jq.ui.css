@@ -832,11 +832,10 @@ select[disabled]~div {
  left:0px;
 }
 /*menu on/off mechanism, note .hasMenu.off and #menu.on default to no transform*/
-.hasMenu.on {
-  -webkit-transform:translate3d(200px,0px,0px);
-}
 .hasMenu.to-on {
   -webkit-transition: -webkit-transform 300ms;
+}
+.hasMenu.on, .hasMenu.to-on {
   -webkit-transform:translate3d(200px,0px,0px);
 }
 .hasMenu.to-off {
@@ -844,7 +843,8 @@ select[disabled]~div {
   -webkit-transform:translate3d(0px,0px,0px);
 }
 #menu.on {
-    -webkit-transform:translate3d(0px,0px,0px);
+    -webkit-transform:none;
+	-webkit-transition:none;
 }
 #menu.to-on {
     -webkit-transition: -webkit-transform 300ms;
@@ -852,11 +852,11 @@ select[disabled]~div {
 }
 #menu.to-off {
     -webkit-transition: -webkit-transform 300ms;
+}
+#menu, #menu.off, #menu.to-off {
     -webkit-transform:translate3d(-200px,0px,0px);
 }
-#menu, #menu.off {
-    -webkit-transform:translate3d(-200px,0px,0px);
-}
+
 
 
 #badgetablet{
