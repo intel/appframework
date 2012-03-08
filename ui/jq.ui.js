@@ -94,6 +94,15 @@
             }
         },
         /**
+         * this is a boolean when set to true (default) it will load that panel when the app is started
+           ```
+           $.ui.loadDefaultHash=false; //Never load the page from the has when the app is started
+           $.ui.loadDefaultHash=true; //Default
+           ```
+         *@title $.ui.loadDefaultHash
+         */
+        loadDefaulHash:true,
+        /**
          * This is a shorthand call to the jq.actionsheet plugin.  We wire it to the jQUi div automatically
            ```
            $.ui.actionsheet("<a href='javascript:;' class='button'>Settings</a> <a href='javascript:;' class='button red'>Logout</a>")

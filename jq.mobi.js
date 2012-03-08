@@ -1475,7 +1475,10 @@ if (!window.jq || typeof (jq) !== "function") {
             }
             return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
         };
-
+        /**
+         Zepto.js events
+         @api private
+         */
 
         //The following is modified from Zepto.js / events.js
         //We've removed depricated jQuery events like .live and allow anonymous functions to be removed
@@ -1671,6 +1674,11 @@ if (!window.jq || typeof (jq) !== "function") {
             });
         };
         
+         /**
+         * internal variables
+         * @api private
+         */
+        
         var returnTrue = function() {
             return true
         }, 
@@ -1825,6 +1833,11 @@ if (!window.jq || typeof (jq) !== "function") {
             event.initEvent(type, bubbles, true, null, null, null, null, null, null, null, null, null, null, null, null);
             return event;
         };
+        
+         /**
+         * End of APIS
+         * @api private
+         */
 
         //End zepto/events.js
         return $;
