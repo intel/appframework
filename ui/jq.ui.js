@@ -683,13 +683,17 @@
          * @api private
          */
         updateOrientation: function(event) {
-            for (var j in this.scrollingDivs) {
-                if (typeof (this.scrollingDivs[j]) !== "function")
-                    this.scrollToTop(j);
+			var that = this;
+            for (var j in that.scrollingDivs) {
+                if (typeof (that.scrollingDivs[j]) !== "function")
+                    that.scrollToTop(j);
             }
-            this.css3animate(this.activeDiv, {
-                x: "100%",
-                time: "0ms"
+            that.css3animate(that.activeDiv, {
+                x: "0%",
+                time: "0ms",
+				callback:function(){
+					that.clearAnimations(that.activeDiv);
+				}
             });
         },
 

@@ -829,7 +829,7 @@ select[disabled]~div {
 	
 .hasMenu{
  position:absolute !important;
- left:0px !important;
+ left:0px;
 }
 /*menu on/off mechanism, note .hasMenu.off and #menu.on default to no transform*/
 .hasMenu.on {
