@@ -385,9 +385,8 @@ font-size:48px;
 	bottom:0px;
 	height:100%;
 	display:none;
-	position:absolute; top:0px; left:-200px;
+	position:absolute; top:0px; left:0px;
 	background:rgba(29,29,28,1);
-    -webkit-transform:translate3d(-200px,0px,0px);
 }
 #menu_scroller {
 	padding-bottom:10px;
@@ -844,6 +843,9 @@ select[disabled]~div {
   -webkit-transition: -webkit-transform 300ms;
   -webkit-transform:translate3d(0px,0px,0px);
 }
+#menu.on {
+    -webkit-transform:translate3d(0px,0px,0px);
+}
 #menu.to-on {
     -webkit-transition: -webkit-transform 300ms;
     -webkit-transform:translate3d(0px,0px,0px);
@@ -852,7 +854,7 @@ select[disabled]~div {
     -webkit-transition: -webkit-transform 300ms;
     -webkit-transform:translate3d(-200px,0px,0px);
 }
-#menu.off {
+#menu, #menu.off {
     -webkit-transform:translate3d(-200px,0px,0px);
 }
 

@@ -735,11 +735,10 @@ if (!window.jq || typeof (jq) !== "function") {
                     name.split(/\s+/g).concat(newName.split(/\s+/g)).forEach(function(cname) {
                         classList = classList.replace(classRE(cname), " ");
                     });
-					classList += newName;
-                    if (classList.length > 0)
-                        this[i].className = classList.trim();
-                    else
-                        this[i].className = "";
+                    if (classList.length > 0){
+                    	this[i].className = (classList.trim()+" "+newName).trim();
+                    } else
+                        this[i].className = newName;
                 }
                 return this;
             },

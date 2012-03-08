@@ -349,7 +349,6 @@
 					els.one("webkitTransitionEnd", function(e){
 						var el = jq(e.target);
 						el.replaceClass("to-on", "on");
-						console.log("Change menu ended for "+e.target.id);
 					});
                 }, 1); //needs to run after
 				
@@ -360,8 +359,7 @@
 				els.one("webkitTransitionEnd", function(e){
 					var el = jq(e.target);
 					el.replaceClass("to-off", "off");
-					if(el.id == 'menu') el.hide();
-					console.log("Change menu ended for "+e.target.id);
+					if(e.target.id == 'menu') el.hide();
 				});
             }
         },
@@ -1101,8 +1099,11 @@
                     //activeDiv = firstDiv;
                     that.firstDiv.style.display = "block";
                     that.css3animate(that.firstDiv, {
-                        x: "100%",
-                        time: "0ms"
+                        x: "0%",
+                        time: "0ms",
+						callback:function(){
+							that.clearAnimations(that.firstDiv);
+						}
                     });
                     if (that.activeDiv.title)
                         that.titleBar.innerHTML = that.activeDiv.title;
