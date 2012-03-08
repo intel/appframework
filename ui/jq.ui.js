@@ -1134,11 +1134,11 @@
             
             if (back) {
                 that.css3animate(oldDiv, {
-                    x: "200%",
+                    x: "100%",
                     time: "200ms",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             time: "1ms",
                             callback: function() {
                                 that.finishTransition(oldDiv);
@@ -1147,30 +1147,36 @@
                     }
                 });
                 that.css3animate(currDiv, {
-                    x: "0%",
+                    x: "-100%",
                     time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: "100%",
-                            time: "200ms"
+                            x: "0%",
+                            time: "200ms",
+                            callback: function() {
+								that.clearAnimations(currDiv);
+                            }
                         });
                     }
                 });
             } else {
                 that.css3animate(oldDiv, {
-                    x: "0%",
+                    x: "-100%",
                     time: "200ms",
                     callback: function() {
                         that.finishTransition(oldDiv);
                     }
                 });
                 that.css3animate(currDiv, {
-                    x: "200%",
+                    x: "100%",
                     time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: "100%",
-                            time: "200ms"
+                            x: "0%",
+                            time: "200ms",
+                            callback: function() {
+								that.clearAnimations(currDiv);
+                            }
                         });
                     }
                 });
@@ -1185,18 +1191,16 @@
             currDiv.style.display = "block";
             var that = this;
             if (back) {
-                that.css3animate(currDiv, {
-                    x: "100%",
-                    y: "0%",
-                    time: "1ms"
-                });
+
+				that.clearAnimations(currDiv);
+
                 that.css3animate(oldDiv, {
                     y: "100%",
-                    x: "100%",
+                    x: "0%",
                     time: "200ms",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             y: 0,
                             time: "1ms",
                             callback: function() {
@@ -1210,29 +1214,27 @@
             } else {
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
-                that.css3animate(oldDiv, {
-                    x: "100%",
-                    time: "200ms",
-                    callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: 0,
-                            y: 0,
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
-                    }
-                });
                 that.css3animate(currDiv, {
                     y: "100%",
-                    x: "100%",
+                    x: "0%",
                     time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
                             y: "0%",
-                            x: "100%",
-                            time: "200ms"
+                            x: "0%",
+                            time: "200ms",
+							callback: function() {
+								that.clearAnimations(currDiv);
+		                        that.css3animate(oldDiv, {
+		                            x: "-100%",
+		                            y: 0,
+		                            time: "1ms",
+		                            callback: function() {
+		                                that.finishTransition(oldDiv);
+		                            }
+		                        });
+								
+							}
                         });
                     }
                 });
@@ -1243,18 +1245,14 @@
             currDiv.style.display = "block";
             var that = this
             if (back) {
-                that.css3animate(currDiv, {
-                    x: "100%",
-                    y: "0%",
-                    time: "1ms"
-                });
+                that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
                     y: "-100%",
-                    x: "100%",
+                    x: "0%",
                     time: "200ms",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             y: 0,
                             time: "1ms",
                             callback: function() {
@@ -1270,11 +1268,11 @@
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
                 that.css3animate(oldDiv, {
-                    x: "100%",
+                    x: "0%",
                     time: "200ms",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             y: 0,
                             time: "1ms",
                             callback: function() {
@@ -1285,13 +1283,16 @@
                 });
                 that.css3animate(currDiv, {
                     y: "-100%",
-                    x: "100%",
+                    x: "0%",
                     time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
                             y: "0%",
-                            x: "100%",
-                            time: "200ms"
+                            x: "0%",
+                            time: "200ms",
+							callback: function(){
+								that.clearAnimations(currDiv);
+							}
                         });
                     }
                 });
@@ -1303,25 +1304,28 @@
             var that = this
             if (back) {
                 that.css3animate(currDiv, {
-                    x: "200%",
+                    x: "100%",
                     time: "1ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: "100%",
-                            time: "200ms"
+                            x: "00%",
+                            time: "200ms",
+							callback: function(){
+								that.clearAnimations(currDiv);
+							}
                         });
                     }
                 });
                 that.css3animate(oldDiv, {
-                    x: "200%",
+                    x: "100%",
                     time: "200ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             time: "1ms",
                             opacity: 1,
                             callback: function() {
@@ -1336,13 +1340,13 @@
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
                 that.css3animate(oldDiv, {
-                    x: "200%",
+                    x: "100%",
                     time: "200ms",
                     scale: '.8',
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             y: 0,
                             time: "1ms",
                             callback: function() {
@@ -1352,14 +1356,17 @@
                     }
                 });
                 that.css3animate(currDiv, {
-                    x: "200%",
+                    x: "100%",
                     time: "1ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: "100%",
-                            time: "200ms"
+                            x: "0%",
+                            time: "200ms",
+							callback:function(){
+								that.clearAnimations(currDiv);
+							}
                         });
                     }
                 });
@@ -1370,17 +1377,14 @@
             currDiv.style.display = "block";
             var that = this
             if (back) {
-                that.css3animate(currDiv, {
-                    x: "100%",
-                    time: "1ms"
-                });
+                that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
-                    x: "100%",
+                    x: "0%",
                     time: "200ms",
                     opacity: .1,
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             time: "1ms",
                             opacity: 1,
                             callback: function() {
@@ -1395,30 +1399,28 @@
             } else {
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
-                that.css3animate(oldDiv, {
-                    x: "100%",
-                    time: "200ms",
-                    callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: 0,
-                            y: 0,
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
-                    }
-                });
-                currDiv.style.opacity = 0;
+				currDiv.style.opacity = 0;
                 that.css3animate(currDiv, {
-                    x: "100%",
+                    x: "0%",
                     time: "1ms",
+                    opacity: .1,
                     callback: function() {
-                        that.css3animate(currDiv, {
-                            x: "100%",
-                            time: "200ms",
-                            opacity: 1
-                        });
+		                that.css3animate(currDiv, {
+		                    x: "0%",
+		                    time: "200ms",
+		                    opacity: 1,
+							callback:function(){
+								that.clearAnimations(currDiv);
+		                        that.css3animate(oldDiv, {
+		                            x: "-100%",
+		                            y: 0,
+		                            time: "1ms",
+		                            callback: function() {
+		                                that.finishTransition(oldDiv);
+		                            }
+		                        });
+							}
+		                });
                     }
                 });
             }
@@ -1428,19 +1430,16 @@
             currDiv.style.display = "block";
             var that = this
             if (back) {
-                that.css3animate(currDiv, {
-                    x: "100%",
-                    time: "1ms"
-                });
+                that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
-                    x: "100%",
+                    x: "0%",
                     time: "200ms",
                     opacity: .1,
                     scale: .2,
-                    origin: "50% 50%",
+                    origin: "-50% 50%",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             time: "1ms",
                             callback: function() {
                                 that.finishTransition(oldDiv);
@@ -1453,34 +1452,31 @@
             } else {
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
-                that.css3animate(oldDiv, {
-                    x: "100%",
-                    time: "200ms",
-                    callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: 0,
-                            y: 0,
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
-                    }
-                });
                 that.css3animate(currDiv, {
-                    x: "100%",
+                    x: "0%",
                     y: "0%",
                     time: "1ms",
                     scale: .2,
-                    origin: "50% 50%",
+                    origin: "-50% 50%",
                     opacity: .1,
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: "100%",
+                            x: "0%",
                             time: "200ms",
                             scale: 1,
                             opacity: 1,
-                            origin: "0% 0%"
+                            origin: "0% 0%",
+							callback: function(){
+								that.clearAnimations(currDiv);
+		                        that.css3animate(oldDiv, {
+		                            x: "100%",
+		                            y: 0,
+		                            time: "1ms",
+		                            callback: function() {
+		                                that.finishTransition(oldDiv);
+		                            }
+		                        });
+							}
                         });
                     }
                 });
@@ -1490,28 +1486,12 @@
             oldDiv.style.display = "block";
             currDiv.style.display = "block";
             var that = this
-            if (back) {
-                that.css3animate(currDiv, {
-                    x: "100%",
-                    time: "1ms"
-                });
-                that.css3animate(oldDiv, {
-                    x: 0,
-                    time: "1ms"
-                });
-            
-            } else {
-                
-                that.css3animate(oldDiv, {
-                    x: 0,
-                    y: 0,
-                    time: "1ms"
-                });
-                that.css3animate(currDiv, {
-                    x: "100%",
-                    time: "1ms"
-                });
-            }
+            that.clearAnimations(currDiv);
+			that.css3animate(oldDiv, {
+                x: "-100%",
+                y: 0,
+                time: "1ms"
+            });
             that.finishTransition(oldDiv);
             currDiv.style.zIndex = 2;
             oldDiv.style.zIndex = 1;
@@ -1527,7 +1507,19 @@
             oldDiv.style.display = 'none';
             this.doingTransition = false;
         
+        },
+		
+        /**
+         * This must be called at the end of every transition to remove all transforms and transitions attached to the inView object (performance + native scroll)
+         *
+         * @param {Object} Div that transitioned out
+         * @title $.ui.finishTransition(oldDiv)
+         */
+        clearAnimations: function(inViewDiv) {
+	        inViewDiv.style.webkitTransform = "none";
+			inViewDiv.style.webkitTransition = "none";
         }
+		
     /**
          * END
          * @api private

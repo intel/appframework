@@ -45,13 +45,13 @@ p {
 
 
 #jQui_modal{
-    -webkit-transform:translate3d(100%,0,0);
+    -webkit-transform:translate3d(0%,0,0);
     -webkit-backface-visibility: hidden;
 	z-index:9999 !important;
 	width:100%;
 	height:100%;
 	display:none;
-	position:absolute; top:0px; left:-100%;
+	position:absolute; top:0px; left:0px;
 	overflow:hidden;
 	background:rgba(29,29,28,1) !important;
 	-webkit-perspective: 1000;
@@ -61,11 +61,11 @@ p {
 width:100%;
 }
 .androidFixer{
-    -webkit-transform:translate3d(100%,0,0);
+    -webkit-transform:translate3d(0%,0,0);
     width:100%;
 	height:100%;
 	display:inline-block;
-	position:absolute; top:0px; left:-100%;
+	position:absolute; top:0px; left:0px;
 	overflow:hidden;
 	
 }    
@@ -240,13 +240,15 @@ a.customBackButton.press {
 	width:100%;
 	height:100%;
 	display:none;
-	position:absolute; top:0px; left:-100%;
+	position:absolute; top:0px; left:0px;
 	overflow:hidden;
 	background:rgba(19,29,38,1);
-	-webkit-transform:translate3d(0,0,0);
+	-webkit-transform:translate3d(0%,0,0);
 	-webkit-perspective: 1000;
     margin-top:10px;
     margin-bottom:10px;
+	overflow:auto;
+	-webkit-overflow-scrolling:touch;
 } /* This class is applied to the divs that contain the various "views" or pages of the app. */
 .panel > * {
 	-webkit-backface-visibility: hidden;
@@ -386,7 +388,8 @@ font-size:48px;
 	position:absolute; top:0px; left:-200px;
 	background:rgba(29,29,28,1);
 	-webkit-transform:translate3d(0,0,0);
-    -webkit-transition: all 300ms !important;
+    -webkit-transition-property: -webkit-transform, opacity;
+	-webkit-transition-duration: 300ms;
 }
 #menu_scroller {
 	padding-bottom:10px;
@@ -796,8 +799,9 @@ input.jq-ui-slider + label {
 	height:24px;
 	width:57px;
 	display:inline-block;
-   -webkit-transition: all 0.3s  ease-in-out;
-
+   	-webkit-transition-property: -webkit-transform, opacity;
+	-webkit-transition-duration: 300ms;
+	-webkit-transition-timing-function: ease-in-out;
 } 
 input.jq-ui-forms[type=radio]:active:checked + label,
 input.jq-ui-forms[type=checkbox]:active:checked + label,
@@ -828,7 +832,8 @@ select[disabled]~div {
 
 	
 .hasMenu{
--webkit-transition: all 300ms;
+ -webkit-transition-property: -webkit-transform, opacity;
+ -webkit-transition-duration: 300ms;
  position:absolute !important;
  left:0px !important;
 }
