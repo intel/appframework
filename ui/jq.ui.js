@@ -562,10 +562,10 @@
             var el = $am(id);
             if (!el)
                 return;
-            if (el.getAttribute("scrolling") && el.getAttribute("scrolling").toLowerCase() == "no")
-                el.innerHTML = content;
-            else
+            if (el.getAttribute("js-scrolling") && el.getAttribute("js-scrolling").toLowerCase() == "yes")
                 el.childNodes[0].innerHTML = content;
+            else
+                el.innerHTML = content;
         },
         /**
          * Dynamically create a new panel on the fly.  It wires events, creates the scroller, applies Android fixes, etc.
@@ -605,9 +605,12 @@
          * @api private
          */
         addDivAndScroll: function(tmp, refreshPull, refreshFunc) {
-            var addScroller = true;
-            if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling").toLowerCase() == "no")
-                addScroller = false;
+            var addScroller = false;
+            if (tmp.getAttribute("js-scrolling") && tmp.getAttribute("js-scrolling").toLowerCase() == "yes"){
+				tmp.style.overflow="hidden";
+            	addScroller = true;
+            }
+                
             if (!addScroller) {
                 this.content.appendChild(tmp);
                 tmp = null;
@@ -1742,13 +1745,10 @@
     
     
     jq(document).ready(function() {
-        document.body.addEventListener('touchmove', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-        }, false);
-        if (!jq.os.desktop)
-            new NoClickDelay(document.getElementById("jQUi"));
-        else {
+		scrollCapable = true;
+        if (!jq.os.desktop && !scrollCapable){
+        	new NoClickDelay(document.getElementById("jQUi"));
+        } else {
             document.getElementById("jQUi").addEventListener("click", function(e) {
               
                 var theTarget = e.target;
