@@ -345,20 +345,20 @@
                 this.scrollingDivs["menu_scroller"].initEvents();
 				menu.show();
                 setTimeout(function() {
-                    els.replaceClass("off", "to-on");
+                    els.replaceClass("to-off off on", "to-on");
 					els.one("webkitTransitionEnd", function(e){
 						var el = jq(e.target);
-						el.replaceClass("to-on", "on");
+						el.replaceClass("to-off off to-on", "on");
 					});
                 }, 1); //needs to run after
 				
             
             } else if (force === undefined || (force !== undefined && force === false)) {
                 this.scrollingDivs["menu_scroller"].removeEvents();
-				els.replaceClass("on", "to-off");
+				els.replaceClass("on off to-on", "to-off");
 				els.one("webkitTransitionEnd", function(e){
 					var el = jq(e.target);
-					el.replaceClass("to-off", "off");
+					el.replaceClass("to-off on to-on", "off");
 					if(e.target.id == 'menu') el.hide();
 				});
             }

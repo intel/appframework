@@ -735,8 +735,9 @@ if (!window.jq || typeof (jq) !== "function") {
                     name.split(/\s+/g).concat(newName.split(/\s+/g)).forEach(function(cname) {
                         classList = classList.replace(classRE(cname), " ");
                     });
+					classList=classList.trim();
                     if (classList.length > 0){
-                    	this[i].className = (classList.trim()+" "+newName).trim();
+                    	this[i].className = (classList+" "+newName).trim();
                     } else
                         this[i].className = newName;
                 }
