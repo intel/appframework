@@ -1,0 +1,78 @@
+@font-face {
+    font-family: 'IcoMoon';
+    src: 
+         url('icons.ttf') format('truetype'),
+         url('icons.svg#IcoMoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+.icon:before {
+color:inherit;font-weight:normal !important;font-family:'IcoMoon';
+padding:5px;float:left;
+font-size: 28px;
+text-align: center;
+vertical-align:middle;
+line-height:auto;
+}
+.icon.mini:before{font-size:20px !important;height:16px !important;width:16px !important;line-height:16px !important;}
+.icon.big:before{font-size:40px !important;height:32px !important;width:32px !important;line-height:32px !important;}
+
+
+.icon.home:before{content:'!';}
+.icon.pencil:before{content:'\22';}
+.icon.picture:before{content:'#';}
+.icon.camera:before{content:'$';}
+.icon.headset:before{content:'%';}
+.icon.paper:before{content:'&';}
+.icon.stack:before{content:'\27';}
+.icon.folder:before{content:'(';}
+.icon.tag:before{content:')';}
+.icon.basket:before{content:'*';}
+.icon.phone:before{content:'+';}
+.icon.mail:before{content:',';}
+.icon.location:before{content:'-';}
+.icon.clock:before{content:'.';}
+.icon.calendar:before{content:'/';}
+.icon.message:before{content:'0';}
+.icon.chat:before{content:'1';}
+.icon.user:before{content:'2';}
+.icon.loading:before{content:'3';}
+.icon.refresh:before{content:'4';}
+.icon.magnifier:before{content:'5';}
+.icon.key:before{content:'6';}
+.icon.settings:before{content:'7';}
+.icon.graph:before{content:'8';}
+.icon.trash:before{content:'9';}
+.icon.pin:before{content:':';}
+.icon.target:before{content:';';}
+.icon.download:before{content:'<';}
+.icon.upload:before{content:'=';}
+.icon.star:before{content:'>';}
+.icon.heart:before{content:'?';}
+.icon.warning:before{content:'@';}
+.icon.add:before{content:'A';}
+.icon.remove:before{content:'B';}
+.icon.question:before{content:'C';}
+.icon.info:before{content:'D';}
+.icon.error:before{content:'E';}
+.icon.check:before{content:'F';}
+.icon.minimize:before{content:'G';}
+.icon.close:before{content:'H';}
+.icon.up:before{content:'I';}
+.icon.down:before{content:'J';}
+.icon.left:before{content:'K';}
+.icon.right:before{content:'L';}
+.icon.tools:before{content:'M';}
+.icon.html5:before{content:'N';}
+.icon.css:before{content:'O';}
+.icon.js:before{content:'P';}
+.icon.cloud:before{content:'Q';}
+.icon.tv:before{content:'R';}
+.icon.wifi:before{content:'S';}
+.icon.new:before{content:'T';}
+.icon.mic:before{content:'U';}
+.icon.database:before{content:'V';}
+.icon.busy:before{content:'W';}
+.icon.bug:before{content:'X';}
+.icon.lamp:before{content:'Y';}

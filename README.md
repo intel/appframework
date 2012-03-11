@@ -10,9 +10,9 @@ It is comprised of three parts.
 
 3) jqPlugins - plugins for mobile applications in a webkit browser.
 
+
 # About jqMobi
 
-While doing mobile development, we quickly found there was no place for the famous query selector libraries.  They often performed poorly, were large in size, and targeted legacy desktop browsers (IE6).  There were a few new libraries targeting mobile development, but speed tests showed they actually performed worse.
 
 We started talking to our development community and asked them what they wanted.  The key features were
 
@@ -81,57 +81,6 @@ var myDiv=$("<div id='foo'>") //Creates a div object and returns it
 # jqMobi API functions - Please see http://api.jqmobi.com for all functions
 ``` js
 
-.length() // return the count of all elements found
-.find() // Find all chidlren that match the given selcetor
-.html() // Returns the first elements .innerHTML
-.html('new html') // set the elements .innerHTML with the given HTML
-.text() // Returns the first elements .innerTEXT
-.text('new text') // Set the elements .innerTEXT with the given string
-.css('property') //Gets the first elements desired css property
-.css('property','value') //Sets the elements css property to value
-.empty() //Sets the elements .innerHTML to an empty string
-.hide() //Sets the elements display css attribute to "none"
-.show() //Sets the elements display css attribute to "block"
-.toggle() //Toggles the elements display css attribute
-.val() //Gets the first elements value  property
-.val("value") //Sets the elements value property
-.attr("attribute")// Gets the first elements desired attribute
-.attr("attribute","value") //Sets the elements attribute with the value
-.removeAttr("attribute")  //Removes the attribute from the elements
-.remove() //Remove an element from the Dom
-.addClass("className") //Adds the css clas name to the selected elements
-.removeClass("className") //Removes a css class from the selected elements
-.hasClass("className")  //Checks the first element to see if the css class exists
-.hasClass("className",_element)  //Checks the passed in element to see if the css class exists
-.bind("event",function(){}) //Binds a function to the event listener selected to the selected elements
-.unbind("event") //Unbinds a function to the event listener selected to the selected elements
-.trigger("event",data) //Trigger an event on the selected elements and pass in optional data
-.one(event,callback)//Bind an event to happen only once
-.delegate(selector,event,callback)  //delegate an event listener for the selectors
-.undelegate(selector,event,callback) //remove the delegate listener
-.on(event,selector,callback) //same as delegate, just different param orders
-.off(event,selector,callback) //remove the on listener
-.append(element) //Appends an element to the selected elements
-.prepend() //Prepends an element to the selected elements
-.get() //Returns the first element from the selected elements
-.get(2) //Returns the third element from the selected elements 
-.offset() //Calculates the first elements offset on the screen
-.data(param,value)// Sets a data-* attribute for the param
-.data(param) //Gets a data-* attribute for the param
-.parent(selector) //Returns the parent nodes based off selector
-.children(selector) //Returns the children of the elements
-.siblings(selector) //Returns the siblings the elemnts
-.filter(selector) //Filters the elements based off selector
-.closest(selector) //find the closes element traversing up the parent nodes
-.not(selector) //Filters the elements based off the selector. Returns matches that do NOT match the selector
-.end() //Used in conjuction with filtered results to get the previous jqMobi object
-.clone(deep) //Clone all the nodes in the collection - deep is default to true
-.isArray(param) //Returns true/false if param is an array
-.isFunction(param) //Returns true/false if param is a function
-.isObject(param) //Returns true/false if param is an object
-.insertBefore(target) //insert collection before the target
-.insertAfter (target) //insert collection after the target
-```
 
 # jqMobi Ajax calls
 
@@ -199,7 +148,7 @@ You can contribute to the core code by forking it and make a pull request.  Plea
 
 # Bugs
 
-Please use github to report any bugs found.  Please provide the following
+Please go to http://www.jqmobi.com and report any bugs with the following
 
 1. Any error messages from the console
 

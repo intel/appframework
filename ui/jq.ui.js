@@ -96,7 +96,7 @@
         /**
          * this is a boolean when set to true (default) it will load that panel when the app is started
            ```
-           $.ui.loadDefaultHash=false; //Never load the page from the has when the app is started
+           $.ui.loadDefaultHash=false; //Never load the page from the hash when the app is started
            $.ui.loadDefaultHash=true; //Default
            ```
          *@title $.ui.loadDefaultHash
@@ -148,10 +148,24 @@
             return $("#jQUi").popup(opts);
         },
         
+        /**
+         *This will throw up a mask and block the UI
+         ```
+         $.ui.blockUI(.9)
+         ````
+         * @param {Float} opacity
+         * @title $.ui.blockUI(opacity)
+         */
         blockUI: function(opacity) {
             $.blockUI(opacity);
         },
-        
+        /**
+         *This will remove the UI mask
+         ```
+         $.ui.unblockUI()
+         ````
+         * @title $.ui.unblockUI()
+         */
         unblockUI: function() {
             $.unblockUI();
         },
@@ -579,7 +593,7 @@
          * @param {String|Object} Element to add
          * @param {String} Content
          * @param {String} title
-         * @title $.ui.addeContentDiv(id,content,title);
+         * @title $.ui.addContentDiv(id,content,title);
          */
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
             var myEl = $am(el);
@@ -957,6 +971,7 @@
                     }
                     //Let's check if it has a function to run to update the data
                     this.parsePanelFunctions(what, oldDiv);
+                    window.scrollTo(1,1);
                 
                 }
             } catch (e) {
@@ -1596,7 +1611,7 @@
         window.setTimeout(function(){hideAddressBar();},200);
     }, false);
     
-    if(jq.os.desktop)
+    if(jq.os.desktop||jq.os.android)
     {
         window.addEventListener("resize", function(e) {
             jq.ui.updateOrientation()
@@ -1750,6 +1765,7 @@
         document.body.addEventListener('touchmove', function(e) {
             e.preventDefault();
             e.stopPropagation();
+            window.scrollTo(1,1);
         }, false);
         if (!jq.os.desktop)
             new NoClickDelay(document.getElementById("jQUi"));
