@@ -8,6 +8,7 @@
     var hasLaunched = false;
     var startPath = window.location.pathname;
     var defaultHash = window.location.hash;
+
     var ui = function() {
         // Init the page
         var that = this;
@@ -35,7 +36,11 @@
         window.addEventListener("popstate", function() {
             that.goBack();
         }, false);
-
+		
+		/*check native scroll support*/
+		var testEl = document.createElement('div');
+		that.supportsNativeScroll = this.hasScroll(testEl);
+		
         /**
          * Helper function to setup the transition objects
          * Custom transitions can be added via $.ui.availableTransitions
@@ -85,7 +90,14 @@
         hasLaunched: false,
         launchCompleted: false,
         activeDiv: "",
+		supportsNativeScroll:false,
         
+		
+		hasScroll:function(el){
+			var testStyle = el.style;
+			return (testStyle['overflowScrolling'] !== undefined || testStyle['webkitOverflowScrolling'] !== undefined)
+		},
+		
         css3animate: function(el, opts) {
             try {
                 jq(el).css3Animate(opts);
@@ -606,6 +618,9 @@
          */
         addDivAndScroll: function(tmp, refreshPull, refreshFunc) {
             var addScroller = false;
+			//sets up scroll when required and not supported
+			if(!this.supportsNativeScroll&&tmp.style.overflow!='hidden'&&tmp.style.overflow!='visible') tmp.setAttribute("js-scrolling", "yes");
+			
             if (tmp.getAttribute("js-scrolling") && tmp.getAttribute("js-scrolling").toLowerCase() == "yes"){
 				tmp.style.overflow="hidden";
             	addScroller = true;
@@ -1619,15 +1634,16 @@
             jQUi.css("height", window.innerHeight + "px");
         }
     }
-    //The following is based on Cubiq.org - iOS no click delay.  We use this to capture events to input boxes to fix Android...and fix iOS ;)
-    //We had to make a lot of fixes to allow access to input elements on android, etc.
-    function NoClickDelay(el) {
+    //The following is based on Cubiq.org's - iOS no click delay.  We use this to capture events to input boxes to fix Android...and fix iOS ;)
+    //We had to make a lot of fixes to allow access to input elements on android, native scroll, etc.
+    function TouchLayer(el) {
         if (typeof (el) === "string")
             el = document.getElementById(el);
         el.addEventListener('touchstart', this, false);
+		el.addEventListener('click', this, false);
     }
     var prevClickField;
-    NoClickDelay.prototype = {
+    TouchLayer.prototype = {
         dX: 0,
         dY: 0,
         cX: 0,
@@ -1637,6 +1653,9 @@
                 case 'touchstart':
                     this.onTouchStart(e);
                     break;
+                case 'click':
+                    this.onClick(e);
+                    break;
                 case 'touchmove':
                     this.onTouchMove(e);
                     break;
@@ -1645,9 +1664,8 @@
                     break;
             }
         },
-        
+		
         onTouchStart: function(e) {
-            
             if (fixInputHandlers(e))
                 return;
             this.dX = e.touches[0].pageX;
@@ -1656,33 +1674,46 @@
                 prevClickField.blur(); //We need to blur any input fields on android
                 prevClickField = null;
             }
-            e.preventDefault();
             this.moved = false;
+			this.scrolled = false;
             document.addEventListener('touchmove', this, true);
             document.addEventListener('touchend', this, true);
         },
+        onClick: function(e) {
+			//cancel all previous settings
+	        document.removeEventListener('touchmove', this, false);
+	        document.removeEventListener('touchend', this, false);
+        },
+		
         
         onTouchMove: function(e) {
-            this.moved = true;
-            this.cX = e.touches[0].pageX - this.dX;
-            this.cY = e.touches[0].pageY - this.dY;
-            e.preventDefault();
+			if(this.moved || !$.ui.supportsNativeScroll || !$.ui.hasScroll(e.target)){
+				console.log("object has no scroll");
+	            this.moved = true;
+	            this.cX = e.touches[0].pageX - this.dX;
+	            this.cY = e.touches[0].pageY - this.dY;
+	            e.preventDefault();
+			} else {
+				this.scrolled = true;
+	            document.removeEventListener('touchmove', this, false);
+	            document.removeEventListener('touchend', this, false);
+			}
         },
         
         onTouchEnd: function(e) {
             
             document.removeEventListener('touchmove', this, false);
             document.removeEventListener('touchend', this, false);
-            
-            if ((!jq.os.blackberry && !this.moved) || (jq.os.blackberry && (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5))) {
+            if (!this.scrolled && (!jq.os.blackberry && !this.moved) || (jq.os.blackberry && (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5))) {
+				e.preventDefault();
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
                 
                 if (checkAnchorClick(theTarget))
                     return false;
-                
-                var theEvent = document.createEvent('MouseEvents');
+
+				var theEvent = document.createEvent('MouseEvents');
                 theEvent.initEvent('click', true, true);
                 theTarget.dispatchEvent(theEvent);
                 if (theTarget && theTarget.type != undefined) {
@@ -1745,9 +1776,8 @@
     
     
     jq(document).ready(function() {
-		scrollCapable = true;
-        if (!jq.os.desktop && !scrollCapable){
-        	new NoClickDelay(document.getElementById("jQUi"));
+        if (!jq.os.desktop){
+        	new TouchLayer(document.getElementById("jQUi"));
         } else {
             document.getElementById("jQUi").addEventListener("click", function(e) {
               

@@ -275,10 +275,8 @@
                         prevLeft = 0;
                         
                         if (this.verticalScroll && this.maxTop > 0) {
-                            var deltaY = this.lockY - event.touches[0].pageY;
-                            deltaY = -deltaY;
+                            var deltaY = event.touches[0].pageY - this.lockY;
                             var newTop = this.startTop + deltaY;
-                            var top = -newTop;
                             try {
                                 var prevTop = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform).f);
                             } catch (prevTopE) {
@@ -288,16 +286,14 @@
                             scrollPoints.y = newTop;
                         }
                         if (this.horizontalScroll && this.maxLeft > 0) {
-                            var deltaX = this.lockX - event.touches[0].pageX;
-                            deltaX = -deltaX;
+                            var deltaX = event.touches[0].pageX - this.lockX;
                             var newLeft = this.startLeft + deltaX;
-                            var left = newLeft;
                             try {
                                 var prevLeft = -numOnly((new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform).e));
                             } catch (prevLeftE) {
                                 var prevLeft = 0;
                             }
-                            scrollPoints.x = left;
+                            scrollPoints.x = newLeft;
                         
                         }
                         var time = 0;
