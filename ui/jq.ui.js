@@ -38,8 +38,8 @@
         }, false);
 		
 		/*check native scroll support*/
-		var testEl = document.createElement('div');
-		that.supportsNativeScroll = this.hasScroll(testEl);
+		var testStyle = document.createElement('div').style;
+		that.supportsNativeScroll = (testStyle['overflowScrolling'] !== undefined || testStyle['webkitOverflowScrolling'] !== undefined);
 		
         /**
          * Helper function to setup the transition objects
@@ -91,12 +91,6 @@
         launchCompleted: false,
         activeDiv: "",
 		supportsNativeScroll:false,
-        
-		
-		hasScroll:function(el){
-			var testStyle = el.style;
-			return (testStyle['overflowScrolling'] !== undefined || testStyle['webkitOverflowScrolling'] !== undefined)
-		},
 		
         css3animate: function(el, opts) {
             try {
@@ -1637,10 +1631,8 @@
     //The following is based on Cubiq.org's - iOS no click delay.  We use this to capture events to input boxes to fix Android...and fix iOS ;)
     //We had to make a lot of fixes to allow access to input elements on android, native scroll, etc.
     function TouchLayer(el) {
-        if (typeof (el) === "string")
-            el = document.getElementById(el);
         el.addEventListener('touchstart', this, false);
-		el.addEventListener('click', this, false);
+		this.layer=el;
     }
     var prevClickField;
     TouchLayer.prototype = {
@@ -1648,13 +1640,15 @@
         dY: 0,
         cX: 0,
         cY: 0,
+		layer: null,
+		scrollingEl: null,
+		isScrolling: false,
+		isScrollingVertical: false,
+		preventTouchMove: false,
         handleEvent: function(e) {
             switch (e.type) {
                 case 'touchstart':
                     this.onTouchStart(e);
-                    break;
-                case 'click':
-                    this.onClick(e);
                     break;
                 case 'touchmove':
                     this.onTouchMove(e);
@@ -1666,45 +1660,114 @@
         },
 		
         onTouchStart: function(e) {
-            if (fixInputHandlers(e))
-                return;
             this.dX = e.touches[0].pageX;
             this.dY = e.touches[0].pageY;
+            if (fixInputHandlers(e))
+                return;
             if (prevClickField !== null && prevClickField !== undefined && jq.os.android) {
                 prevClickField.blur(); //We need to blur any input fields on android
                 prevClickField = null;
             }
             this.moved = false;
-			this.scrolled = false;
-            document.addEventListener('touchmove', this, true);
-            document.addEventListener('touchend', this, true);
+			this.isScrolling = false;
+			this.isScrollingVertical = false;
+			this.preventTouchMove = false;
+			if($.ui.supportsNativeScroll) this.checkScrolling(e.target, this.layer);
+            document.addEventListener('touchmove', this, false);
+			document.addEventListener('touchend', this, false);
+			if(!this.isScrolling) e.preventDefault();
         },
-        onClick: function(e) {
-			//cancel all previous settings
-	        document.removeEventListener('touchmove', this, false);
-	        document.removeEventListener('touchend', this, false);
-        },
+		
+		//set rules here to ignore scrolling check on these elements
+		ignoreScrolling:function(el){
+			if(el['scrollWidth']===undefined || el['clientWidth']===undefined) return true;
+			if(el['scrollHeight']===undefined || el['clientHeight']===undefined) return true;
+			return false;
+		},
+		
+		allowsVerticalScroll:function(el, styles){
+			var overflowY = styles.overflowY;
+			if(overflowY == 'scroll') return true;
+			if(overflowY == 'auto' && el['scrollHeight'] > el['clientHeight'])
+				return true;
+			return false;
+		},
+		allowsHorizontalScroll:function(el, styles){
+			var overflowX = styles.overflowY;
+			if(overflowX == 'scroll') return true;
+			if(overflowX == 'auto' && el['scrollWidth'] > el['clientWidth'])
+				return true;
+			return false;
+		},
+		
+		
+		//check for native scroll - a bit heavy, will only exec once when motion starts
+		checkScrolling : function(el, parentTarget){
+
+			//prevent errors
+			if(this.ignoreScrolling(el)) {
+				return;
+			}
+			
+			//check 
+			var styles = window.getComputedStyle(el);
+			if (this.allowsVerticalScroll(el, styles)){
+				this.isScrollingVertical=true;
+				this.scrollingEl = el;
+				this.isScrolling = true;
+				return;
+			} else if(this.allowsHorizontalScroll(el, styles)){
+				this.isScrollingVertical=false;
+				this.isScrolling = true;
+				return;
+			}
+			//check recursive
+			var isTarget = el.isSameNode(parentTarget);
+			if(!isTarget && el.parentNode) this.checkScrolling(el.parentNode, parentTarget);
+		},
 		
         
         onTouchMove: function(e) {
-			if(this.moved || !$.ui.supportsNativeScroll || !$.ui.hasScroll(e.target)){
-				console.log("object has no scroll");
-	            this.moved = true;
-	            this.cX = e.touches[0].pageX - this.dX;
-	            this.cY = e.touches[0].pageY - this.dY;
-	            e.preventDefault();
-			} else {
-				this.scrolled = true;
-	            document.removeEventListener('touchmove', this, false);
-	            document.removeEventListener('touchend', this, false);
+
+			if(this.preventTouchMove){
+				e.preventDefault();
+				return;
 			}
+			
+			this.cY = e.touches[0].pageY - this.dY;
+			this.cX = e.touches[0].pageX - this.dX;
+			
+			this.moved = true;
+			if(!this.isScrolling){
+				//legacy stuff for old browsers
+	            e.preventDefault();
+			} else if(this.isScrollingVertical){
+				//check if requires cancelation
+				if((this.cY>0 && this.scrollingEl.scrollTop==0) || (this.cY<0 && this.scrollingEl.scrollTop+this.scrollingEl.clientHeight)==this.scrollingEl.scrollHeight){
+					this.preventTouchMove = true;
+					e.preventDefault();	//comment this line to be able to access console log in iOS
+				} else {
+					document.removeEventListener('touchmove', this, false);
+		            document.removeEventListener('touchend', this, false);
+				}
+			} else {
+				//check if requires cancelation (trying to move vertically)
+				if(Math.abs(this.cY)>Math.abs(this.cX)){
+					this.preventTouchMove = true;
+					e.preventDefault();	//comment this line to be able to access console log in iOS
+				} else {
+					document.removeEventListener('touchmove', this, false);
+		            document.removeEventListener('touchend', this, false);
+				}
+			}
+			
         },
         
         onTouchEnd: function(e) {
             
             document.removeEventListener('touchmove', this, false);
             document.removeEventListener('touchend', this, false);
-            if (!this.scrolled && (!jq.os.blackberry && !this.moved) || (jq.os.blackberry && (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5))) {
+            if (!this.scrolling && (!jq.os.blackberry && !this.moved) || (jq.os.blackberry && (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5))) {
 				e.preventDefault();
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
