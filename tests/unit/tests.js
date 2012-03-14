@@ -578,7 +578,7 @@ test("On/Off",function(){
 
 test("append",function(){
 
-  expect(4);
+  expect(5);
 
   $("#foo").html('');
   $("#foo").append("string");
@@ -602,6 +602,10 @@ test("append",function(){
   
   equals($("#foo").html(),"<div>something</div><div>something</div>","Appending multiple objects at once");
   QUnit.reset();
+  
+  $("#foo").html("");
+  $("#foo").append("<p>1</p><p>2</p>");
+  equals($("#foo").html(),"<p>1</p><p>2</p>","Appending multiple <p>'s");
 });
 
 test("prepend",function(){

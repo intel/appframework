@@ -764,15 +764,21 @@ if (!window.jq || typeof (jq) !== "function") {
                         for (var j = 0; j < element.length; j++)
                             insert != undefined ? this[i].insertBefore(element[j], this[i].firstChild) : this[i].appendChild(element[j]);
                     } else {
-                        var obj =fragementRE.test(element)?$(element).get():undefined;
-                        
+                        var obj =fragementRE.test(element)?$(element):undefined;
                         if (obj == undefined || obj.length == 0) {
                             obj = document.createTextNode(element);
                         }
                         if (obj.nodeName != undefined && obj.nodeName.toLowerCase() == "script" && (!obj.type || obj.type.toLowerCase() === 'text/javascript')) {
                             window.eval(obj.innerHTML);
-                        } else
+                        } else if(obj instanceof $jqm) {
+                            for(var k=0;k<obj.length;k++)
+                            {
+                                insert != undefined ? this[i].insertBefore(obj[k], this[i].firstChild) : this[i].appendChild(obj[k]);
+                            }
+                        }
+                        else {
                             insert != undefined ? this[i].insertBefore(obj, this[i].firstChild) : this[i].appendChild(obj);
+                        }
                     }
                 }
                 return this;
