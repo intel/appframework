@@ -37,10 +37,6 @@
             that.goBack();
         }, false);
 		
-		/*check native scroll support*/
-		var testStyle = document.createElement('div').style;
-		that.supportsNativeScroll = (testStyle['overflowScrolling'] !== undefined || testStyle['webkitOverflowScrolling'] !== undefined);
-		
         /**
          * Helper function to setup the transition objects
          * Custom transitions can be added via $.ui.availableTransitions
@@ -90,7 +86,6 @@
         hasLaunched: false,
         launchCompleted: false,
         activeDiv: "",
-		supportsNativeScroll:false,
 		
         css3animate: function(el, opts) {
             try {
@@ -613,7 +608,7 @@
         addDivAndScroll: function(tmp, refreshPull, refreshFunc) {
             var addScroller = false;
 			//sets up scroll when required and not supported
-			if(!this.supportsNativeScroll&&tmp.style.overflow!='hidden'&&tmp.style.overflow!='visible') tmp.setAttribute("js-scrolling", "yes");
+			if(!$.os.supportsNativeScroll&&tmp.style.overflow!='hidden'&&tmp.style.overflow!='visible') tmp.setAttribute("js-scrolling", "yes");
 			
             if (tmp.getAttribute("js-scrolling") && tmp.getAttribute("js-scrolling").toLowerCase() == "yes"){
 				tmp.style.overflow="hidden";
@@ -1673,7 +1668,7 @@
 			this.isScrolling = false;
 			this.isScrollingVertical = false;
 			this.preventTouchMove = false;
-			if($.ui.supportsNativeScroll) this.checkScrolling(e.target, this.layer);
+			if($.os.supportsNativeScroll) this.checkScrolling(e.target, this.layer);
 			if(!this.isScrolling) e.preventDefault();
             document.addEventListener('touchmove', this, false);
 			document.addEventListener('touchend', this, false);
@@ -1702,7 +1697,7 @@
 		},
 		
 		
-		//check for native scroll - a bit heavy, will only exec once when motion starts
+		//check if native scroll is possible
 		checkScrolling : function(el, parentTarget){
 
 			//prevent errors
@@ -1722,7 +1717,7 @@
 				this.isScrolling = true;
 				return;
 			}
-			//check recursive
+			//check recursive up to top element
 			var isTarget = el.isSameNode(parentTarget);
 			if(!isTarget && el.parentNode) this.checkScrolling(el.parentNode, parentTarget);
 		},
