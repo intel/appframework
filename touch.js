@@ -18,13 +18,11 @@ redirectMouseToTouch = function(type, originalEvent)
     touchevt.initEvent(type, true, true);
     touchevt.touches = new Array();
     touchevt.touches[0] = new Object();
-    touchevt.touches[0].pageX = originalEvent.clientX;
-    touchevt.touches[0].pageY = originalEvent.clientY;
+    touchevt.touches[0].pageX = originalEvent.pageX;
+    touchevt.touches[0].pageY = originalEvent.pageY;
     touchevt.touches[0].target = originalEvent.target;
     touchevt.changedTouches = touchevt.touches; //for jqtouch
     touchevt.targetTouches = touchevt.touches; //for jqtouch
-    touchevt.touches[0].clientX = touchevt.touches[0].pageX; //compatibility code
-    touchevt.touches[0].clientY = touchevt.touches[0].pageY; //compatibility code
     touchevt.target = originalEvent.target;
     originalEvent.target.dispatchEvent(touchevt);
     return touchevt;

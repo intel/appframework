@@ -24,7 +24,9 @@ if (!window.jq || typeof (jq) !== "function") {
         eventHandlers = [], 
         _eventID = 1, 
         jsonPHandlers = [], 
-        _jsonPID = 1;
+        _jsonPID = 1,
+        fragementRE=/^\s*<(\w+)[^>]*>/;
+        
 
         /**
          * Internal function to test if a class name fits in a regular expression
@@ -791,15 +793,21 @@ if (!window.jq || typeof (jq) !== "function") {
                         for (var j = 0; j < element.length; j++)
                             insert != undefined ? this[i].insertBefore(element[j], this[i].firstChild) : this[i].appendChild(element[j]);
                     } else {
-                        var obj = $(element).get();
-                        
+                        var obj =fragementRE.test(element)?$(element):undefined;
                         if (obj == undefined || obj.length == 0) {
                             obj = document.createTextNode(element);
                         }
                         if (obj.nodeName != undefined && obj.nodeName.toLowerCase() == "script" && (!obj.type || obj.type.toLowerCase() === 'text/javascript')) {
                             window.eval(obj.innerHTML);
-                        } else
+                        } else if(obj instanceof $jqm) {
+                            for(var k=0;k<obj.length;k++)
+                            {
+                                insert != undefined ? this[i].insertBefore(obj[k], this[i].firstChild) : this[i].appendChild(obj[k]);
+                            }
+                        }
+                        else {
                             insert != undefined ? this[i].insertBefore(obj, this[i].firstChild) : this[i].appendChild(obj);
+                        }
                     }
                 }
                 return this;
@@ -1505,7 +1513,10 @@ if (!window.jq || typeof (jq) !== "function") {
             }
             return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
         };
-
+        /**
+         Zepto.js events
+         @api private
+         */
 
         //The following is modified from Zepto.js / events.js
         //We've removed depricated jQuery events like .live and allow anonymous functions to be removed
@@ -1701,6 +1712,11 @@ if (!window.jq || typeof (jq) !== "function") {
             });
         };
         
+         /**
+         * internal variables
+         * @api private
+         */
+        
         var returnTrue = function() {
             return true
         }, 
@@ -1855,6 +1871,31 @@ if (!window.jq || typeof (jq) !== "function") {
             event.initEvent(type, bubbles, true, null, null, null, null, null, null, null, null, null, null, null, null);
             return event;
         };
+        
+        /**
+         * Creates a proxy function so you can change the 'this' context in the function
+         ```
+            var newObj={foo:bar}
+            $("#main").bind("click",$.proxy(function(evt){console.log(this)},newObj);
+         ```
+         
+         * @param {Function} Callback
+         * @param {Object} Context
+         * @title $.proxy(callback,context);
+         */
+         
+        $.proxy=function(fnc,ctx){
+           var tmp=function(evt){
+           
+              return fnc.call(ctx,evt);
+           }
+           return tmp;
+        }
+        
+         /**
+         * End of APIS
+         * @api private
+         */
 
         //End zepto/events.js
         return $;

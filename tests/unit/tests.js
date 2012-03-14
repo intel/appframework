@@ -578,7 +578,7 @@ test("On/Off",function(){
 
 test("append",function(){
 
-  expect(4);
+  expect(5);
 
   $("#foo").html('');
   $("#foo").append("string");
@@ -602,6 +602,10 @@ test("append",function(){
   
   equals($("#foo").html(),"<div>something</div><div>something</div>","Appending multiple objects at once");
   QUnit.reset();
+  
+  $("#foo").html("");
+  $("#foo").append("<p>1</p><p>2</p>");
+  equals($("#foo").html(),"<p>1</p><p>2</p>","Appending multiple <p>'s");
 });
 
 test("prepend",function(){
@@ -1065,41 +1069,28 @@ test("serialize",function(){
    QUnit.reset();
 });
 
-test("ajaxGet",function(){
-    stop();
-	
-	$.get("server.php?data=foo",function(data){equals(data,"foo");start()});
 
-});
-test("ajaxPost",function(){
-    stop();
-	
-	$.post("server.php",{data:'foo'},function(data){equals(data,"foo");start()});
-
-});
-test("ajax",function(){
-    stop();
-	
-	$.ajax({url:"server.php?data=foo",success:function(data){equals(data,"foo");start()}});
-});
-
-test("jsonp",function(){
-    
- stop();
-	
-  $.jsonP({url:'server.php?jsonp=?',success:function(data){equals(data,"foo");start()}});
-});
-test("getJSON",function(){
-stop();
-  var obj={foo:"bar"};
-  $.getJSON("server.php?json","",function(data){equals(data.foo,obj.foo);start()});
-});
 
 test("parseJSON",function(){
 
 var obj={foo:"bar"};
 
 equals(obj.foo,$.parseJSON(JSON.stringify(obj)).foo);
+
+});
+
+test("$.proxy",function(){
+
+  var obj1={name:"1",test:function(){return this.name}};
+  
+  var obj2={name:"2",test:function(){return this.name+"2"}};
+  var obj3={name:"3"};
+  obj2.name="2";
+  obj3.name="3";
+  
+  equals(obj1.test(),"1","Baseline test of function");
+  equals($.proxy(obj1.test,obj2)(),"2","Testing proxy of object 2");
+  equals($.proxy(obj2.test,obj3)(),"32","Testing proxy of object 3");
 
 });
 
@@ -1148,4 +1139,34 @@ var userAgents={
   $.__detectUA(tmp,userAgents.fennec);
   ok(tmp.os.fennec,"Test for Fennec user agent");
 
+});
+
+test("ajaxGet",function(){
+    stop();
+	
+	$.get("server.php?data=foo",function(data){equals(data,"foo");start()});
+
+});
+test("ajaxPost",function(){
+    stop();
+	
+	$.post("server.php",{data:'foo'},function(data){equals(data,"foo");start()});
+
+});
+test("ajax",function(){
+    stop();
+	
+	$.ajax({url:"server.php?data=foo",success:function(data){equals(data,"foo");start()}});
+});
+
+test("jsonp",function(){
+    
+ stop();
+	
+  $.jsonP({url:'server.php?jsonp=?',success:function(data){equals(data,"foo");start()}});
+});
+test("getJSON",function(){
+stop();
+  var obj={foo:"bar"};
+  $.getJSON("server.php?json","",function(data){equals(data.foo,obj.foo);start()});
 });
