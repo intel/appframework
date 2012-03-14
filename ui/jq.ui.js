@@ -1660,6 +1660,7 @@
         },
 		
         onTouchStart: function(e) {
+			
             this.dX = e.touches[0].pageX;
             this.dY = e.touches[0].pageY;
             if (fixInputHandlers(e))
@@ -1673,9 +1674,9 @@
 			this.isScrollingVertical = false;
 			this.preventTouchMove = false;
 			if($.ui.supportsNativeScroll) this.checkScrolling(e.target, this.layer);
+			if(!this.isScrolling) e.preventDefault();
             document.addEventListener('touchmove', this, false);
 			document.addEventListener('touchend', this, false);
-			if(!this.isScrolling) e.preventDefault();
         },
 		
 		//set rules here to ignore scrolling check on these elements
@@ -1728,7 +1729,7 @@
 		
         
         onTouchMove: function(e) {
-
+			
 			if(this.preventTouchMove){
 				e.preventDefault();
 				return;
@@ -1767,16 +1768,16 @@
             
             document.removeEventListener('touchmove', this, false);
             document.removeEventListener('touchend', this, false);
-            if (!this.scrolling && (!jq.os.blackberry && !this.moved) || (jq.os.blackberry && (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5))) {
-				e.preventDefault();
+            
+            if ((!jq.os.blackberry && !this.moved) || (jq.os.blackberry && (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5))) {
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
                 
                 if (checkAnchorClick(theTarget))
                     return false;
-
-				var theEvent = document.createEvent('MouseEvents');
+                
+                var theEvent = document.createEvent('MouseEvents');
                 theEvent.initEvent('click', true, true);
                 theTarget.dispatchEvent(theEvent);
                 if (theTarget && theTarget.type != undefined) {
@@ -1789,8 +1790,9 @@
             prevClickField = null;
             this.dX = this.cX = this.cY = this.dY = 0;
         }
+        
     };
-    
+	
     
     function fixInputHandlers(e) {
         if (!jq.os.android)
