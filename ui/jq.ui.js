@@ -637,9 +637,20 @@
 				tmp.style.overflow="hidden";
             	addScroller = true;
             }
+            
                 
             if (!addScroller) {
                 this.content.appendChild(tmp);
+                
+                if($.os.supportsNativeScroll)
+                   var tmpScroller=tmp;
+                   tmpScroller.initEvents=function(){};
+                   tmpScroller.removeEvents=function(){}
+                   tmpScroller.scrollTo=function(obj,time){
+                      this.scrollTop=-(obj.y);
+                      this.scrollLeft=-(obj.x);
+                   }
+                   this.scrollingDivs[tmp.id]=tmpScroller;
                 tmp = null;
                 return;
             }
@@ -1675,6 +1686,13 @@
                 case 'touchend':
                     this.onTouchEnd(e);
                     break;
+                case 'scroll':
+                    this.onScroll(e);
+                    break;
+                case 'touchend':
+                    this.onScrollEnd(e);
+                    break;
+				
             }
         },
 		
@@ -1757,48 +1775,104 @@
 			this.cY = e.touches[0].pageY - this.dY;
 			this.cX = e.touches[0].pageX - this.dX;
 			
-			this.moved = true;
 			if(!this.isScrolling){
 				//legacy stuff for old browsers
 	            e.preventDefault();
 			} else if(this.isScrollingVertical){
-				//check if requires cancelation
-				if((this.cY>0 && this.scrollingEl.scrollTop==0) || (this.cY<0 && this.scrollingEl.scrollTop+this.scrollingEl.clientHeight)==this.scrollingEl.scrollHeight){
+				
+				var atTop = this.cY>0 && this.scrollingEl.scrollTop==0;
+				var atBottom = this.cY<0 && (this.scrollingEl.scrollTop+this.scrollingEl.clientHeight)==this.scrollingEl.scrollHeight;
+
+				//check if in boundaries
+				if(atTop || atBottom){
+
 					this.preventTouchMove = true;
-					e.preventDefault();	//comment this line to be able to access console log in iOS
+					e.preventDefault();
+					
 				} else {
-					document.removeEventListener('touchmove', this, false);
-		            document.removeEventListener('touchend', this, false);
+					
+					//Android scroll to pane fix
+					if($.os.android){
+					
+						var throughTop = this.scrollingEl.scrollTop-this.cY<=0;
+						var throughBottom = (this.scrollingEl.scrollTop+this.scrollingEl.clientHeight-this.cY)>=this.scrollingEl.scrollHeight;
+					
+						if(!this.checkAndroidBoundaryScroll(e, throughTop, throughBottom) && !this.moved){
+							this.scrollingEl.addEventListener("scroll", this, false); 
+							this.scrollingEl.addEventListener("scrollend", this, false); 
+						}
+					
+					}
 				}
+				
+				//vertical scroll allowed
+				document.removeEventListener('touchmove', this, false);
+	            document.removeEventListener('touchend', this, false);
+				
 			} else {
 				//check if requires cancelation (trying to move vertically)
 				if(Math.abs(this.cY)>Math.abs(this.cX)){
 					this.preventTouchMove = true;
-					e.preventDefault();	//comment this line to be able to access console log in iOS
+					e.preventDefault();
 				} else {
 					document.removeEventListener('touchmove', this, false);
 		            document.removeEventListener('touchend', this, false);
 				}
 			}
-			
+			this.moved = true;
         },
+		checkAndroidBoundaryScroll:function(e, throughTop, throughBottom){
+			if(throughTop || throughBottom){
+				if(throughTop)
+					this.scrollingEl.scrollTop=0;
+				else
+					this.scrollingEl.scrollTop=this.scrollingEl.scrollHeight-this.scrollingEl.clientHeight;
+				e.preventDefault();
+				return true;
+			}
+			return false;
+		},
+		onScroll:function(e){
+			//check if it is at boundaries
+			var atTop = this.scrollingEl.scrollTop<=0;
+			var atBottom = (this.scrollingEl.scrollTop+this.scrollingEl.clientHeight)>=this.scrollingEl.scrollHeight;
+			if(this.checkAndroidBoundaryScroll(e, atTop, atBottom)){
+					this.onScrollEnd(e);	
+			}
+		},
+		onScrollEnd:function(e){
+			//check if it is at boundaries
+			document.removeEventListener('scroll', this, false);
+			document.removeEventListener('scrollend', this, false);	
+		},
+		
         
         onTouchEnd: function(e) {
             
             document.removeEventListener('touchmove', this, false);
             document.removeEventListener('touchend', this, false);
+			
+			var itMoved = $.os.blackberry ? (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5) : this.moved;
+			var androidVerticalScroll = ($.os.android && this.isScrollingVertical);
             
-            if ((!jq.os.blackberry && !this.moved) || (jq.os.blackberry && (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5))) {
+            if (!itMoved && !androidVerticalScroll) {
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
+            
                 
-                if (checkAnchorClick(theTarget))
+                if (checkAnchorClick(theTarget,this.isScrolling))
+                {
+                    e.preventDefault();
                     return false;
-                
+                }
+               
+
                 var theEvent = document.createEvent('MouseEvents');
+                if(!this.isScrolling){
                 theEvent.initEvent('click', true, true);
                 theTarget.dispatchEvent(theEvent);
+                }
                 if (theTarget && theTarget.type != undefined) {
                     var tagname = theTarget.tagName.toLowerCase();
                     if (tagname == "select" || (theTarget.type=="text"&&tagname == "input")||  tagname == "textarea") {
@@ -1876,7 +1950,7 @@
         }
     });
     
-    function checkAnchorClick(theTarget) {
+    function checkAnchorClick(theTarget,nativeScrolling) {
         var parent = false;
         if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
             parent = true, theTarget = theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
@@ -1884,8 +1958,8 @@
             if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1||theTarget.getAttribute("data-ignore")) {
                 return false;
             }
-            
-            if (theTarget.onclick && !jq.os.desktop){
+
+            if (theTarget.onclick && !jq.os.desktop&&nativeScrolling!==true){
                 theTarget.onclick();
                 //$(theTarget).trigger("click");
             }
@@ -1907,10 +1981,13 @@
             if ((theTarget.href.indexOf("#") !== -1 && theTarget.hash.length == 0)||theTarget.href.length==0)
                 return true;
             
+            
+            
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
             resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
             var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
+            
             jq.ui.loadContent(href, theTarget.resetHistory, 0, mytransition, theTarget);
             return true;
         }

@@ -35,7 +35,6 @@
                     alert("Please provide configuration options for animation of " + elID);
                     return;
                 }
-                this.el.addEventListener("webkitTransitionEnd", that.finishAnimation, false);
 
                 if (options["callback"]) {
                     this.callback = options["callback"];
@@ -95,7 +94,8 @@
 				this.el.style.webkitTransitionDuration = options["time"];
 				this.el.style.webkitTransitionTimingFunction = options["timingFunction"];
                 this.el.style.webkitTransformOrigin = options.origin;
-                
+                this.el.addEventListener("webkitTransitionEnd", that.finishAnimation, false);
+				
             };
 
 
@@ -106,7 +106,7 @@
                 if (!this.moving) return;
 
                 this.moving = false;
-                this.el.removeEventListener("webkitTransitionEnd", that.finishAnimation, true);
+                this.el.removeEventListener("webkitTransitionEnd", that.finishAnimation, false);
                 if (this.callback && typeof (this.callback == "function")) {
                     if (this.timeout) window.clearTimeout(this.timeout);
                     this.callback();
