@@ -1704,7 +1704,7 @@
                 theTarget.dispatchEvent(theEvent);
                 if (theTarget && theTarget.type != undefined) {
                     var tagname = theTarget.tagName.toLowerCase();
-                    if (tagname == "select" || (theTarget.type=="text"&&tagname == "input")||  tagname == "textarea") {
+                     if (tagname == "select" || tagname == "input"||tagname == "textarea"){ 
                         theTarget.focus();
                     }
                 }
@@ -1722,7 +1722,7 @@
         if (theTarget && theTarget.type != undefined) {
             var tagname = theTarget.tagName.toLowerCase();
             var type=theTarget.type;
-            if (tagname == "select" || (theTarget.type=="text"&&tagname == "input")||tagname == "textarea") { // stuff we need to allow
+             if (tagname == "select" || tagname == "input"||tagname == "textarea")  { // stuff we need to allow
                 //On Android 2.2+, the keyboard is broken when we apply -webkit-transform.  The hit box is moved and it no longer loses focus when you click out.
                 //What the following does is moves the div up so the text is not covered by the keyboard.
                 if (jq.os.android && (theTarget.type.toLowerCase() == "text" || theTarget.type.toLowerCase() == "textarea")) {
