@@ -1660,28 +1660,15 @@
     }
     //The following is based on Cubiq.org's - iOS no click delay.  We use this to capture events to input boxes to fix Android...and fix iOS ;)
     //We had to make a lot of fixes to allow access to input elements on android, native scroll, etc.
-	var getMyTime=function(){
-		return new Date().getTime();
-	}
-	var startTime = getMyTime();
     
 	function TouchLayer(el) {
         el.addEventListener('touchstart', this, false);
-		//document.addEventListener('scroll', this, true);
-		document.addEventListener('touchend', function(){console.log((getMyTime()-startTime)+" onTouchEnd");}, true);
-		document.addEventListener('touchmove', function(){
-			console.log((getMyTime()-startTime)+" onTouchMove ("+document.documentElement.scrollTop+"/"+document.getElementById("jqmui").scrollTop+")");
-		}, true);
 		var firstScroll = true;
 		document.addEventListener('scroll', function(e){
-			
-			console.log((getMyTime()-startTime)+" onScroll");
-			if(e.target.id=="jqmui") console.log("panel scrolled! "+document.getElementById("jqmui").scrollTop);
 			if(e.target.isSameNode(document)) {
 				if(!firstScroll){
 					firstScroll = true;
 					hideAddressBar();
-					console.log("document scrolled! "+document.documentElement.scrollTop);
 				} else firstScroll=false;
 			}
 		}, true);
