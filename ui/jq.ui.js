@@ -1173,6 +1173,9 @@
             }
            
         },
+		
+		/*transitions helpers*/
+		
 
         /**
          * Initiate a sliding transition.  This is a sample to show how transitions are implemented.  These are registered in $.ui.availableTransitions and take in three parameters.
@@ -1189,24 +1192,19 @@
             if (back) {
                 that.css3animate(oldDiv, {
                     x: "100%",
-                    time: "200ms",
+                    time: "150ms",
                     callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: "-100%",
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
+                        that.finishTransition(oldDiv);
                     }
                 });
                 that.css3animate(currDiv, {
                     x: "-100%",
+					y: "0%",
                     time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
-                            time: "200ms",
+                            time: "150ms",
                             callback: function() {
 								that.clearAnimations(currDiv);
                             }
@@ -1216,18 +1214,19 @@
             } else {
                 that.css3animate(oldDiv, {
                     x: "-100%",
-                    time: "200ms",
+                    time: "150ms",
                     callback: function() {
                         that.finishTransition(oldDiv);
                     }
                 });
                 that.css3animate(currDiv, {
                     x: "100%",
+					y: "0%",
                     time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
-                            time: "200ms",
+                            time: "150ms",
                             callback: function() {
 								that.clearAnimations(currDiv);
                             }
@@ -1245,29 +1244,24 @@
             currDiv.style.display = "block";
             var that = this;
             if (back) {
-
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
+				
 				that.clearAnimations(currDiv);
 
                 that.css3animate(oldDiv, {
                     y: "100%",
                     x: "0%",
-                    time: "200ms",
+                    time: "150ms",
                     callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: "-100%",
-                            y: 0,
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
+                        that.finishTransition(oldDiv);
                         currDiv.style.zIndex = 2;
                         oldDiv.style.zIndex = 1;
                     }
                 });
             } else {
-                oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
+                oldDiv.style.zIndex = 1;
                 that.css3animate(currDiv, {
                     y: "100%",
                     x: "0%",
@@ -1276,7 +1270,7 @@
                         that.css3animate(currDiv, {
                             y: "0%",
                             x: "0%",
-                            time: "200ms",
+                            time: "150ms",
 							callback: function() {
 								that.clearAnimations(currDiv);
 		                        that.css3animate(oldDiv, {
@@ -1299,11 +1293,13 @@
             currDiv.style.display = "block";
             var that = this
             if (back) {
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
                 that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
                     y: "-100%",
                     x: "0%",
-                    time: "200ms",
+                    time: "150ms",
                     callback: function() {
                         that.css3animate(oldDiv, {
                             x: "-100%",
@@ -1321,20 +1317,6 @@
             } else {
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
-                that.css3animate(oldDiv, {
-                    x: "0%",
-                    time: "200ms",
-                    callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: "-100%",
-                            y: 0,
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
-                    }
-                });
                 that.css3animate(currDiv, {
                     y: "-100%",
                     x: "0%",
@@ -1343,9 +1325,18 @@
                         that.css3animate(currDiv, {
                             y: "0%",
                             x: "0%",
-                            time: "200ms",
+                            time: "150ms",
 							callback: function(){
 								that.clearAnimations(currDiv);
+		                        that.css3animate(oldDiv, {
+		                            x: "-100%",
+		                            y: 0,
+		                            time: "1ms",
+		                            callback: function() {
+		                                that.finishTransition(oldDiv);
+		                            }
+		                        });
+								
 							}
                         });
                     }
@@ -1364,8 +1355,10 @@
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: "00%",
-                            time: "200ms",
+                            x: "0%",
+							scale: 1,
+                            time: "150ms",
+							rotateY: "0deg",
 							callback: function(){
 								that.clearAnimations(currDiv);
 							}
@@ -1374,7 +1367,7 @@
                 });
                 that.css3animate(oldDiv, {
                     x: "100%",
-                    time: "200ms",
+                    time: "150ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
@@ -1382,6 +1375,8 @@
                             x: "-100%",
                             time: "1ms",
                             opacity: 1,
+		                    scale: 1,
+		                    rotateY: "0deg",
                             callback: function() {
                                 that.finishTransition(oldDiv);
                             }
@@ -1395,14 +1390,16 @@
                 currDiv.style.zIndex = 2;
                 that.css3animate(oldDiv, {
                     x: "100%",
-                    time: "200ms",
-                    scale: '.8',
+                    time: "150ms",
+                    scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(oldDiv, {
                             x: "-100%",
                             y: 0,
                             time: "1ms",
+		                    scale: 1,
+		                    rotateY: "0deg",
                             callback: function() {
                                 that.finishTransition(oldDiv);
                             }
@@ -1417,7 +1414,9 @@
                     callback: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
-                            time: "200ms",
+                            time: "150ms",
+		                    scale: 1,
+		                    rotateY: "0deg",
 							callback:function(){
 								that.clearAnimations(currDiv);
 							}
@@ -1431,10 +1430,12 @@
             currDiv.style.display = "block";
             var that = this
             if (back) {
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
                 that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
                     x: "0%",
-                    time: "200ms",
+                    time: "150ms",
                     opacity: .1,
                     callback: function() {
                         that.css3animate(oldDiv, {
@@ -1461,7 +1462,7 @@
                     callback: function() {
 		                that.css3animate(currDiv, {
 		                    x: "0%",
-		                    time: "200ms",
+		                    time: "150ms",
 		                    opacity: 1,
 							callback:function(){
 								that.clearAnimations(currDiv);
@@ -1484,10 +1485,12 @@
             currDiv.style.display = "block";
             var that = this
             if (back) {
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
                 that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
                     x: "0%",
-                    time: "200ms",
+                    time: "150ms",
                     opacity: .1,
                     scale: .2,
                     origin: "-50% 50%",
@@ -1516,7 +1519,7 @@
                     callback: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
-                            time: "200ms",
+                            time: "150ms",
                             scale: 1,
                             opacity: 1,
                             origin: "0% 0%",
@@ -1815,6 +1818,7 @@
 		
         
         onTouchEnd: function(e) {
+			e.preventDefault();
 			var itMoved = $.os.blackberry ? (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5) : this.moved;
             if(!this.moved) this.inMotion=false;
             if (!itMoved) {
@@ -1823,21 +1827,18 @@
                     theTarget = theTarget.parentNode;
             
                 
-                if (checkAnchorClick(theTarget,this.isScrolling))
+                if (checkAnchorClick(theTarget))
                 {
-                    e.preventDefault();
                     return false;
                 }
                
 
                 var theEvent = document.createEvent('MouseEvents');
-                if(!this.isScrolling){
                 theEvent.initEvent('click', true, true);
                 theTarget.dispatchEvent(theEvent);
-                }
                 if (theTarget && theTarget.type != undefined) {
                     var tagname = theTarget.tagName.toLowerCase();
-                     if (tagname == "select" || tagname == "input"||tagname == "textarea"){ 
+                     if (tagname == "select" || tagname == "input" || tagname == "textarea"){ 
                         theTarget.focus();
                     }
                 }
@@ -1859,7 +1860,7 @@
         if (theTarget && theTarget.type != undefined) {
             var tagname = theTarget.tagName.toLowerCase();
             var type=theTarget.type;
-             if (tagname == "select" || tagname == "input"||tagname == "textarea")  { // stuff we need to allow
+             if (tagname == "select" || tagname == "input" || tagname == "textarea")  { // stuff we need to allow
                 //On Android 2.2+, the keyboard is broken when we apply -webkit-transform.  The hit box is moved and it no longer loses focus when you click out.
                 //What the following does is moves the div up so the text is not covered by the keyboard.
                 if (jq.os.android && (theTarget.type.toLowerCase() == "text" || theTarget.type.toLowerCase() == "textarea")) {
