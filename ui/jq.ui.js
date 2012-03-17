@@ -8,6 +8,7 @@
     var hasLaunched = false;
     var startPath = window.location.pathname;
     var defaultHash = window.location.hash;
+
     var ui = function() {
         // Init the page
         var that = this;
@@ -35,7 +36,7 @@
         window.addEventListener("popstate", function() {
             that.goBack();
         }, false);
-
+		
         /**
          * Helper function to setup the transition objects
          * Custom transitions can be added via $.ui.availableTransitions
@@ -85,7 +86,7 @@
         hasLaunched: false,
         launchCompleted: false,
         activeDiv: "",
-        
+		
         css3animate: function(el, opts) {
             try {
                 jq(el).css3Animate(opts);
@@ -347,6 +348,8 @@
             
             }
         },
+		
+		
         /**
          * Toggles the side menu.  Force is a boolean to force show or hide.
            ```
@@ -359,26 +362,29 @@
             var that = this;
             if (!jq("#content").hasClass("hasMenu"))
                 return;
-            if (jq("#menu").css("display") != "block" && ((force !== undefined && force !== false) || force === undefined)) {
+            var menu = jq("#menu");
+			var els = jq("#content, #menu, #header, #navbar");
+			
+            if (menu.css("display") != "block" && ((force !== undefined && force !== false) || force === undefined)) {
                 this.scrollingDivs["menu_scroller"].initEvents();
-                jq("#menu").show();
-                window.setTimeout(function() {
-                    jq("#menu").addClass("on");
-                    jq("#header").addClass("on");
-                    jq("#navbar").addClass("on");
-                    jq("#content").addClass("on");
+				menu.show();
+                setTimeout(function() {
+                    els.replaceClass("to-off off on", "to-on");
+					els.one("webkitTransitionEnd", function(e){
+						var el = jq(e.target);
+						el.replaceClass("to-off off to-on", "on");
+					});
                 }, 1); //needs to run after
+				
             
             } else if (force === undefined || (force !== undefined && force === false)) {
                 this.scrollingDivs["menu_scroller"].removeEvents();
-                
-                jq("#header").removeClass("on");
-                jq("#menu").removeClass("on");
-                jq("#navbar").removeClass("on");
-                jq("#content").removeClass("on");
-                setTimeout(function() {
-                    jq("#menu").hide();
-                }, 300); //lame I know
+				els.replaceClass("on off to-on", "to-off");
+				els.one("webkitTransitionEnd", function(e){
+					var el = jq(e.target);
+					el.replaceClass("to-off on to-on", "off");
+					if(e.target.id == 'menu') el.hide();
+				});
             }
         },
         /**
@@ -580,10 +586,10 @@
             var el = $am(id);
             if (!el)
                 return;
-            if (el.getAttribute("scrolling") && el.getAttribute("scrolling").toLowerCase() == "no")
-                el.innerHTML = content;
-            else
+            if (el.getAttribute("js-scrolling") && el.getAttribute("js-scrolling").toLowerCase() == "yes")
                 el.childNodes[0].innerHTML = content;
+            else
+                el.innerHTML = content;
         },
         /**
          * Dynamically create a new panel on the fly.  It wires events, creates the scroller, applies Android fixes, etc.
@@ -623,11 +629,28 @@
          * @api private
          */
         addDivAndScroll: function(tmp, refreshPull, refreshFunc) {
-            var addScroller = true;
-            if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling").toLowerCase() == "no")
-                addScroller = false;
+            var addScroller = false;
+			//sets up scroll when required and not supported
+			if(!$.os.supportsNativeScroll&&tmp.style.overflow!='hidden'&&tmp.style.overflow!='visible') tmp.setAttribute("js-scrolling", "yes");
+			
+            if (tmp.getAttribute("js-scrolling") && tmp.getAttribute("js-scrolling").toLowerCase() == "yes"){
+				tmp.style.overflow="hidden";
+            	addScroller = true;
+            }
+            
+                
             if (!addScroller) {
                 this.content.appendChild(tmp);
+                
+                if($.os.supportsNativeScroll)
+                   var tmpScroller=tmp;
+                   tmpScroller.initEvents=function(){};
+                   tmpScroller.removeEvents=function(){}
+                   tmpScroller.scrollTo=function(obj,time){
+                      this.scrollTop=-(obj.y);
+                      this.scrollLeft=-(obj.x);
+                   }
+                   this.scrollingDivs[tmp.id]=tmpScroller;
                 tmp = null;
                 return;
             }
@@ -701,13 +724,17 @@
          * @api private
          */
         updateOrientation: function(event) {
-            for (var j in this.scrollingDivs) {
-                if (typeof (this.scrollingDivs[j]) !== "function")
-                    this.scrollToTop(j);
+			var that = this;
+            for (var j in that.scrollingDivs) {
+                if (typeof (that.scrollingDivs[j]) !== "function")
+                    that.scrollToTop(j);
             }
-            this.css3animate(this.activeDiv, {
-                x: "100%",
-                time: "0ms"
+            that.css3animate(that.activeDiv, {
+                x: "0%",
+                time: "0ms",
+				callback:function(){
+					that.clearAnimations(that.activeDiv);
+				}
             });
         },
 
@@ -1118,8 +1145,11 @@
                     //activeDiv = firstDiv;
                     that.firstDiv.style.display = "block";
                     that.css3animate(that.firstDiv, {
-                        x: "100%",
-                        time: "0ms"
+                        x: "0%",
+                        time: "0ms",
+						callback:function(){
+							that.clearAnimations(that.firstDiv);
+						}
                     });
                     if (that.activeDiv.title)
                         that.titleBar.innerHTML = that.activeDiv.title;
@@ -1158,11 +1188,11 @@
             
             if (back) {
                 that.css3animate(oldDiv, {
-                    x: "200%",
+                    x: "100%",
                     time: "200ms",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             time: "1ms",
                             callback: function() {
                                 that.finishTransition(oldDiv);
@@ -1171,30 +1201,36 @@
                     }
                 });
                 that.css3animate(currDiv, {
-                    x: "0%",
+                    x: "-100%",
                     time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: "100%",
-                            time: "200ms"
+                            x: "0%",
+                            time: "200ms",
+                            callback: function() {
+								that.clearAnimations(currDiv);
+                            }
                         });
                     }
                 });
             } else {
                 that.css3animate(oldDiv, {
-                    x: "0%",
+                    x: "-100%",
                     time: "200ms",
                     callback: function() {
                         that.finishTransition(oldDiv);
                     }
                 });
                 that.css3animate(currDiv, {
-                    x: "200%",
+                    x: "100%",
                     time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: "100%",
-                            time: "200ms"
+                            x: "0%",
+                            time: "200ms",
+                            callback: function() {
+								that.clearAnimations(currDiv);
+                            }
                         });
                     }
                 });
@@ -1209,18 +1245,16 @@
             currDiv.style.display = "block";
             var that = this;
             if (back) {
-                that.css3animate(currDiv, {
-                    x: "100%",
-                    y: "0%",
-                    time: "1ms"
-                });
+
+				that.clearAnimations(currDiv);
+
                 that.css3animate(oldDiv, {
                     y: "100%",
-                    x: "100%",
+                    x: "0%",
                     time: "200ms",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             y: 0,
                             time: "1ms",
                             callback: function() {
@@ -1234,29 +1268,27 @@
             } else {
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
-                that.css3animate(oldDiv, {
-                    x: "100%",
-                    time: "200ms",
-                    callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: 0,
-                            y: 0,
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
-                    }
-                });
                 that.css3animate(currDiv, {
                     y: "100%",
-                    x: "100%",
+                    x: "0%",
                     time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
                             y: "0%",
-                            x: "100%",
-                            time: "200ms"
+                            x: "0%",
+                            time: "200ms",
+							callback: function() {
+								that.clearAnimations(currDiv);
+		                        that.css3animate(oldDiv, {
+		                            x: "-100%",
+		                            y: 0,
+		                            time: "1ms",
+		                            callback: function() {
+		                                that.finishTransition(oldDiv);
+		                            }
+		                        });
+								
+							}
                         });
                     }
                 });
@@ -1267,18 +1299,14 @@
             currDiv.style.display = "block";
             var that = this
             if (back) {
-                that.css3animate(currDiv, {
-                    x: "100%",
-                    y: "0%",
-                    time: "1ms"
-                });
+                that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
                     y: "-100%",
-                    x: "100%",
+                    x: "0%",
                     time: "200ms",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             y: 0,
                             time: "1ms",
                             callback: function() {
@@ -1294,11 +1322,11 @@
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
                 that.css3animate(oldDiv, {
-                    x: "100%",
+                    x: "0%",
                     time: "200ms",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             y: 0,
                             time: "1ms",
                             callback: function() {
@@ -1309,13 +1337,16 @@
                 });
                 that.css3animate(currDiv, {
                     y: "-100%",
-                    x: "100%",
+                    x: "0%",
                     time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
                             y: "0%",
-                            x: "100%",
-                            time: "200ms"
+                            x: "0%",
+                            time: "200ms",
+							callback: function(){
+								that.clearAnimations(currDiv);
+							}
                         });
                     }
                 });
@@ -1327,25 +1358,28 @@
             var that = this
             if (back) {
                 that.css3animate(currDiv, {
-                    x: "200%",
+                    x: "100%",
                     time: "1ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: "100%",
-                            time: "200ms"
+                            x: "00%",
+                            time: "200ms",
+							callback: function(){
+								that.clearAnimations(currDiv);
+							}
                         });
                     }
                 });
                 that.css3animate(oldDiv, {
-                    x: "200%",
+                    x: "100%",
                     time: "200ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             time: "1ms",
                             opacity: 1,
                             callback: function() {
@@ -1360,13 +1394,13 @@
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
                 that.css3animate(oldDiv, {
-                    x: "200%",
+                    x: "100%",
                     time: "200ms",
                     scale: '.8',
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             y: 0,
                             time: "1ms",
                             callback: function() {
@@ -1376,14 +1410,17 @@
                     }
                 });
                 that.css3animate(currDiv, {
-                    x: "200%",
+                    x: "100%",
                     time: "1ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: "100%",
-                            time: "200ms"
+                            x: "0%",
+                            time: "200ms",
+							callback:function(){
+								that.clearAnimations(currDiv);
+							}
                         });
                     }
                 });
@@ -1394,17 +1431,14 @@
             currDiv.style.display = "block";
             var that = this
             if (back) {
-                that.css3animate(currDiv, {
-                    x: "100%",
-                    time: "1ms"
-                });
+                that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
-                    x: "100%",
+                    x: "0%",
                     time: "200ms",
                     opacity: .1,
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             time: "1ms",
                             opacity: 1,
                             callback: function() {
@@ -1419,30 +1453,28 @@
             } else {
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
-                that.css3animate(oldDiv, {
-                    x: "100%",
-                    time: "200ms",
-                    callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: 0,
-                            y: 0,
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
-                    }
-                });
-                currDiv.style.opacity = 0;
+				currDiv.style.opacity = 0;
                 that.css3animate(currDiv, {
-                    x: "100%",
+                    x: "0%",
                     time: "1ms",
+                    opacity: .1,
                     callback: function() {
-                        that.css3animate(currDiv, {
-                            x: "100%",
-                            time: "200ms",
-                            opacity: 1
-                        });
+		                that.css3animate(currDiv, {
+		                    x: "0%",
+		                    time: "200ms",
+		                    opacity: 1,
+							callback:function(){
+								that.clearAnimations(currDiv);
+		                        that.css3animate(oldDiv, {
+		                            x: "-100%",
+		                            y: 0,
+		                            time: "1ms",
+		                            callback: function() {
+		                                that.finishTransition(oldDiv);
+		                            }
+		                        });
+							}
+		                });
                     }
                 });
             }
@@ -1452,19 +1484,16 @@
             currDiv.style.display = "block";
             var that = this
             if (back) {
-                that.css3animate(currDiv, {
-                    x: "100%",
-                    time: "1ms"
-                });
+                that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
-                    x: "100%",
+                    x: "0%",
                     time: "200ms",
                     opacity: .1,
                     scale: .2,
-                    origin: "50% 50%",
+                    origin: "-50% 50%",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             time: "1ms",
                             callback: function() {
                                 that.finishTransition(oldDiv);
@@ -1477,34 +1506,31 @@
             } else {
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
-                that.css3animate(oldDiv, {
-                    x: "100%",
-                    time: "200ms",
-                    callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: 0,
-                            y: 0,
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
-                    }
-                });
                 that.css3animate(currDiv, {
-                    x: "100%",
+                    x: "0%",
                     y: "0%",
                     time: "1ms",
                     scale: .2,
-                    origin: "50% 50%",
+                    origin: "-50% 50%",
                     opacity: .1,
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: "100%",
+                            x: "0%",
                             time: "200ms",
                             scale: 1,
                             opacity: 1,
-                            origin: "0% 0%"
+                            origin: "0% 0%",
+							callback: function(){
+								that.clearAnimations(currDiv);
+		                        that.css3animate(oldDiv, {
+		                            x: "100%",
+		                            y: 0,
+		                            time: "1ms",
+		                            callback: function() {
+		                                that.finishTransition(oldDiv);
+		                            }
+		                        });
+							}
                         });
                     }
                 });
@@ -1514,28 +1540,12 @@
             oldDiv.style.display = "block";
             currDiv.style.display = "block";
             var that = this
-            if (back) {
-                that.css3animate(currDiv, {
-                    x: "100%",
-                    time: "1ms"
-                });
-                that.css3animate(oldDiv, {
-                    x: 0,
-                    time: "1ms"
-                });
-            
-            } else {
-                
-                that.css3animate(oldDiv, {
-                    x: 0,
-                    y: 0,
-                    time: "1ms"
-                });
-                that.css3animate(currDiv, {
-                    x: "100%",
-                    time: "1ms"
-                });
-            }
+            that.clearAnimations(currDiv);
+			that.css3animate(oldDiv, {
+                x: "-100%",
+                y: 0,
+                time: "1ms"
+            });
             that.finishTransition(oldDiv);
             currDiv.style.zIndex = 2;
             oldDiv.style.zIndex = 1;
@@ -1551,7 +1561,19 @@
             oldDiv.style.display = 'none';
             this.doingTransition = false;
         
+        },
+		
+        /**
+         * This must be called at the end of every transition to remove all transforms and transitions attached to the inView object (performance + native scroll)
+         *
+         * @param {Object} Div that transitioned out
+         * @title $.ui.finishTransition(oldDiv)
+         */
+        clearAnimations: function(inViewDiv) {
+	        inViewDiv.style.webkitTransform = "none";
+			inViewDiv.style.webkitTransition = "none";
         }
+		
     /**
          * END
          * @api private
@@ -1590,9 +1612,9 @@
     //Check to see if any <nav> items are found. If so, add the CSS classes
     jq(document).ready(function() {
         if (jq("nav").length > 0) {
-            jq("#jQUi #header").addClass("hasMenu");
-            jq("#jQUi #content").addClass("hasMenu");
-            jq("#jQUi #navbar").addClass("hasMenu");
+            jq("#jQUi #header").addClass("hasMenu off");
+            jq("#jQUi #content").addClass("hasMenu off");
+            jq("#jQUi #navbar").addClass("hasMenu off");
         }
         jQUi = jq("#jQUi");
         hideAddressBar();
@@ -1636,19 +1658,23 @@
             jQUi.css("height", window.innerHeight + "px");
         }
     }
-    //The following is based on Cubiq.org - iOS no click delay.  We use this to capture events to input boxes to fix Android...and fix iOS ;)
-    //We had to make a lot of fixes to allow access to input elements on android, etc.
-    function NoClickDelay(el) {
-        if (typeof (el) === "string")
-            el = document.getElementById(el);
+    //The following is based on Cubiq.org's - iOS no click delay.  We use this to capture events to input boxes to fix Android...and fix iOS ;)
+    //We had to make a lot of fixes to allow access to input elements on android, native scroll, etc.
+    function TouchLayer(el) {
         el.addEventListener('touchstart', this, false);
+		this.layer=el;
     }
     var prevClickField;
-    NoClickDelay.prototype = {
+    TouchLayer.prototype = {
         dX: 0,
         dY: 0,
         cX: 0,
         cY: 0,
+		layer: null,
+		scrollingEl: null,
+		isScrolling: false,
+		isScrollingVertical: false,
+		preventTouchMove: false,
         handleEvent: function(e) {
             switch (e.type) {
                 case 'touchstart':
@@ -1660,48 +1686,193 @@
                 case 'touchend':
                     this.onTouchEnd(e);
                     break;
+                case 'scroll':
+                    this.onScroll(e);
+                    break;
+                case 'touchend':
+                    this.onScrollEnd(e);
+                    break;
+				
             }
         },
-        
+		
         onTouchStart: function(e) {
-            
-            if (fixInputHandlers(e))
-                return;
+			
             this.dX = e.touches[0].pageX;
             this.dY = e.touches[0].pageY;
+            if (fixInputHandlers(e))
+                return;
             if (prevClickField !== null && prevClickField !== undefined && jq.os.android) {
                 prevClickField.blur(); //We need to blur any input fields on android
                 prevClickField = null;
             }
-            e.preventDefault();
             this.moved = false;
-            document.addEventListener('touchmove', this, true);
-            document.addEventListener('touchend', this, true);
+			this.isScrolling = false;
+			this.isScrollingVertical = false;
+			this.preventTouchMove = false;
+			if($.os.supportsNativeScroll) this.checkScrolling(e.target, this.layer);
+			if(!this.isScrolling) e.preventDefault();
+            document.addEventListener('touchmove', this, false);
+			document.addEventListener('touchend', this, false);
         },
+		
+		//set rules here to ignore scrolling check on these elements
+		ignoreScrolling:function(el){
+			if(el['scrollWidth']===undefined || el['clientWidth']===undefined) return true;
+			if(el['scrollHeight']===undefined || el['clientHeight']===undefined) return true;
+			return false;
+		},
+		
+		allowsVerticalScroll:function(el, styles){
+			var overflowY = styles.overflowY;
+			if(overflowY == 'scroll') return true;
+			if(overflowY == 'auto' && el['scrollHeight'] > el['clientHeight'])
+				return true;
+			return false;
+		},
+		allowsHorizontalScroll:function(el, styles){
+			var overflowX = styles.overflowY;
+			if(overflowX == 'scroll') return true;
+			if(overflowX == 'auto' && el['scrollWidth'] > el['clientWidth'])
+				return true;
+			return false;
+		},
+		
+		
+		//check if native scroll is possible
+		checkScrolling : function(el, parentTarget){
+
+			//prevent errors
+			if(this.ignoreScrolling(el)) {
+				return;
+			}
+			
+			//check 
+			var styles = window.getComputedStyle(el);
+			if (this.allowsVerticalScroll(el, styles)){
+				this.isScrollingVertical=true;
+				this.scrollingEl = el;
+				this.isScrolling = true;
+				return;
+			} else if(this.allowsHorizontalScroll(el, styles)){
+				this.isScrollingVertical=false;
+				this.isScrolling = true;
+				return;
+			}
+			//check recursive up to top element
+			var isTarget = el.isSameNode(parentTarget);
+			if(!isTarget && el.parentNode) this.checkScrolling(el.parentNode, parentTarget);
+		},
+		
         
         onTouchMove: function(e) {
-            this.moved = true;
-            this.cX = e.touches[0].pageX - this.dX;
-            this.cY = e.touches[0].pageY - this.dY;
-            e.preventDefault();
+			
+			if(this.preventTouchMove){
+				e.preventDefault();
+				return;
+			}
+			
+			this.cY = e.touches[0].pageY - this.dY;
+			this.cX = e.touches[0].pageX - this.dX;
+			
+			if(!this.isScrolling){
+				//legacy stuff for old browsers
+	            e.preventDefault();
+			} else if(this.isScrollingVertical){
+				
+				var atTop = this.cY>0 && this.scrollingEl.scrollTop==0;
+				var atBottom = this.cY<0 && (this.scrollingEl.scrollTop+this.scrollingEl.clientHeight)==this.scrollingEl.scrollHeight;
+
+				//check if in boundaries
+				if(atTop || atBottom){
+
+					this.preventTouchMove = true;
+					e.preventDefault();
+					
+				} else {
+					
+					//Android scroll to pane fix
+					if($.os.android){
+					
+						var throughTop = this.scrollingEl.scrollTop-this.cY<=0;
+						var throughBottom = (this.scrollingEl.scrollTop+this.scrollingEl.clientHeight-this.cY)>=this.scrollingEl.scrollHeight;
+					
+						if(!this.checkAndroidBoundaryScroll(e, throughTop, throughBottom) && !this.moved){
+							this.scrollingEl.addEventListener("scroll", this, false); 
+							this.scrollingEl.addEventListener("scrollend", this, false); 
+						}
+					
+					}
+				}
+				
+				//vertical scroll allowed
+				document.removeEventListener('touchmove', this, false);
+	            document.removeEventListener('touchend', this, false);
+				
+			} else {
+				//check if requires cancelation (trying to move vertically)
+				if(Math.abs(this.cY)>Math.abs(this.cX)){
+					this.preventTouchMove = true;
+					e.preventDefault();
+				} else {
+					document.removeEventListener('touchmove', this, false);
+		            document.removeEventListener('touchend', this, false);
+				}
+			}
+			this.moved = true;
         },
+		checkAndroidBoundaryScroll:function(e, throughTop, throughBottom){
+			if(throughTop || throughBottom){
+				if(throughTop)
+					this.scrollingEl.scrollTop=0;
+				else
+					this.scrollingEl.scrollTop=this.scrollingEl.scrollHeight-this.scrollingEl.clientHeight;
+				e.preventDefault();
+				return true;
+			}
+			return false;
+		},
+		onScroll:function(e){
+			//check if it is at boundaries
+			var atTop = this.scrollingEl.scrollTop<=0;
+			var atBottom = (this.scrollingEl.scrollTop+this.scrollingEl.clientHeight)>=this.scrollingEl.scrollHeight;
+			if(this.checkAndroidBoundaryScroll(e, atTop, atBottom)){
+					this.onScrollEnd(e);	
+			}
+		},
+		onScrollEnd:function(e){
+			//check if it is at boundaries
+			document.removeEventListener('scroll', this, false);
+			document.removeEventListener('scrollend', this, false);	
+		},
+		
         
         onTouchEnd: function(e) {
             
             document.removeEventListener('touchmove', this, false);
             document.removeEventListener('touchend', this, false);
+			
+			var itMoved = $.os.blackberry ? (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5) : this.moved;
+			var androidVerticalScroll = ($.os.android && this.isScrollingVertical);
             
-            if ((!jq.os.blackberry && !this.moved) || (jq.os.blackberry && (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5))) {
+            if (!itMoved && !androidVerticalScroll) {
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
+            
                 
-                if (checkAnchorClick(theTarget))
+                if (checkAnchorClick(theTarget,this.isScrolling))
+                {
+                    e.preventDefault();
                     return false;
-                
+                }
+               
+
                 var theEvent = document.createEvent('MouseEvents');
+                if(!this.isScrolling){
                 theEvent.initEvent('click', true, true);
                 theTarget.dispatchEvent(theEvent);
+                }
                 if (theTarget && theTarget.type != undefined) {
                     var tagname = theTarget.tagName.toLowerCase();
                      if (tagname == "select" || tagname == "input"||tagname == "textarea"){ 
@@ -1712,8 +1883,9 @@
             prevClickField = null;
             this.dX = this.cX = this.cY = this.dY = 0;
         }
+        
     };
-    
+	
     
     function fixInputHandlers(e) {
         if (!jq.os.android)
@@ -1762,14 +1934,9 @@
     
     
     jq(document).ready(function() {
-        document.body.addEventListener('touchmove', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            window.scrollTo(1,1);
-        }, false);
-        if (!jq.os.desktop)
-            new NoClickDelay(document.getElementById("jQUi"));
-        else {
+        if (!jq.os.desktop){
+        	new TouchLayer(document.getElementById("jQUi"));
+        } else {
             document.getElementById("jQUi").addEventListener("click", function(e) {
               
                 var theTarget = e.target;
@@ -1783,7 +1950,7 @@
         }
     });
     
-    function checkAnchorClick(theTarget) {
+    function checkAnchorClick(theTarget,nativeScrolling) {
         var parent = false;
         if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
             parent = true, theTarget = theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
@@ -1791,8 +1958,8 @@
             if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1||theTarget.getAttribute("data-ignore")) {
                 return false;
             }
-            
-            if (theTarget.onclick && !jq.os.desktop){
+
+            if (theTarget.onclick && !jq.os.desktop&&nativeScrolling!==true){
                 theTarget.onclick();
                 //$(theTarget).trigger("click");
             }
@@ -1814,10 +1981,13 @@
             if ((theTarget.href.indexOf("#") !== -1 && theTarget.hash.length == 0)||theTarget.href.length==0)
                 return true;
             
+            
+            
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
             resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
             var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
+            
             jq.ui.loadContent(href, theTarget.resetHistory, 0, mytransition, theTarget);
             return true;
         }

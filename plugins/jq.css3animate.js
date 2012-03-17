@@ -35,7 +35,6 @@
                     alert("Please provide configuration options for animation of " + elID);
                     return;
                 }
-                this.el.addEventListener("webkitTransitionEnd", that.finishAnimation, false);
 
                 if (options["callback"]) {
                     this.callback = options["callback"];
@@ -78,19 +77,25 @@
 
                 this.el.style.webkitTransform = "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ") rotateY(" + options.rotateY + ") skew(" + options.skewX + "," + options.skewY + ")";
                 this.el.style.webkitBackfaceVisiblity = "hidden";
-                this.el.style.webkitTransition = "all " + options["time"]+" "+options["timingFunction"];
-                this.el.style.webkitTransformOrigin = options.origin;
-
-
+				var properties = "-webkit-transform";
+                if (options["opacity"]!==undefined) {
+                    this.el.style.opacity = options["opacity"];
+					properties+=", opacity";
+                }
                 if (options["width"]) {
                     this.el.style.width = options["width"];
+					properties = "all";
                 }
                 if (options["height"]) {
                     this.el.style.height = options["height"];
+					properties = "all";
                 }
-                if (options["opacity"]!==undefined) {
-                    this.el.style.opacity = options["opacity"];
-                }
+				this.el.style.webkitTransitionProperty = properties;
+				this.el.style.webkitTransitionDuration = options["time"];
+				this.el.style.webkitTransitionTimingFunction = options["timingFunction"];
+                this.el.style.webkitTransformOrigin = options.origin;
+                this.el.addEventListener("webkitTransitionEnd", that.finishAnimation, false);
+				
             };
 
 
@@ -101,7 +106,7 @@
                 if (!this.moving) return;
 
                 this.moving = false;
-                this.el.removeEventListener("webkitTransitionEnd", that.finishAnimation, true);
+                this.el.removeEventListener("webkitTransitionEnd", that.finishAnimation, false);
                 if (this.callback && typeof (this.callback == "function")) {
                     if (this.timeout) window.clearTimeout(this.timeout);
                     this.callback();

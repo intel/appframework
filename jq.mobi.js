@@ -718,6 +718,35 @@ if (!window.jq || typeof (jq) !== "function") {
                 return this;
             },
             /**
+            * Replaces a css class on elements.
+                ```
+                $().replaceClass("on", "off");
+                ```
+
+            * @param {String} classes that are space delimited
+			* @param {String} classes that are space delimited
+            * @return {Object} jqMobi object
+            * @title $().replaceClass(old, new)
+            */
+            replaceClass: function(name, newName) {
+                for (var i = 0; i < this.length; i++) {
+                    if (name == undefined) {
+                        this[i].className = newName;
+                        return this;
+                    }
+                    var classList = this[i].className;
+                    name.split(/\s+/g).concat(newName.split(/\s+/g)).forEach(function(cname) {
+                        classList = classList.replace(classRE(cname), " ");
+                    });
+					classList=classList.trim();
+                    if (classList.length > 0){
+                    	this[i].className = (classList+" "+newName).trim();
+                    } else
+                        this[i].className = newName;
+                }
+                return this;
+            },
+            /**
             * Checks to see if an element has a class.
                 ```
                 $().hasClass('foo');
@@ -1456,6 +1485,7 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os.opera = userAgent.match(/Opera Mobi/) ? true : false;
             $.os.fennec = userAgent.match(/fennec/i) ? true : false;
             $.os.desktop = !($.os.ios || $.os.android || $.os.blackberry || $.os.opera || $.os.fennec);
+			$.os.supportsNativeScroll = $.os.desktop || ($.os.ios&&userAgent.match(/OS\s[5-9_]/) ? true : false) || (userAgent.match(/Android\s[4-9.]/) ? true : false);
         }
         detectUA($, navigator.userAgent);
         $.__detectUA = detectUA; //needed for unit tests

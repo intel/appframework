@@ -119,15 +119,6 @@ oldElem=document.getElementsByTagName("link")[0];
     };
     document.addEventListener("DOMContentLoaded",init,false);  
 	$.ui.ready(function(){console.log('ready');});
-   
-    /* This code prevents users from dragging the page */
-    var preventDefaultScroll = function(event) {
-        event.preventDefault();
-        window.scroll(0,0);
-        return false;
-    };
-	
-	document.addEventListener('touchmove', preventDefaultScroll, false);
 
     /* This code is used to run as soon as appMobi activates */
     var onDeviceReady=function(){
@@ -169,7 +160,7 @@ oldElem=document.getElementsByTagName("link")[0];
     </div>
 
 <div id="content">
-	<div title='Welcome' id="main" class="panel" selected="true" data-load="loadedPanel" data-unload="unloadedPanel" data-tab="navbar_home" >
+	<div title='Welcome' id="main" class="panel" selected="true" data-load="loadedPanel" data-unload="unloadedPanel" data-tab="navbar_home">
 
 	<h2 class='expanded' onclick='showHide(this,"main_info");'>Welcome</h2>
 		<p id='main_info'>Welcome to the kitchen sink demo for jqMobi.  Here you will find samples of how to use the jqMobi libraries.  Please select an option from below.</p>
@@ -182,7 +173,7 @@ oldElem=document.getElementsByTagName("link")[0];
 
 	<!-- ------------------------------------------ -->
 	
-	<div title="jqMobi" id="jqm" class="panel" data-nav="menu_jqmobi" >
+	<div title="jqMobi" id="jqm" class="panel" data-nav="menu_jqmobi" js-scrolling="yes">
 		<h2 class='expanded' onclick='showHide(this,"jqmobi_info");'>jqMobi</h2>
 		<p id='jqmobi_info'>jqMobi is a blazingly fast query selector tool that is optmimized for HTML5 browsers.</p>
 
@@ -627,9 +618,12 @@ oldElem=document.getElementsByTagName("link")[0];
 	<!-- jqUi -->
 	<div title="jqUi" id="jqmui" class="panel"  data-footer='footerui' data-tab="navbar_ui">
 
-
-	<h2 class='expanded' onclick='showHide(this,"jqui_info");'>jqUi</h2><p id='jqui_info'>jqUi is AppMobi's User Interface/User Experience library for mobile applications. It uses HTML5 and CSS3 for animations and transitions.<br />
+		
+	<h2 class='expanded' onclick='showHide(this,"jqui_info");'>jqUi</h2><p id='jqui_info'>
+	<div style="overflow:auto;width:100%;">
+		<div style="width:1000px !important;height:50px;">jqUi is AppMobi's User Interface/User Experience library for mobile applications. It uses HTML5 and CSS3 for animations and transitions. sdf asdf asdf asd f sadf sadf s df sdf sd f sdf sdf s df sdf sd fs df sdf sdaf as df</div>
 	We built the kitchen sink using jqUi.  It is comprised of components from the jqPlugins library and additional features.
+	</div>
 	<br>
 		* Fixed navigation bar<br>
 		* Auto scrolling content panels<br>
@@ -1102,7 +1096,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	</div>
 
 	<!-- jqPlugins > jQ.scroller -->
-	<div title="Scroller" class="panel" id="webslider" scrolling="no">
+	<div title="Scroller" class="panel" id="webslider" style="overflow:hidden;">
 	<script>
 		var init_scroller = function () {
 		   $("#scroller").scroller({
@@ -1442,7 +1436,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	</div>
 
 	<!-- jqPlugins > jQ.carousel -->
-	<div title="Carousel" class="panel" id="webcarousel"  scrolling="no">
+	<div title="Carousel" class="panel" id="webcarousel"  style="overflow:hidden;">
 		<style>
 		.carousel_paging2 {
 			border-radius: 10px;
@@ -1516,7 +1510,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	</div>
 
 	<!-- jqPlugins > jQ.swipeListener -->
-	<div title="Swipe" class="panel" id="webswipe" scrolling="no">
+	<div title="Swipe" class="panel" id="webswipe" style="overflow:hidden;">
 		<style>
 			.result {position:absolute;left:100px;}
 		</style>
@@ -1656,7 +1650,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	</div>
 
 	<!-- jqPlugins > jQ.css3animate -->
-	<div title="Animate" class="panel" id="webanimate" scrolling="no">
+	<div title="Animate" class="panel" id="webanimate" style="overflow:hidden;">
 		<script>
 			function moveOnce() {
 				$("#animate").css3Animate({
@@ -1722,7 +1716,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	<!-- ------------------------------------------ -->
 
 	<!-- jqPlugins > jQ.drawer -->
-	<div title="Drawer" class="panel" id="webdrawer" scrolling="no">
+	<div title="Drawer" class="panel" id="webdrawer" style="overflow:hidden;">
 	<br><br>
 	<p>a pulldown tool like the notifications bar</p>
 	<div id="drawer" style="position:relative;top:-270px;height:220px;background:black;width:100%;z-index:100">
@@ -1819,7 +1813,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	</div>
     
     <!-- jqPlugins -> jqAlphaTable-->
-    <div title="Alpha Table" class="panel" id="webalphatable" scrolling="no">
+    <div title="Alpha Table" class="panel" id="webalphatable" style="overflow:hidden;">
     <style>
     #contentDIV .alphaItem {padding:5px;}
     #contentDIV .alphaItem:nth-child(even) {background: #CCC}
