@@ -1660,11 +1660,35 @@
     }
     //The following is based on Cubiq.org's - iOS no click delay.  We use this to capture events to input boxes to fix Android...and fix iOS ;)
     //We had to make a lot of fixes to allow access to input elements on android, native scroll, etc.
-    function TouchLayer(el) {
+	var getMyTime=function(){
+		return new Date().getTime();
+	}
+	var startTime = getMyTime();
+    
+	function TouchLayer(el) {
         el.addEventListener('touchstart', this, false);
+		//document.addEventListener('scroll', this, true);
+		document.addEventListener('touchend', function(){console.log((getMyTime()-startTime)+" onTouchEnd");}, true);
+		document.addEventListener('touchmove', function(){
+			console.log((getMyTime()-startTime)+" onTouchMove ("+document.documentElement.scrollTop+"/"+document.getElementById("jqmui").scrollTop+")");
+		}, true);
+		var firstScroll = true;
+		document.addEventListener('scroll', function(e){
+			
+			console.log((getMyTime()-startTime)+" onScroll");
+			if(e.target.id=="jqmui") console.log("panel scrolled! "+document.getElementById("jqmui").scrollTop);
+			if(e.target.isSameNode(document)) {
+				if(!firstScroll){
+					firstScroll = true;
+					hideAddressBar();
+					console.log("document scrolled! "+document.documentElement.scrollTop);
+				} else firstScroll=false;
+			}
+		}, true);
 		this.layer=el;
     }
     var prevClickField;
+	
     TouchLayer.prototype = {
         dX: 0,
         dY: 0,
@@ -1673,6 +1697,8 @@
 		layer: null,
 		scrollingEl: null,
 		isScrolling: false,
+		inMotion: false,
+		inVerticalMotion:false,
 		isScrollingVertical: false,
 		preventTouchMove: false,
         handleEvent: function(e) {
@@ -1688,9 +1714,6 @@
                     break;
                 case 'scroll':
                     this.onScroll(e);
-                    break;
-                case 'touchend':
-                    this.onScrollEnd(e);
                     break;
 				
             }
@@ -1708,14 +1731,31 @@
             }
             this.moved = false;
 			this.isScrolling = false;
+			this.inMotion = false;
 			this.isScrollingVertical = false;
 			this.preventTouchMove = false;
 			if($.os.supportsNativeScroll) this.checkScrolling(e.target, this.layer);
-			if(!this.isScrolling) e.preventDefault();
-            document.addEventListener('touchmove', this, false);
+			if(!this.isScrolling) {
+				e.preventDefault();
+			} else if(this.isScrollingVertical){
+				this.demandVerticalScroll();
+			}
+			document.addEventListener('touchmove', this, false);
 			document.addEventListener('touchend', this, false);
         },
-		
+		demandVerticalScroll:function(){
+			//if at top or bottom allow scroll
+			var atTop = this.scrollingEl.scrollTop<=0;
+			if(atTop){
+				this.scrollingEl.scrollTop=1;
+			} else {
+				var scrollHeight = this.scrollingEl.scrollTop+this.scrollingEl.clientHeight;
+				var atBottom = scrollHeight>=this.scrollingEl.scrollHeight;
+				if(atBottom) {
+					this.scrollingEl.scrollTop=this.scrollingEl.scrollHeight-this.scrollingEl.clientHeight-1;
+				}
+			}
+		},
 		//set rules here to ignore scrolling check on these elements
 		ignoreScrolling:function(el){
 			if(el['scrollWidth']===undefined || el['clientWidth']===undefined) return true;
@@ -1756,8 +1796,9 @@
 				return;
 			} else if(this.allowsHorizontalScroll(el, styles)){
 				this.isScrollingVertical=false;
+				this.isScrollingHorizontal=true;
+				this.scrollingEl = null;
 				this.isScrolling = true;
-				return;
 			}
 			//check recursive up to top element
 			var isTarget = el.isSameNode(parentTarget);
@@ -1767,95 +1808,29 @@
         
         onTouchMove: function(e) {
 			
-			if(this.preventTouchMove){
-				e.preventDefault();
-				return;
-			}
-			
 			this.cY = e.touches[0].pageY - this.dY;
 			this.cX = e.touches[0].pageX - this.dX;
 			
 			if(!this.isScrolling){
 				//legacy stuff for old browsers
 	            e.preventDefault();
-			} else if(this.isScrollingVertical){
+				this.moved = true;
 				
-				var atTop = this.cY>0 && this.scrollingEl.scrollTop==0;
-				var atBottom = this.cY<0 && (this.scrollingEl.scrollTop+this.scrollingEl.clientHeight)==this.scrollingEl.scrollHeight;
-
-				//check if in boundaries
-				if(atTop || atBottom){
-
-					this.preventTouchMove = true;
-					e.preventDefault();
-					
-				} else {
-					
-					//Android scroll to pane fix
-					if($.os.android){
-					
-						var throughTop = this.scrollingEl.scrollTop-this.cY<=0;
-						var throughBottom = (this.scrollingEl.scrollTop+this.scrollingEl.clientHeight-this.cY)>=this.scrollingEl.scrollHeight;
-					
-						if(!this.checkAndroidBoundaryScroll(e, throughTop, throughBottom) && !this.moved){
-							this.scrollingEl.addEventListener("scroll", this, false); 
-							this.scrollingEl.addEventListener("scrollend", this, false); 
-						}
-					
-					}
-				}
-				
-				//vertical scroll allowed
-				document.removeEventListener('touchmove', this, false);
-	            document.removeEventListener('touchend', this, false);
-				
+			//otherwise it is a scroll
+			//let's clear events for performance
 			} else {
-				//check if requires cancelation (trying to move vertically)
-				if(Math.abs(this.cY)>Math.abs(this.cX)){
-					this.preventTouchMove = true;
-					e.preventDefault();
-				} else {
-					document.removeEventListener('touchmove', this, false);
-		            document.removeEventListener('touchend', this, false);
-				}
+				//scroll allowed - let's not waste performance
+	            document.removeEventListener('touchmove', this, false);
+				document.removeEventListener('touchend', this, false);
 			}
-			this.moved = true;
+			
         },
-		checkAndroidBoundaryScroll:function(e, throughTop, throughBottom){
-			if(throughTop || throughBottom){
-				if(throughTop)
-					this.scrollingEl.scrollTop=0;
-				else
-					this.scrollingEl.scrollTop=this.scrollingEl.scrollHeight-this.scrollingEl.clientHeight;
-				e.preventDefault();
-				return true;
-			}
-			return false;
-		},
-		onScroll:function(e){
-			//check if it is at boundaries
-			var atTop = this.scrollingEl.scrollTop<=0;
-			var atBottom = (this.scrollingEl.scrollTop+this.scrollingEl.clientHeight)>=this.scrollingEl.scrollHeight;
-			if(this.checkAndroidBoundaryScroll(e, atTop, atBottom)){
-					this.onScrollEnd(e);	
-			}
-		},
-		onScrollEnd:function(e){
-			//check if it is at boundaries
-			document.removeEventListener('scroll', this, false);
-			document.removeEventListener('scrollend', this, false);	
-		},
 		
         
         onTouchEnd: function(e) {
-            
-            document.removeEventListener('touchmove', this, false);
-            document.removeEventListener('touchend', this, false);
-			
 			var itMoved = $.os.blackberry ? (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5) : this.moved;
-			var androidVerticalScroll = ($.os.android && this.isScrollingVertical);
-            
-            if (!itMoved && !androidVerticalScroll) {
+            if(!this.moved) this.inMotion=false;
+            if (!itMoved) {
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
@@ -1882,6 +1857,9 @@
             }
             prevClickField = null;
             this.dX = this.cX = this.cY = this.dY = 0;
+            document.removeEventListener('touchmove', this, false);
+            document.removeEventListener('touchend', this, false);
+			
         }
         
     };
