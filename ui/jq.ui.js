@@ -1687,10 +1687,10 @@
 		layer: null,
 		scrollingEl: null,
 		isScrolling: false,
-		inMotion: false,
-		inVerticalMotion:false,
+		beenScrolling: false,
+		previousStartedAtTop: false,
+		previousStartedAtBottom:false,
 		isScrollingVertical: false,
-		preventTouchMove: false,
         handleEvent: function(e) {
             switch (e.type) {
                 case 'touchstart':
@@ -1721,9 +1721,7 @@
             }
             this.moved = false;
 			this.isScrolling = false;
-			this.inMotion = false;
 			this.isScrollingVertical = false;
-			this.preventTouchMove = false;
 			if($.os.supportsNativeScroll) this.checkScrolling(e.target, this.layer);
 			if(!this.isScrolling) {
 				e.preventDefault();
@@ -1734,17 +1732,26 @@
 			document.addEventListener('touchend', this, false);
         },
 		demandVerticalScroll:function(){
-			//if at top or bottom allow scroll
-			var atTop = this.scrollingEl.scrollTop<=0;
-			if(atTop){
-				this.scrollingEl.scrollTop=1;
-			} else {
-				var scrollHeight = this.scrollingEl.scrollTop+this.scrollingEl.clientHeight;
-				var atBottom = scrollHeight>=this.scrollingEl.scrollHeight;
-				if(atBottom) {
-					this.scrollingEl.scrollTop=this.scrollingEl.scrollHeight-this.scrollingEl.clientHeight-1;
+			if(!this.beenScrolling){
+				//if at top or bottom allow scroll
+				var atTop = this.scrollingEl.scrollTop<=0;
+				if(atTop){
+					this.scrollingEl.scrollTop=1;
+				} else {
+					var scrollHeight = this.scrollingEl.scrollTop+this.scrollingEl.clientHeight;
+					var atBottom = scrollHeight>=this.scrollingEl.scrollHeight;
+					if(atBottom) {
+						this.scrollingEl.scrollTop=this.scrollingEl.scrollHeight-this.scrollingEl.clientHeight-1;
+					}
 				}
 			}
+		},
+		onScroll:function(e){
+			if(this.scrollingEl.scrollTop==0) e.preventDefault();
+			console.log("scroll "+(this.scrollingEl?this.scrollingEl.scrollTop:"null"));
+			this.beenScrolling = false;
+			this.previousStartedAtTop = false;
+			this.previousStartedAtBottom = false;
 		},
 		//set rules here to ignore scrolling check on these elements
 		ignoreScrolling:function(el){
@@ -1786,7 +1793,6 @@
 				return;
 			} else if(this.allowsHorizontalScroll(el, styles)){
 				this.isScrollingVertical=false;
-				this.isScrollingHorizontal=true;
 				this.scrollingEl = null;
 				this.isScrolling = true;
 			}
@@ -1800,27 +1806,55 @@
 			
 			this.cY = e.touches[0].pageY - this.dY;
 			this.cX = e.touches[0].pageX - this.dX;
-			
+			console.log("touchmove "+(this.cY>0?"up":"down")+"!");
 			if(!this.isScrolling){
 				//legacy stuff for old browsers
 	            e.preventDefault();
 				this.moved = true;
+				return;
 				
 			//otherwise it is a scroll
 			//let's clear events for performance
-			} else {
-				//scroll allowed - let's not waste performance
-	            document.removeEventListener('touchmove', this, false);
-				document.removeEventListener('touchend', this, false);
+			} else if(this.isScrollingVertical){
+				console.log("isScrollingVertical! "+this.scrollingEl.scrollTop);
+				//if at top or bottom allow scroll
+				var atTop = this.scrollingEl.scrollTop<=0;
+				if(atTop){
+					console.log("through the top!");
+					if(this.beenScrolling && !this.previousStartedAtTop) {
+						this.previousStartedAtTop = false;
+						this.beenScrolling = false;
+						e.preventDefault();
+					} else {
+						this.beenScrolling = true;
+						this.previousStartedAtTop = true;
+					}
+				} else {
+					var scrollHeight = this.scrollingEl.scrollTop+this.scrollingEl.clientHeight;
+					var atBottom = scrollHeight>=this.scrollingEl.scrollHeight;
+					if(atBottom) {
+						if(this.beenScrolling && !this.previousStartedAtBottom) {
+							this.previousStartedAtBottom = false;
+							this.beenScrolling = false;
+							e.preventDefault();
+						} else {
+							this.beenScrolling = true;
+							this.previousStartedAtBottom = true;
+						}
+					} else this.beenScrolling = true;
+					this.scrollingEl.addEventListener('scroll', this, false);
+				}
+				
 			}
-			
+			//scroll allowed - let's not waste performance
+            document.removeEventListener('touchmove', this, false);
+			document.removeEventListener('touchend', this, false);
         },
 		
         
         onTouchEnd: function(e) {
 			e.preventDefault();
 			var itMoved = $.os.blackberry ? (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5) : this.moved;
-            if(!this.moved) this.inMotion=false;
             if (!itMoved) {
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
