@@ -629,64 +629,52 @@
          * @api private
          */
         addDivAndScroll: function(tmp, refreshPull, refreshFunc) {
-            var addScroller = false;
+			var jsScroll = false;
 			//sets up scroll when required and not supported
 			if(!$.os.supportsNativeScroll&&tmp.style.overflow!='hidden'&&tmp.style.overflow!='visible') tmp.setAttribute("js-scrolling", "yes");
 			
             if (tmp.getAttribute("js-scrolling") && tmp.getAttribute("js-scrolling").toLowerCase() == "yes"){
 				tmp.style.overflow="hidden";
-            	addScroller = true;
+				jsScroll = true;
             }
             
+			
                 
-            if (!addScroller) {
+            if (!jsScroll) {
                 this.content.appendChild(tmp);
-                
-                if($.os.supportsNativeScroll)
-                   var tmpScroller=tmp;
-                   tmpScroller.initEvents=function(){};
-                   tmpScroller.removeEvents=function(){}
-                   tmpScroller.scrollTo=function(obj,time){
-                      this.scrollTop=-(obj.y);
-                      this.scrollLeft=-(obj.x);
-                   }
-                   this.scrollingDivs[tmp.id]=tmpScroller;
-                tmp = null;
-                return;
+				var scrollEl = tmp;
+            } else {
+	            //WE need to clone the div so we keep events
+	            var scrollEl = tmp.cloneNode(false);
+            
+            
+	            tmp.title = null;
+	            tmp.id = null;
+	            tmp.removeAttribute("footer");
+	            tmp.removeAttribute("nav");
+	            jq(tmp).removeClass("panel");
+	            tmp.style.width = "100%";
+	            //tmp.style.height = "inherit";
+            
+	            scrollEl.appendChild(tmp);
+            
+	            this.content.appendChild(scrollEl);
+            
+	            this.selectBox.getOldSelects(scrollEl.id);
+	            this.passwordBox.getOldPasswords(scrollEl.id);
+            	
             }
-            //WE need to clone the div so we keep events
-            var myDiv = tmp.cloneNode(false);
-            
-            
-            tmp.title = null;
-            tmp.id = null;
-            tmp.removeAttribute("footer");
-            tmp.removeAttribute("nav");
-            jq(tmp).removeClass("panel");
-            tmp.style.width = "100%";
-            //tmp.style.height = "inherit";
-            
-            myDiv.appendChild(tmp);
-            
-            this.content.appendChild(myDiv);
-            
-            this.selectBox.getOldSelects(myDiv.id);
-            this.passwordBox.getOldPasswords(myDiv.id);
-            
-            if (addScroller) {
-                this.scrollingDivs[myDiv.id] = (jq(tmp).scroller({
-                    scrollBars: true,
-                    verticalScroll: true,
-                    horizontalScroll: false,
-                    vScrollCSS: "jqmScrollbar",
-                    refresh: false
-                }));
-                this.scrollingDivs[myDiv.id].removeEvents();
-            }
-            
-            
-            myDiv = null;
-            tmp = null;
+            this.scrollingDivs[scrollEl.id] = (jq(tmp).scroller({
+                scrollBars: true,
+                verticalScroll: true,
+                horizontalScroll: false,
+                vScrollCSS: "jqmScrollbar",
+                refresh: false,
+				useJsScroll:jsScroll
+            }));
+            this.scrollingDivs[scrollEl.id].removeEvents();
+			tmp = null;
+			scrollEl = null;
         },
 
         /**
@@ -878,7 +866,8 @@
                                 
                                 var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
                                 refreshFunction = refresh ? 
-                                function() {
+                                function(triggered) {
+									if(!triggered) return true;
                                     anchor.refresh = true;
                                     that.loadContent(target, newTab, back, transition, anchor);
                                     anchor.refresh = false;
@@ -1672,7 +1661,7 @@
         cY: 0,
 		layer: null,
 		scrollingEl: null,
-		isScrolling: false,
+		canScroll: false,
 		isScrollingVertical: false,
 		preventTouchMove: false,
         handleEvent: function(e) {
@@ -1685,12 +1674,6 @@
                     break;
                 case 'touchend':
                     this.onTouchEnd(e);
-                    break;
-                case 'scroll':
-                    this.onScroll(e);
-                    break;
-                case 'touchend':
-                    this.onScrollEnd(e);
                     break;
 				
             }
@@ -1707,11 +1690,11 @@
                 prevClickField = null;
             }
             this.moved = false;
-			this.isScrolling = false;
+			this.canScroll = false;
 			this.isScrollingVertical = false;
 			this.preventTouchMove = false;
 			if($.os.supportsNativeScroll) this.checkScrolling(e.target, this.layer);
-			if(!this.isScrolling) e.preventDefault();
+			if(!this.canScroll) e.preventDefault();
             document.addEventListener('touchmove', this, false);
 			document.addEventListener('touchend', this, false);
         },
@@ -1752,11 +1735,11 @@
 			if (this.allowsVerticalScroll(el, styles)){
 				this.isScrollingVertical=true;
 				this.scrollingEl = el;
-				this.isScrolling = true;
+				this.canScroll = true;
 				return;
 			} else if(this.allowsHorizontalScroll(el, styles)){
 				this.isScrollingVertical=false;
-				this.isScrolling = true;
+				this.canScroll = true;
 				return;
 			}
 			//check recursive up to top element
@@ -1767,43 +1750,24 @@
         
         onTouchMove: function(e) {
 			
-			if(this.preventTouchMove){
-				e.preventDefault();
-				return;
-			}
-			
 			this.cY = e.touches[0].pageY - this.dY;
 			this.cX = e.touches[0].pageX - this.dX;
 			
-			if(!this.isScrolling){
+			if(!this.canScroll){
 				//legacy stuff for old browsers
 	            e.preventDefault();
+				
 			} else if(this.isScrollingVertical){
 				
-				var atTop = this.cY>0 && this.scrollingEl.scrollTop==0;
-				var atBottom = this.cY<0 && (this.scrollingEl.scrollTop+this.scrollingEl.clientHeight)==this.scrollingEl.scrollHeight;
-
+				var atTop = this.cY>0 && this.scrollingEl.scrollTop<=0;
+				
 				//check if in boundaries
-				if(atTop || atBottom){
-
-					this.preventTouchMove = true;
-					e.preventDefault();
-					
-				} else {
-					
-					//Android scroll to pane fix
-					if($.os.android){
-					
-						var throughTop = this.scrollingEl.scrollTop-this.cY<=0;
-						var throughBottom = (this.scrollingEl.scrollTop+this.scrollingEl.clientHeight-this.cY)>=this.scrollingEl.scrollHeight;
-					
-						if(!this.checkAndroidBoundaryScroll(e, throughTop, throughBottom) && !this.moved){
-							this.scrollingEl.addEventListener("scroll", this, false); 
-							this.scrollingEl.addEventListener("scrollend", this, false); 
-						}
-					
-					}
+				if(atTop) this.scrollingEl.scrollTop=1;
+				else {
+					var atBottom = this.cY<0 && this.scrollingEl.scrollTop+this.scrollingEl.clientHeight>=this.scrollingEl.scrollHeight;
+					if(atBottom) this.scrollingEl.scrollTop-=1;
 				}
+				
 				
 				//vertical scroll allowed
 				document.removeEventListener('touchmove', this, false);
@@ -1821,30 +1785,6 @@
 			}
 			this.moved = true;
         },
-		checkAndroidBoundaryScroll:function(e, throughTop, throughBottom){
-			if(throughTop || throughBottom){
-				if(throughTop)
-					this.scrollingEl.scrollTop=0;
-				else
-					this.scrollingEl.scrollTop=this.scrollingEl.scrollHeight-this.scrollingEl.clientHeight;
-				e.preventDefault();
-				return true;
-			}
-			return false;
-		},
-		onScroll:function(e){
-			//check if it is at boundaries
-			var atTop = this.scrollingEl.scrollTop<=0;
-			var atBottom = (this.scrollingEl.scrollTop+this.scrollingEl.clientHeight)>=this.scrollingEl.scrollHeight;
-			if(this.checkAndroidBoundaryScroll(e, atTop, atBottom)){
-					this.onScrollEnd(e);	
-			}
-		},
-		onScrollEnd:function(e){
-			//check if it is at boundaries
-			document.removeEventListener('scroll', this, false);
-			document.removeEventListener('scrollend', this, false);	
-		},
 		
         
         onTouchEnd: function(e) {
@@ -1861,7 +1801,7 @@
                     theTarget = theTarget.parentNode;
             
                 
-                if (checkAnchorClick(theTarget,this.isScrolling))
+                if (checkAnchorClick(theTarget,this.canScroll))
                 {
                     e.preventDefault();
                     return false;
@@ -1869,13 +1809,13 @@
                
 
                 var theEvent = document.createEvent('MouseEvents');
-                if(!this.isScrolling){
+                if(!this.canScroll){
                 theEvent.initEvent('click', true, true);
                 theTarget.dispatchEvent(theEvent);
                 }
                 if (theTarget && theTarget.type != undefined) {
                     var tagname = theTarget.tagName.toLowerCase();
-                    if (tagname == "select" || (theTarget.type=="text"&&tagname == "input")||  tagname == "textarea") {
+                    if (tagname == "select" || (theTarget.type=="text"&&tagname == "input") ||  tagname == "textarea") {
                         theTarget.focus();
                     }
                 }
@@ -1913,16 +1853,15 @@
                         }
                     } else if (jq(theTarget).closest("#jQui_modal").length > 0) {
                         
-                        headerHeight = 0;
-                        containerHeight = parseInt(jq("#modalContainer").css("height")) / 2;
-                        var theHeight = e.touches[0].clientY - headerHeight / 2;
+	                    headerHeight = 0;
+	                    containerHeight = parseInt(jq("#modalContainer").css("height")) / 2;
+	                    var theHeight = e.touches[0].clientY - headerHeight / 2;
                         
-                        if (theHeight > containerHeight && containerHeight > 0) {
-                            
-                            window.setTimeout(function() {
-                                this.scrollingDivs['modal'].scrollBy({x: 0,y: theHeight - containerHeight}, 0);
-                            }, 1000);
-                        }
+					    if (theHeight > containerHeight && containerHeight > 0) {
+	                		window.setTimeout(function() {
+	                			$.ui.scrollingDivs['modal'].scrollBy({x: 0,y: theHeight - containerHeight}, 0);
+	                		}, 1000);
+					    }
                     }
                 }
                 
