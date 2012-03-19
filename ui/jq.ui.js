@@ -886,6 +886,15 @@
                 } else {
                     // load a div
                     what = target.replace("#", "");
+
+                    var slashIndex = what.indexOf('/');
+                    var hashLink = "";
+                    if (slashIndex != -1) {
+                        // Ignore everything after the slash for loading
+                        hashLink = what.substr(slashIndex);
+                        what = what.substr(0, slashIndex);
+                    }
+
                     what = $am(what);
                     
                     if (!what)
@@ -920,8 +929,9 @@
                         });
                     }
                     try {
-                        window.history.pushState(what.id, what.id, startPath + "#" + what.id);
-                        $(window).trigger("hashchange", {newUrl: startPath + "#" + what.id,oldURL: startPath + "#" + oldDiv.id});
+                        var oldTarget = window.location.hash;
+                        window.history.pushState(what.id, what.id, startPath + '#' + what.id + hashLink);
+                        $(window).trigger("hashchange", {newUrl: startPath + '#' + what.id + hashLink,oldURL: startPath + oldTarget});
                     } 
                     catch (e) {
                     }
