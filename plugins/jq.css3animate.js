@@ -3,6 +3,7 @@
  * @copyright 2011 - AppMobi
  */ (function ($) {
     $.fn["css3Animate"] = function (opts) {
+		console.log("hello");
         var tmp;
         for (var i = 0; i < this.length; i++) {
             tmp = new css3Animate(this[i], opts);
@@ -35,8 +36,10 @@
                     alert("Please provide configuration options for animation of " + elID);
                     return;
                 }
+				
+				if(options["time"]===undefined) options["time"]=0;
 
-                if (options["callback"]) {
+                if (options["time"]!=0 && options["callback"]) {
                     this.callback = options["callback"];
                     this.moving = true;
                     this.timeout = window.setTimeout(function () {
@@ -70,7 +73,6 @@
 
                 if (!options["timingFunction"]) options["timingFunction"] = "linear";
 
-                options["time"]=(""+options["time"]).indexOf("s")==-1?options["time"]+"ms":options["time"];
                 //check for percent or numbers
                 if (typeof (options.x) == "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x) + "px";
                 if (typeof (options.y) == "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y) + "px";
@@ -91,11 +93,11 @@
 					properties = "all";
                 }
 				this.el.style.webkitTransitionProperty = properties;
+				if(options["time"]!=0 && (""+options["time"]).indexOf("s")==-1) options["time"] = options["time"]+"ms";
 				this.el.style.webkitTransitionDuration = options["time"];
 				this.el.style.webkitTransitionTimingFunction = options["timingFunction"];
                 this.el.style.webkitTransformOrigin = options.origin;
                 this.el.addEventListener("webkitTransitionEnd", that.finishAnimation, false);
-				
             };
 
 

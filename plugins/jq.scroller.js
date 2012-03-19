@@ -130,7 +130,7 @@
 		nativeScroller = function(el, opts){
 			this.init(el, opts);
 			//test
-			//this.refresh=true;
+			this.refresh=true;
 			this.container = this.el;
             //Add the pull to refresh text.  Not optimal but keeps from others overwriting the content and worrying about italics
             if (this.refresh) {
@@ -156,6 +156,7 @@
 			this.moved=false;
 			this.hasCanceled=false;
 			this.dY = this.cY = 0;
+			this.cancelPropagation = false;
 		}
         nativeScroller.prototype.initEvents=function () {
             if(this.refresh) this.el.addEventListener('touchstart', this, false);
@@ -172,7 +173,15 @@
 			}
         }
         nativeScroller.prototype.onTouchMove=function (e) {
+			
 			var newcY = e.touches[0].pageY - this.dY;
+			if(!this.moved&&newcY<0){
+				//forget about it
+				this.el.removeEventListener('touchmove', this, false);
+				this.el.removeEventListener('touchend', this, false);
+				return;
+			}
+			
 			if(!this.moved && newcY>0){
 				//lets try
 				this.scrollTop = this.el.scrollTop = this.refreshHeight;
@@ -189,8 +198,9 @@
 				this.refreshListeners.cancel.call();
 				this.hasCanceled=true;
 			}
-				
+			
 			this.cY = newcY;
+			e.stopPropagation();
         }
         nativeScroller.prototype.onTouchEnd=function (e) {
 			var triggered = this.el.scrollTop<=0;
@@ -208,6 +218,7 @@
 			this.hasCanceled=false;
 			this.el.removeEventListener('touchmove', this, false);
 			this.el.removeEventListener('touchend', this, false);
+			e.stopPropagation();
         }
 		nativeScroller.prototype.hideRefresh=function(){
 			var that = this;
