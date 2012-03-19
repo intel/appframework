@@ -101,7 +101,7 @@
            ```
          *@title $.ui.loadDefaultHash
          */
-        loadDefaulHash:true,
+        loadDefaultHash:true,
         /**
          * This is a shorthand call to the jq.actionsheet plugin.  We wire it to the jQUi div automatically
            ```
@@ -1135,7 +1135,7 @@
                         that.titleBar.innerHTML = that.activeDiv.title;
                     that.parsePanelFunctions(that.activeDiv);
                     //Load the default hash
-                    if (defaultHash.length > 0) 
+                    if (defaultHash.length > 0&&that.loadDefaultHash) 
                     {
                         that.loadContent(defaultHash);
                     }
