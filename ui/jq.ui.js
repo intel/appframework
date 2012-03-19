@@ -1162,6 +1162,9 @@
             }
            
         },
+		
+		/*transitions helpers*/
+		
 
         /**
          * Initiate a sliding transition.  This is a sample to show how transitions are implemented.  These are registered in $.ui.availableTransitions and take in three parameters.
@@ -1178,24 +1181,19 @@
             if (back) {
                 that.css3animate(oldDiv, {
                     x: "100%",
-                    time: "200ms",
+                    time: "150ms",
                     callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: "-100%",
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
+                        that.finishTransition(oldDiv);
                     }
                 });
                 that.css3animate(currDiv, {
                     x: "-100%",
+					y: "0%",
                     time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
-                            time: "200ms",
+                            time: "150ms",
                             callback: function() {
 								that.clearAnimations(currDiv);
                             }
@@ -1205,18 +1203,19 @@
             } else {
                 that.css3animate(oldDiv, {
                     x: "-100%",
-                    time: "200ms",
+                    time: "150ms",
                     callback: function() {
                         that.finishTransition(oldDiv);
                     }
                 });
                 that.css3animate(currDiv, {
                     x: "100%",
+					y: "0%",
                     time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
-                            time: "200ms",
+                            time: "150ms",
                             callback: function() {
 								that.clearAnimations(currDiv);
                             }
@@ -1234,29 +1233,24 @@
             currDiv.style.display = "block";
             var that = this;
             if (back) {
-
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
+				
 				that.clearAnimations(currDiv);
 
                 that.css3animate(oldDiv, {
                     y: "100%",
                     x: "0%",
-                    time: "200ms",
+                    time: "150ms",
                     callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: "-100%",
-                            y: 0,
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
+                        that.finishTransition(oldDiv);
                         currDiv.style.zIndex = 2;
                         oldDiv.style.zIndex = 1;
                     }
                 });
             } else {
-                oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
+                oldDiv.style.zIndex = 1;
                 that.css3animate(currDiv, {
                     y: "100%",
                     x: "0%",
@@ -1265,7 +1259,7 @@
                         that.css3animate(currDiv, {
                             y: "0%",
                             x: "0%",
-                            time: "200ms",
+                            time: "150ms",
 							callback: function() {
 								that.clearAnimations(currDiv);
 		                        that.css3animate(oldDiv, {
@@ -1288,11 +1282,13 @@
             currDiv.style.display = "block";
             var that = this
             if (back) {
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
                 that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
                     y: "-100%",
                     x: "0%",
-                    time: "200ms",
+                    time: "150ms",
                     callback: function() {
                         that.css3animate(oldDiv, {
                             x: "-100%",
@@ -1310,20 +1306,6 @@
             } else {
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
-                that.css3animate(oldDiv, {
-                    x: "0%",
-                    time: "200ms",
-                    callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: "-100%",
-                            y: 0,
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
-                    }
-                });
                 that.css3animate(currDiv, {
                     y: "-100%",
                     x: "0%",
@@ -1332,9 +1314,18 @@
                         that.css3animate(currDiv, {
                             y: "0%",
                             x: "0%",
-                            time: "200ms",
+                            time: "150ms",
 							callback: function(){
 								that.clearAnimations(currDiv);
+		                        that.css3animate(oldDiv, {
+		                            x: "-100%",
+		                            y: 0,
+		                            time: "1ms",
+		                            callback: function() {
+		                                that.finishTransition(oldDiv);
+		                            }
+		                        });
+								
 							}
                         });
                     }
@@ -1353,8 +1344,10 @@
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: "00%",
-                            time: "200ms",
+                            x: "0%",
+							scale: 1,
+                            time: "150ms",
+							rotateY: "0deg",
 							callback: function(){
 								that.clearAnimations(currDiv);
 							}
@@ -1363,7 +1356,7 @@
                 });
                 that.css3animate(oldDiv, {
                     x: "100%",
-                    time: "200ms",
+                    time: "150ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
@@ -1371,6 +1364,8 @@
                             x: "-100%",
                             time: "1ms",
                             opacity: 1,
+		                    scale: 1,
+		                    rotateY: "0deg",
                             callback: function() {
                                 that.finishTransition(oldDiv);
                             }
@@ -1384,14 +1379,16 @@
                 currDiv.style.zIndex = 2;
                 that.css3animate(oldDiv, {
                     x: "100%",
-                    time: "200ms",
-                    scale: '.8',
+                    time: "150ms",
+                    scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(oldDiv, {
                             x: "-100%",
                             y: 0,
                             time: "1ms",
+		                    scale: 1,
+		                    rotateY: "0deg",
                             callback: function() {
                                 that.finishTransition(oldDiv);
                             }
@@ -1406,7 +1403,9 @@
                     callback: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
-                            time: "200ms",
+                            time: "150ms",
+		                    scale: 1,
+		                    rotateY: "0deg",
 							callback:function(){
 								that.clearAnimations(currDiv);
 							}
@@ -1420,10 +1419,12 @@
             currDiv.style.display = "block";
             var that = this
             if (back) {
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
                 that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
                     x: "0%",
-                    time: "200ms",
+                    time: "150ms",
                     opacity: .1,
                     callback: function() {
                         that.css3animate(oldDiv, {
@@ -1450,7 +1451,7 @@
                     callback: function() {
 		                that.css3animate(currDiv, {
 		                    x: "0%",
-		                    time: "200ms",
+		                    time: "150ms",
 		                    opacity: 1,
 							callback:function(){
 								that.clearAnimations(currDiv);
@@ -1473,10 +1474,12 @@
             currDiv.style.display = "block";
             var that = this
             if (back) {
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
                 that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
                     x: "0%",
-                    time: "200ms",
+                    time: "150ms",
                     opacity: .1,
                     scale: .2,
                     origin: "-50% 50%",
@@ -1505,7 +1508,7 @@
                     callback: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
-                            time: "200ms",
+                            time: "150ms",
                             scale: 1,
                             opacity: 1,
                             origin: "0% 0%",
@@ -1649,11 +1652,22 @@
     }
     //The following is based on Cubiq.org's - iOS no click delay.  We use this to capture events to input boxes to fix Android...and fix iOS ;)
     //We had to make a lot of fixes to allow access to input elements on android, native scroll, etc.
-    function TouchLayer(el) {
+    
+	function TouchLayer(el) {
         el.addEventListener('touchstart', this, false);
+		var firstScroll = true;
+		document.addEventListener('scroll', function(e){
+			if(e.target.isSameNode(document)) {
+				if(!firstScroll){
+					firstScroll = true;
+					hideAddressBar();
+				} else firstScroll=false;
+			}
+		}, true);
 		this.layer=el;
     }
     var prevClickField;
+	
     TouchLayer.prototype = {
         dX: 0,
         dY: 0,
@@ -1661,9 +1675,15 @@
         cY: 0,
 		layer: null,
 		scrollingEl: null,
+<<<<<<< HEAD
 		canScroll: false,
+=======
+		isScrolling: false,
+		beenScrolling: false,
+		previousStartedAtTop: false,
+		previousStartedAtBottom:false,
+>>>>>>> 593f89449b1237b055c59a44d190feb027a20912
 		isScrollingVertical: false,
-		preventTouchMove: false,
         handleEvent: function(e) {
             switch (e.type) {
                 case 'touchstart':
@@ -1675,6 +1695,12 @@
                 case 'touchend':
                     this.onTouchEnd(e);
                     break;
+<<<<<<< HEAD
+=======
+                case 'scroll':
+                    this.onScroll(e);
+                    break;
+>>>>>>> 593f89449b1237b055c59a44d190feb027a20912
 				
             }
         },
@@ -1692,13 +1718,42 @@
             this.moved = false;
 			this.canScroll = false;
 			this.isScrollingVertical = false;
-			this.preventTouchMove = false;
 			if($.os.supportsNativeScroll) this.checkScrolling(e.target, this.layer);
+<<<<<<< HEAD
 			if(!this.canScroll) e.preventDefault();
             document.addEventListener('touchmove', this, false);
+=======
+			if(!this.isScrolling) {
+				e.preventDefault();
+			} else if(this.isScrollingVertical){
+				this.demandVerticalScroll();
+			}
+			document.addEventListener('touchmove', this, false);
+>>>>>>> 593f89449b1237b055c59a44d190feb027a20912
 			document.addEventListener('touchend', this, false);
         },
-		
+		demandVerticalScroll:function(){
+			if(!this.beenScrolling){
+				//if at top or bottom allow scroll
+				var atTop = this.scrollingEl.scrollTop<=0;
+				if(atTop){
+					this.scrollingEl.scrollTop=1;
+				} else {
+					var scrollHeight = this.scrollingEl.scrollTop+this.scrollingEl.clientHeight;
+					var atBottom = scrollHeight>=this.scrollingEl.scrollHeight;
+					if(atBottom) {
+						this.scrollingEl.scrollTop=this.scrollingEl.scrollHeight-this.scrollingEl.clientHeight-1;
+					}
+				}
+			}
+		},
+		onScroll:function(e){
+			if(this.scrollingEl.scrollTop==0) e.preventDefault();
+			console.log("scroll "+(this.scrollingEl?this.scrollingEl.scrollTop:"null"));
+			this.beenScrolling = false;
+			this.previousStartedAtTop = false;
+			this.previousStartedAtBottom = false;
+		},
 		//set rules here to ignore scrolling check on these elements
 		ignoreScrolling:function(el){
 			if(el['scrollWidth']===undefined || el['clientWidth']===undefined) return true;
@@ -1739,8 +1794,13 @@
 				return;
 			} else if(this.allowsHorizontalScroll(el, styles)){
 				this.isScrollingVertical=false;
+<<<<<<< HEAD
 				this.canScroll = true;
 				return;
+=======
+				this.scrollingEl = null;
+				this.isScrolling = true;
+>>>>>>> 593f89449b1237b055c59a44d190feb027a20912
 			}
 			//check recursive up to top element
 			var isTarget = el.isSameNode(parentTarget);
@@ -1752,6 +1812,7 @@
 			
 			this.cY = e.touches[0].pageY - this.dY;
 			this.cX = e.touches[0].pageX - this.dX;
+<<<<<<< HEAD
 			
 			if(!this.canScroll){
 				//legacy stuff for old browsers
@@ -1782,46 +1843,96 @@
 					document.removeEventListener('touchmove', this, false);
 		            document.removeEventListener('touchend', this, false);
 				}
+=======
+			console.log("touchmove "+(this.cY>0?"up":"down")+"!");
+			if(!this.isScrolling){
+				//legacy stuff for old browsers
+	            e.preventDefault();
+				this.moved = true;
+				return;
+				
+			//otherwise it is a scroll
+			//let's clear events for performance
+			} else if(this.isScrollingVertical){
+				console.log("isScrollingVertical! "+this.scrollingEl.scrollTop);
+				//if at top or bottom allow scroll
+				var atTop = this.scrollingEl.scrollTop<=0;
+				if(atTop){
+					console.log("through the top!");
+					if(this.beenScrolling && !this.previousStartedAtTop) {
+						this.previousStartedAtTop = false;
+						this.beenScrolling = false;
+						e.preventDefault();
+					} else {
+						this.beenScrolling = true;
+						this.previousStartedAtTop = true;
+					}
+				} else {
+					var scrollHeight = this.scrollingEl.scrollTop+this.scrollingEl.clientHeight;
+					var atBottom = scrollHeight>=this.scrollingEl.scrollHeight;
+					if(atBottom) {
+						if(this.beenScrolling && !this.previousStartedAtBottom) {
+							this.previousStartedAtBottom = false;
+							this.beenScrolling = false;
+							e.preventDefault();
+						} else {
+							this.beenScrolling = true;
+							this.previousStartedAtBottom = true;
+						}
+					} else this.beenScrolling = true;
+					this.scrollingEl.addEventListener('scroll', this, false);
+				}
+				
+>>>>>>> 593f89449b1237b055c59a44d190feb027a20912
 			}
-			this.moved = true;
+			//scroll allowed - let's not waste performance
+            document.removeEventListener('touchmove', this, false);
+			document.removeEventListener('touchend', this, false);
         },
 		
         
         onTouchEnd: function(e) {
-            
-            document.removeEventListener('touchmove', this, false);
-            document.removeEventListener('touchend', this, false);
-			
+			e.preventDefault();
 			var itMoved = $.os.blackberry ? (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5) : this.moved;
-			var androidVerticalScroll = ($.os.android && this.isScrollingVertical);
-            
-            if (!itMoved && !androidVerticalScroll) {
+            if (!itMoved) {
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
             
                 
+<<<<<<< HEAD
                 if (checkAnchorClick(theTarget,this.canScroll))
+=======
+                if (checkAnchorClick(theTarget))
+>>>>>>> 593f89449b1237b055c59a44d190feb027a20912
                 {
-                    e.preventDefault();
                     return false;
                 }
                
 
                 var theEvent = document.createEvent('MouseEvents');
+<<<<<<< HEAD
                 if(!this.canScroll){
+=======
+>>>>>>> 593f89449b1237b055c59a44d190feb027a20912
                 theEvent.initEvent('click', true, true);
                 theTarget.dispatchEvent(theEvent);
-                }
                 if (theTarget && theTarget.type != undefined) {
                     var tagname = theTarget.tagName.toLowerCase();
+<<<<<<< HEAD
                     if (tagname == "select" || (theTarget.type=="text"&&tagname == "input") ||  tagname == "textarea") {
+=======
+                     if (tagname == "select" || tagname == "input" || tagname == "textarea"){ 
+>>>>>>> 593f89449b1237b055c59a44d190feb027a20912
                         theTarget.focus();
                     }
                 }
             }
             prevClickField = null;
             this.dX = this.cX = this.cY = this.dY = 0;
+            document.removeEventListener('touchmove', this, false);
+            document.removeEventListener('touchend', this, false);
+			
         }
         
     };
@@ -1834,7 +1945,7 @@
         if (theTarget && theTarget.type != undefined) {
             var tagname = theTarget.tagName.toLowerCase();
             var type=theTarget.type;
-            if (tagname == "select" || (theTarget.type=="text"&&tagname == "input")||tagname == "textarea") { // stuff we need to allow
+             if (tagname == "select" || tagname == "input" || tagname == "textarea")  { // stuff we need to allow
                 //On Android 2.2+, the keyboard is broken when we apply -webkit-transform.  The hit box is moved and it no longer loses focus when you click out.
                 //What the following does is moves the div up so the text is not covered by the keyboard.
                 if (jq.os.android && (theTarget.type.toLowerCase() == "text" || theTarget.type.toLowerCase() == "textarea")) {
