@@ -1,6 +1,6 @@
 //TouchLayer contributed by Carlos Ouro @ Badoo
-//handles overlooking panning on titlebar, bumps on native scrolling and no delay on click
-//It can be used independently in your own apps and it is required by jqUi
+//handles overlooking js scrolling and native scrolling, panning on titlebar and no delay on click
+//It can be used independently in other apps but it is required by jqUi
 (function() {
     $.touchLayer = function(el) {
         return new touchLayer(el);
@@ -73,10 +73,6 @@
 	        }
 	    },
 		
-		curTime:function(){
-			return (new Date()).getTime();
-		},
-		
 		
         onTouchStart: function(e) {
 			
@@ -120,7 +116,7 @@
 		},
 		onScroll:function(e){
 			if(this.scrollingEl.scrollTop==0) e.preventDefault();
-			console.log("scroll "+(this.scrollingEl?this.scrollingEl.scrollTop:"null"));
+			//console.log("scroll "+(this.scrollingEl?this.scrollingEl.scrollTop:"null"));
 			this.beenScrolling = false;
 			this.previousStartedAtTop = false;
 			this.previousStartedAtBottom = false;
@@ -189,7 +185,7 @@
 			this.cY = e.touches[0].pageY - this.dY;
 			this.cX = e.touches[0].pageX - this.dX;
 
-			console.log("touchmove "+(this.cY>0?"up":"down")+"!");
+			//console.log("touchmove "+(this.cY>0?"up":"down")+"!");
 			if(!this.isScrolling){
 				//legacy stuff for old browsers
 	            e.preventDefault();
@@ -208,11 +204,11 @@
 		
 		isGoingToBump:function(){
 			
-			console.log("isScrollingVertical! "+this.scrollingEl.scrollTop);
+			//console.log("isScrollingVertical! "+this.scrollingEl.scrollTop);
 			//if at top or bottom allow scroll
 			var atTop = this.scrollingEl.scrollTop<=0;
 			if(atTop){
-				console.log("through the top!");
+				//console.log("through the top!");
 				if(this.beenScrolling && !this.previousStartedAtTop) {
 					this.previousStartedAtTop = false;
 					this.beenScrolling = false;

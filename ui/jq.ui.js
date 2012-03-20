@@ -942,9 +942,8 @@
                     catch (e) {
                     }
                     
-                    
                     if (this.resetScrollers && this.scrollingDivs[what.id]) {
-                        this.scrollingDivs[what.id].scrollTo({
+						this.scrollingDivs[what.id].scrollTo({
                             x: 0,
                             y: 0
                         });
@@ -972,7 +971,7 @@
                     if (newTab) {
                         this.setBackButtonText(this.firstDiv.title)
                     }
-                    
+
                     if (this.history.length == 0) {
                         this.backButton.style.visibility = "hidden";
                         this.history = [];

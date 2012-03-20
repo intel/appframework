@@ -3,7 +3,6 @@
  * @copyright 2011 - AppMobi
  */ (function ($) {
     $.fn["css3Animate"] = function (opts) {
-		console.log("hello");
         var tmp;
         for (var i = 0; i < this.length; i++) {
             tmp = new css3Animate(this[i], opts);

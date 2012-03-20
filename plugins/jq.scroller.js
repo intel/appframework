@@ -75,17 +75,7 @@
 					case 'touchmove': this.onTouchMove(e); break;
 					case 'touchend': this.onTouchEnd(e); break;
 	    		}
-			},
-			//Momentum adapted from iscroll4 http://www.cubiq.org
-	        calculateMomentum:function(dist, time) {
-	            var deceleration = 0.0044, 
-	            speed = Math.abs(dist*2) / time, 
-	            newDist = (speed * speed) / (2 * deceleration), newTime = 0
-                
-	            newDist = newDist * (dist < 0 ? -1 : 1);
-	            newTime = speed / deceleration;
-	            return {dist: newDist,time: newTime};
-	        }
+			}
 			
 		}
 		
@@ -258,13 +248,10 @@
 		
 		//JS scroller
 		jsScroller.prototype.defaultProperties = function(){
-            this.lockX=0;
-            this.lockY=0;
+
             this.boolScrollLock=false;
             this.currentScrollingObject=null;
-            this.bottomMargin=0;
-            this.maxTop=0;
-            this.startTop=0;
+			this.elementInfo = null;
             this.verticalScroll=true;
             this.horizontalScroll=false;
             this.scrollBars=true;
@@ -272,18 +259,11 @@
             this.hscrollBar=null;
             this.hScrollCSS="scrollBar";
             this.vScrollCSS="scrollBar";
-            this.divHeight=0;
+
             this.lastScrollbar="";
-            this.timeMoved=0;
-            this.vdistanceMoved=0;
-            this.hdistanceMoved=0;
-            this.prevTime=0;
+
             this.finishScrollingObject=null;
             this.container=null;
-            this.maxLeft=0;
-            this.startLeft=0;
-            this.rightMargin=0;
-            this.divWidth=0;
             this.elementScrolling=false;
             this.scrollingFinishCB=false;
 		}
@@ -321,293 +301,324 @@
             }
         }
         jsScroller.prototype.onTouchStart=function(event) {
-            var container = this.container;
-            var eleScrolling = this.el;
-            that=this;
-            if (!container)
+            if (!this.container)
                 return;
             if(this.elementScrolling){
-               clearTimeout(that.scrollingFinishCB);
+               clearTimeout(this.scrollingFinishCB);
             }
-            touchStarted = true
+            touchStarted = true;
+			
+			//disable if locked
+			if(event.touches.length != 1 || this.boolScrollLock) return;
+			
             // Allow interaction to legit calls, like select boxes, etc.
             if (event.touches[0].target && event.touches[0].target.type != undefined) {
                 var tagname = event.touches[0].target.tagName.toLowerCase();
                 if (tagname == "select" || tagname == "input" || tagname == "button") // stuff we need to allow
-                    // access to
+                    // access to legit calls
                     return;
             }
-            //Add the pull to refresh text.  Not optimal but keeps from others overwriting the content and worrying about italics
-            if (this.refresh && this.refresh == true && document.getElementById(this.el.id + "_pulldown") == null) {
-                //add the refresh div
-                var text = jq("<div id='" + this.el.id + "_pulldown' class='jqscroll_refresh' style='border-radius:.6em;border: 1px solid #2A2A2A;background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#666666),color-stop(1,#222222));background:#222222;margin:0px;height:60px;top:0px;margin-left:5px;margin-right:5px;position:absolute;-webkit-transform: translate3d(0, -65px, 0);top:0,left:0,right:0;text-align:center;line-height:60px;color:white;'>Pull to Refresh</div>").get();
-                text.style.width = this.container.clientWidth + "px";
-                $(this.el).prepend(text);
-            }
-                    
-                    
-            this.lastTime = event.timeStamp;
-            this.finishScrollingObject = null;
-            var cnt=$(container);
-            this.bottomMargin = container.clientHeight > window.innerHeight ? window.innerHeight : container.clientHeight-numOnly(cnt.css("marginTop"))-numOnly(cnt.css("paddingTop"))-numOnly(cnt.css("marginBottom"))-numOnly(cnt.css("paddingBottom")); //handle css offsets
-            this.maxTop = eleScrolling.clientHeight - this.bottomMargin;
-            this.divHeight = eleScrolling.clientHeight;
-            this.rightMargin = container.clientWidth > window.innerWidth ? window.innerWidth : container.clientWidth-numOnly(cnt.css("marginLeft"))-numOnly(cnt.css("paddingLeft"))-numOnly(cnt.css("marginRight"))-numOnly(cnt.css("paddingRight"));
-            this.maxLeft = eleScrolling.clientWidth - this.rightMargin;
-            this.divWidth = eleScrolling.clientWidth;
-            if (this.maxTop < 0 && this.maxLeft < 0)
-                return;
-                    
-            this.lastX = event.touches[0].pageX;
-            this.lastY = event.touches[0].pageY;
-            if (event.touches.length == 1 && this.boolScrollLock == false) {
-                try {
-                    this.lastTop = numOnly(new WebKitCSSMatrix(window.getComputedStyle(eleScrolling).webkitTransform).f) - numOnly(this.container.scrollTop);
-                    this.lastLeft = numOnly(new WebKitCSSMatrix(window.getComputedStyle(eleScrolling).webkitTransform).e) - numOnly(this.container.scrollLeft);
-                        
-                } catch (e) {
-                    this.lastTop = 0 + this.container.scrollTop;
-                    this.lastLeft = 0 + this.container.scrollLeft;
-                    console.log("error scroller touchstart " + e);
-                }
-                this.container.scrollTop = this.container.scrollLeft = 0;
-                this.currentScrollingObject = eleScrolling;
-                this.scrollerMoveCSS(eleScrolling, {
-                    x: this.lastLeft,
-                    y: this.lastTop
-                }, 0);
-                if (this.vscrollBar && this.maxTop > 0) {
-                    this.vscrollBar.style.height = (parseFloat(this.bottomMargin / this.divHeight) * this.bottomMargin) + "px";
-                    var pos = (this.bottomMargin - numOnly(this.vscrollBar.style.height)) - (((this.maxTop + this.lastTop) / this.maxTop) * (this.bottomMargin - numOnly(this.vscrollBar.style.height)));
-                    this.scrollerMoveCSS(this.vscrollBar, {
-                        x: 0,
-                        y: pos
-                    }, 0);
-                            
-                            
-                    if (this.container.clientWidth > window.innerWidth)
-                        this.vscrollBar.style.left = (window.innerWidth - numOnly(this.vscrollBar.style.width) * 3) + "px";
-                    else
-                        this.vscrollBar.style.right = "0px";
-                    this.vscrollBar.webkitTransition = '';
-                    this.vscrollBar.style.opacity = 1;
-                }
-                        
-                if (this.hscrollBar && this.maxLeft > 0) {
-                    this.hscrollBar.style.width = (parseFloat(this.rightMargin / this.divWidth) * this.rightMargin) + "px";
-                    var pos = (this.rightMargin - numOnly(this.hscrollBar.style.width)) - (((this.maxTop + this.lastLeft) / this.maxtLeft) * (this.rightMargin - numOnly(this.hscrollBar.style.width)));
-                    this.scrollerMoveCSS(this.hscrollBar, {
-                        x: pos,
-                        y: 0
-                    }, 0);
-                    if (this.container.clientHeight > window.innerHeight)
-                        this.hscrollBar.style.top = (window.innerHeight - numOnly(this.hscrollBar.style.height)) + "px";
-                    else
-                        this.hscrollBar.style.bottom = numOnly(this.hscrollBar.style.height);
-                    this.vscrollBar.webkitTransition = '';
-                            
-                    this.hscrollBar.style.opacity = 1;
-                }
-
-            //event.preventDefault();
-            // get the scrollbar
-            }
-        }
-        jsScroller.prototype.onTouchMove=function(event) {
-            if (this.currentScrollingObject != null) {
-                event.preventDefault();
-				
-            	var deltaY = event.touches[0].pageY - this.lastY;
-				deltaY = deltaY>0 && this.lastDeltaY>0 ? ((deltaY+this.lastDeltaY)/2) : deltaY;
-				this.lastY = event.touches[0].pageY;
-                var deltaX = event.touches[0].pageX - this.lastX;
-				deltaX = deltaX>0 && this.lastDeltaY>0 ? ((deltaX+this.lastDeltaY)/2) : deltaX;
-				this.lastX = event.touches[0].pageX;
-				
-				
-				this.lastDeltaY = deltaY;
-				this.lastDeltaX = deltaX;
-				
-				var scrollPoints = this.calculateMovement(event, deltaY, deltaX);
-				
-				//console.log(tmpDistanceY+"/"+tmpDistanceX+"/"+tmpTime+" -- "+scrollPoints.y+"/"+scrollPoints.x+"/"+scrollPoints.time);
-				
-                if ((this.maxTop > 0) && (scrollPoints.y > 0 || scrollPoints.y < -1 * this.maxTop)) 
-                {   
-                    var overflow = scrollPoints.y > 0 ? (scrollPoints.y) : -1 * (scrollPoints.y + this.maxTop);
-                    var height = (this.container.clientHeight - overflow) / this.container.clientHeight;  
-                    if (height < .5)
-                        height = .5;
-                    if (scrollPoints.y > 0)
-                        scrollPoints.y = scrollPoints.y * height;
-                    else {
-                        scrollPoints.y = scrollPoints.y - ((scrollPoints.y + this.maxTop) * height);
-                            
-                    }
-                }
-                this.scrollerMoveCSS(this.currentScrollingObject, scrollPoints, scrollPoints.time);
-
-                if (this.vscrollBar) {
-                    // We must calculate the position. Since we don't allow
-                    // the page to scroll to the full content height, we use
-                    // maxTop as height to work with.
-                    var pos = (this.bottomMargin - numOnly(this.vscrollBar.style.height)) - (((this.maxTop + scrollPoints.y) / this.maxTop) * (this.bottomMargin - numOnly(this.vscrollBar.style.height)));
-                    this.scrollerMoveCSS(this.vscrollBar, {
-                        x: 0,
-                        y: pos
-                    }, scrollPoints.time);
-                }
-                if (this.hscrollBar) {
-                    // We must calculate the position. Since we don't allow
-                    // the page to scroll to the full content height, we use
-                    // maxTop as height to work with.
-                    var pos = (this.rightMargin - numOnly(this.hscrollBar.style.width)) - (((this.maxLeft + scrollPoints.x) / this.maxLeft) * (this.rightMargin - numOnly(this.hscrollBar.style.width)));
-                    this.scrollerMoveCSS(this.hscrollBar, {
-                        x: pos,
-                        y: 0
-                    }, scrollPoints.time);
-                }
-                        
-                
-            }
-        }
-		
-		jsScroller.prototype.calculateMovement=function(event, deltaY, deltaX){
-            var scrollPoints = {
-                x: 0,
-                y: 0,
-				time: 300,
-				moveY:0
+			
+			//
+			this.saveEventInfo(event);
+			
+			//default variables
+			var scrollInfo = {
+				//current position
+				top:0,
+				left:0,
+				//current movement
+				speedY:0,
+				absSpeedY:0,
+				absSpeedX:0,
+				y:0,
+				x:0,
+				targetTime:0,
+				duration:0
             };
+			//element info
+			var cnt = $(this.container);
+			this.elementInfo = {};
+			this.elementInfo.bottomMargin 	= (this.container.clientHeight > window.innerHeight ? window.innerHeight : this.container.clientHeight-numOnly(cnt.css("marginTop"))-numOnly(cnt.css("paddingTop"))-numOnly(cnt.css("marginBottom"))-numOnly(cnt.css("paddingBottom")));
+			this.elementInfo.maxTop 		= (this.el.clientHeight - this.elementInfo.bottomMargin);
+			this.elementInfo.divHeight  	= this.el.clientHeight;
+	        this.elementInfo.rightMargin 	= (this.container.clientWidth > window.innerWidth ? window.innerWidth : this.container.clientWidth-numOnly(cnt.css("marginLeft"))-numOnly(cnt.css("paddingLeft"))-numOnly(cnt.css("marginRight"))-numOnly(cnt.css("paddingRight")));
+	        this.elementInfo.maxLeft 		= (this.el.clientWidth - this.elementInfo.rightMargin);
+	        this.elementInfo.divWidth 		= this.el.clientWidth;
+			this.elementInfo.hasVertScroll 	= this.elementInfo.maxTop > 0;
+			this.elementInfo.hasHorScroll 	= this.elementInfo.maxLeft > 0;
+			this.elementInfo.requiresVScrollBar 	= this.vscrollBar && this.elementInfo.hasVertScroll;
+			this.elementInfo.requiresHScrollBar 	= this.hscrollBar && this.elementInfo.hasHorScroll;
 			
-			if (this.verticalScroll && this.maxTop > 0) {
-                var newTop = this.lastTop + deltaY;
-				var vdistanceMoved = Math.abs(this.lastTop) - Math.abs(newTop);
-			} else {
-				var vdistanceMoved = 0;
-				var newTop = this.lastTop;
-			}
-				
-			if (this.horizontalScroll && this.maxLeft > 0) {
-                var newLeft = this.lastLeft + deltaX;
-				var hdistanceMoved = Math.abs(this.lastLeft) - Math.abs(newLeft);
-			} else {
-				var hdistanceMoved = 0
-				var newLeft = this.lastLeft;
-			}
-				  
-			var timeMoved = event.timeStamp - this.lastTime;
+			//get the current top
+            try {
+                scrollInfo.top = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform).f) - numOnly(this.container.scrollTop);
+                scrollInfo.left = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform).e) - numOnly(this.container.scrollLeft);
+                        
+            } catch (e) {
+                scrollInfo.top = 0 + this.container.scrollTop;
+                scrollInfo.left = 0 + this.container.scrollLeft;
+                console.log("error scroller touchstart " + e);
+            }
+			this.container.scrollTop = this.container.scrollLeft = 0;
+			this.currentScrollingObject = this.el;
 			
-            if (this.verticalScroll && this.maxTop > 0) {
-                var myDistance = -vdistanceMoved;
-                scrollPoints.time = timeMoved;
-                        
-                        
-                var move = this.lastTop;
-                scrollPoints.moveY = move;
-                        
-                var data = this.calculateMomentum(myDistance, scrollPoints.time);
-                scrollPoints.time = data.time;
-                if (move < 0)
-                    move = Math.floor(move - data.dist);
-                        
-                if (move > 0) {
-                    move = 0;
-                    scrollPoints.time = 200;
-                }
-                        
-                if (move < (-this.maxTop)) {
-                    move = -this.maxTop;
-                    scrollPoints.time = 200;
-                }
-                        
-                scrollPoints.y = Math.floor(move);
-            }
-            if (this.horizontalScroll && this.maxLeft > 0) {
-                var myDistance = -hdistanceMoved;
-                scrollPoints.time = timeMoved;
-                        
-                var move = this.lastLeft;
-                var data = this.calculateMomentum(myDistance, scrollPoints.time);
-                scrollPoints.time = data.time;
-                if (move < 0)
-                    move = Math.floor(move - data.dist);
-                        
-                if (move > 0) {
-                    move = 0;
-                    scrollPoints.time = 200;
-                }
-                        
-                if (move < (-this.maxLeft)) {
-                    move = -this.maxLeft;
-                    scrollPoints.time = 200;
-                }
-                scrollPoints.x = Math.floor(move);
-            }
-			this.lastTop = newTop;
-			this.lastLeft = newLeft;
-			this.lastTime = event.timeStamp;
-			return scrollPoints;
+			//set target
+			scrollInfo.x = scrollInfo.left;
+			scrollInfo.y = scrollInfo.top;
+			
+			//set everything in position
+            this.scrollerMoveCSS(this.el, scrollInfo, 0);
+
+			//vertical scroll bar
+			if(this.setVScrollBar(scrollInfo)){
+	            if (this.container.clientWidth > window.innerWidth)
+	                this.vscrollBar.style.left = (window.innerWidth - numOnly(this.vscrollBar.style.width) * 3) + "px";
+	            else
+	                this.vscrollBar.style.right = "0px";
+	            this.vscrollBar.style.webkitTransition = '';
+	            this.vscrollBar.style.opacity = 1;
+			}
+			
+			//horizontal scroll
+			if(this.setHScrollBar(scrollInfo)){
+                if (this.container.clientHeight > window.innerHeight)
+                    this.hscrollBar.style.top = (window.innerHeight - numOnly(this.hscrollBar.style.height)) + "px";
+                else
+                    this.hscrollBar.style.bottom = numOnly(this.hscrollBar.style.height);
+                this.vscrollBar.style.webkitTransition = ''; 
+                this.hscrollBar.style.opacity = 1;
+			}
+
+			//save scrollInfo
+			this.lastScrollInfo = scrollInfo;
+        }
+		jsScroller.prototype.saveEventInfo=function(event){
+			this.lastEventInfo = {
+	            pageX: event.touches[0].pageX,
+	            pageY: event.touches[0].pageY,
+				time: event.timeStamp
+			}
+		}
+		jsScroller.prototype.setVScrollBar=function(scrollInfo, timingFunction){
+			if(!this.elementInfo.requiresVScrollBar) return false;
+			var newHeight = (parseFloat(this.elementInfo.bottomMargin / this.elementInfo.divHeight) * this.elementInfo.bottomMargin) + "px";
+			if(newHeight!=this.vscrollBar.style.height) this.vscrollBar.style.height = newHeight;
+			var pos = (this.elementInfo.bottomMargin - numOnly(this.vscrollBar.style.height)) - (((this.elementInfo.maxTop + scrollInfo.y) / this.elementInfo.maxTop) * (this.elementInfo.bottomMargin - numOnly(this.vscrollBar.style.height)));      
+            if (pos > this.elementInfo.bottomMargin)
+                pos = this.elementInfo.bottomMargin;
+            if (pos < 0)
+                pos = 0;
+			this.scrollerMoveCSS(this.vscrollBar, {x: 0,y: pos}, scrollInfo.duration, timingFunction);
+			return true;
+		}
+		jsScroller.prototype.setHScrollBar=function(scrollInfo, timingFunction){
+			if(!this.elementInfo.requiresHScrollBar) return false;
+			var newWidth = (parseFloat(this.elementInfo.rightMargin / this.elementInfo.divWidth) * this.elementInfo.rightMargin) + "px";
+			if(newWidth!=this.hscrollBar.style.width) this.hscrollBar.style.width = newWidth;
+            var pos = (this.elementInfo.rightMargin - numOnly(this.hscrollBar.style.width)) - (((this.elementInfo.maxLeft + scrollInfo.x) / this.elementInfo.maxLeft) * (this.elementInfo.rightMargin - numOnly(this.hscrollBar.style.width)));     
+            
+            if (pos > this.elementInfo.rightMargin)
+                pos = this.elementInfo.rightMargin;
+            if (pos < 0)
+                pos = 0;
+			
+			this.scrollerMoveCSS(this.hscrollBar, {x: pos,y: 0}, scrollInfo.duration, timingFunction);
+			return true;
 		}
 		
-        jsScroller.prototype.onTouchEnd=function(event) {
-                
-            if (this.currentScrollingObject != null) {
-                //if (this.timeMoved == 0) 
-                //{
-                    //event.preventDefault();
-                   // if (this.onclick !== undefined)
-                 //       this.onclick();
-                  //  return false;
-               // }
-                   
-                event.preventDefault();
-                this.finishScrollingObject = this.currentScrollingObject;
-                this.currentScrollingObject = null;
-                
-				var scrollPoints = this.calculateMovement(event, this.lastDeltaY, this.lastDeltaX);
-				console.log(this.finishScrollingObject+"/"+scrollPoints.y+"/"+scrollPoints.x+"/"+scrollPoints.time);
-                var that = this;
-                if (this.refresh && scrollPoints.moveY > this.refreshHeight) {
-                    if (this.refreshListeners.release) {
-                        this.refreshListeners.release.call(this, true);
-                    }
+		
+		
+        jsScroller.prototype.onTouchMove=function(event) {
+            if (this.currentScrollingObject == null) return;
+			event.preventDefault();
+			
+			var scrollInfo = this.calculateMovement(event);
+			
+			//pull to refresh elastic
+            if ((this.elementInfo.maxTop > 0) && (scrollInfo.y > 0 || scrollInfo.y < -this.elementInfo.maxTop)) 
+            {   
+                var overflow = scrollInfo.y > 0 ? (scrollInfo.y) : -1 * (scrollInfo.y + this.elementInfo.maxTop);
+                var height = (this.container.clientHeight - overflow) / this.container.clientHeight;  
+                if (height < .5)
+                    height = .5;
+                if (scrollInfo.y > 0)
+                    scrollInfo.y = scrollInfo.y * height;
+                else {
+                    scrollInfo.y = scrollInfo.y - ((scrollInfo.y + this.elementInfo.maxTop) * height);
                 }
-                if (scrollPoints.time < 300)
-                    scrollPoints.time = 300
-					
-                this.scrollerMoveCSS(this.finishScrollingObject, scrollPoints, scrollPoints.time, "cubic-bezier(0.33,0.66,0.66,1)");
-				
-                if (this.vscrollBar) {
-                    var pos = (this.bottomMargin - numOnly(this.vscrollBar.style.height)) - (((this.maxTop + scrollPoints.y) / this.maxTop) * (this.bottomMargin - numOnly(this.vscrollBar.style.height)));
-                    if (pos > this.bottomMargin)
-                        pos = this.bottomMargin;
-                    if (pos < 0)
-                        pos = 0;
-                    this.scrollerMoveCSS(this.vscrollBar, {
-                        x: 0,
-                        y: pos
-                    }, scrollPoints.time, "cubic-bezier(0.33,0.66,0.66,1)");
-                }
-                if (this.hscrollBar) {
-                    var pos = (this.rightMargin - numOnly(this.hscrollBar.style.width)) - (((this.maxLeft + scrollPoints.x) / this.maxLeft) * (this.rightMargin - numOnly(this.hscrollBar.style.width)));
-                    if (pos > this.rightMargin)
-                        pos = this.rightMargin;
-                    if (pos < 0)
-                        pos = 0;
-                    this.scrollerMoveCSS(this.hscrollBar, {
-                        x: pos,
-                        y: 0
-                    }, scrollPoints.time, "cubic-bezier(0.33,0.66,0.66,1)");
-                }
-                    
-                if(isNaN(scrollPoints.time))
-                    that.hideScrollbars(),that.elementScrolling=false
-                else
-                    this.scrollingFinishCB=setTimeout(function(){that.hideScrollbars();that.elementScrolling=false},scrollPoints.time);
-                this.elementScrolling=true;
             }
-			this.lastDeltaY=this.lastDeltaX=0;
+			
+			if(this.checkSignificance(scrollInfo)){
+				
+				var runFactor = (scrollInfo.duration>0 ? 10 : 1);
+				scrollInfo=this.calculateTarget(scrollInfo, runFactor);
+				//console.log("moving to "+scrollInfo.x+"/"+scrollInfo.y+" in "+scrollInfo.duration);
+				
+				//significant move
+                this.scrollerMoveCSS(this.currentScrollingObject, scrollInfo, scrollInfo.duration);
+				this.setVScrollBar(scrollInfo, 0);
+				this.setHScrollBar(scrollInfo, 0);
+					
+				this.lastScrollInfo = scrollInfo;
+			}
+			
+			this.saveEventInfo(event);
+        }
+		
+		jsScroller.prototype.checkSignificance=function(scrollInfo){
+			
+			//really small move - make it immediate
+			console.log(scrollInfo.duration+" -- "+(scrollInfo.deltaY+scrollInfo.deltaX));
+            if (Math.abs(scrollInfo.deltaY+scrollInfo.deltaX)<10){
+            	scrollInfo.duration = 0;
+				return true;
+            }
+			
+			//Y significance
+			var significantY, significantX;
+			if(this.elementInfo.hasVertScroll){
+				//change direction
+				significantY = this.lastScrollInfo.speedY<0 ? scrollInfo.speedY>0 : scrollInfo.speedY<0;
+				//if(significantY) console.log("significant direction");
+				//significant speedchange
+				significantY = significantY || this.lastScrollInfo.absSpeedY*0.5>scrollInfo.absSpeedY || this.lastScrollInfo.absSpeedY*1.5<scrollInfo.absSpeedY;
+				//if(significantY) console.log("significant speedchange");
+				//TODO - it's goind way too far/behind
+				//
+			} else significantY = false;
+				
+			//X significance
+			if(this.elementInfo.hasHorScroll){
+				//change direction
+				significantX = this.lastScrollInfo.speedX<0 ? scrollInfo.speedX>0 : scrollInfo.speedX<0;
+				//significant speedchange
+				significantX = significantX || this.lastScrollInfo.absSpeedX*0.5>scrollInfo.absSpeedX || this.lastScrollInfo.absSpeedX*1.5<scrollInfo.absSpeedX;
+				//TODO - it's goind way too far/behind
+				//
+				
+			} else significantX = false;
+			
+			return significantY || significantX;
+		}
+		
+		jsScroller.prototype.calculateMovement=function(event){
+			//default variables
+			var scrollInfo = {
+				//current position
+				top:0,
+				left:0,
+				//current movement
+				speedY:0,
+				speedX:0,
+				absSpeedY:0,
+				absSpeedX:0,
+				deltaY:0,
+				deltaX:0,
+				y:0,
+				x:0,
+				targetTime:0,
+				duration:0
+            };
+			
+			
+			if(event.touches && event.touches.length==1){
+	        	scrollInfo.deltaY = this.elementInfo.hasVertScroll ? event.touches[0].pageY - this.lastEventInfo.pageY : 0;
+	            scrollInfo.deltaX = this.elementInfo.hasHorScroll ? event.touches[0].pageX - this.lastEventInfo.pageX : 0;
+				scrollInfo.duration = event.timeStamp - this.lastEventInfo.time;
+			} else {
+	        	scrollInfo.deltaY = this.lastScrollInfo.deltaY;
+	            scrollInfo.deltaX = this.lastScrollInfo.deltaX;
+				scrollInfo.duration = this.lastScrollInfo.duration;
+			}
+			
+			
+			scrollInfo.speedY = scrollInfo.deltaY/scrollInfo.duration;
+			scrollInfo.speedX = scrollInfo.deltaX/scrollInfo.duration;
+			scrollInfo.absSpeedY = Math.abs(scrollInfo.speedY);
+			scrollInfo.absSpeedX = Math.abs(scrollInfo.speedX);
+			
+			return scrollInfo;
+		}
+		jsScroller.prototype.calculateTarget=function(scrollInfo,factor){
+			var transf = new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform);
+			scrollInfo.top = numOnly(transf.f);
+			scrollInfo.left = numOnly(transf.e);
+			
+			scrollInfo.y = scrollInfo.top+scrollInfo.deltaY*factor;
+			scrollInfo.x = scrollInfo.left+scrollInfo.deltaX*factor;
+			scrollInfo.duration = scrollInfo.duration*factor;
+			
+			//boundaries
+            if (scrollInfo.y > 0) {
+                scrollInfo.y = 0;
+                scrollInfo.duration = 200;
+            } else if(scrollInfo.x > 0){
+                scrollInfo.x = 0;
+                scrollInfo.duration = 200;
+            }
+                        
+            if (scrollInfo.y < (-this.elementInfo.maxTop)) {
+                scrollInfo.y = -this.elementInfo.maxTop;
+                scrollInfo.duration = 200;
+            } else if (scrollInfo.x < (-this.elementInfo.maxLeft)) {
+                scrollInfo.x = -this.elementInfo.maxLeft;
+                scrollInfo.duration = 200;
+            }
+			
+			
+			
+			return scrollInfo;
+		}
+		
+		jsScroller.prototype.setMomentum=function(scrollInfo) {
+            var deceleration = 0.0012; 
+			
+			if(scrollInfo.y>0){
+				scrollInfo.deltaY = (scrollInfo.deltaY < 0 ? -1 : 1) * (scrollInfo.absSpeedY * scrollInfo.absSpeedY) / (2 * deceleration);
+				scrollInfo.duration = scrollInfo.absSpeedY / deceleration;
+			} else {
+				scrollInfo.deltaX = (scrollInfo.deltaX < 0 ? -1 : 1) * (scrollInfo.absSpeedX * scrollInfo.absSpeedY) / (2 * deceleration);
+				scrollInfo.duration = scrollInfo.absSpeedX / deceleration;
+			}
+
+            return scrollInfo;
+		}
+		
+		
+        jsScroller.prototype.onTouchEnd=function(event) {
+
+            if (this.currentScrollingObject == null) return;
+            
+			event.preventDefault();
+            this.finishScrollingObject = this.currentScrollingObject;
+            this.currentScrollingObject = null;
+                
+			var scrollInfo = this.calculateMovement(event);
+			scrollInfo=this.setMomentum(scrollInfo);
+			scrollInfo=this.calculateTarget(scrollInfo, 10);
+
+            if (this.refresh && -scrollInfo.top > this.refreshHeight) {
+                if (this.refreshListeners.release) {
+                    this.refreshListeners.release.call(this, true);
+                }
+            }
+            if (scrollInfo.duration < 300)
+                scrollInfo.duration = 300
+					
+            this.scrollerMoveCSS(this.finishScrollingObject, scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
+			this.setVScrollBar(scrollInfo, "cubic-bezier(0.33,0.66,0.66,1)");
+            this.setHScrollBar(scrollInfo, "cubic-bezier(0.33,0.66,0.66,1)");
+			
+			if(isNaN(scrollInfo.duration)){
+				this.hideScrollbars();
+				this.elementScrolling=false;
+			} else {
+				var that = this;
+				this.scrollingFinishCB=setTimeout(function(){that.hideScrollbars();that.elementScrolling=false},scrollInfo.time);
+			}
+
+			this.elementScrolling=true;
             touchStarted = false;
         }
         jsScroller.prototype.scrollerMoveCSS=function(el, distanceToMove, time, timingFunction) {
@@ -624,31 +635,6 @@
             if (!time)
                 time = 0;
             this.scrollerMoveCSS(this.el, pos, time);
-            if (this.vscrollBar) {
-                var pos = (this.bottomMargin - numOnly(this.vscrollBar.style.height)) - (((this.maxTop + pos.y) / this.maxTop) * (this.bottomMargin - numOnly(this.vscrollBar.style.height)));
-                if (pos > this.bottomMargin)
-                    pos = this.bottomMargin;
-                if (pos < 0)
-                    pos = 0;
-                this.scrollerMoveCSS(this.vscrollBar, {
-                    x: 0,
-                    y: pos
-                }, time, "ease-out");
-                this.vscrollBar.style.opacity = '0';
-                
-            }
-            if (this.hscrollBar) {
-                var pos = (this.rightMargin - numOnly(this.hscrollBar.style.width)) - (((this.maxLeft + pos.x) / this.maxLeft) * (this.rightMargin - numOnly(this.hscrollBar.style.width)));
-                if (pos > this.rightMargin)
-                    pos = this.rightMargin;
-                if (pos < 0)
-                    pos = 0;
-                this.scrollerMoveCSS(this.hscrollBar, {
-                    x: pos,
-                    y: 0
-                }, time, "ease-out");
-                this.hscrollBar.style.opacity = '0';
-            }
         }
         jsScroller.prototype.scrollBy=function(pos,time) {
             this.startTop = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform).f) - numOnly(this.container.scrollTop);
