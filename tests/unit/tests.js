@@ -79,8 +79,10 @@ test("selector",function(){
 	 
      equals($('span', tmp).length,4,"Test passing in a context of existing objects");
 
-        
+     equals($(" <div /> ").length,1,"Test removing spaces in query selector when constructing HTML");   
 	QUnit.reset();
+    
+    
 
 })
 

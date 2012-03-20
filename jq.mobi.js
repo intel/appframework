@@ -150,6 +150,7 @@ if (!window.jq || typeof (jq) !== "function") {
         function _selector(selector, what) {
             var dom;
             try {
+                selector=selector.trim();
                 if (selector[0] === "#" && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
                     if (what == document)
                         dom = what.getElementById(selector.replace("#", ""));
