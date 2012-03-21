@@ -58,8 +58,10 @@
             },
 			refreshHangTimeout:2000,
 			refreshHeight:60,
+			refreshElement:null,
 			scrollTop:0,
 			scrollLeft:0,
+			preventHideRefresh:true,
 			//methods
 			init:function(el, opts) {
 				this.el = el;
@@ -75,62 +77,92 @@
 					case 'touchmove': this.onTouchMove(e); break;
 					case 'touchend': this.onTouchEnd(e); break;
 	    		}
+			},
+			addPullToRefresh : function(){
+	            //Add the pull to refresh text.  Not optimal but keeps from others overwriting the content and worrying about italics
+	            if (this.refresh && this.refresh == true) {
+	                //add the refresh div
+					if(this.refreshElement==null){
+		                var jqEl = jq("<div id='" + this.container.id + "_pulldown' class='jqscroll_refresh' style='border-radius:.6em;border: 1px solid #2A2A2A;background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#666666),color-stop(1,#222222));background:#222222;margin:0px;height:60px;position:relative;text-align:center;line-height:60px;color:white;width:100%;'>Pull to Refresh</div>");
+					} else {
+						var jqEl = jq(this.refreshElement);
+					}
+					var el = jqEl.get();
+					
+					this.refreshContainer = jq("<div style=\"overflow:visible;width:100%;height:0;margin:0;padding:0;padding-left:5px;padding-right:5px;\"></div>");
+	                $(this.el).prepend(this.refreshContainer.append(el, 'top'));
+					this.refreshContainer = this.refreshContainer[0];
+	            }
+			},
+			fireRefreshRelease:function(triggered, allowHide){
+				if(!this.refresh) return;
+				var autoCancel = true;
+				if(this.refreshListeners.release!=null) autoCancel = this.refreshListeners.release.call(this, triggered)!==false;
+				if(!triggered){
+					if(allowHide){
+						this.preventHideRefresh = false;
+					    this.hideRefresh();
+					}
+				} else if(autoCancel) {
+					var that = this;
+					this.preventHideRefresh = false;
+					if(this.refreshHangTimeout>0) setTimeout(function(){that.hideRefresh()}, this.refreshHangTimeout);
+	            }
 			}
-			
 		}
 		
 		//extend to jsScroller and nativeScroller (constructs)
 		jsScroller = function(el, opts){
 			this.init(el, opts);
-            try {
-                this.container = this.el.parentNode;
-                this.initEvents();
-                var windowHeight = window.innerHeight;
-                var windowWidth = window.innerWidth;
+			//test
+			this.refresh=true;
+			
+            this.container = this.el.parentNode;
+			this.addPullToRefresh();
+			this.refreshContainer.style.overflow='hidden';
+			this.el.style.overflow = 'visible';
+			this.el.style.overflowX = 'visible';
+			this.el.style.overflowY = 'visible';
+            this.initEvents();
+            var windowHeight = window.innerHeight;
+            var windowWidth = window.innerWidth;
                 
-                
-                if (this.verticalScroll && this.verticalScroll == true && this.scrollBars == true) {
-                    var scrollDiv = createScrollBar(5, 20);
-                    scrollDiv.style.top = "0px";
-                    if (this.vScrollCSS)
-                        scrollDiv.className = this.vScrollCSS;
-                    scrollDiv.style.opacity = "0";
-                    this.container.appendChild(scrollDiv);
-                    this.vscrollBar = scrollDiv;
-                    scrollDiv = null;
-                }
-                if (this.horizontalScroll && this.horizontalScroll == true && this.scrollBars == true) {
-                    var scrollDiv = createScrollBar(20, 5);
-                    scrollDiv.style.bottom = "0px";
-                    
-                    if (this.hScrollCSS)
-                        scrollDiv.className = this.hScrollCSS;
-                    scrollDiv.style.opacity = "0";
-                    this.container.appendChild(scrollDiv);
-                    this.hscrollBar = scrollDiv;
-                    scrollDiv = null;
-                }
-                if (this.horizontalScroll)
-                    this.el.style['float'] = "left";
-                this.el.hasScroller=true;
-            } catch (e) {
-                alert("error adding scroller" + e);
+            //create vertical scroll
+            if (this.verticalScroll && this.verticalScroll == true && this.scrollBars == true) {
+                var scrollDiv = createScrollBar(5, 20);
+                scrollDiv.style.top = "0px";
+                if (this.vScrollCSS)
+                    scrollDiv.className = this.vScrollCSS;
+                scrollDiv.style.opacity = "0";
+                this.container.appendChild(scrollDiv);
+                this.vscrollBar = scrollDiv;
+                scrollDiv = null;
             }
+			//create horizontal scroll
+            if (this.horizontalScroll && this.horizontalScroll == true && this.scrollBars == true) {
+                var scrollDiv = createScrollBar(20, 5);
+                scrollDiv.style.bottom = "0px";
+                    
+                if (this.hScrollCSS)
+                    scrollDiv.className = this.hScrollCSS;
+                scrollDiv.style.opacity = "0";
+                this.container.appendChild(scrollDiv);
+                this.hscrollBar = scrollDiv;
+                scrollDiv = null;
+            }
+            if (this.horizontalScroll)
+                this.el.style['float'] = "left";
+					
+            this.el.hasScroller=true;
+            
 		};
 		nativeScroller = function(el, opts){
 			this.init(el, opts);
 			//test
 			this.refresh=true;
-			this.container = this.el;
-            //Add the pull to refresh text.  Not optimal but keeps from others overwriting the content and worrying about italics
-            if (this.refresh) {
-                //add the refresh div
-                var el = jq("<div class='jqscroll_refresh' style='border-radius:.6em;border: 1px solid #2A2A2A;background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#666666),color-stop(1,#222222));background:#222222;margin:0px;height:60px;position:relative;bottom:0;text-align:center;line-height:60px;color:white;width:100%;'>Pull to Refresh</div>").get();
-				this.refreshContainer = jq("<div style=\"overflow:visible;width:100%;height:0;margin:0;padding:0;padding-left:5px;padding-right:5px;\"></div>");
-                $(this.el).append(this.refreshContainer.append(el, 'top').append("<div style=\"clear:both;\"></div>", 'bottom'), 'top');
-				this.refreshContainer = this.refreshContainer[0];
-            }
 			
+			this.container = this.el;
+			this.addPullToRefresh();
 			this.initEvents();
 		}
 		nativeScroller.prototype = new scrollerCore();
@@ -142,7 +174,6 @@
 		nativeScroller.prototype.defaultProperties = function(){
 
 			this.refreshContainer=null;
-			this.preventHideRefresh=true;
 			this.moved=false;
 			this.hasCanceled=false;
 			this.dY = this.cY = 0;
@@ -157,7 +188,9 @@
         nativeScroller.prototype.onTouchStart=function (e) {
 			this.moved = false;
 			this.preventHideRefresh=true;
+			//get refresh ready
 			if(this.refresh&&this.el.scrollTop==0){
+				this.refreshHeight = this.refreshContainer.firstChild.clientHeight;
 				this.el.addEventListener('touchmove', this, false);
 	            this.dY = e.touches[0].pageY;
 			}
@@ -194,16 +227,8 @@
         }
         nativeScroller.prototype.onTouchEnd=function (e) {
 			var triggered = this.el.scrollTop<=0;
-			var autoCancel = true;
-			if(this.refreshListeners.release) autoCancel = this.refreshListeners.release.call(this, triggered)!==false;
-			if(!triggered){
-				this.preventHideRefresh = false;
-			    this.hideRefresh();
-			} else if(autoCancel) {
-				var that = this;
-				this.preventHideRefresh = false;
-				if(this.refreshHangTimeout>0) setTimeout(function(){that.hideRefresh()}, this.refreshHangTimeout);
-            }
+            this.fireRefreshRelease(triggered, true);
+			
 			this.dY = this.cY = 0;
 			this.hasCanceled=false;
 			this.el.removeEventListener('touchmove', this, false);
@@ -319,7 +344,7 @@
                     return;
             }
 			
-			//
+			//save event
 			this.saveEventInfo(event);
 			
 			//default variables
@@ -362,6 +387,13 @@
             }
 			this.container.scrollTop = this.container.scrollLeft = 0;
 			this.currentScrollingObject = this.el;
+			
+			//get refresh ready
+			if(this.refresh&&scrollInfo.top==0){
+				this.refreshHeight = this.refreshContainer.firstChild.clientHeight;
+				this.refreshContainer.firstChild.style.top=(-this.refreshHeight)+'px';
+				this.refreshContainer.style.overflow='visible';
+			}
 			
 			//set target
 			scrollInfo.x = scrollInfo.left;
@@ -435,31 +467,43 @@
 			
 			var scrollInfo = this.calculateMovement(event);
 			
-			//pull to refresh elastic
-            if ((this.elementInfo.maxTop > 0) && (scrollInfo.y > 0 || scrollInfo.y < -this.elementInfo.maxTop)) 
-            {   
-                var overflow = scrollInfo.y > 0 ? (scrollInfo.y) : -1 * (scrollInfo.y + this.elementInfo.maxTop);
-                var height = (this.container.clientHeight - overflow) / this.container.clientHeight;  
-                if (height < .5)
-                    height = .5;
-                if (scrollInfo.y > 0)
-                    scrollInfo.y = scrollInfo.y * height;
-                else {
-                    scrollInfo.y = scrollInfo.y - ((scrollInfo.y + this.elementInfo.maxTop) * height);
-                }
-            }
 			
 			if(this.checkSignificance(scrollInfo)){
 				
-				var runFactor = (scrollInfo.duration>0 ? 10 : 1);
-				scrollInfo=this.calculateTarget(scrollInfo, runFactor);
-				//console.log("moving to "+scrollInfo.x+"/"+scrollInfo.y+" in "+scrollInfo.duration);
+				var elasticOverflow = scrollInfo.top>=0 || scrollInfo.top <= -this.elementInfo.maxTop;
+				
+				var runFactor = (scrollInfo.duration>0 && !elasticOverflow ? 10 : 1);
+				scrollInfo=this.calculateTarget(scrollInfo, runFactor, elasticOverflow);
+				
+				//pull to refresh elastic
+	            if (elasticOverflow && (scrollInfo.y > 0 || scrollInfo.y < -this.elementInfo.maxTop)) 
+	            {   
+	                var overflow = (scrollInfo.deltaY + this.elementInfo.maxTop);
+	                var height = (this.container.clientHeight - overflow) / this.container.clientHeight;  
+	                if (height < .5)
+	                    height = .5;
+	                if (scrollInfo.y > 0)
+	                    scrollInfo.y = scrollInfo.y + scrollInfo.deltaY * height;
+	                else {
+	                    scrollInfo.y = scrollInfo.y - scrollInfo.deltaY * height;
+	                }
+					scrollInfo.y = Math.floor(scrollInfo.y);
+	            }
 				
 				//significant move
                 this.scrollerMoveCSS(this.currentScrollingObject, scrollInfo, scrollInfo.duration);
 				this.setVScrollBar(scrollInfo, 0);
 				this.setHScrollBar(scrollInfo, 0);
-					
+				
+				//check refresh triggering
+				if(this.refresh){
+					if(this.lastScrollInfo.top<this.refreshHeight && scrollInfo.top>this.refreshHeight){
+						if(this.refreshListeners.trigger) this.refreshListeners.trigger.call();
+					} else if(this.lastScrollInfo.top>this.refreshHeight && scrollInfo.top<this.refreshHeight){
+						if(this.refreshListeners.cancel) this.refreshListeners.cancel.call();
+					}
+				}
+				
 				this.lastScrollInfo = scrollInfo;
 			}
 			
@@ -469,7 +513,7 @@
 		jsScroller.prototype.checkSignificance=function(scrollInfo){
 			
 			//really small move - make it immediate
-			console.log(scrollInfo.duration+" -- "+(scrollInfo.deltaY+scrollInfo.deltaX));
+			//console.log(scrollInfo.duration+" -- "+(scrollInfo.deltaY+scrollInfo.deltaX));
             if (Math.abs(scrollInfo.deltaY+scrollInfo.deltaX)<10){
             	scrollInfo.duration = 0;
 				return true;
@@ -532,25 +576,31 @@
 				scrollInfo.duration = this.lastScrollInfo.duration;
 			}
 			
+			//do not divide by 0! breaks stuff
+			if(scrollInfo.duration!=0){
+				scrollInfo.speedY = scrollInfo.deltaY/scrollInfo.duration;
+				scrollInfo.speedX = scrollInfo.deltaX/scrollInfo.duration;
+			} else {
+				scrollInfo.speedY =  0;
+				scrollInfo.speedX = 0;
+			}
 			
-			scrollInfo.speedY = scrollInfo.deltaY/scrollInfo.duration;
-			scrollInfo.speedX = scrollInfo.deltaX/scrollInfo.duration;
 			scrollInfo.absSpeedY = Math.abs(scrollInfo.speedY);
 			scrollInfo.absSpeedX = Math.abs(scrollInfo.speedX);
 			
 			return scrollInfo;
 		}
-		jsScroller.prototype.calculateTarget=function(scrollInfo,factor){
+		jsScroller.prototype.calculateTarget=function(scrollInfo,factor, elasticOverflow){
 			var transf = new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform);
 			scrollInfo.top = numOnly(transf.f);
 			scrollInfo.left = numOnly(transf.e);
 			
-			scrollInfo.y = scrollInfo.top+scrollInfo.deltaY*factor;
-			scrollInfo.x = scrollInfo.left+scrollInfo.deltaX*factor;
-			scrollInfo.duration = scrollInfo.duration*factor;
+			scrollInfo.y = Math.floor(scrollInfo.top+scrollInfo.deltaY*factor);
+			scrollInfo.x = Math.floor(scrollInfo.left+scrollInfo.deltaX*factor);
+			scrollInfo.duration = Math.floor(scrollInfo.duration*factor);
 			
 			//boundaries
-            if (scrollInfo.y > 0) {
+            if (!elasticOverflow && scrollInfo.y > 0) {
                 scrollInfo.y = 0;
                 scrollInfo.duration = 200;
             } else if(scrollInfo.x > 0){
@@ -558,7 +608,7 @@
                 scrollInfo.duration = 200;
             }
                         
-            if (scrollInfo.y < (-this.elementInfo.maxTop)) {
+            if (!elasticOverflow && scrollInfo.y < (-this.elementInfo.maxTop)) {
                 scrollInfo.y = -this.elementInfo.maxTop;
                 scrollInfo.duration = 200;
             } else if (scrollInfo.x < (-this.elementInfo.maxLeft)) {
@@ -569,6 +619,9 @@
 			
 			
 			return scrollInfo;
+		}
+		jsScroller.prototype.hideRefresh=function(){
+			this.scrollerMoveCSS(this.el, {x:0,y:0}, 75);
 		}
 		
 		jsScroller.prototype.setMomentum=function(scrollInfo) {
@@ -593,19 +646,31 @@
 			event.preventDefault();
             this.finishScrollingObject = this.currentScrollingObject;
             this.currentScrollingObject = null;
-                
+            
 			var scrollInfo = this.calculateMovement(event);
 			scrollInfo=this.setMomentum(scrollInfo);
-			scrollInfo=this.calculateTarget(scrollInfo, 10);
+			scrollInfo=this.calculateTarget(scrollInfo, 10, false);
+			var triggered = scrollInfo.top > this.refreshHeight;
+            this.fireRefreshRelease(triggered, scrollInfo.top>0);
 
-            if (this.refresh && -scrollInfo.top > this.refreshHeight) {
-                if (this.refreshListeners.release) {
-                    this.refreshListeners.release.call(this, true);
-                }
-            }
-            if (scrollInfo.duration < 300)
-                scrollInfo.duration = 300
-					
+			//refresh hang in
+			if(this.refresh && triggered) {
+				scrollInfo.y = this.refreshHeight;
+				scrollInfo.duration = 75;
+			//top boundary
+			} else if(scrollInfo.y >= 0){
+				scrollInfo.y = 0;
+				scrollInfo.duration = 75;
+			//lower boundary
+			} else if(-scrollInfo.y > this.elementInfo.maxTop){
+				scrollInfo.y = -this.elementInfo.maxTop;
+				scrollInfo.duration = 75;
+			//all others
+			} else {
+	            if (scrollInfo.duration < 300)
+	                scrollInfo.duration = 300;
+			}
+			
             this.scrollerMoveCSS(this.finishScrollingObject, scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
 			this.setVScrollBar(scrollInfo, "cubic-bezier(0.33,0.66,0.66,1)");
             this.setHScrollBar(scrollInfo, "cubic-bezier(0.33,0.66,0.66,1)");
@@ -615,7 +680,7 @@
 				this.elementScrolling=false;
 			} else {
 				var that = this;
-				this.scrollingFinishCB=setTimeout(function(){that.hideScrollbars();that.elementScrolling=false},scrollInfo.time);
+				this.scrollingFinishCB=setTimeout(function(){that.hideScrollbars();that.elementScrolling=false},scrollInfo.duration);
 			}
 
 			this.elementScrolling=true;
