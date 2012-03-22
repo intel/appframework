@@ -3,7 +3,19 @@
 //It can be used independently in other apps but it is required by jqUi
 (function() {
     $.touchLayer = function(el) {
-        return new touchLayer(el);
+		if(!jq.os.desktop) return new touchLayer(el);
+		else {
+            jQUi.addEventListener("click", function(e) {
+              
+                var theTarget = e.target;
+                if (theTarget.nodeType == 3)
+                    theTarget = theTarget.parentNode;
+                if (checkAnchorClick(theTarget)) {
+                    e.preventDefault();
+                    return false;
+                }
+            }, false);
+		}
     };
     
 	//TouchLayer contributed by Carlos Ouro @ Badoo
@@ -32,7 +44,7 @@
         cX: 0,
         cY: 0,
 		layer: null,
-		panElementId: "pageTitle",
+		panElementId: "header",
 		scrollingEl: null,
 		isScrolling: false,
 		beenScrolling: false,

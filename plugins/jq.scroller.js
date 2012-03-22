@@ -62,6 +62,9 @@
 			scrollTop:0,
 			scrollLeft:0,
 			preventHideRefresh:true,
+            verticalScroll: true,
+            horizontalScroll: false,
+			
 			//methods
 			init:function(el, opts) {
 				this.el = el;
@@ -76,36 +79,40 @@
 					case 'touchstart': this.onTouchStart(e); break;
 					case 'touchmove': this.onTouchMove(e); break;
 					case 'touchend': this.onTouchEnd(e); break;
+					case 'scroll': 
+						if(this.onScroll) this.onScroll(e);
+					break;
 	    		}
 			},
-			addPullToRefresh : function(){
+			coreAddPullToRefresh : function(rEl){
+				if(rEl) this.refreshElement=rEl; 
 	            //Add the pull to refresh text.  Not optimal but keeps from others overwriting the content and worrying about italics
-	            if (this.refresh && this.refresh == true) {
-	                //add the refresh div
-					if(this.refreshElement==null){
-		                var jqEl = jq("<div id='" + this.container.id + "_pulldown' class='jqscroll_refresh' style='border-radius:.6em;border: 1px solid #2A2A2A;background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#666666),color-stop(1,#222222));background:#222222;margin:0px;height:60px;position:relative;text-align:center;line-height:60px;color:white;width:100%;'>Pull to Refresh</div>");
-					} else {
-						var jqEl = jq(this.refreshElement);
-					}
-					var el = jqEl.get();
+                //add the refresh div
+				var orginalEl = document.getElementById(this.container.id + "_pulldown");
+				if(this.refreshElement==null && orginalEl==null){
+	                var jqEl = jq("<div id='" + this.container.id + "_pulldown' class='jqscroll_refresh' style='border-radius:.6em;border: 1px solid #2A2A2A;background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#666666),color-stop(1,#222222));background:#222222;margin:0px;height:60px;position:relative;text-align:center;line-height:60px;color:white;width:100%;'>Pull to Refresh</div>");
+				} else if(orginalEl!=null) {
+					var jqEl = jq(orginalEl);
+				} else {
+					var jqEl = jq(this.refreshElement);
+				}
+				var el = jqEl.get();
 					
-					this.refreshContainer = jq("<div style=\"overflow:visible;width:100%;height:0;margin:0;padding:0;padding-left:5px;padding-right:5px;\"></div>");
-	                $(this.el).prepend(this.refreshContainer.append(el, 'top'));
-					this.refreshContainer = this.refreshContainer[0];
-	            }
+				this.refreshContainer = jq("<div style=\"overflow:hidden;width:100%;height:0;margin:0;padding:0;padding-left:5px;padding-right:5px;\"></div>");
+                $(this.el).prepend(this.refreshContainer.append(el, 'top'));
+				this.refreshContainer = this.refreshContainer[0];
 			},
 			fireRefreshRelease:function(triggered, allowHide){
 				if(!this.refresh) return;
 				var autoCancel = true;
 				if(this.refreshListeners.release!=null) autoCancel = this.refreshListeners.release.call(this, triggered)!==false;
+				this.preventHideRefresh = false;
 				if(!triggered){
 					if(allowHide){
-						this.preventHideRefresh = false;
 					    this.hideRefresh();
 					}
 				} else if(autoCancel) {
 					var that = this;
-					this.preventHideRefresh = false;
 					if(this.refreshHangTimeout>0) setTimeout(function(){that.hideRefresh()}, this.refreshHangTimeout);
 	            }
 			}
@@ -118,11 +125,8 @@
 			this.refresh=true;
 			
             this.container = this.el.parentNode;
-			this.addPullToRefresh();
-			this.refreshContainer.style.overflow='hidden';
-			this.el.style.overflow = 'visible';
-			this.el.style.overflowX = 'visible';
-			this.el.style.overflowY = 'visible';
+
+			this.addPullToRefresh(null, true);
             this.initEvents();
             var windowHeight = window.innerHeight;
             var windowWidth = window.innerWidth;
@@ -161,8 +165,14 @@
 			//test
 			this.refresh=true;
 			
+			this.el.style.overflow='auto';
+            if(this.verticalScroll) this.el.style.overflowY='auto';
+            if(this.horizontalScroll) this.el.style.overflowX='auto';
+            
+			
+			
 			this.container = this.el;
-			this.addPullToRefresh();
+			this.addPullToRefresh(null, true);
 			this.initEvents();
 		}
 		nativeScroller.prototype = new scrollerCore();
@@ -181,10 +191,17 @@
 		}
         nativeScroller.prototype.initEvents=function () {
             if(this.refresh) this.el.addEventListener('touchstart', this, false);
+			this.el.addEventListener('scroll', this, false);
         }
         nativeScroller.prototype.removeEvents=function () {
             this.el.removeEventListener('touchstart', this, false);
         }
+		nativeScroller.prototype.addPullToRefresh=function(el, leaveRefresh){
+			if(!leaveRefresh) this.refresh = true;
+            if (this.refresh && this.refresh == true) {
+	                this.coreAddPullToRefresh(el);
+            }
+		}
         nativeScroller.prototype.onTouchStart=function (e) {
 			this.moved = false;
 			this.preventHideRefresh=true;
@@ -238,7 +255,6 @@
 		nativeScroller.prototype.hideRefresh=function(){
 			var that = this;
 			if(that.preventHideRefresh) return;
-			
 			
 			that.jqEl.css3Animate({
                 y: (this.el.scrollTop-that.refreshHeight)+"px",
@@ -314,6 +330,15 @@
             this.el.removeEventListener('touchmove', this);
 			this.el.removeEventListener('touchend', this);
         }
+		jsScroller.prototype.addPullToRefresh=function(el, leaveRefresh){
+			if(!leaveRefresh) this.refresh = true;
+            if (this.refresh && this.refresh == true) {
+	                this.coreAddPullToRefresh(el);
+					this.el.style.overflow='visible';
+					this.el.style.overflowX='visible';
+					this.el.style.overflowY='visible';
+            }
+		}
         jsScroller.prototype.hideScrollbars=function() {
             if (this.hscrollBar)
             {
@@ -510,6 +535,7 @@
 			this.saveEventInfo(event);
         }
 		
+		//TODO: improve/tweak for best smoothnesss and performance
 		jsScroller.prototype.checkSignificance=function(scrollInfo){
 			
 			//really small move - make it immediate
@@ -528,7 +554,7 @@
 				//significant speedchange
 				significantY = significantY || this.lastScrollInfo.absSpeedY*0.5>scrollInfo.absSpeedY || this.lastScrollInfo.absSpeedY*1.5<scrollInfo.absSpeedY;
 				//if(significantY) console.log("significant speedchange");
-				//TODO - it's goind way too far/behind
+				//TODO - movement significance
 				//
 			} else significantY = false;
 				
@@ -538,7 +564,7 @@
 				significantX = this.lastScrollInfo.speedX<0 ? scrollInfo.speedX>0 : scrollInfo.speedX<0;
 				//significant speedchange
 				significantX = significantX || this.lastScrollInfo.absSpeedX*0.5>scrollInfo.absSpeedX || this.lastScrollInfo.absSpeedX*1.5<scrollInfo.absSpeedX;
-				//TODO - it's goind way too far/behind
+				//TODO - movement significance
 				//
 				
 			} else significantX = false;
@@ -678,9 +704,10 @@
 			if(isNaN(scrollInfo.duration)){
 				this.hideScrollbars();
 				this.elementScrolling=false;
+				if(this.onScroll) this.onScroll(e);
 			} else {
 				var that = this;
-				this.scrollingFinishCB=setTimeout(function(){that.hideScrollbars();that.elementScrolling=false},scrollInfo.duration);
+				this.scrollingFinishCB=setTimeout(function(){that.hideScrollbars();that.elementScrolling=false;if(this.onScroll) this.onScroll(e);},scrollInfo.duration);
 			}
 
 			this.elementScrolling=true;

@@ -1602,7 +1602,7 @@
 	
 	function hideAddressBar(){
         if (jq.os.desktop)
-            return jQUi.css("height", "100%");
+            return jQUi.style.height="100%";
         touchLayer.hideAddressBar();
 	}
 	
@@ -1615,20 +1615,7 @@
         }
         jQUi = document.getElementById("jQUi");
 		
-        if (!jq.os.desktop){
-        	touchLayer = $.touchLayer(jQUi);
-        } else {
-            jQUi.addEventListener("click", function(e) {
-              
-                var theTarget = e.target;
-                if (theTarget.nodeType == 3)
-                    theTarget = theTarget.parentNode;
-                if (checkAnchorClick(theTarget)) {
-                    e.preventDefault();
-                    return false;
-                }
-            }, false);
-        }
+		touchLayer = $.touchLayer(jQUi);
 		hideAddressBar();
     });
     
