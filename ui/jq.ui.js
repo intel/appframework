@@ -86,6 +86,8 @@
         launchCompleted: false,
         activeDiv: "",
         
+    
+        
         css3animate: function(el, opts) {
             try {
                 jq(el).css3Animate(opts);
@@ -102,6 +104,15 @@
          *@title $.ui.loadDefaultHash
          */
         loadDefaultHash:true,
+        
+        /**
+         * This is a boolean that when set to true will add "&cache=_rand_" to any ajax loaded link
+           ```
+           $.ui.useAjaxCacheBuster=true;
+           ```
+          *@title $.ui.useAjaxCacheBuster
+          */
+        useAjaxCacheBuster:false,
         /**
          * This is a shorthand call to the jq.actionsheet plugin.  We wire it to the jQUi div automatically
            ```
@@ -877,7 +888,7 @@
                         }
                     };
                     ajaxUrl = target;
-                    var newtarget = target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000;
+                    var newtarget = useAjaxCacheBuster?target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000:target;
                     xmlhttp.open("GET", newtarget, true);
                     xmlhttp.send();
                     // show Ajax Mask
