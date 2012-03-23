@@ -38,16 +38,18 @@
 				
 				if(options["time"]===undefined) options["time"]=0;
 
-                if (options["time"]!=0 && options["callback"]) {
+                if (options["callback"]) {
                     this.callback = options["callback"];
                     this.moving = true;
-                    this.timeout = window.setTimeout(function () {
-                        if (that.moving == true && that.callback && typeof (that.callback == "function")) {
-                            that.moving = false;
-                            that.callback();
-                            delete this.callback;
-                        }
-                    }, numOnly(options["time"]) + 50);
+                    if(options["time"]!=0){
+						this.timeout = window.setTimeout(function () {
+		                    if (that.moving == true && that.callback && typeof (that.callback == "function")) {
+		                        that.moving = false;
+		                        that.callback();
+		                        delete this.callback;
+		                    }
+		                }, numOnly(options["time"]) + 50);
+					}
                 } else {
                     this.moving = false;
                 }
@@ -92,17 +94,24 @@
 					properties = "all";
                 }
 				this.el.style.webkitTransitionProperty = properties;
-				if(options["time"]!=0 && (""+options["time"]).indexOf("s")==-1) options["time"] = options["time"]+"ms";
-				this.el.style.webkitTransitionDuration = options["time"];
+				if((""+options["time"]).indexOf("s")==-1) var time = options["time"]+"ms";
+				else var time = options["time"];
+				this.el.style.webkitTransitionDuration = time;
+				console.log(this.el.style.webkitTransitionDuration);
 				this.el.style.webkitTransitionTimingFunction = options["timingFunction"];
                 this.el.style.webkitTransformOrigin = options.origin;
-                this.el.addEventListener("webkitTransitionEnd", that.finishAnimation, false);
+				if(options["time"]==0 && options["callback"]){
+					setTimeout(function(){that.finishAnimation();},0);
+				} else {
+					this.el.addEventListener("webkitTransitionEnd", that.finishAnimation, false);
+				}
             };
 
 
         css3Animate.prototype = {
             finishAnimation: function (event) {
-                event.preventDefault();
+				console.log("finishAnimation " + Badoo.getTimer());
+                if(event) event.preventDefault();
                 var that = this;
                 if (!this.moving) return;
 

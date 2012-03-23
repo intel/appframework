@@ -358,7 +358,7 @@
          * @param {Boolean} [force]
          * @title $.ui.toggleSideMenu([force])
          */
-        toggleSideMenu: function(force) {
+        toggleSideMenu: function(force, callback) {
             var that = this;
             if (!jq("#content").hasClass("hasMenu"))
                 return;
@@ -373,6 +373,7 @@
 					els.one("webkitTransitionEnd", function(e){
 						var el = jq(e.target);
 						el.replaceClass("to-off off to-on", "on");
+						if(callback) callback();
 					});
                 }, 1); //needs to run after
 				
@@ -384,9 +385,26 @@
 					var el = jq(e.target);
 					el.replaceClass("to-off on to-on", "off");
 					if(e.target.id == 'menu') el.hide();
+					if(callback) callback();
 				});
             }
         },
+		disableSideMenu:function(){
+			var that = this;
+			var els = jq("#content, #menu, #header, #navbar");
+			this.toggleSideMenu(false, function(){
+				els.removeClass("hasMenu");
+			});
+		},
+		enableSideMenu:function(){
+			var that = this;
+			var els = jq("#content, #menu, #header, #navbar");
+			els.addClass("hasMenu");
+		},
+		isSideMenuEnabled:function(){
+			return jq("#content").hasClass("hasMenu");
+		},
+		
         /**
          * Re-wire events on the bottom navbar after content has been updateded
            ```
@@ -669,8 +687,13 @@
                 verticalScroll: true,
                 horizontalScroll: false,
                 vScrollCSS: "jqmScrollbar",
-                refresh: false,
-				useJsScroll:jsScroll
+                refresh: refreshPull,
+				useJsScroll:jsScroll,
+				refreshListeners:{
+					release: refreshFunc,
+					trigger: null,
+					cancel: null
+				}
             }));
             this.scrollingDivs[scrollEl.id].removeEvents();
 			tmp = null;
@@ -1185,52 +1208,61 @@
         slideTransition: function(oldDiv, currDiv, back) {
             oldDiv.style.display = "block";
             currDiv.style.display = "block";
-            var that = this
-            
+            var that = this;
             if (back) {
                 that.css3animate(oldDiv, {
-                    x: "100%",
-                    time: "150ms",
-                    callback: function() {
-                        that.finishTransition(oldDiv);
-                    }
-                });
-                that.css3animate(currDiv, {
-                    x: "-100%",
-					y: "0%",
-                    time: "1ms",
-                    callback: function() {
-                        that.css3animate(currDiv, {
-                            x: "0%",
-                            time: "150ms",
-                            callback: function() {
+					x:"0%",
+					y:"0%",
+					callback:function(){
+		                that.css3animate(oldDiv, {
+		                    x: "100%",
+		                    time: "150ms",
+		                    callback: function() {
+		                        that.finishTransition(oldDiv);
+		                    }
+		                });
+					}
+				});
+				that.css3animate(currDiv, {
+					x:"-100%",
+					y:"0%",
+					callback:function(){
+	                    that.css3animate(currDiv, {
+	                        x: "0%",
+	                        time: "150ms",
+	                        callback: function() {
 								that.clearAnimations(currDiv);
-                            }
-                        });
-                    }
-                });
+	                        }
+	                    });
+					}
+				});
             } else {
                 that.css3animate(oldDiv, {
-                    x: "-100%",
-                    time: "150ms",
-                    callback: function() {
-                        that.finishTransition(oldDiv);
-                    }
-                });
-                that.css3animate(currDiv, {
-                    x: "100%",
-					y: "0%",
-                    time: "1ms",
-                    callback: function() {
-                        that.css3animate(currDiv, {
-                            x: "0%",
-                            time: "150ms",
-                            callback: function() {
+					x:"0%",
+					y:"0%",
+					callback:function(){
+		                that.css3animate(oldDiv, {
+		                    x: "-100%",
+		                    time: "150ms",
+		                    callback: function() {
+		                        that.finishTransition(oldDiv);
+		                    }
+		                });
+					}
+				});
+				that.css3animate(currDiv, {
+					x:"100%",
+					y:"0%",
+					callback:function(){
+	                    that.css3animate(currDiv, {
+	                        x: "0%",
+	                        time: "150ms",
+	                        callback: function() {
 								that.clearAnimations(currDiv);
-                            }
-                        });
-                    }
-                });
+	                        }
+	                    });
+					}
+				});
             }
         },
         /**
@@ -1561,7 +1593,6 @@
         finishTransition: function(oldDiv) {
             oldDiv.style.display = 'none';
             this.doingTransition = false;
-        
         },
 		
         /**

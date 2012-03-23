@@ -1891,6 +1891,12 @@ if (!window.jq || typeof (jq) !== "function") {
            }
            return tmp;
         }
+		
+        /**
+         * Debug plugin do nothing default
+		 * $.debug not to break even if debug plugin is not loaded
+         */
+		$.debug=function(m){return m;}
         
          /**
          * End of APIS

@@ -22,15 +22,15 @@
 	//handles overlooking panning on titlebar, bumps on native scrolling and no delay on click
 	var touchLayer = function(el) {
         el.addEventListener('touchstart', this, false);
-		var firstScroll = true;
+		this.ignoreNextScroll = true;
 		var that = this;
 		document.addEventListener('scroll', function(e){
-			if(e.target.isSameNode(document)) {
+			if(!that.allowDocumentScroll && e.target.isSameNode(document)) {
 				if(!that.isPanning){
-					if(!firstScroll){
-						firstScroll = true;
+					if(!that.ignoreNextScroll){
+						that.ignoreNextScroll = true;
 						that.hideAddressBar();
-					} else firstScroll=false;
+					} else that.ignoreNextScroll=false;
 				}
 			}
 		}, true);
@@ -39,6 +39,7 @@
     var prevClickField;
 	
     touchLayer.prototype = {
+		allowDocumentScroll:false,
         dX: 0,
         dY: 0,
         cX: 0,
@@ -67,7 +68,6 @@
                 case 'scroll':
                     this.onScroll(e);
                     break;
-				
             }
         },
 		hideAddressBar:function() {
@@ -88,10 +88,16 @@
 		
         onTouchStart: function(e) {
 			
+			var id = e.target.id;
+
             this.dX = e.touches[0].pageX;
             this.dY = e.touches[0].pageY;
-            if (fixInputHandlers(e))
+            if (fixInputHandlers(e)) {
                 return;
+			} else {
+				this.allowDocumentScroll=false;
+			}
+				
             if (prevClickField !== null && prevClickField !== undefined && jq.os.android) {
                 prevClickField.blur(); //We need to blur any input fields on android
                 prevClickField = null;
@@ -107,10 +113,7 @@
 			} else if(this.isScrollingVertical && !this.beenScrolling){
 				this.demandVerticalScroll();
 			}
-			//force no touchmove on pan
-			if(this.isPanning) document.removeEventListener('touchmove', this, false);
-			else document.addEventListener('touchmove', this, false);
-			
+			document.addEventListener('touchmove', this, false);
 			document.addEventListener('touchend', this, false);
         },
 		demandVerticalScroll:function(){
@@ -127,11 +130,12 @@
 			}
 		},
 		onScroll:function(e){
-			if(this.scrollingEl.scrollTop==0) e.preventDefault();
-			//console.log("scroll "+(this.scrollingEl?this.scrollingEl.scrollTop:"null"));
-			this.beenScrolling = false;
-			this.previousStartedAtTop = false;
-			this.previousStartedAtBottom = false;
+			if(!this.isScrolling) {
+				this.beenScrolling = false;
+				this.previousStartedAtTop = false;
+				this.previousStartedAtBottom = false;
+				e.target.removeEventListener('scroll', this, false);
+			}
 		},
 		//set rules here to ignore scrolling check on these elements
 		ignoreScrolling:function(el){
@@ -196,8 +200,12 @@
 			
 			this.cY = e.touches[0].pageY - this.dY;
 			this.cX = e.touches[0].pageX - this.dX;
+			
+			if(this.isPanning) {
+				this.moved = true;
+				return;
+			}
 
-			//console.log("touchmove "+(this.cY>0?"up":"down")+"!");
 			if(!this.isScrolling){
 				//legacy stuff for old browsers
 	            e.preventDefault();
@@ -208,7 +216,6 @@
 			} else if(this.isScrollingVertical && this.isGoingToBump()){
 				e.preventDefault();
 			}
-			
 			//let's clear events for performance
             document.removeEventListener('touchmove', this, false);
 			document.removeEventListener('touchend', this, false);
@@ -216,16 +223,15 @@
 		
 		isGoingToBump:function(){
 			
-			//console.log("isScrollingVertical! "+this.scrollingEl.scrollTop);
 			//if at top or bottom allow scroll
 			var atTop = this.scrollingEl.scrollTop<=0;
 			if(atTop){
-				//console.log("through the top!");
 				if(this.beenScrolling && !this.previousStartedAtTop) {
 					this.previousStartedAtTop = false;
 					this.beenScrolling = false;
 					return true;
 				} else {
+					this.scrollingEl.scrollTop=1;
 					this.beenScrolling = true;
 					this.previousStartedAtTop = true;
 				}
@@ -238,32 +244,35 @@
 						this.beenScrolling = false;
 						return true;
 					} else {
+						this.scrollingEl.scrollTop=this.scrollingEl.scrollHeight-this.scrollingEl.clientHeight-1;
 						this.beenScrolling = true;
 						this.previousStartedAtBottom = true;
 					}
-				} else this.beenScrolling = true;
-				this.scrollingEl.addEventListener('scroll', this, false);
+				} else {
+					this.beenScrolling = true;
+				}
 			}
+			this.scrollingEl.addEventListener('scroll', this, false);
 			return false;
 		},
 		
         
         onTouchEnd: function(e) {
 			
-			if(this.isPanning){
+			var itMoved = $.os.blackberry ? (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5) : this.moved;
+			
+			if(this.isPanning && itMoved){
 				//wait 2 secs and cancel
 				var that = this;
 				setTimeout(function(){
-					if(that.isPanning) {
-						that.hideAddressBar();
-						that.isPanning = false;
-					}
+					that.hideAddressBar();
 				}, 2000);
 			}
 			
-			e.preventDefault();
-			var itMoved = $.os.blackberry ? (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5) : this.moved;
+			if(!this.isScrolling) e.preventDefault();
+			
             if (!itMoved) {
+				
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
@@ -281,11 +290,15 @@
 				}
                 if (theTarget && theTarget.type != undefined) {
                     var tagname = theTarget.tagName.toLowerCase();
-                    if (tagname == "select" || (theTarget.type=="text"&&tagname == "input") ||  tagname == "textarea") {
-                        theTarget.focus();
+                    if (tagname == "select" || (tagname == "input" && (theTarget.type=="text"||theTarget.type=="password")) ||  tagname == "textarea") {
+                        this.allowDocumentScroll = true;
+						theTarget.focus();
                     }
                 }
             }
+			
+			this.isPanning = false;
+			this.isScrolling = false;
             prevClickField = null;
             this.dX = this.cX = this.cY = this.dY = 0;
             document.removeEventListener('touchmove', this, false);
@@ -306,7 +319,7 @@
              if (tagname == "select" || tagname == "input" || tagname == "textarea")  { // stuff we need to allow
                 //On Android 2.2+, the keyboard is broken when we apply -webkit-transform.  The hit box is moved and it no longer loses focus when you click out.
                 //What the following does is moves the div up so the text is not covered by the keyboard.
-                if (jq.os.android && (theTarget.type.toLowerCase() == "text" || theTarget.type.toLowerCase() == "textarea")) {
+                if (jq.os.android && (theTarget.type.toLowerCase() == "password" || theTarget.type.toLowerCase() == "text" || theTarget.type.toLowerCase() == "textarea")) {
                     var prevClickField = theTarget;
                     var headerHeight = 0, 
                     containerHeight = 0;

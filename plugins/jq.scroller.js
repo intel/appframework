@@ -64,6 +64,7 @@
 			preventHideRefresh:true,
             verticalScroll: true,
             horizontalScroll: false,
+			refreshTriggered: false,
 			
 			//methods
 			init:function(el, opts) {
@@ -185,7 +186,6 @@
 
 			this.refreshContainer=null;
 			this.moved=false;
-			this.hasCanceled=false;
 			this.dY = this.cY = 0;
 			this.cancelPropagation = false;
 		}
@@ -231,12 +231,13 @@
 			} else this.scrollTop = this.el.scrollTop;
 			var difY = newcY-this.cY;
 			//check for trigger
-			if(this.refreshListeners.trigger && this.scrollTop>0 && (this.scrollTop-difY)<=0)
+			if(this.refreshListeners.trigger && !this.refreshTriggered && (this.scrollTop-difY)<=0){
+				this.refreshTriggered = true;
 				this.refreshListeners.trigger.call();
 			//check for cancel
-			else if(!this.hasCanceled && this.refreshListeners.cancel && this.scrollTop<=0 && (this.scrollTop-difY)>0){
+			} else if(this.refreshListeners.cancel && this.refreshTriggered && (this.scrollTop-difY)>0){
+				this.refreshTriggered = false;
 				this.refreshListeners.cancel.call();
-				this.hasCanceled=true;
 			}
 			
 			this.cY = newcY;
@@ -247,7 +248,7 @@
             this.fireRefreshRelease(triggered, true);
 			
 			this.dY = this.cY = 0;
-			this.hasCanceled=false;
+			this.refreshTriggered=false;
 			this.el.removeEventListener('touchmove', this, false);
 			this.el.removeEventListener('touchend', this, false);
 			e.stopPropagation();
