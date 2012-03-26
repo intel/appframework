@@ -927,6 +927,7 @@
                     if (oldDiv == currWhat) //prevent it from going to itself
                         return;
                     
+                    var oldTarget = window.location.hash;
                     if (newTab) {
                         this.history = [];
                         this.history.push({
@@ -935,12 +936,11 @@
                         });
                     } else if (!back) {
                         this.history.push({
-                            target: "#" + this.activeDiv.id,
+                            target: oldTarget,
                             transition: transition
                         });
                     }
                     try {
-                        var oldTarget = window.location.hash;
                         window.history.pushState(what.id, what.id, startPath + '#' + what.id + hashLink);
                         $(window).trigger("hashchange", {newUrl: startPath + '#' + what.id + hashLink,oldURL: startPath + oldTarget});
                     } 
