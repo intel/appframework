@@ -25,7 +25,8 @@ if (!window.jq || typeof (jq) !== "function") {
         _eventID = 1, 
         jsonPHandlers = [], 
         _jsonPID = 1,
-        fragementRE=/^\s*<(\w+)[^>]*>/;
+        fragementRE=/^\s*<(\w+)[^>]*>/,
+        _attrCache={};
         
 
         /**
@@ -588,39 +589,47 @@ if (!window.jq || typeof (jq) !== "function") {
                 ```
                 $().attr("foo"); //Gets the first elements 'foo' attribute
                 $().attr("foo","bar");//Sets the elements 'foo' attribute to 'bar'
-                $().attr("foo",{bar:'bar'}) //Sets the attribute to a JSON string
+                $().attr("foo",{bar:'bar'}) //Adds the object to an internal cache
                 ```
 
-            * @param {String} attribute to act upon
-            * @param {String|Array|Object} [value] to set
-            * @return {String|Object|Array} If used as a getter, return the attribute value.  If a setter, return a jqMobi object
+            * @param {String|Object} attribute to act upon.  If it's an object (hashmap), it will set the attributes based off the kvp.
+            * @param {String|Array|Object|function} [value] to set
+            * @return {String|Object|Array|Function} If used as a getter, return the attribute value.  If a setter, return a jqMobi object
             * @title $().attr(attribute,[value])
             */
             attr: function(attr, value) {
                 if (this.length === 0)
-                    return undefined;
+                    return undefined;                
                 if (value === undefined && !$.isObject(attr)) {
-                    var val = this[0].getAttribute(attr);
                     
-                    try {
-                        val = JSON.parse(val);
-                    } catch (e) {
-                    }
+                    var val = (this[0].jqmCacheId&&_attrCache[this[0].jqmCacheId][attr])?(this[0].jqmCacheId&&_attrCache[this[0].jqmCacheId][attr]):this[0].getAttribute(attr);
                     return val;
                 }
-                value = $.isArray(value) || $.isObject(value) ? JSON.stringify(value) : value;
                 for (var i = 0; i < this.length; i++) {
                     if ($.isObject(attr)) {
                         for (var key in attr) {
-                            if (value == null && value !== undefined)
-                                this[i].removeAttribute(key);
-                            else
-                                this[i].setAttribute(key, attr[key]);
+                            $(this[i]).attr(key,attr[key]);
                         }
-                    } else if (value == null && value !== undefined)
+                    }
+                    else if($.isArray(value)||$.isObject(value)||$.isFunction(value))
+                    {
+                        
+                        if(!this[i].jqmCacheId)
+                            this[i].jqmCacheId=$.uuid();
+                        
+                        if(!_attrCache[this[i].jqmCacheId])
+                            _attrCache[this[i].jqmCacheId]={}
+                        _attrCache[this[i].jqmCacheId][attr]=value;
+                    }
+                    else if (value == null && value !== undefined)
+                    {
                         this[i].removeAttribute(attr);
-                    else
+                        if(this[i].jqmCacheId&&_attrCache[this[i].jqmCacheId][attr])
+                            delete _attrCache[this[i].jqmCacheId][attr];
+                    }
+                    else{
                         this[i].setAttribute(attr, value);
+                    }
                 }
                 return this;
             },
@@ -639,6 +648,8 @@ if (!window.jq || typeof (jq) !== "function") {
                 for (var i = 0; i < this.length; i++) {
                     attr.split(/\s+/g).forEach(function(param) {
                         that[i].removeAttribute(param);
+                        if(that[i].jqmCacheId&&_attrCache[that[i].jqmCacheId][attr])
+                            delete _attrCache[that[i].jqmCacheId][attr];
                     });
                 }
                 return this;

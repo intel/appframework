@@ -277,7 +277,7 @@ test("val",function(){
 
 test("attr",function(){
 
-   expect(3);
+   expect(5);
    
    var elem=$("#foo").get(0);
    
@@ -295,12 +295,20 @@ test("attr",function(){
 	});
 	ok( pass, "Set Multiple Attributes" );
     QUnit.reset();
-
+    
+    var func=function(){return "bar";}
+    $("#foo").attr("barTest",func);
+    equals(func,$("#foo").attr("barTest"),"Testing setting/getting a function");
+    QUnit.reset();
+    
+    var myArr=[1,2,3]
+    $("#foo").attr("myArr",myArr);
+    equals(myArr,$("#foo").attr("myArr"),"Testing setting/getting an array");
 });
 
 
 test("removeAttr",function(){
-   expect(10);
+   expect(11);
    equal( jq("#foo").removeAttr( "class" ).attr("class"), undefined, "remove class" );
    QUnit.reset();
 	equal( jq("#foo").removeAttr("id").attr("id"), undefined, "Remove id" );
@@ -324,6 +332,11 @@ test("removeAttr",function(){
 		equal( div.attr(key), undefined, "Attribute `" + key + "` was removed" );
 	});
    QUnit.reset();
+   var myArr=[1,2,3]
+   $("#foo").attr("myArr",myArr);
+   $("#foo").removeAttr("myArr");
+   equals(null,$("#foo").attr("myArr"),"Removing an array (special internal cache)");
+   
 });
 
 test("filter",function(){
@@ -983,13 +996,12 @@ expect(4);
    equals($("#foo").data("test"),"foo","Getting an attribute");
    
    QUnit.reset();
-   document.getElementById("foo").setAttribute("data-test",JSON.stringify(obj));
+   $("#foo").data("test",obj);
    equals($("#foo").data("test").foo,obj.foo,"Getting an attribute that is an object");
    
    QUnit.reset();
    $("#foo").data("test",obj);
-   var elem=JSON.parse(document.getElementById("foo").getAttribute("data-test"));
-   equals(elem.foo,obj.foo,"Seeting an attribute that is an object");
+   equals(obj,$("#foo").data("test"),"Seeting an attribute that is an object");
 
 });
 
