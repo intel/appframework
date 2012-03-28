@@ -35,21 +35,13 @@
                 alert("Please provide configuration options for animation of " + elID);
                 return;
             }
-				
-			if(options["time"]===undefined) options["time"]=0;
+			
+			var timeNum = numOnly(options["time"]);
+			if(!options["time"] || options["time"]===undefined || timeNum==0) options["time"]=0;
 
             if (options["callback"]) {
                 this.callback = options["callback"];
                 this.moving = true;
-                if(options["time"]!=0){
-					this.timeout = window.setTimeout(function () {
-	                    if (that.moving == true && that.callback && typeof (that.callback == "function")) {
-	                        that.moving = false;
-	                        that.callback();
-	                        delete this.callback;
-	                    }
-	                }, numOnly(options["time"]) + 50);
-				}
             } else {
                 this.moving = false;
             }
@@ -76,7 +68,8 @@
             //check for percent or numbers
             if (typeof (options.x) == "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x) + "px";
             if (typeof (options.y) == "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y) + "px";
-
+			//console.log($.debug.since()+"setting styles "+this.el.id);
+			
             this.el.style.webkitTransform = "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ") rotateY(" + options.rotateY + ") skew(" + options.skewX + "," + options.skewY + ")";
             this.el.style.webkitBackfaceVisiblity = "hidden";
 			var properties = "-webkit-transform";
@@ -98,10 +91,22 @@
 			this.el.style.webkitTransitionDuration = time;
 			this.el.style.webkitTransitionTimingFunction = options["timingFunction"];
             this.el.style.webkitTransformOrigin = options.origin;
-			if(options["time"]==0){
+			//console.log($.debug.since()+"finished styles "+this.el.id);
+			if(timeNum==0){
+				//console.log("executing callback "+this.el.id);
 				var that = this;
 				window.setTimeout(function(){that.finishAnimation();}, 0);
 			} else {
+				//console.log("set webkitTransitionEnd callback "+this.el.id);
+				if(this.moving){
+					this.timeout = window.setTimeout(function () {
+	                    if (that.moving == true && that.callback && typeof (that.callback == "function")) {
+	                        that.moving = false;
+	                        that.callback();
+	                        delete this.callback;
+	                    }
+	                }, timeNum + 50);
+				}
 				this.el.addEventListener("webkitTransitionEnd", that.finishAnimation, false);
 			}
         };
@@ -123,8 +128,8 @@
             }
         }
 		
-		//uncomment for debug and performance
-		css3Animate = $.debug.type(css3Animate, 'css3Animate');
+		//uncomment for performance debug
+		//css3Animate = $.debug.type(css3Animate, 'css3Animate');
 		
         return css3Animate;
     })();

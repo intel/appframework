@@ -149,21 +149,18 @@ if (!window.jq || typeof (jq) !== "function") {
         
         function _selector(selector, what) {
             var dom;
-            try {
-                if (selector[0] === "#" && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
-                    if (what == document)
-                        dom = what.getElementById(selector.replace("#", ""));
-                    else
-                        dom = [].slice.call(what.querySelectorAll(selector));
-                } else if (selector[0] === "<" && selector[selector.length - 1] === ">")  //html
-                {
-                    var tmp = document.createElement("div");
-                    tmp.innerHTML = selector.trim();
-                    dom = [].slice.call(tmp.childNodes);
-                } else {
+            if (selector[0] === "#" && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
+                if (what == document)
+                    dom = what.getElementById(selector.replace("#", ""));
+                else
                     dom = [].slice.call(what.querySelectorAll(selector));
-                }
-            } catch (e) {
+            } else if (selector[0] === "<" && selector[selector.length - 1] === ">")  //html
+            {
+                var tmp = document.createElement("div");
+                tmp.innerHTML = selector.trim();
+                dom = [].slice.call(tmp.childNodes);
+            } else {
+                dom = [].slice.call(what.querySelectorAll(selector));
             }
             return dom;
         }
@@ -1485,7 +1482,7 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os.opera = userAgent.match(/Opera Mobi/) ? true : false;
             $.os.fennec = userAgent.match(/fennec/i) ? true : false;
             $.os.desktop = !($.os.ios || $.os.android || $.os.blackberry || $.os.opera || $.os.fennec);
-			$.os.supportsNativeScroll = $.os.desktop || ($.os.ios&&userAgent.match(/OS\s[5-9_]/) ? true : false);
+			$.os.supportsNativeScroll = false;
         }
         detectUA($, navigator.userAgent);
         $.__detectUA = detectUA; //needed for unit tests
@@ -1911,6 +1908,7 @@ if (!window.jq || typeof (jq) !== "function") {
     //Helper function used in jq.mobi.plugins.
     if (!window.numOnly) {
         function numOnly(val) {
+			if(val===undefined) return 0;
             if (isNaN(parseFloat(val)))
                 val = val.replace(/[^0-9.-]/, "");
             
