@@ -5,15 +5,18 @@
  */ 
  (function ($) {
 	 //you can override this one to have your own 
-	 $.debugLog = console.log;
-	 
+	 $.debug = {};
+	 $.debug.log = function(t){console.log(t);};
+	 var maxObjectItems = 5;
 	 
 	 var now=function(){
-		 return (new Date()).getTime()*1000;
+		 return (new Date()).getTime();
 	 }
 	 var lastTime=now();
 	 var since=function(){
-		 var pastTime = now()-lastTime;
+		 thisTime = now();
+		 pastTime = thisTime-lastTime;
+		 lastTime = thisTime;
 		 if(pastTime>10000) {
 			 return ""+Math.floor(pastTime/1000)+"s";
 		 } else if(pastTime>3000) {
@@ -22,13 +25,148 @@
 		 	return ""+Math.floor(pastTime)+"ms";
 		 }
 	 }
+	 var getContent=function(obj, allowRecursive){
+		 curType = typeof obj;
+			 
+		 if(curType== 'number'){
+			 return obj;
+		 } else if(curType == 'string'){
+		 	return "'"+obj+"'";
+		 } else if(curType == 'boolean'){
+			 return obj ? "true" : "false";
+		 } else if($.isArray(obj)){
+			 if(obj.length<=maxObjectItems){
+				 var str = "[";
+				 var firstItem = true;
+			 	for(el in obj){
+	   			 	if(!firstItem) str+=', ';
+	   			 	else firstItem = false;
+					str+=getContent(obj[el], false);
+			 	}
+				return str+"]";
+			 }
+		 } else if(curType == 'object'){
+			 if(allowRecursive && Object.keys(obj).length<=maxObjectItems){
+				 var str = "{";
+				 var firstItem = true;
+			 	for(el in obj){
+	   			 	if(!firstItem) str+=', ';
+	   			 	else firstItem = false;
+					str+=el+":"+getContent(obj[el], false);
+			 	}
+				return str+"}";
+			} else {
+				if(obj.length==1 && typeof obj.get == 'function') {
+					obj = obj.get();
+				}
+				if(typeof obj.tagName == 'string'){
+					return "["+obj.tagName+(obj.id?" #"+obj.id:"")+"]";
+				}
+			}
+		 }
+		 //unrecognized
+		 return "["+curType+"]";
+	 }
+	 var checkParams = function(args){
+		 var curType;
+		 var str = "";
+		 var firstItem = true;
+         for (i = 0; i < args.length; i++) {
+			 if(!firstItem) str+=', ';
+			 else firstItem = false;
+			 str+=getContent(args[i], true);
+         }
+		 if(str=="") str="void";
+		 return str;
+	 }
 	 
+	 $.debug.since = function(){
+	 	return "[+"+since()+"] ";
+	 }
 	 
-	 $.debug = function(method, methodName){
+	 $.debug.method = function(obj, method, methodName){
+		 var that = this;
 		 return function(){
-			 $.debugLog("[+"+since()+"] "+methodName);
-			 method.call(this, arguments);
+			 that.log(that.since()+methodName+"("+checkParams(arguments)+")");
+			 return method.apply(obj, arguments);
 		 }
 	 }
 	 
+	 $.debug.object = function(obj, objectName){
+		 for (item in obj){
+			 if(typeof obj[item] == 'function'){
+			 	obj[item] = this.method(obj, obj[item], objectName+"."+item);
+			 }
+		 }
+	 }
+	 
+	 $.debug.type = function(c, objectName){
+		 var that = this;
+		 var a = function(){
+			 that.log(that.since()+objectName+".constructor("+checkParams(arguments)+")");
+			 c.apply(this, arguments);
+			 that.object(this, objectName);
+		 }
+		 for(el in c.prototype){
+		 	a.prototype[el]=c.prototype[el];
+		 }
+		 return a;
+	 }
+	 
+	 
 })(jq);
+
+
+
+// //UNIT TESTING
+// 
+// //VARIABLES
+// var t = {
+// 	a:16,
+// 	b:11,
+// 	f: function(){
+// 		return this.f2();
+// 	},
+// 	f2: function(){
+// 		return this.a+this.b;
+// 	}
+// }
+// 
+// var t2 = {
+// 	a:15,
+// 	b:10,
+// 	f: function(){
+// 		return this.f2();
+// 	},
+// 	f2: function(){
+// 		return this.a+this.b;
+// 	}
+// }
+// 
+// 
+// 
+// var t3 = function(){this.b = 20;this.c = 5;}
+// t3.prototype = {
+// 	a: 20,
+// 	b: 1000,
+// 	f: function(){
+// 		return this.f2();
+// 	}
+// }
+// t3.prototype.f2=function(){
+// 	return this.a+this.b+this.b;
+// }
+// 
+// //SETUP
+// t.f = $.debug.method(t, t.f, 't.f');
+// t.f2 = $.debug.method(t, t.f2, 't.f2');
+// $.debug.object(t2, 't2');
+// t3 = $.debug.type(t3, 't3');
+// 
+// 
+// //RUN TESTS
+// console.log(t.f());
+// console.log(t2.f());
+// var t3Test = new t3();
+// console.log(t3Test.f());
+// //plus details should appear on console

@@ -18,99 +18,97 @@
         if (!window.WebKitCSSMatrix) return;
         var translateOpen = 'm11' in new WebKitCSSMatrix() ? "3d(" : "(";
         var translateClose = 'm11' in new WebKitCSSMatrix() ? ",0)" : ")";
-
+		
         var css3Animate = function (elID, options) {
-
-                if (typeof elID == "string" || elID instanceof String) {
-                    this.el = document.getElementById(elID);
-                } else {
-                    this.el = elID;
-                }
-                if (!(this instanceof css3Animate)) {
-                    return new css3Animate(elID, options);
-                }
-                if (!this.el) return;
-                var that = this;
-                if (!options) {
-                    alert("Please provide configuration options for animation of " + elID);
-                    return;
-                }
+			
+            if (typeof elID == "string" || elID instanceof String) {
+                this.el = document.getElementById(elID);
+            } else {
+                this.el = elID;
+            }
+            if (!(this instanceof css3Animate)) {
+                return new css3Animate(elID, options);
+            }
+            if (!this.el) return;
+            var that = this;
+            if (!options) {
+                alert("Please provide configuration options for animation of " + elID);
+                return;
+            }
 				
-				if(options["time"]===undefined) options["time"]=0;
+			if(options["time"]===undefined) options["time"]=0;
 
-                if (options["callback"]) {
-                    this.callback = options["callback"];
-                    this.moving = true;
-                    if(options["time"]!=0){
-						this.timeout = window.setTimeout(function () {
-		                    if (that.moving == true && that.callback && typeof (that.callback == "function")) {
-		                        that.moving = false;
-		                        that.callback();
-		                        delete this.callback;
-		                    }
-		                }, numOnly(options["time"]) + 50);
-					}
-                } else {
-                    this.moving = false;
-                }
+            if (options["callback"]) {
+                this.callback = options["callback"];
+                this.moving = true;
+                if(options["time"]!=0){
+					this.timeout = window.setTimeout(function () {
+	                    if (that.moving == true && that.callback && typeof (that.callback == "function")) {
+	                        that.moving = false;
+	                        that.callback();
+	                        delete this.callback;
+	                    }
+	                }, numOnly(options["time"]) + 50);
+				}
+            } else {
+                this.moving = false;
+            }
 
                 
-                if (!options["y"]) options["y"] = 0;
-                if (!options["x"]) options["x"] = 0;
-                if (options["previous"]) {
-                    options.y += numOnly(new WebKitCSSMatrix(
-                    window.getComputedStyle(this.el).webkitTransform).f);
-                    options.x += numOnly(new WebKitCSSMatrix(
-                    window.getComputedStyle(this.el).webkitTransform).e);
-                }
-                if (!options["origin"]) options.origin = "0% 0%";
+            if (!options["y"]) options["y"] = 0;
+            if (!options["x"]) options["x"] = 0;
+            if (options["previous"]) {
+				var cssMatrix = new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform);
+                options.y += numOnly(cssMatrix.f);
+                options.x += numOnly(cssMatrix.e);
+            }
+            if (!options["origin"]) options.origin = "0% 0%";
 
-                if (!options["scale"]) options.scale = "1";
+            if (!options["scale"]) options.scale = "1";
 
-                if (!options["rotateY"]) options.rotateY = "0";
-                if (!options["rotateX"]) options.rotateX = "0";
-                if (!options["skewY"]) options.skewY = "0";
-                if (!options["skewX"]) options.skewX = "0";
+            if (!options["rotateY"]) options.rotateY = "0";
+            if (!options["rotateX"]) options.rotateX = "0";
+            if (!options["skewY"]) options.skewY = "0";
+            if (!options["skewX"]) options.skewX = "0";
 
-                if (!options["timingFunction"]) options["timingFunction"] = "linear";
+            if (!options["timingFunction"]) options["timingFunction"] = "linear";
 
-                //check for percent or numbers
-                if (typeof (options.x) == "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x) + "px";
-                if (typeof (options.y) == "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y) + "px";
+            //check for percent or numbers
+            if (typeof (options.x) == "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x) + "px";
+            if (typeof (options.y) == "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y) + "px";
 
-                this.el.style.webkitTransform = "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ") rotateY(" + options.rotateY + ") skew(" + options.skewX + "," + options.skewY + ")";
-                this.el.style.webkitBackfaceVisiblity = "hidden";
-				var properties = "-webkit-transform";
-                if (options["opacity"]!==undefined) {
-                    this.el.style.opacity = options["opacity"];
-					properties+=", opacity";
-                }
-                if (options["width"]) {
-                    this.el.style.width = options["width"];
-					properties = "all";
-                }
-                if (options["height"]) {
-                    this.el.style.height = options["height"];
-					properties = "all";
-                }
-				this.el.style.webkitTransitionProperty = properties;
-				if((""+options["time"]).indexOf("s")==-1) var time = options["time"]+"ms";
-				else var time = options["time"];
-				this.el.style.webkitTransitionDuration = time;
-				console.log(this.el.style.webkitTransitionDuration);
-				this.el.style.webkitTransitionTimingFunction = options["timingFunction"];
-                this.el.style.webkitTransformOrigin = options.origin;
-				if(options["time"]==0 && options["callback"]){
-					setTimeout(function(){that.finishAnimation();},0);
-				} else {
-					this.el.addEventListener("webkitTransitionEnd", that.finishAnimation, false);
-				}
-            };
+            this.el.style.webkitTransform = "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ") rotateY(" + options.rotateY + ") skew(" + options.skewX + "," + options.skewY + ")";
+            this.el.style.webkitBackfaceVisiblity = "hidden";
+			var properties = "-webkit-transform";
+            if (options["opacity"]!==undefined) {
+                this.el.style.opacity = options["opacity"];
+				properties+=", opacity";
+            }
+            if (options["width"]) {
+                this.el.style.width = options["width"];
+				properties = "all";
+            }
+            if (options["height"]) {
+                this.el.style.height = options["height"];
+				properties = "all";
+            }
+			this.el.style.webkitTransitionProperty = properties;
+			if((""+options["time"]).indexOf("s")==-1) var time = options["time"]+"ms";
+			else var time = options["time"];
+			this.el.style.webkitTransitionDuration = time;
+			this.el.style.webkitTransitionTimingFunction = options["timingFunction"];
+            this.el.style.webkitTransformOrigin = options.origin;
+			if(options["time"]==0){
+				var that = this;
+				window.setTimeout(function(){that.finishAnimation();}, 0);
+			} else {
+				this.el.addEventListener("webkitTransitionEnd", that.finishAnimation, false);
+			}
+        };
 
 
         css3Animate.prototype = {
             finishAnimation: function (event) {
-				console.log("finishAnimation " + Badoo.getTimer());
                 if(event) event.preventDefault();
                 var that = this;
                 if (!this.moving) return;
@@ -124,6 +122,10 @@
                 }
             }
         }
+		
+		//uncomment for debug and performance
+		css3Animate = $.debug.type(css3Animate, 'css3Animate');
+		
         return css3Animate;
     })();
     css3Animate.queue = function () {

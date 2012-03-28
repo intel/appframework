@@ -10,7 +10,7 @@
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
-                if (checkAnchorClick(theTarget)) {
+                if (checkAnchorClick(theTarget, false)) {
                     e.preventDefault();
                     return false;
                 }
@@ -92,7 +92,7 @@
 
             this.dX = e.touches[0].pageX;
             this.dY = e.touches[0].pageY;
-            if (fixInputHandlers(e)) {
+            if (this.fixInputHandlers(e)) {
                 return;
 			} else {
 				this.allowDocumentScroll=false;
@@ -304,54 +304,57 @@
             document.removeEventListener('touchmove', this, false);
             document.removeEventListener('touchend', this, false);
 			
-        }
-        
+        },
+		
+		fixInputHandlers:function(e) {
+	        if (!jq.os.android)
+	            return;
+	        var theTarget = e.touches[0].target;
+	        if (theTarget && theTarget.type != undefined) {
+	            var tagname = theTarget.tagName.toLowerCase();
+	            var type=theTarget.type;
+	             if (tagname == "select" || tagname == "input" || tagname == "textarea")  { // stuff we need to allow
+	                //On Android 2.2+, the keyboard is broken when we apply -webkit-transform.  The hit box is moved and it no longer loses focus when you click out.
+	                //What the following does is moves the div up so the text is not covered by the keyboard.
+	                if (jq.os.android && (theTarget.type.toLowerCase() == "password" || theTarget.type.toLowerCase() == "text" || theTarget.type.toLowerCase() == "textarea")) {
+	                    var prevClickField = theTarget;
+	                    var headerHeight = 0, 
+	                    containerHeight = 0;
+	                    if (jq(theTarget).closest("#content").length > 0) {
+	                        headerHeight = parseInt(jq("#header").css("height"));
+	                        containerHeight = parseInt(jq("#content").css("height")) / 2;
+	                        var theHeight = e.touches[0].clientY - headerHeight / 2;
+	                        if (theHeight > containerHeight && containerHeight > 0) {
+	                            var el = jq(theTarget).closest(".panel").get();
+	                            window.setTimeout(function() {
+	                                $.ui.scrollingDivs[el.id].scrollBy({x: 0,y: theHeight - containerHeight}, 0);
+	                            }, 1000);
+	                        }
+	                    } else if (jq(theTarget).closest("#jQui_modal").length > 0) {
+                        
+		                    headerHeight = 0;
+		                    containerHeight = parseInt(jq("#modalContainer").css("height")) / 2;
+		                    var theHeight = e.touches[0].clientY - headerHeight / 2;
+                        
+						    if (theHeight > containerHeight && containerHeight > 0) {
+		                		window.setTimeout(function() {
+		                			$.ui.scrollingDivs['modal'].scrollBy({x: 0,y: theHeight - containerHeight}, 0);
+		                		}, 1000);
+						    }
+	                    }
+	                }
+                
+	                return true;
+	            }
+	        }
+	        return false;
+	    },
+		
+		
     };
 	
-    
-    function fixInputHandlers(e) {
-        if (!jq.os.android)
-            return;
-        var theTarget = e.touches[0].target;
-        if (theTarget && theTarget.type != undefined) {
-            var tagname = theTarget.tagName.toLowerCase();
-            var type=theTarget.type;
-             if (tagname == "select" || tagname == "input" || tagname == "textarea")  { // stuff we need to allow
-                //On Android 2.2+, the keyboard is broken when we apply -webkit-transform.  The hit box is moved and it no longer loses focus when you click out.
-                //What the following does is moves the div up so the text is not covered by the keyboard.
-                if (jq.os.android && (theTarget.type.toLowerCase() == "password" || theTarget.type.toLowerCase() == "text" || theTarget.type.toLowerCase() == "textarea")) {
-                    var prevClickField = theTarget;
-                    var headerHeight = 0, 
-                    containerHeight = 0;
-                    if (jq(theTarget).closest("#content").length > 0) {
-                        headerHeight = parseInt(jq("#header").css("height"));
-                        containerHeight = parseInt(jq("#content").css("height")) / 2;
-                        var theHeight = e.touches[0].clientY - headerHeight / 2;
-                        if (theHeight > containerHeight && containerHeight > 0) {
-                            var el = jq(theTarget).closest(".panel").get();
-                            window.setTimeout(function() {
-                                $.ui.scrollingDivs[el.id].scrollBy({x: 0,y: theHeight - containerHeight}, 0);
-                            }, 1000);
-                        }
-                    } else if (jq(theTarget).closest("#jQui_modal").length > 0) {
-                        
-	                    headerHeight = 0;
-	                    containerHeight = parseInt(jq("#modalContainer").css("height")) / 2;
-	                    var theHeight = e.touches[0].clientY - headerHeight / 2;
-                        
-					    if (theHeight > containerHeight && containerHeight > 0) {
-	                		window.setTimeout(function() {
-	                			$.ui.scrollingDivs['modal'].scrollBy({x: 0,y: theHeight - containerHeight}, 0);
-	                		}, 1000);
-					    }
-                    }
-                }
-                
-                return true;
-            }
-        }
-        return false;
-    }
+	//debug
+	//touchLayer = $.debug.type(touchLayer, 'css3Animate');
     
     function checkAnchorClick(theTarget,nativeScrolling) {
         var parent = false;

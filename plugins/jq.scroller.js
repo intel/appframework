@@ -59,6 +59,7 @@
 			refreshHangTimeout:2000,
 			refreshHeight:60,
 			refreshElement:null,
+			refreshCancelCB:null,
 			scrollTop:0,
 			scrollLeft:0,
 			preventHideRefresh:true,
@@ -114,7 +115,7 @@
 					}
 				} else if(autoCancel) {
 					var that = this;
-					if(this.refreshHangTimeout>0) setTimeout(function(){that.hideRefresh()}, this.refreshHangTimeout);
+					if(this.refreshHangTimeout>0) this.refreshCancelCB = setTimeout(function(){that.hideRefresh()}, this.refreshHangTimeout);
 	            }
 			}
 		}
@@ -204,7 +205,7 @@
 		}
         nativeScroller.prototype.onTouchStart=function (e) {
 			this.moved = false;
-			this.preventHideRefresh=true;
+			if(this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
 			//get refresh ready
 			if(this.refresh&&this.el.scrollTop==0){
 				this.refreshHeight = this.refreshContainer.firstChild.clientHeight;
@@ -303,10 +304,8 @@
             this.vScrollCSS="scrollBar";
 
             this.lastScrollbar="";
-
             this.finishScrollingObject=null;
             this.container=null;
-            this.elementScrolling=false;
             this.scrollingFinishCB=false;
 		}
         
@@ -354,9 +353,8 @@
         jsScroller.prototype.onTouchStart=function(event) {
             if (!this.container)
                 return;
-            if(this.elementScrolling){
-               clearTimeout(this.scrollingFinishCB);
-            }
+			if(this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
+            if(this.scrollingFinishCB) clearTimeout(this.scrollingFinishCB);
             touchStarted = true;
 			
 			//disable if locked
@@ -403,8 +401,9 @@
 			
 			//get the current top
             try {
-                scrollInfo.top = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform).f) - numOnly(this.container.scrollTop);
-                scrollInfo.left = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform).e) - numOnly(this.container.scrollLeft);
+				var cssMatrix = new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform);
+                scrollInfo.top = numOnly(cssMatrix.f) - numOnly(this.container.scrollTop);
+                scrollInfo.left = numOnly(cssMatrix.e) - numOnly(this.container.scrollLeft);
                         
             } catch (e) {
                 scrollInfo.top = 0 + this.container.scrollTop;
@@ -504,16 +503,11 @@
 				//pull to refresh elastic
 	            if (elasticOverflow && (scrollInfo.y > 0 || scrollInfo.y < -this.elementInfo.maxTop)) 
 	            {   
-	                var overflow = (scrollInfo.deltaY + this.elementInfo.maxTop);
+	                var overflow = Math.abs(scrollInfo.y);
 	                var height = (this.container.clientHeight - overflow) / this.container.clientHeight;  
-	                if (height < .5)
-	                    height = .5;
-	                if (scrollInfo.y > 0)
-	                    scrollInfo.y = scrollInfo.y + scrollInfo.deltaY * height;
-	                else {
-	                    scrollInfo.y = scrollInfo.y - scrollInfo.deltaY * height;
-	                }
-					scrollInfo.y = Math.floor(scrollInfo.y);
+					if(height<.5) height = .5;
+					console.log(this.container.clientHeight + " -- " + overflow+" -- "+height);
+	                scrollInfo.y = Math.round(scrollInfo.top + scrollInfo.deltaY * height);
 	            }
 				
 				//significant move
@@ -553,10 +547,8 @@
 				significantY = this.lastScrollInfo.speedY<0 ? scrollInfo.speedY>0 : scrollInfo.speedY<0;
 				//if(significantY) console.log("significant direction");
 				//significant speedchange
-				significantY = significantY || this.lastScrollInfo.absSpeedY*0.5>scrollInfo.absSpeedY || this.lastScrollInfo.absSpeedY*1.5<scrollInfo.absSpeedY;
-				//if(significantY) console.log("significant speedchange");
-				//TODO - movement significance
-				//
+				significantY = significantY || this.lastScrollInfo.absSpeedY*0.3>scrollInfo.absSpeedY || this.lastScrollInfo.absSpeedY*1.3<scrollInfo.absSpeedY;
+				
 			} else significantY = false;
 				
 			//X significance
@@ -564,9 +556,7 @@
 				//change direction
 				significantX = this.lastScrollInfo.speedX<0 ? scrollInfo.speedX>0 : scrollInfo.speedX<0;
 				//significant speedchange
-				significantX = significantX || this.lastScrollInfo.absSpeedX*0.5>scrollInfo.absSpeedX || this.lastScrollInfo.absSpeedX*1.5<scrollInfo.absSpeedX;
-				//TODO - movement significance
-				//
+				significantX = significantX || this.lastScrollInfo.absSpeedX*0.4>scrollInfo.absSpeedX || this.lastScrollInfo.absSpeedX*1.6<scrollInfo.absSpeedX;
 				
 			} else significantX = false;
 			
@@ -704,14 +694,11 @@
 			
 			if(isNaN(scrollInfo.duration)){
 				this.hideScrollbars();
-				this.elementScrolling=false;
 				if(this.onScroll) this.onScroll(e);
 			} else {
 				var that = this;
-				this.scrollingFinishCB=setTimeout(function(){that.hideScrollbars();that.elementScrolling=false;if(this.onScroll) this.onScroll(e);},scrollInfo.duration);
+				this.scrollingFinishCB=setTimeout(function(){that.hideScrollbars();if(this.onScroll) this.onScroll(e);},scrollInfo.duration);
 			}
-
-			this.elementScrolling=true;
             touchStarted = false;
         }
         jsScroller.prototype.scrollerMoveCSS=function(el, distanceToMove, time, timingFunction) {
