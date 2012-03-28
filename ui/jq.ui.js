@@ -8,6 +8,7 @@
     var hasLaunched = false;
     var startPath = window.location.pathname;
     var defaultHash = window.location.hash;
+    var previousTarget = defaultHash;
     var ui = function() {
         // Init the page
         var that = this;
@@ -927,7 +928,6 @@
                     if (oldDiv == currWhat) //prevent it from going to itself
                         return;
                     
-                    var oldTarget = window.location.hash;
                     if (newTab) {
                         this.history = [];
                         this.history.push({
@@ -936,17 +936,18 @@
                         });
                     } else if (!back) {
                         this.history.push({
-                            target: this.activeDiv.id,
+                            target: previousTarget,
                             transition: transition
                         });
                     }
                     try {
                         window.history.pushState(what.id, what.id, startPath + '#' + what.id + hashLink);
-                        $(window).trigger("hashchange", {newUrl: startPath + '#' + what.id + hashLink,oldURL: startPath + oldTarget});
+                        $(window).trigger("hashchange", {newUrl: startPath + '#' + what.id + hashLink,oldURL: startPath + previousTarget});
                     } 
                     catch (e) {
                     }
                     
+                    previousTarget = '#' + what.id + hashLink;
                     
                     if (this.resetScrollers && this.scrollingDivs[what.id]) {
                         this.scrollingDivs[what.id].scrollTo({
