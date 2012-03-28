@@ -936,7 +936,7 @@
                         });
                     } else if (!back) {
                         this.history.push({
-                            target: oldTarget,
+                            target: this.activeDiv.id,
                             transition: transition
                         });
                     }
