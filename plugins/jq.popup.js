@@ -1,6 +1,7 @@
 /**
  * jq.popup - a popup/alert library for html5 mobile apps
  * @copyright Indiepath 2011 - Tim Fisher
+ * Modifications/enhancements by appMobi for jqMobi
  * 
  */
 
@@ -16,8 +17,15 @@
         doneClass:'button',
         cancelClass:'button',
         onShow:function(){console.log('showing popup');}
-        autoCloseDone:true //default is true will close the popup when done is clicked.
+        autoCloseDone:true, //default is true will close the popup when done is clicked.
+        suppressTitle:false //Do not show the title if set to true
   });
+  
+  You can programatically trigger a close by dispatching a "close" event to it.
+  
+  $('body').popup({title:'Alert',id:'myTestPopup'});
+  $("#myTestPopup").trigger("close");
+  
  */
 (function($) {
     
@@ -43,7 +51,7 @@
                     opts = {message: opts,cancelOnly: "true",cancelText: "OK"};
                 this.id = id = opts.id = opts.id || $.uuid(); //opts is passed by reference
                 var self = this;
-                this.title = opts.title || "Alert";
+                this.title = opts.suppressTitle?"":(opts.title || "Alert");
                 this.message = opts.message || "";
                 this.cancelText = opts.cancelText || "Cancel";
                 this.cancelCallback = opts.cancelCallback || function() {
@@ -80,6 +88,7 @@
             cancelOnly: false,
             onShow: null,
             autoCloseDone:true,
+            supressTitle:false,
             show: function() {
                 var self = this;
                 var markup = '<div id="' + this.id + '" class="jqPopup hidden">\
@@ -91,6 +100,10 @@
 	        				</footer>\
 	        			</div></div>';
                 $(this.container).append($(markup));
+                
+                $("#" + this.id).bind("close", function(){
+                	self.hide();
+                })
                 
                 if (this.cancelOnly) {
                     $("#" + this.id).find('A#action').hide();

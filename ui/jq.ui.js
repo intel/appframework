@@ -889,7 +889,7 @@
                         }
                     };
                     ajaxUrl = target;
-                    var newtarget = useAjaxCacheBuster?target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000:target;
+                    var newtarget = this.useAjaxCacheBuster?target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000:target;
                     xmlhttp.open("GET", newtarget, true);
                     xmlhttp.send();
                     // show Ajax Mask
