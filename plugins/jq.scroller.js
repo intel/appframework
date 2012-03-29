@@ -311,11 +311,9 @@
             this.container=null;
             this.scrollingFinishCB=false;
 			
-			this.configRunFactor = 50;
-			this.configSpeedSignificance = .5;
-			this.configSignificantDelta = 15;
-			this.configSignificantDuration = 40;
-			this.configSignificantMovementDuration = 120;
+			this.configSpeedSignificance = .7;
+			this.significantMovementLength = 20;
+			this.configFlashDuration = 10;
 		}
         
         function createScrollBar(width, height) {
@@ -392,6 +390,8 @@
 				absSpeedX:0,
 				deltaY:0,
 				deltaX:0,
+				absDeltaY:0,
+				absDeltaX:0,
 				y:0,
 				x:0,
 				duration:0
@@ -502,8 +502,8 @@
 			
 			if(this.checkSignificance(scrollInfo, elasticOverflow)){
 				
-				var runFactor = (scrollInfo.duration>0 && !elasticOverflow ? this.configRunFactor : 1);
-				scrollInfo=this.calculateTarget(scrollInfo, runFactor, elasticOverflow);
+				if(scrollInfo.duration>0) scrollInfo=this.setMomentum(scrollInfo);
+				scrollInfo=this.calculateTarget(scrollInfo, elasticOverflow);
 				
 				//pull to refresh elastic
 	            if (elasticOverflow && (scrollInfo.y > 0 || scrollInfo.y < -this.elementInfo.maxTop)) 
@@ -514,59 +514,75 @@
 	                scrollInfo.y = Math.round(scrollInfo.top + scrollInfo.deltaY * height);
 	            }
 				
+				//avoid strange flashing movements
+				if(scrollInfo.duration==0 || scrollInfo.duration>this.configFlashDuration) {
+					//significant move
+	                this.scrollerMoveCSS(this.currentScrollingObject, scrollInfo, scrollInfo.duration);
+					this.setVScrollBar(scrollInfo, 0);
+					this.setHScrollBar(scrollInfo, 0);
 				
-				//significant move
-                this.scrollerMoveCSS(this.currentScrollingObject, scrollInfo, scrollInfo.duration);
-				this.setVScrollBar(scrollInfo, 0);
-				this.setHScrollBar(scrollInfo, 0);
-				
-				//check refresh triggering
-				if(this.refresh){
-					if(!this.refreshTriggered && scrollInfo.top>this.refreshHeight){
-						this.refreshTriggered=true;
-						if(this.refreshListeners.trigger) this.refreshListeners.trigger.call();
-					} else if(this.refreshTriggered && scrollInfo.top<this.refreshHeight){
-						this.refreshTriggered=false;
-						if(this.refreshListeners.cancel) this.refreshListeners.cancel.call();
+					//check refresh triggering
+					if(this.refresh){
+						if(!this.refreshTriggered && scrollInfo.top>this.refreshHeight){
+							this.refreshTriggered=true;
+							if(this.refreshListeners.trigger) this.refreshListeners.trigger.call();
+						} else if(this.refreshTriggered && scrollInfo.top<this.refreshHeight){
+							this.refreshTriggered=false;
+							if(this.refreshListeners.cancel) this.refreshListeners.cancel.call();
+						}
 					}
+				
+					this.lastScrollInfo = scrollInfo;
+					this.moved = true;
 				}
 				
-				this.lastScrollInfo = scrollInfo;
-				this.moved = true;
 			}
 			
 			this.saveEventInfo(event);
         }
 		
 		jsScroller.prototype.checkSignificance=function(scrollInfo, elasticOverflow){
-			
-			//small and long move - make it immediate
-            if (Math.abs(scrollInfo.deltaY+scrollInfo.deltaX)<this.configSignificantDelta && scrollInfo.duration>this.configSignificantDuration){
-            	scrollInfo.duration = 0;
-				return true;
-            }
-			//every move counts
-			if(elasticOverflow) return true;
-			
+
 			//Y significance
-			var significantY, significantX;
 			if(this.elementInfo.hasVertScroll){
+				//every move counts immediately for small movements
+				if(scrollInfo.absDeltaY<this.significantMovementLength) {
+					this.immediateMovement(scrollInfo);
+					return true;
+				}
+				//start movement
+				if(this.lastScrollInfo.speedY==0) return true;
 				//change direction
-				significantY = this.lastScrollInfo.speedY<0 ? scrollInfo.speedY>0 : scrollInfo.speedY<0;
+				if (this.lastScrollInfo.speedY<0 ? scrollInfo.speedY>0 : scrollInfo.speedY<0) return true;
 				//significant speedchange
-				significantY = significantY || this.lastScrollInfo.absSpeedY*(1-this.configSpeedSignificance)>scrollInfo.absSpeedY || this.lastScrollInfo.absSpeedY*(1+this.configSpeedSignificance)<scrollInfo.absSpeedY;
-				
-			} else significantY = false;
+				if (scrollInfo.absSpeedY>this.lastScrollInfo.absSpeedY*(1+this.configSpeedSignificance) || this.lastScrollInfo.absSpeedY*(1-this.configSpeedSignificance)>scrollInfo.absSpeedY) return true;		
+			}
 				
 			//X significance
 			if(this.elementInfo.hasHorScroll){
+				//every move counts immediately for small movements
+				if(scrollInfo.absDeltaX<this.significantMovementLength) {
+					this.immediateMovement(scrollInfo);
+					return true;
+				}
+				//start movement
+				if(this.lastScrollInfo.speedX==0) return true;
 				//change direction
-				significantX = this.lastScrollInfo.speedX<0 ? scrollInfo.speedX>0 : scrollInfo.speedX<0;
+				if (this.lastScrollInfo.speedX<0 ? scrollInfo.speedX>0 : scrollInfo.speedX<0) return true;
 				//significant speedchange
-				significantX = significantX || this.lastScrollInfo.absSpeedX*(1-this.configSpeedSignificance)>scrollInfo.absSpeedX || this.lastScrollInfo.absSpeedX*(1+this.configSpeedSignificance)<scrollInfo.absSpeedX;
-				
-			} else significantX = false;
+				if (scrollInfo.absSpeedX>this.lastScrollInfo.absSpeedX*(1+this.configSpeedSignificance) || this.lastScrollInfo.absSpeedX*(1-this.configSpeedSignificance)>scrollInfo.absSpeedX) return true;
+			}
 			
+			return false;
+			
+		}
+		
+		jsScroller.prototype.immediateMovement=function(scrollInfo){
+			scrollInfo.duration=0;
+			scrollInfo.speedY=0;
+			scrollInfo.speedX=0;
+			scrollInfo.absSpeedY=0;
+			scrollInfo.absSpeedX=0;
 		}
 		
 		jsScroller.prototype.calculateMovement=function(event){
@@ -582,81 +598,67 @@
 				absSpeedX:0,
 				deltaY:0,
 				deltaX:0,
+				absDeltaY:0,
+				absDeltaX:0,
 				y:0,
 				x:0,
 				duration:0
             };
 			
+        	scrollInfo.deltaY = this.elementInfo.hasVertScroll ? event.touches[0].pageY - this.lastEventInfo.pageY : 0;
+            scrollInfo.deltaX = this.elementInfo.hasHorScroll ? event.touches[0].pageX - this.lastEventInfo.pageX : 0;
+			scrollInfo.time = event.timeStamp - this.lastEventInfo.time;
+			scrollInfo.duration = event.timeStamp - this.lastEventInfo.time;
 			
-			if(event.touches && event.touches.length==1){
-	        	scrollInfo.deltaY = this.elementInfo.hasVertScroll ? event.touches[0].pageY - this.lastEventInfo.pageY : 0;
-	            scrollInfo.deltaX = this.elementInfo.hasHorScroll ? event.touches[0].pageX - this.lastEventInfo.pageX : 0;
-				scrollInfo.time = event.timeStamp - this.lastEventInfo.time;
-				scrollInfo.duration = event.timeStamp - this.lastEventInfo.time;
-			} else {
-				if(this.lastScrollInfo.duration>0){
-					//calculate movement
-		        	scrollInfo.deltaY = this.lastScrollInfo.deltaY;
-		            scrollInfo.deltaX = this.lastScrollInfo.deltaX;
-					scrollInfo.runFactor = this.lastScrollInfo.runFactor;
-					scrollInfo.time = this.lastScrollInfo.time;
-					scrollInfo.duration = this.lastScrollInfo.duration/scrollInfo.runFactor;
-				} else {
-					//dont move at all
-		        	scrollInfo.deltaY = 0;
-		            scrollInfo.deltaX = 0;
-					scrollInfo.runFactor = 1;
-					scrollInfo.time = this.lastScrollInfo.time;
-					scrollInfo.duration = 0;
-				}
-			}
-			
-			//console.log("touchmove "+scrollInfo.deltaY+" in "+scrollInfo.time);
 			scrollInfo.speedY = this.divide(scrollInfo.deltaY, scrollInfo.time);
 			scrollInfo.speedX = this.divide(scrollInfo.deltaX, scrollInfo.time);
 			
 			scrollInfo.absSpeedY = Math.abs(scrollInfo.speedY);
 			scrollInfo.absSpeedX = Math.abs(scrollInfo.speedX);
 			
+			scrollInfo.absDeltaY = Math.abs(scrollInfo.deltaY);
+			scrollInfo.absDeltaX = Math.abs(scrollInfo.deltaX);
+			
 			return scrollInfo;
 		}
-		jsScroller.prototype.calculateTarget=function(scrollInfo, factor, elasticOverflow){
+		jsScroller.prototype.calculateTarget=function(scrollInfo, elasticOverflow){
 			var transf = new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform);
 			scrollInfo.top = numOnly(transf.f);
 			scrollInfo.left = numOnly(transf.e);
 			
-			if(scrollInfo.duration==0) factor=1;
+			scrollInfo.y = scrollInfo.top+scrollInfo.deltaY;
+			scrollInfo.x = scrollInfo.left+scrollInfo.deltaX;
+			scrollInfo.duration = scrollInfo.duration;
 			
-			scrollInfo.y = scrollInfo.top+scrollInfo.deltaY*factor;
-			scrollInfo.x = scrollInfo.left+scrollInfo.deltaX*factor;
-			scrollInfo.runFactor = factor;
-			scrollInfo.duration = scrollInfo.duration*factor;
+			var tmpTop = scrollInfo.top;
+			var tmpY = scrollInfo.y;
+			var tmpDuration = scrollInfo.duration;
 			
 			//boundaries
-			//console.log(scrollInfo.top+"/"+scrollInfo.y+"/"+this.elementInfo.maxTop+" -- "+scrollInfo.left+"/"+scrollInfo.x+"/"+this.elementInfo.maxLeft);
-            if (!elasticOverflow && scrollInfo.y > 0) {
-                scrollInfo.y = 0;
-                scrollInfo.duration = this.divide(-scrollInfo.top, scrollInfo.speedY);
-				scrollInfo.runFactor = (-scrollInfo.top)/scrollInfo.deltaY;
-            } else if(scrollInfo.x > 0){
-                scrollInfo.x = 0;
-                scrollInfo.duration = this.divide(-scrollInfo.top, scrollInfo.speedY);
-				scrollInfo.runFactor = (-scrollInfo.left)/scrollInfo.deltaX;
-            }
-                        
-            if (!elasticOverflow && scrollInfo.y < (-this.elementInfo.maxTop)) {
-                scrollInfo.y = -this.elementInfo.maxTop;
-				var change = this.elementInfo.maxTop+scrollInfo.top;
-                scrollInfo.duration = this.divide(scrollInfo.speedY, change);
-				scrollInfo.runFactor = change/scrollInfo.deltaY;
-            } else if (scrollInfo.x < (-this.elementInfo.maxLeft)) {
-                scrollInfo.x = -this.elementInfo.maxLeft;
-				var change = this.elementInfo.maxLeft+scrollInfo.left;
-                scrollInfo.duration = this.divide(scrollInfo.speedX, change);
-				scrollInfo.runFactor = change/scrollInfo.deltaX;
-            }
+			if(this.elementInfo.hasVertScroll){
+				if(!elasticOverflow){
+		            if (scrollInfo.y > 0) {
+		                scrollInfo.y = 0;
+		                scrollInfo.duration = Math.abs(this.divide(scrollInfo.top, scrollInfo.speedY));
+		            } else if (scrollInfo.y < (-this.elementInfo.maxTop)) {
+		                scrollInfo.y = -this.elementInfo.maxTop;
+						var change = this.elementInfo.maxTop+scrollInfo.top;
+		                scrollInfo.duration = Math.abs(this.divide(change, scrollInfo.speedY));
+		            }
+				}
+			}
+            
+			if(this.elementInfo.hasHorScroll) {
+				if(scrollInfo.x > 0){
+	                scrollInfo.x = 0;
+	                scrollInfo.duration = Math.abs(this.divide(scrollInfo.top, scrollInfo.speedY));
+	            } else if (scrollInfo.x < (-this.elementInfo.maxLeft)) {
+	                scrollInfo.x = -this.elementInfo.maxLeft;
+					var change = this.elementInfo.maxLeft+scrollInfo.left;
+	                scrollInfo.duration = Math.abs(this.divide(scrollInfo.speedX, change));
+	            }
+			}
 			
-			if(scrollInfo.duration<this.configSignificantMovementDuration) scrollInfo.duration=0;
 			
 			return scrollInfo;
 		}
@@ -675,12 +677,18 @@
 		jsScroller.prototype.setMomentum=function(scrollInfo) {
             var deceleration = 0.0012; 
 			
-			if(scrollInfo.y>0){
+			if(scrollInfo.absDeltaY>0){
 				scrollInfo.deltaY = (scrollInfo.deltaY < 0 ? -1 : 1) * (scrollInfo.absSpeedY * scrollInfo.absSpeedY) / (2 * deceleration);
+				scrollInfo.absDeltaY = Math.abs(scrollInfo.deltaY);
 				scrollInfo.duration = scrollInfo.absSpeedY / deceleration;
-			} else {
+				scrollInfo.speedY = scrollInfo.deltaY/scrollInfo.duration;
+				scrollInfo.absSpeedY = Math.abs(scrollInfo.speedY);
+			} else if(scrollInfo.absDeltaX) {
 				scrollInfo.deltaX = (scrollInfo.deltaX < 0 ? -1 : 1) * (scrollInfo.absSpeedX * scrollInfo.absSpeedY) / (2 * deceleration);
+				scrollInfo.absDeltaX = Math.abs(scrollInfo.deltaX);
 				scrollInfo.duration = scrollInfo.absSpeedX / deceleration;
+				scrollInfo.speedX = scrollInfo.deltaX/scrollInfo.duration;
+				scrollInfo.absSpeedX = Math.abs(scrollInfo.speedX);
 			}
 
             return scrollInfo;
@@ -695,9 +703,9 @@
             this.finishScrollingObject = this.currentScrollingObject;
             this.currentScrollingObject = null;
             
-			var scrollInfo = this.calculateMovement(event);
+			scrollInfo = this.lastScrollInfo;
 			scrollInfo=this.setMomentum(scrollInfo);
-			scrollInfo=this.calculateTarget(scrollInfo, 5, false);
+			scrollInfo=this.calculateTarget(scrollInfo, false);
 			var triggered = scrollInfo.top > this.refreshHeight;
             this.fireRefreshRelease(triggered, scrollInfo.top>0);
 			
@@ -730,10 +738,6 @@
                 time = 0;
             if (!timingFunction)
                 timingFunction = "linear";
-			if(el.isSameNode(document.getElementById('people-nearby-page').firstChild)){
-				var at = distanceToMove.top ? "from "+distanceToMove.top+" " : "";
-				console.log(at+" "+"translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose+" ("+(this.divide(distanceToMove.y, time))+")");
-			}
             el.style.webkitTransform = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
             el.style.webkitTransitionDuration = time + "ms";
             el.style.webkitBackfaceVisiblity = "hidden";

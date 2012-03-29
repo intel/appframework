@@ -69,7 +69,7 @@ width:100%;
 	width:100%;	height:1px;
 } /* Horizontal line. */
 
-.jqmScrollbar { background:white !important; } /* Sets the color of the scrollbar */
+.jqmScrollbar { background:white !important; border:1px grey solid !important; } /* Sets the color of the scrollbar */
 
 #jQUi {
 	position:absolute;
@@ -802,13 +802,13 @@ select[disabled]~div {
 }
 /*menu on/off mechanism, note .hasMenu.off and #menu.on default to no transform*/
 .hasMenu.to-on {
-  -webkit-transition: -webkit-transform 300ms;
+  -webkit-transition: -webkit-transform 200ms;
 }
 .hasMenu.on, .hasMenu.to-on {
   -webkit-transform:translate3d(200px,0px,0px);
 }
 .hasMenu.to-off {
-  -webkit-transition: -webkit-transform 300ms;
+  -webkit-transition: -webkit-transform 200ms;
   -webkit-transform:translate3d(0px,0px,0px);
 }
 #menu.on {
@@ -816,11 +816,11 @@ select[disabled]~div {
 	-webkit-transition:none;
 }
 #menu.to-on {
-    -webkit-transition: -webkit-transform 300ms;
+    -webkit-transition: -webkit-transform 200ms;
     -webkit-transform:translate3d(0px,0px,0px);
 }
 #menu.to-off {
-    -webkit-transition: -webkit-transform 300ms;
+    -webkit-transition: -webkit-transform 200ms;
 }
 #menu, #menu.off, #menu.to-off {
     -webkit-transform:translate3d(-200px,0px,0px);

@@ -8,7 +8,7 @@
     var hasLaunched = false;
     var startPath = window.location.pathname;
     var defaultHash = window.location.hash;
-
+    var previousTarget = defaultHash;
     var ui = function() {
         // Init the page
         var that = this;
@@ -950,25 +950,26 @@
                 if (oldDiv == currWhat) //prevent it from going to itself
                     return;
                     
-                if (newTab) {
-                    this.history = [];
-                    this.history.push({
-                        target: "#" + this.firstDiv.id,
-                        transition: transition
-                    });
-                } else if (!back) {
-                    this.history.push({
-                        target: "#" + this.activeDiv.id,
-                        transition: transition
-                    });
-                }
-                try {
-                    var oldTarget = window.location.hash;
-                    window.history.pushState(what.id, what.id, startPath + '#' + what.id + hashLink);
-                    $(window).trigger("hashchange", {newUrl: startPath + '#' + what.id + hashLink,oldURL: startPath + oldTarget});
-                } 
-                catch (e) {
-                }
+                    if (newTab) {
+                        this.history = [];
+                        this.history.push({
+                            target: "#" + this.firstDiv.id,
+                            transition: transition
+                        });
+                    } else if (!back) {
+                        this.history.push({
+                            target: previousTarget,
+                            transition: transition
+                        });
+                    }
+                    try {
+                        window.history.pushState(what.id, what.id, startPath + '#' + what.id + hashLink);
+                        $(window).trigger("hashchange", {newUrl: startPath + '#' + what.id + hashLink,oldURL: startPath + previousTarget});
+                    } 
+                    catch (e) {
+                    }
+                    
+                    previousTarget = '#' + what.id + hashLink;
                     
                 if (this.resetScrollers && this.scrollingDivs[what.id]) {
 					this.scrollingDivs[what.id].scrollTo({

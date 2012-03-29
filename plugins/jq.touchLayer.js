@@ -3,19 +3,7 @@
 //It can be used independently in other apps but it is required by jqUi
 (function() {
     $.touchLayer = function(el) {
-		if(!jq.os.desktop) return new touchLayer(el);
-		else {
-            jQUi.addEventListener("click", function(e) {
-              
-                var theTarget = e.target;
-                if (theTarget.nodeType == 3)
-                    theTarget = theTarget.parentNode;
-                if (checkAnchorClick(theTarget, false)) {
-                    e.preventDefault();
-                    return false;
-                }
-            }, false);
-		}
+		return new touchLayer(el);
     };
     
 	//TouchLayer contributed by Carlos Ouro @ Badoo
@@ -87,11 +75,11 @@
 		
 		
         onTouchStart: function(e) {
-			
 			var id = e.target.id;
 
             this.dX = e.touches[0].pageX;
             this.dY = e.touches[0].pageY;
+			
             if (this.fixInputHandlers(e)) {
                 return;
 			} else {
@@ -107,6 +95,7 @@
 			this.isPanning = false;
 			this.isScrolling = false;
 			this.isScrollingVertical = false;
+			
 			this.checkDOMTree(e.target, this.layer);
 			if(!this.isScrolling && !this.isPanning) {
 				e.preventDefault();
@@ -169,7 +158,7 @@
 				return;
 			}
 			//check native scroll
-			if($.os.supportsNativeScroll){
+			if($.os.supportsNativeTouchScroll){
 				
 				//prevent errors
 				if(this.ignoreScrolling(el)) {
@@ -260,6 +249,7 @@
         onTouchEnd: function(e) {
 			
 			var itMoved = $.os.blackberry ? (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5) : this.moved;
+			//console.log("touchend "+e.target.id+" "+this.isPanning+" "+this.isScrolling+" "+itMoved);
 			
 			if(this.isPanning && itMoved){
 				//wait 2 secs and cancel
@@ -272,7 +262,6 @@
 			if(!this.isScrolling) e.preventDefault();
 			
             if (!itMoved) {
-				
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
@@ -286,6 +275,8 @@
 				if(!this.isScrolling){
                 	var theEvent = document.createEvent('MouseEvents');
                 	theEvent.initEvent('click', true, true);
+					if(e.mouseToTouch) theEvent.mouseToTouch = true;
+					//console.log("dispatching event click to "+e.target.id);
                 	theTarget.dispatchEvent(theEvent);
 				}
                 if (theTarget && theTarget.type != undefined) {
@@ -354,7 +345,7 @@
     };
 	
 	//debug
-	//touchLayer = $.debug.type(touchLayer, 'css3Animate');
+	//touchLayer = $.debug.type(touchLayer, 'touchLayer');
     
     function checkAnchorClick(theTarget,nativeScrolling) {
         var parent = false;
@@ -407,81 +398,3 @@
         theTarget.dispatchEvent(clickevent);
     }
 })();
-
-
-
-
-//Touch events are from zepto/touch.js
-(function($) {
-    var touch = {}, touchTimeout;
-    
-    function parentIfText(node) {
-        return 'tagName' in node ? node : node.parentNode;
-    }
-    
-    function swipeDirection(x1, x2, y1, y2) {
-        var xDelta = Math.abs(x1 - x2), yDelta = Math.abs(y1 - y2);
-        if (xDelta >= yDelta) {
-            return (x1 - x2 > 0 ? 'Left' : 'Right');
-        } else {
-            return (y1 - y2 > 0 ? 'Up' : 'Down');
-        }
-    }
-    
-    var longTapDelay = 750;
-    function longTap() {
-        if (touch.last && (Date.now() - touch.last >= longTapDelay)) {
-            touch.el.trigger('longTap');
-            touch = {};
-        }
-    }
-    $(document).ready(function() {
-        $(document.body).bind('touchstart', function(e) {
-            var now = Date.now(), delta = now - (touch.last || now);
-            touch.el = $(parentIfText(e.touches[0].target));
-            touchTimeout && clearTimeout(touchTimeout);
-            touch.x1 = e.touches[0].pageX;
-            touch.y1 = e.touches[0].pageY;
-            if (delta > 0 && delta <= 250)
-                touch.isDoubleTap = true;
-            touch.last = now;
-            setTimeout(longTap, longTapDelay);
-            if (!touch.el.data("ignore-pressed"))
-                touch.el.addClass("selected");
-        }).bind('touchmove', function(e) {
-            touch.x2 = e.touches[0].pageX;
-            touch.y2 = e.touches[0].pageY;
-        }).bind('touchend', function(e) {
-            if (!touch.el)
-                return;
-            if (!touch.el.data("ignore-pressed"))
-                touch.el.removeClass("selected");
-            if (touch.isDoubleTap) {
-                touch.el.trigger('doubleTap');
-                touch = {};
-            } else if (touch.x2 > 0 || touch.y2 > 0) {
-                (Math.abs(touch.x1 - touch.x2) > 30 || Math.abs(touch.y1 - touch.y2) > 30) && 
-                touch.el.trigger('swipe') && 
-                touch.el.trigger('swipe' + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)));
-                touch.x1 = touch.x2 = touch.y1 = touch.y2 = touch.last = 0;
-            } else if ('last' in touch) {
-                touch.el.trigger('tap');
-                
-                touchTimeout = setTimeout(function() {
-                    touchTimeout = null;
-                    if (touch.el)
-                        touch.el.trigger('singleTap');
-                    touch = {};
-                }, 250);
-            }
-        }).bind('touchcancel', function() {
-            touch = {}
-        });
-    });
-    
-    ['swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown', 'doubleTap', 'tap', 'singleTap', 'longTap'].forEach(function(m) {
-        $.fn[m] = function(callback) {
-            return this.bind(m, callback)
-        }
-    });
-})(jq);

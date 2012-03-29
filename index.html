@@ -58,7 +58,7 @@ function loadedPanel(what){
 	}
 if(!((window.DocumentTouch&&document instanceof DocumentTouch)||'ontouchstart' in window)){
 var script=document.createElement("script");
-script.src="touch.js";
+script.src="plugins/jq.desktopBrowsers.js";
 var tag=$("head").append(script);
 $.os.android=true; //let's make it run like an android device
 $.os.desktop=true;
@@ -107,6 +107,7 @@ oldElem=document.getElementsByTagName("link")[0];
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.actionsheet.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.popup.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.touchLayer.js"></script> 
+<script type="text/javascript" charset="utf-8" src="./plugins/jq.touchEvents.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./ui/jq.ui.js"></script> 
 
 
