@@ -1695,7 +1695,12 @@
                 prevClickField.blur(); //We need to blur any input fields on android
                 prevClickField = null;
             }
-            e.preventDefault();
+            var theTarget = e.target;
+            if (theTarget.nodeType == 3)
+                theTarget = theTarget.parentNode;
+            if(theTarget.tagName.toLowerCase()=="a"&& theTarget.href.indexOf("tel:")===0){}
+            else
+                e.preventDefault();
             this.moved = false;
             document.addEventListener('touchmove', this, true);
             document.addEventListener('touchend', this, true);
@@ -1819,7 +1824,8 @@
                 //$(theTarget).trigger("click");
             }
             
-            
+            if(theTarget.href.indexOf("tel:")===0)
+               return false;
             if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) 
             {
                 if (theTarget.href.toLowerCase().indexOf("javascript:") != 0) {
