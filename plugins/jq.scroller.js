@@ -11,7 +11,7 @@
             return cache[this[0].id] ? cache[this[0].id] : null;
         }
 		//override nativeScroll for old browsers
-		if(!$.os.supportsNativeScroll) opts.useJsScroll=true;
+		if(!$.os.supportsNativeTouchScroll) opts.useJsScroll=true;
 		
         for (var i = 0; i < this.length; i++) {
             tmp = scroller(this[i], opts);
@@ -67,6 +67,9 @@
             horizontalScroll: false,
 			refreshTriggered: false,
 			moved : false,
+			eventsActive:false,
+			rememberEventsActive:false,
+			scrollingLocked:false,
 			
 			//methods
 			init:function(el, opts) {
@@ -78,18 +81,22 @@
 	            }
 	        },
 			handleEvent : function(e){
-	    		switch(e.type) {
-					case 'touchstart': 
-						this.preventHideRefresh = true;
-						this.moved = false;
-						this.onTouchStart(e); 
-					break;
-					case 'touchmove': this.onTouchMove(e); break;
-					case 'touchend': this.onTouchEnd(e); break;
-					case 'scroll': 
-						if(this.onScroll) this.onScroll(e);
-					break;
-	    		}
+				if(this.scrollingLocked){
+					e.preventDefault();
+				} else {
+		    		switch(e.type) {
+						case 'touchstart': 
+							this.preventHideRefresh = true;
+							this.moved = false;
+							this.onTouchStart(e); 
+						break;
+						case 'touchmove': this.onTouchMove(e); break;
+						case 'touchend': this.onTouchEnd(e); break;
+						case 'scroll': 
+							if(this.onScroll) this.onScroll(e);
+						break;
+		    		}
+				}
 			},
 			coreAddPullToRefresh : function(rEl){
 				if(rEl) this.refreshElement=rEl; 
@@ -122,6 +129,21 @@
 					var that = this;
 					if(this.refreshHangTimeout>0) this.refreshCancelCB = setTimeout(function(){that.hideRefresh()}, this.refreshHangTimeout);
 	            }
+			},
+			lock:function(){
+				if(this.scrollingLocked) return;
+				this.scrollingLocked=true;
+				this.rememberEventsActive = this.eventsActive);
+				if(!this.eventsActive){
+					this.initEvents();
+				}
+			},
+			unlock:function(){
+				if(!this.scrollingLocked) return;
+				this.scrollingLocked=false;
+				if(!this.rememberEventsActive){
+					this.removeEvents();
+				}
 			}
 		}
 		
@@ -197,10 +219,12 @@
         nativeScroller.prototype.initEvents=function () {
             if(this.refresh) this.el.addEventListener('touchstart', this, false);
 			this.el.addEventListener('scroll', this, false);
+			this.eventsActive = true;
         }
         nativeScroller.prototype.removeEvents=function () {
             this.el.removeEventListener('touchstart', this, false);
 			this.el.removeEventListener('scroll', this, false);
+			this.eventsActive = false;
         }
 		nativeScroller.prototype.addPullToRefresh=function(el, leaveRefresh){
 			if(!leaveRefresh) this.refresh = true;
@@ -311,9 +335,9 @@
             this.container=null;
             this.scrollingFinishCB=false;
 			
-			this.configSpeedSignificance = .7;
-			this.significantMovementLength = 20;
-			this.configFlashDuration = 10;
+			this.configSpeedSignificance = .75;
+			this.significantMovementLength = 15;
+			this.configFlashDuration = 40;
 		}
         
         function createScrollBar(width, height) {
@@ -331,11 +355,13 @@
     		this.el.addEventListener('touchstart', this, false);
             this.el.addEventListener('touchmove', this, false);
 			this.el.addEventListener('touchend', this, false);
+			this.eventsActive = true;
         }
         jsScroller.prototype.removeEvents=function () {
         	this.el.removeEventListener('touchstart', this, false);
             this.el.removeEventListener('touchmove', this, false);
 			this.el.removeEventListener('touchend', this, false);
+			this.eventsActive = false;
         }
 		jsScroller.prototype.addPullToRefresh=function(el, leaveRefresh){
 			if(!leaveRefresh) this.refresh = true;
@@ -429,9 +455,6 @@
 			//set target
 			scrollInfo.x = scrollInfo.left;
 			scrollInfo.y = scrollInfo.top;
-			
-			//set everything in position
-            //this.scrollerMoveCSS(this.el, scrollInfo, 0);
 
 			//vertical scroll bar
 			if(this.setVScrollBar(scrollInfo)){

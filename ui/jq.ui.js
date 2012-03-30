@@ -246,7 +246,7 @@
          * @title $.ui.goBack()
          */
         goBack: function() {
-            if (this.history.length > 0) {
+			if (this.history.length > 0) {
                 var tmpEl = this.history.pop();
                 this.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
                 this.transitionType = tmpEl.transition;
@@ -645,7 +645,7 @@
         addDivAndScroll: function(tmp, refreshPull, refreshFunc) {
 			var jsScroll = false;
 			//sets up scroll when required and not supported
-			if(!$.os.supportsNativeScroll&&tmp.style.overflow!='hidden'&&tmp.style.overflow!='visible') tmp.setAttribute("js-scrolling", "yes");
+			if(!$.os.supportsNativeTouchScroll&&tmp.style.overflow!='hidden'&&tmp.style.overflow!='visible') tmp.setAttribute("js-scrolling", "yes");
 			
             if (tmp.getAttribute("js-scrolling") && tmp.getAttribute("js-scrolling").toLowerCase() == "yes"){
 				tmp.style.overflow="hidden";
@@ -1088,7 +1088,7 @@
             this.backButton.className = "button";
             
             this.backButton.onclick = function() {
-                that.goBack();
+				that.goBack();
             };
             this.backButton.style.visibility = "hidden";
             this.titleBar = $am("pageTitle");

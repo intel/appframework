@@ -1482,7 +1482,7 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os.opera = userAgent.match(/Opera Mobi/) ? true : false;
             $.os.fennec = userAgent.match(/fennec/i) ? true : false;
             $.os.desktop = !($.os.ios || $.os.android || $.os.blackberry || $.os.opera || $.os.fennec);
-			$.os.supportsNativeScroll = $.os.desktop || ($.os.ios&&userAgent.match(/OS\s[5-9_]/) ? true : false);
+			$.os.supportsNativeTouchScroll = ($.os.ios&&userAgent.match(/OS\s[5-9_]/) ? true : false);
         }
         detectUA($, navigator.userAgent);
         $.__detectUA = detectUA; //needed for unit tests

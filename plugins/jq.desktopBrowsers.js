@@ -45,49 +45,65 @@
 		document.removeEventListener("click", preventClick, true);
 	};
 	
-	
-	var emulateTouchEvents = function() 
-	{
-	    this.mouseDown = false;
-		this.mouseMoving = false;
+    var mouseDown = false,
+		mouseMoving = false,
+		lastTarget = null;
 
-	    document.addEventListener("mousedown", function(e) 
-	    {
-			this.mouseDown = true;
-			this.mouseMoving = false;
-	        redirectMouseToTouch("touchstart", e);
-	    }, true);
+    document.addEventListener("mousedown", function(e) 
+    {
+		mouseDown = true;
+		mouseMoving = false;
+		lastTarget = e.target;
+        redirectMouseToTouch("touchstart", e);
+    }, true);
 
-	    document.addEventListener("mouseup", function(e) 
-	    {
-	        redirectMouseToTouch("touchend", e);
-			if(!this.mouseMoving){
-			    document.addEventListener("click", preventClick, true);
-			}
-	    }, true);
+    document.addEventListener("mouseup", function(e) 
+    {
+        redirectMouseToTouch("touchend", e);
+		if(!mouseMoving){
+		    document.addEventListener("click", preventClick, true);
+		}
+		mouseDown = false;
+		mouseMoving = false;
+    }, true);
 
-	    document.addEventListener("mousemove", function(e) 
-	    {
-	        if (!this.mouseDown)
-	            return;
-			this.mouseMoving = true;
-	        redirectMouseToTouch("touchmove", e);
-	    }, true);
+    document.addEventListener("mousemove", function(e) 
+    {
+        if (!mouseDown)
+            return;
+		mouseMoving = true;
+        redirectMouseToTouch("touchmove", e);
+    }, true);
 		
-		//prevent all mouse events which dont exist on touch devices
-	    document.addEventListener("drag", preventAll, true);
-		document.addEventListener("dragstart", preventAll, true);
-		document.addEventListener("dragenter", preventAll, true);
-		document.addEventListener("dragover", preventAll, true);
-		document.addEventListener("dragleave", preventAll, true);
-		document.addEventListener("dragend", preventAll, true);
-		document.addEventListener("drop", preventAll, true);
-		document.addEventListener("selectstart", preventAll, true);
-	}
-	emulateTouchEvents();
+    document.addEventListener("mouseout", function(e) 
+    {
+		if(mouseDown){
+		    e = e ? e : window.event;
+		    var from = e.relatedTarget || e.toElement;
+		    if (!from || from.nodeName == "HTML") {
+				var touchevt = document.createEvent("Event");
+			 	touchevt.initEvent("mouseup", true, true);
+		        touchevt.target = lastTarget;
+				lastTarget.dispatchEvent(touchevt);
+		    }
+		}
+    }, true);
+		
+		
+	//prevent all mouse events which dont exist on touch devices
+    document.addEventListener("drag", preventAll, true);
+	document.addEventListener("dragstart", preventAll, true);
+	document.addEventListener("dragenter", preventAll, true);
+	document.addEventListener("dragover", preventAll, true);
+	document.addEventListener("dragleave", preventAll, true);
+	document.addEventListener("dragend", preventAll, true);
+	document.addEventListener("drop", preventAll, true);
+	document.addEventListener("selectstart", preventAll, true);
+	
+	
 	window.addEventListener("resize",function(){
-	var touchevt = document.createEvent("Event");
-	 touchevt.initEvent("orientationchange", true, true);
+		var touchevt = document.createEvent("Event");
+	 	touchevt.initEvent("orientationchange", true, true);
 	    document.dispatchEvent(touchevt);
 	},false);
 	
