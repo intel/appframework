@@ -552,7 +552,8 @@
             var that = this;
             try {
                 if ($am(id)) {
-                    jq("#modalContainer").html('<div style="width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right"></div>'+$am(id).childNodes[0].innerHTML+'');
+                    //jq("#modalContainer").html('<div style="width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right"></div>'+$am(id).childNodes[0].innerHTML+'');
+                    jq("#modalContainer").html($am(id).childNodes[0].innerHTML+'');
                     jq('#modalContainer').append("<a href='javascript:;' onclick='$.ui.hideModal();' class='closebutton modalbutton'></a>");
                     this.modalWindow.style.display = "block";
                     
@@ -1665,7 +1666,7 @@
             el = document.getElementById(el);
         el.addEventListener('touchstart', this, false);
     }
-    var prevClickField;
+    
     NoClickDelay.prototype = {
         dX: 0,
         dY: 0,
@@ -1687,20 +1688,20 @@
         
         onTouchStart: function(e) {
             
-            if (fixInputHandlers(e))
-                return;
+            
             this.dX = e.touches[0].pageX;
             this.dY = e.touches[0].pageY;
-            if (prevClickField !== null && prevClickField !== undefined && jq.os.android) {
-                prevClickField.blur(); //We need to blur any input fields on android
-                prevClickField = null;
-            }
+           
             var theTarget = e.target;
             if (theTarget.nodeType == 3)
                 theTarget = theTarget.parentNode;
-            if(theTarget.tagName.toLowerCase()=="a"&& theTarget.href.indexOf("tel:")===0){}
+            var tagname = theTarget.tagName.toLowerCase();
+            if((tagname=="a"&& theTarget.href.indexOf("tel:")===0)||(tagname=="input"||tagname=="select"||tagname=="textarea")){
+                theTarget.focus();
+            }
             else
                 e.preventDefault();
+            
             this.moved = false;
             document.addEventListener('touchmove', this, true);
             document.addEventListener('touchend', this, true);
@@ -1710,7 +1711,7 @@
             this.moved = true;
             this.cX = e.touches[0].pageX - this.dX;
             this.cY = e.touches[0].pageY - this.dY;
-            e.preventDefault();
+           // e.preventDefault();
         },
         
         onTouchEnd: function(e) {
@@ -1736,56 +1737,11 @@
                     }
                 }
             }
-            prevClickField = null;
+            
             this.dX = this.cX = this.cY = this.dY = 0;
         }
     };
     
-    
-    function fixInputHandlers(e) {
-        if (!jq.os.android)
-            return;
-        var theTarget = e.touches[0].target;
-        if (theTarget && theTarget.type != undefined) {
-            var tagname = theTarget.tagName.toLowerCase();
-            var type=theTarget.type;
-             if (tagname == "select" || tagname == "input"||tagname == "textarea")  { // stuff we need to allow
-                //On Android 2.2+, the keyboard is broken when we apply -webkit-transform.  The hit box is moved and it no longer loses focus when you click out.
-                //What the following does is moves the div up so the text is not covered by the keyboard.
-                if (jq.os.android && (theTarget.type.toLowerCase() == "text" || theTarget.type.toLowerCase() == "textarea")) {
-                    var prevClickField = theTarget;
-                    var headerHeight = 0, 
-                    containerHeight = 0;
-                    if (jq(theTarget).closest("#content").length > 0) {
-                        headerHeight = parseInt(jq("#header").css("height"));
-                        containerHeight = parseInt(jq("#content").css("height")) / 2;
-                        var theHeight = e.touches[0].clientY - headerHeight / 2;
-                        if (theHeight > containerHeight && containerHeight > 0) {
-                            var el = jq(theTarget).closest(".panel").get();
-                            window.setTimeout(function() {
-                                $.ui.scrollingDivs[el.id].scrollBy({x: 0,y: theHeight - containerHeight}, 0);
-                            }, 1000);
-                        }
-                    } else if (jq(theTarget).closest("#jQui_modal").length > 0) {
-                        
-                        headerHeight = 0;
-                        containerHeight = parseInt(jq("#modalContainer").css("height")) / 2;
-                        var theHeight = e.touches[0].clientY - headerHeight / 2;
-                        
-                        if (theHeight > containerHeight && containerHeight > 0) {
-                            
-                            window.setTimeout(function() {
-                                this.scrollingDivs['modal'].scrollBy({x: 0,y: theHeight - containerHeight}, 0);
-                            }, 1000);
-                        }
-                    }
-                }
-                
-                return true;
-            }
-        }
-        return false;
-    }
     
     
     jq(document).ready(function() {
@@ -1808,6 +1764,7 @@
                 }
             }, false);
         }
+        
     });
     
     function checkAnchorClick(theTarget) {
