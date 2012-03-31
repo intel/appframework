@@ -49,7 +49,7 @@ if (!window.jq || typeof (jq) !== "function") {
             for (var i = 0; i < arr.length; i++) {
                 if (arr.indexOf(arr[i]) != i) {
                     arr.splice(i, 1);
-                    continue;
+                    i--;
                 }
             }
             return arr;
