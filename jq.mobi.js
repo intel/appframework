@@ -270,7 +270,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @title $.isArray(param)
         */
         $.isArray = function(obj) {
-            return obj != undefined && obj instanceof Array && obj['push'] != undefined; //ios 3.1.3 doesn't have Array.isArray
+            return obj instanceof Array && obj['push'] != undefined; //ios 3.1.3 doesn't have Array.isArray
         };
 
         /**
@@ -285,7 +285,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @title $.isFunction(param)
         */
         $.isFunction = function(obj) {
-            return obj != undefined && typeof obj === "function";
+            return typeof obj === "function";
         };
         /**
         * Checks to see if the parameter is a object
@@ -299,7 +299,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @title $.isObject(param)
         */
         $.isObject = function(obj) {
-            return obj != undefined && typeof obj === "object";
+            return typeof obj === "object";
         }
 
 
