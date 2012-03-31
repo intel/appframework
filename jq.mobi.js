@@ -69,7 +69,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 return elems;
             
             for (; nodes; nodes = nodes.nextSibling) {
-                if (nodes.nodeType == 1 && nodes !== element) {
+                if (nodes.nodeType == document.ELEMENT_NODE && nodes !== element) {
                     elems.push(nodes);
                 }
             }
