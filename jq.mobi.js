@@ -1889,7 +1889,6 @@ if (!window.jq || typeof (jq) !== "function") {
         window.numOnly = function numOnly(val) {
             if (isNaN(parseFloat(val)))
                 val = val.replace(/[^0-9.-]/, "");
-            
             return parseFloat(val);
         }
     }
