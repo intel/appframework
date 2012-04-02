@@ -199,7 +199,6 @@ width:100%;
 	top:48px;
 	bottom:62px;
 	left:0px;right:0px;
-	overflow:hidden;
 } /* Accounts for positioning of the content area, which is everything below the header and above the navbar. */
 
 .panel {
@@ -211,7 +210,7 @@ width:100%;
 	position:absolute; top:0px; left:-100%;
 	overflow:hidden;
 	background:rgba(19,29,38,1);
-	-webkit-transform:translate3d(0,0,0);
+	
 	-webkit-perspective: 1000;
     margin-top:10px;
     margin-bottom:10px;
@@ -654,6 +653,7 @@ input.jq-ui-forms[type=checkbox] ,input.jq-ui-forms[type=radio]  {
 	-webkit-appearance: none;
 	opacity:0;
 	margin-bottom:30px;
+    width:0px;
 } /* Blocks rendering of the native radio controls. */
 
 input.jq-ui-forms[type=checkbox] + label,input.jq-ui-forms[type=radio] + label { 

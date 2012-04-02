@@ -184,7 +184,6 @@ body[orient="landscape"] > #header > h1 {
 	top:48px;
 	bottom:62px;
 	left:0px;right:0px;
-	overflow:hidden;
 } /* Accounts for positioning of the content area, which is everything below the header and above the navbar. */
 
 .panel {
@@ -196,7 +195,7 @@ body[orient="landscape"] > #header > h1 {
 	position:absolute; top:0px; left:-100%;
 	overflow:hidden;
 	background:transparent;
-	-webkit-transform:translate3d(0,0,0);
+	
 	-webkit-perspective:1000;
 } /* This class is applied to the divs that contain the various "views" or pages of the app. */
 
@@ -576,6 +575,7 @@ input.jq-ui-forms[type=checkbox], input.jq-ui-forms[type=radio]  {
 	-webkit-appearance:none;
 	opacity:0;
 	margin-bottom:30px;
+    width:0px;
 } /* Blocks rendering of the native radio controls. */
 
 input.jq-ui-forms[type=checkbox] + label,input.jq-ui-forms[type=radio] + label { 
