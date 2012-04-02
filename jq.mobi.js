@@ -1886,7 +1886,7 @@ if (!window.jq || typeof (jq) !== "function") {
     '$' in window || (window.$ = jq);
     //Helper function used in jq.mobi.plugins.
     if (!window.numOnly) {
-        function numOnly(val) {
+        window.numOnly = function numOnly(val) {
             if (isNaN(parseFloat(val)))
                 val = val.replace(/[^0-9.-]/, "");
             
