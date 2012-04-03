@@ -133,7 +133,7 @@
 			lock:function(){
 				if(this.scrollingLocked) return;
 				this.scrollingLocked=true;
-				this.rememberEventsActive = this.eventsActive);
+				this.rememberEventsActive = this.eventsActive;
 				if(!this.eventsActive){
 					this.initEvents();
 				}
@@ -156,7 +156,7 @@
             this.container = this.el.parentNode;
 
 			this.addPullToRefresh(null, true);
-            this.initEvents();
+            //this.enable();
             var windowHeight = window.innerHeight;
             var windowWidth = window.innerWidth;
                 
@@ -195,14 +195,10 @@
 			//this.refresh=true;
 			
 			this.el.style.overflow='auto';
-            if(this.verticalScroll) this.el.style.overflowY='auto';
-            if(this.horizontalScroll) this.el.style.overflowX='auto';
-            
-			
 			
 			this.container = this.el;
 			this.addPullToRefresh(null, true);
-			this.initEvents();
+			//this.enable();
 		}
 		nativeScroller.prototype = new scrollerCore();
 		jsScroller.prototype = new scrollerCore();
@@ -216,12 +212,12 @@
 			this.dY = this.cY = 0;
 			this.cancelPropagation = false;
 		}
-        nativeScroller.prototype.initEvents=function () {
+        nativeScroller.prototype.enable=function () {
             if(this.refresh) this.el.addEventListener('touchstart', this, false);
 			this.el.addEventListener('scroll', this, false);
 			this.eventsActive = true;
         }
-        nativeScroller.prototype.removeEvents=function () {
+        nativeScroller.prototype.disable=function () {
             this.el.removeEventListener('touchstart', this, false);
 			this.el.removeEventListener('scroll', this, false);
 			this.eventsActive = false;
@@ -351,13 +347,13 @@
             scrollDiv.style.background = "black";
             return scrollDiv;
         }
-        jsScroller.prototype.initEvents=function () {
+        jsScroller.prototype.enable=function () {
     		this.el.addEventListener('touchstart', this, false);
             this.el.addEventListener('touchmove', this, false);
 			this.el.addEventListener('touchend', this, false);
 			this.eventsActive = true;
         }
-        jsScroller.prototype.removeEvents=function () {
+        jsScroller.prototype.disable=function () {
         	this.el.removeEventListener('touchstart', this, false);
             this.el.removeEventListener('touchmove', this, false);
 			this.el.removeEventListener('touchend', this, false);

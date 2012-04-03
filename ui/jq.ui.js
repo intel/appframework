@@ -362,27 +362,25 @@
 			var els = jq("#content, #menu, #header, #navbar");
 			
             if (menu.css("display") != "block" && ((force !== undefined && force !== false) || force === undefined)) {
-                this.scrollingDivs["menu_scroller"].initEvents();
+				this.scrollingDivs["menu_scroller"].enable();
 				menu.show();
                 setTimeout(function() {
                     els.replaceClass("to-off off on", "to-on");
-					els.one("webkitTransitionEnd", function(e){
-						var el = jq(e.target);
-						el.replaceClass("to-off off to-on", "on");
+					setTimeout(function(){
+						els.replaceClass("to-off off to-on", "on");
 						if(callback) callback();
-					});
+					}, 175);	//temporary fix until css3Animate supports classes
                 }, 1); //needs to run after
 				
             
             } else if (force === undefined || (force !== undefined && force === false)) {
-                this.scrollingDivs["menu_scroller"].removeEvents();
+                this.scrollingDivs["menu_scroller"].disable();
 				els.replaceClass("on off to-on", "to-off");
-				els.one("webkitTransitionEnd", function(e){
-					var el = jq(e.target);
-					el.replaceClass("to-off on to-on", "off");
-					if(e.target.id == 'menu') el.hide();
+				setTimeout(function(){
+					els.replaceClass("to-off on to-on", "off");
+					menu.hide();
 					if(callback) callback();
-				});
+				}, 175);	//temporary fix until css3Animate supports classes
             }
         },
 		disableSideMenu:function(){
@@ -566,7 +564,7 @@
                     
                     button = null;
                     content = null;
-                    this.scrollingDivs['modal_container'].initEvents();
+                    this.scrollingDivs['modal_container'].enable();
                     this.scrollToTop('modal');
                 }
             } catch (e) {
@@ -584,7 +582,7 @@
             $am("modalContainer").innerHTML = "";
             $am("jQui_modal").style.display = "none";
             
-            this.scrollingDivs['modal_container'].removeEvents();
+            this.scrollingDivs['modal_container'].disable();
         },
 
         /**
@@ -691,7 +689,7 @@
 					cancel: null
 				}
             }));
-            this.scrollingDivs[scrollEl.id].removeEvents();
+            //this.scrollingDivs[scrollEl.id].disable(); //changed the default behaviour in scroller plugin for performance
 			tmp = null;
 			scrollEl = null;
         },
@@ -1008,10 +1006,10 @@
                     this.backButton.style.visibility = "visible";
                 this.activeDiv = what;
                 if (this.scrollingDivs[this.activeDiv.id]) {
-                    this.scrollingDivs[this.activeDiv.id].initEvents();
+                    this.scrollingDivs[this.activeDiv.id].enable();
                 }
                 if (this.scrollingDivs[oldDiv.id]) {
-                    this.scrollingDivs[oldDiv.id].removeEvents();
+                    this.scrollingDivs[oldDiv.id].disable();
                 }
                 //Let's check if it has a function to run to update the data
                 this.parsePanelFunctions(what, oldDiv);
@@ -1154,7 +1152,7 @@
                 // Fix a bug in iOS where translate3d makes the content blurry
                 this.activeDiv = this.firstDiv;
                 if (this.scrollingDivs[this.activeDiv.id]) {
-                    this.scrollingDivs[this.activeDiv.id].initEvents();
+                    this.scrollingDivs[this.activeDiv.id].enable();
                 }
                 window.setTimeout(function() {
                     //activeDiv = firstDiv;
