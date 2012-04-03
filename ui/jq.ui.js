@@ -1119,15 +1119,35 @@
                 el = null;
             }
             contentDivs = null;
-            for (var j in defer) {
-                (function(j) {
-                    jq.ajax({url:AppMobi.webRoot + defer[j], success:function(data) {
-                        if (data.length == 0)
-                            return;
-                        $.ui.updateContentDiv(j, data);
-                        that.parseScriptTags(jq(j).get());
-                    },error:function(msg){console.log("Error with deferred load "+defer[j])}});
-                })(j);
+            var loadingDefer=false;
+            var toLoad=Object.keys(defer).length;
+            if(toLoad>0){
+                loadingDefer=true;
+                var loaded=0;
+                for (var j in defer) {
+                    (function(j) {
+                        jq.ajax({url:AppMobi.webRoot + defer[j], success:function(data) {
+                            if (data.length == 0)
+                                return;
+                            $.ui.updateContentDiv(j, data);
+                            that.parseScriptTags(jq(j).get());
+                            loaded++;
+                            if(loaded>=toLoad){
+                               $(document).trigger("defer:loaded");
+                               loadingDefer=false;
+                               
+                            }
+                        },error:function(msg){
+                            //still trigger the file as being loaded to not block jq.ui.ready
+                            console.log("Error with deferred load "+AppMobi.webRoot+defer[j])
+                            loaded++;
+                            if(loaded>=toLoad){
+                               $(document).trigger("defer:loaded");
+                               loadingDefer=false;
+                            }
+                        }});
+                    })(j);
+                }
             }
             if (this.firstDiv) {
                 
@@ -1137,7 +1157,9 @@
                 if (this.scrollingDivs[this.activeDiv.id]) {
                     this.scrollingDivs[this.activeDiv.id].initEvents();
                 }
-                window.setTimeout(function() {
+                
+                //window.setTimeout(function() {
+                var loadFirstDiv=function(){
                     //activeDiv = firstDiv;
                     that.firstDiv.style.display = "block";
                     that.css3animate(that.firstDiv, {
@@ -1148,7 +1170,7 @@
                         that.titleBar.innerHTML = that.activeDiv.title;
                     that.parsePanelFunctions(that.activeDiv);
                     //Load the default hash
-                    if (defaultHash.length > 0&&that.loadDefaultHash) 
+                    if (defaultHash.length > 0) 
                     {
                         that.loadContent(defaultHash);
                     }
@@ -1162,7 +1184,12 @@
                     that.defaultMenu = jq(firstMenu).children();
                     
                     that.updateSideMenu(that.defaultMenu);
-                }, 100);
+                };
+                if(loadingDefer){
+                    $(document).one("defer:loaded",loadFirstDiv);
+                }
+                else
+                    window.setTimeout(loadFirstDiv,100);
             }
            
         },
