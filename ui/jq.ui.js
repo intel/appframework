@@ -37,6 +37,8 @@
             that.goBack();
         }, false);
 		
+		this.togglingSideMenu = false;
+		
         /**
          * Helper function to setup the transition objects
          * Custom transitions can be added via $.ui.availableTransitions
@@ -355,6 +357,8 @@
          * @title $.ui.toggleSideMenu([force])
          */
         toggleSideMenu: function(force, callback) {
+			if(this.togglingSideMenu) return;	//just in case...
+			this.togglingSideMenu=true;
             var that = this;
             if (!jq("#content").hasClass("hasMenu"))
                 return;
@@ -368,6 +372,7 @@
                     els.replaceClass("to-off off on", "to-on");
 					setTimeout(function(){
 						els.replaceClass("to-off off to-on", "on");
+						that.togglingSideMenu=false;
 						if(callback) callback();
 					}, 175);	//temporary fix until css3Animate supports classes
                 }, 1); //needs to run after
@@ -379,6 +384,7 @@
 				setTimeout(function(){
 					els.replaceClass("to-off on to-on", "off");
 					menu.hide();
+					that.togglingSideMenu=false;
 					if(callback) callback();
 				}, 175);	//temporary fix until css3Animate supports classes
             }

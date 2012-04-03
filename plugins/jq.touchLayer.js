@@ -36,11 +36,8 @@
 		panElementId: "header",
 		scrollingEl: null,
 		isScrolling: false,
-		beenScrolling: false,
 		currentMomentum: 0,
 		startTime:0,
-		previousStartedAtTop: false,
-		previousStartedAtBottom:false,
 		isScrollingVertical: false,
         handleEvent: function(e) {
             switch (e.type) {
@@ -52,9 +49,6 @@
                     break;
                 case 'touchend':
                     this.onTouchEnd(e);
-                    break;
-                case 'scroll':
-                    this.onScroll(e);
                     break;
             }
         },
@@ -99,8 +93,10 @@
 			this.checkDOMTree(e.target, this.layer);
 			if(!this.isScrolling && !this.isPanning) {
 				e.preventDefault();
-			} else if(this.isScrollingVertical && !this.beenScrolling){
-				this.demandVerticalScroll();
+			} else if(this.isScrollingVertical && !this.demandVerticalScroll()){
+				console.log("prevented touchstart!!");
+				e.preventDefault();
+				return;
 			}
 			document.addEventListener('touchmove', this, false);
 			document.addEventListener('touchend', this, false);
@@ -117,14 +113,7 @@
 					this.scrollingEl.scrollTop=this.scrollingEl.scrollHeight-this.scrollingEl.clientHeight-1;
 				}
 			}
-		},
-		onScroll:function(e){
-			if(!this.isScrolling) {
-				this.beenScrolling = false;
-				this.previousStartedAtTop = false;
-				this.previousStartedAtBottom = false;
-				e.target.removeEventListener('scroll', this, false);
-			}
+			return true;
 		},
 		//set rules here to ignore scrolling check on these elements
 		ignoreScrolling:function(el){
@@ -191,59 +180,26 @@
 			this.cX = e.touches[0].pageX - this.dX;
 			
 			if(this.isPanning) {
+				console.log("prevent touchmove - panning");
 				this.moved = true;
+				document.removeEventListener('touchmove', this, false);
 				return;
 			}
 
 			if(!this.isScrolling){
+				console.log("prevent touchmove - not native scroll");
 				//legacy stuff for old browsers
 	            e.preventDefault();
 				this.moved = true;
 				return;
-				
-			//otherwise it is a native scroll
-			} else if(this.isScrollingVertical && this.isGoingToBump()){
-				e.preventDefault();
 			}
+			
+			//otherwise it is a native scroll
+			
 			//let's clear events for performance
             document.removeEventListener('touchmove', this, false);
 			document.removeEventListener('touchend', this, false);
         },
-		
-		isGoingToBump:function(){
-			
-			//if at top or bottom allow scroll
-			var atTop = this.scrollingEl.scrollTop<=0;
-			if(atTop){
-				if(this.beenScrolling && !this.previousStartedAtTop) {
-					this.previousStartedAtTop = false;
-					this.beenScrolling = false;
-					return true;
-				} else {
-					this.scrollingEl.scrollTop=1;
-					this.beenScrolling = true;
-					this.previousStartedAtTop = true;
-				}
-			} else {
-				var scrollHeight = this.scrollingEl.scrollTop+this.scrollingEl.clientHeight;
-				var atBottom = scrollHeight>=this.scrollingEl.scrollHeight;
-				if(atBottom) {
-					if(this.beenScrolling && !this.previousStartedAtBottom) {
-						this.previousStartedAtBottom = false;
-						this.beenScrolling = false;
-						return true;
-					} else {
-						this.scrollingEl.scrollTop=this.scrollingEl.scrollHeight-this.scrollingEl.clientHeight-1;
-						this.beenScrolling = true;
-						this.previousStartedAtBottom = true;
-					}
-				} else {
-					this.beenScrolling = true;
-				}
-			}
-			this.scrollingEl.addEventListener('scroll', this, false);
-			return false;
-		},
 		
         
         onTouchEnd: function(e) {
