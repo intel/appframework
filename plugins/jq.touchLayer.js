@@ -104,6 +104,7 @@
 			document.addEventListener('touchend', this, false);
         },
 		debugVars:function(start){
+			return;	//comment to test
 			console.log($.debug.since()+start);
 			console.log(
 				(this.moved?"move ":"") +
