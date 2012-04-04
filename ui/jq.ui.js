@@ -100,7 +100,7 @@
            ```
          *@title $.ui.loadDefaultHash
          */
-        loadDefaulHash:true,
+        loadDefaultHash:true,
         /**
          * This is a shorthand call to the jq.actionsheet plugin.  We wire it to the jQUi div automatically
            ```
@@ -404,6 +404,9 @@
 		isSideMenuEnabled:function(){
 			return jq("#content").hasClass("hasMenu");
 		},
+		isSideMenuOn:function(){
+			return this.isSideMenuEnabled() && jq("#content").hasClass("on");
+		},
 		
         /**
          * Re-wire events on the bottom navbar after content has been updateded
@@ -467,6 +470,7 @@
          * @title $.ui.updateSideMenu(Elements)
          */
         updateSideMenu: function(elems) {
+			
             var that = this;
             
             var nb = jq("#menu_scroller");
@@ -786,11 +790,12 @@
             }, 10);
             var hasMenu = what.getAttribute("data-nav");
             if (hasMenu && this.customMenu != hasMenu) {
-                this.customMenu = hasMenu;
+				this.customMenu = hasMenu;
                 this.updateSideMenu(jq("#" + hasMenu).children());
             } else if (hasMenu != this.customMenu) {
-                if (this.customMenu)
-                    this.updateSideMenu(this.defaultMenu);
+                if (this.customMenu){
+					this.updateSideMenu(this.defaultMenu);
+                }  
                 this.customMenu = false;
             }
             
@@ -805,9 +810,9 @@
                     window[fnc](oldDiv);
                 }
             }
-            if (this.menu.style.display == "block")
-                this.toggleSideMenu(); //Close on phones to prevent orientation change bug.
-        
+            if (this.isSideMenuOn()){
+				this.toggleSideMenu(false);
+            }
         },
         /**
          * Helper function that parses a contents html for any script tags and either adds them or executes the code
@@ -1174,7 +1179,7 @@
                         that.titleBar.innerHTML = that.activeDiv.title;
                     that.parsePanelFunctions(that.activeDiv);
                     //Load the default hash
-                    if (defaultHash.length > 0) 
+                    if (defaultHash.length > 0 && that.loadDefaultHash) 
                     {
                         that.loadContent(defaultHash);
                     }

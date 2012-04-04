@@ -75,6 +75,7 @@
             this.dY = e.touches[0].pageY;
 			
             if (this.fixInputHandlers(e)) {
+				this.debugVars("touchstart: stopped at fixInputHandlers");
                 return;
 			} else {
 				this.allowDocumentScroll=false;
@@ -94,13 +95,23 @@
 			if(!this.isScrolling && !this.isPanning) {
 				e.preventDefault();
 			} else if(this.isScrollingVertical && !this.demandVerticalScroll()){
-				console.log("prevented touchstart!!");
+				this.debugVars("touchstart: stopped at demandVerticalScroll");
 				e.preventDefault();
 				return;
 			}
+			this.debugVars("touchstart");
 			document.addEventListener('touchmove', this, false);
 			document.addEventListener('touchend', this, false);
         },
+		debugVars:function(start){
+			console.log($.debug.since()+start);
+			console.log(
+				(this.moved?"move ":"") +
+				(this.isPanning?"panning ":"") +
+				(this.isScrolling?"scrolling ":"") +
+				(this.scrollingEl?"scrolltop "+this.scrollingEl.scrollTop+" ":"")
+			);
+		},
 		demandVerticalScroll:function(){
 			//if at top or bottom adjust scroll
 			var atTop = this.scrollingEl.scrollTop<=0;
@@ -180,21 +191,22 @@
 			this.cX = e.touches[0].pageX - this.dX;
 			
 			if(this.isPanning) {
-				console.log("prevent touchmove - panning");
 				this.moved = true;
 				document.removeEventListener('touchmove', this, false);
+				this.debugVars("touchmove: panning");
 				return;
 			}
 
 			if(!this.isScrolling){
-				console.log("prevent touchmove - not native scroll");
 				//legacy stuff for old browsers
 	            e.preventDefault();
 				this.moved = true;
+				this.debugVars("touchmove: not scrolling");
 				return;
 			}
 			
 			//otherwise it is a native scroll
+			this.debugVars("touchmove");
 			
 			//let's clear events for performance
             document.removeEventListener('touchmove', this, false);
@@ -205,7 +217,6 @@
         onTouchEnd: function(e) {
 			
 			var itMoved = $.os.blackberry ? (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5) : this.moved;
-			//console.log("touchend "+e.target.id+" "+this.isPanning+" "+this.isScrolling+" "+itMoved);
 			
 			if(this.isPanning && itMoved){
 				//wait 2 secs and cancel
@@ -221,20 +232,33 @@
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
-            
-                
-                if (checkAnchorClick(theTarget,this.isScrolling))
-                {
-                    return false;
-                }
                
-				if(!this.isScrolling){
-                	var theEvent = document.createEvent('MouseEvents');
-                	theEvent.initEvent('click', true, true);
-					if(e.mouseToTouch) theEvent.mouseToTouch = true;
-					//console.log("dispatching event click to "+e.target.id);
-                	theTarget.dispatchEvent(theEvent);
+				//SIMULATES A REAL CLICK EVENT ON TARGET
+				//create click event and let it bubble normally
+            	var theEvent = document.createEvent('MouseEvents');
+            	theEvent.initEvent('click', true, true);
+				theEvent.target = e.target;
+				//jq.DesktopBrowsers flag
+				if(e.mouseToTouch) theEvent.mouseToTouch = true;
+					
+				//Setup to act when event finishes bubbling
+				var callbackEvent=function(clickEvent){
+					checkAnchorClick(clickEvent);
+					document.removeEventListener('click', callbackEvent, false);
 				}
+				document.addEventListener('click', callbackEvent, false);
+				var oldPrevent = theEvent.preventDefault;
+				//cancel both the click event and our callback
+				theEvent.preventDefault = function(){
+					document.removeEventListener('click', callbackEvent, false);
+					oldPrevent.call(theEvent);
+				}
+				
+				//TODO: Known loophole
+				// If .stopPropagation() but no .preventDefault() we cannot prevent the click event on the element and replace with our own...
+            	theTarget.dispatchEvent(theEvent);
+				
+				
                 if (theTarget && theTarget.type != undefined) {
                     var tagname = theTarget.tagName.toLowerCase();
                     if (tagname == "select" || (tagname == "input" && (theTarget.type=="text"||theTarget.type=="password")) ||  tagname == "textarea") {
@@ -243,6 +267,7 @@
                     }
                 }
             }
+			this.debugVars("touchend");
 			
 			this.isPanning = false;
 			this.isScrolling = false;
@@ -303,54 +328,46 @@
 	//debug
 	//touchLayer = $.debug.type(touchLayer, 'touchLayer');
     
-    function checkAnchorClick(theTarget,nativeScrolling) {
+    function checkAnchorClick(e) {
+		theTarget = e.target;
+		
         var parent = false;
+		//this technique fails when considerable content exists inside anchor, should be recursive ?
         if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
             parent = true, theTarget = theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
-        if (theTarget.tagName.toLowerCase() == "a") {
+			
+		//anchors
+		if (theTarget.tagName.toLowerCase() == "a") {
             if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1||theTarget.getAttribute("data-ignore")) {
-                return false;
-            }
-
-            if (theTarget.onclick && !jq.os.desktop && !nativeScrolling){
-                theTarget.onclick();
-                //$(theTarget).trigger("click");
+                return;
             }
             
-            
+            //external links
             if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) 
             {
                 if (theTarget.href.toLowerCase().indexOf("javascript:") != 0) {
-                    if (jq.ui.isAppMobi)
-                        AppMobi.device.launchExternal(theTarget.href);
-                    else if (!jq.os.desktop)
-                        brokerClickEventMobile(theTarget);
-                    else
-                        window.open(theTarget);
-                    return true;
+                    if (jq.ui.isAppMobi) {
+                    	e.preventDefault();
+						AppMobi.device.launchExternal(theTarget.href);
+                    } else if (!jq.os.desktop){
+                    	e.target.target = "_blank";
+                    }
                 }
-                return false;
+                return;
             }
+			
+			//empty links
             if ((theTarget.href.indexOf("#") !== -1 && theTarget.hash.length == 0)||theTarget.href.length==0)
-                return true;
+                return;
             
             
-            
+			//internal links
+			e.preventDefault();
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
             resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
             var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
-            
             jq.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
-            return true;
         }
-    }
-    function brokerClickEventMobile(theTarget) {
-        if (jq.os.desktop)
-            return;
-        var clickevent = document.createEvent('Event');
-        clickevent.initEvent('click', true, false);
-        theTarget.target = "_blank";
-        theTarget.dispatchEvent(clickevent);
     }
 })();

@@ -102,11 +102,14 @@
 				if(rEl) this.refreshElement=rEl; 
 	            //Add the pull to refresh text.  Not optimal but keeps from others overwriting the content and worrying about italics
                 //add the refresh div
-				var orginalEl = document.getElementById(this.container.id + "_pulldown");
-				if(this.refreshElement==null && orginalEl==null){
-	                var jqEl = jq("<div id='" + this.container.id + "_pulldown' class='jqscroll_refresh' style='border-radius:.6em;border: 1px solid #2A2A2A;background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#666666),color-stop(1,#222222));background:#222222;margin:0px;height:60px;position:relative;text-align:center;line-height:60px;color:white;width:100%;'>Pull to Refresh</div>");
-				} else if(orginalEl!=null) {
-					var jqEl = jq(orginalEl);
+				
+				if(this.refreshElement==null){
+					var orginalEl = document.getElementById(this.container.id + "_pulldown");
+					if(orginalEl!=null){
+						var jqEl = jq(orginalEl);
+					} else {
+						var jqEl = jq("<div id='" + this.container.id + "_pulldown' class='jqscroll_refresh' style='border-radius:.6em;border: 1px solid #2A2A2A;background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#666666),color-stop(1,#222222));background:#222222;margin:0px;height:60px;position:relative;text-align:center;line-height:60px;color:white;width:100%;'>Pull to Refresh</div>");
+					}
 				} else {
 					var jqEl = jq(this.refreshElement);
 				}
@@ -266,7 +269,7 @@
 			}
 			
 			this.cY = newcY;
-			e.stopPropagation();
+			//e.stopPropagation();
         }
         nativeScroller.prototype.onTouchEnd=function (e) {
 			var triggered = this.el.scrollTop<=0;
@@ -275,7 +278,7 @@
 			this.dY = this.cY = 0;
 			this.el.removeEventListener('touchmove', this, false);
 			this.el.removeEventListener('touchend', this, false);
-			e.stopPropagation();
+			//e.stopPropagation();
         }
 		nativeScroller.prototype.hideRefresh=function(){
 			var that = this;
