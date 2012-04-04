@@ -1170,7 +1170,7 @@
                         that.titleBar.innerHTML = that.activeDiv.title;
                     that.parsePanelFunctions(that.activeDiv);
                     //Load the default hash
-                    if (defaultHash.length > 0) 
+                    if (defaultHash.length > 0 && that.loadDefaultHash)
                     {
                         that.loadContent(defaultHash);
                     }
