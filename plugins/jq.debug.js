@@ -1,7 +1,7 @@
 /**
  * jq.debug - general and performance debug plugin
  * @copyright 2012 - Carlos Ouro @ Badoo
- * Use like $ui.launch=$.debug($ui.launch);
+ * Use like $ui=$.debug.type($ui);
  */ 
  (function ($) {
 	 //you can override this one to have your own 
@@ -26,6 +26,8 @@
 		 }
 	 }
 	 var getContent=function(obj, allowRecursive){
+		 if(obj===null) return null;
+		 
 		 curType = typeof obj;
 			 
 		 if(curType== 'number'){
@@ -46,7 +48,8 @@
 				return str+"]";
 			 }
 		 } else if(curType == 'object'){
-			 if(allowRecursive && Object.keys(obj).length<=maxObjectItems){
+			 var isMobi = $.is$(obj);
+			 if(!isMobi && allowRecursive && Object.keys(obj).length<=maxObjectItems){
 				 var str = "{";
 				 var firstItem = true;
 			 	for(el in obj){
@@ -56,11 +59,14 @@
 			 	}
 				return str+"}";
 			} else {
-				if(obj.length==1 && typeof obj.get == 'function') {
-					obj = obj.get();
-				}
-				if(typeof obj.tagName == 'string'){
-					return "["+obj.tagName+(obj.id?" #"+obj.id:"")+"]";
+				if(isMobi){
+					var str = "$("+obj[0].tagName+(obj[0].id?"#"+obj[0].id:"");
+					for(var i = 0; i<obj.length; i++){
+						str+=", "+oobj[i].tagName+(obj[i].id?"#"+obj[i].id:"");
+					}
+					return str+")";
+				} else if(obj.tagName!==undefined && typeof obj.tagName == 'string'){
+					return "["+obj.tagName+(obj.id?"#"+obj.id:"")+"]";
 				}
 			}
 		 }

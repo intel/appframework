@@ -25,7 +25,6 @@
             return;
         var translateOpen = 'm11' in new WebKitCSSMatrix() ? "3d(" : "(";
         var translateClose = 'm11' in new WebKitCSSMatrix() ? ",0)" : ")";
-        var touchStarted = false;
 		var jsScroller, nativeScroller;
 		
 		//initialize and js/native mode selector
@@ -160,8 +159,6 @@
 
 			this.addPullToRefresh(null, true);
             //this.enable();
-            var windowHeight = window.innerHeight;
-            var windowWidth = window.innerWidth;
                 
             //create vertical scroll
             if (this.verticalScroll && this.verticalScroll == true && this.scrollBars == true) {
@@ -332,7 +329,7 @@
             this.lastScrollbar="";
             this.finishScrollingObject=null;
             this.container=null;
-            this.scrollingFinishCB=false;
+            this.scrollingFinishCB=null;
 			
 			this.configSpeedSignificance = .75;
 			this.significantMovementLength = 15;
@@ -385,9 +382,14 @@
         jsScroller.prototype.onTouchStart=function(event) {
 			if (!this.container)
                 return;
-			if(this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
-            if(this.scrollingFinishCB) clearTimeout(this.scrollingFinishCB);
-            touchStarted = true;
+			if(this.refreshCancelCB) {
+				clearTimeout(this.refreshCancelCB);
+				this.refreshCancelCB = null;
+			}
+            if(this.scrollingFinishCB) {
+				clearTimeout(this.scrollingFinishCB);
+				this.scrollingFinishCB=null;
+			}
 			
 			//disable if locked
 			if(event.touches.length != 1 || this.boolScrollLock) return;
@@ -752,8 +754,7 @@
 			
 			var that = this;
 			this.scrollingFinishCB=setTimeout(function(){that.hideScrollbars();if(that.onScroll) that.onScroll();},scrollInfo.duration);
-			
-            touchStarted = false;
+
         }
         jsScroller.prototype.scrollerMoveCSS=function(el, distanceToMove, time, timingFunction) {
             if (!time)

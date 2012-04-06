@@ -10,6 +10,7 @@
 	//handles overlooking panning on titlebar, bumps on native scrolling and no delay on click
 	var touchLayer = function(el) {
         el.addEventListener('touchstart', this, false);
+		el.addEventListener('click', this, false);
 		this.ignoreNextScroll = true;
 		var that = this;
 		document.addEventListener('scroll', function(e){
@@ -50,6 +51,9 @@
                 case 'touchend':
                     this.onTouchEnd(e);
                     break;
+				case 'click':
+					this.onClick(e);
+					break;
             }
         },
 		hideAddressBar:function() {
@@ -99,7 +103,7 @@
 				e.preventDefault();
 				return;
 			}
-			this.debugVars("touchstart");
+			//this.debugVars("touchstart");
 			document.addEventListener('touchmove', this, false);
 			document.addEventListener('touchend', this, false);
         },
@@ -207,7 +211,7 @@
 			}
 			
 			//otherwise it is a native scroll
-			this.debugVars("touchmove");
+			//this.debugVars("touchmove");
 			
 			//let's clear events for performance
             document.removeEventListener('touchmove', this, false);
@@ -219,15 +223,16 @@
 			
 			var itMoved = $.os.blackberry ? (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5) : this.moved;
 			
+			var that = this;
+			
 			if(this.isPanning && itMoved){
 				//wait 2 secs and cancel
-				var that = this;
 				setTimeout(function(){
 					that.hideAddressBar();
 				}, 2000);
 			}
 			
-			if(!this.isScrolling) e.preventDefault();
+			if(!this.isScrolling || !this.moved) e.preventDefault();
 			
             if (!itMoved) {
                 var theTarget = e.target;
@@ -241,34 +246,11 @@
 				theEvent.target = e.target;
 				//jq.DesktopBrowsers flag
 				if(e.mouseToTouch) theEvent.mouseToTouch = true;
-					
-				//Setup to act when event finishes bubbling
-				var callbackEvent=function(clickEvent){
-					checkAnchorClick(clickEvent);
-					document.removeEventListener('click', callbackEvent, false);
-				}
-				document.addEventListener('click', callbackEvent, false);
-				var oldPrevent = theEvent.preventDefault;
-				//cancel both the click event and our callback
-				theEvent.preventDefault = function(){
-					document.removeEventListener('click', callbackEvent, false);
-					oldPrevent.call(theEvent);
-				}
+				//dispatch event immediatly (to another thread)
+				setTimeout(function(){theTarget.dispatchEvent(theEvent);},0);
 				
-				//TODO: Known loophole
-				// If .stopPropagation() but no .preventDefault() we cannot prevent the click event on the element and replace with our own...
-            	theTarget.dispatchEvent(theEvent);
-				
-				
-                if (theTarget && theTarget.type != undefined) {
-                    var tagname = theTarget.tagName.toLowerCase();
-                    if (tagname == "select" || (tagname == "input" && (theTarget.type=="text"||theTarget.type=="password")) ||  tagname == "textarea") {
-                        this.allowDocumentScroll = true;
-						theTarget.focus();
-                    }
-                }
             }
-			this.debugVars("touchend");
+			//this.debugVars("touchend");
 			
 			this.isPanning = false;
 			this.isScrolling = false;
@@ -276,8 +258,24 @@
             this.dX = this.cX = this.cY = this.dY = 0;
             document.removeEventListener('touchmove', this, false);
             document.removeEventListener('touchend', this, false);
+			console.log("finished touchend");
 			
         },
+		
+		onClick:function(e){
+			var theTarget = e.target;
+			
+			if(this.checkAnchorClick(e, theTarget)) return;
+			
+            if (theTarget && theTarget.type != undefined) {
+                var tagname = theTarget.tagName.toLowerCase();
+                if (tagname == "select" || (tagname == "input" && (theTarget.type=="text"||theTarget.type=="password")) ||  tagname == "textarea") {
+                    this.allowDocumentScroll = true;
+					theTarget.focus();
+					return;
+                }
+            }
+		},
 		
 		fixInputHandlers:function(e) {
 	        if (!jq.os.android)
@@ -323,52 +321,56 @@
 	        return false;
 	    },
 		
+	    checkAnchorClick:function(e, theTarget) {
+			
+			if(theTarget.isSameNode(this.layer)) {
+				return false;
+			}
+			
+			//this technique fails when considerable content exists inside anchor, should be recursive ?
+	        if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
+	            return this.checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
+			
+			//anchors
+			if (theTarget.tagName.toLowerCase() == "a") {
+	            if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1||theTarget.getAttribute("data-ignore")) {
+	                return true;
+	            }
+            
+	            //external links
+	            if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) 
+	            {
+	                if (theTarget.href.toLowerCase().indexOf("javascript:") != 0) {
+	                    if (jq.ui.isAppMobi) {
+	                    	e.preventDefault();
+							AppMobi.device.launchExternal(theTarget.href);
+	                    } else if (!jq.os.desktop){
+	                    	e.target.target = "_blank";
+	                    }
+	                }
+	                return true;
+	            }
+			
+				//empty links
+	            if ((theTarget.href.indexOf("#") !== -1 && theTarget.hash.length == 0)||theTarget.href.length==0)
+	                return true;
+            
+            
+				//internal links
+				e.preventDefault();
+	            var mytransition = theTarget.getAttribute("data-transition");
+	            var resetHistory = theTarget.getAttribute("data-resetHistory");
+	            resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
+	            var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
+	            jq.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
+				return true;
+	        }
+	    }
 		
     };
 	
 	//debug
 	//touchLayer = $.debug.type(touchLayer, 'touchLayer');
     
-    function checkAnchorClick(e) {
-		theTarget = e.target;
-		
-        var parent = false;
-		//this technique fails when considerable content exists inside anchor, should be recursive ?
-        if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
-            parent = true, theTarget = theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
-			
-		//anchors
-		if (theTarget.tagName.toLowerCase() == "a") {
-            if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1||theTarget.getAttribute("data-ignore")) {
-                return;
-            }
-            
-            //external links
-            if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) 
-            {
-                if (theTarget.href.toLowerCase().indexOf("javascript:") != 0) {
-                    if (jq.ui.isAppMobi) {
-                    	e.preventDefault();
-						AppMobi.device.launchExternal(theTarget.href);
-                    } else if (!jq.os.desktop){
-                    	e.target.target = "_blank";
-                    }
-                }
-                return;
-            }
-			
-			//empty links
-            if ((theTarget.href.indexOf("#") !== -1 && theTarget.hash.length == 0)||theTarget.href.length==0)
-                return;
-            
-            
-			//internal links
-			e.preventDefault();
-            var mytransition = theTarget.getAttribute("data-transition");
-            var resetHistory = theTarget.getAttribute("data-resetHistory");
-            resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
-            var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
-            jq.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
-        }
-    }
+    
 })();

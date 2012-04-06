@@ -164,7 +164,18 @@ if (!window.jq || typeof (jq) !== "function") {
             }
             return dom;
         }
+        /**
+        * Checks to see if the parameter is a $jqm object
+            ```
+            var foo=$('#header');
+            $.is$(foo);
+            ```
 
+        * @param {Object} element
+        * @return {Boolean}
+        * @title $.is$(param)
+        */
+		$.is$ = function(obj){return obj instanceof $jqm;}
         /**
         * Map takes in elements and executes a callback function on each and returns a collection
         ```

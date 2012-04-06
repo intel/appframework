@@ -34,7 +34,8 @@
         if (!window.AppMobi)
             AppMobi = {}, AppMobi.webRoot = "";
         window.addEventListener("popstate", function() {
-            that.goBack();
+            console.log("popstate goBack!");
+			that.goBack();
         }, false);
 		
 		this.togglingSideMenu = false;
@@ -88,9 +89,10 @@
         hasLaunched: false,
         launchCompleted: false,
         activeDiv: "",
+		menuAnimation: null,
 		
         css3animate: function(el, opts) {
-            jq(el).css3Animate(opts);
+            return jq(el).css3Animate(opts);
         },
         /**
          * this is a boolean when set to true (default) it will load that panel when the app is started
@@ -357,36 +359,54 @@
          * @title $.ui.toggleSideMenu([force])
          */
         toggleSideMenu: function(force, callback) {
-			if(this.togglingSideMenu) return;	//just in case...
-			this.togglingSideMenu=true;
+			console.log("toggling menu");
+			if(!this.isSideMenuEnabled()) return;
+			if(this.menuAnimation) {
+				this.menuAnimation.cancel();
+			}
             var that = this;
-            if (!jq("#content").hasClass("hasMenu"))
-                return;
             var menu = jq("#menu");
 			var els = jq("#content, #menu, #header, #navbar");
 			
-            if (menu.css("display") != "block" && ((force !== undefined && force !== false) || force === undefined)) {
-				this.scrollingDivs["menu_scroller"].enable();
-				menu.show();
-                setTimeout(function() {
-                    els.replaceClass("to-off off on", "to-on");
-					setTimeout(function(){
-						els.replaceClass("to-off off to-on", "on");
-						that.togglingSideMenu=false;
-						if(callback) callback();
-					}, 175);	//temporary fix until css3Animate supports classes
-                }, 1); //needs to run after
+            if (!(menu.hasClass("on") || menu.hasClass("to-on")) && ((force !== undefined && force !== false) || force === undefined)) {
 				
+				menu.show();
+				setTimeout(function(){
+					that.menuAnimation = that.css3animate(els,{
+						"removeClass":"to-off off on",
+						"addClass":"to-on",
+						callback:function(){
+							that.menuAnimation = that.css3animate(els,{
+								"removeClass":"to-off off to-on",
+								"addClass":"on",
+								time:0,
+								callback:function(){
+									that.scrollingDivs["menu_scroller"].enable();
+									if(callback) callback();
+								}
+							});
+						}
+					});
+				},0);	
             
             } else if (force === undefined || (force !== undefined && force === false)) {
+				
                 this.scrollingDivs["menu_scroller"].disable();
-				els.replaceClass("on off to-on", "to-off");
-				setTimeout(function(){
-					els.replaceClass("to-off on to-on", "off");
-					menu.hide();
-					that.togglingSideMenu=false;
-					if(callback) callback();
-				}, 175);	//temporary fix until css3Animate supports classes
+				that.menuAnimation = that.css3animate(els,{
+					"removeClass":"on off to-on",
+					"addClass":"to-off",
+					callback:function(){
+						that.menuAnimation = that.css3animate(els,{
+							"removeClass":"to-off on to-on",
+							"addClass":"off",
+							time:0,
+							callback:function(){
+								menu.hide();
+								if(callback) callback();
+							}
+						});
+					}
+				});
             }
         },
 		disableSideMenu:function(){
@@ -405,7 +425,8 @@
 			return jq("#content").hasClass("hasMenu");
 		},
 		isSideMenuOn:function(){
-			return this.isSideMenuEnabled() && jq("#content").hasClass("on");
+			var menu = jq('#menu');
+			return this.isSideMenuEnabled() && (menu.hasClass("on") || menu.hasClass("to-on"));
 		},
 		
         /**
@@ -484,7 +505,7 @@
             close.className = "closebutton jqMenuClose";
             close.href = "javascript:;"
             close.onclick = function() {
-                that.toggleSideMenu();
+                that.toggleSideMenu(false);
             };
             nb.append(close);
             var tmp = document.createElement("div");
@@ -1223,14 +1244,7 @@
 		                    callback: function() {
 		                        that.finishTransition(oldDiv);
 		                    }
-		                });
-					}
-				});
-				that.css3animate(currDiv, {
-					x:"-100%",
-					y:"0%",
-					callback:function(){
-	                    that.css3animate(currDiv, {
+		                }).also(currDiv, {
 	                        x: "0%",
 	                        time: "150ms",
 	                        callback: function() {
@@ -1238,6 +1252,9 @@
 	                        }
 	                    });
 					}
+				}).also(currDiv, {
+					x:"-100%",
+					y:"0%"
 				});
             } else {
                 that.css3animate(oldDiv, {
@@ -1250,14 +1267,7 @@
 		                    callback: function() {
 		                        that.finishTransition(oldDiv);
 		                    }
-		                });
-					}
-				});
-				that.css3animate(currDiv, {
-					x:"100%",
-					y:"0%",
-					callback:function(){
-	                    that.css3animate(currDiv, {
+		                }).also(currDiv, {
 	                        x: "0%",
 	                        time: "150ms",
 	                        callback: function() {
@@ -1265,6 +1275,9 @@
 	                        }
 	                    });
 					}
+				}).also(currDiv, {
+					x:"100%",
+					y:"0%"
 				});
             }
         },
