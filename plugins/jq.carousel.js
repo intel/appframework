@@ -46,7 +46,8 @@
                 
                 return new carousel(containerEl, opts);
             }
-            try {
+        
+                 
                 var that = this;
                 this.pagingDiv = this.pagingDiv ? document.getElementById(this.pagingDiv) : null;
 
@@ -59,10 +60,20 @@
                 if (this.vertical) {
                     this.horizontal = false;
                 }
-                var tmpHTML = this.container.innerHTML;
-                this.container.innerHTML = "";
+                
                 var el = document.createElement("div");
-                el.innerHTML = tmpHTML;
+                this.container.appendChild(el);
+                var $el=$(el);
+                var $container=$(this.container);
+                var data = Array.prototype.slice.call(this.container.childNodes);
+                while(data.length>0)
+                {
+                    var myEl=data.splice(0,1);
+                    myEl=$container.find(myEl)
+                    if(myEl.get()==el)
+                       continue;
+                    $el.append(myEl.get());
+                }
                 if (this.horizontal) {
                     el.style.display = "-webkit-box";
                     el.style['-webkit-box-flex'] = 1;
@@ -70,9 +81,10 @@
                 else {
                     el.style.display = "block";
                 }
-                this.container.appendChild(el);
+                
                 this.el = el;
                 this.refreshItems();
+               
                 el.addEventListener('touchmove', function(e) {
                     that.touchMove(e);
                 }, false);
@@ -86,10 +98,7 @@
                 window.addEventListener("orientationchange", function() {
                     that.onMoveIndex(that.carouselIndex,0);
                 }, false);
-            
-            } catch (e) {
-                console.log("error adding carousel " + e);
-            }
+           
         };
         
         carousel.prototype = {
@@ -129,8 +138,6 @@
                     this.movingElement = true;
                     this.startY = e.touches[0].pageY;
                     this.startX = e.touches[0].pageX;
-                    //e.preventDefault();
-                    //e.stopPropagation();
                     if (this.vertical) {
                         try {
                             this.cssMoveStart = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el, null).webkitTransform).f);
@@ -147,8 +154,6 @@
                 }
             },
             touchMove: function(e) {
-                // e.preventDefault();
-                // e.stopPropagation();
                 if(!this.movingElement)
                    return;
                 if (e.touches.length > 1) {
@@ -166,7 +171,7 @@
                     this.dy += this.cssMoveStart;
                     movePos.y = this.dy;
                     e.preventDefault();
-                        e.stopPropagation();
+                    e.stopPropagation();
                 } else {
                     if (!this.lockMove&&isHorizontalSwipe(rawDelta.x, rawDelta.y)) {
                          
@@ -252,9 +257,9 @@
                 this.myDivWidth = numOnly(this.container.clientWidth);
                 this.myDivHeight = numOnly(this.container.clientHeight);
                 var runFinal = false;
-                try {
-                    
-                    document.getElementById(this.container.id + "_" + this.carouselIndex).className = this.pagingCssName;
+  
+                    if(document.getElementById(this.container.id + "_" + this.carouselIndex))
+                        document.getElementById(this.container.id + "_" + this.carouselIndex).className = this.pagingCssName;
                     var newTime = Math.abs(newInd - this.carouselIndex);
                     
                     var ind = newInd;
@@ -283,9 +288,7 @@
                         
                         document.getElementById(this.container.id + "_" + this.carouselIndex).className = this.pagingCssNameSelected;
                     }
-                } catch (e) {
-                    console.log("Error " + e);
-                }
+               
                 if (runFinal && this.pagingFunction && typeof this.pagingFunction == "function")
                     this.pagingFunction(currInd);
             },

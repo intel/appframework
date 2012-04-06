@@ -91,6 +91,7 @@
         activeDiv: "",
 		menuAnimation: null,
 		
+
         css3animate: function(el, opts) {
             return jq(el).css3Animate(opts);
         },
@@ -103,6 +104,15 @@
          *@title $.ui.loadDefaultHash
          */
         loadDefaultHash:true,
+        
+        /**
+         * This is a boolean that when set to true will add "&cache=_rand_" to any ajax loaded link
+           ```
+           $.ui.useAjaxCacheBuster=true;
+           ```
+          *@title $.ui.useAjaxCacheBuster
+          */
+        useAjaxCacheBuster:false,
         /**
          * This is a shorthand call to the jq.actionsheet plugin.  We wire it to the jQUi div automatically
            ```
@@ -589,7 +599,8 @@
             var that = this;
             try {
                 if ($am(id)) {
-                    jq("#modalContainer").html('<div style="width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right"></div>'+$am(id).childNodes[0].innerHTML+'');
+                    //jq("#modalContainer").html('<div style="width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right"></div>'+$am(id).childNodes[0].innerHTML+'');
+                    jq("#modalContainer").html($am(id).childNodes[0].innerHTML+'');
                     jq('#modalContainer').append("<a href='javascript:;' onclick='$.ui.hideModal();' class='closebutton modalbutton'></a>");
                     this.modalWindow.style.display = "block";
                     
@@ -938,6 +949,25 @@
                             
                         return that.loadContent("#" + urlHash);
                         
+                        }
+                    };
+                    ajaxUrl = target;
+                    var newtarget = this.useAjaxCacheBuster?target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000:target;
+                    xmlhttp.open("GET", newtarget, true);
+                    xmlhttp.send();
+                    // show Ajax Mask
+                    this.showMask();
+                    return;
+                } else {
+                    // load a div
+                    what = target.replace("#", "");
+
+                    var slashIndex = what.indexOf('/');
+                    var hashLink = "";
+                    if (slashIndex != -1) {
+                        // Ignore everything after the slash for loading
+                        hashLink = what.substr(slashIndex);
+                        what = what.substr(0, slashIndex);
                     }
                 };
                 ajaxUrl = target;
@@ -1168,15 +1198,35 @@
                 el = null;
             }
             contentDivs = null;
-            for (var j in defer) {
-                (function(j) {
-                    jq.ajax({url:AppMobi.webRoot + defer[j], success:function(data) {
-                        if (data.length == 0)
-                            return;
-                        $.ui.updateContentDiv(j, data);
-                        that.parseScriptTags(jq(j).get());
-                    },error:function(msg){console.log("Error with deferred load "+defer[j])}});
-                })(j);
+            var loadingDefer=false;
+            var toLoad=Object.keys(defer).length;
+            if(toLoad>0){
+                loadingDefer=true;
+                var loaded=0;
+                for (var j in defer) {
+                    (function(j) {
+                        jq.ajax({url:AppMobi.webRoot + defer[j], success:function(data) {
+                            if (data.length == 0)
+                                return;
+                            $.ui.updateContentDiv(j, data);
+                            that.parseScriptTags(jq(j).get());
+                            loaded++;
+                            if(loaded>=toLoad){
+                               $(document).trigger("defer:loaded");
+                               loadingDefer=false;
+                               
+                            }
+                        },error:function(msg){
+                            //still trigger the file as being loaded to not block jq.ui.ready
+                            console.log("Error with deferred load "+AppMobi.webRoot+defer[j])
+                            loaded++;
+                            if(loaded>=toLoad){
+                               $(document).trigger("defer:loaded");
+                               loadingDefer=false;
+                            }
+                        }});
+                    })(j);
+                }
             }
             if (this.firstDiv) {
                 
@@ -1186,7 +1236,9 @@
                 if (this.scrollingDivs[this.activeDiv.id]) {
                     this.scrollingDivs[this.activeDiv.id].enable();
                 }
-                window.setTimeout(function() {
+                
+                //window.setTimeout(function() {
+                var loadFirstDiv=function(){
                     //activeDiv = firstDiv;
                     that.firstDiv.style.display = "block";
                     that.css3animate(that.firstDiv, {
@@ -1214,7 +1266,12 @@
                     that.defaultMenu = jq(firstMenu).children();
                     
                     that.updateSideMenu(that.defaultMenu);
-                }, 100);
+                };
+                if(loadingDefer){
+                    $(document).one("defer:loaded",loadFirstDiv);
+                }
+                else
+                    window.setTimeout(loadFirstDiv,100);
             }
            
         },
