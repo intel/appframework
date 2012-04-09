@@ -326,6 +326,7 @@
             this.hScrollCSS="scrollBar";
             this.vScrollCSS="scrollBar";
 			this.firstEventInfo=null;
+			this.moved=false;
 
             this.lastScrollbar="";
             this.finishScrollingObject=null;
@@ -382,7 +383,7 @@
         }
         jsScroller.prototype.onTouchStart=function(event) {
 			
-			event.preventDefault();
+			this.moved = false;
 			
 			if (!this.container)
                 return;
@@ -719,7 +720,6 @@
         jsScroller.prototype.onTouchEnd=function(event) {
 			
             if (this.currentScrollingObject == null || !this.moved) return;
-            
 			event.preventDefault();
 			event.stopPropagation();
 			
