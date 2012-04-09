@@ -10,7 +10,6 @@
 	//handles overlooking panning on titlebar, bumps on native scrolling and no delay on click
 	var touchLayer = function(el) {
         el.addEventListener('touchstart', this, false);
-		el.addEventListener('click', this, false);
 		this.ignoreNextScroll = true;
 		var that = this;
 		document.addEventListener('scroll', function(e){
@@ -18,7 +17,15 @@
 				if(!that.isPanning){
 					if(!that.ignoreNextScroll){
 						that.ignoreNextScroll = true;
-						that.hideAddressBar();
+						if(that.wasPanning){
+							that.wasPanning = false;
+							//give it a couple of seconds
+							setTimeout(function(){
+								that.hideAddressBar();
+							}, 2000);
+						} else {
+							that.hideAddressBar();
+						}
 					} else that.ignoreNextScroll=false;
 				}
 			}
@@ -40,6 +47,7 @@
 		currentMomentum: 0,
 		startTime:0,
 		isScrollingVertical: false,
+		wasPanning:false,
         handleEvent: function(e) {
             switch (e.type) {
                 case 'touchstart':
@@ -51,9 +59,6 @@
                 case 'touchend':
                     this.onTouchEnd(e);
                     break;
-				case 'click':
-					this.onClick(e);
-					break;
             }
         },
 		hideAddressBar:function() {
@@ -79,11 +84,10 @@
             this.dY = e.touches[0].pageY;
 			
             if (this.fixInputHandlers(e)) {
-				this.debugVars("touchstart: stopped at fixInputHandlers");
                 return;
-			} else {
-				this.allowDocumentScroll=false;
 			}
+			
+			this.allowDocumentScroll=false;
 				
             if (prevClickField !== null && prevClickField !== undefined && jq.os.android) {
                 prevClickField.blur(); //We need to blur any input fields on android
@@ -99,11 +103,9 @@
 			if(!this.isScrolling && !this.isPanning) {
 				e.preventDefault();
 			} else if(this.isScrollingVertical && !this.demandVerticalScroll()){
-				this.debugVars("touchstart: stopped at demandVerticalScroll");
 				e.preventDefault();
 				return;
 			}
-			//this.debugVars("touchstart");
 			document.addEventListener('touchmove', this, false);
 			document.addEventListener('touchend', this, false);
         },
@@ -158,7 +160,8 @@
 		checkDOMTree : function(el, parentTarget){
 			
 			//check panning
-			if(this.panElementId==el.id){
+			//temporarily disabled for android - click vs panning issues
+			if(!jq.os.android && this.panElementId==el.id){
 				this.isPanning = true;
 				return;
 			}
@@ -198,7 +201,6 @@
 			if(this.isPanning) {
 				this.moved = true;
 				document.removeEventListener('touchmove', this, false);
-				this.debugVars("touchmove: panning");
 				return;
 			}
 
@@ -206,13 +208,10 @@
 				//legacy stuff for old browsers
 	            e.preventDefault();
 				this.moved = true;
-				this.debugVars("touchmove: not scrolling");
 				return;
 			}
 			
 			//otherwise it is a native scroll
-			//this.debugVars("touchmove");
-			
 			//let's clear events for performance
             document.removeEventListener('touchmove', this, false);
 			document.removeEventListener('touchend', this, false);
@@ -227,30 +226,40 @@
 			
 			if(this.isPanning && itMoved){
 				//wait 2 secs and cancel
-				setTimeout(function(){
-					that.hideAddressBar();
-				}, 2000);
+				this.wasPanning = true;
 			}
 			
-			if(!this.isScrolling || !this.moved) e.preventDefault();
-			
             if (!itMoved) {
+				
+				//NOTE: on android if touchstart is not preventDefault(), click will fire even if touchend is prevented
+				//this is one of the reasons why scrolling and panning can not be nice and native like on iPhone
+				e.preventDefault();
+					
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
                
+	            if (theTarget && theTarget.type != undefined) {
+	                var tagname = theTarget.tagName.toLowerCase();
+	                if (tagname == "select" || tagname == "input" ||  tagname == "textarea") {
+	                    this.allowDocumentScroll = true;
+						theTarget.focus();
+	                }
+	            }
+				
 				//SIMULATES A REAL CLICK EVENT ON TARGET
 				//create click event and let it bubble normally
-            	var theEvent = document.createEvent('MouseEvents');
-            	theEvent.initEvent('click', true, true);
-				theEvent.target = e.target;
+				var theEvent = document.createEvent('MouseEvents');
+				theEvent.initEvent('click', true, true);
+				theEvent.target = theTarget;
 				//jq.DesktopBrowsers flag
 				if(e.mouseToTouch) theEvent.mouseToTouch = true;
 				//dispatch event immediatly (to another thread)
-				setTimeout(function(){theTarget.dispatchEvent(theEvent);},0);
+				setTimeout(function(){
+					theTarget.dispatchEvent(theEvent);
+				},0);
 				
             }
-			//this.debugVars("touchend");
 			
 			this.isPanning = false;
 			this.isScrolling = false;
@@ -258,24 +267,8 @@
             this.dX = this.cX = this.cY = this.dY = 0;
             document.removeEventListener('touchmove', this, false);
             document.removeEventListener('touchend', this, false);
-			console.log("finished touchend");
 			
         },
-		
-		onClick:function(e){
-			var theTarget = e.target;
-			
-			if(this.checkAnchorClick(e, theTarget)) return;
-			
-            if (theTarget && theTarget.type != undefined) {
-                var tagname = theTarget.tagName.toLowerCase();
-                if (tagname == "select" || (tagname == "input" && (theTarget.type=="text"||theTarget.type=="password")) ||  tagname == "textarea") {
-                    this.allowDocumentScroll = true;
-					theTarget.focus();
-					return;
-                }
-            }
-		},
 		
 		fixInputHandlers:function(e) {
 	        if (!jq.os.android)
@@ -319,54 +312,7 @@
 	            }
 	        }
 	        return false;
-	    },
-		
-	    checkAnchorClick:function(e, theTarget) {
-			
-			if(theTarget.isSameNode(this.layer)) {
-				return false;
-			}
-			
-			//this technique fails when considerable content exists inside anchor, should be recursive ?
-	        if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
-	            return this.checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
-			
-			//anchors
-			if (theTarget.tagName.toLowerCase() == "a") {
-	            if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1||theTarget.getAttribute("data-ignore")) {
-	                return true;
-	            }
-            
-	            //external links
-	            if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) 
-	            {
-	                if (theTarget.href.toLowerCase().indexOf("javascript:") != 0) {
-	                    if (jq.ui.isAppMobi) {
-	                    	e.preventDefault();
-							AppMobi.device.launchExternal(theTarget.href);
-	                    } else if (!jq.os.desktop){
-	                    	e.target.target = "_blank";
-	                    }
-	                }
-	                return true;
-	            }
-			
-				//empty links
-	            if ((theTarget.href.indexOf("#") !== -1 && theTarget.hash.length == 0)||theTarget.href.length==0)
-	                return true;
-            
-            
-				//internal links
-				e.preventDefault();
-	            var mytransition = theTarget.getAttribute("data-transition");
-	            var resetHistory = theTarget.getAttribute("data-resetHistory");
-	            resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
-	            var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
-	            jq.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
-				return true;
-	        }
-	    }
-		
+	    }	
     };
 	
 	//debug

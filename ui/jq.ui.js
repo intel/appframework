@@ -925,8 +925,7 @@
                                 
                             var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
                             refreshFunction = refresh ? 
-                            function(triggered) {
-								if(!triggered) return true;
+                            function() {
                                 anchor.refresh = true;
                                 that.loadContent(target, newTab, back, transition, anchor);
                                 anchor.refresh = false;
@@ -949,29 +948,10 @@
                             
                         return that.loadContent("#" + urlHash);
                         
-                        }
-                    };
-                    ajaxUrl = target;
-                    var newtarget = this.useAjaxCacheBuster?target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000:target;
-                    xmlhttp.open("GET", newtarget, true);
-                    xmlhttp.send();
-                    // show Ajax Mask
-                    this.showMask();
-                    return;
-                } else {
-                    // load a div
-                    what = target.replace("#", "");
-
-                    var slashIndex = what.indexOf('/');
-                    var hashLink = "";
-                    if (slashIndex != -1) {
-                        // Ignore everything after the slash for loading
-                        hashLink = what.substr(slashIndex);
-                        what = what.substr(0, slashIndex);
                     }
                 };
                 ajaxUrl = target;
-                var newtarget = target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000;
+                var newtarget = this.useAjaxCacheBuster?target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000:target;
                 xmlhttp.open("GET", newtarget, true);
                 xmlhttp.send();
                 // show Ajax Mask
@@ -1010,29 +990,29 @@
                 if (oldDiv == currWhat) //prevent it from going to itself
                     return;
                     
-                    if (newTab) {
-                        this.history = [];
-                        this.history.push({
-                            target: "#" + this.firstDiv.id,
-                            transition: transition
-                        });
-                    } else if (!back) {
-                        this.history.push({
-                            target: previousTarget,
-                            transition: transition
-                        });
-                    }
-                    try {
-                        window.history.pushState(what.id, what.id, startPath + '#' + what.id + hashLink);
-                        $(window).trigger("hashchange", {newUrl: startPath + '#' + what.id + hashLink,oldURL: startPath + previousTarget});
-                    } 
-                    catch (e) {
-                    }
+                if (newTab) {
+                    this.history = [];
+                    this.history.push({
+                        target: "#" + this.firstDiv.id,
+                        transition: transition
+                    });
+                } else if (!back) {
+                    this.history.push({
+                        target: previousTarget,
+                        transition: transition
+                    });
+                }
+                try {
+                    window.history.pushState(what.id, what.id, startPath + '#' + what.id + hashLink);
+                    $(window).trigger("hashchange", {newUrl: startPath + '#' + what.id + hashLink,oldURL: startPath + previousTarget});
+                } 
+                catch (e) {
+                }
                     
-                    previousTarget = '#' + what.id + hashLink;
+                previousTarget = '#' + what.id + hashLink;
                     
                 if (this.resetScrollers && this.scrollingDivs[what.id]) {
-					this.scrollingDivs[what.id].scrollTo({
+                    this.scrollingDivs[what.id].scrollTo({
                         x: 0,
                         y: 0
                     });
@@ -1060,7 +1040,7 @@
                 if (newTab) {
                     this.setBackButtonText(this.firstDiv.title)
                 }
-
+                    
                 if (this.history.length == 0) {
                     this.backButton.style.visibility = "hidden";
                     this.history = [];
@@ -1076,9 +1056,7 @@
                 //Let's check if it has a function to run to update the data
                 this.parsePanelFunctions(what, oldDiv);
                 window.scrollTo(1,1);
-                
-            }
-            
+			}
         },
 
         /**
@@ -1407,7 +1385,6 @@
                         that.css3animate(oldDiv, {
                             x: "-100%",
                             y: 0,
-                            time: "1ms",
                             callback: function() {
                                 that.finishTransition(oldDiv);
                             
@@ -1423,7 +1400,6 @@
                 that.css3animate(currDiv, {
                     y: "-100%",
                     x: "0%",
-                    time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
                             y: "0%",
@@ -1434,7 +1410,6 @@
 		                        that.css3animate(oldDiv, {
 		                            x: "-100%",
 		                            y: 0,
-		                            time: "1ms",
 		                            callback: function() {
 		                                that.finishTransition(oldDiv);
 		                            }
@@ -1686,7 +1661,7 @@
     };
     
     function $am(el) {
-        el = el.indexOf("#") == -1 ? "#" + el : el;
+        el = typeof el == 'string' && el.indexOf("#") == -1 ? "#" + el : el;
         return jq(el).get(0);
     }
     
@@ -1714,11 +1689,61 @@
 (function() {
     var jQUi, touchLayer;
 	
-	function hideAddressBar(){
+	var hideAddressBar = function(){
         if (jq.os.desktop)
             return jQUi.style.height="100%";
         touchLayer.hideAddressBar();
 	}
+	
+	//lookup for a clicked anchor recursively and fire UI own actions when applicable 
+    var checkAnchorClick = function(e, theTarget) {
+			
+		if(theTarget.isSameNode(jQUi)) {
+			return;
+		}
+			
+		//this technique fails when considerable content exists inside anchor, should be recursive ?
+        if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
+            return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
+			
+		//anchors
+		if (theTarget.tagName.toLowerCase() == "a") {
+            if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1||theTarget.getAttribute("data-ignore")) {
+                return;
+            }
+            
+            //external links
+            if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) 
+            {
+                if (theTarget.href.toLowerCase().indexOf("javascript:") != 0) {
+                    if (jq.ui.isAppMobi) {
+                    	e.preventDefault();
+						AppMobi.device.launchExternal(theTarget.href);
+                    } else if (!jq.os.desktop){
+                    	e.target.target = "_blank";
+                    }
+                }
+                return;
+            }
+			
+			//empty links
+            if ((theTarget.href.indexOf("#") !== -1 && theTarget.hash.length == 0)||theTarget.href.length==0)
+                return;
+            
+            
+			//internal links
+			//TODO: this should be moved into jq.ui.js attached to a click event with useCapture
+			//this way the touchLayer can be used independentely from the UI
+			e.preventDefault();
+            var mytransition = theTarget.getAttribute("data-transition");
+            var resetHistory = theTarget.getAttribute("data-resetHistory");
+            resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
+            var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
+            jq.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
+			return;
+        }
+    }
+	
 	
     //Check to see if any <nav> items are found. If so, add the CSS classes
     jq(document).ready(function() {
@@ -1728,8 +1753,14 @@
             jq("#jQUi #navbar").addClass("hasMenu off");
         }
         jQUi = document.getElementById("jQUi");
-		
+		//boot touchLayer
 		touchLayer = $.touchLayer(jQUi);
+		//set anchor click handler for UI
+		jQUi.addEventListener('click', function(e){
+			var theTarget = e.target;
+			checkAnchorClick(e, theTarget);
+		}, false);
+		
 		hideAddressBar();
     });
     
