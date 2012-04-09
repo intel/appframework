@@ -325,6 +325,7 @@
             this.hscrollBar=null;
             this.hScrollCSS="scrollBar";
             this.vScrollCSS="scrollBar";
+			this.firstEventInfo=null;
 
             this.lastScrollbar="";
             this.finishScrollingObject=null;
@@ -380,6 +381,9 @@
             }
         }
         jsScroller.prototype.onTouchStart=function(event) {
+			
+			event.preventDefault();
+			
 			if (!this.container)
                 return;
 			if(this.refreshCancelCB) {
@@ -403,7 +407,7 @@
             }
 			
 			//save event
-			this.saveEventInfo(event);
+			this.saveEventInfo(event, true);
 			
 			//default variables
 			var scrollInfo = {
@@ -480,11 +484,18 @@
 			//save scrollInfo
 			this.lastScrollInfo = scrollInfo;
         }
-		jsScroller.prototype.saveEventInfo=function(event){
+		jsScroller.prototype.saveEventInfo=function(event, first){
 			this.lastEventInfo = {
 	            pageX: event.touches[0].pageX,
 	            pageY: event.touches[0].pageY,
 				time: event.timeStamp
+			}
+			if(first){
+				this.firstEventInfo = {
+		            pageX: event.touches[0].pageX,
+		            pageY: event.touches[0].pageY,
+					time: event.timeStamp
+				}
 			}
 		}
 		jsScroller.prototype.setVScrollBar=function(scrollInfo, timingFunction){
@@ -519,6 +530,7 @@
         jsScroller.prototype.onTouchMove=function(event) {
             if (this.currentScrollingObject == null) return;
 			event.preventDefault();
+			event.stopPropagation();
 			
 			var scrollInfo = this.calculateMovement(event);
 			
@@ -527,7 +539,7 @@
 			if(this.checkSignificance(scrollInfo, elasticOverflow)){
 				
 				if(scrollInfo.duration>0) scrollInfo=this.setMomentum(scrollInfo);
-				scrollInfo=this.calculateTarget(scrollInfo, elasticOverflow);
+				scrollInfo=this.calculateTarget(scrollInfo);
 				
 				//pull to refresh elastic
 	            if (elasticOverflow && (scrollInfo.y > 0 || scrollInfo.y < -this.elementInfo.maxTop)) 
@@ -609,7 +621,7 @@
 			scrollInfo.absSpeedX=0;
 		}
 		
-		jsScroller.prototype.calculateMovement=function(event){
+		jsScroller.prototype.calculateMovement=function(event, last){
 			//default variables
 			var scrollInfo = {
 				//current position
@@ -629,19 +641,26 @@
 				duration:0
             };
 			
-        	scrollInfo.deltaY = this.elementInfo.hasVertScroll ? event.touches[0].pageY - this.lastEventInfo.pageY : 0;
-            scrollInfo.deltaX = this.elementInfo.hasHorScroll ? event.touches[0].pageX - this.lastEventInfo.pageX : 0;
-			scrollInfo.time = event.timeStamp - this.lastEventInfo.time;
-			scrollInfo.duration = event.timeStamp - this.lastEventInfo.time;
+			var prevEventInfo = last ? this.firstEventInfo : this.lastEventInfo ;
+			var pageX = last ? event.pageX : event.touches[0].pageX;
+			var pageY = last ? event.pageY : event.touches[0].pageY;
+			var time = last ? event.time : event.timeStamp;
 			
-			scrollInfo.speedY = this.divide(scrollInfo.deltaY, scrollInfo.time);
-			scrollInfo.speedX = this.divide(scrollInfo.deltaX, scrollInfo.time);
+        	scrollInfo.deltaY = this.elementInfo.hasVertScroll ? pageY - prevEventInfo.pageY : 0;
+            scrollInfo.deltaX = this.elementInfo.hasHorScroll ? pageX - prevEventInfo.pageX : 0;
+			scrollInfo.time = time;
+			scrollInfo.duration = time - prevEventInfo.time;
+			
+			scrollInfo.speedY = this.divide(scrollInfo.deltaY, scrollInfo.duration);
+			scrollInfo.speedX = this.divide(scrollInfo.deltaX, scrollInfo.duration);
 			
 			scrollInfo.absSpeedY = Math.abs(scrollInfo.speedY);
 			scrollInfo.absSpeedX = Math.abs(scrollInfo.speedX);
 			
 			scrollInfo.absDeltaY = Math.abs(scrollInfo.deltaY);
 			scrollInfo.absDeltaX = Math.abs(scrollInfo.deltaX);
+			
+			if(last) console.log(scrollInfo.deltaY+" in "+scrollInfo.duration);
 			
 			return scrollInfo;
 		}
@@ -654,35 +673,9 @@
 			scrollInfo.x = scrollInfo.left+scrollInfo.deltaX;
 			scrollInfo.duration = scrollInfo.duration;
 			
-			var tmpTop = scrollInfo.top;
-			var tmpY = scrollInfo.y;
-			var tmpDuration = scrollInfo.duration;
-			
-			//boundaries
-			if(this.elementInfo.hasVertScroll){
-				if(!elasticOverflow){
-		            if (scrollInfo.y > 0) {
-		                scrollInfo.y = 0;
-		                scrollInfo.duration = Math.abs(this.divide(scrollInfo.top, scrollInfo.speedY));
-		            } else if (scrollInfo.y < (-this.elementInfo.maxTop)) {
-		                scrollInfo.y = -this.elementInfo.maxTop;
-						var change = this.elementInfo.maxTop+scrollInfo.top;
-		                scrollInfo.duration = Math.abs(this.divide(change, scrollInfo.speedY));
-		            }
-				}
-			}
-            
-			if(this.elementInfo.hasHorScroll) {
-				if(scrollInfo.x > 0){
-	                scrollInfo.x = 0;
-	                scrollInfo.duration = Math.abs(this.divide(scrollInfo.top, scrollInfo.speedY));
-	            } else if (scrollInfo.x < (-this.elementInfo.maxLeft)) {
-	                scrollInfo.x = -this.elementInfo.maxLeft;
-					var change = this.elementInfo.maxLeft+scrollInfo.left;
-	                scrollInfo.duration = Math.abs(this.divide(scrollInfo.speedX, change));
-	            }
-			}
-			
+			//x boundaries
+			if(scrollInfo.x<0) scrollInfo.x = 0;
+			if(-scrollInfo.x<this.elementInfo.maxLeft) scrollInfo.x = -this.elementInfo.maxLeft;
 			
 			return scrollInfo;
 		}
@@ -707,12 +700,16 @@
 				scrollInfo.duration = scrollInfo.absSpeedY / deceleration;
 				scrollInfo.speedY = scrollInfo.deltaY/scrollInfo.duration;
 				scrollInfo.absSpeedY = Math.abs(scrollInfo.speedY);
+				if(scrollInfo.absSpeedY<deceleration*100)
+					scrollInfo.deltaY = scrollInfo.absDeltaY = scrollInfo.duration = scrollInfo.speedY = scrollInfo.absSpeedY = 0;
 			} else if(scrollInfo.absDeltaX) {
 				scrollInfo.deltaX = (scrollInfo.deltaX < 0 ? -1 : 1) * (scrollInfo.absSpeedX * scrollInfo.absSpeedY) / (2 * deceleration);
 				scrollInfo.absDeltaX = Math.abs(scrollInfo.deltaX);
 				scrollInfo.duration = scrollInfo.absSpeedX / deceleration;
 				scrollInfo.speedX = scrollInfo.deltaX/scrollInfo.duration;
 				scrollInfo.absSpeedX = Math.abs(scrollInfo.speedX);
+				if(scrollInfo.absSpeedX<deceleration*100)
+					scrollInfo.deltaX = scrollInfo.absDeltaX = scrollInfo.duration = scrollInfo.speedX = scrollInfo.absSpeedX = 0;
 			}
 
             return scrollInfo;
@@ -724,13 +721,15 @@
             if (this.currentScrollingObject == null || !this.moved) return;
             
 			event.preventDefault();
+			event.stopPropagation();
+			
             this.finishScrollingObject = this.currentScrollingObject;
             this.currentScrollingObject = null;
             
-			scrollInfo = this.lastScrollInfo;
+			var scrollInfo = this.calculateMovement(this.lastEventInfo, true);
 			scrollInfo=this.setMomentum(scrollInfo);
-			scrollInfo=this.calculateTarget(scrollInfo, false);
-			var triggered = scrollInfo.top > this.refreshHeight;
+			scrollInfo=this.calculateTarget(scrollInfo);
+			var triggered = scrollInfo.top > this.refreshHeight || scrollInfo.y > this.refreshHeight;
             this.fireRefreshRelease(triggered, scrollInfo.top>0);
 			
 			//refresh hang in
@@ -740,13 +739,15 @@
 			//top boundary
 			} else if(scrollInfo.y >= 0){
 				scrollInfo.y = 0;
-				scrollInfo.duration = 75;
+				if(scrollInfo.top >= 0) scrollInfo.duration = 75;
 			//lower boundary
 			} else if(-scrollInfo.y > this.elementInfo.maxTop){
 				scrollInfo.y = -this.elementInfo.maxTop;
-				scrollInfo.duration = 75;
+				if(-scrollInfo.top > this.elementInfo.maxTop) scrollInfo.duration = 75;
 			//all others
 			}
+			
+			console.log("final speed "+scrollInfo.absSpeedY+ " to "+scrollInfo.y+" in "+scrollInfo.duration);
 			
             this.scrollerMoveCSS(this.finishScrollingObject, scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
 			this.setVScrollBar(scrollInfo, "cubic-bezier(0.33,0.66,0.66,1)");

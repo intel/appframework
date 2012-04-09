@@ -1100,19 +1100,20 @@ oldElem=document.getElementsByTagName("link")[0];
 	<script>
 		var init_scroller = function () {
 		   $("#scroller").scroller({
+			    refresh:true,
 				scrollBars: true,
 				verticalScroll: true,
 				horizontalScroll: false,
 				vScrollCSS: "jqmScrollbar",
 				hScrollCSS: "jqmScrollbar"
-			});
+			}).enable();
 		};
 		window.addEventListener("load", init_scroller, false);
 	</script>
 	<div id="outercontent"
 			style="height: 95%; width:95%; overflow: hidden; position: relative">
 			
-			<div id="scroller"><div>Lorem ipsum dolor sit amet, consectetur
+			<div id="scroller" style="overflow: auto;"><div>Lorem ipsum dolor sit amet, consectetur
 				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
 				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
 				sed convallis elementum, magna diam pharetra magna, id vestibulum est
