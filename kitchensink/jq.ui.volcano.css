@@ -100,7 +100,7 @@ width:100%;
 	position:absolute;
 	overflow:hidden;
 	width:100%;
-    z-index:-11;
+    z-index:0;
     left:-10px;
     text-align:center;
 	height:48px; 
@@ -138,6 +138,7 @@ body[orient="landscape"] > #header > h1 {
 } /* sets up sizing and handling of excess text for the type in the back button */
 
 .button {
+    z-index:1;
 	position:relative;
 	display:inline-block;
 	height:36px; min-width:60px;
@@ -199,10 +200,7 @@ body[orient="landscape"] > #header > h1 {
 	-webkit-perspective:1000;
 } /* This class is applied to the divs that contain the various "views" or pages of the app. */
 
-.panel > * {
-	-webkit-backface-visibility:hidden;
-	-webkit-perspective:1000;
-}
+
 
 
 /**********************************************************

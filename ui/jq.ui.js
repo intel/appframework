@@ -550,11 +550,16 @@
          */
         showModal: function(id) {
             var that = this;
-            try {
+            var container=jq("#modalContainer");
+          //  try {
                 if ($am(id)) {
-                    //jq("#modalContainer").html('<div style="width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right"></div>'+$am(id).childNodes[0].innerHTML+'');
-                    jq("#modalContainer").html($am(id).childNodes[0].innerHTML+'');
-                    jq('#modalContainer').append("<a href='javascript:;' onclick='$.ui.hideModal();' class='closebutton modalbutton'></a>");
+                    that._oldModal=$("#"+id);
+                    container.html("<div class='modalcontent' style='width:100%;height:100%;float:left'></div>");
+                    container.append("<a href='javascript:;' onclick='$.ui.hideModal();' class='closebutton modalbutton'></a>");
+                    if(that._oldModal.attr("scrolling")!="no")
+                        container.find(".modalcontent").append($(that._oldModal.children().get(0)))
+                    else
+                        container.find(".modalcontent").append($("#"+id).children());
                     this.modalWindow.style.display = "block";
                     
                     button = null;
@@ -562,9 +567,9 @@
                     this.scrollingDivs['modal_container'].initEvents();
                     this.scrollToTop('modal');
                 }
-            } catch (e) {
-                console.log("Error with modal - " + e, this.modalWindow);
-            }
+          //  } catch (e) {
+           //     console.log("Error with modal - " + e, this.modalWindow);
+           // }
         },
         /**
          * Hide the modal window and remove the content
@@ -574,10 +579,13 @@
          * @title $.ui.hideModal();
          */
         hideModal: function() {
+            var container=jq("#modalContainer");
+            this._oldModal.prepend(container.find(".modalcontent").children());
             $am("modalContainer").innerHTML = "";
             $am("jQui_modal").style.display = "none";
             
             this.scrollingDivs['modal_container'].removeEvents();
+            delete this._oldModal;
         },
 
         /**
@@ -637,17 +645,21 @@
          */
         addDivAndScroll: function(tmp, refreshPull, refreshFunc) {
             var addScroller = true;
-            if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling").toLowerCase() == "no")
+            if ((tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling").toLowerCase() == "no"))
                 addScroller = false;
+            
+            
             if (!addScroller) {
                 this.content.appendChild(tmp);
+                this.selectBox.getOldSelects(tmp.id);
+                this.passwordBox.getOldPasswords(tmp.id);
                 tmp = null;
                 return;
             }
             //WE need to clone the div so we keep events
             var myDiv = tmp.cloneNode(false);
             
-            
+                     
             tmp.title = null;
             tmp.id = null;
             tmp.removeAttribute("footer");
@@ -660,9 +672,10 @@
             
             this.content.appendChild(myDiv);
             
-            this.selectBox.getOldSelects(myDiv.id);
-            this.passwordBox.getOldPasswords(myDiv.id);
-            
+            if(tmp.getAttribute("data-modal")){
+                this.selectBox.getOldSelects(myDiv.id);
+                this.passwordBox.getOldPasswords(myDiv.id);   
+            }
             if (addScroller) {
                 this.scrollingDivs[myDiv.id] = (jq(tmp).scroller({
                     scrollBars: true,
@@ -824,7 +837,7 @@
             if (this.doingTransition)
                 return;
             
-            try {
+            
                 what = null;
                 var that = this;
                 that.hideMask();
@@ -997,9 +1010,7 @@
                     window.scrollTo(1,1);
                 
                 }
-            } catch (e) {
-                console.log("Error with loading content " + e + "  - " + target);
-            }
+            
         },
 
         /**
@@ -1085,7 +1096,7 @@
             modalDiv.id = "jQui_modal";
             
             this.viewportContainer.append(modalDiv);
-            modalDiv.appendChild(jq("<div id='modalContainer'></div>").get());
+            modalDiv.appendChild(jq("<div id='modalContainer' style='width:100%;height:100%;float:left'></div>").get());
             this.scrollingDivs['modal_container'] = jq("#modalContainer").scroller({
                 scrollBars: true,
                 vertical: true,
@@ -1170,10 +1181,14 @@
                         that.titleBar.innerHTML = that.activeDiv.title;
                     that.parsePanelFunctions(that.activeDiv);
                     //Load the default hash
-                    if (defaultHash.length > 0 && that.loadDefaultHash)
+                    if (defaultHash.length > 0 && that.loadDefaultHash&&defaultHash!=("#"+that.firstDiv.id))
                     {
                         that.loadContent(defaultHash);
+                        
                     }
+                   // that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
+                
+                    
                     modalDiv = null;
                     maskDiv = null;
                     that.launchCompleted = true;

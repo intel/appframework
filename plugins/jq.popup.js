@@ -187,7 +187,10 @@
      * Here we override the window.alert function due to iOS eating touch events on native alerts
      */
     window.alert = function(text) {
-        $(document.body).popup(text.toString());
+        if($("#jQUi").length>0)
+            $("#jQUi").popup(text.toString());
+        else
+            $(document.body).popup(text.toString());
     }
     window.confirm = function(text) {
         throw "Due to iOS eating touch events from native confirms, please use our popup plugin instead";

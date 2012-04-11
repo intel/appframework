@@ -101,7 +101,7 @@ width:100%;
 	position:absolute;
 	overflow:hidden;
 	width:100%;
-    z-index:-11;
+    z-index:0;
     left:-10px;
     text-align:center;
 	height:48px; 
@@ -112,11 +112,6 @@ width:100%;
 	text-overflow:ellipsis;
 	white-space:nowrap;
 } /* This is text that appears in the header at the top of the screen */
-
-body[orient="landscape"] > #header > h1 {
-	margin-left:-125px;
-	width:250px;
-} /* Updates the available text area and positioning when the screen is held in landscape orientation. */
 
 
 
@@ -139,6 +134,7 @@ body[orient="landscape"] > #header > h1 {
 } /* sets up sizing and handling of excess text for the type in the back button */
 
 .button {
+    z-index:1;
 	position:relative;
 	display:inline-block;
 	height:36px; min-width:60px;
@@ -198,10 +194,6 @@ body[orient="landscape"] > #header > h1 {
 	background:transparent;
 	-webkit-perspective:1000;
 } /* This class is applied to the divs that contain the various "views" or pages of the app. */
-.panel > * {
-	-webkit-backface-visibility:hidden;
-	-webkit-perspective:1000;
-}
 
 
 
