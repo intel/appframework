@@ -1908,14 +1908,13 @@
             if (touch.isDoubleTap) {
                 touch.el.trigger('doubleTap');
                 touch = {};
-            } else if (touch.x2 > 0 || touch.y2 > 0) {
+            } else if (Math.abs(touch.x1 - touch.x2) > 5 || Math.abs(touch.x1 - touch.x2) > 5) {
                 (Math.abs(touch.x1 - touch.x2) > 30 || Math.abs(touch.y1 - touch.y2) > 30) && 
                 touch.el.trigger('swipe') && 
                 touch.el.trigger('swipe' + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)));
                 touch.x1 = touch.x2 = touch.y1 = touch.y2 = touch.last = 0;
             } else if ('last' in touch) {
                 touch.el.trigger('tap');
-                
                 touchTimeout = setTimeout(function() {
                     touchTimeout = null;
                     if (touch.el)
