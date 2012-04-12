@@ -1845,7 +1845,7 @@
             var resetHistory = theTarget.getAttribute("data-resetHistory");
             resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
             var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
-            jq.ui.loadContent(href, theTarget.resetHistory, 0, mytransition, theTarget);
+            jq.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
             return true;
         }
     }
