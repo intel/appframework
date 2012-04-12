@@ -422,9 +422,11 @@
 		disableSideMenu:function(){
 			var that = this;
 			var els = jq("#content, #menu, #header, #navbar");
-			this.toggleSideMenu(false, function(){
-				els.removeClass("hasMenu");
-			});
+			if(this.isSideMenuOn()){
+				this.toggleSideMenu(false, function(){
+					els.removeClass("hasMenu");
+				});
+			} else els.removeClass("hasMenu");
 		},
 		enableSideMenu:function(){
 			var that = this;
