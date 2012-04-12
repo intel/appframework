@@ -6,13 +6,14 @@
 		e.stopPropagation();
     }
 	
-	var redirectMouseToTouch = function(type, originalEvent) 
+	var redirectMouseToTouch = function(type, originalEvent, newTarget) 
 	{
-
+		var theTarget = newTarget ? newTarget : originalEvent.target;
+		
 	    //stop propagation, and remove default behavior for everything but INPUT, TEXTAREA & SELECT fields
-	    if (originalEvent.target.tagName.toUpperCase().indexOf("SELECT") == -1 && 
-	    originalEvent.target.tagName.toUpperCase().indexOf("TEXTAREA") == -1 && 
-	    originalEvent.target.tagName.toUpperCase().indexOf("INPUT") == -1)  //SELECT, TEXTAREA & INPUT
+	    if (theTarget.tagName.toUpperCase().indexOf("SELECT") == -1 && 
+	    theTarget.tagName.toUpperCase().indexOf("TEXTAREA") == -1 && 
+	    theTarget.tagName.toUpperCase().indexOf("INPUT") == -1)  //SELECT, TEXTAREA & INPUT
 	    {
 	        preventAll(originalEvent);
 	    }
@@ -24,14 +25,16 @@
 		    touchevt.touches[0] = new Object();
 		    touchevt.touches[0].pageX = originalEvent.pageX;
 		    touchevt.touches[0].pageY = originalEvent.pageY;
-		    touchevt.touches[0].target = originalEvent.target;
+			//target
+		    touchevt.touches[0].target = theTarget;
 		    touchevt.changedTouches = touchevt.touches; //for jqtouch
 		    touchevt.targetTouches = touchevt.touches;  //for jqtouch
 		}
-	    touchevt.target = originalEvent.target;
+		//target
+	    touchevt.target = theTarget;
+		
 		touchevt.mouseToTouch = true;
-	    originalEvent.target.dispatchEvent(touchevt);
-	    return touchevt;
+	    theTarget.dispatchEvent(touchevt);
 	}
 	
     var mouseDown = false,
@@ -46,7 +49,9 @@
 
     document.addEventListener("mouseup", function(e) 
     {
-        redirectMouseToTouch("touchend", e);
+		if(!mouseDown) return;
+        redirectMouseToTouch("touchend", e, lastTarget);	//bind it to initial mousedown target
+		lastTarget = null;
 		mouseDown = false;
     }, true);
 
@@ -54,21 +59,6 @@
     {
         if (!mouseDown) return;
         redirectMouseToTouch("touchmove", e);
-    }, true);
-		
-    document.addEventListener("mouseout", function(e) 
-    {
-		if(!mouseDown) return;
-		
-	    e = e ? e : window.event;
-	    var from = e.relatedTarget || e.toElement;
-	    if (!from || from.nodeName == "HTML") {
-			var touchevt = document.createEvent("Event");
-		 	touchevt.initEvent("mouseup", true, true);
-	        touchevt.target = lastTarget;
-			lastTarget.dispatchEvent(touchevt);
-	    }
-		
     }, true);
 		
 		
