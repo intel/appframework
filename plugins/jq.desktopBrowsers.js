@@ -19,40 +19,27 @@
     
 	    var touchevt = document.createEvent("Event");
 	    touchevt.initEvent(type, true, true);
-	    touchevt.touches = new Array();
-	    touchevt.touches[0] = new Object();
-	    touchevt.touches[0].pageX = originalEvent.pageX;
-	    touchevt.touches[0].pageY = originalEvent.pageY;
-	    touchevt.touches[0].target = originalEvent.target;
-	    touchevt.changedTouches = touchevt.touches; //for jqtouch
-	    touchevt.targetTouches = touchevt.touches; //for jqtouch
+		if(type!='touchend'){
+		    touchevt.touches = new Array();
+		    touchevt.touches[0] = new Object();
+		    touchevt.touches[0].pageX = originalEvent.pageX;
+		    touchevt.touches[0].pageY = originalEvent.pageY;
+		    touchevt.touches[0].target = originalEvent.target;
+		    touchevt.changedTouches = touchevt.touches; //for jqtouch
+		    touchevt.targetTouches = touchevt.touches;  //for jqtouch
+		}
 	    touchevt.target = originalEvent.target;
-	    originalEvent.target.dispatchEvent(touchevt);
 		touchevt.mouseToTouch = true;
+	    originalEvent.target.dispatchEvent(touchevt);
 	    return touchevt;
 	}
 	
-	var preventClick, removePreventClick;
-	preventClick = function(e) 
-    {
-		if(!e.mouseToTouch){
-	        preventAll(e);
-			removePreventClick();
-		}
-    }
-	
-	removePreventClick=function(){
-		document.removeEventListener("click", preventClick, true);
-	};
-	
     var mouseDown = false,
-		mouseMoving = false,
 		lastTarget = null;
 
     document.addEventListener("mousedown", function(e) 
     {
 		mouseDown = true;
-		mouseMoving = false;
 		lastTarget = e.target;
         redirectMouseToTouch("touchstart", e);
     }, true);
@@ -60,33 +47,28 @@
     document.addEventListener("mouseup", function(e) 
     {
         redirectMouseToTouch("touchend", e);
-		if(!mouseMoving){
-		    document.addEventListener("click", preventClick, true);
-		}
 		mouseDown = false;
-		mouseMoving = false;
     }, true);
 
     document.addEventListener("mousemove", function(e) 
     {
-        if (!mouseDown)
-            return;
-		mouseMoving = true;
+        if (!mouseDown) return;
         redirectMouseToTouch("touchmove", e);
     }, true);
 		
     document.addEventListener("mouseout", function(e) 
     {
-		if(mouseDown){
-		    e = e ? e : window.event;
-		    var from = e.relatedTarget || e.toElement;
-		    if (!from || from.nodeName == "HTML") {
-				var touchevt = document.createEvent("Event");
-			 	touchevt.initEvent("mouseup", true, true);
-		        touchevt.target = lastTarget;
-				lastTarget.dispatchEvent(touchevt);
-		    }
-		}
+		if(!mouseDown) return;
+		
+	    e = e ? e : window.event;
+	    var from = e.relatedTarget || e.toElement;
+	    if (!from || from.nodeName == "HTML") {
+			var touchevt = document.createEvent("Event");
+		 	touchevt.initEvent("mouseup", true, true);
+	        touchevt.target = lastTarget;
+			lastTarget.dispatchEvent(touchevt);
+	    }
+		
     }, true);
 		
 		
@@ -99,6 +81,12 @@
 	document.addEventListener("dragend", preventAll, true);
 	document.addEventListener("drop", preventAll, true);
 	document.addEventListener("selectstart", preventAll, true);
+	document.addEventListener("click", function(e) 
+    {
+		if(!e.mouseToTouch){
+	        preventAll(e);
+		}
+    }, true);
 	
 	
 	window.addEventListener("resize",function(){
@@ -107,7 +95,4 @@
 	    document.dispatchEvent(touchevt);
 	},false);
 	
-	$.touchEvents={
-		allowClick:removePreventClick
-	}
 })(jq)
