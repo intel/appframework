@@ -147,7 +147,13 @@ if (!window.jq || typeof (jq) !== "function") {
          * @param {String|Element|Object} [context]
          * @api private
          */
-        
+ 		function _selectorAll(selector, what){
+ 			try{
+ 				return what.querySelectorAll(selector);
+ 			} catch(e){
+ 				return [];
+ 			}
+ 		};
         function _selector(selector, what) {
             var dom;
 
@@ -156,17 +162,18 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (what == document)
                     dom = what.getElementById(selector.replace("#", ""));
                 else
-                    dom = [].slice.call(what.querySelectorAll(selector));
+                    dom = [].slice.call(_selectorAll(selector, what));
             } else if (selector[0] === "<" && selector[selector.length - 1] === ">")  //html
             {
                 var tmp = document.createElement("div");
                 tmp.innerHTML = selector.trim();
                 dom = [].slice.call(tmp.childNodes);
             } else {
-                dom = [].slice.call(what.querySelectorAll(selector));
+                dom = [].slice.call(_selectorAll(selector, what));
             }
             return dom;
         }
+		
         /**
         * Checks to see if the parameter is a $jqm object
             ```
