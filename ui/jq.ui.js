@@ -684,12 +684,16 @@
          */
         addDivAndScroll: function(tmp, refreshPull, refreshFunc) {
 			var jsScroll = false;
+			var overflowStyle = tmp.style.overflow;
+			var hasScroll = overflowStyle!='hidden'&&overflowStyle!='visible';
+			
 			//sets up scroll when required and not supported
-			if(!$.os.supportsNativeTouchScroll&&tmp.style.overflow!='hidden'&&tmp.style.overflow!='visible') tmp.setAttribute("js-scrolling", "yes");
+			if(!$.os.supportsNativeTouchScroll&&hasScroll) tmp.setAttribute("js-scrolling", "yes");
 			
             if (tmp.getAttribute("js-scrolling") && tmp.getAttribute("js-scrolling").toLowerCase() == "yes"){
 				tmp.style.overflow="hidden";
 				jsScroll = true;
+				hasScroll = true;
             }
             
 			
@@ -718,20 +722,24 @@
 	            this.passwordBox.getOldPasswords(scrollEl.id);
             	
             }
-            this.scrollingDivs[scrollEl.id] = (jq(tmp).scroller({
-                scrollBars: true,
-                verticalScroll: true,
-                horizontalScroll: false,
-                vScrollCSS: "jqmScrollbar",
-                refresh: refreshPull,
-				useJsScroll:jsScroll,
-				refreshListeners:{
-					release: refreshFunc,
-					trigger: null,
-					cancel: null
-				}
-            }));
-            //this.scrollingDivs[scrollEl.id].disable(); //changed the default behaviour in scroller plugin for performance
+
+			if(hasScroll){
+	            this.scrollingDivs[scrollEl.id] = (jq(tmp).scroller({
+	                scrollBars: true,
+	                verticalScroll: true,
+	                horizontalScroll: false,
+	                vScrollCSS: "jqmScrollbar",
+	                refresh: refreshPull,
+					useJsScroll:jsScroll,
+					refreshListeners:{
+						release: refreshFunc,
+						trigger: null,
+						cancel: null
+					},
+					autoEnable:false	//dont enable the events unnecessarilly
+	            }));
+			}
+            
 			tmp = null;
 			scrollEl = null;
         },
@@ -973,8 +981,11 @@
                     
                 if (!what)
                     throw ("Target: " + target + " was not found");
-                if (what == this.activeDiv && !back)
-                    return;
+                if (what == this.activeDiv && !back){
+                	//toggle the menu if applicable
+		            if (this.isSideMenuOn()) this.toggleSideMenu(false);
+					return;
+                }
                     
                 if (what.getAttribute("data-modal") == "true" || what.getAttribute("modal") == "true") {
                     return this.showModal(what.id);
@@ -1026,8 +1037,11 @@
                 if (back) {
                     if (this.history.length > 0) {
                         var val = this.history[this.history.length - 1];
-                            
-                        var el = $am(val.target.replace("#", ""));
+						var slashIndex = val.target.indexOf('/');
+						if (slashIndex != -1) {
+						    var prevId = val.target.substr(0, slashIndex);
+						} else var prevId = val.target;
+                        var el = $am(prevId.replace("#", ""));
                         this.setBackButtonText(el.title)
                     }
                 } else if (this.activeDiv.title)
