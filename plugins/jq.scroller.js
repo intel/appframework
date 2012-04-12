@@ -69,6 +69,7 @@
 			eventsActive:false,
 			rememberEventsActive:false,
 			scrollingLocked:false,
+			autoEnable:true,
 			
 			//methods
 			init:function(el, opts) {
@@ -156,9 +157,11 @@
 			//this.refresh=true;
 			
             this.container = this.el.parentNode;
+			
+			if(this.container.style.overflow != 'hidden' && this.container.style.overflow != 'visible') this.container.style.overflow = 'hidden';
 
 			this.addPullToRefresh(null, true);
-            //this.enable();
+            if(this.autoEnable) this.enable();
                 
             //create vertical scroll
             if (this.verticalScroll && this.verticalScroll == true && this.scrollBars == true) {
@@ -198,7 +201,7 @@
 			
 			this.container = this.el;
 			this.addPullToRefresh(null, true);
-			//this.enable();
+			if(this.autoEnable) this.enable();
 		}
 		nativeScroller.prototype = new scrollerCore();
 		jsScroller.prototype = new scrollerCore();
@@ -327,6 +330,7 @@
             this.vScrollCSS="scrollBar";
 			this.firstEventInfo=null;
 			this.moved=false;
+			this.preventPullToRefresh = true;
 
             this.lastScrollbar="";
             this.finishScrollingObject=null;
@@ -350,15 +354,15 @@
             return scrollDiv;
         }
         jsScroller.prototype.enable=function () {
-    		this.el.addEventListener('touchstart', this, false);
-            this.el.addEventListener('touchmove', this, false);
-			this.el.addEventListener('touchend', this, false);
+    		this.container.addEventListener('touchstart', this, false);
+            this.container.addEventListener('touchmove', this, false);
+			this.container.addEventListener('touchend', this, false);
 			this.eventsActive = true;
         }
         jsScroller.prototype.disable=function () {
-        	this.el.removeEventListener('touchstart', this, false);
-            this.el.removeEventListener('touchmove', this, false);
-			this.el.removeEventListener('touchend', this, false);
+        	this.container.removeEventListener('touchstart', this, false);
+            this.container.removeEventListener('touchmove', this, false);
+			this.container.removeEventListener('touchend', this, false);
 			this.eventsActive = false;
         }
 		jsScroller.prototype.addPullToRefresh=function(el, leaveRefresh){
@@ -366,8 +370,6 @@
             if (this.refresh && this.refresh == true) {
 	                this.coreAddPullToRefresh(el);
 					this.el.style.overflow='visible';
-					this.el.style.overflowX='visible';
-					this.el.style.overflowY='visible';
             }
 		}
         jsScroller.prototype.hideScrollbars=function() {
@@ -384,6 +386,7 @@
         jsScroller.prototype.onTouchStart=function(event) {
 			
 			this.moved = false;
+			this.currentScrollingObject = null;
 			
 			if (!this.container)
                 return;
@@ -406,10 +409,7 @@
                     // access to legit calls
                     return;
             }
-			
-			//save event
-			this.saveEventInfo(event, true);
-			
+
 			//default variables
 			var scrollInfo = {
 				//current position
@@ -434,14 +434,20 @@
 			this.elementInfo = {};
 			this.elementInfo.bottomMargin 	= (this.container.clientHeight > window.innerHeight ? window.innerHeight : this.container.clientHeight-numOnly(cnt.css("marginTop"))-numOnly(cnt.css("paddingTop"))-numOnly(cnt.css("marginBottom"))-numOnly(cnt.css("paddingBottom")));
 			this.elementInfo.maxTop 		= (this.el.clientHeight - this.elementInfo.bottomMargin);
+			if(this.elementInfo.maxTop<0) this.elementInfo.maxTop = 0;
 			this.elementInfo.divHeight  	= this.el.clientHeight;
 	        this.elementInfo.rightMargin 	= (this.container.clientWidth > window.innerWidth ? window.innerWidth : this.container.clientWidth-numOnly(cnt.css("marginLeft"))-numOnly(cnt.css("paddingLeft"))-numOnly(cnt.css("marginRight"))-numOnly(cnt.css("paddingRight")));
 	        this.elementInfo.maxLeft 		= (this.el.clientWidth - this.elementInfo.rightMargin);
+			if(this.elementInfo.maxLeft<0) this.elementInfo.maxLeft = 0;
 	        this.elementInfo.divWidth 		= this.el.clientWidth;
-			this.elementInfo.hasVertScroll 	= this.elementInfo.maxTop > 0;
+			this.elementInfo.hasVertScroll 	= this.verticalScroll || this.elementInfo.maxTop > 0;
 			this.elementInfo.hasHorScroll 	= this.elementInfo.maxLeft > 0;
 			this.elementInfo.requiresVScrollBar 	= this.vscrollBar && this.elementInfo.hasVertScroll;
 			this.elementInfo.requiresHScrollBar 	= this.hscrollBar && this.elementInfo.hasHorScroll;
+			
+			//save event
+			this.saveEventInfo(event);
+			this.saveFirstEventInfo(event);
 			
 			//get the current top
 			var cssMatrix = new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform);
@@ -456,6 +462,10 @@
 				this.refreshHeight = this.refreshContainer.firstChild.clientHeight;
 				this.refreshContainer.firstChild.style.top=(-this.refreshHeight)+'px';
 				this.refreshContainer.style.overflow='visible';
+				this.preventPullToRefresh = false;
+			} else if(scrollInfo.top<0) {
+				this.preventPullToRefresh = true;
+				this.refreshContainer.style.overflow='hidden';
 			}
 			
 			//set target
@@ -485,18 +495,18 @@
 			//save scrollInfo
 			this.lastScrollInfo = scrollInfo;
         }
-		jsScroller.prototype.saveEventInfo=function(event, first){
+		jsScroller.prototype.saveEventInfo=function(event){
 			this.lastEventInfo = {
 	            pageX: event.touches[0].pageX,
 	            pageY: event.touches[0].pageY,
 				time: event.timeStamp
 			}
-			if(first){
-				this.firstEventInfo = {
-		            pageX: event.touches[0].pageX,
-		            pageY: event.touches[0].pageY,
-					time: event.timeStamp
-				}
+		}
+		jsScroller.prototype.saveFirstEventInfo=function(event){
+			this.firstEventInfo = {
+	            pageX: event.touches[0].pageX,
+	            pageY: event.touches[0].pageY,
+				time: event.timeStamp
 			}
 		}
 		jsScroller.prototype.setVScrollBar=function(scrollInfo, timingFunction){
@@ -537,29 +547,44 @@
 			
 			var elasticOverflow = (this.lastScrollInfo.top>=0 || this.lastScrollInfo.top <= -this.elementInfo.maxTop);
 			
-			if(this.checkSignificance(scrollInfo, elasticOverflow)){
+			if(this.checkSignificance(scrollInfo, event, elasticOverflow)){
 				
 				if(scrollInfo.duration>0) scrollInfo=this.setMomentum(scrollInfo);
 				scrollInfo=this.calculateTarget(scrollInfo);
 				
-				//pull to refresh elastic
-	            if (elasticOverflow && (scrollInfo.y > 0 || scrollInfo.y < -this.elementInfo.maxTop)) 
-	            {   
-	                var overflow = Math.abs(scrollInfo.y);
-	                var height = (this.container.clientHeight - overflow) / this.container.clientHeight;  
-					if(height<.5) height = .5;
-	                scrollInfo.y = Math.round(scrollInfo.top + scrollInfo.deltaY * height);
-	            }
-				
 				//avoid strange flashing movements
 				if(scrollInfo.duration==0 || scrollInfo.duration>this.configFlashDuration) {
 					//significant move
+					
+					//boundaries control
+					scrollInfo = this.checkYboundary(scrollInfo);
+					if(this.elementInfo.hasHorScroll) scrollInfo = this.checkXboundary(scrollInfo);
+					
+					//pull to refresh elastic
+					var positiveOverflow = scrollInfo.y > 0;
+					var negativeOverflow = scrollInfo.y < -this.elementInfo.maxTop;
+		            if (positiveOverflow || negativeOverflow) 
+		            {   
+		                var overflow = positiveOverflow ? scrollInfo.y : -scrollInfo.y-this.elementInfo.maxTop;
+		                var pcent = (this.container.clientHeight - overflow) / this.container.clientHeight;  
+						if(pcent<.5) pcent = .5;
+						//cur top, maxTop or 0?
+						var baseTop = 0;
+						if((positiveOverflow && scrollInfo.top>0) || (negativeOverflow && scrollInfo.top<-this.elementInfo.maxTop)){
+							baseTop = scrollInfo.top;
+						} else if(negativeOverflow){
+							baseTop = -this.elementInfo.maxTop;
+						}
+		                scrollInfo.y = Math.round(baseTop + scrollInfo.deltaY * pcent);
+		            }
+					
+					//move
 	                this.scrollerMoveCSS(this.currentScrollingObject, scrollInfo, scrollInfo.duration);
 					this.setVScrollBar(scrollInfo, 0);
 					this.setHScrollBar(scrollInfo, 0);
 				
 					//check refresh triggering
-					if(this.refresh){
+					if(this.refresh && !this.preventPullToRefresh){
 						if(!this.refreshTriggered && scrollInfo.top>this.refreshHeight){
 							this.refreshTriggered=true;
 							if(this.refreshListeners.trigger) this.refreshListeners.trigger.call();
@@ -578,7 +603,7 @@
 			this.saveEventInfo(event);
         }
 		
-		jsScroller.prototype.checkSignificance=function(scrollInfo, elasticOverflow){
+		jsScroller.prototype.checkSignificance=function(scrollInfo, event, elasticOverflow){
 
 			//Y significance
 			if(this.elementInfo.hasVertScroll){
@@ -590,7 +615,11 @@
 				//start movement
 				if(this.lastScrollInfo.speedY==0) return true;
 				//change direction
-				if (this.lastScrollInfo.speedY<0 ? scrollInfo.speedY>0 : scrollInfo.speedY<0) return true;
+				if (this.lastScrollInfo.speedY<0 ? scrollInfo.speedY>0 : scrollInfo.speedY<0) {
+					//reset the starting points
+					this.saveFirstEvent(event);
+					return true;
+				}
 				//significant speedchange
 				if (scrollInfo.absSpeedY>this.lastScrollInfo.absSpeedY*(1+this.configSpeedSignificance) || this.lastScrollInfo.absSpeedY*(1-this.configSpeedSignificance)>scrollInfo.absSpeedY) return true;		
 			}
@@ -661,8 +690,6 @@
 			scrollInfo.absDeltaY = Math.abs(scrollInfo.deltaY);
 			scrollInfo.absDeltaX = Math.abs(scrollInfo.deltaX);
 			
-			if(last) console.log(scrollInfo.deltaY+" in "+scrollInfo.duration);
-			
 			return scrollInfo;
 		}
 		jsScroller.prototype.calculateTarget=function(scrollInfo, elasticOverflow){
@@ -674,12 +701,40 @@
 			scrollInfo.x = scrollInfo.left+scrollInfo.deltaX;
 			scrollInfo.duration = scrollInfo.duration;
 			
-			//x boundaries
-			if(scrollInfo.x<0) scrollInfo.x = 0;
-			if(-scrollInfo.x<this.elementInfo.maxLeft) scrollInfo.x = -this.elementInfo.maxLeft;
-			
 			return scrollInfo;
 		}
+		jsScroller.prototype.checkYboundary=function(scrollInfo){
+			var minTop = this.container.clientHeight/2;
+			var maxTop = this.elementInfo.maxTop+minTop;
+			//y boundaries
+			if(scrollInfo.y>minTop) scrollInfo.y = minTop;
+			else if(-scrollInfo.y>maxTop) scrollInfo.y = -maxTop;
+			else return scrollInfo;
+			
+			//recalculate delta
+			var oldDeltaY = scrollInfo.absDeltaY;
+			scrollInfo.deltaY = scrollInfo.y - scrollInfo.top;
+			scrollInfo.absDeltaY = Math.abs(scrollInfo.deltaY);
+			//recalculate duration at same speed
+			scrollInfo.duration = scrollInfo.duration * scrollInfo.absDeltaY / oldDeltaY;
+			return scrollInfo;
+		}
+		
+		jsScroller.prototype.checkXboundary=function(scrollInfo){
+			//x boundaries
+			if(scrollInfo.x>0) scrollInfo.x = 0;
+			else if(-scrollInfo.x>this.elementInfo.maxLeft) scrollInfo.x = -this.elementInfo.maxLeft;
+			else return scrollInfo;
+			
+			//recalculate delta
+			var oldDeltaX = scrollInfo.absDeltaX;
+			scrollInfo.deltaX = scrollInfo.x - scrollInfo.left;
+			scrollInfo.absDeltaX = Math.abs(scrollInfo.deltaX);
+			//recalculate duration at same speed
+			scrollInfo.duration = scrollInfo.duration * scrollInfo.absDeltaX / oldDeltaX;
+			return scrollInfo;
+		}
+		
 		
 		//freak of mathematics, but for our cases it works
 		jsScroller.prototype.divide=function(a, b){
@@ -729,7 +784,7 @@
 			var scrollInfo = this.calculateMovement(this.lastEventInfo, true);
 			scrollInfo=this.setMomentum(scrollInfo);
 			scrollInfo=this.calculateTarget(scrollInfo);
-			var triggered = scrollInfo.top > this.refreshHeight || scrollInfo.y > this.refreshHeight;
+			var triggered = !this.preventPullToRefresh && (scrollInfo.top > this.refreshHeight || scrollInfo.y > this.refreshHeight);
             this.fireRefreshRelease(triggered, scrollInfo.top>0);
 			
 			//refresh hang in
@@ -746,8 +801,6 @@
 				if(-scrollInfo.top > this.elementInfo.maxTop) scrollInfo.duration = 75;
 			//all others
 			}
-			
-			console.log("final speed "+scrollInfo.absSpeedY+ " to "+scrollInfo.y+" in "+scrollInfo.duration);
 			
             this.scrollerMoveCSS(this.finishScrollingObject, scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
 			this.setVScrollBar(scrollInfo, "cubic-bezier(0.33,0.66,0.66,1)");
@@ -778,6 +831,10 @@
             this.startLeft = numOnly(cssMatrix.e) - numOnly(this.container.scrollLeft);
             this.scrollTo({y:this.startTop-pos.y,x:this.startLeft-pos.x},time);
         }
+		
+		//debug JS scrolling
+		//jsScroller = $.debug.type(jsScroller, 'jsScroller');
+		
 		//return main function
         return scroller;
     })();
