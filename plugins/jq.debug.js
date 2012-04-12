@@ -7,7 +7,7 @@
 	 //you can override this one to have your own 
 	 $.debug = {};
 	 $.debug.log = function(t){console.log(t);};
-	 var maxObjectItems = 5;
+	 var maxObjectItems = 14;
 	 
 	 var now=function(){
 		 return (new Date()).getTime();
