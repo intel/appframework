@@ -4,19 +4,23 @@
  */ 
  (function($) {
     var cache = [];
+	var objId=function(obj){
+		if(!obj.jqmScrollerId) obj.jqmScrollerId=$.uuid();
+		return obj.jqmScrollerId;
+	}
     $.fn["scroller"] = function(opts) {
-        var tmp;
-        if (opts === undefined && this.length > 0) 
-        {
-            return cache[this[0].id] ? cache[this[0].id] : null;
-        }
-		//override nativeScroll for old browsers
-		if(!$.os.supportsNativeTouchScroll) opts.useJsScroll=true;
-		
+        var tmp, id;
         for (var i = 0; i < this.length; i++) {
-            tmp = scroller(this[i], opts);
-            if (this[i].id)
-                cache[this[i].id] = tmp;
+			//cache system
+			id = objId(this[i]);
+			if(!cache[id]){
+				if(!opts) opts = {};
+				if(!$.os.supportsNativeTouchScroll) opts.useJsScroll = true;
+				tmp = scroller(this[i], opts);
+				cache[id] = tmp;
+			} else if(this.length==0) {
+				tmp = cache[id];
+			}
         }
         return this.length == 1 ? tmp : this;
     };
@@ -465,7 +469,7 @@
 				this.preventPullToRefresh = false;
 			} else if(scrollInfo.top<0) {
 				this.preventPullToRefresh = true;
-				this.refreshContainer.style.overflow='hidden';
+				if(this.refresh) this.refreshContainer.style.overflow='hidden';
 			}
 			
 			//set target
