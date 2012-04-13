@@ -1,17 +1,43 @@
 /**
  * jq.web.css3Animate - css3 animate class for html5 mobile apps
  * @copyright 2011 - AppMobi
- */ (function ($) {
+ */ 
+(function ($) {
+	var cache = [];
+	var objId=function(obj){
+		if(!obj.jqmCSS3AnimateId) obj.jqmCSS3AnimateId=$.uuid();
+		return obj.jqmCSS3AnimateId;
+	}
+	var getEl=function(elID){
+        if (typeof elID == "string" || elID instanceof String) {
+            return document.getElementById(elID);
+        } else if($.is$(elID)){
+        	return elID[0];
+        } else {
+            return elID;
+        }
+	}
+	var getCSS3Animate=function(obj, options){
+        var tmp, id, el = getEl(obj);
+		//first one
+		id = objId(el);
+		if(cache[id]){
+			cache[id].animate(options);
+			tmp = cache[id];
+		} else tmp = css3Animate(el, options);
+		return tmp;
+	}
     $.fn["css3Animate"] = function (opts) {
         var tmp;
 		//first one
-		tmp = new css3Animate(this[0], opts);
+		tmp = getCSS3Animate(this[0], opts);
 		opts.callback=null;
         for (var i = 1; i < this.length; i++) {
             tmp.also(this[i], opts);
         }
         return tmp;
     };
+	
 
     $["css3AnimateQueue"] = function () {
         return new css3Animate.queue();
@@ -23,29 +49,30 @@
 	var css3Animate = (function () {
 		
 	    var css3Animate = function (elID, options) {
+			if(!(this instanceof css3Animate)) return new css3Animate(elID, options);
+			
+			//start doing stuff
 			this.callbacksStack = [];
-			this.activeEventsStack = [];
-			this.activeTimeoutsStack = [];
+			this.activeEvent = null;
+			this.activeTimeout = null;
 			this.countStack = 0;
-			this.isActive = true;
-			this.animate(elID, options);
+			this.isActive = false;
+			this.el = elID;
+			
+	        if (!this.el) return;
+			
+			this.animate(options);
 	    };
 
 	    css3Animate.prototype = {
-			animate:function(elID, options){
-			
-		        if (typeof elID == "string" || elID instanceof String) {
-		            var el = document.getElementById(elID);
-		        } else if($.is$(elID)){
-		        	el = elID[0];
-		        } else {
-		            var el = elID;
-		        }
-			
-		        if (!el) return;
-			
+			animate:function(options){
+				
+				//cancel current active animation on this object
+				if(this.isActive) this.cancel();
+				this.isActive = true;
+				
 		        if (!options) {
-		            alert("Please provide configuration options for animation of " + elID);
+		            alert("Please provide configuration options for animation of " + this.el.id);
 		            return;
 		        }
 			
@@ -59,9 +86,9 @@
 	            if(classMode){
 	            	//class defines properties being changed
 					if(options["removeClass"]){
-						jq(el).replaceClass(options["removeClass"], options["addClass"]);
+						jq(this.el).replaceClass(options["removeClass"], options["addClass"]);
 					} else {
-						jq(el).addClass(options["addClass"]);
+						jq(this.el).addClass(options["addClass"]);
 					}
 				
 	            } else {
@@ -72,7 +99,7 @@
 			        if (!options["y"]) options["y"] = 0;
 			        if (!options["x"]) options["x"] = 0;
 			        if (options["previous"]) {
-						var cssMatrix = new WebKitCSSMatrix(window.getComputedStyle(el).webkitTransform);
+						var cssMatrix = new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform);
 			            options.y += numOnly(cssMatrix.f);
 			            options.x += numOnly(cssMatrix.e);
 			        }
@@ -90,36 +117,37 @@
 			        //check for percent or numbers
 			        if (typeof (options.x) == "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x) + "px";
 			        if (typeof (options.y) == "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y) + "px";
-			
-			        el.style.webkitTransform = "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ") rotateY(" + options.rotateY + ") skew(" + options.skewX + "," + options.skewY + ")";
-			        el.style.webkitBackfaceVisiblity = "hidden";
+					
+			        this.el.style.webkitTransform = "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ") rotateY(" + options.rotateY + ") skew(" + options.skewX + "," + options.skewY + ")";
+			        this.el.style.webkitBackfaceVisiblity = "hidden";
 					var properties = "-webkit-transform";
 			        if (options["opacity"]!==undefined) {
-			            el.style.opacity = options["opacity"];
+			            this.el.style.opacity = options["opacity"];
 						properties+=", opacity";
 			        }
 			        if (options["width"]) {
-			            el.style.width = options["width"];
+			            this.el.style.width = options["width"];
 						properties = "all";
 			        }
 			        if (options["height"]) {
-			            el.style.height = options["height"];
+			            this.el.style.height = options["height"];
 						properties = "all";
 			        }
-					el.style.webkitTransitionProperty = properties;
+					this.el.style.webkitTransitionProperty = properties;
 				
 					if((""+options["time"]).indexOf("s")==-1) var time = options["time"]+"ms";
 					else var time = options["time"];
+					
+					if((""+options["time"]).indexOf("ms")==-1) var timeout = timeNum*1000+50;
+					else var timeout = timeNum+50;
 			
-					el.style.webkitTransitionDuration = time;
-					el.style.webkitTransitionTimingFunction = options["timingFunction"];
-			        el.style.webkitTransformOrigin = options.origin;
-				
+					this.el.style.webkitTransitionDuration = time;
+					this.el.style.webkitTransitionTimingFunction = options["timingFunction"];
+			        this.el.style.webkitTransformOrigin = options.origin;
 	            }
 
 				//add callback to the stack
 				this.callbacksStack.push(callback);
-				var curIndex = this.countStack;
 				this.countStack++;
 			
 				var that = this;
@@ -127,39 +155,59 @@
 					//setupo the event normally
 					var finishCB = function(event){
 						that.finishAnimation(event);
-						el.removeEventListener("webkitTransitionEnd", finishCB, false);
-						delete that.activeEventsStack[curIndex];
-					};
-					el.addEventListener("webkitTransitionEnd", finishCB, false);
-					this.activeEventsStack[curIndex] = {el:el, cb:finishCB};
-					//class mode requires us to check if timeout was actually 0 or not after class properties are set
-					this.activeTimeoutsStack[curIndex] = window.setTimeout(function(){
-						var duration = window.getComputedStyle(el).webkitTransitionDuration;
-						if(numOnly(duration)==0){
-							el.removeEventListener("webkitTransitionEnd", finishCB, false);
-							delete that.activeEventsStack[curIndex];
-							that.finishAnimation(false);
+						that.el.removeEventListener("webkitTransitionEnd", finishCB, false);
+						delete that.activeEvent;
+						if(that.activeTimeout){
+							window.clearTimeout(that.activeTimeout);
+							delete that.activeTimeout;
 						}
-						delete that.activeTimeoutsStack[curIndex];
+					};
+					this.el.addEventListener("webkitTransitionEnd", finishCB, false);
+					this.activeEvent = finishCB;
+					//class mode requires us to check if timeout was actually 0 or not after class properties are set
+					this.activeTimeout = window.setTimeout(function(){
+						var duration = window.getComputedStyle(that.el).webkitTransitionDuration;
+						var timeNum = numOnly(duration);
+						if(timeNum==0){
+							that.el.removeEventListener("webkitTransitionEnd", finishCB, false);
+							delete that.activeEvent;
+							that.finishAnimation(false);
+							delete that.activeTimeout;
+						} else {
+							if((""+options["time"]).indexOf("ms")==-1) var timeout = timeNum*1000+50;
+							else var timeout = timeNum+20;
+							that.activeTimeout = window.setTimeout(finishCB, timeout);
+						}
 					}, 0);
 				} else {
 					if(timeNum==0){
 						//just wait for styles to be rendered
-						this.activeTimeoutsStack[curIndex] = window.setTimeout(function(){
+						this.activeTimeout = window.setTimeout(function(){
 							that.finishAnimation(false);
-							delete that.activeTimeoutsStack[curIndex];
+							delete that.activeTimeout;
 						}, 0);
 					} else {
 						var finishCB = function(event){
 							that.finishAnimation(event);
-							el.removeEventListener("webkitTransitionEnd", finishCB, false);
-							delete that.activeEventsStack[curIndex];
+							that.el.removeEventListener("webkitTransitionEnd", finishCB, false);
+							delete that.activeEvent;
+							if(that.activeTimeout){
+								window.clearTimeout(that.activeTimeout);
+								delete that.activeTimeout;
+							}
 						};
-						el.addEventListener("webkitTransitionEnd", finishCB, false);
-						this.activeEventsStack[curIndex] = {el:el, cb:finishCB};
+						this.el.addEventListener("webkitTransitionEnd", finishCB, false);
+						this.activeTimeout = window.setTimeout(finishCB, timeout);
+						this.activeEvent = finishCB;
 					}
 				}
 			
+			},
+			addCallbackHook:function(callback){
+				if(callback) this.callbacksStack.push(callback);
+				this.countStack++;
+				var that = this;
+				return function(){that.finishAnimation();};
 			},
 	        finishAnimation: function (event) {
 	            if(event) event.preventDefault();
@@ -170,20 +218,25 @@
 	            if(this.countStack==0) this.fireCallbacks();
 	        },
 			fireCallbacks:function(){
-				this.clearEventStacks();
-				//fire all callbacks later
-				for(var i=0; i<this.callbacksStack.length; i++) {
-	                if (this.callbacksStack[i] && typeof (this.callbacksStack[i] == "function")) {
-	                    this.callbacksStack[i]();
-	                }
-				}
+				this.clearEvents();
+				
+				//keep callbacks after cleanup
+				// (if any of the callbacks overrides this object, callbacks will keep on fire as expected)
+				var callbacks = this.callbacksStack;
+				
 				//cleanup
 				this.cleanup();
+				
+				//fire all callbacks
+				for(var i=0; i<callbacks.length; i++) {
+	                if (callbacks[i] && typeof (callbacks[i] == "function")) {
+	                    callbacks[i]();
+	                }
+				}
 			},
 			cancel:function(){
 				if(!this.isActive) return;
-				console.log("cancelling an animation!");
-				this.clearEventStacks();
+				this.clearEvents();
 				this.cleanup();
 			},
 			cleanup:function(){
@@ -191,22 +244,24 @@
 				this.isActive = false;
 				this.countStack = 0;
 			},
-			clearEventStacks:function(){
-				for(var i = 0; i<this.countStack; i++){
-					if(this.activeEventsStack[i]) {
-						this.activeEventsStack[i].el.removeEventListener("webkitTransitionEnd", this.activeEventsStack[i].cb, false);
-						delete this.activeEventsStack[i];
-					}
-					if(this.activeTimeoutsStack[i]) {
-						window.clearTimeout(this.activeTimeoutsStack[i]);
-						delete this.activeTimeoutsStack[i];
-					}
+			clearEvents:function(){
+				if(this.activeEvent) {
+					this.el.removeEventListener("webkitTransitionEnd", this.activeEvent, false);
+					delete this.activeEvent;
 				}
-				this.activeEventsStack = [];
-				this.activeTimeoutsStack = [];
+				if(this.activeTimeout) {
+					window.clearTimeout(this.activeTimeout);
+					delete this.activeTimeout;
+				}
+				this.activeEvent = null;
+				this.activeTimeout = null;
 			},
-	        also: function (elID, params) {
-				this.animate(elID, params);
+	        also: function (elID, opts) {
+				var oldCallback = opts.callback;
+				opts.callback = this.addCallbackHook(oldCallback);
+				getCSS3Animate(elID, opts);
+				//set the old callback back in the obj to avoid strange stuff
+				opts.callback = oldCallback;
 				return this;
 	        }
 	    }
