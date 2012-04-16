@@ -102,23 +102,12 @@
 			this.checkDOMTree(e.target, this.layer);
 			if(!this.isScrolling && !this.isPanning) {
 				e.preventDefault();
-			} else if(this.isScrollingVertical && !this.demandVerticalScroll()){
-				e.preventDefault();
-				return;
+			} else if(this.isScrollingVertical){
+				this.demandVerticalScroll();
 			}
 			document.addEventListener('touchmove', this, false);
 			document.addEventListener('touchend', this, false);
         },
-		debugVars:function(start){
-			return;	//comment to test
-			console.log($.debug.since()+start);
-			console.log(
-				(this.moved?"move ":"") +
-				(this.isPanning?"panning ":"") +
-				(this.isScrolling?"scrolling ":"") +
-				(this.scrollingEl?"scrolltop "+this.scrollingEl.scrollTop+" ":"")
-			);
-		},
 		demandVerticalScroll:function(){
 			//if at top or bottom adjust scroll
 			var atTop = this.scrollingEl.scrollTop<=0;
@@ -131,7 +120,6 @@
 					this.scrollingEl.scrollTop=this.scrollingEl.scrollHeight-this.scrollingEl.clientHeight-1;
 				}
 			}
-			return true;
 		},
 		//set rules here to ignore scrolling check on these elements
 		ignoreScrolling:function(el){
@@ -148,7 +136,7 @@
 			return false;
 		},
 		allowsHorizontalScroll:function(el, styles){
-			var overflowX = styles.overflowY;
+			var overflowX = styles.overflowX;
 			if(overflowX == 'scroll') return true;
 			if(overflowX == 'auto' && el['scrollWidth'] > el['clientWidth'])
 				return true;
@@ -254,7 +242,7 @@
 				theEvent.target = theTarget;
 				//jq.DesktopBrowsers flag
 				if(e.mouseToTouch) theEvent.mouseToTouch = true;
-				//dispatch event immediatly (to another thread)
+				//dispatch event immediatly (don't block the touchend event with it)
 				setTimeout(function(){
 					theTarget.dispatchEvent(theEvent);
 				},0);
