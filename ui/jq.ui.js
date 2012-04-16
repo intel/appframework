@@ -1044,7 +1044,9 @@
 						    var prevId = val.target.substr(0, slashIndex);
 						} else var prevId = val.target;
                         var el = $am(prevId.replace("#", ""));
-                        this.setBackButtonText(el.title)
+						//make sure panel is there
+                        if(el) this.setBackButtonText(el.title);
+						else this.setBackButtonText("Back");
                     }
                 } else if (this.activeDiv.title)
                     this.setBackButtonText(this.activeDiv.title)
