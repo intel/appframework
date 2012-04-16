@@ -500,6 +500,7 @@
 			
 			//just in case...
 			if(this.doScrollInterval) window.clearInterval(this.doScrollInterval);
+			this.doScrollInterval = null;
 			var that = this;
 			this.doScrollInterval = window.setInterval(function(){that.doScroll();}, this.refreshRate);
         }
@@ -736,6 +737,8 @@
         jsScroller.prototype.onTouchEnd=function(event) {
 			
 			window.clearInterval(this.doScrollInterval);
+			this.doScrollInterval = null;
+			
             if (this.currentScrollingObject == null || !this.moved) return;
 			event.preventDefault();
 			event.stopPropagation();
