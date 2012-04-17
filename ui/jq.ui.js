@@ -1742,7 +1742,8 @@
                 theTarget = theTarget.parentNode;
             var tagname = theTarget.tagName.toLowerCase();
             if((tagname=="a"&& theTarget.href.indexOf("tel:")===0)||(tagname=="input"||tagname=="select"||tagname=="textarea")){
-                theTarget.focus();
+                if(jq.os.android)
+                    theTarget.focus();
             }
             else
                 e.preventDefault();
