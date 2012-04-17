@@ -18,7 +18,7 @@
 				if(!$.os.supportsNativeTouchScroll) opts.useJsScroll = true;
 				tmp = scroller(this[i], opts);
 				cache[id] = tmp;
-			} else if(this.length==0) {
+			} else {
 				tmp = cache[id];
 			}
         }
