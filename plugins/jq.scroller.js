@@ -453,7 +453,7 @@
 			this.saveFirstEventInfo(event);
 			
 			//get the current top
-			var cssMatrix = new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform);
+			var cssMatrix = this.getCSSMatrix(this.el);
             scrollInfo.top = numOnly(cssMatrix.f) - numOnly(this.container.scrollTop);
             scrollInfo.left = numOnly(cssMatrix.e) - numOnly(this.container.scrollLeft);
 
@@ -504,6 +504,10 @@
 			var that = this;
 			this.doScrollInterval = window.setInterval(function(){that.doScroll();}, this.refreshRate);
         }
+		jsScroller.prototype.getCSSMatrix = function(el){
+			var str = window.getComputedStyle(el).webkitTransform;
+			return str=='none' ? {f:0,e:0} : new WebKitCSSMatrix(str);
+		}
 		jsScroller.prototype.saveEventInfo=function(event){
 			this.lastEventInfo = {
 	            pageX: event.touches[0].pageX,
@@ -550,7 +554,6 @@
         jsScroller.prototype.onTouchMove=function(event) {
             if (this.currentScrollingObject == null) return;
 			event.preventDefault();
-			event.stopPropagation();
 			
 			var scrollInfo = this.calculateMovement(event);
 			this.calculateTarget(scrollInfo);
@@ -562,7 +565,7 @@
         }
 		
 		jsScroller.prototype.doScroll=function(){
-			var cssMatrix = (new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform));
+			var cssMatrix = this.getCSSMatrix(this.el);
 			this.lastScrollInfo.top = numOnly(cssMatrix.f);
 			this.lastScrollInfo.left = numOnly(cssMatrix.e);
 			
@@ -741,7 +744,6 @@
 			
             if (this.currentScrollingObject == null || !this.moved) return;
 			event.preventDefault();
-			event.stopPropagation();
 			
             this.finishScrollingObject = this.currentScrollingObject;
             this.currentScrollingObject = null;
@@ -754,7 +756,7 @@
 			if(this.elementInfo.hasHorScroll) this.checkXboundary(scrollInfo);
 			
 			//get the current top
-			var cssMatrix = new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform);
+			var cssMatrix = this.getCSSMatrix(this.el);
             scrollInfo.top = numOnly(cssMatrix.f);
             scrollInfo.left = numOnly(cssMatrix.e);
 			
@@ -800,7 +802,7 @@
             this.scrollerMoveCSS(this.el, pos, time);
         }
         jsScroller.prototype.scrollBy=function(pos,time) {
-			var cssMatrix = new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform);
+			var cssMatrix = this.getCSSMatrix(this.el);
             this.startTop = numOnly(cssMatrix.f) - numOnly(this.container.scrollTop);
             this.startLeft = numOnly(cssMatrix.e) - numOnly(this.container.scrollLeft);
             this.scrollTo({y:this.startTop-pos.y,x:this.startLeft-pos.x},time);
