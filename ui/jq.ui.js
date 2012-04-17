@@ -1750,8 +1750,6 @@
             
             
 			//internal links
-			//TODO: this should be moved into jq.ui.js attached to a click event with useCapture
-			//this way the touchLayer can be used independentely from the UI
 			e.preventDefault();
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
