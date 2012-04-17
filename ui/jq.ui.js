@@ -1170,7 +1170,9 @@
                 }
                 
                 //window.setTimeout(function() {
+                
                 var loadFirstDiv=function(){
+                    
                     //activeDiv = firstDiv;
                     that.firstDiv.style.display = "block";
                     that.css3animate(that.firstDiv, {
@@ -1184,11 +1186,12 @@
                     if (defaultHash.length > 0 && that.loadDefaultHash&&defaultHash!=("#"+that.firstDiv.id))
                     {
                         that.loadContent(defaultHash);
-                        
+                        that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
                     }
-                   // that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
-                
-                    
+                    else
+                        previousTarget="#"+that.firstDiv.id;
+
+
                     modalDiv = null;
                     maskDiv = null;
                     that.launchCompleted = true;
