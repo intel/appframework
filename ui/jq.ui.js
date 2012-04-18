@@ -1779,7 +1779,8 @@
                 if (theTarget && theTarget.type != undefined) {
                     var tagname = theTarget.tagName.toLowerCase();
                      if (tagname == "select" || tagname == "input"||tagname == "textarea"){ 
-                        theTarget.focus();
+                        if(jq.os.android)
+                            theTarget.focus();
                     }
                 }
             }
