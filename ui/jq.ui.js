@@ -672,10 +672,10 @@
             
             this.content.appendChild(myDiv);
             
-            if(tmp.getAttribute("data-modal")){
+           // if(tmp.getAttribute("data-modal")){
                 this.selectBox.getOldSelects(myDiv.id);
                 this.passwordBox.getOldPasswords(myDiv.id);   
-            }
+            //}
             if (addScroller) {
                 this.scrollingDivs[myDiv.id] = (jq(tmp).scroller({
                     scrollBars: true,
