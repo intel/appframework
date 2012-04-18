@@ -1775,13 +1775,7 @@
                 
                 var theEvent = document.createEvent('MouseEvents');
                 theEvent.initEvent('click', true, true);
-                theTarget.dispatchEvent(theEvent);
-                if (theTarget && theTarget.type != undefined) {
-                    var tagname = theTarget.tagName.toLowerCase();
-                     if (tagname == "select" || tagname == "input"||tagname == "textarea"){ 
-                        theTarget.focus();
-                    }
-                }
+                theTarget.dispatchEvent(theEvent);                
             }
             
             this.dX = this.cX = this.cY = this.dY = 0;
