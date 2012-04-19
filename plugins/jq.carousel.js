@@ -186,7 +186,6 @@
                        return this.lockMove=true;
                 }
                 
-                var totalMoved = this.vertical ? ((this.dy % this.myDivHeight) / this.myDivHeight * 100) * -1 : ((this.dx % this.myDivWidth) / this.myDivWidth * 100) * -1; // get a percentage of movement.
                 if(movePos)
                     this.moveCSS3(this.el, movePos);
             },
