@@ -150,14 +150,15 @@ if (!window.jq || typeof (jq) !== "function") {
         
         function _selector(selector, what) {
             var dom;
-            try {
-                selector=selector.trim();
                 if (selector[0] === "#" && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
                     if (what == document)
                         dom = what.getElementById(selector.replace("#", ""));
                     else
                         dom = [].slice.call(what.querySelectorAll(selector));
-                } else if (selector[0] === "<" && selector[selector.length - 1] === ">")  //html
+                    return dom;
+                } 
+                selector=selector.trim();
+                if (selector[0] === "<" && selector[selector.length - 1] === ">")  //html
                 {
                     var tmp = document.createElement("div");
                     tmp.innerHTML = selector.trim();
@@ -165,8 +166,6 @@ if (!window.jq || typeof (jq) !== "function") {
                 } else {
                     dom = [].slice.call(what.querySelectorAll(selector));
                 }
-            } catch (e) {
-            }
             return dom;
         }
 
