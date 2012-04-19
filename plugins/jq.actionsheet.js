@@ -71,12 +71,23 @@
         };
         actionsheet.prototype = {
             activeSheet:null,
-            hideSheet: function() {
+            hideSheet: function() {              
                 var that=this;
+                
                 this.activeSheet.off("click","a",function(){that.hideSheet()});
-                this.activeSheet.remove();
-                this.activeSheet=null;
-                this.el.style.overflow = "none";
+                this.activeSheet.get().style.webkitTransition="all 0ms";
+                this.activeSheet.css("bottom","0px");                               
+                var markup = this.activeSheet;
+                var theEl = this.el;
+                setTimeout(function(){
+                	markup.get().style.webkitTransition="all 200ms";
+                	markup.css("bottom", (-(parseInt(markup.css("height")) + 10)) + "px");
+                	setTimeout(function(){
+		                markup.remove();
+		                markup=null;
+		                theEl.style.overflow = "none";
+	                },300);
+                },10);                
             }
         };
         return actionsheet;
