@@ -27,8 +27,9 @@
     var scroller = (function() {
         if (!window.WebKitCSSMatrix)
             return;
-        var translateOpen = 'm11' in new WebKitCSSMatrix() ? "3d(" : "(";
-        var translateClose = 'm11' in new WebKitCSSMatrix() ? ",0)" : ")";
+		var allows3D = 'm11' in new WebKitCSSMatrix();
+        var translateOpen = allows3D ? "3d(" : "(";
+        var translateClose = allows3D ? ",0)" : ")";
 		var jsScroller, nativeScroller;
 		
 		//initialize and js/native mode selector
@@ -85,9 +86,7 @@
 	            }
 	        },
 			handleEvent : function(e){
-				if(this.scrollingLocked){
-					e.preventDefault();
-				} else {
+				if(!this.scrollingLocked){
 		    		switch(e.type) {
 						case 'touchstart': 
 							this.preventHideRefresh = true;
@@ -553,7 +552,7 @@
 		
         jsScroller.prototype.onTouchMove=function(event) {
             if (this.currentScrollingObject == null) return;
-			event.preventDefault();
+			//event.preventDefault();
 			
 			var scrollInfo = this.calculateMovement(event);
 			this.calculateTarget(scrollInfo);
@@ -743,7 +742,7 @@
 			this.doScrollInterval = null;
 			
             if (this.currentScrollingObject == null || !this.moved) return;
-			event.preventDefault();
+			//event.preventDefault();
 			
             this.finishScrollingObject = this.currentScrollingObject;
             this.currentScrollingObject = null;
@@ -791,10 +790,12 @@
                 time = 0;
             if (!timingFunction)
                 timingFunction = "linear";
-            el.style.webkitTransform = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
-            el.style.webkitTransitionDuration = time + "ms";
-            el.style.webkitBackfaceVisiblity = "hidden";
-            el.style.webkitTransitionTimingFunction = timingFunction;
+			if(el && el.style){
+	            el.style.webkitTransform = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
+	            el.style.webkitTransitionDuration = time + "ms";
+	            el.style.webkitBackfaceVisiblity = "hidden";
+	            el.style.webkitTransitionTimingFunction = timingFunction;
+			}
         }
         jsScroller.prototype.scrollTo=function(pos, time) {
             if (!time)
