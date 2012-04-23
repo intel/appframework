@@ -1906,7 +1906,7 @@
             if (touch.isDoubleTap) {
                 touch.el.trigger('doubleTap');
                 touch = {};
-            } else if (Math.abs(touch.x1 - touch.x2) > 5 || Math.abs(touch.x1 - touch.x2) > 5) {
+            } else if (Math.abs(touch.x1 - touch.x2) > 5 || Math.abs(touch.y1 - touch.y2) > 5) {
                 (Math.abs(touch.x1 - touch.x2) > 30 || Math.abs(touch.y1 - touch.y2) > 30) && 
                 touch.el.trigger('swipe') && 
                 touch.el.trigger('swipe' + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)));
