@@ -317,28 +317,6 @@ if (!window.jq || typeof (jq) !== "function") {
         $.isObject = function(obj) {
             return typeof obj === "object";
         };
-		
-        /**
-        * Searches the array for a given value and returns the corresponding key if successful
-            ```
-            var foo=['bar'];
-            $.arraySearch('bar', foo);
-            ```
-
-        * @param {Object} element
-        * @return {Integer}
-        * @title $.arraySearch(el, arr);
-        */
-		$.arraySearch = function(obj, a){
-			if(!$.isArray(a)) return false;
-			var i = a.length;
-			while (i--) {
-				if (a[i] === obj) {
-					return i;
-				}
-			}
-			return false;
-		}
 
         /**
          * Prototype for jqm object.  Also extens $.fn
