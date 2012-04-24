@@ -216,10 +216,18 @@
                         }
                         this.container.scrollTop = this.container.scrollLeft = 0;
                         this.currentScrollingObject = eleScrolling;
-                        this.scrollerMoveCSS(eleScrolling, {
-                            x: this.startLeft,
-                            y: this.startTop
-                        }, 0);
+                        if (this.vscrollBar) {
+                            this.scrollerMoveCSS(eleScrolling, {
+                                x: 0,
+                                y: this.startTop
+                            }, 0);
+                        }
+                        if (this.hscrollBar) {
+                            this.scrollerMoveCSS(eleScrolling, {
+                                x: this.startLeft,
+                                y: 0
+                            }, 0);
+                        }
                         if (this.vscrollBar && this.maxTop > 0) {
                             this.vscrollBar.style.height = (parseFloat(this.bottomMargin / this.divHeight) * this.bottomMargin) + "px";
                             var pos = (this.bottomMargin - numOnly(this.vscrollBar.style.height)) - (((this.maxTop + this.startTop) / this.maxTop) * (this.bottomMargin - numOnly(this.vscrollBar.style.height)));
