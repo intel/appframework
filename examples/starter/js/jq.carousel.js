@@ -110,7 +110,7 @@
             pagingDiv: null,
             pagingCssName: "carousel_paging",
             pagingCssNameSelected: "carousel_paging_selected",
-            pagingCallback: null,
+            pagingFunction: null,
             lockMove:false,
             // handle the moving function
             touchStart: function(e) {

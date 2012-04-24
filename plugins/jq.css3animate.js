@@ -35,18 +35,21 @@
                     alert("Please provide configuration options for animation of " + elID);
                     return;
                 }
-                this.el.addEventListener("webkitTransitionEnd", that.finishAnimation, false);
+				
+				if(options["time"]===undefined) options["time"]=0;
 
                 if (options["callback"]) {
                     this.callback = options["callback"];
                     this.moving = true;
-                    this.timeout = window.setTimeout(function () {
-                        if (that.moving == true && that.callback && typeof (that.callback == "function")) {
-                            that.moving = false;
-                            that.callback();
-                            delete this.callback;
-                        }
-                    }, numOnly(options["time"]) + 50);
+                    if(options["time"]!=0){
+						this.timeout = window.setTimeout(function () {
+		                    if (that.moving == true && that.callback && typeof (that.callback == "function")) {
+		                        that.moving = false;
+		                        that.callback();
+		                        delete this.callback;
+		                    }
+		                }, numOnly(options["time"]) + 50);
+					}
                 } else {
                     this.moving = false;
                 }
@@ -71,37 +74,47 @@
 
                 if (!options["timingFunction"]) options["timingFunction"] = "linear";
 
-                options["time"]=(""+options["time"]).indexOf("s")==-1?options["time"]+"ms":options["time"];
                 //check for percent or numbers
                 if (typeof (options.x) == "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x) + "px";
                 if (typeof (options.y) == "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y) + "px";
 
                 this.el.style.webkitTransform = "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ") rotateY(" + options.rotateY + ") skew(" + options.skewX + "," + options.skewY + ")";
                 this.el.style.webkitBackfaceVisiblity = "hidden";
-                this.el.style.webkitTransition = "all " + options["time"]+" "+options["timingFunction"];
-                this.el.style.webkitTransformOrigin = options.origin;
-
-
+				var properties = "-webkit-transform";
+                if (options["opacity"]!==undefined) {
+                    this.el.style.opacity = options["opacity"];
+					properties+=", opacity";
+                }
                 if (options["width"]) {
                     this.el.style.width = options["width"];
+					properties = "all";
                 }
                 if (options["height"]) {
                     this.el.style.height = options["height"];
+					properties = "all";
                 }
-                if (options["opacity"]!==undefined) {
-                    this.el.style.opacity = options["opacity"];
-                }
+				this.el.style.webkitTransitionProperty = properties;
+				if((""+options["time"]).indexOf("s")==-1) var time = options["time"]+"ms";
+				else var time = options["time"];
+				this.el.style.webkitTransitionDuration = time;
+				this.el.style.webkitTransitionTimingFunction = options["timingFunction"];
+                this.el.style.webkitTransformOrigin = options.origin;
+				if(options["time"]==0 && options["callback"]){
+					setTimeout(function(){that.finishAnimation();},0);
+				} else {
+					this.el.addEventListener("webkitTransitionEnd", that.finishAnimation, false);
+				}
             };
 
 
         css3Animate.prototype = {
             finishAnimation: function (event) {
-                event.preventDefault();
+                if(event) event.preventDefault();
                 var that = this;
                 if (!this.moving) return;
 
                 this.moving = false;
-                this.el.removeEventListener("webkitTransitionEnd", that.finishAnimation, true);
+                this.el.removeEventListener("webkitTransitionEnd", that.finishAnimation, false);
                 if (this.callback && typeof (this.callback == "function")) {
                     if (this.timeout) window.clearTimeout(this.timeout);
                     this.callback();

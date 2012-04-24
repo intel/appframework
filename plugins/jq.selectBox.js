@@ -276,39 +276,39 @@
             });
         }
     };
-//The following is based off Eli Grey's shim
-//https://gist.github.com/384583
-//We use HTMLElement to not cause problems with other objects
-if (!HTMLElement.prototype.watch) {
-	HTMLElement.prototype.watch = function (prop, handler) {
-		var oldval = this[prop], newval = oldval,
-		getter = function () {
-			return newval;
-		},
-		setter = function (val) {
-			oldval = newval;
-			return newval = handler.call(this, prop, oldval, val);
-		};
-		if (delete this[prop]) { // can't watch constants
-			if (HTMLElement.defineProperty) { // ECMAScript 5
-				HTMLElement.defineProperty(this, prop, {
-					get: getter,
-					set: setter,
-					enumerable: false,
-					configurable: true
-				});
-			} else if (HTMLElement.prototype.__defineGetter__ && HTMLElement.prototype.__defineSetter__) { // legacy
-				HTMLElement.prototype.__defineGetter__.call(this, prop, getter);
-				HTMLElement.prototype.__defineSetter__.call(this, prop, setter);
-			}
-		}
-	};
-}
-if (!HTMLElement.prototype.unwatch) {
-	HTMLElement.prototype.unwatch = function (prop) {
-		var val = this[prop];
-		delete this[prop]; // remove accessors
-		this[prop] = val;
-	};
-}   
+    //The following is based off Eli Grey's shim
+    //https://gist.github.com/384583
+    //We use HTMLElement to not cause problems with other objects
+    if (!HTMLElement.prototype.watch) {
+        HTMLElement.prototype.watch = function (prop, handler) {
+            var oldval = this[prop], newval = oldval,
+            getter = function () {
+                return newval;
+            },
+            setter = function (val) {
+                oldval = newval;
+                return newval = handler.call(this, prop, oldval, val);
+            };
+            if (delete this[prop]) { // can't watch constants
+                if (HTMLElement.defineProperty) { // ECMAScript 5
+                    HTMLElement.defineProperty(this, prop, {
+                        get: getter,
+                        set: setter,
+                        enumerable: false,
+                        configurable: true
+                    });
+                } else if (HTMLElement.prototype.__defineGetter__ && HTMLElement.prototype.__defineSetter__) { // legacy
+                    HTMLElement.prototype.__defineGetter__.call(this, prop, getter);
+                    HTMLElement.prototype.__defineSetter__.call(this, prop, setter);
+                }
+            }
+        };
+    }
+    if (!HTMLElement.prototype.unwatch) {
+        HTMLElement.prototype.unwatch = function (prop) {
+            var val = this[prop];
+            delete this[prop]; // remove accessors
+            this[prop] = val;
+        };
+    }   
 })(jq);

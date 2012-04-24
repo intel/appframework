@@ -73,6 +73,8 @@
                 }
                 if (this.horizontalScroll)
                     this.el.style['float'] = "left";
+                    
+                $(this.el).addClass("jq-scrollable");
                 this.el.hasScroller=true;
             } catch (e) {
                 alert("error adding scroller" + e);
@@ -166,6 +168,8 @@
                    clearTimeout(that.scrollingFinishCB);
                 }
                 touchStarted = true
+                if( $(this.el).hasClass("blockscroll"))
+                        return;
                 try {
                     // Allow interaction to legit calls, like select boxes, etc.
                     if (event.touches[0].target && event.touches[0].target.type != undefined) {
@@ -230,7 +234,7 @@
                             else
                                 this.vscrollBar.style.right = "0px";
                             this.vscrollBar.webkitTransition = '';
-                            this.vscrollBar.style.opacity = 1;
+                        //    this.vscrollBar.style.opacity = 1;
                         }
                         
                         if (this.hscrollBar && this.maxLeft > 0) {
@@ -246,7 +250,7 @@
                                 this.hscrollBar.style.bottom = numOnly(this.hscrollBar.style.height);
                             this.vscrollBar.webkitTransition = '';
                             
-                            this.hscrollBar.style.opacity = 1;
+                          //  this.hscrollBar.style.opacity = 1;
                         }
 
                     //event.preventDefault();
@@ -258,7 +262,8 @@
             },
             touchMove: function(event) {
                 try {
-                  
+                    if( $(this.el).hasClass("blockscroll"))
+                        return;
                     if (this.currentScrollingObject != null) {
                         event.preventDefault();
                         var scrollPoints = {
@@ -326,6 +331,7 @@
                                 x: 0,
                                 y: pos
                             }, 0);
+                            this.vscrollBar.style.opacity=1;
                         }
                         if (this.hscrollBar) {
                             // We must calculate the position. Since we don't allow
@@ -336,6 +342,7 @@
                                 x: pos,
                                 y: 0
                             }, 0);
+                            this.hscrollBar.style.opacity=1;
                         }
                         
                         if (this.prevTime) {

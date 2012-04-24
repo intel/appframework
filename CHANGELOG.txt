@@ -1,0 +1,36 @@
+1.02 Release
+
+This is *NOT* a drop in upgrade.  There are core CSS file changes for transitions, so please do a merge/test locally before deploying.
+
+
+1) Transitions were pulled out of jq.ui.js into their own folder.  You can now include just one, or all of them.
+
+2) Major changes were made to the css files dealing with transitions/positions.  Panels are no longer staged to the left.
+   This is needed for the next major update that will introduce native scrolling on iOS5 devices.
+
+3) We reworked a lot of the effects to take full advantage of -webkit-transform, like transitions, side menu animation and action sheet.
+
+4) We've added the ability to add custom headers via the <header> tag.  You can reference them on the panel with the data-header attribute.
+
+5) You can now put custom <header> and <footer> tags inline in panels and they will be used on that panel only.
+
+6) $.ui.updateNavBar().  This has been deprecated.  We use a listener now to process clicks on navbars.
+
+7) ui/jq.ui.js now is similar to the minified version, all plugins (minus jq.mobi.js) are included.  The source has been moved to ui/src/jq.ui.js
+
+8) Added new jq.ui property - showLoading:true -  This will show the loading spinner on ajax requests. Setting this to false will not show a loading screen.
+
+9) Added new jq.ui property- isAjaxApp:false - When set to true, this will treat every request as if the anchor had data-refresh-ajax=true and data-persist-ajax=true
+   properties.  
+
+10) jq.ui.css - Removed images for expand/collapse class and close button.  They now use CSS3.  Any other images have been converted to data-uri's.
+
+11) icons.css - removed SVG file and embedded TTF as data-uri.
+
+12) Fixed events not propegating on navbar anchors
+
+13) Fixed transition bugs on iOS devices
+
+14) Fixed spacing bug in default navbar - there was a 2 pixel space between tabs until a new footer was loaded.
+
+15) Fixed z-indexing issues in the header with the back button and title
