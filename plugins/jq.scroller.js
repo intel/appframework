@@ -15,7 +15,7 @@
 			id = objId(this[i]);
 			if(!cache[id]){
 				if(!opts) opts = {};
-				if(!$.os.supportsNativeTouchScroll) opts.useJsScroll = true;
+				if(!$.feat.nativeTouchScroll) opts.useJsScroll = true;
 				tmp = scroller(this[i], opts);
 				cache[id] = tmp;
 			} else {

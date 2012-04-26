@@ -708,7 +708,7 @@
 			var hasScroll = overflowStyle!='hidden'&&overflowStyle!='visible';
 			
 			//sets up scroll when required and not supported
-			if(!$.os.supportsNativeTouchScroll&&hasScroll) tmp.setAttribute("js-scrolling", "yes");
+			if(!$.feat.nativeTouchScroll&&hasScroll) tmp.setAttribute("js-scrolling", "yes");
 			
             if (tmp.getAttribute("js-scrolling") && tmp.getAttribute("js-scrolling").toLowerCase() == "yes"){
 				jsScroll = true;

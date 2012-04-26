@@ -1513,7 +1513,10 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os.fennec = userAgent.match(/fennec/i) ? true : false;
 			$.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || 'ontouchstart' in window);
             $.os.desktop = !($.os.ios || $.os.android || $.os.blackberry || $.os.opera || $.os.fennec || $.os.supportsTouch);
-			$.os.supportsNativeTouchScroll = ($.os.ios&&userAgent.match(/OS\s[5-9_]/) ? true : false);
+			//features
+			$.feat = {};
+			$.feat.nativeTouchScroll = ($.os.ios ? !userAgent.match(/OS\s[1-4]/) : false);
+			$.feat.nativeSelectElements = !$.os.android || !userAgent.match(/Android\s[1-2]/);
         }
         detectUA($, navigator.userAgent);
         $.__detectUA = detectUA; //needed for unit tests

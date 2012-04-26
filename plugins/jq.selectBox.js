@@ -9,7 +9,7 @@
         oldSelects: {},
         scroller: null,
         getOldSelects: function(elID) {
-            if ($.os.android == false)
+            if ($.feat.nativeSelectElements)
                 return;
             if (!$.fn['scroller']) {
                 alert("This library requires jq.web.Scroller");

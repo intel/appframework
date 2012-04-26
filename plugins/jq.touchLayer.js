@@ -214,7 +214,7 @@
 				return;
 			}
 			//check native scroll
-			if($.os.supportsNativeTouchScroll){
+			if($.feat.nativeTouchScroll){
 				
 				//prevent errors
 				if(this.ignoreScrolling(el)) {
