@@ -13,14 +13,6 @@
         // Init the page
         var that = this;
 		
-		
-	    window.addEventListener("orientationchange", function() {that.updateOrientation();}, false);
-    
-	    if(jq.os.desktop||jq.os.android)
-	    {
-	        window.addEventListener("resize", function() {that.updateOrientation();}, false);
-	    }
-		
 		//setup the menu and boot touchLayer
 	    jq(document).ready(function() {
 			//setup the menu
@@ -34,6 +26,14 @@
 			//if $.ui.launch can optionally create the jQUI object, we should had that option here somehow...
 	        jQUi = document.getElementById("jQUi");
 			that.touchLayer = $.touchLayer(jQUi);
+			
+			window.addEventListener("orientationchange", function() {that.updateOrientation();}, false);
+		    if(jq.os.desktop||jq.os.android)
+		    {
+		        window.addEventListener("resize", function() {that.updateOrientation();}, false);
+		    }
+			
+			
 			//hide address bar
 			$.ui.touchLayer.hideAddressBar();
 	    });
@@ -92,8 +92,8 @@
         defaultMenu: "",
         _readyFunc: null,
         doingTransition: false,
-        passwordBox: new jq.passwordBox(),
-        selectBox: jq.selectBox,
+        passwordBox: jq.passwordBox ? new jq.passwordBox() : false,
+        selectBox: jq.selectBox ? jq.selectBox : false,
         ajaxUrl: "",
         transitionType: "slide",
         scrollingDivs: [],
@@ -367,14 +367,13 @@
          * @title $.ui.toggleHeaderMenu([force])
          */
          toggleHeaderMenu: function(force) {
-
             if (jq("#header").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
                 jq("#content").css("top", "0px");
                 jq("#header").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
                 jq("#header").show();
-                jq("#content").css("top", jq("#header").css("height"));
-            
+				var val = numOnly(jq("#header").css("height"));
+                jq("#content").css("top", val+'px');
             }
         },
 		
@@ -737,9 +736,9 @@
 	            scrollEl.appendChild(tmp);
             
 	            this.content.appendChild(scrollEl);
-            
-	            if(this.selectBox) this.selectBox.getOldSelects(scrollEl.id);
-	            if(this.passwordBox) this.passwordBox.getOldPasswords(scrollEl.id);
+            	
+	            if(this.selectBox!==false) this.selectBox.getOldSelects(scrollEl.id);
+	            if(this.passwordBox!==false) this.passwordBox.getOldPasswords(scrollEl.id);
             	
             }
 
@@ -1043,10 +1042,8 @@
                     });
                 }
                 this.doingTransition = true;
-                if (this.availableTransitions[transition])
-                    this.availableTransitions[transition].call(this, oldDiv, currWhat, back);
-                else
-                    this.availableTransitions['default'].call(this, oldDiv, currWhat, back);
+				this.runTransition(transition, oldDiv, currWhat, back);
+                
                     
                 if (back) {
                     if (this.history.length > 0) {
@@ -1088,6 +1085,11 @@
                 window.scrollTo(1,1);
 			}
         },
+		
+		runTransition: function(transition, oldDiv, currWhat, back){
+            if (!this.availableTransitions[transition]) transition = 'default';
+            this.availableTransitions[transition].call(this, oldDiv, currWhat, back);
+		},
 
         /**
          * This is callled when you want to launch jqUi.  If autoLaunch is set to true, it gets called on DOMContentLoaded.
@@ -1104,6 +1106,13 @@
                 this.hasLaunched = true;
                 return;
             }
+			//android panel extra style (x is always shifted -100% due to the form inputs bug)
+			jq.os.android=true;
+			if(jq.os.android) {
+				var ss = document.styleSheets[document.styleSheets.length-1];
+				ss.insertRule(".panel{left:-100%;}", ss.cssRules.length);
+			}
+			
             this.isAppMobi = (window.AppMobi && typeof (AppMobi) == "object" && AppMobi.app !== undefined) ? true : false;
             var that = this;
             this.viewportContainer = jq("#jQUi");
@@ -1157,6 +1166,7 @@
                 this.content.id = "content";
                 this.viewportContainer.append(this.content);
             }
+			
             this.header.innerHTML = '<a id="backButton"  href="javascript:;"></a> <h1 id="pageTitle"></h1>' + header.innerHTML;
             this.backButton = $am("backButton");
             this.backButton.className = "button";
@@ -1256,8 +1266,7 @@
                     //activeDiv = firstDiv;
                     that.firstDiv.style.display = "block";
                     that.css3animate(that.firstDiv, {
-                        x: "0%",
-                        time: "0ms",
+                        x: that.androidPcentFixX("0%"),
 						callback:function(){
 							that.clearAnimations(that.firstDiv);
 						}
@@ -1306,17 +1315,17 @@
             var that = this;
             if (back) {
                 that.css3animate(oldDiv, {
-					x:"0%",
+					x:that.androidPcentFixX("0%"),
 					y:"0%",
 					callback:function(){
 		                that.css3animate(oldDiv, {
-		                    x: "100%",
+		                    x: that.androidPcentFixX("100%"),
 		                    time: "150ms",
 		                    callback: function() {
 		                        that.finishTransition(oldDiv);
 		                    }
 		                }).also(currDiv, {
-	                        x: "0%",
+	                        x: that.androidPcentFixX("0%"),
 	                        time: "150ms",
 	                        callback: function() {
 								that.clearAnimations(currDiv);
@@ -1324,22 +1333,22 @@
 	                    });
 					}
 				}).also(currDiv, {
-					x:"-100%",
+					x:that.androidPcentFixX("-100%"),
 					y:"0%"
 				});
             } else {
                 that.css3animate(oldDiv, {
-					x:"0%",
+					x:that.androidPcentFixX("0%"),
 					y:"0%",
 					callback:function(){
 		                that.css3animate(oldDiv, {
-		                    x: "-100%",
+		                    x: that.androidPcentFixX("-100%"),
 		                    time: "150ms",
 		                    callback: function() {
 		                        that.finishTransition(oldDiv);
 		                    }
 		                }).also(currDiv, {
-	                        x: "0%",
+	                        x: that.androidPcentFixX("0%"),
 	                        time: "150ms",
 	                        callback: function() {
 								that.clearAnimations(currDiv);
@@ -1347,7 +1356,7 @@
 	                    });
 					}
 				}).also(currDiv, {
-					x:"100%",
+					x:that.androidPcentFixX("100%"),
 					y:"0%"
 				});
             }
@@ -1368,7 +1377,7 @@
 
                 that.css3animate(oldDiv, {
                     y: "100%",
-                    x: "0%",
+                    x: that.androidPcentFixX("0%"),
                     time: "150ms",
                     callback: function() {
                         that.finishTransition(oldDiv);
@@ -1381,19 +1390,18 @@
                 oldDiv.style.zIndex = 1;
                 that.css3animate(currDiv, {
                     y: "100%",
-                    x: "0%",
+                    x: that.androidPcentFixX("0%"),
                     time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
                             y: "0%",
-                            x: "0%",
+                            x: that.androidPcentFixX("0%"),
                             time: "150ms",
 							callback: function() {
 								that.clearAnimations(currDiv);
 		                        that.css3animate(oldDiv, {
-		                            x: "-100%",
+		                            x: that.androidPcentFixX("-100%"),
 		                            y: 0,
-		                            time: "1ms",
 		                            callback: function() {
 		                                that.finishTransition(oldDiv);
 		                            }
@@ -1415,11 +1423,11 @@
                 that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
                     y: "-100%",
-                    x: "0%",
+                    x: that.androidPcentFixX("0%"),
                     time: "150ms",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: "-100%",
+                            x: that.androidPcentFixX("-100%"),
                             y: 0,
                             callback: function() {
                                 that.finishTransition(oldDiv);
@@ -1435,16 +1443,16 @@
                 currDiv.style.zIndex = 2;
                 that.css3animate(currDiv, {
                     y: "-100%",
-                    x: "0%",
+                    x: that.androidPcentFixX("0%"),
                     callback: function() {
                         that.css3animate(currDiv, {
                             y: "0%",
-                            x: "0%",
+                            x: that.androidPcentFixX("0%"),
                             time: "150ms",
 							callback: function(){
 								that.clearAnimations(currDiv);
 		                        that.css3animate(oldDiv, {
-		                            x: "-100%",
+		                            x: that.androidPcentFixX("-100%"),
 		                            y: 0,
 		                            callback: function() {
 		                                that.finishTransition(oldDiv);
@@ -1463,13 +1471,13 @@
             var that = this
             if (back) {
                 that.css3animate(currDiv, {
-                    x: "100%",
+                    x: that.androidPcentFixX("100%"),
                     time: "1ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: "0%",
+                            x: that.androidPcentFixX("0%"),
 							scale: 1,
                             time: "150ms",
 							rotateY: "0deg",
@@ -1480,14 +1488,13 @@
                     }
                 });
                 that.css3animate(oldDiv, {
-                    x: "100%",
+                    x: that.androidPcentFixX("100%"),
                     time: "150ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: "-100%",
-                            time: "1ms",
+                            x: that.androidPcentFixX("-100%"),
                             opacity: 1,
 		                    scale: 1,
 		                    rotateY: "0deg",
@@ -1503,13 +1510,13 @@
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
                 that.css3animate(oldDiv, {
-                    x: "100%",
+                    x: that.androidPcentFixX("100%"),
                     time: "150ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: "-100%",
+                            x: that.androidPcentFixX("-100%"),
                             y: 0,
                             time: "1ms",
 		                    scale: 1,
@@ -1521,13 +1528,13 @@
                     }
                 });
                 that.css3animate(currDiv, {
-                    x: "100%",
+                    x: that.androidPcentFixX("100%"),
                     time: "1ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: "0%",
+                            x: that.androidPcentFixX("0%"),
                             time: "150ms",
 		                    scale: 1,
 		                    rotateY: "0deg",
@@ -1548,13 +1555,12 @@
                 oldDiv.style.zIndex = 2;
                 that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
-                    x: "0%",
+                    x: that.androidPcentFixX("0%"),
                     time: "150ms",
                     opacity: .1,
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: "-100%",
-                            time: "1ms",
+                            x: that.androidPcentFixX("-100%"),
                             opacity: 1,
                             callback: function() {
                                 that.finishTransition(oldDiv);
@@ -1570,20 +1576,18 @@
                 currDiv.style.zIndex = 2;
 				currDiv.style.opacity = 0;
                 that.css3animate(currDiv, {
-                    x: "0%",
-                    time: "1ms",
+                    x: that.androidPcentFixX("0%"),
                     opacity: .1,
                     callback: function() {
 		                that.css3animate(currDiv, {
-		                    x: "0%",
+		                    x: that.androidPcentFixX("0%"),
 		                    time: "150ms",
 		                    opacity: 1,
 							callback:function(){
 								that.clearAnimations(currDiv);
 		                        that.css3animate(oldDiv, {
-		                            x: "-100%",
+		                            x: that.androidPcentFixX("-100%"),
 		                            y: 0,
-		                            time: "1ms",
 		                            callback: function() {
 		                                that.finishTransition(oldDiv);
 		                            }
@@ -1603,15 +1607,14 @@
                 oldDiv.style.zIndex = 2;
                 that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
-                    x: "0%",
+                    x: that.androidPcentFixX("0%"),
                     time: "150ms",
                     opacity: .1,
                     scale: .2,
-                    origin: "-50% 50%",
+                    origin: that.androidPcentFixX("-50%")+" 50%",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: "-100%",
-                            time: "1ms",
+                            x: that.androidPcentFixX("-100%"),
                             callback: function() {
                                 that.finishTransition(oldDiv);
                             }
@@ -1624,25 +1627,23 @@
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
                 that.css3animate(currDiv, {
-                    x: "0%",
+                    x: that.androidPcentFixX("0%"),
                     y: "0%",
-                    time: "1ms",
                     scale: .2,
-                    origin: "-50% 50%",
+                    origin: that.androidPcentFixX("-50%")+" 50%",
                     opacity: .1,
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: "0%",
+                            x: that.androidPcentFixX("0%"),
                             time: "150ms",
                             scale: 1,
                             opacity: 1,
-                            origin: "0% 0%",
+                            origin: that.androidPcentFixX("0%")+" 0%",
 							callback: function(){
 								that.clearAnimations(currDiv);
 		                        that.css3animate(oldDiv, {
-		                            x: "100%",
+		                            x: that.androidPcentFixX("100%"),
 		                            y: 0,
-		                            time: "1ms",
 		                            callback: function() {
 		                                that.finishTransition(oldDiv);
 		                            }
@@ -1654,21 +1655,23 @@
             }
         },
         noTransition: function(oldDiv, currDiv, back) {
-            oldDiv.style.display = "block";
             currDiv.style.display = "block";
-            var that = this
+			oldDiv.style.display = "block";
+            var that = this;
             that.clearAnimations(currDiv);
 			that.css3animate(oldDiv, {
-                x: "-100%",
-                y: 0,
-                time: "1ms"
+                x: this.androidPcentFixX("-100%"),
+                y: 0
             });
             that.finishTransition(oldDiv);
             currDiv.style.zIndex = 2;
             oldDiv.style.zIndex = 1;
         },
-
-        /**
+		androidPcentFixX:function(val){
+			if(!jq.os.android) return val;
+			return ''+(numOnly(val)+100)+'%';
+		},
+		/**
          * This must be called at the end of every transition to hide the old div and reset the doingTransition variable
          *
          * @param {Object} Div that transitioned out
@@ -1686,7 +1689,8 @@
          * @title $.ui.finishTransition(oldDiv)
          */
         clearAnimations: function(inViewDiv) {
-	        inViewDiv.style.webkitTransform = "none";
+			if(jq.os.android) inViewDiv.style.webkitTransform = "translate3d(100%,0,0)";
+			else inViewDiv.style.webkitTransform = "none";
 			inViewDiv.style.webkitTransition = "none";
         }
 		
