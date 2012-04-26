@@ -199,9 +199,7 @@
 			this.init(el, opts);
 			//test
 			//this.refresh=true;
-			
-			this.el.style.overflow='auto';
-			
+
 			this.container = this.el;
 			this.addPullToRefresh(null, true);
 			if(this.autoEnable) this.enable();
@@ -219,11 +217,13 @@
 			this.cancelPropagation = false;
 		}
         nativeScroller.prototype.enable=function () {
+			this.el.style.overflow='auto';
             if(this.refresh) this.el.addEventListener('touchstart', this, false);
 			this.el.addEventListener('scroll', this, false);
 			this.eventsActive = true;
         }
         nativeScroller.prototype.disable=function () {
+			this.el.style.overflow='hidden';
             this.el.removeEventListener('touchstart', this, false);
 			this.el.removeEventListener('scroll', this, false);
 			this.eventsActive = false;
@@ -341,7 +341,6 @@
             this.finishScrollingObject=null;
             this.container=null;
             this.scrollingFinishCB=null;
-			
 		}
         
         function createScrollBar(width, height) {
@@ -504,8 +503,10 @@
 			this.doScrollInterval = window.setInterval(function(){that.doScroll();}, this.refreshRate);
         }
 		jsScroller.prototype.getCSSMatrix = function(el){
-			var str = window.getComputedStyle(el).webkitTransform;
-			return str=='none' ? {f:0,e:0} : new WebKitCSSMatrix(str);
+			var str = window.getComputedStyle(el).webkitTransform;	//fix for BB transform 'none'
+			if(str=='none') return {f:0,e:0};
+			var obj = new WebKitCSSMatrix(str);
+			return obj;
 		}
 		jsScroller.prototype.saveEventInfo=function(event){
 			this.lastEventInfo = {
@@ -530,7 +531,7 @@
                 pos = this.elementInfo.bottomMargin;
             if (pos < 0)
                 pos = 0;
-			this.scrollerMoveCSS(this.vscrollBar, {x: 0,y: pos}, time, timingFunction);
+			this.scrollbarMoveCSS(this.vscrollBar, {x: 0,y: pos}, time, timingFunction);
 			return true;
 		}
 		jsScroller.prototype.setHScrollBar=function(scrollInfo, time, timingFunction){
@@ -544,7 +545,7 @@
             if (pos < 0)
                 pos = 0;
 			
-			this.scrollerMoveCSS(this.hscrollBar, {x: pos,y: 0}, time, timingFunction);
+			this.scrollbarMoveCSS(this.hscrollBar, {x: pos,y: 0}, time, timingFunction);
 			return true;
 		}
 		
@@ -597,7 +598,7 @@
             }
 					
 			//move
-            this.scrollerMoveCSS(this.currentScrollingObject, this.lastScrollInfo, 0);
+            this.scrollerMoveCSS(this.lastScrollInfo, 0);
 			this.setVScrollBar(this.lastScrollInfo, 0, 0);
 			this.setHScrollBar(this.lastScrollInfo, 0, 0);
 				
@@ -698,7 +699,7 @@
 		
 		jsScroller.prototype.hideRefresh=function(){
 			if(this.preventHideRefresh) return;
-			this.scrollerMoveCSS(this.el, {x:0,y:0}, 75);
+			this.scrollerMoveCSS({x:0,y:0}, 75);
 			this.refreshTriggered=false;
 		}
 		
@@ -777,29 +778,45 @@
 			//all others
 			}
 			
-            this.scrollerMoveCSS(this.finishScrollingObject, scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
+            this.scrollerMoveCSS(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
 			this.setVScrollBar(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
             this.setHScrollBar(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
 			
 			var that = this;
-			this.scrollingFinishCB=setTimeout(function(){that.hideScrollbars();if(that.onScroll) that.onScroll();},scrollInfo.duration);
-
+			this.scrollingFinishCB=setTimeout(function(){
+				that.hideScrollbars();
+				if(that.onScroll) that.onScroll();
+			},scrollInfo.duration);
         }
-        jsScroller.prototype.scrollerMoveCSS=function(el, distanceToMove, time, timingFunction) {
+		
+		
+        jsScroller.prototype.scrollerMoveCSS=function(distanceToMove, time, timingFunction) {
             if (!time)
                 time = 0;
             if (!timingFunction)
                 timingFunction = "linear";
+			
+			if(this.el && this.el.style){
+	            this.el.style.webkitTransform = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
+	            this.el.style.webkitTransitionDuration = time + "ms";
+	            this.el.style.webkitTransitionTimingFunction = timingFunction;
+			}
+        }
+		jsScroller.prototype.scrollbarMoveCSS=function(el, distanceToMove, time, timingFunction) {
+            if (!time)
+                time = 0;
+            if (!timingFunction)
+                timingFunction = "linear";
+			
 			if(el && el.style){
 	            el.style.webkitTransform = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
 	            el.style.webkitTransitionDuration = time + "ms";
-	            el.style.webkitBackfaceVisiblity = "hidden";
 	            el.style.webkitTransitionTimingFunction = timingFunction;
 			}
         }
         jsScroller.prototype.scrollTo=function(pos, time) {
             if (!time)
-                time = 0;
+				time = 0;
             this.scrollerMoveCSS(this.el, pos, time);
         }
         jsScroller.prototype.scrollBy=function(pos,time) {
