@@ -1511,7 +1511,8 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os.blackberry = userAgent.match(/BlackBerry/) || userAgent.match(/PlayBook/) ? true : false;
             $.os.opera = userAgent.match(/Opera Mobi/) ? true : false;
             $.os.fennec = userAgent.match(/fennec/i) ? true : false;
-            $.os.desktop = !($.os.ios || $.os.android || $.os.blackberry || $.os.opera || $.os.fennec);
+			$.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || 'ontouchstart' in window);
+            $.os.desktop = !($.os.ios || $.os.android || $.os.blackberry || $.os.opera || $.os.fennec || $.os.supportsTouch);
 			$.os.supportsNativeTouchScroll = ($.os.ios&&userAgent.match(/OS\s[5-9_]/) ? true : false);
         }
         detectUA($, navigator.userAgent);
