@@ -2565,10 +2565,7 @@
                 var that = this;
                 // Fix a bug in iOS where translate3d makes the content blurry
                 this.activeDiv = this.firstDiv;
-                if (this.scrollingDivs[this.activeDiv.id]) {
-                    this.scrollingDivs[this.activeDiv.id].initEvents();
-                }
-                
+              
                 //window.setTimeout(function() {
                 var loadFirstDiv=function(){
                     //activeDiv = firstDiv;
@@ -2576,6 +2573,9 @@
                     {
                         that.activeDiv=$(defaultHash).get();
                         
+                    }
+                    if (that.scrollingDivs[that.activeDiv.id]) {
+                        that.scrollingDivs[that.activeDiv.id].initEvents();
                     }
                     that.activeDiv.style.display = "block";
                     
