@@ -138,8 +138,10 @@
 					if((""+options["time"]).indexOf("s")==-1) var time = options["time"]+"ms";
 					else var time = options["time"];
 					
-					if((""+options["time"]).indexOf("ms")==-1) var timeout = timeNum*1000+50;
-					else var timeout = timeNum+50;
+					if((""+options["time"]).indexOf("ms")==-1) var timeout = timeNum*1000+100;
+					else {
+						var timeout = timeNum+100;
+					}
 			
 					this.el.style.webkitTransitionDuration = time;
 					this.el.style.webkitTransitionTimingFunction = options["timingFunction"];
@@ -174,8 +176,8 @@
 							that.finishAnimation(false);
 							delete that.activeTimeout;
 						} else {
-							if((""+options["time"]).indexOf("ms")==-1) var timeout = timeNum*1000+50;
-							else var timeout = timeNum+20;
+							if((""+options["time"]).indexOf("ms")==-1) var timeout = timeNum*1000+100;
+							else var timeout = timeNum+100;
 							that.activeTimeout = window.setTimeout(finishCB, timeout);
 						}
 					}, 0);
