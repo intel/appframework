@@ -283,6 +283,7 @@
                 var tmpEl = this.history.pop();
                 this.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
                 this.transitionType = tmpEl.transition;
+				//for Android 4.0.x, we must touchLayer.hideAdressBar()
             }
         },
         /**
@@ -1107,10 +1108,10 @@
                 return;
             }
 			//android panel extra style (x is always shifted -100% due to the form inputs bug)
-			jq.os.android=true;
 			if(jq.os.android) {
-				var ss = document.styleSheets[document.styleSheets.length-1];
-				ss.insertRule(".panel{left:-100%;}", ss.cssRules.length);
+				var ns = document.createElement('style');
+				document.getElementsByTagName("html")[0].appendChild(ns);
+				ns.appendChild(document.createTextNode('.panel{left:-100%;}'));
 			}
 			
             this.isAppMobi = (window.AppMobi && typeof (AppMobi) == "object" && AppMobi.app !== undefined) ? true : false;
