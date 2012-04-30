@@ -10,7 +10,7 @@
         scroller: null,
         getOldSelects: function(elID) {
             if ($.feat.nativeSelectElements)
-                return;
+               return;
             if (!$.fn['scroller']) {
                 alert("This library requires jq.web.Scroller");
                 return;
@@ -27,13 +27,20 @@
                     continue;
                 (function(theSel) {
                     var fakeInput = document.createElement("div");
-                    var selWidth = parseInt(theSel.style.width) > 0 ? parseInt(theSel.style.width) : 100;
-                    var selHeight = parseInt(theSel.style.height) > 0 ? parseInt(theSel.style.height) : 20;
-                    fakeInput.style.width = selWidth + "px";
-                    fakeInput.style.height = selHeight + "px";
-                    fakeInput.style.position = "absolute";
-                    fakeInput.style.left = "0px";
-                    fakeInput.style.top = "0px";
+					var theSelStyle = window.getComputedStyle(theSel);
+					var width = theSelStyle.width=='intrinsic' ? '100%' : theSelStyle.width;
+                    var selWidth = parseInt(width) > 0 ? width : '100px';
+                    var selHeight = parseInt(theSel.style.height) > 0 ? theSel.style.height : (parseInt(theSelStyle.height) ? theSelStyle.height : '20px');
+                    fakeInput.style.width = selWidth;
+                    fakeInput.style.height = selHeight;
+					fakeInput.style.margin = theSelStyle.margin;
+					fakeInput.style.position = theSelStyle.position;
+					fakeInput.style.left = theSelStyle.left;
+					fakeInput.style.top = theSelStyle.top;
+					fakeInput.style.lineHeight = theSelStyle.lineHeight;
+                    //fakeInput.style.position = "absolute";
+                    //fakeInput.style.left = "0px";
+                    //fakeInput.style.top = "0px";
                     fakeInput.style.zIndex = "1";
                     if (theSel.value)
                         fakeInput.innerHTML = theSel.options[theSel.selectedIndex].text;
@@ -49,7 +56,7 @@
                         that.initDropDown(this.linkId);
                     };
                     theSel.parentNode.appendChild(fakeInput);
-                    theSel.parentNode.style.position = "relative";
+                    //theSel.parentNode.style.position = "relative";
                     theSel.style.display = "none";
                     theSel.style.webkitAppearance = "none";
                     // Create listeners to watch when the select value has changed.
