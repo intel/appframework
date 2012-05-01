@@ -399,6 +399,10 @@
 				clearTimeout(this.scrollingFinishCB);
 				this.scrollingFinishCB=null;
 			}
+			if(this.doScrollInterval) {
+				clearInterval(this.doScrollInterval);
+				this.doScrollInterval=null;
+			}
 			
 			//disable if locked
 			if(event.touches.length != 1 || this.boolScrollLock) return;
