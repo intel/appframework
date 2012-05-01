@@ -335,7 +335,7 @@
 			this.moved=false;
 			this.preventPullToRefresh = true;
 			this.doScrollInterval = null;
-			this.refreshRate = 75;
+			this.refreshRate = 25;
 
             this.lastScrollbar="";
             this.finishScrollingObject=null;
@@ -751,14 +751,15 @@
 			var scrollInfo = this.calculateMovement(this.lastEventInfo, true);
 			this.setMomentum(scrollInfo);
 			this.calculateTarget(scrollInfo);
-			//boundaries control
-			this.checkYboundary(scrollInfo);
-			if(this.elementInfo.hasHorScroll) this.checkXboundary(scrollInfo);
 			
 			//get the current top
 			var cssMatrix = this.getCSSMatrix(this.el);
             scrollInfo.top = numOnly(cssMatrix.f);
             scrollInfo.left = numOnly(cssMatrix.e);
+			
+			//boundaries control
+			this.checkYboundary(scrollInfo);
+			if(this.elementInfo.hasHorScroll) this.checkXboundary(scrollInfo);
 			
 			var triggered = !this.preventPullToRefresh && (scrollInfo.top > this.refreshHeight || scrollInfo.y > this.refreshHeight);
             this.fireRefreshRelease(triggered, scrollInfo.top>0);
