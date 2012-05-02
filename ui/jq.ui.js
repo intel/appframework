@@ -2523,8 +2523,10 @@
                     if (tmp.getAttribute("selected"))
                         this.firstDiv = $am(id);
                 }
-                if (el.getAttribute("data-defer"))
+                if (el.getAttribute("data-defer")){
                     defer[id] = el.getAttribute("data-defer");
+                    defer.length++;
+                }
                 el = null;
             }
             if(!this.firstDiv)
