@@ -804,7 +804,12 @@
                 if (typeof (that.scrollingDivs[j]) !== "function")
                     that.scrollToTop(j);
             }
-			window.setTimeout(function(){that.touchLayer.hideAddressBar();},100);
+			window.setTimeout(function(){
+				that.touchLayer.hideAddressBar();
+				if(!$.feat.transformAbsoluteForms && that.touchLayer.isFocused){
+					that.androidFormsFix(that.touchLayer.focusedElement);
+				}
+			},100);
         },
 
         /**
@@ -1091,7 +1096,21 @@
             if (!this.availableTransitions[transition]) transition = 'default';
             this.availableTransitions[transition].call(this, oldDiv, currWhat, back);
 		},
-
+		
+		androidFormsFix: function(input){
+			if(this.activeDiv && input){
+				//let's position as best as possible
+				var pos = jq(input).offset();
+				var panelRight = numOnly(pos.right)-1;
+				this.activeDiv.style.left=(-1*panelRight)+'px';
+				this.activeDiv.style.webkitTransform='translate3d('+panelRight+'px,0,0)';
+			} else {	
+				//back to normal
+				this.activeDiv.style.left='-100%';
+				this.activeDiv.style.webkitTransform='translate3d(100%,0,0)';
+			}
+		},
+		
         /**
          * This is callled when you want to launch jqUi.  If autoLaunch is set to true, it gets called on DOMContentLoaded.
          * If autoLaunch is set to false, you can manually invoke it.
@@ -1107,15 +1126,29 @@
                 this.hasLaunched = true;
                 return;
             }
-			//android panel extra style (x is always shifted -100% due to the form inputs bug)
+			
+			var that = this;
+			
 			if(jq.os.android) {
+				//panel extra style (x is always shifted -100% due to the misplaced form inputs bug)
 				var ns = document.createElement('style');
 				document.getElementsByTagName("html")[0].appendChild(ns);
 				ns.appendChild(document.createTextNode('.panel{left:-100%;}'));
+				
+				if(!$.feat.transformAbsoluteForms){
+					//connect to touchLayer to detect editMode
+					this.touchLayer.onEnterEdit = function(el){
+						//old androids fix
+						that.androidFormsFix(el);
+					}
+					this.touchLayer.onExitEdit = function(el){
+						//old androids fix
+						that.androidFormsFix();
+					}
+				}
 			}
-			
+
             this.isAppMobi = (window.AppMobi && typeof (AppMobi) == "object" && AppMobi.app !== undefined) ? true : false;
-            var that = this;
             this.viewportContainer = jq("#jQUi");
             this.navbar = $am("navbar");
             this.content = $am("content");

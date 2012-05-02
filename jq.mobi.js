@@ -919,8 +919,10 @@ if (!window.jq || typeof (jq) !== "function") {
                 return {
                     left: obj.left + window.pageXOffset,
                     top: obj.top + window.pageYOffset,
-                    width: parseInt(this[0].style.width),
-                    height: parseInt(this[0].style.height)
+                    right: obj.right + window.pageXOffset,
+                    bottom: obj.bottom + window.pageYOffset,
+                    width: parseInt(this[0].offsetWidth),
+                    height: parseInt(this[0].offsetHeight)
                 };
             },
             /**
@@ -1516,7 +1518,7 @@ if (!window.jq || typeof (jq) !== "function") {
 			//features
 			$.feat = {};
 			$.feat.nativeTouchScroll = ($.os.ios ? !userAgent.match(/OS\s[1-4]/) : false);
-			$.feat.nativeSelectElements = !$.os.android || !userAgent.match(/Android\s[1-2]/);
+			$.feat.transformAbsoluteForms = !$.os.android || !userAgent.match(/Android\s[1-2]/);
         }
         detectUA($, navigator.userAgent);
         $.__detectUA = detectUA; //needed for unit tests

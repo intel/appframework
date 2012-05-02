@@ -12,9 +12,7 @@
 	var verySensitiveTouch = $.os.blackberry;	//devices which have a very sensitive touch and touchmove is easily fired even on simple taps
 	var inputElementRequiresNativeTap = $.os.blackberry || $.os.android;	//devices which require the touchstart event to bleed through in order to actually fire the click on select elements
 	var selectElementRequiresNativeTap = $.os.blackberry || $.os.android;	//devices which require the touchstart event to bleed through in order to actually fire the click on select elements
-	var focusScrolls = $.os.ios;	//devices scrolling on focus instead of resizing
-	var supportsBlurEvent = $.os.ios;	//devices supporting onBlur event
-	
+	var focusScrolls = $.os.ios;	//devices scrolling on focus instead of resizing	
     
 	//TouchLayer contributed by Carlos Ouro @ Badoo
 	//handles overlooking panning on titlebar, bumps on native scrolling and no delay on click
@@ -41,7 +39,6 @@
 		}, true);
 		this.layer=el;
     }
-    var prevClickField;
 	
     touchLayer.prototype = {
 		allowDocumentScroll:false,
@@ -102,26 +99,27 @@
 		onClick:function(e){
 			//handle forms
 			var tag =  e.target && e.target.tagName != undefined ? e.target.tagName.toLowerCase() : '';
-            if (inputElements.indexOf(tag)!==-1 && !e.target.isSameNode(document.activeElement)) {
+
+            if (inputElements.indexOf(tag)!==-1 && (!this.isFocused || !e.target.isSameNode(this.focusedElement))) {
+
+				var type =  e.target && e.target.type != undefined ? e.target.type.toLowerCase() : '';
+				var autoBlur = autoBlurInputTypes.indexOf(type)!==-1;
 				
-				if(supportsBlurEvent){
-					var type =  e.target && e.target.type != undefined ? e.target.type.toLowerCase() : '';
-					var autoBlur = autoBlurInputTypes.indexOf(type)!==-1;
-					
+				//focus
+				if(!autoBlur) {
 					//remove previous blur event if this keeps focus
-					if(this.isFocused && !autoBlur){
+					if(this.isFocused){
 						this.focusedElement.removeEventListener('blur', this, false);
 					}
-					//focus
-					if(!autoBlur) {
-						e.target.addEventListener('blur', this, false);
-						this.isFocused=true;
-						this.focusedElement = e.target;
-					} else {
-						this.isFocused=false;
-					}
-					this.allowDocumentScroll = true;
+					e.target.addEventListener('blur', this, false);
+					this.isFocused = true;
+					this.focusedElement = e.target;
+					//android bug workaround for UI
+					if(this.onEnterEdit) this.onEnterEdit(e.target);
+				} else {
+					this.isFocused=false;
 				}
+				this.allowDocumentScroll = true;
 				
 				//fire focus action
 				if(requiresJSFocus){
@@ -131,8 +129,11 @@
 		},
 		onBlur:function(e){
 			this.isFocused=false;
-			this.focusedElement.removeEventListener('blur', this, false);
+			//just in case...
+			if(this.focusedElement) this.focusedElement.removeEventListener('blur', this, false);
 			this.focusedElement = null;
+			//android bug workaround for UI
+			if(this.onExitEdit) this.onExitEdit(e.target);
 			//hideAddressBar now for scrolls, next stack step for resizes
 			if(focusScrolls) this.hideAddressBar();
 		},
@@ -154,10 +155,12 @@
 			
 			this.checkDOMTree(e.target, this.layer);
 			//some stupid phones require a native tap in order for the native input elements to work
-			if((inputElementRequiresNativeTap || selectElementRequiresNativeTap) && e.target && e.target.tagName != undefined){
-				var tagName = e.target.tagName.toLowerCase();
-				 if(inputElementRequiresNativeTap && inputElements.indexOf(tagName)!==-1) this.requiresNativeTap = true;
-				 else if(selectElementRequiresNativeTap && tagName=='select') this.requiresNativeTap = true;
+			if(this.isFocused) {
+				this.requiresNativeTap=true;
+			} else if(inputElementRequiresNativeTap && e.target && e.target.tagName != undefined){
+				if(inputElements.indexOf(e.target.tagName.toLowerCase())!==-1) {
+					this.requiresNativeTap = true;
+				}
 			}
 
 			if(!this.isScrolling && !this.isPanning && !this.requiresNativeTap) {
@@ -294,10 +297,9 @@
 				this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
             }
 			
-			this.inFocus = null;
+			this.requiresNativeTap = false;
 			this.isPanning = false;
 			this.isScrolling = false;
-            prevClickField = null;
             this.dX = this.cX = this.cY = this.dY = 0;
             document.removeEventListener('touchmove', this, false);
             document.removeEventListener('touchend', this, false);
