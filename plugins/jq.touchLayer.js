@@ -20,23 +20,7 @@
         el.addEventListener('touchstart', this, false);
 		el.addEventListener('click', this, false);
 		this.ignoreNextScroll = true;	//there will be one scroll fired in the load process .hideAddressBar()
-		var that = this;
-		document.addEventListener('scroll', function(e){
-			if(!that.allowDocumentScroll && !that.isPanning && e.target.isSameNode(document)) {
-				if(!that.ignoreNextScroll){
-					that.ignoreNextScroll = true;
-					if(that.wasPanning){
-						that.wasPanning = false;
-						//give it a couple of seconds
-						setTimeout(function(){
-							that.hideAddressBar();
-						}, 2000);
-					} else {
-						that.hideAddressBar();
-					}
-				} else that.ignoreNextScroll=false;
-			}
-		}, true);
+		document.addEventListener('scroll', this, true);
 		this.layer=el;
     }
 	
@@ -78,6 +62,9 @@
 	            case 'blur':
 	               	this.onBlur(e);
 	                break;
+				case 'scroll':
+					this.onScroll(e);
+					break;
             }
         },
 		hideAddressBar:function() {
@@ -137,7 +124,23 @@
 			//hideAddressBar now for scrolls, next stack step for resizes
 			if(focusScrolls) this.hideAddressBar();
 		},
-		
+		onScroll:function(e){
+			if(!this.allowDocumentScroll && !this.isPanning && e.target.isSameNode(document)) {
+				if(!this.ignoreNextScroll){
+					this.ignoreNextScroll = true;
+					if(this.wasPanning){
+						this.wasPanning = false;
+						//give it a couple of seconds
+						var that = this;
+						setTimeout(function(){
+							that.hideAddressBar();
+						}, 2000);
+					} else {
+						this.hideAddressBar();
+					}
+				} else this.ignoreNextScroll=false;
+			}
+		},
 		
         onTouchStart: function(e) {
 			var id = e.target.id;
