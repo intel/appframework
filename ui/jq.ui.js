@@ -730,9 +730,7 @@
 	            tmp.id = null;
 	            tmp.removeAttribute("footer");
 	            tmp.removeAttribute("nav");
-	            jq(tmp).removeClass("panel");
-	            tmp.style.width = "100%";
-	            //tmp.style.height = "inherit";
+	            jq(tmp).replaceClass("panel", "jqmScrollPanel");
             
 	            scrollEl.appendChild(tmp);
             
