@@ -1129,7 +1129,7 @@
 			
 			var that = this;
 			
-			if(jq.os.android) {
+			if(jq.os.android && !jq.os.chrome) {
 				//panel extra style (x is always shifted -100% due to the misplaced form inputs bug)
 				var ns = document.createElement('style');
 				document.getElementsByTagName("html")[0].appendChild(ns);
@@ -1702,7 +1702,7 @@
             oldDiv.style.zIndex = 1;
         },
 		androidPcentFixX:function(val){
-			if(!jq.os.android) return val;
+			if(!jq.os.android||jq.os.chrome) return val;
 			return ''+(numOnly(val)+100)+'%';
 		},
 		/**
@@ -1723,7 +1723,7 @@
          * @title $.ui.finishTransition(oldDiv)
          */
         clearAnimations: function(inViewDiv) {
-			if(jq.os.android) inViewDiv.style.webkitTransform = "translate3d(100%,0,0)";
+			if(jq.os.android&&!jq.os.chrome) inViewDiv.style.webkitTransform = "translate3d(100%,0,0)";
 			else inViewDiv.style.webkitTransform = "none";
 			inViewDiv.style.webkitTransition = "none";
         }
