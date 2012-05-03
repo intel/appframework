@@ -10,8 +10,8 @@
 	var autoBlurInputTypes = ['button', 'radio', 'checkbox', 'range'];
 	var requiresJSFocus = $.os.ios;	//devices which require .focus() on dynamic click events
 	var verySensitiveTouch = $.os.blackberry;	//devices which have a very sensitive touch and touchmove is easily fired even on simple taps
-	var inputElementRequiresNativeTap = $.os.blackberry || $.os.android;	//devices which require the touchstart event to bleed through in order to actually fire the click on select elements
-	var selectElementRequiresNativeTap = $.os.blackberry || $.os.android;	//devices which require the touchstart event to bleed through in order to actually fire the click on select elements
+	var inputElementRequiresNativeTap = $.os.blackberry || ($.os.android && !$.os.chrome);	//devices which require the touchstart event to bleed through in order to actually fire the click on select elements
+	var selectElementRequiresNativeTap = $.os.blackberry || ($.os.android && !$.os.chrome);	//devices which require the touchstart event to bleed through in order to actually fire the click on select elements
 	var focusScrolls = $.os.ios;	//devices scrolling on focus instead of resizing	
     
 	//TouchLayer contributed by Carlos Ouro @ Badoo
@@ -68,7 +68,7 @@
             }
         },
 		hideAddressBar:function() {
-	        if (jq.os.desktop) {
+	        if (jq.os.desktop||jq.os.chrome) {
 	            this.layer.style.height="100%";
 	        } else if (jq.os.android) {
 	            window.scrollTo(1, 1);
