@@ -769,7 +769,10 @@
                     that.updateHeaderElements(jq("#" + hasHeader).children());
                 } else if (hasHeader != that.customHeader) {
                     if (that.customHeader)
+                    {
                         that.updateHeaderElements(that.defaultHeader);
+                        that.setTitle(that.activeDiv.title);
+                    }
                     that.customHeader = false;
                 }
 
