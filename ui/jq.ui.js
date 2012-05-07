@@ -2411,7 +2411,7 @@
                     } else if (that.showBackbutton){
                         jq("#header #backButton").css("visibility","visible");
                     }
-                },300);
+                },370);
                 window.scrollTo(1, 1);
             
             }
