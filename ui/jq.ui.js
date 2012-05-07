@@ -2808,7 +2808,7 @@
             
             var tagname = theTarget.tagName.toLowerCase();
             var type=theTarget.type||"";
-            if((tagname=="a"&& theTarget.href.indexOf("tel:")===0)||((tagname=="input"&&type=="text")||tagname=="textarea"||tagname=="select")){
+            if((tagname=="a"&& theTarget.href.indexOf("tel:")===0)||((tagname=="input")||tagname=="textarea"||tagname=="select")){
                 prevField=theTarget;
                 if(jq.os.android&&$.ui.fixAndroidInputs){
                     theTarget.focus();
