@@ -217,6 +217,7 @@
             var el = document.getElementById(elID);
             if (el) {
                 el.selectedIndex = value;
+                $(el).trigger("change");
             }
             this.scroller.scrollTo({
                 x: 0,
