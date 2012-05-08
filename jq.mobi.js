@@ -1505,6 +1505,7 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os = {};
             $.os.webkit = userAgent.match(/WebKit\/([\d.]+)/) ? true : false;
             $.os.android = userAgent.match(/(Android)\s+([\d.]+)/) || userAgent.match(/Silk-Accelerated/) ? true : false;
+			$.os.androidICS = $.os.android && userAgent.match(/(Android)\s4/) ? true : false;
             $.os.ipad = userAgent.match(/(iPad).*OS\s([\d_]+)/) ? true : false;
             $.os.iphone = !$.os.ipad && userAgent.match(/(iPhone\sOS)\s([\d_]+)/) ? true : false;
             $.os.webos = userAgent.match(/(webOS|hpwOS)[\s\/]([\d.]+)/) ? true : false;
@@ -1519,7 +1520,6 @@ if (!window.jq || typeof (jq) !== "function") {
 			//features
 			$.feat = {};
 			$.feat.nativeTouchScroll = ($.os.ios ? !userAgent.match(/OS\s[1-4]/) : false);
-			$.feat.transformAbsoluteForms = !$.os.android || !userAgent.match(/Android\s[1-2]/);
         }
         detectUA($, navigator.userAgent);
         $.__detectUA = detectUA; //needed for unit tests

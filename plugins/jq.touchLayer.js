@@ -1,5 +1,6 @@
 //TouchLayer contributed by Carlos Ouro @ Badoo
-//handles overlooking js scrolling and native scrolling, panning on titlebar and no delay on click
+//handles overlooking JS and native scrolling, panning, 
+//no delay on click, edit mode focus, preventing defaults, resizing content, etc
 //It can be used independently in other apps but it is required by jqUi
 (function() {
     $.touchLayer = function(el) {
@@ -12,7 +13,8 @@
 	var verySensitiveTouch = $.os.blackberry;	//devices which have a very sensitive touch and touchmove is easily fired even on simple taps
 	var inputElementRequiresNativeTap = $.os.blackberry || ($.os.android && !$.os.chrome);	//devices which require the touchstart event to bleed through in order to actually fire the click on select elements
 	var selectElementRequiresNativeTap = $.os.blackberry || ($.os.android && !$.os.chrome);	//devices which require the touchstart event to bleed through in order to actually fire the click on select elements
-	var focusScrolls = $.os.ios;	//devices scrolling on focus instead of resizing	
+	var focusScrolls = $.os.ios;	//devices scrolling on focus instead of resizing
+	var requirePanning = $.os.ios;	//devices which require panning feature
     
 	//TouchLayer contributed by Carlos Ouro @ Badoo
 	//handles overlooking panning on titlebar, bumps on native scrolling and no delay on click
@@ -25,7 +27,6 @@
     }
 	
     touchLayer.prototype = {
-		allowDocumentScroll:false,
         dX: 0,
         dY: 0,
         cX: 0,
@@ -34,8 +35,6 @@
 		panElementId: "header",
 		scrollingEl: null,
 		isScrolling: false,
-		currentMomentum: 0,
-		startTime:0,
 		isScrollingVertical: false,
 		wasPanning:false,
 		isPanning:false,
@@ -86,7 +85,6 @@
 		onClick:function(e){
 			//handle forms
 			var tag =  e.target && e.target.tagName != undefined ? e.target.tagName.toLowerCase() : '';
-
             if (inputElements.indexOf(tag)!==-1 && (!this.isFocused || !e.target.isSameNode(this.focusedElement))) {
 
 				var type =  e.target && e.target.type != undefined ? e.target.type.toLowerCase() : '';
@@ -98,11 +96,11 @@
 					if(this.isFocused){
 						this.focusedElement.removeEventListener('blur', this, false);
 					}
-					e.target.addEventListener('blur', this, false);
-					this.isFocused = true;
 					this.focusedElement = e.target;
+					this.focusedElement.addEventListener('blur', this, false);
 					//android bug workaround for UI
-					if(this.onEnterEdit) this.onEnterEdit(e.target);
+					if(!this.isFocused && this.onEnterEdit) this.onEnterEdit(e.target);
+					this.isFocused = true;
 				} else {
 					this.isFocused=false;
 				}
@@ -120,7 +118,14 @@
 			if(this.focusedElement) this.focusedElement.removeEventListener('blur', this, false);
 			this.focusedElement = null;
 			//android bug workaround for UI
-			if(this.onExitEdit) this.onExitEdit(e.target);
+			if(this.onExitEdit) {
+				var that = this;
+				setTimeout(function(){
+					if(!that.isFocused) {
+						that.onExitEdit(e.target);
+					}
+				},250);
+			}
 			//hideAddressBar now for scrolls, next stack step for resizes
 			if(focusScrolls) this.hideAddressBar();
 		},
@@ -162,6 +167,9 @@
 				this.requiresNativeTap=true;
 			} else if(inputElementRequiresNativeTap && e.target && e.target.tagName != undefined){
 				if(inputElements.indexOf(e.target.tagName.toLowerCase())!==-1) {
+					if(this.onPreEnterEdit) {
+						this.onPreEnterEdit(e.target);
+					}
 					this.requiresNativeTap = true;
 				}
 			}
@@ -215,7 +223,7 @@
 			
 			//check panning
 			//temporarily disabled for android - click vs panning issues
-			if(!jq.os.android && this.panElementId==el.id){
+			if(requirePanning && this.panElementId==el.id){
 				this.isPanning = true;
 				return;
 			}
@@ -298,6 +306,8 @@
 				
 				//fire the click event
 				this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
+            } else if(itMoved && this.requiresNativeTap){
+            	if(this.onCancelEnterEdit) this.onCancelEnterEdit(e.target);
             }
 			
 			this.requiresNativeTap = false;

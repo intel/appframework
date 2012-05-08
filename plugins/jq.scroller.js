@@ -1,7 +1,9 @@
 /**
- * jq.scroller - a scrolling library for jqMobi apps
- * Copyright 2011 - AppMobi 
+ * jq.scroller - rewritten by Carlos Ouro @ Badoo
+ * Supports iOS native touch scrolling and a much improved javascript scroller
  */ 
+ 
+ 
  (function($) {
     var cache = [];
 	var objId=function(obj){
@@ -336,6 +338,8 @@
 			this.preventPullToRefresh = true;
 			this.doScrollInterval = null;
 			this.refreshRate = 25;
+			this.isScrolling=false;
+			this.activeAndroidFix = false;
 
             this.lastScrollbar="";
             this.finishScrollingObject=null;
@@ -455,9 +459,15 @@
 			this.saveFirstEventInfo(event);
 			
 			//get the current top
-			var cssMatrix = this.getCSSMatrix(this.el);
-            scrollInfo.top = numOnly(cssMatrix.f) - numOnly(this.container.scrollTop);
-            scrollInfo.left = numOnly(cssMatrix.e) - numOnly(this.container.scrollLeft);
+			if(!this.activeAndroidFix || !jq.os.android || jq.os.chrome){
+				var cssMatrix = this.getCSSMatrix(this.el);
+	            scrollInfo.top = numOnly(cssMatrix.f) - numOnly(this.container.scrollTop);
+	            scrollInfo.left = numOnly(cssMatrix.e) - numOnly(this.container.scrollLeft);
+			} else {	//AndroidGB fix
+	            scrollInfo.top = numOnly(this.el.style.top);
+	            scrollInfo.left = numOnly(this.el.style.left);
+			}
+			
 
 			this.container.scrollTop = this.container.scrollLeft = 0;
 			this.currentScrollingObject = this.el;
@@ -569,9 +579,29 @@
         }
 		
 		jsScroller.prototype.doScroll=function(){
-			var cssMatrix = this.getCSSMatrix(this.el);
-			this.lastScrollInfo.top = numOnly(cssMatrix.f);
-			this.lastScrollInfo.left = numOnly(cssMatrix.e);
+			
+			
+			if(this.isScrolling){
+				var cssMatrix = this.getCSSMatrix(this.el);
+				this.lastScrollInfo.top = numOnly(cssMatrix.f);
+				this.lastScrollInfo.left = numOnly(cssMatrix.e);
+			} else if(this.lastScrollInfo.x != this.lastScrollInfo.left || this.lastScrollInfo.y != this.lastScrollInfo.top){
+				this.isScrolling=true;
+				if(this.onScrollStart) this.onScrollStart();
+				if(this.activeAndroidFix && jq.os.android && !jq.os.chrome){
+					//skip a beat to apply android fix
+					this.resetAdroindGBForms();
+					return;
+				} else {
+					//proceed normally
+					var cssMatrix = this.getCSSMatrix(this.el);
+					this.lastScrollInfo.top = numOnly(cssMatrix.f);
+					this.lastScrollInfo.left = numOnly(cssMatrix.e);
+				}
+			} else {
+				//nothing to do here, cary on
+				return;
+			}
 			
 			this.recalculateDeltaY(this.lastScrollInfo);
 			this.recalculateDeltaX(this.lastScrollInfo);
@@ -790,9 +820,57 @@
 			var that = this;
 			this.scrollingFinishCB=setTimeout(function(){
 				that.hideScrollbars();
+				if(that.activeAndroidFix && jq.os.android && !jq.os.chrome) that.fixAdroindGBForms();
 				if(that.onScroll) that.onScroll();
+				if(that.onScrollEnd) that.onScrollEnd();
+				that.isScrolling=false;
 			},scrollInfo.duration);
         }
+		
+		//Android Forms Fix
+		jsScroller.prototype.fixAdroindGBForms = function(){
+			var cssMatrix = this.getCSSMatrix(this.el);
+            this.el.style.top = numOnly(cssMatrix.f);
+            this.el.style.left = numOnly(cssMatrix.e);
+			this.el.style.webkitTransform = "none";
+			this.el.style.webkitTransition = "none";
+			this.el.style.webkitPerspective = "none";
+			//container
+			this.container.style.webkitPerspective = "none";
+			this.container.style.webkitBackfaceVisibility = "visible";
+			//scrollbars
+			if(this.vscrollBar){
+				this.vscrollBar.style.webkitTransform = "none";
+				this.vscrollBar.style.webkitTransition = "none";
+				this.vscrollBar.style.webkitPerspective = "none";
+				this.vscrollBar.style.webkitBackfaceVisibility = "visible";
+			}
+			if(this.hscrollBar){
+				this.hscrollBar.style.webkitTransform = "none";
+				this.hscrollBar.style.webkitTransition = "none";
+				this.hscrollBar.style.webkitPerspective = "none";
+				this.hscrollBar.style.webkitBackfaceVisibility = "visible";
+			}
+		}
+		jsScroller.prototype.resetAdroindGBForms = function(){
+			this.scrollerMoveCSS({x:numOnly(this.el.style.left),y:numOnly(this.el.style.top)}, 0);
+			this.el.style.webkitPerspective = 1000;
+            this.el.style.top = 0;
+            this.el.style.left = 0;
+			//container
+			this.container.style.webkitPerspective = 1000;
+			this.container.style.webkitBackfaceVisibility = "hidden";
+			//scrollbars
+			if(this.vscrollBar){
+				this.vscrollBar.style.webkitPerspective = 1000;
+				this.vscrollBar.style.webkitBackfaceVisibility = "hidden";
+			}
+			if(this.hscrollBar){
+				this.hscrollBar.style.webkitPerspective = 1000;
+				this.hscrollBar.style.webkitBackfaceVisibility = "hidden";
+			}
+		}
+		
 		
 		
         jsScroller.prototype.scrollerMoveCSS=function(distanceToMove, time, timingFunction) {

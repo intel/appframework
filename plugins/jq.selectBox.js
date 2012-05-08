@@ -9,7 +9,7 @@
         oldSelects: {},
         scroller: null,
         getOldSelects: function(elID) {
-            if ($.feat.transformAbsoluteForms)
+            if ($.os.android && !$.os.androidICS)
                return;
             if (!$.fn['scroller']) {
                 alert("This library requires jq.web.Scroller");

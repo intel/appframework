@@ -804,9 +804,6 @@
             }
 			window.setTimeout(function(){
 				that.touchLayer.hideAddressBar();
-				if(!$.feat.transformAbsoluteForms && that.touchLayer.isFocused){
-					that.androidFormsFix(that.touchLayer.focusedElement);
-				}
 			},100);
         },
 
@@ -1095,20 +1092,6 @@
             this.availableTransitions[transition].call(this, oldDiv, currWhat, back);
 		},
 		
-		androidFormsFix: function(input){
-			if(this.activeDiv && input){
-				//let's position as best as possible
-				var pos = jq(input).offset();
-				var panelRight = numOnly(pos.right)-1;
-				this.activeDiv.style.left=(-1*panelRight)+'px';
-				this.activeDiv.style.webkitTransform='translate3d('+panelRight+'px,0,0)';
-			} else {	
-				//back to normal
-				this.activeDiv.style.left='-100%';
-				this.activeDiv.style.webkitTransform='translate3d(100%,0,0)';
-			}
-		},
-		
         /**
          * This is callled when you want to launch jqUi.  If autoLaunch is set to true, it gets called on DOMContentLoaded.
          * If autoLaunch is set to false, you can manually invoke it.
@@ -1128,22 +1111,31 @@
 			var that = this;
 			
 			if(jq.os.android && !jq.os.chrome) {
-				//panel extra style (x is always shifted -100% due to the misplaced form inputs bug)
-				var ns = document.createElement('style');
-				document.getElementsByTagName("html")[0].appendChild(ns);
-				ns.appendChild(document.createTextNode('.panel{left:-100%;}'));
-				
-				if(!$.feat.transformAbsoluteForms){
-					//connect to touchLayer to detect editMode
-					this.touchLayer.onEnterEdit = function(el){
-						//old androids fix
-						that.androidFormsFix(el);
-					}
-					this.touchLayer.onExitEdit = function(el){
-						//old androids fix
-						that.androidFormsFix();
+				var androidFixOn = false;
+				//connect to touchLayer to detect editMode
+				this.touchLayer.onPreEnterEdit = function(el){
+					if(!androidFixOn && that.activeDiv){
+						console.log("deploying ugly android fix");
+						androidFixOn = true;
+						//activate on scroller
+						if(that.scrollingDivs[that.activeDiv.id]){
+							that.scrollingDivs[that.activeDiv.id].activeAndroidFix = true;
+							that.scrollingDivs[that.activeDiv.id].fixAdroindGBForms();
+						}
 					}
 				}
+				this.touchLayer.onCancelEnterEdit = this.touchLayer.onExitEdit = function(el){
+					if(androidFixOn && that.activeDiv){
+						console.log("removing ugly android fix");
+						androidFixOn = false;
+						//dehactivate on scroller
+						if(that.scrollingDivs[that.activeDiv.id]){
+							that.scrollingDivs[that.activeDiv.id].activeAndroidFix = false;
+							that.scrollingDivs[that.activeDiv.id].resetAdroindGBForms();
+						}
+					}
+				}
+				
 			}
 
             this.isAppMobi = (window.AppMobi && typeof (AppMobi) == "object" && AppMobi.app !== undefined) ? true : false;
@@ -1298,7 +1290,7 @@
                     //activeDiv = firstDiv;
                     that.firstDiv.style.display = "block";
                     that.css3animate(that.firstDiv, {
-                        x: that.androidPcentFixX("0%"),
+                        x: "0%",
 						callback:function(){
 							that.clearAnimations(that.firstDiv);
 						}
@@ -1347,17 +1339,17 @@
             var that = this;
             if (back) {
                 that.css3animate(oldDiv, {
-					x:that.androidPcentFixX("0%"),
+					x:"0%",
 					y:"0%",
 					callback:function(){
 		                that.css3animate(oldDiv, {
-		                    x: that.androidPcentFixX("100%"),
+		                    x: "100%",
 		                    time: "150ms",
 		                    callback: function() {
 		                        that.finishTransition(oldDiv);
 		                    }
 		                }).also(currDiv, {
-	                        x: that.androidPcentFixX("0%"),
+	                        x: "0%",
 	                        time: "150ms",
 	                        callback: function() {
 								that.clearAnimations(currDiv);
@@ -1365,22 +1357,22 @@
 	                    });
 					}
 				}).also(currDiv, {
-					x:that.androidPcentFixX("-100%"),
+					x:"-100%",
 					y:"0%"
 				});
             } else {
                 that.css3animate(oldDiv, {
-					x:that.androidPcentFixX("0%"),
+					x:"0%",
 					y:"0%",
 					callback:function(){
 		                that.css3animate(oldDiv, {
-		                    x: that.androidPcentFixX("-100%"),
+		                    x: "-100%",
 		                    time: "150ms",
 		                    callback: function() {
 		                        that.finishTransition(oldDiv);
 		                    }
 		                }).also(currDiv, {
-	                        x: that.androidPcentFixX("0%"),
+	                        x: "0%",
 	                        time: "150ms",
 	                        callback: function() {
 								that.clearAnimations(currDiv);
@@ -1388,7 +1380,7 @@
 	                    });
 					}
 				}).also(currDiv, {
-					x:that.androidPcentFixX("100%"),
+					x:"100%",
 					y:"0%"
 				});
             }
@@ -1409,7 +1401,7 @@
 
                 that.css3animate(oldDiv, {
                     y: "100%",
-                    x: that.androidPcentFixX("0%"),
+                    x: "0%",
                     time: "150ms",
                     callback: function() {
                         that.finishTransition(oldDiv);
@@ -1422,17 +1414,17 @@
                 oldDiv.style.zIndex = 1;
                 that.css3animate(currDiv, {
                     y: "100%",
-                    x: that.androidPcentFixX("0%"),
+                    x: "0%",
                     time: "1ms",
                     callback: function() {
                         that.css3animate(currDiv, {
                             y: "0%",
-                            x: that.androidPcentFixX("0%"),
+                            x: "0%",
                             time: "150ms",
 							callback: function() {
 								that.clearAnimations(currDiv);
 		                        that.css3animate(oldDiv, {
-		                            x: that.androidPcentFixX("-100%"),
+		                            x: "-100%",
 		                            y: 0,
 		                            callback: function() {
 		                                that.finishTransition(oldDiv);
@@ -1455,11 +1447,11 @@
                 that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
                     y: "-100%",
-                    x: that.androidPcentFixX("0%"),
+                    x: "0%",
                     time: "150ms",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: that.androidPcentFixX("-100%"),
+                            x: "-100%",
                             y: 0,
                             callback: function() {
                                 that.finishTransition(oldDiv);
@@ -1475,16 +1467,16 @@
                 currDiv.style.zIndex = 2;
                 that.css3animate(currDiv, {
                     y: "-100%",
-                    x: that.androidPcentFixX("0%"),
+                    x: "0%",
                     callback: function() {
                         that.css3animate(currDiv, {
                             y: "0%",
-                            x: that.androidPcentFixX("0%"),
+                            x: "0%",
                             time: "150ms",
 							callback: function(){
 								that.clearAnimations(currDiv);
 		                        that.css3animate(oldDiv, {
-		                            x: that.androidPcentFixX("-100%"),
+		                            x: "-100%",
 		                            y: 0,
 		                            callback: function() {
 		                                that.finishTransition(oldDiv);
@@ -1503,13 +1495,13 @@
             var that = this
             if (back) {
                 that.css3animate(currDiv, {
-                    x: that.androidPcentFixX("100%"),
+                    x: "100%",
                     time: "1ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: that.androidPcentFixX("0%"),
+                            x: "0%",
 							scale: 1,
                             time: "150ms",
 							rotateY: "0deg",
@@ -1520,13 +1512,13 @@
                     }
                 });
                 that.css3animate(oldDiv, {
-                    x: that.androidPcentFixX("100%"),
+                    x: "100%",
                     time: "150ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: that.androidPcentFixX("-100%"),
+                            x: "-100%",
                             opacity: 1,
 		                    scale: 1,
 		                    rotateY: "0deg",
@@ -1542,13 +1534,13 @@
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
                 that.css3animate(oldDiv, {
-                    x: that.androidPcentFixX("100%"),
+                    x: "100%",
                     time: "150ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: that.androidPcentFixX("-100%"),
+                            x: "-100%",
                             y: 0,
                             time: "1ms",
 		                    scale: 1,
@@ -1560,13 +1552,13 @@
                     }
                 });
                 that.css3animate(currDiv, {
-                    x: that.androidPcentFixX("100%"),
+                    x: "100%",
                     time: "1ms",
                     scale: .8,
                     rotateY: "180deg",
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: that.androidPcentFixX("0%"),
+                            x: "0%",
                             time: "150ms",
 		                    scale: 1,
 		                    rotateY: "0deg",
@@ -1587,12 +1579,12 @@
                 oldDiv.style.zIndex = 2;
                 that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
-                    x: that.androidPcentFixX("0%"),
+                    x: "0%",
                     time: "150ms",
                     opacity: .1,
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: that.androidPcentFixX("-100%"),
+                            x: "-100%",
                             opacity: 1,
                             callback: function() {
                                 that.finishTransition(oldDiv);
@@ -1608,17 +1600,17 @@
                 currDiv.style.zIndex = 2;
 				currDiv.style.opacity = 0;
                 that.css3animate(currDiv, {
-                    x: that.androidPcentFixX("0%"),
+                    x: "0%",
                     opacity: .1,
                     callback: function() {
 		                that.css3animate(currDiv, {
-		                    x: that.androidPcentFixX("0%"),
+		                    x: "0%",
 		                    time: "150ms",
 		                    opacity: 1,
 							callback:function(){
 								that.clearAnimations(currDiv);
 		                        that.css3animate(oldDiv, {
-		                            x: that.androidPcentFixX("-100%"),
+		                            x: "-100%",
 		                            y: 0,
 		                            callback: function() {
 		                                that.finishTransition(oldDiv);
@@ -1639,14 +1631,14 @@
                 oldDiv.style.zIndex = 2;
                 that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
-                    x: that.androidPcentFixX("0%"),
+                    x: "0%",
                     time: "150ms",
                     opacity: .1,
                     scale: .2,
-                    origin: that.androidPcentFixX("-50%")+" 50%",
+                    origin: "-50%"+" 50%",
                     callback: function() {
                         that.css3animate(oldDiv, {
-                            x: that.androidPcentFixX("-100%"),
+                            x: "-100%",
                             callback: function() {
                                 that.finishTransition(oldDiv);
                             }
@@ -1659,22 +1651,22 @@
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
                 that.css3animate(currDiv, {
-                    x: that.androidPcentFixX("0%"),
+                    x: "0%",
                     y: "0%",
                     scale: .2,
-                    origin: that.androidPcentFixX("-50%")+" 50%",
+                    origin: "-50%"+" 50%",
                     opacity: .1,
                     callback: function() {
                         that.css3animate(currDiv, {
-                            x: that.androidPcentFixX("0%"),
+                            x: "0%",
                             time: "150ms",
                             scale: 1,
                             opacity: 1,
-                            origin: that.androidPcentFixX("0%")+" 0%",
+                            origin: "0%"+" 0%",
 							callback: function(){
 								that.clearAnimations(currDiv);
 		                        that.css3animate(oldDiv, {
-		                            x: that.androidPcentFixX("100%"),
+		                            x: "100%",
 		                            y: 0,
 		                            callback: function() {
 		                                that.finishTransition(oldDiv);
@@ -1692,17 +1684,13 @@
             var that = this;
             that.clearAnimations(currDiv);
 			that.css3animate(oldDiv, {
-                x: this.androidPcentFixX("-100%"),
+                x: "-100%",
                 y: 0
             });
             that.finishTransition(oldDiv);
             currDiv.style.zIndex = 2;
             oldDiv.style.zIndex = 1;
         },
-		androidPcentFixX:function(val){
-			if(!jq.os.android||jq.os.chrome) return val;
-			return ''+(numOnly(val)+100)+'%';
-		},
 		/**
          * This must be called at the end of every transition to hide the old div and reset the doingTransition variable
          *
@@ -1721,8 +1709,7 @@
          * @title $.ui.finishTransition(oldDiv)
          */
         clearAnimations: function(inViewDiv) {
-			if(jq.os.android&&!jq.os.chrome) inViewDiv.style.webkitTransform = "translate3d(100%,0,0)";
-			else inViewDiv.style.webkitTransform = "none";
+			inViewDiv.style.webkitTransform = "none";
 			inViewDiv.style.webkitTransition = "none";
         }
 		
