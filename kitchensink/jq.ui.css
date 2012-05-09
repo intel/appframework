@@ -70,7 +70,7 @@ width:100%;
 	width:100%;	height:1px;
 } /* Horizontal line. */
 
-.jqmScrollPanel { width:100%; height:100%; }
+.jqmScrollPanel { width:100%; min-height:100%; }
 .jqmScrollbar { background:white !important; border:1px grey solid !important; } /* Sets the color of the scrollbar */
 
 #jQUi {
