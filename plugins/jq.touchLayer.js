@@ -14,6 +14,7 @@
 	var inputElementRequiresNativeTap = $.os.blackberry || ($.os.android && !$.os.chrome);	//devices which require the touchstart event to bleed through in order to actually fire the click on select elements
 	var selectElementRequiresNativeTap = $.os.blackberry || ($.os.android && !$.os.chrome);	//devices which require the touchstart event to bleed through in order to actually fire the click on select elements
 	var focusScrolls = $.os.ios;	//devices scrolling on focus instead of resizing
+	var focusResizes = $.os.blackberry10;
 	var requirePanning = $.os.ios;	//devices which require panning feature
     
 	//TouchLayer contributed by Carlos Ouro @ Badoo
@@ -110,7 +111,9 @@
 				if(requiresJSFocus){
 					e.target.focus();
 				}
-            }
+				
+				//BB10 needs to be preventDefault on touchstart and thus need manual blur on click
+            } else if($.os.blackberry10 && this.isFocused) this.focusedElement.blur();
 		},
 		onBlur:function(e){
 			this.isFocused=false;
@@ -118,8 +121,8 @@
 			if(this.focusedElement) this.focusedElement.removeEventListener('blur', this, false);
 			this.focusedElement = null;
 			//android bug workaround for UI
+			var that = this;
 			if(this.onExitEdit) {
-				var that = this;
 				setTimeout(function(){
 					if(!that.isFocused) {
 						that.onExitEdit(e.target);
@@ -128,6 +131,7 @@
 			}
 			//hideAddressBar now for scrolls, next stack step for resizes
 			if(focusScrolls) this.hideAddressBar();
+			else if(focusResizes) setTimeout(function(){that.hideAddressBar();},250);
 		},
 		onScroll:function(e){
 			if(!this.allowDocumentScroll && !this.isPanning && e.target.isSameNode(document)) {
@@ -162,9 +166,12 @@
 			this.requiresNativeTap = false;
 			
 			this.checkDOMTree(e.target, this.layer);
-			//some stupid phones require a native tap in order for the native input elements to work
-			if(this.isFocused) {
+			
+			//if on edit mode, allow all native touches 
+			//(BB10 must still be prevented, always clicks even after move)
+			if(this.isFocused && !$.os.blackberry10) {
 				this.requiresNativeTap=true;
+				//some stupid phones require a native tap in order for the native input elements to work
 			} else if(inputElementRequiresNativeTap && e.target && e.target.tagName != undefined){
 				if(inputElements.indexOf(e.target.tagName.toLowerCase())!==-1) {
 					if(this.onPreEnterEdit) {
@@ -266,7 +273,7 @@
 				return;
 			}
 
-			if(!this.isScrolling){
+			if(!this.isScrolling && (!$.os.blackberry10 || !this.requiresNativeTap)){
 				//legacy stuff for old browsers
 	            e.preventDefault();
 				this.moved = true;
@@ -306,6 +313,7 @@
 				
 				//fire the click event
 				this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
+				
             } else if(itMoved && this.requiresNativeTap){
             	if(this.onCancelEnterEdit) this.onCancelEnterEdit(e.target);
             }

@@ -1511,7 +1511,9 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os.webos = userAgent.match(/(webOS|hpwOS)[\s\/]([\d.]+)/) ? true : false;
             $.os.touchpad = $.os.webos && userAgent.match(/TouchPad/) ? true : false;
             $.os.ios = $.os.ipad || $.os.iphone;
-            $.os.blackberry = userAgent.match(/BlackBerry/) || userAgent.match(/PlayBook/) ? true : false;
+			$.os.playbook = userAgent.match(/PlayBook/) ? true : false;
+            $.os.blackberry = $.os.playbook || userAgent.match(/BlackBerry/) ? true : false;
+			$.os.blackberry10 = $.os.blackberry || userAgent.match(/Safari\/536/) ? true : false;
             $.os.chrome = userAgent.match(/Chrome/) ? true : false;
 			$.os.opera = userAgent.match(/Opera Mobi/) ? true : false;
             $.os.fennec = userAgent.match(/fennec/i) ? true : false;
