@@ -219,7 +219,7 @@ width:100%;
 	overflow:auto;
 	-webkit-overflow-scrolling:touch;
 } /* This class is applied to the divs that contain the various "views" or pages of the app. */
-.panel > * {
+.panel > .jqmScrollPanel, .panel > .jqmScrollbar {
 	-webkit-backface-visibility: hidden;
 	-webkit-perspective: 1000;
 }
@@ -997,7 +997,7 @@ color:white;
    width:5px !important;
    height:20px !important;
    border-radius:2px !important;
-   border:1px soldid black !important;
+   border:1px solid black !important;
    background:black !important;
    opacity:0 !important;
 }/*
