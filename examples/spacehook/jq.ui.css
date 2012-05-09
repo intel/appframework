@@ -45,7 +45,7 @@ p {
 
 
 #jQui_modal{
-    -webkit-transform:translate3d(100%,0,0);
+    
     -webkit-backface-visibility: hidden;
 	z-index:9999 !important;
 	width:100%;
@@ -126,11 +126,6 @@ width:100%;
 	color:#fff;
 } /* This is text that appears in the header at the top of the screen */
 
-body[orient="landscape"] > #header > h1 {
-	margin-left:-125px;
-	width:250px;
-} /* Updates the available text area and positioning when the screen is held in landscape orientation. */
-
 
 
 /**********************************************************
@@ -188,29 +183,6 @@ body[orient="landscape"] > #header > h1 {
 	z-index:9999;
 }
 
-a.customBackButton {
-	float:right;
-	display:block;
-	width:44px; height:44px;
-	background:url("images/back.png"), -webkit-gradient(linear, left top, left bottom, from(#161F28), to(#1D2730), color-stop(.5,#161F28), color-stop(.5,#1D2730));
-	background-position:0px 0px, left top;
-	background-repeat:no-repeat;
-	border-top-left-radius:6px; border-bottom-left-radius:6px; -webkit-border-top-left-radius:6px; -webkit-border-top-left-radius:6px;
-	-webkit-box-shadow:0px 0px 24px rgba(0,0,0,0.8); box-shadow:0px 0px 24px rgba(0,0,0,0.8);
-	margin-top:2px;
-} /* This is the custom, graphical button shown in jQUi by default */
-
-a.customBackButton.press {
-	float:right;
-    display:block;
-	width:44px; height:44px;
-	background:url("images/back.png"), -webkit-gradient(linear, left top, left bottom, from(rgba(56,65,74,1)), to(rgba(33,38,43,1)), color-stop(.5,rgba(56,65,74,1)), color-stop(.5,rgba(33,38,43,1)));
-	background-position:0px -44px, left top;
-	background-repeat:no-repeat;
-	border-top-left-radius:6px; border-bottom-left-radius:6px; -webkit-border-top-left-radius:6px; -webkit-border-top-left-radius:6px;
-	-webkit-box-shadow:0px 0px 24px rgba(0,0,0,0.8); box-shadow:0px 0px 24px rgba(0,0,0,0.8);
-	margin-top:2px;
-}
 
 
 
@@ -233,17 +205,12 @@ a.customBackButton.press {
 	width:100%;
 	height:100%;
 	display:none;
-	position:absolute; top:0px; left:-100%;
+	position:absolute; top:0px;
 	overflow:hidden;
 	background:white;
     color:black;
-	-webkit-transform:translate3d(0,0,0);
-	-webkit-perspective: 1000;
+	
 } /* This class is applied to the divs that contain the various "views" or pages of the app. */
-.panel > * {
-	-webkit-backface-visibility: hidden;
-	-webkit-perspective: 1000;
-}
 
 
 

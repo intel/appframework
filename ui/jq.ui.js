@@ -2578,9 +2578,14 @@
                     //activeDiv = firstDiv;
                     if (defaultHash.length > 0 && that.loadDefaultHash&&defaultHash!=("#"+that.firstDiv.id))
                     {
-                        that.activeDiv=$(defaultHash).get();
                         
+                        that.activeDiv=$(defaultHash).get();
+                        jq("#header #backButton").css("visibility","visible");
+                        that.setBackButtonText(that.activeDiv.title)
+                        that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
                     }
+                    else
+                        previousTarget="#"+that.activeDiv.id;
                     if (that.scrollingDivs[that.activeDiv.id]) {
                         that.scrollingDivs[that.activeDiv.id].initEvents();
                     }
@@ -2626,7 +2631,7 @@
             var that = this
             if (back) {
                 that.css3animate(currDiv, {
-                    x: "100%",
+                    x: "0%",
                     time: "1ms"
                 });
                 that.css3animate(oldDiv, {
@@ -2642,7 +2647,7 @@
                     time: "1ms"
                 });
                 that.css3animate(currDiv, {
-                    x: "100%",
+                    x: "0%",
                     time: "1ms"
                 });
             }
