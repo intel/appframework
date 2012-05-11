@@ -936,7 +936,6 @@
                 var markStart = '</div><div id="jq_actionsheet"><div style="width:100%">';
                 var markEnd = '</div></div>';
                 var markup;
-                
                 if (typeof opts == "string") {
                     markup = $(markStart + opts +"<a href='javascript:;' class='cancel'>Cancel</a>"+markEnd);
                 } else if (typeof opts == "object") {
@@ -952,6 +951,7 @@
                     }
                 }
                 $(elID).find("#jq_actionsheet").remove();
+                $(elID).find("#jq_action_mask").remove();
                 actionsheetEl = $(elID).append(markup);
                 
                 markup.get().style.webkitTransition="all 0ms";
@@ -974,8 +974,7 @@
             hideSheet: function() {
                 var that=this;
                 this.activeSheet.off("click","a",function(){that.hideSheet()});
-                $("#jq_action_mask").remove();
-
+                $(this.el).find("#jq_action_mask").remove();
                 this.activeSheet.get().style.webkitTransition="all 0ms";
                 var markup = this.activeSheet;
                 var theEl = this.el;
