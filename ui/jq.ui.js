@@ -2192,12 +2192,12 @@
             var scripts = div.getElementsByTagName("script");
             div = null;
             for (var i = 0; i < scripts.length; i++) {
-                if (scripts[i].src.length > 0 && !that.remoteJSPages[scripts[i].src]) {
+                if (scripts[i].src.length > 0 && !this.remoteJSPages[scripts[i].src]) {
                     var doc = document.createElement("script");
                     doc.type = scripts[i].type;
                     doc.src = scripts[i].src;
                     document.getElementsByTagName('head')[0].appendChild(doc);
-                    that.remoteJSPages[scripts[i].src] = 1;
+                    this.remoteJSPages[scripts[i].src] = 1;
                     doc = null;
                 } else {
                     window.eval(scripts[i].innerHTML);
