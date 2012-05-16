@@ -1907,6 +1907,47 @@ if (!window.jq || typeof (jq) !== "function") {
             event.initEvent(type, bubbles, true, null, null, null, null, null, null, null, null, null, null, null, null);
             return event;
         };
+		
+		/* Events system for objects */
+		$.bind = function(obj, ev, f){
+			if(!obj.__events) obj.__events = {};
+			if(!$.isArray(ev)) ev = [ev];
+			for(var i=0; i<ev.length; i++){
+				if(!obj.__events[ev[i]]) obj.__events[ev[i]] = [];
+				obj.__events[ev[i]].push(f);
+			}
+		};
+		$.trigger = function(obj, ev, args){
+			var ret = true;
+			if(!obj.__events) return ret;
+			if(!$.isArray(ev)) ev = [ev];
+			if(!$.isArray(args)) args = [];
+			for(var i=0; i<ev.length; i++){
+				if(obj.__events[ev[i]]){
+					var evts = obj.__events[ev[i]];
+					for(var j = 0; j<evts.length; j++)
+						if($.isFunction(evts[j]) && evts[j].apply({}, args)===false) 
+							ret = false;
+				}
+			}
+			return ret;
+		};
+		$.unbind = function(obj, ev, f){
+			if(!obj.__events) return ret;
+			if(!$.isArray(ev)) ev = [ev];
+			for(var i=0; i<ev.length; i++){
+				if(obj.__events[ev[i]]){
+					var evts = obj.__events[ev[i]];
+					for(var j = 0; j<evts.length; j++){
+						if(evts[j]==f) {
+							evts.splice(j,1);
+							break;
+						}
+					}
+				}
+			}
+		};
+		
         
         /**
          * Creates a proxy function so you can change the 'this' context in the function
