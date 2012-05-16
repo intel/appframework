@@ -1990,9 +1990,12 @@ if (!window.jq || typeof (jq) !== "function") {
     //Helper function used in jq.mobi.plugins.
     if (!window.numOnly) {
         window.numOnly = function numOnly(val) {
-            if(val===undefined) return 0;
-			if (isNaN(parseFloat(val)))
-                val = val.replace(/[^0-9.-]/, "");
+			if (val===undefined) return 0;
+			if ( isNaN( parseFloat(val) ) ){
+				if(val.replace){
+					val = val.replace(/[^0-9.-]/, "");
+				} else return 0;
+			}  
             return parseFloat(val);
         }
     }
