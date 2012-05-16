@@ -43,7 +43,7 @@
 					androidFixOn = true;
 					//activate on scroller
 				 	for(el in cache)
-						if(checkConsistency(el) && cache[el].el.style.display!="none") cache[el].startAbsoluteMode();
+						if(checkConsistency(el) && cache[el].el.style.display!="none") cache[el].startFormsMode();
 				}
 			});
 			$.bind($.touchLayer, ['cancel-enter-edit', 'exit-edit'], function(el){
@@ -52,7 +52,7 @@
 					androidFixOn = false;
 					//dehactivate on scroller
 				 	for(el in cache)
-						if(checkConsistency(el) && cache[el].el.style.display!="none") cache[el].stopAbsoluteMode();
+						if(checkConsistency(el) && cache[el].el.style.display!="none") cache[el].stopFormsMode();
 				}
 			});
 		}
@@ -91,11 +91,6 @@
 		scrollerCore.prototype = {
 			//core default properties
 			refresh:false,
-            refreshListeners:{
-            	trigger:null,
-				cancel:null,
-				release:null	//Note: .release() - return false; will cancel auto-closing refresh, use .hideRefresh() to close it manually
-            },
 			refreshHangTimeout:2000,
 			refreshHeight:60,
 			refreshElement:null,
@@ -372,7 +367,8 @@
 			this.doScrollInterval = null;
 			this.refreshRate = 25;
 			this.isScrolling=false;
-			this.activeAndroidFix = false;
+			this.androidFormsMode = false;
+			this.refreshSafeKeep = false;
 
             this.lastScrollbar="";
             this.finishScrollingObject=null;
@@ -492,16 +488,10 @@
 			this.saveFirstEventInfo(event);
 			
 			//get the current top
-			if(!this.activeAndroidFix || !jq.os.android || jq.os.chrome){
-				var cssMatrix = this.getCSSMatrix(this.el);
-	            scrollInfo.top = numOnly(cssMatrix.f) - numOnly(this.container.scrollTop);
-	            scrollInfo.left = numOnly(cssMatrix.e) - numOnly(this.container.scrollLeft);
-			} else {	//AndroidGB fix
-	            scrollInfo.top = numOnly(this.el.style.top);
-	            scrollInfo.left = numOnly(this.el.style.left);
-			}
+			var cssMatrix = this.getCSSMatrix(this.el);
+            scrollInfo.top = numOnly(cssMatrix.f) - numOnly(this.container.scrollTop);
+            scrollInfo.left = numOnly(cssMatrix.e) - numOnly(this.container.scrollLeft);
 			
-
 			this.container.scrollTop = this.container.scrollLeft = 0;
 			this.currentScrollingObject = this.el;
 			
@@ -550,10 +540,20 @@
 			this.doScrollInterval = window.setInterval(function(){that.doScroll();}, this.refreshRate);
         }
 		jsScroller.prototype.getCSSMatrix = function(el){
-			var str = window.getComputedStyle(el).webkitTransform;	//fix for BB transform 'none'
-			if(str=='none') return {f:0,e:0};
-			var obj = new WebKitCSSMatrix(str);
-			return obj;
+			if(this.androidFormsMode){
+				//absolute mode
+				var top = parseInt(el.style.marginTop);
+				var left = parseInt(el.style.marginLeft);
+				if(isNaN(top)) top = 0;
+				if(isNaN(left)) left = 0;
+				return {f:top,e:left};
+			} else {
+				//regular transform
+				var str = window.getComputedStyle(el).webkitTransform;	//fix for BB transform 'none'
+				if(str=='none') return {f:0,e:0};
+				var obj = new WebKitCSSMatrix(str);
+				return obj;
+			}
 		}
 		jsScroller.prototype.saveEventInfo=function(event){
 			this.lastEventInfo = {
@@ -613,28 +613,17 @@
 		
 		jsScroller.prototype.doScroll=function(){
 			
-			
-			if(this.isScrolling){
-				var cssMatrix = this.getCSSMatrix(this.el);
-				this.lastScrollInfo.top = numOnly(cssMatrix.f);
-				this.lastScrollInfo.left = numOnly(cssMatrix.e);
-			} else if(this.lastScrollInfo.x != this.lastScrollInfo.left || this.lastScrollInfo.y != this.lastScrollInfo.top){
+			if(!this.isScrolling && this.lastScrollInfo.x != this.lastScrollInfo.left || this.lastScrollInfo.y != this.lastScrollInfo.top){
 				this.isScrolling=true;
 				if(this.onScrollStart) this.onScrollStart();
-				if(this.activeAndroidFix && jq.os.android && !jq.os.chrome){
-					//skip a beat to apply android fix
-					this.resetAdroindGBForms();
-					return;
-				} else {
-					//proceed normally
-					var cssMatrix = this.getCSSMatrix(this.el);
-					this.lastScrollInfo.top = numOnly(cssMatrix.f);
-					this.lastScrollInfo.left = numOnly(cssMatrix.e);
-				}
 			} else {
 				//nothing to do here, cary on
 				return;
 			}
+			//proceed normally
+			var cssMatrix = this.getCSSMatrix(this.el);
+			this.lastScrollInfo.top = numOnly(cssMatrix.f);
+			this.lastScrollInfo.left = numOnly(cssMatrix.e);
 			
 			this.recalculateDeltaY(this.lastScrollInfo);
 			this.recalculateDeltaX(this.lastScrollInfo);
@@ -814,9 +803,11 @@
 			
             this.finishScrollingObject = this.currentScrollingObject;
             this.currentScrollingObject = null;
-            
+
 			var scrollInfo = this.calculateMovement(this.lastEventInfo, true);
-			this.setMomentum(scrollInfo);
+			if(!this.androidFormsMode) {
+				this.setMomentum(scrollInfo);
+			}
 			this.calculateTarget(scrollInfo);
 			
 			//get the current top
@@ -846,6 +837,7 @@
 			//all others
 			}
 			
+			if(this.androidFormsMode) scrollInfo.duration = 0;
             this.scrollerMoveCSS(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
 			this.setVScrollBar(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
             this.setHScrollBar(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
@@ -865,13 +857,21 @@
 		}
 		
 		//Android Forms Fix
-		jsScroller.prototype.fixAdroindGBForms = function(){
+		jsScroller.prototype.startFormsMode = function(){
+			//get prev values
 			var cssMatrix = this.getCSSMatrix(this.el);
-            this.el.style.top = numOnly(cssMatrix.f);
-            this.el.style.left = numOnly(cssMatrix.e);
+			//toggle vars
+			this.refreshSafeKeep = this.refresh;
+			this.refresh=false;
+			this.androidFormsMode=true;
+			//set new css rules
 			this.el.style.webkitTransform = "none";
 			this.el.style.webkitTransition = "none";
 			this.el.style.webkitPerspective = "none";
+			
+			//set position
+            this.scrollerMoveCSS({x:numOnly(cssMatrix.e),y:numOnly(cssMatrix.f)}, 0);
+			
 			//container
 			this.container.style.webkitPerspective = "none";
 			this.container.style.webkitBackfaceVisibility = "visible";
@@ -888,12 +888,21 @@
 				this.hscrollBar.style.webkitPerspective = "none";
 				this.hscrollBar.style.webkitBackfaceVisibility = "visible";
 			}
+			
 		}
-		jsScroller.prototype.resetAdroindGBForms = function(){
-			this.scrollerMoveCSS({x:numOnly(this.el.style.left),y:numOnly(this.el.style.top)}, 0);
+		jsScroller.prototype.stopFormsMode = function(){
+			//get prev values
+			var cssMatrix = this.getCSSMatrix(this.el);
+			//toggle vars
+			this.refresh = this.refreshSafeKeep;
+			this.androidFormsMode=false;
+			//set new css rules
 			this.el.style.webkitPerspective = 1000;
-            this.el.style.top = 0;
-            this.el.style.left = 0;
+            this.el.style.marginTop = 0;
+            this.el.style.marginLeft = 0;
+			this.el.style.webkitTransition = '0ms linear';	//reactivate transitions
+			//set position
+			this.scrollerMoveCSS({x:numOnly(cssMatrix.e),y:numOnly(cssMatrix.f)}, 0);
 			//container
 			this.container.style.webkitPerspective = 1000;
 			this.container.style.webkitBackfaceVisibility = "hidden";
@@ -906,6 +915,7 @@
 				this.hscrollBar.style.webkitPerspective = 1000;
 				this.hscrollBar.style.webkitBackfaceVisibility = "hidden";
 			}
+			
 		}
 		
 		
@@ -917,9 +927,14 @@
                 timingFunction = "linear";
 			
 			if(this.el && this.el.style){
-	            this.el.style.webkitTransform = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
-	            this.el.style.webkitTransitionDuration = time + "ms";
-	            this.el.style.webkitTransitionTimingFunction = timingFunction;
+				if(this.androidFormsMode){
+		            this.el.style.marginTop = Math.round(distanceToMove.y) + "px";
+					this.el.style.marginLeft = Math.round(distanceToMove.x) + "px";
+				} else {
+		            this.el.style.webkitTransform = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
+		            this.el.style.webkitTransitionDuration = time + "ms";
+		            this.el.style.webkitTransitionTimingFunction = timingFunction;
+				}
 			}
         }
 		jsScroller.prototype.scrollbarMoveCSS=function(el, distanceToMove, time, timingFunction) {
