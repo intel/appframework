@@ -476,11 +476,11 @@
 			//element info
 			var cnt = $(this.container);
 			this.elementInfo = {};
-			this.elementInfo.bottomMargin 	= (this.container.clientHeight > window.innerHeight ? window.innerHeight : this.container.clientHeight-numOnly(cnt.css("marginTop"))-numOnly(cnt.css("paddingTop"))-numOnly(cnt.css("marginBottom"))-numOnly(cnt.css("paddingBottom")));
+			this.elementInfo.bottomMargin 	= (this.container.clientHeight > window.innerHeight ? window.innerHeight : this.container.clientHeight-numOnly(cnt.css("paddingTop"))-numOnly(cnt.css("paddingBottom")));
 			this.elementInfo.maxTop 		= (this.el.clientHeight - this.elementInfo.bottomMargin);
 			if(this.elementInfo.maxTop<0) this.elementInfo.maxTop = 0;
 			this.elementInfo.divHeight  	= this.el.clientHeight;
-	        this.elementInfo.rightMargin 	= (this.container.clientWidth > window.innerWidth ? window.innerWidth : this.container.clientWidth-numOnly(cnt.css("marginLeft"))-numOnly(cnt.css("paddingLeft"))-numOnly(cnt.css("marginRight"))-numOnly(cnt.css("paddingRight")));
+	        this.elementInfo.rightMargin 	= (this.container.clientWidth > window.innerWidth ? window.innerWidth : this.container.clientWidth-numOnly(cnt.css("paddingLeft"))-numOnly(cnt.css("paddingRight")));
 	        this.elementInfo.maxLeft 		= (this.el.clientWidth - this.elementInfo.rightMargin);
 			if(this.elementInfo.maxLeft<0) this.elementInfo.maxLeft = 0;
 	        this.elementInfo.divWidth 		= this.el.clientWidth;
