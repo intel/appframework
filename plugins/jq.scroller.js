@@ -785,7 +785,7 @@
 				scrollInfo.duration = scrollInfo.absSpeedY / deceleration;
 				scrollInfo.speedY = scrollInfo.deltaY/scrollInfo.duration;
 				scrollInfo.absSpeedY = Math.abs(scrollInfo.speedY);
-				if(scrollInfo.absSpeedY<deceleration*100)
+				if(scrollInfo.absSpeedY<deceleration*100 || scrollInfo.absDeltaY<5)
 					scrollInfo.deltaY = scrollInfo.absDeltaY = scrollInfo.duration = scrollInfo.speedY = scrollInfo.absSpeedY = 0;
 			} else if(scrollInfo.absDeltaX) {
 				scrollInfo.deltaX = (scrollInfo.deltaX < 0 ? -1 : 1) * (scrollInfo.absSpeedX * scrollInfo.absSpeedX) / (2 * deceleration);
@@ -793,9 +793,9 @@
 				scrollInfo.duration = scrollInfo.absSpeedX / deceleration;
 				scrollInfo.speedX = scrollInfo.deltaX/scrollInfo.duration;
 				scrollInfo.absSpeedX = Math.abs(scrollInfo.speedX);
-				if(scrollInfo.absSpeedX<deceleration*100)
+				if(scrollInfo.absSpeedX<deceleration*100 || scrollInfo.absDeltaX<5)
 					scrollInfo.deltaX = scrollInfo.absDeltaX = scrollInfo.duration = scrollInfo.speedX = scrollInfo.absSpeedX = 0;
-			}
+			} else scrollInfo.duration = 0;
 		}
 		
 		
