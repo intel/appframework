@@ -249,12 +249,14 @@
 			this.cancelPropagation = false;
 		}
         nativeScroller.prototype.enable=function () {
+			if(this.eventsActive) return;
 			this.el.style.overflow='auto';
             if(this.refresh) this.el.addEventListener('touchstart', this, false);
 			this.el.addEventListener('scroll', this, false);
 			this.eventsActive = true;
         }
         nativeScroller.prototype.disable=function () {
+			if(!this.eventsActive) return;
 			this.el.style.overflow='hidden';
             this.el.removeEventListener('touchstart', this, false);
 			this.el.removeEventListener('scroll', this, false);
@@ -390,12 +392,14 @@
             return scrollDiv;
         }
         jsScroller.prototype.enable=function () {
+			if(this.eventsActive) return;
     		this.container.addEventListener('touchstart', this, false);
             this.container.addEventListener('touchmove', this, false);
 			this.container.addEventListener('touchend', this, false);
 			this.eventsActive = true;
         }
         jsScroller.prototype.disable=function () {
+			if(!this.eventsActive) return;
         	this.container.removeEventListener('touchstart', this, false);
             this.container.removeEventListener('touchmove', this, false);
 			this.container.removeEventListener('touchend', this, false);
