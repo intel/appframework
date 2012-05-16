@@ -46,6 +46,7 @@
 		requiresNativeTap: false,
 		focusElement: null,
 		isFocused:false,
+		blockClicks:false,
 		
         handleEvent: function(e) {
             switch (e.type) {
@@ -154,8 +155,7 @@
 		},
 		
         onTouchStart: function(e) {
-			var id = e.target.id;
-
+			
             this.dX = e.touches[0].pageX;
             this.dY = e.touches[0].pageY;
 			
@@ -308,13 +308,14 @@
 				//NOTE: on android if touchstart is not preventDefault(), click will fire even if touchend is prevented
 				//this is one of the reasons why scrolling and panning can not be nice and native like on iPhone
 				e.preventDefault();
-					
+				
+				//fire click
                 var theTarget = e.target;
                 if (theTarget.nodeType == 3)
                     theTarget = theTarget.parentNode;
 				
 				//fire the click event
-				this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
+				if(!this.blockClicks) this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
 				
             } else if(itMoved && this.requiresNativeTap){
             	if(!this.isFocused) $.trigger(this, 'cancel-enter-edit', [e.target]);
