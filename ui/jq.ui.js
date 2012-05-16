@@ -25,7 +25,7 @@
 			//TODO: touchLayer should be initiated here, but requires jQUI element to exist
 			//if $.ui.launch can optionally create the jQUI object, we should had that option here somehow...
 	        jQUi = document.getElementById("jQUi");
-			that.touchLayer = $.touchLayer(jQUi);
+			$.touchLayer(jQUi);
 			
 			window.addEventListener("orientationchange", function(e) {that.updateOrientation(e, 100);}, false);
 		    if(jq.os.desktop||jq.os.android)
@@ -35,7 +35,7 @@
 			
 			
 			//hide address bar
-			$.ui.touchLayer.hideAddressBar();
+			$.touchLayer.hideAddressBar();
 	    });
 		
         if (window.AppMobi)

@@ -3,8 +3,10 @@
 //no delay on click, edit mode focus, preventing defaults, resizing content, etc
 //It can be used independently in other apps but it is required by jqUi
 (function() {
+	//singleton
     $.touchLayer = function(el) {
-		return new touchLayer(el);
+		$.touchLayer = new touchLayer(el);
+		return $.touchLayer;
     };
 	//configuration stuff
 	var inputElements = ['input', 'select', 'textarea'];
@@ -86,6 +88,7 @@
 		onClick:function(e){
 			//handle forms
 			var tag =  e.target && e.target.tagName != undefined ? e.target.tagName.toLowerCase() : '';
+			
             if (inputElements.indexOf(tag)!==-1 && (!this.isFocused || !e.target.isSameNode(this.focusedElement))) {
 
 				var type =  e.target && e.target.type != undefined ? e.target.type.toLowerCase() : '';
