@@ -1951,23 +1951,31 @@ if (!window.jq || typeof (jq) !== "function") {
         
         /**
          * Creates a proxy function so you can change the 'this' context in the function
+		 * Update: now also allows multiple argument call or for you to pass your own arguments
          ```
             var newObj={foo:bar}
             $("#main").bind("click",$.proxy(function(evt){console.log(this)},newObj);
+			
+			or 
+			
+			( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj) )('foo', 'bar');
+			
+			or 
+			
+			( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj, ['foo', 'bar']) )();
          ```
          
          * @param {Function} Callback
          * @param {Object} Context
          * @title $.proxy(callback,context);
          */
-         
-        $.proxy=function(fnc,ctx){
-           var tmp=function(evt){
-           
-              return fnc.call(ctx,evt);
-           }
-           return tmp;
-        }
+		$.proxy=function(f, c, args){
+           	return function(){
+				if(args) return f.apply(c, args);	//use provided arguments
+               	return f.apply(c, arguments);	//use scope function call arguments
+            }
+		}
+		
         
          /**
          * End of APIS
