@@ -95,6 +95,7 @@
 			refreshHeight:60,
 			refreshElement:null,
 			refreshCancelCB:null,
+            refreshRunning:false,
 			scrollTop:0,
 			scrollLeft:0,
 			preventHideRefresh:true,
@@ -120,7 +121,7 @@
 				if(!this.scrollingLocked){
 		    		switch(e.type) {
 						case 'touchstart': 
-							this.preventHideRefresh = true;
+							this.preventHideRefresh = !this.refreshRunning; // if it's not running why prevent it xD
 							this.moved = false;
 							this.onTouchStart(e); 
 						break;
@@ -157,6 +158,7 @@
 				if(!this.refresh) return;
 				var autoCancel = $.trigger(this, 'refresh-release', [triggered])!==false;
 				this.preventHideRefresh = false;
+                this.refreshRunning = true;
 				if(!triggered){
 					if(allowHide){
 					    this.hideRefresh();
