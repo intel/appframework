@@ -921,8 +921,8 @@ if (!window.jq || typeof (jq) !== "function") {
                     top: obj.top + window.pageYOffset,
                     right: obj.right + window.pageXOffset,
                     bottom: obj.bottom + window.pageYOffset,
-                    width: parseInt(this[0].offsetWidth),
-                    height: parseInt(this[0].offsetHeight)
+                    width: obj.right-obj.left,
+                    height: obj.bottom-obj.top
                 };
             },
             /**
