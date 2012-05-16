@@ -27,10 +27,10 @@
 	        jQUi = document.getElementById("jQUi");
 			that.touchLayer = $.touchLayer(jQUi);
 			
-			window.addEventListener("orientationchange", function() {that.updateOrientation();}, false);
+			window.addEventListener("orientationchange", function(e) {that.updateOrientation(e, 100);}, false);
 		    if(jq.os.desktop||jq.os.android)
 		    {
-		        window.addEventListener("resize", function() {that.updateOrientation();}, false);
+		        window.addEventListener("resize", function(e) {that.updateOrientation(e, 100);}, false);
 		    }
 			
 			
@@ -388,7 +388,6 @@
          * @title $.ui.toggleSideMenu([force])
          */
         toggleSideMenu: function(force, callback) {
-			console.log("toggling menu");
 			if(!this.isSideMenuEnabled()) return;
 			if(this.menuAnimation) {
 				this.menuAnimation.cancel();
@@ -790,22 +789,24 @@
         /**
          *  Scrolls all panels to the top and fixes position when orientation changes
            ```
-           $.ui.updateOrientation(event);
+           $.ui.updateOrientation(event, time);
            ```
          * @param {Event} event
-         * @title $.ui.updateOrientation(event);
+		 * @param {Int} ms to hideAddressBar();
+         * @title $.ui.updateOrientation(event, time);
          * @api private
          */
-        updateOrientation: function(event) {
+        updateOrientation: function(event, time) {
 			var that = this;
             for (var j in that.scrollingDivs) {
                 if (typeof (that.scrollingDivs[j]) !== "function")
                     that.scrollToTop(j);
             }
 			window.setTimeout(function(){
-				that.touchLayer.hideAddressBar();
-			},100);
+				$.touchLayer.hideAddressBar();
+			},time);
         },
+		
 
         /**
          *  This is used when a transition fires to do helper events.  We check to see if we need to change the nav menus, footer, and fire
@@ -951,7 +952,7 @@
                                 anchor.refresh = true;
                                 that.loadContent(target, newTab, back, transition, anchor);
                                 anchor.refresh = false;
-                            } : null
+                            } : null;
                             that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
                             $am(urlHash).title = anchor.title ? anchor.title : target;
                         } else {
@@ -1175,10 +1176,10 @@
                 this.menu = document.createElement("div");
                 this.menu.id = "menu";
                 this.menu.style.overflow = "hidden";
-                this.menu.innerHTML = "<div id='menu_scroller'></div>";
+                this.menu.innerHTML = '<div id="menu_scroller"></div>';
                 this.viewportContainer.append(this.menu);
                 this.scrollingDivs["menu_scroller"] = jq("#menu_scroller").scroller({
-                    scrollBars: true,
+                    scrollBars: false,
                     verticalScroll: true,
                     vScrollCSS: "jqmScrollbar"
                 });
