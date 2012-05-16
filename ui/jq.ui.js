@@ -748,13 +748,10 @@
 	                vScrollCSS: "jqmScrollbar",
 	                refresh: refreshPull,
 					useJsScroll:jsScroll,
-					refreshListeners:{
-						release: refreshFunc,
-						trigger: null,
-						cancel: null
-					},
 					autoEnable:false	//dont enable the events unnecessarilly
 	            }));
+				//backwards compatibility
+				if(refreshFunc) $.bind(this.scrollingDivs[scrollEl.id], 'refresh-release', function(trigger){if(trigger) refreshFunc()});
 			}
             
 			tmp = null;
@@ -1110,34 +1107,6 @@
             }
 			
 			var that = this;
-			
-			if(jq.os.android && !jq.os.chrome) {
-				var androidFixOn = false;
-				//connect to touchLayer to detect editMode
-				this.touchLayer.onPreEnterEdit = function(el){
-					if(!androidFixOn && that.activeDiv){
-						console.log("deploying ugly android fix");
-						androidFixOn = true;
-						//activate on scroller
-						if(that.scrollingDivs[that.activeDiv.id]){
-							that.scrollingDivs[that.activeDiv.id].activeAndroidFix = true;
-							that.scrollingDivs[that.activeDiv.id].fixAdroindGBForms();
-						}
-					}
-				}
-				this.touchLayer.onCancelEnterEdit = this.touchLayer.onExitEdit = function(el){
-					if(androidFixOn && that.activeDiv){
-						console.log("removing ugly android fix");
-						androidFixOn = false;
-						//dehactivate on scroller
-						if(that.scrollingDivs[that.activeDiv.id]){
-							that.scrollingDivs[that.activeDiv.id].activeAndroidFix = false;
-							that.scrollingDivs[that.activeDiv.id].resetAdroindGBForms();
-						}
-					}
-				}
-				
-			}
 
             this.isAppMobi = (window.AppMobi && typeof (AppMobi) == "object" && AppMobi.app !== undefined) ? true : false;
             this.viewportContainer = jq("#jQUi");

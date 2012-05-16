@@ -103,7 +103,7 @@
 					this.focusedElement = e.target;
 					this.focusedElement.addEventListener('blur', this, false);
 					//android bug workaround for UI
-					if(!this.isFocused && this.onEnterEdit) this.onEnterEdit(e.target);
+					if(!this.isFocused) $.trigger(this, 'enter-edit', [e.target]);
 					this.isFocused = true;
 				} else {
 					this.isFocused=false;
@@ -125,13 +125,12 @@
 			this.focusedElement = null;
 			//android bug workaround for UI
 			var that = this;
-			if(this.onExitEdit) {
-				setTimeout(function(){
-					if(!that.isFocused) {
-						that.onExitEdit(e.target);
-					}
-				},250);
-			}
+			setTimeout(function(){
+				if(!that.isFocused) {
+					$.trigger(that, 'exit-edit', [e.target]);
+				}
+			},250);
+			
 			//hideAddressBar now for scrolls, next stack step for resizes
 			if(focusScrolls) this.hideAddressBar();
 			else if(focusResizes) setTimeout(function(){that.hideAddressBar();},250);
@@ -176,10 +175,10 @@
 				this.requiresNativeTap=true;
 				//some stupid phones require a native tap in order for the native input elements to work
 			} else if(inputElementRequiresNativeTap && e.target && e.target.tagName != undefined){
-				if(inputElements.indexOf(e.target.tagName.toLowerCase())!==-1) {
-					if(this.onPreEnterEdit) {
-						this.onPreEnterEdit(e.target);
-					}
+				var tag = e.target.tagName.toLowerCase();
+				if(inputElements.indexOf(tag)!==-1) {
+					//notify scrollers, except for selects
+					if(tag!='select') $.trigger(this, 'pre-enter-edit', [e.target]);
 					this.requiresNativeTap = true;
 				}
 			}
@@ -318,7 +317,7 @@
 				this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
 				
             } else if(itMoved && this.requiresNativeTap){
-            	if(this.onCancelEnterEdit) this.onCancelEnterEdit(e.target);
+            	if(!this.isFocused) $.trigger(this, 'cancel-enter-edit', [e.target]);
             }
 			
 			this.requiresNativeTap = false;

@@ -2,8 +2,6 @@
  * jq.scroller - rewritten by Carlos Ouro @ Badoo
  * Supports iOS native touch scrolling and a much improved javascript scroller
  */ 
- 
- 
  (function($) {
     var cache = [];
 	var objId=function(obj){
@@ -26,6 +24,40 @@
         }
         return this.length == 1 ? tmp : this;
     };
+	var boundTouchLayer = false;
+	function checkConsistency(id){
+		if(!cache[id].el) {
+			delete cache[id];
+			return false;
+		}
+		return true;
+	}
+	function bindTouchLayer(){
+		//use a single bind for all scrollers
+		if(jq.os.android && !jq.os.chrome) {
+			var androidFixOn = false;
+			//connect to touchLayer to detect editMode
+			$.bind($.touchLayer, 'pre-enter-edit', function(el){
+				if(!androidFixOn){
+					console.log("deploying forms scroll android fix");
+					androidFixOn = true;
+					//activate on scroller
+				 	for(el in cache)
+						if(checkConsistency(el) && cache[el].el.style.display!="none") cache[el].startAbsoluteMode();
+				}
+			});
+			$.bind($.touchLayer, ['cancel-enter-edit', 'exit-edit'], function(el){
+				if(androidFixOn){
+					console.log("removing forms scroll android fix");
+					androidFixOn = false;
+					//dehactivate on scroller
+				 	for(el in cache)
+						if(checkConsistency(el) && cache[el].el.style.display!="none") cache[el].stopAbsoluteMode();
+				}
+			});
+		}
+		boundTouchLayer = true;
+	}
     var scroller = (function() {
         if (!window.WebKitCSSMatrix)
             return;
@@ -37,6 +69,8 @@
 		//initialize and js/native mode selector
         var scroller = function(elID, opts) {
             
+			if(!boundTouchLayer && $.touchLayer && $.isObject($.touchLayer)) bindTouchLayer();
+			
             if (typeof elID == "string" || elID instanceof String) {
                 var el = document.getElementById(elID);
             } else {
@@ -98,7 +132,7 @@
 						case 'touchmove': this.onTouchMove(e); break;
 						case 'touchend': this.onTouchEnd(e); break;
 						case 'scroll': 
-							if(this.onScroll) this.onScroll(e);
+							$.trigger(this, 'scroll', [e]);
 						break;
 		    		}
 				}
@@ -126,8 +160,7 @@
 			},
 			fireRefreshRelease:function(triggered, allowHide){
 				if(!this.refresh) return;
-				var autoCancel = true;
-				if(this.refreshListeners.release!=null) autoCancel = this.refreshListeners.release.call(this, triggered)!==false;
+				var autoCancel = $.trigger(this, 'refresh-release', [triggered])!==false;
 				this.preventHideRefresh = false;
 				if(!triggered){
 					if(allowHide){
@@ -264,13 +297,13 @@
 			} else this.scrollTop = this.el.scrollTop;
 			var difY = newcY-this.cY;
 			//check for trigger
-			if(this.refreshListeners.trigger && !this.refreshTriggered && (this.scrollTop-difY)<=0){
+			if(!this.refreshTriggered && (this.scrollTop-difY)<=0){
 				this.refreshTriggered = true;
-				this.refreshListeners.trigger.call();
+				$.trigger(this, 'refresh-trigger');
 			//check for cancel
-			} else if(this.refreshListeners.cancel && this.refreshTriggered && (this.scrollTop-difY)>0){
+			} else if(this.refreshTriggered && (this.scrollTop-difY)>0){
 				this.refreshTriggered = false;
-				this.refreshListeners.cancel.call();
+				$.trigger(this, 'refresh-cancel');
 			}
 			
 			this.cY = newcY;
@@ -640,10 +673,10 @@
 			if(this.refresh && !this.preventPullToRefresh){
 				if(!this.refreshTriggered && this.lastScrollInfo.top>this.refreshHeight){
 					this.refreshTriggered=true;
-					if(this.refreshListeners.trigger) this.refreshListeners.trigger.call();
+					$.trigger(this, 'refresh-trigger');
 				} else if(this.refreshTriggered && this.lastScrollInfo.top<this.refreshHeight){
 					this.refreshTriggered=false;
-					if(this.refreshListeners.cancel) this.refreshListeners.cancel.call();
+					$.trigger(this, 'refresh-cancel');
 				}
 			}
 			
@@ -817,15 +850,19 @@
 			this.setVScrollBar(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
             this.setHScrollBar(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
 			
+			this.setFinishCalback(scrollInfo.duration);
+        }
+		
+		//finish callback
+		jsScroller.prototype.setFinishCalback = function(duration){
 			var that = this;
 			this.scrollingFinishCB=setTimeout(function(){
 				that.hideScrollbars();
-				if(that.activeAndroidFix && jq.os.android && !jq.os.chrome) that.fixAdroindGBForms();
-				if(that.onScroll) that.onScroll();
-				if(that.onScrollEnd) that.onScrollEnd();
+				$.trigger(that, 'scroll');
+				$.trigger(that, 'scrollend');
 				that.isScrolling=false;
-			},scrollInfo.duration);
-        }
+			},duration);
+		}
 		
 		//Android Forms Fix
 		jsScroller.prototype.fixAdroindGBForms = function(){
@@ -892,15 +929,20 @@
                 timingFunction = "linear";
 			
 			if(el && el.style){
-	            el.style.webkitTransform = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
-	            el.style.webkitTransitionDuration = time + "ms";
-	            el.style.webkitTransitionTimingFunction = timingFunction;
+				if(this.androidFormsMode){
+		            el.style.marginTop = Math.round(distanceToMove.y) + "px";
+					el.style.marginLeft = Math.round(distanceToMove.x) + "px";
+				} else {
+		            el.style.webkitTransform = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
+		            el.style.webkitTransitionDuration = time + "ms";
+		            el.style.webkitTransitionTimingFunction = timingFunction;
+				}
 			}
         }
         jsScroller.prototype.scrollTo=function(pos, time) {
             if (!time)
 				time = 0;
-            this.scrollerMoveCSS(this.el, pos, time);
+            this.scrollerMoveCSS(pos, time);
         }
         jsScroller.prototype.scrollBy=function(pos,time) {
 			var cssMatrix = this.getCSSMatrix(this.el);
