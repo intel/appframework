@@ -1445,6 +1445,7 @@
         hasLaunched: false,
         launchCompleted: false,
         activeDiv: "",
+        customClickHandler:"",
         
         
         css3animate: function(el, opts) {
@@ -2895,6 +2896,12 @@
         if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
             parent = true, theTarget = theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
         if (theTarget.tagName.toLowerCase() == "a") {
+        
+        
+            var custom=(typeof jq.ui.customClickHandler=="function")?jq.ui.customClickHandler:false;
+            if(custom!==false&&jq.ui.customClickHandler(theTarget.href)){
+               return true;
+            }
             if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1 || theTarget.getAttribute("data-ignore")) {
                 return false;
             }
@@ -3002,6 +3009,7 @@
                 touch.el.trigger('swipe') &&
                 touch.el.trigger('swipe' + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)));
                 touch.x1 = touch.x2 = touch.y1 = touch.y2 = touch.last = 0;
+                touch={};
             } else if ('last' in touch) {
                 touch.el.trigger('tap');
                 touchTimeout = setTimeout(function() {
