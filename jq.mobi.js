@@ -1214,6 +1214,9 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (!settings.headers)
                     settings.headers = {};
                
+                if(!('async' in settings)||settings.async!==false)
+                    settings.async=true;
+                
                 if (!settings.dataType)
                     settings.dataType = "text/html";
                 else {
@@ -1291,7 +1294,7 @@ if (!window.jq || typeof (jq) !== "function") {
                         settings.complete.call(context, xhr, error ? 'error' : 'success');
                     }
                 };
-                xhr.open(settings.type, settings.url, true);
+                xhr.open(settings.type, settings.url, settings.async);
                 
                 if (settings.contentType)
                     settings.headers['Content-Type'] = settings.contentType;

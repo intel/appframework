@@ -1173,6 +1173,13 @@ test("ajax",function(){
 	$.ajax({url:"server.php?data=foo",success:function(data){equals(data,"foo");start()}});
 });
 
+test("ajax sync",function(){
+    
+	var fixer=0;
+	$.ajax({url:"server.php?data=foo",async:false,success:function(data){fixer=1}});
+    equals(fixer,1);
+});
+
 test("jsonp",function(){
     
  stop();
