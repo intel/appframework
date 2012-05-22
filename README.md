@@ -79,7 +79,6 @@ var myDiv=$("<div id='foo'>") //Creates a div object and returns it
 ```
 
 # jqMobi API functions - Please see http://api.jqmobi.com for all functions
-``` js
 
 
 # jqMobi Ajax calls
