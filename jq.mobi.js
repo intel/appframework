@@ -874,8 +874,8 @@ if (!window.jq || typeof (jq) !== "function") {
                 return {
                     left: obj.left + window.pageXOffset,
                     top: obj.top + window.pageYOffset,
-                    width: parseInt(this[0].style.width),
-                    height: parseInt(this[0].style.height)
+                    width: parseInt(obj.width),
+                    height: parseInt(obj.height)
                 };
             },
             /**
