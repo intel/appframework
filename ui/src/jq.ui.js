@@ -1447,7 +1447,7 @@
             }
         },
         
-         onTouchStart: function(e) {
+        onTouchStart: function(e) {
             
             this.dX = e.touches[0].pageX;
             this.dY = e.touches[0].pageY;
@@ -1457,9 +1457,8 @@
                 theTarget = theTarget.parentNode;
             
             if(closeField)
-                cleartimeout(closeField),closeField=null;
+                clearTimeout(closeField),closeField=null;
             if(prevField){
-                setTimeout(function(){jq(prevField).get(0).blur();},200);
                 prevField=null;
                 var field = document.createElement('input');
                 field.setAttribute('type', 'text');
@@ -1475,14 +1474,22 @@
                 }, 350);
             }
            
+            if(prevPanel){
+                //prevField.blur();
+                prevPanel.css("-webkit-transform","translate3d(0px,0px,0px)");
+                prevPanel.css("left","0");
+                prevField=null;
+                prevPanel=null;
+            }
             
             var tagname = theTarget.tagName.toLowerCase();
             var type=theTarget.type||"";
-            if((tagname=="a"&& theTarget.href.indexOf("tel:")===0)||((tagname=="input")||tagname=="textarea"||tagname=="select")){
-                prevField=theTarget;
+            if((tagname=="a"&& theTarget.href.indexOf("tel:")===0)||((tagname=="input")||tagname=="textarea"||tagname=="select")&&type!="checkbox"&&type!="radio"){
+                
                 if(jq.os.android&&$.ui.fixAndroidInputs){
-                    theTarget.focus();
                     prevField=theTarget;
+                    theTarget.focus();
+                    //prevField=theTarget;
                     prevPanel=$(theTarget).closest(".panel");
                     prevPanel.css("left","-100%");
                     prevPanel.css("-webkit-transition-duration","0ms");
@@ -1493,23 +1500,25 @@
                 
             }
             else
-            e.preventDefault();
+                e.preventDefault();
             this.moved = false;
             document.addEventListener('touchmove', this, true);
             document.addEventListener('touchend', this, true);
+            
         },
         
         onTouchMove: function(e) {
+            
             this.moved = true;
             this.cX = e.touches[0].pageX - this.dX;
             this.cY = e.touches[0].pageY - this.dY;
-           // e.preventDefault();
-        },
-        
-        onTouchEnd: function(e) {
             
-            document.removeEventListener('touchmove', this, false);
-            document.removeEventListener('touchend', this, false);
+           // e.preventDefault();
+           return false;
+        },
+        onTouchEnd: function(e) {
+            document.removeEventListener('touchmove', this, true);
+            document.removeEventListener('touchend', this, true);
             
             if ((!jq.os.blackberry && !this.moved) || (jq.os.blackberry && (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5))) {
                 var theTarget = e.target;
@@ -1521,8 +1530,11 @@
                 theTarget.dispatchEvent(theEvent);
                 
             }
+            
             prevClickField = null;
             this.dX = this.cX = this.cY = this.dY = 0;
+            return false;
+            
         }
     };
     
