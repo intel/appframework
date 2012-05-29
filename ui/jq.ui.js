@@ -796,15 +796,16 @@
 	        			</div></div>';
                 $(this.container).append($(markup));
                 
-                $("#" + this.id).bind("close", function(){
+                var $el=$("#"+this.id);
+                $el.bind("close", function(){
                 	self.hide();
                 })
                 
                 if (this.cancelOnly) {
-                    $("#" + this.id).find('A#action').hide();
-                    $("#" + this.id).find('A#cancel').addClass('center');
+                    $el.find('A#action').hide();
+                    $el.find('A#cancel').addClass('center');
                 }
-                $("#" + this.id).find('A').each(function() {
+                $el.find('A').each(function() {
                     var button = $(this);
                     button.bind('click', function(e) {
                         if (button.attr('id') == 'cancel') {
@@ -820,8 +821,8 @@
                 });
                 self.positionPopup();
                 $.blockUI(0.5);
-                $('#' + self.id).removeClass('hidden');
-                $('#' + self.id).bind("orientationchange", function() {
+                $el.removeClass('hidden');
+                $el.bind("orientationchange", function() {
                     self.positionPopup();
                 });
                 
@@ -841,6 +842,7 @@
             remove: function() {
                 var self = this;
                 var $el=$("#"+self.id);
+                $el.unbind("close");
                 $el.find('BUTTON#action').unbind('click');
                 $el.find('BUTTON#cancel').unbind('click');
                 $el.unbind("orientationchange").remove();
@@ -2783,6 +2785,7 @@
     var prevClickField;
     var prevPanel;
     var prevField;
+    var closeField;
     NoClickDelay.prototype = {
         dX: 0,
         dY: 0,

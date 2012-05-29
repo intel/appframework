@@ -1427,6 +1427,7 @@
     var prevClickField;
     var prevPanel;
     var prevField;
+    var closeField;
     NoClickDelay.prototype = {
         dX: 0,
         dY: 0,
