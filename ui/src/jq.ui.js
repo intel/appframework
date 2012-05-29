@@ -303,26 +303,37 @@
             br = bottom right
             tr = top right (default)
            ```
-           $.ui.updateBadge('#mydiv','3','bl');
+           $.ui.updateBadge('#mydiv','3','bl','green');
            ```
          * @param {String} target
          * @param {String} Value
          * @param {String} [position]         
-         * @title $.ui.updateBadge(target,value,[position])
+         * @param {String|Object} [color or CSS hash]         
+         * @title $.ui.updateBadge(target,value,[position],[color])
          */
-        updateBadge: function(target, value, position) {
+        updateBadge: function(target, value, position,color) {
             if (position === undefined)
                 position = "";
-            
             if (target[0] != "#")
                 target = "#" + target;
             var badge = jq(target).find("span.jq-badge");
+            
             if (badge.length == 0) {
                 if (jq(target).css("position") != "absolute")
                     jq(target).css("position", "relative");
-                badge = jq(target).append("<span class='jq-badge " + position + "'>" + value + "</span>");
+                badge=jq("<span class='jq-badge " + position + "'>" + value + "</span>");    
+                jq(target).append(badge);
             } else
                 badge.html(value);
+            
+            
+            if(jq.isObject(color)){
+                badge.css(color);
+            }
+            else if(color){
+                badge.css("background",color);
+            }
+            
             badge.data("ignore-pressed","true");
         
         },
@@ -1411,7 +1422,7 @@
     function NoClickDelay(el) {
         if (typeof (el) === "string")
             el = document.getElementById(el);
-        el.addEventListener('touchstart', this, true);
+        el.addEventListener('touchstart', this, false);
     }
     var prevClickField;
     var prevPanel;
@@ -1435,7 +1446,7 @@
             }
         },
         
-        onTouchStart: function(e) {
+         onTouchStart: function(e) {
             
             this.dX = e.touches[0].pageX;
             this.dY = e.touches[0].pageY;
@@ -1444,17 +1455,25 @@
             if (theTarget.nodeType == 3)
                 theTarget = theTarget.parentNode;
             
+            if(closeField)
+                cleartimeout(closeField),closeField=null;
             if(prevField){
-                prevField.blur();
+                setTimeout(function(){jq(prevField).get(0).blur();},200);
                 prevField=null;
+                var field = document.createElement('input');
+                field.setAttribute('type', 'text');
+                field.id="myhack";
+                document.body.appendChild(field);
+
+                closeField=setTimeout(function() {
+                    field.focus();
+                    setTimeout(function() {
+                        field.blur();
+                        field.parentNode.removeChild(field);
+                    }, 50);
+                }, 350);
             }
-            if(prevPanel){
-                //prevField.blur();
-                prevPanel.css("-webkit-transform","translate3d(0px,0px,0px)");
-                prevPanel.css("left","0");
-                prevField=null;
-                prevPanel=null;
-            }
+           
             
             var tagname = theTarget.tagName.toLowerCase();
             var type=theTarget.type||"";
@@ -1470,9 +1489,10 @@
                     prevPanel.css("position","absolute");
                     return;
                 }
+                
             }
             else
-                e.preventDefault();
+            e.preventDefault();
             this.moved = false;
             document.addEventListener('touchmove', this, true);
             document.addEventListener('touchend', this, true);
@@ -1550,9 +1570,7 @@
                 return false;
             }
             
-            if (theTarget.onclick && !jq.os.desktop) {
-                theTarget.onclick();
-            }
+          
             
             if(theTarget.href.indexOf("tel:")===0)
                return false;
@@ -1579,7 +1597,11 @@
             resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
             
             var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
+            if (theTarget.onclick && !jq.os.desktop) {
+                theTarget.onclick();
+            }
             jq.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
+            
             return true;
         }
     }
