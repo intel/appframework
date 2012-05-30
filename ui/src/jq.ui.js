@@ -824,15 +824,16 @@
            
             
             
-            var fnc = what.getAttribute("data-load");
-            if (typeof fnc == "string" && window[fnc]) {
-                window[fnc](what);
-            }
+            //Fire unload first
             if (oldDiv) {
                 fnc = oldDiv.getAttribute("data-unload");
                 if (typeof fnc == "string" && window[fnc]) {
                     window[fnc](oldDiv);
                 }
+            }
+            var fnc = what.getAttribute("data-load");
+            if (typeof fnc == "string" && window[fnc]) {
+                window[fnc](what);
             }
             if (this.menu.style.display == "block")
                 this.toggleSideMenu(); //Close on phones to prevent orientation change bug.
