@@ -1963,10 +1963,18 @@
             var el = $am(id);
             if (!el)
                 return;
+            
+            //TODO: is this fast enough?
+            var newDiv = document.createElement("div");
+	        newDiv.innerHTML = content;
+	        if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
+	            
+             
+            
             if (el.getAttribute("scrolling") && el.getAttribute("scrolling").toLowerCase() == "no")
-                el.innerHTML = content;
+               el.innerHTML = newDiv.innerHTML;
             else
-                el.childNodes[0].innerHTML = content;
+                el.childNodes[0].innerHTML = newDiv.innerHTML;
         },
         /**
          * Dynamically create a new panel on the fly.  It wires events, creates the scroller, applies Android fixes, etc.
@@ -1981,10 +1989,12 @@
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
             var myEl = $am(el);
             if (!myEl) {
-                var newDiv = document.createElement("div");
-                newDiv.id = el;
-                newDiv.title = title;
-                newDiv.innerHTML = content;
+            	var newDiv = document.createElement("div");
+	            newDiv.innerHTML = content;
+	            if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
+	            
+				newDiv.title = title;
+				newDiv.id = el;
             } else {
                 newDiv = myEl;
             }
@@ -2234,7 +2244,7 @@
 
                     //ajax div already exists.  Let's see if we should be refreshing it.
                     loadAjax = false;
-                    if (anchor.getAttribute("data-refresh-ajax") === 'true' || (anchor.refresh && anchor.refresh === true)||this.isAjaxApp) {
+                    if ((anchor && anchor.getAttribute("data-refresh-ajax") === 'true') || (anchor && anchor.refresh && anchor.refresh === true)||this.isAjaxApp) {
                         loadAjax = true;
                     } else
                         target = "#" + urlHash;
@@ -2260,8 +2270,7 @@
                         if ($am(urlHash) !== undefined) {
                             that.updateContentDiv(urlHash, xmlhttp.responseText);
                             $am(urlHash).title = anchor.title ? anchor.title : target;
-                        } else if (anchor.getAttribute("data-persist-ajax")||that.isAjaxApp) {
-                            
+                        } else if (that.isAjaxApp || anchor.getAttribute("data-persist-ajax")) {    
                             var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
                             refreshFunction = refresh ? 
                             function() {
@@ -2284,8 +2293,7 @@
                         that.parseScriptTags(div);
                         if (doReturn)
                             return;
-                        
-                        return that.loadContent("#" + urlHash);
+                        return that.loadContent("#" + urlHash, false, back, null);
                     
                     }
                 };
@@ -2931,11 +2939,11 @@
             
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
-            
+            var back = (theTarget.getAttribute("data-reverse") && theTarget.getAttribute("data-reverse") == 'true')?true:false;
             resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
             
             var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
-            jq.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
+            jq.ui.loadContent(href, resetHistory, back, mytransition, theTarget);
             return true;
         }
     }
