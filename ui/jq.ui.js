@@ -1993,7 +1993,7 @@
 	            if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
 	            
 				if(!newDiv.title) newDiv.title = title;
-				var newId = (newDiv.id)? newDiv.id : el; 
+				var newId = (newDiv.id)? newDiv.id : el; //figure out the new id - either the id from the loaded div.panel or the crc32 hash
 				newDiv.id = newId;
             } else {
                 newDiv = myEl;
