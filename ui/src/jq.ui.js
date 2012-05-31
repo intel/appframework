@@ -1611,9 +1611,9 @@
             resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
             
             var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
-            if (theTarget.onclick && !jq.os.desktop) {
-                theTarget.onclick();
-            }
+            //if (theTarget.onclick && !jq.os.desktop) {
+              //  theTarget.onclick();
+            //}
             jq.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
             
             return true;
