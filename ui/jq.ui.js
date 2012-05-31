@@ -1964,7 +1964,6 @@
             if (!el)
                 return;
             
-            //TODO: is this fast enough?
             var newDiv = document.createElement("div");
 	        newDiv.innerHTML = content;
 	        if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
@@ -1993,8 +1992,8 @@
 	            newDiv.innerHTML = content;
 	            if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
 	            
-				newDiv.title = title;
-				newDiv.id = el;
+				if(newDiv.title == null || newDiv.id == undefined) newDiv.title = title;
+				if(newDiv.id == null || newDiv.id == undefined) newDiv.id = el;
             } else {
                 newDiv = myEl;
             }
