@@ -1992,8 +1992,9 @@
 	            newDiv.innerHTML = content;
 	            if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
 	            
-				if(newDiv.title == null || newDiv.id == undefined) newDiv.title = title;
-				if(newDiv.id == null || newDiv.id == undefined) newDiv.id = el;
+				if(!newDiv.title) newDiv.title = title;
+				var newId = (newDiv.id)? newDiv.id : el; 
+				newDiv.id = newId;
             } else {
                 newDiv = myEl;
             }
@@ -2003,7 +2004,7 @@
             myEl = null;
             that.addDivAndScroll(newDiv, refresh, refreshFunc);
             newDiv = null;
-            return;
+            return newId;
         },
         /**
          *  Takes a div and sets up scrolling for it..
@@ -2277,7 +2278,7 @@
                                 that.loadContent(target, newTab, back, transition, anchor);
                                 anchor.refresh = false;
                             } : null
-                            that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
+                            urlHash = that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
                             $am(urlHash).title = anchor.title ? anchor.title : target;
                         } else {
                             that.updateContentDiv("jQui_ajax", xmlhttp.responseText);
