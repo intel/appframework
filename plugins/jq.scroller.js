@@ -32,6 +32,9 @@
 		}
 		return true;
 	}
+	function needsFormsFix(el){
+		return cache[el].useJsScroll && cache[el].isEnabled() && cache[el].el.style.display!="none";
+	}
 	function bindTouchLayer(){
 		//use a single bind for all scrollers
 		if(jq.os.android && !jq.os.chrome) {
@@ -39,20 +42,20 @@
 			//connect to touchLayer to detect editMode
 			$.bind($.touchLayer, 'pre-enter-edit', function(el){
 				if(!androidFixOn){
-					console.log("deploying forms scroll android fix");
+					console.log("deploying forms scroll android fix"); // @debug
 					androidFixOn = true;
 					//activate on scroller
 				 	for(el in cache)
-						if(checkConsistency(el) && cache[el].el.style.display!="none") cache[el].startFormsMode();
+						if(checkConsistency(el) && needsFormsFix(el)) cache[el].startFormsMode();
 				}
 			});
 			$.bind($.touchLayer, ['cancel-enter-edit', 'exit-edit'], function(el){
 				if(androidFixOn){
-					console.log("removing forms scroll android fix");
+					console.log("removing forms scroll android fix"); // @debug
 					androidFixOn = false;
 					//dehactivate on scroller
 				 	for(el in cache)
-						if(checkConsistency(el) && cache[el].el.style.display!="none") cache[el].stopFormsMode();
+						if(checkConsistency(el) && needsFormsFix(el)) cache[el].stopFormsMode();
 				}
 			});
 		}
@@ -107,6 +110,9 @@
 			rememberEventsActive:false,
 			scrollingLocked:false,
 			autoEnable:true,
+			blockFormsFix:false,
+			loggedY: 0,
+			loggedX: 0,
 			
 			//methods
 			init:function(el, opts) {
@@ -182,7 +188,8 @@
 				if(!this.rememberEventsActive){
 					this.removeEvents();
 				}
-			}
+			},
+			isEnabled:function(){return this.eventsActive;}
 		}
 		
 		//extend to jsScroller and nativeScroller (constructs)
@@ -864,6 +871,7 @@
 		
 		//Android Forms Fix
 		jsScroller.prototype.startFormsMode = function(){
+			if(this.blockFormsFix) return;
 			//get prev values
 			var cssMatrix = this.getCSSMatrix(this.el);
 			//toggle vars
@@ -897,6 +905,7 @@
 			
 		}
 		jsScroller.prototype.stopFormsMode = function(){
+			if(this.blockFormsFix) return;
 			//get prev values
 			var cssMatrix = this.getCSSMatrix(this.el);
 			//toggle vars
