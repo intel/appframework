@@ -122,6 +122,13 @@
 	            for (j in opts) {
 	                this[j] = opts[j];
 	            }
+				//assign self destruct
+				var that = this;
+				this.jqEl.bind('destroy', function(){
+					that.disable(true);	//with destroy notice
+					var id = that.el.jqmScrollerId;
+					if(cache[id]) delete cache[id];
+				});
 	        },
 			handleEvent : function(e){
 				if(!this.scrollingLocked){
