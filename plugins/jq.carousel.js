@@ -54,6 +54,13 @@
         
                  
                 var that = this;
+				jq(this.container).bind('destroy', function(){
+					var id = that.container.jqmCarouselId;
+					//window event need to be cleaned up manually, remaining binds are automatically killed in the dom cleanup process
+	                window.removeEventListener("orientationchange", that.orientationHandler, false);
+					if(cache[id]) delete cache[id];
+				});
+				
                 this.pagingDiv = this.pagingDiv ? document.getElementById(this.pagingDiv) : null;
 
 
