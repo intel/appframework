@@ -26,12 +26,7 @@
 			//if $.ui.launch can optionally create the jQUI object, we should had that option here somehow...
 	        jQUi = document.getElementById("jQUi");
 			$.touchLayer(jQUi);
-			
-			window.addEventListener("orientationchange", function(e) {that.updateOrientation(e, 100);}, false);
-		    if(jq.os.desktop||jq.os.android)
-		    {
-		        window.addEventListener("resize", function(e) {that.updateOrientation(e, 100);}, false);
-		    }
+			$.bind($.touchLayer, "orientationchange", function(e){that.updateOrientation(e);});
 			
 			
 			//hide address bar
@@ -797,15 +792,12 @@
          * @title $.ui.updateOrientation(event, time);
          * @api private
          */
-        updateOrientation: function(event, time) {
+        updateOrientation: function(event) {
 			var that = this;
             for (var j in that.scrollingDivs) {
                 if (typeof (that.scrollingDivs[j]) !== "function")
                     that.scrollToTop(j);
             }
-			window.setTimeout(function(){
-				$.touchLayer.hideAddressBar();
-			},time);
         },
 		
 
