@@ -358,7 +358,18 @@ font-size:48px;
 }
 #menu_scroller {
 	padding-bottom:10px;
+	-webkit-backface-visibility: hidden;
+	overflow:auto;
+	-webkit-overflow-scrolling:touch;
 }
+#menu_scroller > * {
+	-webkit-backface-visibility: hidden;
+	-webkit-perspective: 1000;
+}
+
+
+
+
 #menu > * {
 	width:90%;
 	margin-left:auto;
