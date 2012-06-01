@@ -437,10 +437,13 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (html === undefined)
                     return this[0].innerHTML;
                 for (var i = 0; i < this.length; i++) {
+                    $.cleanUpContent(this[i], false, true);
                     this[i].innerHTML = html;
                 }
                 return this;
             },
+
+
             /**
             * Gets or sets the innerText for the collection.
             * If used as a get, the first elements innerText is returned
@@ -506,6 +509,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             empty: function() {
                 for (var i = 0; i < this.length; i++) {
+                    $.cleanUpContent(this[i], false, true);
                     this[i].innerHTML = '';
                 }
                 return this;
@@ -687,6 +691,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (elems == undefined)
                     return this;
                 for (var i = 0; i < elems.length; i++) {
+                    $.cleanUpContent(elems[i], true, true);
                     elems[i].parentNode.removeChild(elems[i]);
                 }
                 return this;
@@ -1975,6 +1980,69 @@ if (!window.jq || typeof (jq) !== "function") {
                	return f.apply(c, arguments);	//use scope function call arguments
             }
 		}
+
+        /**
+         * Removes listeners on a div and its children recursively
+         ```
+         * @param {HTMLDivElement} the element to clean up recursively
+         */
+		function cleanUpNode(node, kill){
+			//kill it before it lays eggs!
+			if(kill && node.dispatchEvent){
+	            var e = $.Event('destroy', {bubbles:false});
+	            node.dispatchEvent(e);
+			}
+			//cleanup itself
+            var id = jqmid(node);
+            if(id && handlers[id]){
+		    	for(var key in handlers[id])
+		        	node.removeEventListener(handlers[id][key].e, handlers[id][key].proxy, false);
+            	delete handlers[id];
+            }
+		}
+		function cleanUpContent(node, kill){
+            if(!node) return;
+			//cleanup children
+            var children = node.childNodes;
+            if(children && children.length > 0)
+                for(var child in children)
+                    cleanUpContent(children[child], kill);
+			
+			cleanUpNode(node, kill);
+		}
+        $.cleanUpContent = function(node, itself, kill){
+            if(!node) return;
+			//cleanup children
+            var cn = node.childNodes;
+            if(cn && cn.length > 0){
+				//destroy everything in a few ms to avoid memory leaks
+				//remove them all and copy objs into new array
+				var els = [].slice.apply(cn, [0]);
+				$.asap(function(){
+                	for(var i=0;i<els.length;i++){
+                		cleanUpContent(els[i], kill);
+                	}	
+				});
+            }
+			//cleanUp this node
+			if(itself) cleanUpNode(node, kill);
+        }
+		
+        // Like setTimeout(fn, 0); but much faster
+		var timeouts = [];
+        $.asap = function(fn) {
+            timeouts.push(fn);
+			//post a message to ourselves so we know we have to execute a function from the stack 
+            window.postMessage("jqm-asap", "*");
+        }
+		window.addEventListener("message", function(event) {
+            if (event.source == window && event.data == "jqm-asap") {
+                event.stopPropagation();
+                if (timeouts.length > 0) {	//just in case...
+                    (timeouts.shift())();
+                }
+            }
+        }, true);
 		
         
          /**
