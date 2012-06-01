@@ -65,6 +65,13 @@
 	        if (!this.el) return;
 			
 			this.animate(options);
+			
+			var that = this;
+			jq(this.el).bind('destroy', function(){
+				var id = that.el.jqmCSS3AnimateId;
+				that.callbacksStack = [];
+				if(cache[id]) delete cache[id];
+			});
 	    };
 
 	    css3Animate.prototype = {
