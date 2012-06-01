@@ -264,14 +264,24 @@
 		}
         nativeScroller.prototype.enable=function () {
 			if(this.eventsActive) return;
+			//unlock overflow
 			this.el.style.overflow='auto';
+			//set current scroll
+			this.el.scrollTop = this.loggedY;
+			this.el.scrollLeft = this.loggedX;
+			//set events
             if(this.refresh) this.el.addEventListener('touchstart', this, false);
 			this.el.addEventListener('scroll', this, false);
 			this.eventsActive = true;
         }
-        nativeScroller.prototype.disable=function () {
+        nativeScroller.prototype.disable=function (destroy) {
 			if(!this.eventsActive) return;
-			this.el.style.overflow='hidden';
+			//log current scroll
+			this.loggedY = this.el.scrollTop;
+			this.loggedX = this.el.scrollLeft;
+			//lock overflow
+			if(!destroy) this.el.style.overflow='hidden';
+			//remove events
             this.el.removeEventListener('touchstart', this, false);
 			this.el.removeEventListener('scroll', this, false);
 			this.eventsActive = false;
@@ -407,6 +417,9 @@
         }
         jsScroller.prototype.enable=function () {
 			if(this.eventsActive) return;
+			//set top/left
+			this.scrollerMoveCSS({x:this.loggedX,y:this.loggedY}, 0);
+			//add listeners
     		this.container.addEventListener('touchstart', this, false);
             this.container.addEventListener('touchmove', this, false);
 			this.container.addEventListener('touchend', this, false);
@@ -414,6 +427,11 @@
         }
         jsScroller.prototype.disable=function () {
 			if(!this.eventsActive) return;
+			//log top/left
+			var cssMatrix = this.getCSSMatrix(this.el);
+            this.loggedY = numOnly(cssMatrix.f) - numOnly(this.container.scrollTop);
+            this.loggedX = numOnly(cssMatrix.e) - numOnly(this.container.scrollLeft);
+			//remove event listeners
         	this.container.removeEventListener('touchstart', this, false);
             this.container.removeEventListener('touchmove', this, false);
 			this.container.removeEventListener('touchend', this, false);
