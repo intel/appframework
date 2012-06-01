@@ -290,8 +290,8 @@
                         runFinal = true;
                     this.carouselIndex = ind;
                     if (this.pagingDiv) {
-                        
-                        document.getElementById(this.container.id + "_" + this.carouselIndex).className = this.pagingCssNameSelected;
+						var tmpEl = document.getElementById(this.container.id + "_" + this.carouselIndex);
+                        if(tmpEl) tmpEl.className = this.pagingCssNameSelected;
                     }
                
                 if (runFinal && this.pagingFunction && typeof this.pagingFunction == "function")
