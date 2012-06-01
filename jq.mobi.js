@@ -1880,9 +1880,9 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Object} jqMobi object
         * @title $().trigger(event,data);
         */
-        $.fn.trigger = function(event, data) {
+        $.fn.trigger = function(event, data, props) {
             if (typeof event == 'string')
-                event = $.Event(event);
+                event = $.Event(event, props);
             event.data = data;
             for (var i = 0; i < this.length; i++) {
                 this[i].dispatchEvent(event)
