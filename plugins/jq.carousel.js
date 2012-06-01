@@ -96,20 +96,12 @@
                 
                 this.el = el;
                 this.refreshItems();
-               
-                el.addEventListener('touchmove', function(e) {
-                    that.touchMove(e);
-                }, false);
-                el.addEventListener('touchend', function(e) {
-                    that.touchEnd(e);
-                }, false);
-                el.addEventListener('touchstart', function(e) {
-                    that.touchStart(e);
-                }, false);
-                var that = this;
-                window.addEventListener("orientationchange", function() {
-                    that.onMoveIndex(that.carouselIndex,0);
-                }, false);
+                var jqEl = jq(el);
+                jqEl.bind('touchmove', function(e) {that.touchMove(e);});
+                jqEl.bind('touchend', function(e) {that.touchEnd(e);});
+                jqEl.bind('touchstart', function(e) {that.touchStart(e);});
+				this.orientationHandler = function() {that.onMoveIndex(that.carouselIndex,0);};
+                window.addEventListener("orientationchange", this.orientationHandler, false);
            
         };
         
@@ -269,9 +261,10 @@
                 this.myDivWidth = numOnly(this.container.clientWidth);
                 this.myDivHeight = numOnly(this.container.clientHeight);
                 var runFinal = false;
-  
+
                     if(document.getElementById(this.container.id + "_" + this.carouselIndex))
                         document.getElementById(this.container.id + "_" + this.carouselIndex).className = this.pagingCssName;
+
                     var newTime = Math.abs(newInd - this.carouselIndex);
                     
                     var ind = newInd;
