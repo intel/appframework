@@ -399,7 +399,7 @@
             if (!(menu.hasClass("on") || menu.hasClass("to-on")) && ((force !== undefined && force !== false) || force === undefined)) {
 				
 				menu.show();
-				setTimeout(function(){
+				$.asap(function(){
 					that.menuAnimation = that.css3animate(els,{
 						"removeClass":"to-off off on",
 						"addClass":"to-on",
@@ -415,7 +415,7 @@
 							});
 						}
 					});
-				},0);	
+				});	
             
             } else if (force === undefined || (force !== undefined && force === false)) {
 				
@@ -660,10 +660,14 @@
             var el = $am(id);
             if (!el)
                 return;
-            if (el.getAttribute("js-scrolling") && el.getAttribute("js-scrolling").toLowerCase() == "yes")
+            if (el.getAttribute("js-scrolling") && el.getAttribute("js-scrolling").toLowerCase() == "yes"){
+                $.cleanUpContent(el.childNodes[0], false, true);
                 el.childNodes[0].innerHTML = content;
-            else
+            }
+            else{
+                $.cleanUpContent(el, false, true);
                 el.innerHTML = content;
+            }
         },
         /**
          * Dynamically create a new panel on the fly.  It wires events, creates the scroller, applies Android fixes, etc.
@@ -821,7 +825,9 @@
             var that = this;
             var hasFooter = what.getAttribute("data-footer");
             
-            window.setTimeout(function() {
+			//Note: this used to be a setTimeout(,10) and I set it to $.asap
+			//It should be ok, but if anyone finds a bug related to it feel free to change it back
+            $.asap(function() {
                 if (hasFooter && hasFooter.toLowerCase() == "none") {
                     that.toggleNavMenu(false);
                 } else {
@@ -839,7 +845,7 @@
                     jq("#navbar a").removeClass("selected");
                     jq("#" + what.getAttribute("data-tab")).addClass("selected");
                 }
-            }, 10);
+            });
             var hasMenu = what.getAttribute("data-nav");
             if (hasMenu && this.customMenu != hasMenu) {
 				this.customMenu = hasMenu;
@@ -1288,7 +1294,7 @@
                     $(document).one("defer:loaded",loadFirstDiv);
                 }
                 else
-                    window.setTimeout(loadFirstDiv,100);
+                    window.setTimeout(loadFirstDiv,100);	//could this be $.asap?
             }
            
         },
