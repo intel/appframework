@@ -140,8 +140,6 @@
 						break;
 						case 'touchmove': this.onTouchMove(e); break;
 						case 'touchend': this.onTouchEnd(e); break;
-						case 'scroll': 
-							$.trigger(this, 'scroll', [e]);
 						break;
 		    		}
 				}
@@ -271,7 +269,6 @@
 			this.el.scrollLeft = this.loggedX;
 			//set events
             if(this.refresh) this.el.addEventListener('touchstart', this, false);
-			this.el.addEventListener('scroll', this, false);
 			this.eventsActive = true;
         }
         nativeScroller.prototype.disable=function (destroy) {
@@ -283,7 +280,6 @@
 			if(!destroy) this.el.style.overflow='hidden';
 			//remove events
             this.el.removeEventListener('touchstart', this, false);
-			this.el.removeEventListener('scroll', this, false);
 			this.eventsActive = false;
         }
 		nativeScroller.prototype.addPullToRefresh=function(el, leaveRefresh){
@@ -888,8 +884,7 @@
 			var that = this;
 			this.scrollingFinishCB=setTimeout(function(){
 				that.hideScrollbars();
-				$.trigger(that, 'scroll');
-				$.trigger(that, 'scrollend');
+				$.trigger($.touchLayer, 'scrollend', [that.el]);	//notify touchLayer of this elements scrollend
 				that.isScrolling=false;
 			},duration);
 		}
