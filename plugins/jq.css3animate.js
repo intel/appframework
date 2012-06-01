@@ -24,7 +24,10 @@
 		if(cache[id]){
 			cache[id].animate(options);
 			tmp = cache[id];
-		} else tmp = css3Animate(el, options);
+		} else {
+			tmp = css3Animate(el, options);
+			cache[id] = tmp;
+		}
 		return tmp;
 	}
     $.fn["css3Animate"] = function (opts) {
