@@ -213,7 +213,6 @@ width:100%;
 	position:absolute; top:0px; left:0px;
 	background:rgba(19,29,38,1);
 	-webkit-transform:none;
-	-webkit-perspective: 1000;
     margin-top:10px;
     margin-bottom:10px;
 	overflow:auto;
