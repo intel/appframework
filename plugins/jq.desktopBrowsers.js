@@ -1,3 +1,7 @@
+//desktopBrowsers contributed by Carlos Ouro @ Badoo
+//translates desktop browsers events to touch events and prevents defaults
+//It can be used independently in other apps but it is required for using the touchLayer in the desktop
+
 (function ($) {
 	
 	var preventAll = function(e) 
