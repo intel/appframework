@@ -1318,7 +1318,7 @@
 		                    callback: function() {
 		                        that.finishTransition(oldDiv);
 		                    }
-		                }).also(currDiv, {
+		                }).link(currDiv, {
 	                        x: "0%",
 	                        time: "150ms",
 	                        callback: function() {
@@ -1326,7 +1326,7 @@
 	                        }
 	                    });
 					}
-				}).also(currDiv, {
+				}).link(currDiv, {
 					x:"-100%",
 					y:"0%"
 				});
@@ -1341,7 +1341,7 @@
 		                    callback: function() {
 		                        that.finishTransition(oldDiv);
 		                    }
-		                }).also(currDiv, {
+		                }).link(currDiv, {
 	                        x: "0%",
 	                        time: "150ms",
 	                        callback: function() {
@@ -1349,7 +1349,7 @@
 	                        }
 	                    });
 					}
-				}).also(currDiv, {
+				}).link(currDiv, {
 					x:"100%",
 					y:"0%"
 				});

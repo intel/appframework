@@ -36,7 +36,7 @@
 		tmp = getCSS3Animate(this[0], opts);
 		opts.callback=null;
         for (var i = 1; i < this.length; i++) {
-            tmp.also(this[i], opts);
+            tmp.link(this[i], opts);
         }
         return tmp;
     };
@@ -261,7 +261,7 @@
 				this.activeEvent = null;
 				this.activeTimeout = null;
 			},
-	        also: function (elID, opts) {
+	        link: function (elID, opts) {
 				var oldCallback = opts.callback;
 				opts.callback = this.addCallbackHook(oldCallback);
 				getCSS3Animate(elID, opts);
