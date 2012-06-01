@@ -1513,7 +1513,7 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os.ios = $.os.ipad || $.os.iphone;
 			$.os.playbook = userAgent.match(/PlayBook/) ? true : false;
             $.os.blackberry = $.os.playbook || userAgent.match(/BlackBerry/) ? true : false;
-			$.os.blackberry10 = $.os.blackberry || userAgent.match(/Safari\/536/) ? true : false;
+			$.os.blackberry10 = $.os.blackberry && userAgent.match(/Safari\/536/) ? true : false;
             $.os.chrome = userAgent.match(/Chrome/) ? true : false;
 			$.os.opera = userAgent.match(/Opera Mobi/) ? true : false;
             $.os.fennec = userAgent.match(/fennec/i) ? true : false;
