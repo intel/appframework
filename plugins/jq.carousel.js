@@ -5,18 +5,23 @@
  */
 (function($) {
     var cache = [];
+	var objId=function(obj){
+		if(!obj.jqmCarouselId) obj.jqmCarouselId=$.uuid();
+		return obj.jqmCarouselId;
+	}
     $.fn.carousel = function(opts) {
-        if (opts === undefined && this.length > 0) 
-        {
-            return cache[this[0].id] ? cache[this[0].id] : null;
-        }
-        var tmp;
+        var tmp, id;
         for (var i = 0; i < this.length; i++) {
-            tmp = new carousel(this[i], opts);
-            if (this[i].id)
-                cache[this[i].id] = tmp;
+			//cache system
+			id = objId(this[i]);
+			if(!cache[id]){
+				tmp = new carousel(this[i], opts);
+				cache[id] = tmp;
+			} else {
+				tmp = cache[id];
+			}
         }
-        return this.length === 1 ? tmp : this;
+        return this.length == 1 ? tmp : this;
     };
     
     var carousel = (function() {
