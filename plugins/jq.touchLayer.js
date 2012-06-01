@@ -1,6 +1,9 @@
 //TouchLayer contributed by Carlos Ouro @ Badoo
+//un-authoritive layer between touches and actions on the DOM 
+//(un-authoritive: listeners do not require useCapture)
 //handles overlooking JS and native scrolling, panning, 
-//no delay on click, edit mode focus, preventing defaults, resizing content, etc
+//no delay on click, edit mode focus, preventing defaults, resizing content, 
+//enter/exit edit mode (keyboard on screen), prevent clicks on momentum, etc
 //It can be used independently in other apps but it is required by jqUi
 (function() {
 	//singleton
@@ -19,15 +22,28 @@
 	var focusResizes = $.os.blackberry10;
 	var requirePanning = $.os.ios;	//devices which require panning feature
     
-	//TouchLayer contributed by Carlos Ouro @ Badoo
-	//handles overlooking panning on titlebar, bumps on native scrolling and no delay on click
 	var touchLayer = function(el) {
+		this.clearTouchVars();
         el.addEventListener('touchstart', this, false);
+		el.addEventListener('touchmove', this, false);
+		el.addEventListener('touchend', this, false);
 		el.addEventListener('click', this, false);
 		document.addEventListener('scroll', this, false);
 		window.addEventListener("orientationchange", this, false);
 	    window.addEventListener("resize", this, false);
 		this.layer=el;
+		//proxies
+		this.scrollEndedProxy_ = $.proxy(this.scrollEnded, this);
+		this.hideAddressBarProxy_ = $.proxy(this.hideAddressBar, this, []);
+		this.exitExitProxy_ = $.proxy(this.exitExit, this, []);
+		var that = this;
+		this.scrollTimeoutExpireProxy_ = function(){
+			that.scrollTimeoutHandle_=null;
+			that.scrollTimeoutEl.addEventListener('scroll', that.scrollEndedProxy_, false);
+		};
+		//js scrollers
+		$.bind(this,'scrollstart',function(el){that.fireEvent('UIEvents', 'scrollstart', el, false, false);});
+		$.bind(this,'scrollend',function(el){that.fireEvent('UIEvents', 'scrollend', el, false, false);});
     }
 	
     touchLayer.prototype = {
@@ -42,14 +58,21 @@
 		isScrollingVertical: false,
 		wasPanning:false,
 		isPanning:false,
-		ignoreNextScroll:false,
 		allowDocumentScroll:false,
 		requiresNativeTap: false,
 		focusElement: null,
 		isFocused:false,
 		blockClicks:false,
+		scrollTimeoutHandle_:null,
+		scrollEndedProxy_:null,
+		scrollTimeoutExpiredProxy_:null,
+		hideAddressBarProxy_:null,
+		exitExitProxy_:null,
+		considerScrollMomentum_:false,
+		scrollTimeoutEl:null,
+		blockPossibleClick:false,
 		
-        handleEvent: function(e) {
+        handleEvent: function(e) {            
             switch (e.type) {
                 case 'touchstart':
                     this.onTouchStart(e);
@@ -318,75 +341,139 @@
 			var isTarget = el.isSameNode(parentTarget);
 			if(!isTarget && el.parentNode) this.checkDOMTree(el.parentNode, parentTarget);
 		},
+		//scroll finish detectors
+		scrollEnded : function(e){
+			//this.log("scrollEnded");
+			if(e) this.scrollTimeoutEl.removeEventListener('scroll', this.scrollEndedProxy_, false);
+			this.fireEvent('UIEvents', 'scrollend', this.scrollTimeoutEl, false, false);
+			this.scrollTimeoutEl=null;
+		},
 		
         
         onTouchMove: function(e) {
-			
-			this.cY = e.touches[0].pageY - this.dY;
-			this.cX = e.touches[0].pageX - this.dX;
-			
+			//set it as moved
+			var wasMoving = this.moved;
+			this.moved = true;
+			//very sensitive devices check
+			if(verySensitiveTouch){
+				this.cY = e.touches[0].pageY - this.dY;
+				this.cX = e.touches[0].pageX - this.dX;
+			}
+			//panning check
 			if(this.isPanning) {
-				this.moved = true;
-				document.removeEventListener('touchmove', this, false);
 				return;
 			}
-
+			//native scroll (for scrollend)
+			if(this.isScrolling){
+				if(!wasMoving) {
+					//this.log("scrollstart");
+					this.fireEvent('UIEvents', 'scrollstart', this.scrollingEl, false, false);
+				}
+				if(this.isScrollingVertical) {
+					this.speedY = (this.lastY - e.touches[0].pageY)/(e.timeStamp-this.lastTimestamp);
+					this.lastY = e.touches[0].pageY;
+					this.lastTimestamp = e.timeStamp;
+				}
+			}
+			//non-native scroll devices
 			if(!this.isScrolling && (!$.os.blackberry10 || !this.requiresNativeTap)){
 				//legacy stuff for old browsers
 	            e.preventDefault();
-				this.moved = true;
+				//this.log("TouchMove (preventDefault): "+
+				//	(this.isFocused?"focused ":"")+
+				//	(this.isPanning?"panning ":"")+
+				//	(this.requiresNativeTap?"nativeTap ":"")+
+				//	(this.isScrolling?"scrolling ":"")+
+				//	(this.moved?"moved ":"")
+				//);
 				return;
 			}
 			
-			//otherwise it is a native scroll
-			//let's clear events for performance
-            document.removeEventListener('touchmove', this, false);
-			document.removeEventListener('touchend', this, false);
+			//this.log("TouchMove: "+
+			//	(this.isFocused?"focused ":"")+
+			//	(this.isPanning?"panning ":"")+
+			//	(this.requiresNativeTap?"nativeTap ":"")+
+			//	(this.isScrolling?"scrolling ":"")+
+			//	(this.moved?"moved ":"")
+			//);
         },
-		
         
         onTouchEnd: function(e) {
+			//double check moved for sensitive devices
 			var itMoved = this.moved;
-			
 			if(verySensitiveTouch){
 				itMoved = itMoved && !(Math.abs(this.cX) < 10 && Math.abs(this.cY) < 10);
 			}
-						
-			var that = this;
 			
+			//panning action
 			if(this.isPanning && itMoved){
 				//wait 2 secs and cancel
 				this.wasPanning = true;
-			}
-			
-            if (!itMoved && !this.requiresNativeTap) {
+				
+			//a generated click
+			} else if (!itMoved && !this.requiresNativeTap) {
 				
 				//NOTE: on android if touchstart is not preventDefault(), click will fire even if touchend is prevented
 				//this is one of the reasons why scrolling and panning can not be nice and native like on iPhone
 				e.preventDefault();
 				
 				//fire click
-                var theTarget = e.target;
-                if (theTarget.nodeType == 3)
-                    theTarget = theTarget.parentNode;
+				if(!this.blockClicks && !this.blockPossibleClick){
+	                var theTarget = e.target;
+	                if (theTarget.nodeType == 3)
+	                    theTarget = theTarget.parentNode;
 				
-				//fire the click event
-				if(!this.blockClicks) this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
+					this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
+				}
 				
-            } else if(itMoved && this.requiresNativeTap){
-            	if(!this.isFocused) $.trigger(this, 'cancel-enter-edit', [e.target]);
+            } else if(itMoved){
+				//setup scrollend stuff
+				if(this.isScrolling){
+					this.scrollTimeoutEl = this.scrollingEl;
+					if(Math.abs(this.speedY)<0.01){
+						//fire scrollend immediatly
+						//this.log(" scrollend immediately "+this.speedY);
+						this.scrollEnded(false);
+					} else {
+						//wait for scroll event
+						//this.log($.debug.since()+" setting scroll timeout "+this.speedY);
+						this.scrollTimeoutHandle_ = setTimeout(this.scrollTimeoutExpireProxy_,30)
+					}
+				}
+				//trigger cancel-enter-edit on inputs
+				if(this.requiresNativeTap){
+            		if(!this.isFocused) $.trigger(this, 'cancel-enter-edit', [e.target]);
+				}
             }
 			
-			this.requiresNativeTap = false;
-			this.isPanning = false;
-			this.isScrolling = false;
-            this.dX = this.cX = this.cY = this.dY = 0;
-            document.removeEventListener('touchmove', this, false);
-            document.removeEventListener('touchend', this, false);
 			
+			
+			//this.log("TouchEnd: "+
+			//	(this.isFocused?"focused ":"")+
+			//	(this.isPanning?"panning ":"")+
+			//	(this.requiresNativeTap?"nativeTap ":"")+
+			//	(this.isScrolling?"scrolling ":"")+
+			//	(itMoved?"moved ":"")
+			//);
+			
+			
+			//clear up vars
+			this.clearTouchVars();
         },
 		
+		clearTouchVars:function(){
+			this.speedY = this.lastY = this.cY = this.cX = this.dX = this.dY = 0;
+			this.allowDocumentScroll=false;
+            this.moved = false;
+			this.isPanning = false;
+			this.isScrolling = false;
+			this.isScrollingVertical = false;
+			this.requiresNativeTap = false;
+			this.blockPossibleClick = false;
+		},
+		
 		fireEvent:function(eventType, eventName, target, bubbles, mouseToTouch){
+			//this.log("Firing event "+eventName);
 			//create the event and set the options
 			var theEvent = document.createEvent(eventType);
 			theEvent.initEvent(eventName, bubbles, true);
