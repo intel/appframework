@@ -57,7 +57,6 @@
 			//start doing stuff
 			this.callbacksStack = [];
 			this.activeEvent = null;
-			this.activeTimeout = null;
 			this.countStack = 0;
 			this.isActive = false;
 			this.el = elID;
@@ -145,12 +144,15 @@
 			        }
 					this.el.style.webkitTransitionProperty = properties;
 				
-					if((""+options["time"]).indexOf("s")==-1) var time = options["time"]+"ms";
-					else var time = options["time"];
-					
-					if((""+options["time"]).indexOf("ms")==-1) var timeout = timeNum*1000+100;
-					else {
-						var timeout = timeNum+100;
+					if((""+options["time"]).indexOf("s")===-1) {
+						var scale = 'ms';
+						var time = options["time"]+scale;
+					} else if(options["time"].indexOf("ms")!==-1){
+						var scale = 'ms';
+						var time = options["time"];
+					} else {
+						var scale = 's';
+						var time = options["time"]+scale;
 					}
 			
 					this.el.style.webkitTransitionDuration = time;
@@ -164,54 +166,27 @@
 			
 				var that = this;
 				if(classMode){
-					//setupo the event normally
-					var finishCB = function(event){
-						that.finishAnimation(event);
-						that.el.removeEventListener("webkitTransitionEnd", finishCB, false);
-						delete that.activeEvent;
-						if(that.activeTimeout){
-							window.clearTimeout(that.activeTimeout);
-							delete that.activeTimeout;
-						}
-					};
-					this.el.addEventListener("webkitTransitionEnd", finishCB, false);
-					this.activeEvent = finishCB;
-					//class mode requires us to check if timeout was actually 0 or not after class properties are set
-					this.activeTimeout = window.setTimeout(function(){
-						var duration = window.getComputedStyle(that.el).webkitTransitionDuration;
-						var timeNum = numOnly(duration);
-						if(timeNum==0){
-							that.el.removeEventListener("webkitTransitionEnd", finishCB, false);
-							delete that.activeEvent;
-							that.finishAnimation(false);
-							delete that.activeTimeout;
-						} else {
-							if((""+options["time"]).indexOf("ms")==-1) var timeout = timeNum*1000+100;
-							else var timeout = timeNum+100;
-							that.activeTimeout = window.setTimeout(finishCB, timeout);
-						}
-					}, 0);
-				} else {
-					if(timeNum==0){
-						//just wait for styles to be rendered
-						this.activeTimeout = window.setTimeout(function(){
-							that.finishAnimation(false);
-							delete that.activeTimeout;
-						}, 0);
+					//get the duration
+					var duration = window.getComputedStyle(that.el).webkitTransitionDuration;
+					var timeNum = numOnly(duration);
+					if(duration.indexOf("ms")!==-1){
+						var scale = 'ms';
 					} else {
-						var finishCB = function(event){
-							that.finishAnimation(event);
-							that.el.removeEventListener("webkitTransitionEnd", finishCB, false);
-							delete that.activeEvent;
-							if(that.activeTimeout){
-								window.clearTimeout(that.activeTimeout);
-								delete that.activeTimeout;
-							}
-						};
-						this.el.addEventListener("webkitTransitionEnd", finishCB, false);
-						this.activeTimeout = window.setTimeout(finishCB, timeout);
-						this.activeEvent = finishCB;
+						var scale = 's';
 					}
+				}
+				
+				//finish asap
+				if(timeNum==0 || (scale=='ms' && timeNum<5)){
+					$.asap($.proxy(this.finishAnimation, this, [false]));
+					//set transitionend event
+				} else {
+					//setup the event normally
+					this.activeEvent = function(event){
+						that.finishAnimation(event);
+						that.el.removeEventListener("webkitTransitionEnd", that.activeEvent, false);
+					};
+					this.el.addEventListener("webkitTransitionEnd", this.activeEvent, false);
 				}
 			
 			},
@@ -259,14 +234,8 @@
 			clearEvents:function(){
 				if(this.activeEvent) {
 					this.el.removeEventListener("webkitTransitionEnd", this.activeEvent, false);
-					delete this.activeEvent;
-				}
-				if(this.activeTimeout) {
-					window.clearTimeout(this.activeTimeout);
-					delete this.activeTimeout;
 				}
 				this.activeEvent = null;
-				this.activeTimeout = null;
 			},
 	        link: function (elID, opts) {
 				var oldCallback = opts.callback;
