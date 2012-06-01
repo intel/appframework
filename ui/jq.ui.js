@@ -2887,7 +2887,7 @@
                 var theEvent = document.createEvent('MouseEvents');
                 theEvent.initEvent('click', true, true);
                 theTarget.dispatchEvent(theEvent);
-                
+                e.preventDefault();
             }
             
             prevClickField = null;
