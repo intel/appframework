@@ -6,7 +6,7 @@
  (function ($) {
 	 //you can override this one to have your own 
 	 $.debug = {};
-	 $.debug.log = function(t){console.log(t);};
+	 $.debug.out = function(t){console.log(t);};
 	 var maxObjectItems = 14;
 	 
 	 var now=function(){
@@ -90,10 +90,12 @@
 	 	return "[+"+since()+"] ";
 	 }
 	 
+	 $.debug.log = function(t){this.out(this.since()+t);};
+	 
 	 $.debug.method = function(obj, method, methodName){
 		 var that = this;
 		 return function(){
-			 that.log(that.since()+methodName+"("+checkParams(arguments)+")");
+			 that.log(methodName+"("+checkParams(arguments)+")");
 			 return method.apply(obj, arguments);
 		 }
 	 }
@@ -109,7 +111,7 @@
 	 $.debug.type = function(c, objectName){
 		 var that = this;
 		 var a = function(){
-			 that.log(that.since()+objectName+".constructor("+checkParams(arguments)+")");
+			 that.log(objectName+".constructor("+checkParams(arguments)+")");
 			 c.apply(this, arguments);
 			 that.object(this, objectName);
 		 }
