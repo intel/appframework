@@ -1544,7 +1544,6 @@
     jq(document).ready(function() {
         document.body.addEventListener('touchmove', function(e) {
             e.preventDefault();
-            e.stopPropagation();
             window.scrollTo(1, 1);
         }, false);
         if (!jq.os.desktop)
