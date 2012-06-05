@@ -1987,6 +1987,8 @@
                el.innerHTML = newDiv.innerHTML;
             else
                 el.childNodes[0].innerHTML = newDiv.innerHTML;
+                
+            if($(newDiv).title) el.title = $(newDiv).title;
         },
         /**
          * Dynamically create a new panel on the fly.  It wires events, creates the scroller, applies Android fixes, etc.
@@ -2283,7 +2285,7 @@
                         //Here we check to see if we are retaining the div, if so update it
                         if ($am(urlHash) !== undefined) {
                             that.updateContentDiv(urlHash, xmlhttp.responseText);
-                            $am(urlHash).title = anchor.title ? anchor.title : target;
+                            if(!$am(urlHash).title) $am(urlHash).title = anchor.title ? anchor.title : target;
                         } else if (that.isAjaxApp || anchor.getAttribute("data-persist-ajax")) {    
                             var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
                             refreshFunction = refresh ? 
@@ -2293,7 +2295,7 @@
                                 anchor.refresh = false;
                             } : null
                             urlHash = that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
-                            $am(urlHash).title = anchor.title ? anchor.title : target;
+                            if(!$am(urlHash).title) $am(urlHash).title = anchor.title ? anchor.title : target;
                         } else {
                             that.updateContentDiv("jQui_ajax", xmlhttp.responseText);
                             $am("jQui_ajax").title = anchor.title ? anchor.title : target;
