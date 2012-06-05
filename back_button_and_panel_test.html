@@ -1,0 +1,110 @@
+<!DOCTYPE html><!--HTML5 doctype-->
+<html>
+	<head>
+		<title>jqMobi Kitchen Sink</title>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+		<link rel="stylesheet" type="text/css" href="kitchensink/icons.css" />
+		<link rel="stylesheet" type="text/css" href="kitchensink/jq.ui.css" title="default"/>
+		
+		<script type="text/javascript" charset="utf-8" src="./jq.mobi.js"></script> 
+		
+		<script type="text/javascript" charset="utf-8" src="./plugins/jq.swipe.js"></script>
+		<script type="text/javascript" charset="utf-8" src="./plugins/jq.template.js"></script>
+		<script type="text/javascript" charset="utf-8" src="./plugins/jq.carousel.js"></script>
+		<script type="text/javascript" charset="utf-8" src="./plugins/jq.drawer.js"></script>
+		<script type="text/javascript" charset="utf-8" src="./plugins/jq.shake.js"></script>
+		<script type="text/javascript" charset="utf-8" src="./plugins/jq.alphatable.js"></script>
+		<script type="text/javascript" charset="utf-8" src="./ui/jq.ui.js"></script>
+		
+		
+<script type="text/javascript">
+    /* This function runs once the page is loaded, but appMobi is not yet active */
+	var webRoot="./kitchensink/";
+	$.ui.autoLaunch=true;
+    $.ui.openLinksNewTab=false;
+    var init = function(){
+	   $.ui.backButtonText="Back";  
+	   window.setTimeout(function(){$.ui.launch();},1500);
+       //$.ui.removeFooterMenu(); This would remove the bottom nav menu
+    };
+    document.addEventListener("DOMContentLoaded",init,false);  
+	$.ui.ready(function(){console.log('ready');});
+   
+    /* This code prevents users from dragging the page */
+    var preventDefaultScroll = function(event) {
+        event.preventDefault();
+        window.scroll(0,0);
+        return false;
+    };
+	
+	document.addEventListener('touchmove', preventDefaultScroll, false);
+
+    /* This code is used to run as soon as appMobi activates */
+    var onDeviceReady=function(){
+		AppMobi.device.setRotateOrientation("portrait");
+        AppMobi.device.setAutoRotate(false);
+		webRoot=AppMobi.webRoot+"kitchensink/";
+	    //hide splash screen
+	    AppMobi.device.hideSplashScreen();	
+		
+    };
+    document.addEventListener("appMobi.device.ready",onDeviceReady,false);    
+	function showHide(obj,objToHide){
+		var el=$("#"+objToHide)[0];
+		
+		if(obj.className=="expanded"){
+			obj.className="collapsed";
+		}
+		else{
+			obj.className="expanded";
+		}
+		$(el).toggle();
+		
+	}
+	
+</script>
+	</head>
+	<body>
+		<div id="jQUi">
+			<!-- this is the splashscreen you see. -->
+			<div id="splashscreen" class='ui-loader'>
+				<img src="kitchensink/images/splash.png">
+				<br>
+				<br>
+				<span class='ui-icon ui-icon-loading spin'></span><h1 >Starting app</h1>
+			</div>
+			<div id="header">
+				<img id='badgephone' onclick='jq.ui.toggleSideMenu()' align="right" src='kitchensink/images/badge.png' style='padding-top:10px'>
+				<img id='badgetablet' align="right" src='kitchensink/images/badge.png' style='padding-top:10px'>
+			</div>
+			<div id="content">
+				<div class="panel" title="First Page" id="page1">
+					<header>
+						<h1>page 1</h1>
+					</header>
+					<ul>
+						<li>Page 1</li>
+						<li><a href="#page2">to Page 2</a></li>
+						<li><a href="kitchensink/ajax.html">to Ajax page (not including div.panel)</a></li>
+						<li><a href="kitchensink/ajax_with_panel.html">to Ajax page (including div.panel)</a></li>
+					</ul>
+				</div>
+				<div class="panel" title="Second Page" id="page2">
+					<header>
+						<a href="#page1" data-reverse="true" class="button" style="float:left;">back</a>
+						<h1>page 2</h1>
+					</header>
+					<ul>
+						<li>Page 2</li>
+						<li>Details</li>
+						<li><a href="#page1" data-reverse="false">back zu page 1 (forward)</a></li>
+						<li><a href="#page1" data-reverse="true">back zu page 1 (backwards)</a></li>
+					</ul>
+				</div
+			</div>
+		</div>
+	</body>
+</html>

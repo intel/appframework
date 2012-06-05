@@ -1976,10 +1976,19 @@
             var el = $am(id);
             if (!el)
                 return;
+            
+            var newDiv = document.createElement("div");
+	        newDiv.innerHTML = content;
+	        if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
+	            
+             
+            
             if (el.getAttribute("scrolling") && el.getAttribute("scrolling").toLowerCase() == "no")
-                el.innerHTML = content;
+               el.innerHTML = newDiv.innerHTML;
             else
-                el.childNodes[0].innerHTML = content;
+                el.childNodes[0].innerHTML = newDiv.innerHTML;
+                
+            if($(newDiv).title) el.title = $(newDiv).title;
         },
         /**
          * Dynamically create a new panel on the fly.  It wires events, creates the scroller, applies Android fixes, etc.
@@ -1994,10 +2003,13 @@
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
             var myEl = $am(el);
             if (!myEl) {
-                var newDiv = document.createElement("div");
-                newDiv.id = el;
-                newDiv.title = title;
-                newDiv.innerHTML = content;
+            	var newDiv = document.createElement("div");
+	            newDiv.innerHTML = content;
+	            if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
+	            
+				if(!newDiv.title) newDiv.title = title;
+				var newId = (newDiv.id)? newDiv.id : el; //figure out the new id - either the id from the loaded div.panel or the crc32 hash
+				newDiv.id = newId;
             } else {
                 newDiv = myEl;
             }
@@ -2007,7 +2019,7 @@
             myEl = null;
             that.addDivAndScroll(newDiv, refresh, refreshFunc);
             newDiv = null;
-            return;
+            return newId;
         },
         /**
          *  Takes a div and sets up scrolling for it..
@@ -2248,7 +2260,7 @@
 
                     //ajax div already exists.  Let's see if we should be refreshing it.
                     loadAjax = false;
-                    if (anchor.getAttribute("data-refresh-ajax") === 'true' || (anchor.refresh && anchor.refresh === true)||this.isAjaxApp) {
+                    if ((anchor && anchor.getAttribute("data-refresh-ajax") === 'true') || (anchor && anchor.refresh && anchor.refresh === true)||this.isAjaxApp) {
                         loadAjax = true;
                     } else
                         target = "#" + urlHash;
@@ -2273,9 +2285,8 @@
                         //Here we check to see if we are retaining the div, if so update it
                         if ($am(urlHash) !== undefined) {
                             that.updateContentDiv(urlHash, xmlhttp.responseText);
-                            $am(urlHash).title = anchor.title ? anchor.title : target;
-                        } else if (anchor.getAttribute("data-persist-ajax")||that.isAjaxApp) {
-                            
+                            if(!$am(urlHash).title) $am(urlHash).title = anchor.title ? anchor.title : target;
+                        } else if (that.isAjaxApp || anchor.getAttribute("data-persist-ajax")) {    
                             var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
                             refreshFunction = refresh ? 
                             function() {
@@ -2283,8 +2294,8 @@
                                 that.loadContent(target, newTab, back, transition, anchor);
                                 anchor.refresh = false;
                             } : null
-                            that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
-                            $am(urlHash).title = anchor.title ? anchor.title : target;
+                            urlHash = that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
+                            if(!$am(urlHash).title) $am(urlHash).title = anchor.title ? anchor.title : target;
                         } else {
                             that.updateContentDiv("jQui_ajax", xmlhttp.responseText);
                             $am("jQui_ajax").title = anchor.title ? anchor.title : target;
@@ -2298,8 +2309,7 @@
                         that.parseScriptTags(div);
                         if (doReturn)
                             return;
-                        
-                        return that.loadContent("#" + urlHash);
+                        return that.loadContent("#" + urlHash, false, back, null);
                     
                     }
                 };
@@ -2964,15 +2974,12 @@
             
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
-            
+            var back = (theTarget.getAttribute("data-reverse") && theTarget.getAttribute("data-reverse") == 'true')?true:false;
             resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
             
             var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
-            //if (theTarget.onclick && !jq.os.desktop) {
-              //  theTarget.onclick();
-            //}
-            jq.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
-            
+            jq.ui.loadContent(href, resetHistory, back, mytransition, theTarget);
+
             return true;
         }
     }
