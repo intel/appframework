@@ -28,6 +28,34 @@ if (!window.jq || typeof (jq) !== "function") {
         fragementRE=/^\s*<(\w+)[^>]*>/,
         _attrCache={};
         
+        
+        /**
+         * internal function to use domfragments for insertion
+         *
+         * @api private
+        */
+        function _insertFragments(jqm,container,insert){
+            var frag=document.createDocumentFragment();
+            if(insert){
+                for(var j=jqm.length-1;j>=0;j--)
+                {
+                    frag.insertBefore(jqm[j],frag.firstChild);
+                }
+                container.insertBefore(frag,container.firstChild);
+            
+            }
+            else {
+            
+                for(var j=0;j<jqm.length;j++)
+                    frag.appendChild(jqm[j]);
+                container.appendChild(frag);
+            }
+            frag=null;
+        }
+                
+            
+                    
+        
 
         /**
          * Internal function to test if a class name fits in a regular expression
@@ -769,11 +797,11 @@ if (!window.jq || typeof (jq) !== "function") {
                     element = $(element);
                 var i;
                 
+                
                 for (i = 0; i < this.length; i++) {
                     if (element.length && typeof element != "string") {
                         element = $(element);
-                        for (var j = 0; j < element.length; j++)
-                            insert != undefined ? this[i].insertBefore(element[j], this[i].firstChild) : this[i].appendChild(element[j]);
+                        _insertFragments(element,this[i],insert);
                     } else {
                         var obj =fragementRE.test(element)?$(element):undefined;
                         if (obj == undefined || obj.length == 0) {
@@ -782,10 +810,7 @@ if (!window.jq || typeof (jq) !== "function") {
                         if (obj.nodeName != undefined && obj.nodeName.toLowerCase() == "script" && (!obj.type || obj.type.toLowerCase() === 'text/javascript')) {
                             window.eval(obj.innerHTML);
                         } else if(obj instanceof $jqm) {
-                            for(var k=0;k<obj.length;k++)
-                            {
-                                insert != undefined ? this[i].insertBefore(obj[k], this[i].firstChild) : this[i].appendChild(obj[k]);
-                            }
+                            _insertFragments(obj,this[i],insert);
                         }
                         else {
                             insert != undefined ? this[i].insertBefore(obj, this[i].firstChild) : this[i].appendChild(obj);
@@ -874,8 +899,8 @@ if (!window.jq || typeof (jq) !== "function") {
                 return {
                     left: obj.left + window.pageXOffset,
                     top: obj.top + window.pageYOffset,
-                    width: parseInt(this[0].style.width),
-                    height: parseInt(this[0].style.height)
+                    width: parseInt(obj.width),
+                    height: parseInt(obj.height)
                 };
             },
             /**

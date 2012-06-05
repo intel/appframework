@@ -362,7 +362,7 @@
                         var pagingEl = document.createElement("div");
                         pagingEl.id = this.container.id + "_" + i;
                         pagingEl.pageId = i;
-                        if (i !== 0) {
+                        if (i !== this.carouselIndex) {
                             pagingEl.className = this.pagingCssName;
                         } 
                         else {

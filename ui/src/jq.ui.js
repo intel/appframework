@@ -303,26 +303,37 @@
             br = bottom right
             tr = top right (default)
            ```
-           $.ui.updateBadge('#mydiv','3','bl');
+           $.ui.updateBadge('#mydiv','3','bl','green');
            ```
          * @param {String} target
          * @param {String} Value
          * @param {String} [position]         
-         * @title $.ui.updateBadge(target,value,[position])
+         * @param {String|Object} [color or CSS hash]         
+         * @title $.ui.updateBadge(target,value,[position],[color])
          */
-        updateBadge: function(target, value, position) {
+        updateBadge: function(target, value, position,color) {
             if (position === undefined)
                 position = "";
-            
             if (target[0] != "#")
                 target = "#" + target;
             var badge = jq(target).find("span.jq-badge");
+            
             if (badge.length == 0) {
                 if (jq(target).css("position") != "absolute")
                     jq(target).css("position", "relative");
-                badge = jq(target).append("<span class='jq-badge " + position + "'>" + value + "</span>");
+                badge=jq("<span class='jq-badge " + position + "'>" + value + "</span>");    
+                jq(target).append(badge);
             } else
                 badge.html(value);
+            
+            
+            if(jq.isObject(color)){
+                badge.css(color);
+            }
+            else if(color){
+                badge.css("background",color);
+            }
+            
             badge.data("ignore-pressed","true");
         
         },
@@ -813,15 +824,16 @@
            
             
             
-            var fnc = what.getAttribute("data-load");
-            if (typeof fnc == "string" && window[fnc]) {
-                window[fnc](what);
-            }
+            //Fire unload first
             if (oldDiv) {
                 fnc = oldDiv.getAttribute("data-unload");
                 if (typeof fnc == "string" && window[fnc]) {
                     window[fnc](oldDiv);
                 }
+            }
+            var fnc = what.getAttribute("data-load");
+            if (typeof fnc == "string" && window[fnc]) {
+                window[fnc](what);
             }
             if (this.menu.style.display == "block")
                 this.toggleSideMenu(); //Close on phones to prevent orientation change bug.
@@ -1411,11 +1423,12 @@
     function NoClickDelay(el) {
         if (typeof (el) === "string")
             el = document.getElementById(el);
-        el.addEventListener('touchstart', this, true);
+        el.addEventListener('touchstart', this, false);
     }
     var prevClickField;
     var prevPanel;
     var prevField;
+    var closeField;
     NoClickDelay.prototype = {
         dX: 0,
         dY: 0,
@@ -1444,10 +1457,24 @@
             if (theTarget.nodeType == 3)
                 theTarget = theTarget.parentNode;
             
+            if(closeField)
+                clearTimeout(closeField),closeField=null;
             if(prevField){
-                prevField.blur();
                 prevField=null;
+                var field = document.createElement('input');
+                field.setAttribute('type', 'text');
+                field.id="myhack";
+                document.body.appendChild(field);
+
+                closeField=setTimeout(function() {
+                    field.focus();
+                    setTimeout(function() {
+                        field.blur();
+                        field.parentNode.removeChild(field);
+                    }, 50);
+                }, 350);
             }
+           
             if(prevPanel){
                 //prevField.blur();
                 prevPanel.css("-webkit-transform","translate3d(0px,0px,0px)");
@@ -1458,11 +1485,12 @@
             
             var tagname = theTarget.tagName.toLowerCase();
             var type=theTarget.type||"";
-            if((tagname=="a"&& theTarget.href.indexOf("tel:")===0)||((tagname=="input")||tagname=="textarea"||tagname=="select")){
-                prevField=theTarget;
+            if((tagname=="a"&& theTarget.href.indexOf("tel:")===0)||((tagname=="input")||tagname=="textarea"||tagname=="select")&&type!="checkbox"&&type!="radio"){
+                
                 if(jq.os.android&&$.ui.fixAndroidInputs){
-                    theTarget.focus();
                     prevField=theTarget;
+                    theTarget.focus();
+                    //prevField=theTarget;
                     prevPanel=$(theTarget).closest(".panel");
                     prevPanel.css("left","-100%");
                     prevPanel.css("-webkit-transition-duration","0ms");
@@ -1470,25 +1498,28 @@
                     prevPanel.css("position","absolute");
                     return;
                 }
+                
             }
             else
                 e.preventDefault();
             this.moved = false;
             document.addEventListener('touchmove', this, true);
             document.addEventListener('touchend', this, true);
+            
         },
         
         onTouchMove: function(e) {
+            
             this.moved = true;
             this.cX = e.touches[0].pageX - this.dX;
             this.cY = e.touches[0].pageY - this.dY;
-           // e.preventDefault();
-        },
-        
-        onTouchEnd: function(e) {
             
-            document.removeEventListener('touchmove', this, false);
-            document.removeEventListener('touchend', this, false);
+           // e.preventDefault();
+           return false;
+        },
+        onTouchEnd: function(e) {
+            document.removeEventListener('touchmove', this, true);
+            document.removeEventListener('touchend', this, true);
             
             if ((!jq.os.blackberry && !this.moved) || (jq.os.blackberry && (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5))) {
                 var theTarget = e.target;
@@ -1498,10 +1529,13 @@
                 var theEvent = document.createEvent('MouseEvents');
                 theEvent.initEvent('click', true, true);
                 theTarget.dispatchEvent(theEvent);
-                
+                e.preventDefault();
             }
+            
             prevClickField = null;
             this.dX = this.cX = this.cY = this.dY = 0;
+            return false;
+            
         }
     };
     
@@ -1510,7 +1544,6 @@
     jq(document).ready(function() {
         document.body.addEventListener('touchmove', function(e) {
             e.preventDefault();
-            e.stopPropagation();
             window.scrollTo(1, 1);
         }, false);
         if (!jq.os.desktop)
@@ -1550,9 +1583,7 @@
                 return false;
             }
             
-            if (theTarget.onclick && !jq.os.desktop) {
-                theTarget.onclick();
-            }
+          
             
             if(theTarget.href.indexOf("tel:")===0)
                return false;
@@ -1579,7 +1610,11 @@
             resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
             
             var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
+            //if (theTarget.onclick && !jq.os.desktop) {
+              //  theTarget.onclick();
+            //}
             jq.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
+            
             return true;
         }
     }

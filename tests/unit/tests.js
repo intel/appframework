@@ -625,7 +625,7 @@ test("append",function(){
 
 test("prepend",function(){
 
-  expect(4);
+  expect(5);
 
   $("#foo").html('');
   $("#foo").prepend("string");
@@ -643,12 +643,17 @@ test("prepend",function(){
   QUnit.reset();
   var arr=[];
   arr.push(jq("<div>something</div>").get());
-  arr.push(jq("<div>something</div>").get());
+  arr.push(jq("<div>something 2</div>").get());
   $("#foo").html("");
   $("#foo").prepend(arr);
   
-  equals($("#foo").html(),"<div>something</div><div>something</div>","Prepending multiple objects at once");
+  equals($("#foo").html(),"<div>something</div><div>something 2</div>","Prepending multiple objects at once");
   QUnit.reset();
+  $("#foo").html("");
+  $("#foo").prepend("<b>1</b><b>2</b>");
+  equals($("#foo").html(),"<b>1</b><b>2</b>","Pending objects with the order staying the same ");
+  QUnit.reset();
+  
 });
 test("insertBefore",function(){
 
