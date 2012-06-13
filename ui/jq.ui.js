@@ -2602,6 +2602,14 @@
                     //activeDiv = firstDiv;
                     if (defaultHash.length > 0 && that.loadDefaultHash&&defaultHash!=("#"+that.firstDiv.id))
                     {
+                        //Fix a bug,when startwith #divid/value, "that.activeDiv=$(defaultHash).get();" will be error 
+                        var slashIndex = defaultHash.indexOf('/');
+                        var hashLink = "";
+                        if (slashIndex != -1) {
+                            // Ignore everything after the slash for loading
+                            hashLink = defaultHash.substr(slashIndex);
+                            defaultHash = defaultHash.substr(0, slashIndex);
+                        }
                         
                         that.activeDiv=$(defaultHash).get();
                         jq("#header #backButton").css("visibility","visible");
