@@ -1578,7 +1578,7 @@
     
     function checkAnchorClick(theTarget) {
         var parent = false;
-        if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
+        while (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
             parent = true, theTarget = theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
         if (theTarget.tagName.toLowerCase() == "a") {
         
