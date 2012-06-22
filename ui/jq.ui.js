@@ -2007,7 +2007,7 @@
 	            newDiv.innerHTML = content;
 	            if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
 	            
-				if(!newDiv.title) newDiv.title = title;
+				if(!newDiv.title&&title) newDiv.title = title;
 				var newId = (newDiv.id)? newDiv.id : el; //figure out the new id - either the id from the loaded div.panel or the crc32 hash
 				newDiv.id = newId;
             } else {
@@ -2294,8 +2294,7 @@
                                 that.loadContent(target, newTab, back, transition, anchor);
                                 anchor.refresh = false;
                             } : null
-                            urlHash = that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
-                            if(!$am(urlHash).title) $am(urlHash).title = anchor.title ? anchor.title : target;
+                            that.addContentDiv(urlHash, xmlhttp.responseText,anchor.title ? anchor.title : target, refresh, refreshFunction);
                         } else {
                             that.updateContentDiv("jQui_ajax", xmlhttp.responseText);
                             $am("jQui_ajax").title = anchor.title ? anchor.title : target;
@@ -2600,9 +2599,8 @@
                 //window.setTimeout(function() {
                 var loadFirstDiv=function(){
                     //activeDiv = firstDiv;
-                    if (defaultHash.length > 0 && that.loadDefaultHash&&defaultHash!=("#"+that.firstDiv.id))
+                    if (defaultHash.length > 0 && that.loadDefaultHash&&defaultHash!=("#"+that.firstDiv.id)&&$(defaultHash).length>0)
                     {
-                        
                         that.activeDiv=$(defaultHash).get();
                         jq("#header #backButton").css("visibility","visible");
                         that.setBackButtonText(that.activeDiv.title)
@@ -2938,13 +2936,13 @@
     
     function checkAnchorClick(theTarget) {
         var parent = false;
-        if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
+        while (theTarget.tagName && theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
             parent = true, theTarget = theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
         if (theTarget.tagName.toLowerCase() == "a") {
         
         
             var custom=(typeof jq.ui.customClickHandler=="function")?jq.ui.customClickHandler:false;
-            if(custom!==false&&jq.ui.customClickHandler(theTarget.href)){
+            if(custom!==false&&jq.ui.customClickHandler(theTarget)){
                return true;
             }
             if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1 || theTarget.getAttribute("data-ignore")) {
