@@ -1578,13 +1578,13 @@
     
     function checkAnchorClick(theTarget) {
         var parent = false;
-        if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
+        while (theTarget.tagName && theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
             parent = true, theTarget = theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
         if (theTarget.tagName.toLowerCase() == "a") {
         
         
             var custom=(typeof jq.ui.customClickHandler=="function")?jq.ui.customClickHandler:false;
-            if(custom!==false&&jq.ui.customClickHandler(theTarget.href)){
+            if(custom!==false&&jq.ui.customClickHandler(theTarget)){
                return true;
             }
             if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1 || theTarget.getAttribute("data-ignore")) {
