@@ -138,7 +138,8 @@ oldElem=document.getElementsByTagName("link")[0];
 	function showHide(obj,objToHide){
 		var el=$("#"+objToHide)[0];
 		
-		if(obj.className=="expanded"){
+		var $obj=$(obj);
+		if($obj.hasClass("expanded")){
 			obj.className="collapsed";
 		}
 		else{
