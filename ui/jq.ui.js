@@ -2940,7 +2940,7 @@
         var parent = false;
         while (theTarget.tagName && theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
             parent = true, theTarget = theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
-        if (theTarget.tagName.toLowerCase() == "a") {
+        if (theTarget&&theTarget.tagName&&theTarget.tagName.toLowerCase() == "a") {
         
         
             var custom=(typeof jq.ui.customClickHandler=="function")?jq.ui.customClickHandler:false;
