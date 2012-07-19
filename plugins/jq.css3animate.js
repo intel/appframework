@@ -31,10 +31,13 @@
 		return tmp;
 	}
     $.fn["css3Animate"] = function (opts) {
-        var tmp;
-		//first one
-		tmp = getCSS3Animate(this[0], opts);
-		opts.callback=null;
+		//keep old callback system - backwards compatibility - should be deprecated in future versions
+		if(!opts.complete && opts.callback) opts.complete = opts.callback;
+        //first on
+		var tmp = getCSS3Animate(this[0], opts);
+		opts.complete=null;
+		opts.sucess=null;
+		opts.failure=null;
         for (var i = 1; i < this.length; i++) {
             tmp.link(this[i], opts);
         }
@@ -60,6 +63,7 @@
 			this.countStack = 0;
 			this.isActive = false;
 			this.el = elID;
+			this.linkFinishedProxy_ = $.proxy(this.linkFinished, this);
 			
 	        if (!this.el) return;
 			
@@ -83,11 +87,6 @@
 		        if (!options) {
 		            alert("Please provide configuration options for animation of " + this.el.id);
 		            return;
-		        }
-			
-				var callback = null;
-		        if (options["callback"]) {
-		            callback = options["callback"];
 		        }
 			
 				var classMode = !!options["addClass"];
@@ -161,13 +160,19 @@
 	            }
 
 				//add callback to the stack
-				this.callbacksStack.push(callback);
+				
+				this.callbacksStack.push({
+					complete : options["complete"],
+					success : options["success"],
+					failure : options["failure"]
+				});
 				this.countStack++;
 			
 				var that = this;
+				var style = window.getComputedStyle(this.el);
 				if(classMode){
 					//get the duration
-					var duration = window.getComputedStyle(that.el).webkitTransitionDuration;
+					var duration = style.webkitTransitionDuration;
 					var timeNum = numOnly(duration);
 					if(duration.indexOf("ms")!==-1){
 						var scale = 'ms';
@@ -177,7 +182,8 @@
 				}
 				
 				//finish asap
-				if(timeNum==0 || (scale=='ms' && timeNum<5)){
+				if(timeNum==0 || (scale=='ms' && timeNum<5) || style.display=='none'){
+					//the duration is nearly 0 or the element is not displayed, finish immediatly
 					$.asap($.proxy(this.finishAnimation, this, [false]));
 					//set transitionend event
 				} else {
@@ -193,8 +199,11 @@
 			addCallbackHook:function(callback){
 				if(callback) this.callbacksStack.push(callback);
 				this.countStack++;
-				var that = this;
-				return function(){that.finishAnimation();};
+				return this.linkFinishedProxy_;
+			},
+			linkFinished:function(canceled){
+				if(canceled) this.cancel();
+				else this.finishAnimation();
 			},
 	        finishAnimation: function (event) {
 	            if(event) event.preventDefault();
@@ -202,9 +211,9 @@
 				
 				this.countStack--;
 				
-	            if(this.countStack==0) this.fireCallbacks();
+	            if(this.countStack==0) this.fireCallbacks(false);
 	        },
-			fireCallbacks:function(){
+			fireCallbacks:function(canceled){
 				this.clearEvents();
 				
 				//keep callbacks after cleanup
@@ -216,15 +225,19 @@
 				
 				//fire all callbacks
 				for(var i=0; i<callbacks.length; i++) {
-	                if (callbacks[i] && typeof (callbacks[i] == "function")) {
-	                    callbacks[i]();
-	                }
+					var complete = callbacks[i]['complete'];
+					var success = callbacks[i]['success'];
+					var failure = callbacks[i]['failure'];
+					//fire callbacks
+	                if(complete && typeof (complete == "function")) complete(canceled);
+					//success/failure
+					if(canceled && failure && typeof (failure == "function")) failure();
+					else if(success && typeof (success == "function")) success();
 				}
 			},
 			cancel:function(){
 				if(!this.isActive) return;
-				this.clearEvents();
-				this.cleanup();
+				this.fireCallbacks(true); //fire failure callbacks
 			},
 			cleanup:function(){
 				this.callbacksStack=[];
@@ -238,11 +251,16 @@
 				this.activeEvent = null;
 			},
 	        link: function (elID, opts) {
-				var oldCallback = opts.callback;
-				opts.callback = this.addCallbackHook(oldCallback);
+				var callbacks = {complete:opts.complete,success:opts.success,failure:opts.failure};
+				opts.complete = this.addCallbackHook(callbacks);
+				opts.success = null;
+				opts.failure = null;
+				//run the animation with the replaced callbacks
 				getCSS3Animate(elID, opts);
 				//set the old callback back in the obj to avoid strange stuff
-				opts.callback = oldCallback;
+				opts.complete = callbacks.complete;
+				opts.success = callbacks.success;
+				opts.failure = callbacks.failure;
 				return this;
 	        }
 	    }
@@ -281,8 +299,8 @@
                 }
                 if (this.elements.length == 0) return;
                 var params = this.shift();
-                if (this.elements.length > 0) params.callback = function () {
-                    that.run();
+                if (this.elements.length > 0) params.complete = function (canceled) {
+                    if(!canceled) that.run();
                 };
                 css3Animate(params.id, params);
             },
