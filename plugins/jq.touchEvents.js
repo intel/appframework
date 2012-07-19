@@ -1,7 +1,3 @@
-//TouchEvent contributed by Carlos Ouro @ Badoo
-//translates desktop browsers events to touch events and prevents defaults
-//It can be used independently in other apps but it is required by jqUi
-
 //Touch events are from zepto/touch.js
 (function($) {
     var touch = {}, touchTimeout;
