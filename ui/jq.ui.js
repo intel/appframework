@@ -26,11 +26,6 @@
 			//if $.ui.launch can optionally create the jQUI object, we should had that option here somehow...
 	        jQUi = document.getElementById("jQUi");
 			$.touchLayer(jQUi);
-			$.bind($.touchLayer, "orientationchange", function(e){that.updateOrientation(e);});
-			
-			
-			//hide address bar
-			$.touchLayer.hideAddressBar();
 	    });
 		
         if (window.AppMobi)
@@ -55,16 +50,14 @@
            $.ui.availableTransitions['none']=function();
            ```
          */
-        (function(obj) {
-            obj.availableTransitions = {};
-            obj.availableTransitions.up = that.slideUpTransition;
-            obj.availableTransitions.down = that.slideDownTransition
-            obj.availableTransitions.fade = that.fadeTransition
-            obj.availableTransitions.flip = that.flipTransition
-            obj.availableTransitions.pop = that.popTransition
-            obj.availableTransitions['default'] = that.slideTransition;
-            obj.availableTransitions['none'] = that.noTransition;
-        })(this);
+         this.availableTransitions = {};
+         this.availableTransitions.up = this.slideUpTransition;
+         this.availableTransitions.down = this.slideDownTransition;
+         this.availableTransitions.fade = this.fadeTransition;
+         this.availableTransitions.flip = this.flipTransition;
+         this.availableTransitions.pop = this.popTransition;
+         this.availableTransitions['default'] = this.slideTransition;
+         this.availableTransitions['none'] = this.noTransition;
     };
     
     
@@ -275,10 +268,14 @@
          */
         goBack: function() {
 			if (this.history.length > 0) {
-                var tmpEl = this.history.pop();
-                this.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
-                this.transitionType = tmpEl.transition;
-				//for Android 4.0.x, we must touchLayer.hideAdressBar()
+                var that = this;
+                $.asap(
+                    function() {
+                        var tmpEl = that.history.pop();
+                        that.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
+                        that.transitionType = tmpEl.transition;
+                        //for Android 4.0.x, we must touchLayer.hideAdressBar()
+                    });
             }
         },
         /**
@@ -292,6 +289,26 @@
         clearHistory: function() {
             this.history = [];
             this.backButton.style.visibility = "hidden";
+        },
+        /**
+         * Updates the current window hash
+         *
+         * @param {String} newHash New Hash value
+         * @title $.ui.updateHash(newHash)
+         */
+        updateHash: function(newHash) {
+            previousTarget = '#' + newHash.replace('#', '');
+
+            var previousHash = window.location.hash;
+            var firstSlash = newHash.indexOf('/');
+            var panelName = newHash.substring(1, firstSlash == -1?null:firstSlash - 1);
+
+            try {
+                window.history.replaceState(panelName, panelName, window.location.pathname + newHash);
+                $(window).trigger("hashchange", {newUrl: window.location.pathname + newHash, oldUrl: window.location.pathname + previousHash});
+            }
+            catch (e) {
+            }
         },
         /**
          * Update a badge on the selected target.  Position can be
@@ -383,51 +400,61 @@
          * @title $.ui.toggleSideMenu([force])
          */
         toggleSideMenu: function(force, callback) {
-			if(!this.isSideMenuEnabled()) return;
-			if(this.menuAnimation) {
-				this.menuAnimation.cancel();
-			}
+			if(!this.isSideMenuEnabled() || this.togglingSideMenu) return;
+            this.togglingSideMenu = true;
+
             var that = this;
             var menu = jq("#menu");
 			var els = jq("#content, #menu, #header, #navbar");
 			
             if (!(menu.hasClass("on") || menu.hasClass("to-on")) && ((force !== undefined && force !== false) || force === undefined)) {
-				
+
 				menu.show();
 				$.asap(function(){
-					that.menuAnimation = that.css3animate(els,{
+					that.css3animate(els,{
 						"removeClass":"to-off off on",
 						"addClass":"to-on",
-						callback:function(){
-							that.menuAnimation = that.css3animate(els,{
-								"removeClass":"to-off off to-on",
-								"addClass":"on",
-								time:0,
-								callback:function(){
-									that.scrollingDivs["menu_scroller"].enable();
-									if(callback) callback();
-								}
-							});
+						complete:function(canceled){
+							if(!canceled){
+	                            that.css3animate(els,{
+									"removeClass":"to-off off to-on",
+									"addClass":"on",
+									time:0,
+									complete:function(){
+                                        that.togglingSideMenu = false;
+										if(callback) callback(false);
+									}
+								});
+							} else{
+                                that.togglingSideMenu = false;
+                                if(callback) callback(true);
+                            }
 						}
 					});
 				});	
             
             } else if (force === undefined || (force !== undefined && force === false)) {
-				
-                this.scrollingDivs["menu_scroller"].disable();
-				that.menuAnimation = that.css3animate(els,{
+
+
+				that.css3animate(els,{
 					"removeClass":"on off to-on",
 					"addClass":"to-off",
-					callback:function(){
-						that.menuAnimation = that.css3animate(els,{
-							"removeClass":"to-off on to-on",
-							"addClass":"off",
-							time:0,
-							callback:function(){
-								menu.hide();
-								if(callback) callback();
-							}
-						});
+					complete:function(canceled){
+						if(!canceled){
+	                        that.css3animate(els,{
+								"removeClass":"to-off on to-on",
+								"addClass":"off",
+								time:0,
+								complete:function(){
+	                                menu.hide();
+                                    that.togglingSideMenu = false;
+									if(callback) callback(false);
+								}
+							});
+						} else{
+                            that.togglingSideMenu = false;
+                            if(callback) callback(true);
+                        }
 					}
 				});
             }
@@ -436,8 +463,8 @@
 			var that = this;
 			var els = jq("#content, #menu, #header, #navbar");
 			if(this.isSideMenuOn()){
-				this.toggleSideMenu(false, function(){
-					els.removeClass("hasMenu");
+				this.toggleSideMenu(false, function(canceled){
+					if(!canceled) els.removeClass("hasMenu");
 				});
 			} else els.removeClass("hasMenu");
 		},
@@ -782,24 +809,6 @@
                 }, 0);
             }
         },
-        /**
-         *  Scrolls all panels to the top and fixes position when orientation changes
-           ```
-           $.ui.updateOrientation(event, time);
-           ```
-         * @param {Event} event
-		 * @param {Int} ms to hideAddressBar();
-         * @title $.ui.updateOrientation(event, time);
-         * @api private
-         */
-        updateOrientation: function(event) {
-			var that = this;
-            for (var j in that.scrollingDivs) {
-                if (typeof (that.scrollingDivs[j]) !== "function")
-                    that.scrollToTop(j);
-            }
-        },
-		
 
         /**
          *  This is used when a transition fires to do helper events.  We check to see if we need to change the nav menus, footer, and fire
@@ -1128,6 +1137,26 @@
 				checkAnchorClick(e, theTarget);
 			}, false);
 			
+			var enterEditEl = null;
+			//on enter-edit keep a reference of the actioned element
+			$.bind($.touchLayer, 'enter-edit', function(el){ enterEditEl = el; });
+			//enter-edit-reshape panel padding and scroll adjust
+			$.bind($.touchLayer, 'enter-edit-reshape', function(){
+				//onReshape UI fixes
+				//check if focused element is within active panel
+				var jQel = $(enterEditEl);
+				var elCheck = jQel.closest(that.activeDiv);
+				if(elCheck && elCheck.size()>0){
+					if($.os.ios || $.os.chrome){
+						//TODO: calculate necessary scroll to add as padding-bottom and top
+					} else if($.os.android || $.os.blackberry){
+						//TODO: scroll the panel in a way the focused element stays in view
+					}
+				}
+			});
+			
+			
+			
             if (!this.navbar) {
                 this.navbar = document.createElement("div");
                 this.navbar.id = "navbar";
@@ -1259,7 +1288,7 @@
                     that.firstDiv.style.display = "block";
                     that.css3animate(that.firstDiv, {
                         x: "0%",
-						callback:function(){
+						success:function(){
 							that.clearAnimations(that.firstDiv);
 						}
                     });
@@ -1275,11 +1304,15 @@
                     maskDiv = null;
                     that.launchCompleted = true;
                     jq(document).trigger("jq.ui.ready");
-                    jq("#splashscreen").remove();
+                    $.asap(function() {
+                        // Run after the first div animation has been triggered
+                        jq("#splashscreen").remove();
+                    });
+
                     that.defaultFooter = jq("#navbar").children();
                     var firstMenu = jq("nav").get();
                     that.defaultMenu = jq(firstMenu).children();
-                    
+
                     that.updateSideMenu(that.defaultMenu);
                 };
                 if(loadingDefer){
@@ -1309,19 +1342,16 @@
                 that.css3animate(oldDiv, {
 					x:"0%",
 					y:"0%",
-					callback:function(){
+					complete:function(){
 		                that.css3animate(oldDiv, {
 		                    x: "100%",
 		                    time: "150ms",
-		                    callback: function() {
-		                        that.finishTransition(oldDiv);
+		                    complete: function() {
+		                        that.finishTransition(oldDiv, currDiv);
 		                    }
 		                }).link(currDiv, {
 	                        x: "0%",
-	                        time: "150ms",
-	                        callback: function() {
-								that.clearAnimations(currDiv);
-	                        }
+	                        time: "150ms"
 	                    });
 					}
 				}).link(currDiv, {
@@ -1332,19 +1362,16 @@
                 that.css3animate(oldDiv, {
 					x:"0%",
 					y:"0%",
-					callback:function(){
+					complete:function(){
 		                that.css3animate(oldDiv, {
 		                    x: "-100%",
 		                    time: "150ms",
-		                    callback: function() {
-		                        that.finishTransition(oldDiv);
+		                    complete: function() {
+		                        that.finishTransition(oldDiv, currDiv);
 		                    }
 		                }).link(currDiv, {
 	                        x: "0%",
-	                        time: "150ms",
-	                        callback: function() {
-								that.clearAnimations(currDiv);
-	                        }
+	                        time: "150ms"
 	                    });
 					}
 				}).link(currDiv, {
@@ -1371,7 +1398,7 @@
                     y: "100%",
                     x: "0%",
                     time: "150ms",
-                    callback: function() {
+                    complete: function() {
                         that.finishTransition(oldDiv);
                         currDiv.style.zIndex = 2;
                         oldDiv.style.zIndex = 1;
@@ -1383,18 +1410,22 @@
                 that.css3animate(currDiv, {
                     y: "100%",
                     x: "0%",
-                    time: "1ms",
-                    callback: function() {
+                    complete: function() {
                         that.css3animate(currDiv, {
                             y: "0%",
                             x: "0%",
                             time: "150ms",
-							callback: function() {
+							complete: function(canceled) {
+								if(canceled) {
+									that.finishTransition(oldDiv, currDiv);
+									return;
+								}
+								
 								that.clearAnimations(currDiv);
 		                        that.css3animate(oldDiv, {
 		                            x: "-100%",
 		                            y: 0,
-		                            callback: function() {
+		                            complete: function() {
 		                                that.finishTransition(oldDiv);
 		                            }
 		                        });
@@ -1417,11 +1448,16 @@
                     y: "-100%",
                     x: "0%",
                     time: "150ms",
-                    callback: function() {
+                    complete: function(canceled) {
+						if(canceled) {
+							that.finishTransition(oldDiv, currDiv);
+							return;
+						}
+						
                         that.css3animate(oldDiv, {
                             x: "-100%",
                             y: 0,
-                            callback: function() {
+                            complete: function() {
                                 that.finishTransition(oldDiv);
                             
                             }
@@ -1436,17 +1472,22 @@
                 that.css3animate(currDiv, {
                     y: "-100%",
                     x: "0%",
-                    callback: function() {
+                    complete: function() {
                         that.css3animate(currDiv, {
                             y: "0%",
                             x: "0%",
                             time: "150ms",
-							callback: function(){
+							complete: function(canceled){
+								if(canceled) {
+									that.finishTransition(oldDiv, currDiv);
+									return;
+								}
+								
 								that.clearAnimations(currDiv);
 		                        that.css3animate(oldDiv, {
 		                            x: "-100%",
 		                            y: 0,
-		                            callback: function() {
+		                            complete: function() {
 		                                that.finishTransition(oldDiv);
 		                            }
 		                        });
@@ -1464,16 +1505,15 @@
             if (back) {
                 that.css3animate(currDiv, {
                     x: "100%",
-                    time: "1ms",
                     scale: .8,
                     rotateY: "180deg",
-                    callback: function() {
+                    complete: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
 							scale: 1,
                             time: "150ms",
 							rotateY: "0deg",
-							callback: function(){
+							complete: function(){
 								that.clearAnimations(currDiv);
 							}
                         });
@@ -1484,13 +1524,13 @@
                     time: "150ms",
                     scale: .8,
                     rotateY: "180deg",
-                    callback: function() {
+                    complete: function() {
                         that.css3animate(oldDiv, {
                             x: "-100%",
                             opacity: 1,
 		                    scale: 1,
 		                    rotateY: "0deg",
-                            callback: function() {
+                            complete: function() {
                                 that.finishTransition(oldDiv);
                             }
                         });
@@ -1506,14 +1546,14 @@
                     time: "150ms",
                     scale: .8,
                     rotateY: "180deg",
-                    callback: function() {
+                    complete: function() {
                         that.css3animate(oldDiv, {
                             x: "-100%",
                             y: 0,
                             time: "1ms",
 		                    scale: 1,
 		                    rotateY: "0deg",
-                            callback: function() {
+                            complete: function() {
                                 that.finishTransition(oldDiv);
                             }
                         });
@@ -1524,13 +1564,13 @@
                     time: "1ms",
                     scale: .8,
                     rotateY: "180deg",
-                    callback: function() {
+                    complete: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
                             time: "150ms",
 		                    scale: 1,
 		                    rotateY: "0deg",
-							callback:function(){
+							complete:function(){
 								that.clearAnimations(currDiv);
 							}
                         });
@@ -1550,11 +1590,16 @@
                     x: "0%",
                     time: "150ms",
                     opacity: .1,
-                    callback: function() {
+                    complete: function(canceled) {
+						if(canceled) {
+							that.finishTransition(oldDiv, currDiv);
+							return;
+						}
+						
                         that.css3animate(oldDiv, {
                             x: "-100%",
                             opacity: 1,
-                            callback: function() {
+                            complete: function() {
                                 that.finishTransition(oldDiv);
                             }
                         
@@ -1570,17 +1615,22 @@
                 that.css3animate(currDiv, {
                     x: "0%",
                     opacity: .1,
-                    callback: function() {
+                    complete: function() {
 		                that.css3animate(currDiv, {
 		                    x: "0%",
 		                    time: "150ms",
 		                    opacity: 1,
-							callback:function(){
+							complete:function(canceled){
+								if(canceled) {
+									that.finishTransition(oldDiv, currDiv);
+									return;
+								}
+								
 								that.clearAnimations(currDiv);
 		                        that.css3animate(oldDiv, {
 		                            x: "-100%",
 		                            y: 0,
-		                            callback: function() {
+		                            complete: function() {
 		                                that.finishTransition(oldDiv);
 		                            }
 		                        });
@@ -1604,10 +1654,15 @@
                     opacity: .1,
                     scale: .2,
                     origin: "-50%"+" 50%",
-                    callback: function() {
+                    complete: function(canceled) {
+						if(canceled) {
+							that.finishTransition(oldDiv);
+							return;
+						}
+						
                         that.css3animate(oldDiv, {
                             x: "-100%",
-                            callback: function() {
+                            complete: function() {
                                 that.finishTransition(oldDiv);
                             }
                         });
@@ -1624,19 +1679,24 @@
                     scale: .2,
                     origin: "-50%"+" 50%",
                     opacity: .1,
-                    callback: function() {
+                    complete: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
                             time: "150ms",
                             scale: 1,
                             opacity: 1,
                             origin: "0%"+" 0%",
-							callback: function(){
+							complete: function(canceled){
+								if(canceled) {
+									that.finishTransition(oldDiv, currDiv);
+									return;
+								}
+								
 								that.clearAnimations(currDiv);
 		                        that.css3animate(oldDiv, {
 		                            x: "100%",
 		                            y: 0,
-		                            callback: function() {
+		                            complete: function() {
 		                                that.finishTransition(oldDiv);
 		                            }
 		                        });
@@ -1665,9 +1725,10 @@
          * @param {Object} Div that transitioned out
          * @title $.ui.finishTransition(oldDiv)
          */
-        finishTransition: function(oldDiv) {
+        finishTransition: function(oldDiv, currDiv) {
             oldDiv.style.display = 'none';
             this.doingTransition = false;
+			if(currDiv) this.clearAnimations(currDiv);
         },
 		
         /**
