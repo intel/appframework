@@ -1,7 +1,8 @@
 /**
  * jq.debug - general and performance debug plugin
  * @copyright 2012 - Carlos Ouro @ Badoo
- * Use like $ui=$.debug.type($ui);
+ * Use like MyClass=$.debug.type(MyClass);
+ * Or MyObj=$.debug.object(MyObj);
  */ 
  (function ($) {
 	 //you can override this one to have your own 
