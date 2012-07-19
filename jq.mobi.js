@@ -764,7 +764,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 for (var i = 0; i < this.length; i++) {
                     if (name == undefined) {
                         this[i].className = newName;
-                        return this;
+                        continue;
                     }
                     var classList = this[i].className;
                     name.split(/\s+/g).concat(newName.split(/\s+/g)).forEach(function(cname) {
@@ -1516,6 +1516,7 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os.webos = userAgent.match(/(webOS|hpwOS)[\s\/]([\d.]+)/) ? true : false;
             $.os.touchpad = $.os.webos && userAgent.match(/TouchPad/) ? true : false;
             $.os.ios = $.os.ipad || $.os.iphone;
+            $.os.ios6 = $.os.ios &&  userAgent.match(/(OS)\s([6])/) ? true : false;
 			$.os.playbook = userAgent.match(/PlayBook/) ? true : false;
             $.os.blackberry = $.os.playbook || userAgent.match(/BlackBerry/) ? true : false;
 			$.os.blackberry10 = $.os.blackberry && userAgent.match(/Safari\/536/) ? true : false;
@@ -2010,6 +2011,11 @@ if (!window.jq || typeof (jq) !== "function") {
 			
 			cleanUpNode(node, kill);
 		}
+		var cleanUpAsap = function(els, kill){
+        	for(var i=0;i<els.length;i++){
+            	cleanUpContent(els[i], kill);
+            }	
+		}
         $.cleanUpContent = function(node, itself, kill){
             if(!node) return;
 			//cleanup children
@@ -2017,12 +2023,7 @@ if (!window.jq || typeof (jq) !== "function") {
             if(cn && cn.length > 0){
 				//destroy everything in a few ms to avoid memory leaks
 				//remove them all and copy objs into new array
-				var els = [].slice.apply(cn, [0]);
-				$.asap(function(){
-                	for(var i=0;i<els.length;i++){
-                		cleanUpContent(els[i], kill);
-                	}	
-				});
+				$.asap(cleanUpAsap, {}, [slice.apply(cn, [0]), kill]);
             }
 			//cleanUp this node
 			if(itself) cleanUpNode(node, kill);
@@ -2030,8 +2031,12 @@ if (!window.jq || typeof (jq) !== "function") {
 		
         // Like setTimeout(fn, 0); but much faster
 		var timeouts = [];
-        $.asap = function(fn) {
+		var contexts = [];
+		var params = [];
+        $.asap = function(fn, context, args) {
             timeouts.push(fn);
+			contexts.push(context?context:{});
+			params.push(args?args:[]);
 			//post a message to ourselves so we know we have to execute a function from the stack 
             window.postMessage("jqm-asap", "*");
         }
@@ -2039,7 +2044,7 @@ if (!window.jq || typeof (jq) !== "function") {
             if (event.source == window && event.data == "jqm-asap") {
                 event.stopPropagation();
                 if (timeouts.length > 0) {	//just in case...
-                    (timeouts.shift())();
+                    (timeouts.shift()).apply(contexts.shift(), params.shift());
                 }
             }
         }, true);
@@ -2058,7 +2063,7 @@ if (!window.jq || typeof (jq) !== "function") {
     //Helper function used in jq.mobi.plugins.
     if (!window.numOnly) {
         window.numOnly = function numOnly(val) {
-			if (val===undefined) return 0;
+			if (val===undefined || val==='') return 0;
 			if ( isNaN( parseFloat(val) ) ){
 				if(val.replace){
 					val = val.replace(/[^0-9.-]/, "");
