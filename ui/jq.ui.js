@@ -1145,15 +1145,36 @@
 				//onReshape UI fixes
 				//check if focused element is within active panel
 				var jQel = $(enterEditEl);
-				var elCheck = jQel.closest(that.activeDiv);
-				if(elCheck && elCheck.size()>0){
+				var jQactive = jQel.closest(that.activeDiv);
+				if(jQactive && jQactive.size()>0){
 					if($.os.ios || $.os.chrome){
-						//TODO: calculate necessary scroll to add as padding-bottom and top
+						var paddingTop, paddingBottom;
+						if(document.body.scrollTop){
+							paddingTop=document.body.scrollTop-jQactive.offset().top;
+						} else {
+							paddingTop=0;
+						}
+						//not exact, can be a little above the actual value
+						//but we haven't found an accurate way to measure it and this is the best so far
+						paddingBottom=jQactive.offset().bottom-jQel.offset().bottom;	
+						that.scrollingDivs[that.activeDiv.id].setPaddings(paddingTop, paddingBottom);
+
 					} else if($.os.android || $.os.blackberry){
-						//TODO: scroll the panel in a way the focused element stays in view
+						var elPos = jQel.offset();
+						var containerPos = jQactive.offset();
+						if(elPos.bottom>containerPos.bottom && elPos.height<containerPos.height){
+							//apply fix
+							that.scrollingDivs[that.activeDiv.id].scrollToItem(jQel, 'bottom');
+						}
 					}
 				}
 			});
+			if($.os.ios){
+				$.bind($.touchLayer, 'exit-edit-reshape', function(){
+					that.scrollingDivs[that.activeDiv.id].setPaddings(0, 0);
+				});
+			}
+			
 			
 			
 			
