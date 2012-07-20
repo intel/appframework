@@ -203,16 +203,27 @@
 					this.removeEvents();
 				}
 			},
-			scrollToItem:function(el){	//TODO: add functionality for x position
+			scrollToItem:function(el, where){	//TODO: add functionality for x position
 				if(!$.is$(el)) el = $(el);
-				var itemTop = el.offset().top;
-				var panelTop = this.jqEl.offset().top;
-				var newTop = itemTop-document.body.scrollTop;
-				if (document.body.scrollTop<panelTop){
-					newTop -= panelTop;
+				
+				if(where=='bottom'){
+					var itemPos = el.offset();
+					var newTop = itemPos.top-this.jqEl.offset().bottom+itemPos.height;
+					newTop+=4;	//add a small space
+				} else {
+					var itemTop = el.offset().top;
+					var newTop = itemTop-document.body.scrollTop;
+					var panelTop = this.jqEl.offset().top;
+					if (document.body.scrollTop<panelTop){
+						newTop -= panelTop;
+					}
+					newTop-=4;	//add a small space
 				}
-				newTop-=4;	//add a small space
+				
 				this.scrollBy({y:newTop, x:0}, 0);	
+			},
+			setPaddings:function(top, bottom){
+				$(this.el).css('paddingTop', top+"px").css('paddingBottom', bottom+"px");
 			},
 			//freak of mathematics, but for our cases it works
 			divide:function(a, b){return b!=0 ? a/b : 0;},
@@ -285,6 +296,8 @@
 			this.cancelPropagation = false;
 			this.loggedPcentY=0;
 			this.loggedPcentX=0;
+			var that = this;
+			this.adjustScrollOverflowProxy_ = function(){that.jqEl.css('overflow', 'auto');}
 		}
         nativeScroller.prototype.enable=function (firstExecution) {
 			if(this.eventsActive) return;
@@ -415,9 +428,11 @@
 			//console.log('pcent '+this.loggedPcentY+':'+(y/(this.el.scrollHeight-this.el.clientHeight)));
 		}
 		nativeScroller.prototype.adjustScroll=function(){
+			this.jqEl.css('overflow', 'hidden');
 			this.el.scrollLeft=this.loggedPcentX*(this.el.scrollWidth-this.el.clientWidth);
 			this.el.scrollTop=this.loggedPcentY*(this.el.scrollHeight-this.el.clientHeight);
 			this.logPos(this.el.scrollLeft, this.el.scrollTop);
+			$.asap(this.adjustScrollOverflowProxy_);
 			//console.log(this.loggedPcentY+'--'+this.el.scrollTop);
 		}
 		
