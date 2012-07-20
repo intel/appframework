@@ -240,8 +240,10 @@
 						//this.log("enter edit mode");
 						$.trigger(this, 'enter-edit', [e.target]);
 						//fire / preview reshape event
-						if($.os.ios) this.fireReshapeEvent('enter-edit');
-						else this.previewReshapeEvent('enter-edit');
+						if($.os.ios) {
+							var that = this;
+							setTimeout(function(){that.fireReshapeEvent('enter-edit');}, 300);	//TODO: get accurate reading from window scrolling motion and get rid of timeout
+						} else this.previewReshapeEvent('enter-edit');
 					}
 					this.isFocused_ = true;
 				} else {
@@ -304,8 +306,10 @@
 				//do not allow scroll anymore
 				this.allowDocumentScroll_=false;
 				//fire / preview reshape event
-				if($.os.ios) this.fireReshapeEvent('exit-edit');
-				else this.previewReshapeEvent('exit-edit');
+				if($.os.ios) {
+					var that = this; 
+					setTimeout(function(){that.fireReshapeEvent('exit-edit');}, 300);	//TODO: get accurate reading from window scrolling motion and get rid of timeout
+				} else this.previewReshapeEvent('exit-edit');
 			}
 		},
 		onScroll:function(e){
