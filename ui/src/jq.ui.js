@@ -648,6 +648,13 @@
             var el = $am(id);
             if (!el)
                 return;
+            
+            var newDiv = document.createElement("div");
+            newDiv.innerHTML = content;
+            if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
+                
+             
+            
             if (el.getAttribute("js-scrolling") && el.getAttribute("js-scrolling").toLowerCase() == "yes"){
                 $.cleanUpContent(el.childNodes[0], false, true);
                 el.childNodes[0].innerHTML = content;
@@ -656,6 +663,8 @@
                 $.cleanUpContent(el, false, true);
                 el.innerHTML = content;
             }
+                
+            if($(newDiv).title) el.title = $(newDiv).title;
         },
         /**
          * Dynamically create a new panel on the fly.  It wires events, creates the scroller, applies Android fixes, etc.
@@ -671,9 +680,12 @@
             var myEl = $am(el);
             if (!myEl) {
                 var newDiv = document.createElement("div");
-                newDiv.id = el;
-                newDiv.title = title;
                 newDiv.innerHTML = content;
+                if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
+                
+                if(!newDiv.title&&title) newDiv.title = title;
+                var newId = (newDiv.id)? newDiv.id : el; //figure out the new id - either the id from the loaded div.panel or the crc32 hash
+                newDiv.id = newId;
             } else {
                 newDiv = myEl;
             }
@@ -683,7 +695,7 @@
             myEl = null;
             that.addDivAndScroll(newDiv, refresh, refreshFunc);
             newDiv = null;
-            return;
+            return newId;
         },
         /**
          *  Takes a div and sets up scrolling for it..
@@ -1263,35 +1275,49 @@
                 //window.setTimeout(function() {
                 var loadFirstDiv=function(){
                     //activeDiv = firstDiv;
-                    that.firstDiv.style.display = "block";
-                    that.css3animate(that.firstDiv, {
-                        x: "0%",
-						success:function(){
-							that.clearAnimations(that.firstDiv);
-						}
-                    });
+                    //activeDiv = firstDiv;
+                    if (defaultHash.length > 0 && that.loadDefaultHash&&defaultHash!=("#"+that.firstDiv.id)&&$(defaultHash).length>0)
+                    {
+                        that.activeDiv=$(defaultHash).get();
+                        jq("#header #backButton").css("visibility","visible");
+                        that.setBackButtonText(that.activeDiv.title)
+                        that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
+                    }
+                    else
+                        previousTarget="#"+that.activeDiv.id;
+                    
+                    that.activeDiv.style.display = "block";
+                    
+                   
                     if (that.activeDiv.title)
-                        that.titleBar.innerHTML = that.activeDiv.title;
+                        that.setTitle(that.activeDiv.title);
                     that.parsePanelFunctions(that.activeDiv);
                     //Load the default hash
-                    if (defaultHash.length > 0 && that.loadDefaultHash) 
-                    {
-                        that.loadContent(defaultHash);
-                    }
+                    
+                    that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
                     modalDiv = null;
                     maskDiv = null;
                     that.launchCompleted = true;
-                    jq(document).trigger("jq.ui.ready");
-                    $.asap(function() {
-                        // Run after the first div animation has been triggered
-                        jq("#splashscreen").remove();
-                    });
-
-                    that.defaultFooter = jq("#navbar").children();
+                    
+                   if(jq("#navbar a").length>0){
+                        jq("#navbar a").data("ignore-pressed", "true").data("resetHistory", "true");
+                        that.defaultFooter = jq("#navbar").children();
+                        that.updateNavbarElements(that.defaultFooter);
+                    }
                     var firstMenu = jq("nav").get();
-                    that.defaultMenu = jq(firstMenu).children();
-
-                    that.updateSideMenu(that.defaultMenu);
+                    if(firstMenu){
+                        that.defaultMenu = jq(firstMenu).children();
+                        that.updateSideMenu(that.defaultMenu);
+                    }
+                    that.defaultHeader = jq("#header").children();
+                    jq(document).trigger("jq.ui.ready");
+                    jq("#splashscreen").remove();
+                    jq("#navbar").on("click", "a", function(e) {
+                        jq("#navbar a").not(this).removeClass("selected");
+                        setTimeout(function() {
+                            $(e.target).addClass("selected");
+                        }, 10);
+                    });
                 };
                 if(loadingDefer){
                     $(document).one("defer:loaded",loadFirstDiv);
@@ -1426,6 +1452,7 @@
             document.documentElement.style.minHeight = window.innerHeight;
         }, 300);
     });
+
 })();
 
 

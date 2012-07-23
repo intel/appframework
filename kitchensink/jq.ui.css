@@ -883,7 +883,8 @@ select[disabled]~div {
 		-webkit-transition:none !important;
 	}
     
-}#jq_actionsheet {
+}
+#jq_actionsheet {
     position:absolute;
     left:0px;
     right:0px;

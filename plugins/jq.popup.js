@@ -94,22 +94,23 @@
                 var markup = '<div id="' + this.id + '" class="jqPopup hidden">\
 	        				<header>' + this.title + '</header>\
 	        				<div><div style="width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right"></div>' + this.message + '</div>\
-	        				<footer>\
+	        				<footer style="clear:both;">\
 	        					<a href="javascript:;" class="'+this.cancelClass+'" id="cancel">' + this.cancelText + '</a>\
 	        					<a href="javascript:;" class="'+this.doneClass+'" id="action">' + this.doneText + '</a>\
 	        				</footer>\
 	        			</div></div>';
                 $(this.container).append($(markup));
                 
-                $("#" + this.id).bind("close", function(){
+                var $el=$("#"+this.id);
+                $el.bind("close", function(){
                 	self.hide();
                 })
                 
                 if (this.cancelOnly) {
-                    $("#" + this.id).find('A#action').hide();
-                    $("#" + this.id).find('A#cancel').addClass('center');
+                    $el.find('A#action').hide();
+                    $el.find('A#cancel').addClass('center');
                 }
-                $("#" + this.id).find('A').each(function() {
+                $el.find('A').each(function() {
                     var button = $(this);
                     button.bind('click', function(e) {
                         if (button.attr('id') == 'cancel') {
@@ -125,8 +126,8 @@
                 });
                 self.positionPopup();
                 $.blockUI(0.5);
-                $('#' + self.id).removeClass('hidden');
-                $('#' + self.id).bind("orientationchange", function() {
+                $el.removeClass('hidden');
+                $el.bind("orientationchange", function() {
                     self.positionPopup();
                 });
                 
@@ -145,9 +146,11 @@
             
             remove: function() {
                 var self = this;
-                $('#' + self.id + ' BUTTON#action').unbind('click');
-                $('#' + self.id + ' BUTTON#cancel').unbind('click');
-                $('#' + self.id).unbind("orientationchange").remove();
+                var $el=$("#"+self.id);
+                $el.unbind("close");
+                $el.find('BUTTON#action').unbind('click');
+                $el.find('BUTTON#cancel').unbind('click');
+                $el.unbind("orientationchange").remove();
                 queue.splice(0, 1);
                 if (queue.length > 0)
                     queue[0].show();
@@ -187,7 +190,12 @@
      * Here we override the window.alert function due to iOS eating touch events on native alerts
      */
     window.alert = function(text) {
-        $(document.body).popup(text.toString());
+        if(text===null||text===undefined)
+            text="null";
+        if($("#jQUi").length>0)
+            $("#jQUi").popup(text.toString());
+        else
+            $(document.body).popup(text.toString());
     }
     window.confirm = function(text) {
         throw "Due to iOS eating touch events from native confirms, please use our popup plugin instead";

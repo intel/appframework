@@ -784,7 +784,8 @@ left:0px !important;
 		-webkit-transform:translate3d(0,0,0) !important;
 	}
     
-}#jq_actionsheet {
+}
+#jq_actionsheet {
     position:absolute;
     left:0px;
     right:0px;

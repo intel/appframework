@@ -38,9 +38,8 @@
             try {
                 var that = this;
                 var markStart = '<div id="jq_actionsheet"><div style="width:100%">';
-                var markEnd = '</div></div>';
+                var markEnd = '</div>';
                 var markup;
-                
                 if (typeof opts == "string") {
                     markup = $(markStart + opts +"<a href='javascript:;' class='cancel'>Cancel</a>"+markEnd);
                 } else if (typeof opts == "object") {
@@ -56,15 +55,20 @@
                     }
                 }
                 $(elID).find("#jq_actionsheet").remove();
+                $(elID).find("#jq_action_mask").remove();
                 actionsheetEl = $(elID).append(markup);
                 
                 markup.get().style.webkitTransition="all 0ms";
-                markup.css("bottom", (-(parseInt(markup.css("height")) + 10)) + "px");
+                markup.css("-webkit-transform", "translate3d(0,"+(window.innerHeight*2) + "px,0)");
                 this.el.style.overflow = "hidden";
                 markup.on("click", "a",function(){that.hideSheet()});
                 this.activeSheet=markup;
-                
-                setTimeout(function(){markup.get().style.webkitTransition="all 200ms";markup.css("bottom","0px");},10);
+                $(elID).append('<div id="jq_action_mask" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px;z-index:9998;background:rgba(0,0,0,.4)"/>');
+                setTimeout(function(){
+                    markup.get().style.webkitTransition="all 200ms";
+                    var height=window.innerHeight-parseInt(markup.css("height"));
+                    markup.css("-webkit-transform", "translate3d(0,"+(height)+"px,0)");
+                 },10);
             } catch (e) {
                 alert("error adding actionsheet" + e);
             }
@@ -74,9 +78,20 @@
             hideSheet: function() {
                 var that=this;
                 this.activeSheet.off("click","a",function(){that.hideSheet()});
-                this.activeSheet.remove();
-                this.activeSheet=null;
-                this.el.style.overflow = "none";
+                $(this.el).find("#jq_action_mask").remove();
+                this.activeSheet.get().style.webkitTransition="all 0ms";
+                var markup = this.activeSheet;
+                var theEl = this.el;
+                setTimeout(function(){
+                    
+                	markup.get().style.webkitTransition="all 500ms";
+                	markup.css("-webkit-transform", "translate3d(0,"+(window.innerHeight*2) + "px,0)");
+                	setTimeout(function(){
+		                markup.remove();
+		                markup=null;
+		                theEl.style.overflow = "none";
+	                },500);
+                },10);            
             }
         };
         return actionsheet;

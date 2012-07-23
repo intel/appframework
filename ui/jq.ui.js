@@ -1522,22 +1522,23 @@
                 var markup = '<div id="' + this.id + '" class="jqPopup hidden">\
 	        				<header>' + this.title + '</header>\
 	        				<div><div style="width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right"></div>' + this.message + '</div>\
-	        				<footer>\
+	        				<footer style="clear:both;">\
 	        					<a href="javascript:;" class="'+this.cancelClass+'" id="cancel">' + this.cancelText + '</a>\
 	        					<a href="javascript:;" class="'+this.doneClass+'" id="action">' + this.doneText + '</a>\
 	        				</footer>\
 	        			</div></div>';
                 $(this.container).append($(markup));
                 
-                $("#" + this.id).bind("close", function(){
+                var $el=$("#"+this.id);
+                $el.bind("close", function(){
                 	self.hide();
                 })
                 
                 if (this.cancelOnly) {
-                    $("#" + this.id).find('A#action').hide();
-                    $("#" + this.id).find('A#cancel').addClass('center');
+                    $el.find('A#action').hide();
+                    $el.find('A#cancel').addClass('center');
                 }
-                $("#" + this.id).find('A').each(function() {
+                $el.find('A').each(function() {
                     var button = $(this);
                     button.bind('click', function(e) {
                         if (button.attr('id') == 'cancel') {
@@ -1553,8 +1554,8 @@
                 });
                 self.positionPopup();
                 $.blockUI(0.5);
-                $('#' + self.id).removeClass('hidden');
-                $('#' + self.id).bind("orientationchange", function() {
+                $el.removeClass('hidden');
+                $el.bind("orientationchange", function() {
                     self.positionPopup();
                 });
                 
@@ -1573,9 +1574,11 @@
             
             remove: function() {
                 var self = this;
-                $('#' + self.id + ' BUTTON#action').unbind('click');
-                $('#' + self.id + ' BUTTON#cancel').unbind('click');
-                $('#' + self.id).unbind("orientationchange").remove();
+                var $el=$("#"+self.id);
+                $el.unbind("close");
+                $el.find('BUTTON#action').unbind('click');
+                $el.find('BUTTON#cancel').unbind('click');
+                $el.unbind("orientationchange").remove();
                 queue.splice(0, 1);
                 if (queue.length > 0)
                     queue[0].show();
@@ -1615,7 +1618,12 @@
      * Here we override the window.alert function due to iOS eating touch events on native alerts
      */
     window.alert = function(text) {
-        $(document.body).popup(text.toString());
+        if(text===null||text===undefined)
+            text="null";
+        if($("#jQUi").length>0)
+            $("#jQUi").popup(text.toString());
+        else
+            $(document.body).popup(text.toString());
     }
     window.confirm = function(text) {
         throw "Due to iOS eating touch events from native confirms, please use our popup plugin instead";
@@ -1661,9 +1669,8 @@
             try {
                 var that = this;
                 var markStart = '<div id="jq_actionsheet"><div style="width:100%">';
-                var markEnd = '</div></div>';
+                var markEnd = '</div>';
                 var markup;
-                
                 if (typeof opts == "string") {
                     markup = $(markStart + opts +"<a href='javascript:;' class='cancel'>Cancel</a>"+markEnd);
                 } else if (typeof opts == "object") {
@@ -1679,15 +1686,20 @@
                     }
                 }
                 $(elID).find("#jq_actionsheet").remove();
+                $(elID).find("#jq_action_mask").remove();
                 actionsheetEl = $(elID).append(markup);
                 
                 markup.get().style.webkitTransition="all 0ms";
-                markup.css("bottom", (-(parseInt(markup.css("height")) + 10)) + "px");
+                markup.css("-webkit-transform", "translate3d(0,"+(window.innerHeight*2) + "px,0)");
                 this.el.style.overflow = "hidden";
                 markup.on("click", "a",function(){that.hideSheet()});
                 this.activeSheet=markup;
-                
-                setTimeout(function(){markup.get().style.webkitTransition="all 200ms";markup.css("bottom","0px");},10);
+                $(elID).append('<div id="jq_action_mask" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px;z-index:9998;background:rgba(0,0,0,.4)"/>');
+                setTimeout(function(){
+                    markup.get().style.webkitTransition="all 200ms";
+                    var height=window.innerHeight-parseInt(markup.css("height"));
+                    markup.css("-webkit-transform", "translate3d(0,"+(height)+"px,0)");
+                 },10);
             } catch (e) {
                 alert("error adding actionsheet" + e);
             }
@@ -1697,14 +1709,26 @@
             hideSheet: function() {
                 var that=this;
                 this.activeSheet.off("click","a",function(){that.hideSheet()});
-                this.activeSheet.remove();
-                this.activeSheet=null;
-                this.el.style.overflow = "none";
+                $(this.el).find("#jq_action_mask").remove();
+                this.activeSheet.get().style.webkitTransition="all 0ms";
+                var markup = this.activeSheet;
+                var theEl = this.el;
+                setTimeout(function(){
+                    
+                	markup.get().style.webkitTransition="all 500ms";
+                	markup.css("-webkit-transform", "translate3d(0,"+(window.innerHeight*2) + "px,0)");
+                	setTimeout(function(){
+		                markup.remove();
+		                markup=null;
+		                theEl.style.overflow = "none";
+	                },500);
+                },10);            
             }
         };
         return actionsheet;
     })();
 })(jq);
+
 /*
  * jq.web.passwordBox - password box replacement for html5 mobile apps on android due to a bug with CSS3 translate3d
  * @copyright 2011 - AppMobi
@@ -3420,6 +3444,13 @@ if (!HTMLElement.prototype.unwatch) {
             var el = $am(id);
             if (!el)
                 return;
+            
+            var newDiv = document.createElement("div");
+            newDiv.innerHTML = content;
+            if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
+                
+             
+            
             if (el.getAttribute("js-scrolling") && el.getAttribute("js-scrolling").toLowerCase() == "yes"){
                 $.cleanUpContent(el.childNodes[0], false, true);
                 el.childNodes[0].innerHTML = content;
@@ -3428,6 +3459,8 @@ if (!HTMLElement.prototype.unwatch) {
                 $.cleanUpContent(el, false, true);
                 el.innerHTML = content;
             }
+                
+            if($(newDiv).title) el.title = $(newDiv).title;
         },
         /**
          * Dynamically create a new panel on the fly.  It wires events, creates the scroller, applies Android fixes, etc.
@@ -3443,9 +3476,12 @@ if (!HTMLElement.prototype.unwatch) {
             var myEl = $am(el);
             if (!myEl) {
                 var newDiv = document.createElement("div");
-                newDiv.id = el;
-                newDiv.title = title;
                 newDiv.innerHTML = content;
+                if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
+                
+                if(!newDiv.title&&title) newDiv.title = title;
+                var newId = (newDiv.id)? newDiv.id : el; //figure out the new id - either the id from the loaded div.panel or the crc32 hash
+                newDiv.id = newId;
             } else {
                 newDiv = myEl;
             }
@@ -3455,7 +3491,7 @@ if (!HTMLElement.prototype.unwatch) {
             myEl = null;
             that.addDivAndScroll(newDiv, refresh, refreshFunc);
             newDiv = null;
-            return;
+            return newId;
         },
         /**
          *  Takes a div and sets up scrolling for it..
@@ -4035,35 +4071,49 @@ if (!HTMLElement.prototype.unwatch) {
                 //window.setTimeout(function() {
                 var loadFirstDiv=function(){
                     //activeDiv = firstDiv;
-                    that.firstDiv.style.display = "block";
-                    that.css3animate(that.firstDiv, {
-                        x: "0%",
-						success:function(){
-							that.clearAnimations(that.firstDiv);
-						}
-                    });
+                    //activeDiv = firstDiv;
+                    if (defaultHash.length > 0 && that.loadDefaultHash&&defaultHash!=("#"+that.firstDiv.id)&&$(defaultHash).length>0)
+                    {
+                        that.activeDiv=$(defaultHash).get();
+                        jq("#header #backButton").css("visibility","visible");
+                        that.setBackButtonText(that.activeDiv.title)
+                        that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
+                    }
+                    else
+                        previousTarget="#"+that.activeDiv.id;
+                    
+                    that.activeDiv.style.display = "block";
+                    
+                   
                     if (that.activeDiv.title)
-                        that.titleBar.innerHTML = that.activeDiv.title;
+                        that.setTitle(that.activeDiv.title);
                     that.parsePanelFunctions(that.activeDiv);
                     //Load the default hash
-                    if (defaultHash.length > 0 && that.loadDefaultHash) 
-                    {
-                        that.loadContent(defaultHash);
-                    }
+                    
+                    that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
                     modalDiv = null;
                     maskDiv = null;
                     that.launchCompleted = true;
-                    jq(document).trigger("jq.ui.ready");
-                    $.asap(function() {
-                        // Run after the first div animation has been triggered
-                        jq("#splashscreen").remove();
-                    });
-
-                    that.defaultFooter = jq("#navbar").children();
+                    
+                   if(jq("#navbar a").length>0){
+                        jq("#navbar a").data("ignore-pressed", "true").data("resetHistory", "true");
+                        that.defaultFooter = jq("#navbar").children();
+                        that.updateNavbarElements(that.defaultFooter);
+                    }
                     var firstMenu = jq("nav").get();
-                    that.defaultMenu = jq(firstMenu).children();
-
-                    that.updateSideMenu(that.defaultMenu);
+                    if(firstMenu){
+                        that.defaultMenu = jq(firstMenu).children();
+                        that.updateSideMenu(that.defaultMenu);
+                    }
+                    that.defaultHeader = jq("#header").children();
+                    jq(document).trigger("jq.ui.ready");
+                    jq("#splashscreen").remove();
+                    jq("#navbar").on("click", "a", function(e) {
+                        jq("#navbar a").not(this).removeClass("selected");
+                        setTimeout(function() {
+                            $(e.target).addClass("selected");
+                        }, 10);
+                    });
                 };
                 if(loadingDefer){
                     $(document).one("defer:loaded",loadFirstDiv);
@@ -4198,6 +4248,7 @@ if (!HTMLElement.prototype.unwatch) {
             document.documentElement.style.minHeight = window.innerHeight;
         }, 300);
     });
+
 })();
 
 

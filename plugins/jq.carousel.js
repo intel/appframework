@@ -175,7 +175,7 @@
                     this.dy += this.cssMoveStart;
                     movePos.y = this.dy;
                     e.preventDefault();
-                    e.stopPropagation();
+                    //e.stopPropagation();
                 } else {
                     if (!this.lockMove&&isHorizontalSwipe(rawDelta.x, rawDelta.y)) {
                          
@@ -183,7 +183,7 @@
                         this.dx = e.touches[0].pageX - this.startX;
                         this.dx += this.cssMoveStart;
                         e.preventDefault();
-                        e.stopPropagation();
+                      //  e.stopPropagation();
                         movePos.x = this.dx;
                     }
                     else
@@ -370,7 +370,7 @@
                         var pagingEl = document.createElement("div");
                         pagingEl.id = this.container.id + "_" + i;
                         pagingEl.pageId = i;
-                        if (i !== 0) {
+                        if (i !== this.carouselIndex) {
                             pagingEl.className = this.pagingCssName;
                         } 
                         else {
