@@ -2822,10 +2822,9 @@
             var theTarget = e.target;
             if (theTarget.nodeType == 3)
                 theTarget = theTarget.parentNode;
-            
             if(closeField)
                 clearTimeout(closeField),closeField=null;
-            if(prevField){
+            if(prevField&&jq.os.android&&$.ui.fixAndroidInputs){
                 prevField=null;
                 var field = document.createElement('input');
                 field.setAttribute('type', 'text');
@@ -2840,6 +2839,10 @@
                     }, 50);
                 }, 350);
             }
+            if(prevField)
+            {
+                prevField.blur(),prevField=null;
+            }
            
             if(prevPanel){
                 //prevField.blur();
@@ -2852,9 +2855,8 @@
             var tagname = theTarget.tagName.toLowerCase();
             var type=theTarget.type||"";
             if((tagname=="a"&& theTarget.href.indexOf("tel:")===0)||((tagname=="input")||tagname=="textarea"||tagname=="select")&&type!="checkbox"&&type!="radio"){
-                
+                prevField=theTarget;
                 if(jq.os.android&&$.ui.fixAndroidInputs){
-                    prevField=theTarget;
                     theTarget.focus();
                     //prevField=theTarget;
                     prevPanel=$(theTarget).closest(".panel");
@@ -2864,7 +2866,6 @@
                     prevPanel.css("position","absolute");
                     return;
                 }
-                
             }
             else
                 e.preventDefault();
