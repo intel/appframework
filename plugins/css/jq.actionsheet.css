@@ -8,7 +8,7 @@
     margin:auto;
     background:black;
     float:left;
-    z-index:1000;
+    z-index:9999;
     border-top:#fff 1px solid;
     background:rgba(71,71,71,.95);
     background-image:-webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,.4)), to(rgba(255,255,255,0)), color-stop(.08,rgba(255,255,255,.1)), color-stop(.08,rgba(255,255,255,0)));

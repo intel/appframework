@@ -1,4 +1,2800 @@
 /**
+ * jq.web.css3Animate - css3 animate class for html5 mobile apps
+ * @copyright 2011 - AppMobi
+ */ 
+(function ($) {
+	var cache = [];
+	var objId=function(obj){
+		if(!obj.jqmCSS3AnimateId) obj.jqmCSS3AnimateId=$.uuid();
+		return obj.jqmCSS3AnimateId;
+	}
+	var getEl=function(elID){
+        if (typeof elID == "string" || elID instanceof String) {
+            return document.getElementById(elID);
+        } else if($.is$(elID)){
+        	return elID[0];
+        } else {
+            return elID;
+        }
+	}
+	var getCSS3Animate=function(obj, options){
+        var tmp, id, el = getEl(obj);
+		//first one
+		id = objId(el);
+		if(cache[id]){
+			cache[id].animate(options);
+			tmp = cache[id];
+		} else {
+			tmp = css3Animate(el, options);
+			cache[id] = tmp;
+		}
+		return tmp;
+	}
+    $.fn["css3Animate"] = function (opts) {
+		//keep old callback system - backwards compatibility - should be deprecated in future versions
+		if(!opts.complete && opts.callback) opts.complete = opts.callback;
+        //first on
+		var tmp = getCSS3Animate(this[0], opts);
+		opts.complete=null;
+		opts.sucess=null;
+		opts.failure=null;
+        for (var i = 1; i < this.length; i++) {
+            tmp.link(this[i], opts);
+        }
+        return tmp;
+    };
+	
+
+    $["css3AnimateQueue"] = function () {
+        return new css3Animate.queue();
+    }
+    if (!window.WebKitCSSMatrix) return;
+    var translateOpen = 'm11' in new WebKitCSSMatrix() ? "3d(" : "(";
+    var translateClose = 'm11' in new WebKitCSSMatrix() ? ",0)" : ")";
+	
+	var css3Animate = (function () {
+		
+	    var css3Animate = function (elID, options) {
+			if(!(this instanceof css3Animate)) return new css3Animate(elID, options);
+			
+			//start doing stuff
+			this.callbacksStack = [];
+			this.activeEvent = null;
+			this.countStack = 0;
+			this.isActive = false;
+			this.el = elID;
+			this.linkFinishedProxy_ = $.proxy(this.linkFinished, this);
+			
+	        if (!this.el) return;
+			
+			this.animate(options);
+			
+			var that = this;
+			jq(this.el).bind('destroy', function(){
+				var id = that.el.jqmCSS3AnimateId;
+				that.callbacksStack = [];
+				if(cache[id]) delete cache[id];
+			});
+	    };
+
+	    css3Animate.prototype = {
+			animate:function(options){
+				
+				//cancel current active animation on this object
+				if(this.isActive) this.cancel();
+				this.isActive = true;
+				
+		        if (!options) {
+		            alert("Please provide configuration options for animation of " + this.el.id);
+		            return;
+		        }
+			
+				var classMode = !!options["addClass"];
+			
+	            if(classMode){
+	            	//class defines properties being changed
+					if(options["removeClass"]){
+						jq(this.el).replaceClass(options["removeClass"], options["addClass"]);
+					} else {
+						jq(this.el).addClass(options["addClass"]);
+					}
+				
+	            } else {
+	            	//property by property
+					var timeNum = numOnly(options["time"]);
+					if(timeNum==0) options["time"]=0;
+				
+			        if (!options["y"]) options["y"] = 0;
+			        if (!options["x"]) options["x"] = 0;
+			        if (options["previous"]) {
+						var cssMatrix = new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform);
+			            options.y += numOnly(cssMatrix.f);
+			            options.x += numOnly(cssMatrix.e);
+			        }
+			        if (!options["origin"]) options.origin = "0% 0%";
+
+			        if (!options["scale"]) options.scale = "1";
+
+			        if (!options["rotateY"]) options.rotateY = "0";
+			        if (!options["rotateX"]) options.rotateX = "0";
+			        if (!options["skewY"]) options.skewY = "0";
+			        if (!options["skewX"]) options.skewX = "0";
+
+			        if (!options["timingFunction"]) options["timingFunction"] = "linear";
+
+			        //check for percent or numbers
+			        if (typeof (options.x) == "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x) + "px";
+			        if (typeof (options.y) == "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y) + "px";
+					
+			        this.el.style.webkitTransform = "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ") rotateY(" + options.rotateY + ") skew(" + options.skewX + "," + options.skewY + ")";
+			        this.el.style.webkitBackfaceVisiblity = "hidden";
+					var properties = "-webkit-transform";
+			        if (options["opacity"]!==undefined) {
+			            this.el.style.opacity = options["opacity"];
+						properties+=", opacity";
+			        }
+			        if (options["width"]) {
+			            this.el.style.width = options["width"];
+						properties = "all";
+			        }
+			        if (options["height"]) {
+			            this.el.style.height = options["height"];
+						properties = "all";
+			        }
+					this.el.style.webkitTransitionProperty = properties;
+				
+					if((""+options["time"]).indexOf("s")===-1) {
+						var scale = 'ms';
+						var time = options["time"]+scale;
+					} else if(options["time"].indexOf("ms")!==-1){
+						var scale = 'ms';
+						var time = options["time"];
+					} else {
+						var scale = 's';
+						var time = options["time"]+scale;
+					}
+			
+					this.el.style.webkitTransitionDuration = time;
+					this.el.style.webkitTransitionTimingFunction = options["timingFunction"];
+			        this.el.style.webkitTransformOrigin = options.origin;
+	            }
+
+				//add callback to the stack
+				
+				this.callbacksStack.push({
+					complete : options["complete"],
+					success : options["success"],
+					failure : options["failure"]
+				});
+				this.countStack++;
+			
+				var that = this;
+				var style = window.getComputedStyle(this.el);
+				if(classMode){
+					//get the duration
+					var duration = style.webkitTransitionDuration;
+					var timeNum = numOnly(duration);
+					if(duration.indexOf("ms")!==-1){
+						var scale = 'ms';
+					} else {
+						var scale = 's';
+					}
+				}
+				
+				//finish asap
+				if(timeNum==0 || (scale=='ms' && timeNum<5) || style.display=='none'){
+					//the duration is nearly 0 or the element is not displayed, finish immediatly
+					$.asap($.proxy(this.finishAnimation, this, [false]));
+					//set transitionend event
+				} else {
+					//setup the event normally
+					this.activeEvent = function(event){
+						that.finishAnimation(event);
+						that.el.removeEventListener("webkitTransitionEnd", that.activeEvent, false);
+					};
+					this.el.addEventListener("webkitTransitionEnd", this.activeEvent, false);
+				}
+			
+			},
+			addCallbackHook:function(callback){
+				if(callback) this.callbacksStack.push(callback);
+				this.countStack++;
+				return this.linkFinishedProxy_;
+			},
+			linkFinished:function(canceled){
+				if(canceled) this.cancel();
+				else this.finishAnimation();
+			},
+	        finishAnimation: function (event) {
+	            if(event) event.preventDefault();
+				if(!this.isActive) return;
+				
+				this.countStack--;
+				
+	            if(this.countStack==0) this.fireCallbacks(false);
+	        },
+			fireCallbacks:function(canceled){
+				this.clearEvents();
+				
+				//keep callbacks after cleanup
+				// (if any of the callbacks overrides this object, callbacks will keep on fire as expected)
+				var callbacks = this.callbacksStack;
+				
+				//cleanup
+				this.cleanup();
+				
+				//fire all callbacks
+				for(var i=0; i<callbacks.length; i++) {
+					var complete = callbacks[i]['complete'];
+					var success = callbacks[i]['success'];
+					var failure = callbacks[i]['failure'];
+					//fire callbacks
+	                if(complete && typeof (complete == "function")) complete(canceled);
+					//success/failure
+					if(canceled && failure && typeof (failure == "function")) failure();
+					else if(success && typeof (success == "function")) success();
+				}
+			},
+			cancel:function(){
+				if(!this.isActive) return;
+				this.fireCallbacks(true); //fire failure callbacks
+			},
+			cleanup:function(){
+				this.callbacksStack=[];
+				this.isActive = false;
+				this.countStack = 0;
+			},
+			clearEvents:function(){
+				if(this.activeEvent) {
+					this.el.removeEventListener("webkitTransitionEnd", this.activeEvent, false);
+				}
+				this.activeEvent = null;
+			},
+	        link: function (elID, opts) {
+				var callbacks = {complete:opts.complete,success:opts.success,failure:opts.failure};
+				opts.complete = this.addCallbackHook(callbacks);
+				opts.success = null;
+				opts.failure = null;
+				//run the animation with the replaced callbacks
+				getCSS3Animate(elID, opts);
+				//set the old callback back in the obj to avoid strange stuff
+				opts.complete = callbacks.complete;
+				opts.success = callbacks.success;
+				opts.failure = callbacks.failure;
+				return this;
+	        }
+	    }
+		
+		// var tmp = new $.css3AnimateQueue();
+		// tmp.push({id:"animate",x:20,y:30,time:"300ms"});
+		// tmp.push({id:"animate",x:20,y:30,time:"500ms",previous:true});
+		// tmp.push({id:"animate",x:0,y:0,time:"0ms"});
+		// tmp.push({id:"animate",x:20,y:30,time:"300ms"});
+		// tmp.push({id:"animate",x:20,y:30,time:"500ms",previous:true});
+		// tmp.push(function(){reset()});
+		// tmp.run();
+		
+		//uncomment for performance debug
+		//css3Animate = $.debug.type(css3Animate, 'css3Animate');
+		
+		
+        return css3Animate;
+    })();
+
+    css3Animate.queue = function () {
+        return {
+            elements: [],
+            push: function (el) {
+                this.elements.push(el);
+            },
+            pop: function () {
+                return this.elements.pop();
+            },
+            run: function () {
+                var that = this;
+                if (this.elements.length == 0) return;
+                if (typeof (this.elements[0]) == "function") {
+                    var func = this.shift();
+                    func();
+                }
+                if (this.elements.length == 0) return;
+                var params = this.shift();
+                if (this.elements.length > 0) params.complete = function (canceled) {
+                    if(!canceled) that.run();
+                };
+                css3Animate(params.id, params);
+            },
+            shift: function () {
+                return this.elements.shift();
+            }
+        }
+    };
+})(jq);
+
+/**
+ * jq.scroller - rewritten by Carlos Ouro @ Badoo
+ * Supports iOS native touch scrolling and a much improved javascript scroller
+ */ 
+ (function($) {
+ 	var HIDE_REFRESH_TIME = 75; // hide animation of pull2ref duration in ms
+
+    var cache = [];
+	var objId=function(obj){
+		if(!obj.jqmScrollerId) obj.jqmScrollerId=$.uuid();
+		return obj.jqmScrollerId;
+	}
+    $.fn["scroller"] = function(opts) {
+        var tmp, id;
+        for (var i = 0; i < this.length; i++) {
+			//cache system
+			id = objId(this[i]);
+			if(!cache[id]){
+				if(!opts) opts = {};
+				if(!$.feat.nativeTouchScroll) opts.useJsScroll = true;
+				tmp = scroller(this[i], opts);
+				cache[id] = tmp;
+			} else {
+				tmp = cache[id];
+			}
+        }
+        return this.length == 1 ? tmp : this;
+    };
+	var boundTouchLayer = false;
+	function checkConsistency(id){
+		if(!cache[id].el) {
+			delete cache[id];
+			return false;
+		}
+		return true;
+	}
+	
+	function bindTouchLayer(){
+		//use a single bind for all scrollers
+		if(jq.os.android && !jq.os.chrome) {
+			var androidFixOn = false;
+			//connect to touchLayer to detect editMode
+			$.bind($.touchLayer, 'pre-enter-edit', function(focusEl){
+				if(!androidFixOn){
+					console.log("deploying forms scroll android fix"); // @debug
+					androidFixOn = true;
+					//activate on scroller
+				 	for(el in cache)
+						if(checkConsistency(el) && cache[el].needsFormsFix(focusEl)) cache[el].startFormsMode();
+				}
+			});
+			$.bind($.touchLayer, ['cancel-enter-edit', 'exit-edit'], function(focusEl){
+				if(androidFixOn){
+					console.log("removing forms scroll android fix"); // @debug
+					androidFixOn = false;
+					//dehactivate on scroller
+				 	for(el in cache)
+						if(checkConsistency(el) && cache[el].androidFormsMode) cache[el].stopFormsMode();
+				}
+			});
+		}
+		boundTouchLayer = true;
+	}
+    var scroller = (function() {
+        if (!window.WebKitCSSMatrix)
+            return;
+		var allows3D = 'm11' in new WebKitCSSMatrix();
+        var translateOpen = allows3D ? "3d(" : "(";
+        var translateClose = allows3D ? ",0)" : ")";
+		var jsScroller, nativeScroller;
+		
+		//initialize and js/native mode selector
+        var scroller = function(elID, opts) {
+            
+			if(!boundTouchLayer && $.touchLayer && $.isObject($.touchLayer)) bindTouchLayer();
+			
+            if (typeof elID == "string" || elID instanceof String) {
+                var el = document.getElementById(elID);
+            } else {
+                var el = elID;
+            }
+            if (!el) {
+                alert("Could not find element for scroller " + elID);
+                return;
+            }
+            
+            if(opts.useJsScroll) return new jsScroller(el, opts);
+			return new nativeScroller(el, opts);
+        
+        };
+		
+		//parent abstract class (common functionality)
+        var scrollerCore = function() {};
+		scrollerCore.prototype = {
+			//core default properties
+			refresh:false,
+			refreshHangTimeout:2000,
+			refreshHeight:60,
+			refreshElement:null,
+			refreshCancelCB:null,
+            refreshRunning:false,
+			scrollTop:0,
+			scrollLeft:0,
+			preventHideRefresh:true,
+            verticalScroll: true,
+            horizontalScroll: false,
+			refreshTriggered: false,
+			moved : false,
+			eventsActive:false,
+			rememberEventsActive:false,
+			scrollingLocked:false,
+			autoEnable:true,
+			blockFormsFix:false,
+			loggedPcentY: 0,
+			loggedPcentX: 0,
+			
+			//methods
+			init:function(el, opts) {
+				this.el = el;
+				this.jqEl = $(this.el);
+				this.defaultProperties();
+	            for (j in opts) {
+	                this[j] = opts[j];
+	            }
+				//assign self destruct
+				var that = this;
+				var orientationChangeProxy = function(){
+					//no need to readjust if disabled...
+					if(that.eventsActive) that.adjustScroll();
+				}
+				this.jqEl.bind('destroy', function(){
+					that.disable(true);	//with destroy notice
+					var id = that.el.jqmScrollerId;
+					if(cache[id]) delete cache[id];
+					$.unbind($.touchLayer, 'orientationchange-reshape', orientationChangeProxy);
+				});
+				$.bind($.touchLayer, 'orientationchange-reshape', orientationChangeProxy);
+	        },
+			needsFormsFix:function(focusEl){
+				return this.useJsScroll && this.isEnabled() && this.el.style.display!="none" && $(focusEl).closest(this.jqEl).size()>0;
+			},
+			handleEvent : function(e){
+				if(!this.scrollingLocked){
+		    		switch(e.type) {
+						case 'touchstart': 
+							this.preventHideRefresh = !this.refreshRunning; // if it's not running why prevent it xD
+							this.moved = false;
+							this.onTouchStart(e); 
+						break;
+						case 'touchmove': this.onTouchMove(e); break;
+						case 'touchend': this.onTouchEnd(e); break;
+						case 'scroll': this.onScroll(e); break;
+		    		}
+				}
+			},
+			coreAddPullToRefresh : function(rEl){
+				if(rEl) this.refreshElement=rEl; 
+	            //Add the pull to refresh text.  Not optimal but keeps from others overwriting the content and worrying about italics
+                //add the refresh div
+				
+				if(this.refreshElement==null){
+					var orginalEl = document.getElementById(this.container.id + "_pulldown");
+					if(orginalEl!=null){
+						var jqEl = jq(orginalEl);
+					} else {
+						var jqEl = jq("<div id='" + this.container.id + "_pulldown' class='jqscroll_refresh' style='border-radius:.6em;border: 1px solid #2A2A2A;background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#666666),color-stop(1,#222222));background:#222222;margin:0px;height:60px;position:relative;text-align:center;line-height:60px;color:white;width:100%;'>Pull to Refresh</div>");
+					}
+				} else {
+					var jqEl = jq(this.refreshElement);
+				}
+				var el = jqEl.get();
+					
+				this.refreshContainer = jq("<div style=\"overflow:hidden;width:100%;height:0;margin:0;padding:0;padding-left:5px;padding-right:5px;\"></div>");
+                $(this.el).prepend(this.refreshContainer.append(el, 'top'));
+				this.refreshContainer = this.refreshContainer[0];
+			},
+			fireRefreshRelease:function(triggered, allowHide){
+				if(!this.refresh) return;
+				var autoCancel = $.trigger(this, 'refresh-release', [triggered])!==false;
+				this.preventHideRefresh = false;
+                this.refreshRunning = true;
+				if(!triggered){
+					if(allowHide){
+					    this.hideRefresh();
+					}
+				} else if(autoCancel) {
+					var that = this;
+					if(this.refreshHangTimeout>0) this.refreshCancelCB = setTimeout(function(){that.hideRefresh()}, this.refreshHangTimeout);
+	            }
+			},
+			lock:function(){
+				if(this.scrollingLocked) return;
+				this.scrollingLocked=true;
+				this.rememberEventsActive = this.eventsActive;
+				if(!this.eventsActive){
+					this.initEvents();
+				}
+			},
+			unlock:function(){
+				if(!this.scrollingLocked) return;
+				this.scrollingLocked=false;
+				if(!this.rememberEventsActive){
+					this.removeEvents();
+				}
+			},
+			scrollToItem:function(el, where){	//TODO: add functionality for x position
+				if(!$.is$(el)) el = $(el);
+				
+				if(where=='bottom'){
+					var itemPos = el.offset();
+					var newTop = itemPos.top-this.jqEl.offset().bottom+itemPos.height;
+					newTop+=4;	//add a small space
+				} else {
+					var itemTop = el.offset().top;
+					var newTop = itemTop-document.body.scrollTop;
+					var panelTop = this.jqEl.offset().top;
+					if (document.body.scrollTop<panelTop){
+						newTop -= panelTop;
+					}
+					newTop-=4;	//add a small space
+				}
+				
+				this.scrollBy({y:newTop, x:0}, 0);	
+			},
+			setPaddings:function(top, bottom){
+				$(this.el).css('paddingTop', top+"px").css('paddingBottom', bottom+"px");
+			},
+			//freak of mathematics, but for our cases it works
+			divide:function(a, b){return b!=0 ? a/b : 0;},
+			isEnabled:function(){return this.eventsActive;}
+		}
+		
+		//extend to jsScroller and nativeScroller (constructs)
+		jsScroller = function(el, opts){
+			this.init(el, opts);
+			//test
+			//this.refresh=true;
+			
+            this.container = this.el.parentNode;
+			this.container.jqmScrollerId = el.jqmScrollerId;
+			this.jqEl = $(this.container);
+			
+			if(this.container.style.overflow != 'hidden' && this.container.style.overflow != 'visible') this.container.style.overflow = 'hidden';
+
+			this.addPullToRefresh(null, true);
+            if(this.autoEnable) this.enable(true);
+                
+            //create vertical scroll
+            if (this.verticalScroll && this.verticalScroll == true && this.scrollBars == true) {
+                var scrollDiv = createScrollBar(5, 20);
+                scrollDiv.style.top = "0px";
+                if (this.vScrollCSS)
+                    scrollDiv.className = this.vScrollCSS;
+                scrollDiv.style.opacity = "0";
+                this.container.appendChild(scrollDiv);
+                this.vscrollBar = scrollDiv;
+                scrollDiv = null;
+            }
+			//create horizontal scroll
+            if (this.horizontalScroll && this.horizontalScroll == true && this.scrollBars == true) {
+                var scrollDiv = createScrollBar(20, 5);
+                scrollDiv.style.bottom = "0px";
+                    
+                if (this.hScrollCSS)
+                    scrollDiv.className = this.hScrollCSS;
+                scrollDiv.style.opacity = "0";
+                this.container.appendChild(scrollDiv);
+                this.hscrollBar = scrollDiv;
+                scrollDiv = null;
+            }
+            if (this.horizontalScroll)
+                this.el.style['float'] = "left";
+					
+            this.el.hasScroller=true;
+            
+		};
+		nativeScroller = function(el, opts){
+			this.init(el, opts);
+			//test
+			//this.refresh=true;
+
+			this.container = this.el;
+			this.addPullToRefresh(null, true);
+			if(this.autoEnable) this.enable();
+		}
+		nativeScroller.prototype = new scrollerCore();
+		jsScroller.prototype = new scrollerCore();
+		
+		
+		
+		///Native scroller
+		nativeScroller.prototype.defaultProperties = function(){
+
+			this.refreshContainer=null;
+			this.dY = this.cY = 0;
+			this.cancelPropagation = false;
+			this.loggedPcentY=0;
+			this.loggedPcentX=0;
+			var that = this;
+			this.adjustScrollOverflowProxy_ = function(){that.jqEl.css('overflow', 'auto');}
+		}
+        nativeScroller.prototype.enable=function (firstExecution) {
+			if(this.eventsActive) return;
+			this.eventsActive = true;
+			//unlock overflow
+			this.el.style.overflow='auto';
+			//set current scroll
+			if(!firstExecution) this.adjustScroll();
+			//set events
+            if(this.refresh) this.el.addEventListener('touchstart', this, false);
+			this.el.addEventListener('scroll', this, false);
+        }
+        nativeScroller.prototype.disable=function (destroy) {
+			if(!this.eventsActive) return;
+			//log current scroll
+			this.logPos(this.el.scrollLeft, this.el.scrollTop);
+			//lock overflow
+			if(!destroy) this.el.style.overflow='hidden';
+			//remove events
+            this.el.removeEventListener('touchstart', this, false);
+			this.el.removeEventListener('scroll', this, false);
+			this.eventsActive = false;
+        }
+		nativeScroller.prototype.addPullToRefresh=function(el, leaveRefresh){
+			if(!leaveRefresh) this.refresh = true;
+            if (this.refresh && this.refresh == true) {
+	        	this.coreAddPullToRefresh(el);
+            }
+		}
+        nativeScroller.prototype.onTouchStart=function (e) {
+			if(this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
+			//get refresh ready
+			if(this.refresh&&this.el.scrollTop==0){
+				this.refreshHeight = this.refreshContainer.firstChild.clientHeight;
+				this.el.addEventListener('touchmove', this, false);
+	            this.dY = e.touches[0].pageY;
+			}
+        }
+        nativeScroller.prototype.onTouchMove=function (e) {
+			
+			var newcY = e.touches[0].pageY - this.dY;
+			if(!this.moved&&newcY<0){
+				//forget about it
+				this.el.removeEventListener('touchmove', this, false);
+				this.el.removeEventListener('touchend', this, false);
+				return;
+			}
+			
+			if(!this.moved && newcY>0){
+				//lets set pull to refresh stuff in place
+				this.scrollTo({y:this.refreshHeight,x:this.scrollLeft});
+				this.refreshContainer.style.height=this.refreshHeight+'px';
+				this.el.addEventListener('touchend', this, false);
+				this.moved=true;
+			}
+			var difY = newcY-this.cY;
+			//check for trigger
+			if(!this.refreshTriggered && (this.scrollTop-difY)<=0){
+				this.refreshTriggered = true;
+				$.trigger(this, 'refresh-trigger');
+			//check for cancel
+			} else if(this.refreshTriggered && (this.scrollTop-difY)>0){
+				this.refreshTriggered = false;
+				$.trigger(this, 'refresh-cancel');
+			}
+			
+			this.cY = newcY;
+			//e.stopPropagation();
+        }
+        nativeScroller.prototype.onTouchEnd=function (e) {
+			var triggered = this.el.scrollTop<=0;
+            this.fireRefreshRelease(triggered, true);
+			
+			this.dY = this.cY = 0;
+			this.el.removeEventListener('touchmove', this, false);
+			this.el.removeEventListener('touchend', this, false);
+			//e.stopPropagation();
+        }
+		nativeScroller.prototype.hideRefresh=function(animate){
+			if(this.preventHideRefresh) return;
+			
+			var that = this;
+			var endAnimationCb = function(canceled){
+					if(!canceled){	//not sure if this should be the correct logic....
+						that.el.style.webkitTransform="none";
+						that.el.style.webkitTransitionProperty="none";
+						that.el.scrollTop=0;
+						that.logPos(that.el.scrollLeft, 0);
+					}
+					that.refreshContainer.style.height='0';
+					that.dY = that.cY = 0;
+			};
+
+			if (animate === false) {
+				endAnimationCb();
+			} else {
+				that.jqEl.css3Animate({
+	                y: (that.el.scrollTop-that.refreshHeight)+"px",
+	                x: "0%",
+	                time: HIDE_REFRESH_TIME + "ms",
+					complete: endAnimationCb
+	            });
+			}
+			
+			this.refreshTriggered=false;
+			//this.el.addEventListener('touchend', this, false);
+		}
+        nativeScroller.prototype.hideScrollbars=function() {}
+        nativeScroller.prototype.scrollTo=function(pos) {
+			this.el.scrollTop=-(pos.y);
+            this.el.scrollLeft=-(pos.x);
+			this.logPos(this.el.scrollLeft, this.el.scrollTop);
+        }
+        nativeScroller.prototype.scrollBy=function(pos) {
+            this.el.scrollTop+=pos.y;
+            this.el.scrollLeft+=pos.x;
+			this.logPos(this.el.scrollLeft, this.el.scrollTop);
+        }
+        nativeScroller.prototype.onScroll=function(e) {
+			//console.log('scroll '+this.el.scrollTop);
+			this.logPos(this.el.scrollLeft, this.el.scrollTop);
+        }
+		nativeScroller.prototype.logPos=function(x,y){
+			this.loggedPcentX = this.divide(x, (this.el.scrollWidth-this.el.clientWidth));
+			this.loggedPcentY = this.divide(y, (this.el.scrollHeight-this.el.clientHeight));
+			this.scrollLeft = x;
+			this.scrollTop = y;
+			//console.log('pcent '+this.loggedPcentY+':'+(y/(this.el.scrollHeight-this.el.clientHeight)));
+		}
+		nativeScroller.prototype.adjustScroll=function(){
+			this.jqEl.css('overflow', 'hidden');
+			this.el.scrollLeft=this.loggedPcentX*(this.el.scrollWidth-this.el.clientWidth);
+			this.el.scrollTop=this.loggedPcentY*(this.el.scrollHeight-this.el.clientHeight);
+			this.logPos(this.el.scrollLeft, this.el.scrollTop);
+			$.asap(this.adjustScrollOverflowProxy_);
+			//console.log(this.loggedPcentY+'--'+this.el.scrollTop);
+		}
+		
+		
+		
+		
+		
+		//JS scroller
+		jsScroller.prototype.defaultProperties = function(){
+
+            this.boolScrollLock=false;
+            this.currentScrollingObject=null;
+			this.elementInfo = null;
+            this.verticalScroll=true;
+            this.horizontalScroll=false;
+            this.scrollBars=true;
+            this.vscrollBar=null;
+            this.hscrollBar=null;
+            this.hScrollCSS="scrollBar";
+            this.vScrollCSS="scrollBar";
+			this.firstEventInfo=null;
+			this.moved=false;
+			this.preventPullToRefresh = true;
+			this.doScrollInterval = null;
+			this.refreshRate = 25;
+			this.isScrolling=false;
+			this.androidFormsMode = false;
+			this.refreshSafeKeep = false;
+
+            this.lastScrollbar="";
+            this.finishScrollingObject=null;
+            this.container=null;
+            this.scrollingFinishCB=null;
+			this.loggedPcentY=0;
+			this.loggedPcentX=0;
+			
+		}
+        
+        function createScrollBar(width, height) {
+            var scrollDiv = document.createElement("div");
+            scrollDiv.style.position = 'absolute';
+            scrollDiv.style.width = width + "px";
+            scrollDiv.style.height = height + "px";
+            scrollDiv.style.webkitBorderRadius = "2px";
+            scrollDiv.style.opacity = 0;
+            scrollDiv.className = 'scrollBar';
+            scrollDiv.style.background = "black";
+            return scrollDiv;
+        }
+        jsScroller.prototype.enable=function (firstExecution) {
+			if(this.eventsActive) return;
+			this.eventsActive = true;
+			if(!firstExecution) this.adjustScroll();
+			//add listeners
+    		this.container.addEventListener('touchstart', this, false);
+            this.container.addEventListener('touchmove', this, false);
+			this.container.addEventListener('touchend', this, false);
+			
+        }
+		jsScroller.prototype.adjustScroll=function(){
+			//set top/left
+			var size = this.getViewportSize();
+			//console.log('adjust '+this.loggedPcentY+':'+(this.el.clientHeight-size.h));
+			this.scrollerMoveCSS({
+				x:Math.round(this.loggedPcentX*(this.el.clientWidth-size.w)),
+				y:Math.round(this.loggedPcentY*(this.el.clientHeight-size.h))
+			}, 0);
+		}
+        jsScroller.prototype.disable=function () {
+			if(!this.eventsActive) return;
+			//log top/left
+			var cssMatrix = this.getCSSMatrix(this.el);
+			//console.log('disable');
+			this.logPos((numOnly(cssMatrix.e) - numOnly(this.container.scrollLeft)), (numOnly(cssMatrix.f) - numOnly(this.container.scrollTop)));
+			//remove event listeners
+        	this.container.removeEventListener('touchstart', this, false);
+            this.container.removeEventListener('touchmove', this, false);
+			this.container.removeEventListener('touchend', this, false);
+			this.eventsActive = false;
+        }
+		jsScroller.prototype.addPullToRefresh=function(el, leaveRefresh){
+			if(!leaveRefresh) this.refresh = true;
+            if (this.refresh && this.refresh == true) {
+	                this.coreAddPullToRefresh(el);
+					this.el.style.overflow='visible';
+            }
+		}
+        jsScroller.prototype.hideScrollbars=function() {
+            if (this.hscrollBar)
+            {
+                this.hscrollBar.style.opacity = 0
+                this.hscrollBar.style.webkitTransitionDuration = "0ms";
+            }
+            if (this.vscrollBar){
+                this.vscrollBar.style.opacity = 0
+                this.vscrollBar.style.webkitTransitionDuration = "0ms";
+            }
+        }
+		jsScroller.prototype.getViewportSize=function(){
+			var style = window.getComputedStyle(this.container);
+			if(isNaN(numOnly(style.paddingTop))) alert((typeof style.paddingTop)+'::'+style.paddingTop+':');
+			return {
+				h:(this.container.clientHeight > window.innerHeight ? window.innerHeight : this.container.clientHeight-numOnly(style.paddingTop)-numOnly(style.paddingBottom)),
+				w:(this.container.clientWidth > window.innerWidth ? window.innerWidth : this.container.clientWidth-numOnly(style.paddingLeft)-numOnly(style.paddingRight))
+			};
+		}
+		
+        jsScroller.prototype.onTouchStart=function(event) {
+			
+			this.moved = false;
+			this.currentScrollingObject = null;
+			
+			if (!this.container)
+                return;
+			if(this.refreshCancelCB) {
+				clearTimeout(this.refreshCancelCB);
+				this.refreshCancelCB = null;
+			}
+            if(this.scrollingFinishCB) {
+				clearTimeout(this.scrollingFinishCB);
+				this.scrollingFinishCB=null;
+			}
+			if(this.doScrollInterval) {
+				clearInterval(this.doScrollInterval);
+				this.doScrollInterval=null;
+			}
+			
+			//disable if locked
+			if(event.touches.length != 1 || this.boolScrollLock) return;
+			
+            // Allow interaction to legit calls, like select boxes, etc.
+            if (event.touches[0].target && event.touches[0].target.type != undefined) {
+                var tagname = event.touches[0].target.tagName.toLowerCase();
+                if (tagname == "select" || tagname == "input" || tagname == "button") // stuff we need to allow
+                    // access to legit calls
+                    return;
+            }
+
+			//default variables
+			var scrollInfo = {
+				//current position
+				top:0,
+				left:0,
+				//current movement
+				speedY:0,
+				speedX:0,
+				absSpeedY:0,
+				absSpeedX:0,
+				deltaY:0,
+				deltaX:0,
+				absDeltaY:0,
+				absDeltaX:0,
+				y:0,
+				x:0,
+				duration:0
+            };
+			
+			//element info
+			this.elementInfo = {};
+			var size = this.getViewportSize();
+			this.elementInfo.bottomMargin 	= size.h;
+			this.elementInfo.maxTop 		= (this.el.clientHeight - this.elementInfo.bottomMargin);
+			if(this.elementInfo.maxTop<0) this.elementInfo.maxTop = 0;
+			this.elementInfo.divHeight  	= this.el.clientHeight;
+	        this.elementInfo.rightMargin 	= size.w;
+	        this.elementInfo.maxLeft 		= (this.el.clientWidth - this.elementInfo.rightMargin);
+			if(this.elementInfo.maxLeft<0) this.elementInfo.maxLeft = 0;
+	        this.elementInfo.divWidth 		= this.el.clientWidth;
+			this.elementInfo.hasVertScroll 	= this.verticalScroll || this.elementInfo.maxTop > 0;
+			this.elementInfo.hasHorScroll 	= this.elementInfo.maxLeft > 0;
+			this.elementInfo.requiresVScrollBar 	= this.vscrollBar && this.elementInfo.hasVertScroll;
+			this.elementInfo.requiresHScrollBar 	= this.hscrollBar && this.elementInfo.hasHorScroll;
+			
+			//save event
+			this.saveEventInfo(event);
+			this.saveFirstEventInfo(event);
+			
+			//get the current top
+			var cssMatrix = this.getCSSMatrix(this.el);
+            scrollInfo.top = numOnly(cssMatrix.f) - numOnly(this.container.scrollTop);
+            scrollInfo.left = numOnly(cssMatrix.e) - numOnly(this.container.scrollLeft);
+			
+			this.container.scrollTop = this.container.scrollLeft = 0;
+			this.currentScrollingObject = this.el;
+			
+			//get refresh ready
+			if(this.refresh&&scrollInfo.top==0){
+				this.refreshHeight = this.refreshContainer.firstChild.clientHeight;
+				this.refreshContainer.firstChild.style.top=(-this.refreshHeight)+'px';
+				this.refreshContainer.style.overflow='visible';
+				this.preventPullToRefresh = false;
+			} else if(scrollInfo.top<0) {
+				this.preventPullToRefresh = true;
+				if(this.refresh) this.refreshContainer.style.overflow='hidden';
+			}
+			
+			//set target
+			scrollInfo.x = scrollInfo.left;
+			scrollInfo.y = scrollInfo.top;
+
+			//vertical scroll bar
+			if(this.setVScrollBar(scrollInfo, 0, 0)){
+	            if (this.container.clientWidth > window.innerWidth)
+	                this.vscrollBar.style.left = (window.innerWidth - numOnly(this.vscrollBar.style.width) * 3) + "px";
+	            else
+	                this.vscrollBar.style.right = "0px";
+	            this.vscrollBar.style.webkitTransition = '';
+	            this.vscrollBar.style.opacity = 1;
+			}
+			
+			//horizontal scroll
+			if(this.setHScrollBar(scrollInfo, 0, 0)){
+                if (this.container.clientHeight > window.innerHeight)
+                    this.hscrollBar.style.top = (window.innerHeight - numOnly(this.hscrollBar.style.height)) + "px";
+                else
+                    this.hscrollBar.style.bottom = numOnly(this.hscrollBar.style.height);
+                this.vscrollBar.style.webkitTransition = ''; 
+                this.hscrollBar.style.opacity = 1;
+			}
+
+			//save scrollInfo
+			this.lastScrollInfo = scrollInfo;
+			
+			//just in case...
+			if(this.doScrollInterval) window.clearInterval(this.doScrollInterval);
+			this.doScrollInterval = null;
+			var that = this;
+			this.doScrollInterval = window.setInterval(function(){that.doScroll();}, this.refreshRate);
+        }
+		jsScroller.prototype.getCSSMatrix = function(el){
+			if(this.androidFormsMode){
+				//absolute mode
+				var top = parseInt(el.style.marginTop);
+				var left = parseInt(el.style.marginLeft);
+				if(isNaN(top)) top = 0;
+				if(isNaN(left)) left = 0;
+				return {f:top,e:left};
+			} else {
+				//regular transform
+				var str = window.getComputedStyle(el).webkitTransform;	//fix for BB transform 'none'
+				if(str=='none') return {f:0,e:0};
+				var obj = new WebKitCSSMatrix(str);
+				return obj;
+			}
+		}
+		jsScroller.prototype.saveEventInfo=function(event){
+			this.lastEventInfo = {
+	            pageX: event.touches[0].pageX,
+	            pageY: event.touches[0].pageY,
+				time: event.timeStamp
+			}
+		}
+		jsScroller.prototype.saveFirstEventInfo=function(event){
+			this.firstEventInfo = {
+	            pageX: event.touches[0].pageX,
+	            pageY: event.touches[0].pageY,
+				time: event.timeStamp
+			}
+		}
+		jsScroller.prototype.setVScrollBar=function(scrollInfo, time, timingFunction){
+			if(!this.elementInfo.requiresVScrollBar) return false;
+			var newHeight = (parseFloat(this.elementInfo.bottomMargin / this.elementInfo.divHeight) * this.elementInfo.bottomMargin) + "px";
+			if(newHeight!=this.vscrollBar.style.height) this.vscrollBar.style.height = newHeight;
+			var pos = (this.elementInfo.bottomMargin - numOnly(this.vscrollBar.style.height)) - (((this.elementInfo.maxTop + scrollInfo.y) / this.elementInfo.maxTop) * (this.elementInfo.bottomMargin - numOnly(this.vscrollBar.style.height)));      
+            if (pos > this.elementInfo.bottomMargin)
+                pos = this.elementInfo.bottomMargin;
+            if (pos < 0)
+                pos = 0;
+			this.scrollbarMoveCSS(this.vscrollBar, {x: 0,y: pos}, time, timingFunction);
+			return true;
+		}
+		jsScroller.prototype.setHScrollBar=function(scrollInfo, time, timingFunction){
+			if(!this.elementInfo.requiresHScrollBar) return false;
+			var newWidth = (parseFloat(this.elementInfo.rightMargin / this.elementInfo.divWidth) * this.elementInfo.rightMargin) + "px";
+			if(newWidth!=this.hscrollBar.style.width) this.hscrollBar.style.width = newWidth;
+            var pos = (this.elementInfo.rightMargin - numOnly(this.hscrollBar.style.width)) - (((this.elementInfo.maxLeft + scrollInfo.x) / this.elementInfo.maxLeft) * (this.elementInfo.rightMargin - numOnly(this.hscrollBar.style.width)));     
+            
+            if (pos > this.elementInfo.rightMargin)
+                pos = this.elementInfo.rightMargin;
+            if (pos < 0)
+                pos = 0;
+			
+			this.scrollbarMoveCSS(this.hscrollBar, {x: pos,y: 0}, time, timingFunction);
+			return true;
+		}
+		
+		
+		
+        jsScroller.prototype.onTouchMove=function(event) {
+            if (this.currentScrollingObject == null) return;
+			//event.preventDefault();
+			
+			var scrollInfo = this.calculateMovement(event);
+			this.calculateTarget(scrollInfo);
+				
+			this.lastScrollInfo = scrollInfo;
+			this.moved = true;
+
+			this.saveEventInfo(event);
+        }
+		
+		jsScroller.prototype.doScroll=function(){
+			
+			if(!this.isScrolling && this.lastScrollInfo.x != this.lastScrollInfo.left || this.lastScrollInfo.y != this.lastScrollInfo.top){
+				this.isScrolling=true;
+				if(this.onScrollStart) this.onScrollStart();
+			} else {
+				//nothing to do here, cary on
+				return;
+			}
+			//proceed normally
+			var cssMatrix = this.getCSSMatrix(this.el);
+			this.lastScrollInfo.top = numOnly(cssMatrix.f);
+			this.lastScrollInfo.left = numOnly(cssMatrix.e);
+			
+			this.recalculateDeltaY(this.lastScrollInfo);
+			this.recalculateDeltaX(this.lastScrollInfo);
+			
+			//boundaries control
+			this.checkYboundary(this.lastScrollInfo);
+			if(this.elementInfo.hasHorScroll) this.checkXboundary(this.lastScrollInfo);
+					
+			//pull to refresh elastic
+			var positiveOverflow = this.lastScrollInfo.y > 0 && this.lastScrollInfo.deltaY>0;
+			var negativeOverflow = this.lastScrollInfo.y < -this.elementInfo.maxTop && this.lastScrollInfo.deltaY<0;
+            if (positiveOverflow || negativeOverflow) 
+            {   
+                var overflow = positiveOverflow ? this.lastScrollInfo.y : -this.lastScrollInfo.y-this.elementInfo.maxTop;
+                var pcent = (this.container.clientHeight - overflow) / this.container.clientHeight;  
+				if(pcent<.5) pcent = .5;
+				//cur top, maxTop or 0?
+				var baseTop = 0;
+				if((positiveOverflow && this.lastScrollInfo.top>0) || (negativeOverflow && this.lastScrollInfo.top<-this.elementInfo.maxTop)){
+					baseTop = this.lastScrollInfo.top;
+				} else if(negativeOverflow){
+					baseTop = -this.elementInfo.maxTop;
+				}
+				var changeY = this.lastScrollInfo.deltaY * pcent;
+				var absChangeY = Math.abs(this.lastScrollInfo.deltaY * pcent);
+				if(absChangeY<1) changeY = positiveOverflow ? 1 : -1;
+                this.lastScrollInfo.y = baseTop + changeY;
+            }
+					
+			//move
+            this.scrollerMoveCSS(this.lastScrollInfo, 0);
+			this.setVScrollBar(this.lastScrollInfo, 0, 0);
+			this.setHScrollBar(this.lastScrollInfo, 0, 0);
+				
+			//check refresh triggering
+			if(this.refresh && !this.preventPullToRefresh){
+				if(!this.refreshTriggered && this.lastScrollInfo.top>this.refreshHeight){
+					this.refreshTriggered=true;
+					$.trigger(this, 'refresh-trigger');
+				} else if(this.refreshTriggered && this.lastScrollInfo.top<this.refreshHeight){
+					this.refreshTriggered=false;
+					$.trigger(this, 'refresh-cancel');
+				}
+			}
+			
+		}
+		
+		jsScroller.prototype.calculateMovement=function(event, last){
+			//default variables
+			var scrollInfo = {
+				//current position
+				top:0,
+				left:0,
+				//current movement
+				speedY:0,
+				speedX:0,
+				absSpeedY:0,
+				absSpeedX:0,
+				deltaY:0,
+				deltaX:0,
+				absDeltaY:0,
+				absDeltaX:0,
+				y:0,
+				x:0,
+				duration:0
+            };
+			
+			var prevEventInfo = last ? this.firstEventInfo : this.lastEventInfo ;
+			var pageX = last ? event.pageX : event.touches[0].pageX;
+			var pageY = last ? event.pageY : event.touches[0].pageY;
+			var time = last ? event.time : event.timeStamp;
+			
+        	scrollInfo.deltaY = this.elementInfo.hasVertScroll ? pageY - prevEventInfo.pageY : 0;
+            scrollInfo.deltaX = this.elementInfo.hasHorScroll ? pageX - prevEventInfo.pageX : 0;
+			scrollInfo.time = time;
+			
+			scrollInfo.duration = time - prevEventInfo.time;
+			
+			return scrollInfo;
+		}
+		
+		jsScroller.prototype.calculateTarget=function(scrollInfo){
+			scrollInfo.y = this.lastScrollInfo.y+scrollInfo.deltaY;
+			scrollInfo.x = this.lastScrollInfo.x+scrollInfo.deltaX;
+		}
+		jsScroller.prototype.checkYboundary=function(scrollInfo){
+			var minTop = this.container.clientHeight/2;
+			var maxTop = this.elementInfo.maxTop+minTop;
+			//y boundaries
+			if(scrollInfo.y>minTop) scrollInfo.y = minTop;
+			else if(-scrollInfo.y>maxTop) scrollInfo.y = -maxTop;
+			else return;
+			
+			this.recalculateDeltaY(scrollInfo);
+		}
+		jsScroller.prototype.checkXboundary=function(scrollInfo){
+			//x boundaries
+			if(scrollInfo.x>0) scrollInfo.x = 0;
+			else if(-scrollInfo.x>this.elementInfo.maxLeft) scrollInfo.x = -this.elementInfo.maxLeft;
+			else return;
+						
+			this.recalculateDeltaY(scrollInfo);
+		}
+		jsScroller.prototype.recalculateDeltaY=function(scrollInfo){
+			//recalculate delta
+			var oldAbsDeltaY = Math.abs(scrollInfo.deltaY);
+			scrollInfo.deltaY = scrollInfo.y - scrollInfo.top;
+			newAbsDeltaY = Math.abs(scrollInfo.deltaY);
+			//recalculate duration at same speed
+			scrollInfo.duration = scrollInfo.duration * newAbsDeltaY / oldAbsDeltaY;
+			
+		}
+		jsScroller.prototype.recalculateDeltaX=function(scrollInfo){
+			//recalculate delta
+			var oldAbsDeltaX = Math.abs(scrollInfo.deltaX);
+			scrollInfo.deltaX = scrollInfo.x - scrollInfo.left;
+			newAbsDeltaX = Math.abs(scrollInfo.deltaX);
+			//recalculate duration at same speed
+			scrollInfo.duration = scrollInfo.duration * newAbsDeltaX / oldAbsDeltaX;
+			
+		}
+		
+		jsScroller.prototype.hideRefresh=function(animate){
+			if(this.preventHideRefresh) return;
+			this.scrollerMoveCSS({x:0,y:0}, HIDE_REFRESH_TIME);
+			this.refreshTriggered=false;
+		}
+		
+		jsScroller.prototype.setMomentum=function(scrollInfo) {
+            var deceleration = 0.0012; 
+			
+			//calculate movement speed
+			scrollInfo.speedY = this.divide(scrollInfo.deltaY, scrollInfo.duration);
+			scrollInfo.speedX = this.divide(scrollInfo.deltaX, scrollInfo.duration);
+			
+			scrollInfo.absSpeedY = Math.abs(scrollInfo.speedY);
+			scrollInfo.absSpeedX = Math.abs(scrollInfo.speedX);
+			
+			scrollInfo.absDeltaY = Math.abs(scrollInfo.deltaY);
+			scrollInfo.absDeltaX = Math.abs(scrollInfo.deltaX);
+			
+			//set momentum
+			if(scrollInfo.absDeltaY>0){
+				scrollInfo.deltaY = (scrollInfo.deltaY < 0 ? -1 : 1) * (scrollInfo.absSpeedY * scrollInfo.absSpeedY) / (2 * deceleration);
+				scrollInfo.absDeltaY = Math.abs(scrollInfo.deltaY);
+				scrollInfo.duration = scrollInfo.absSpeedY / deceleration;
+				scrollInfo.speedY = scrollInfo.deltaY/scrollInfo.duration;
+				scrollInfo.absSpeedY = Math.abs(scrollInfo.speedY);
+				if(scrollInfo.absSpeedY<deceleration*100 || scrollInfo.absDeltaY<5)
+					scrollInfo.deltaY = scrollInfo.absDeltaY = scrollInfo.duration = scrollInfo.speedY = scrollInfo.absSpeedY = 0;
+			} else if(scrollInfo.absDeltaX) {
+				scrollInfo.deltaX = (scrollInfo.deltaX < 0 ? -1 : 1) * (scrollInfo.absSpeedX * scrollInfo.absSpeedX) / (2 * deceleration);
+				scrollInfo.absDeltaX = Math.abs(scrollInfo.deltaX);
+				scrollInfo.duration = scrollInfo.absSpeedX / deceleration;
+				scrollInfo.speedX = scrollInfo.deltaX/scrollInfo.duration;
+				scrollInfo.absSpeedX = Math.abs(scrollInfo.speedX);
+				if(scrollInfo.absSpeedX<deceleration*100 || scrollInfo.absDeltaX<5)
+					scrollInfo.deltaX = scrollInfo.absDeltaX = scrollInfo.duration = scrollInfo.speedX = scrollInfo.absSpeedX = 0;
+			} else scrollInfo.duration = 0;
+		}
+		
+		
+        jsScroller.prototype.onTouchEnd=function(event) {
+			
+			window.clearInterval(this.doScrollInterval);
+			this.doScrollInterval = null;
+			
+            if (this.currentScrollingObject == null || !this.moved) return;
+			//event.preventDefault();
+			
+            this.finishScrollingObject = this.currentScrollingObject;
+            this.currentScrollingObject = null;
+
+			var scrollInfo = this.calculateMovement(this.lastEventInfo, true);
+			if(!this.androidFormsMode) {
+				this.setMomentum(scrollInfo);
+			}
+			this.calculateTarget(scrollInfo);
+			
+			//get the current top
+			var cssMatrix = this.getCSSMatrix(this.el);
+            scrollInfo.top = numOnly(cssMatrix.f);
+            scrollInfo.left = numOnly(cssMatrix.e);
+			
+			//boundaries control
+			this.checkYboundary(scrollInfo);
+			if(this.elementInfo.hasHorScroll) this.checkXboundary(scrollInfo);
+			
+			var triggered = !this.preventPullToRefresh && (scrollInfo.top > this.refreshHeight || scrollInfo.y > this.refreshHeight);
+            this.fireRefreshRelease(triggered, scrollInfo.top>0);
+			
+			//refresh hang in
+			if(this.refresh && triggered) {
+				scrollInfo.y = this.refreshHeight;
+				scrollInfo.duration = HIDE_REFRESH_TIME;
+			//top boundary
+			} else if(scrollInfo.y >= 0){
+				scrollInfo.y = 0;
+				if(scrollInfo.top >= 0) scrollInfo.duration = HIDE_REFRESH_TIME;
+			//lower boundary
+			} else if(-scrollInfo.y > this.elementInfo.maxTop || this.elementInfo.maxTop==0){
+				scrollInfo.y = -this.elementInfo.maxTop;
+				if(-scrollInfo.top > this.elementInfo.maxTop) scrollInfo.duration = HIDE_REFRESH_TIME;
+			//all others
+			}
+			
+			if(this.androidFormsMode) scrollInfo.duration = 0;
+            this.scrollerMoveCSS(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
+			this.setVScrollBar(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
+            this.setHScrollBar(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
+			
+			this.setFinishCalback(scrollInfo.duration);
+        }
+		
+		//finish callback
+		jsScroller.prototype.setFinishCalback = function(duration){
+			var that = this;
+			this.scrollingFinishCB=setTimeout(function(){
+				that.hideScrollbars();
+				$.trigger($.touchLayer, 'scrollend', [that.el]);	//notify touchLayer of this elements scrollend
+				that.isScrolling=false;
+				that.elementInfo = null;	//reset elementInfo when idle
+			},duration);
+		}
+		
+		//Android Forms Fix
+		jsScroller.prototype.startFormsMode = function(){
+			if(this.blockFormsFix) return;
+			//get prev values
+			var cssMatrix = this.getCSSMatrix(this.el);
+			//toggle vars
+			this.refreshSafeKeep = this.refresh;
+			this.refresh=false;
+			this.androidFormsMode=true;
+			//set new css rules
+			this.el.style.webkitTransform = "none";
+			this.el.style.webkitTransition = "none";
+			this.el.style.webkitPerspective = "none";
+			
+			//set position
+            this.scrollerMoveCSS({x:numOnly(cssMatrix.e),y:numOnly(cssMatrix.f)}, 0);
+			
+			//container
+			this.container.style.webkitPerspective = "none";
+			this.container.style.webkitBackfaceVisibility = "visible";
+			//scrollbars
+			if(this.vscrollBar){
+				this.vscrollBar.style.webkitTransform = "none";
+				this.vscrollBar.style.webkitTransition = "none";
+				this.vscrollBar.style.webkitPerspective = "none";
+				this.vscrollBar.style.webkitBackfaceVisibility = "visible";
+			}
+			if(this.hscrollBar){
+				this.hscrollBar.style.webkitTransform = "none";
+				this.hscrollBar.style.webkitTransition = "none";
+				this.hscrollBar.style.webkitPerspective = "none";
+				this.hscrollBar.style.webkitBackfaceVisibility = "visible";
+			}
+			
+		}
+		jsScroller.prototype.stopFormsMode = function(){
+			if(this.blockFormsFix) return;
+			//get prev values
+			var cssMatrix = this.getCSSMatrix(this.el);
+			//toggle vars
+			this.refresh = this.refreshSafeKeep;
+			this.androidFormsMode=false;
+			//set new css rules
+			this.el.style.webkitPerspective = 1000;
+            this.el.style.marginTop = 0;
+            this.el.style.marginLeft = 0;
+			this.el.style.webkitTransition = '0ms linear';	//reactivate transitions
+			//set position
+			this.scrollerMoveCSS({x:numOnly(cssMatrix.e),y:numOnly(cssMatrix.f)}, 0);
+			//container
+			this.container.style.webkitPerspective = 1000;
+			this.container.style.webkitBackfaceVisibility = "hidden";
+			//scrollbars
+			if(this.vscrollBar){
+				this.vscrollBar.style.webkitPerspective = 1000;
+				this.vscrollBar.style.webkitBackfaceVisibility = "hidden";
+			}
+			if(this.hscrollBar){
+				this.hscrollBar.style.webkitPerspective = 1000;
+				this.hscrollBar.style.webkitBackfaceVisibility = "hidden";
+			}
+			
+		}
+		
+		
+		
+        jsScroller.prototype.scrollerMoveCSS=function(distanceToMove, time, timingFunction) {
+            if (!time)
+                time = 0;
+            if (!timingFunction)
+                timingFunction = "linear";
+			
+			if(this.el && this.el.style){
+				
+				//do not touch the DOM if disabled
+				if(this.eventsActive){
+					if(this.androidFormsMode){
+			            this.el.style.marginTop = Math.round(distanceToMove.y) + "px";
+						this.el.style.marginLeft = Math.round(distanceToMove.x) + "px";
+					} else {
+			            this.el.style.webkitTransform = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
+			            this.el.style.webkitTransitionDuration = time + "ms";
+			            this.el.style.webkitTransitionTimingFunction = timingFunction;
+					}
+				}
+				// Position should be updated even when the scroller is disabled so we log the change
+				//console.log('scrollmove #'+this.container.id)
+				this.logPos(distanceToMove.x, distanceToMove.y);
+			}
+        }
+		jsScroller.prototype.logPos=function(x,y){
+			
+			if(!this.elementInfo){
+				var size = this.getViewportSize();
+			} else {
+				var size = {h:this.elementInfo.bottomMargin,w:this.elementInfo.rightMargin}
+			}
+			
+			this.loggedPcentX = this.divide(x, (this.el.clientWidth - size.w));
+			this.loggedPcentY = this.divide(y, (this.el.clientHeight - size.h));
+			this.scrollTop = y;
+			this.scrollLeft = x;
+			//console.log('logged '+this.loggedPcentY+' '+y+':'+(this.el.clientHeight - size.h));
+		}
+		jsScroller.prototype.scrollbarMoveCSS=function(el, distanceToMove, time, timingFunction) {
+            if (!time)
+                time = 0;
+            if (!timingFunction)
+                timingFunction = "linear";
+			
+			if(el && el.style){
+				if(this.androidFormsMode){
+		            el.style.marginTop = Math.round(distanceToMove.y) + "px";
+					el.style.marginLeft = Math.round(distanceToMove.x) + "px";
+				} else {
+		            el.style.webkitTransform = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
+		            el.style.webkitTransitionDuration = time + "ms";
+		            el.style.webkitTransitionTimingFunction = timingFunction;
+				}
+			}
+        }
+        jsScroller.prototype.scrollTo=function(pos, time) {
+            if (!time)
+				time = 0;
+            this.scrollerMoveCSS(pos, time);
+        }
+        jsScroller.prototype.scrollBy=function(pos,time) {
+			var cssMatrix = this.getCSSMatrix(this.el);
+            var startTop = numOnly(cssMatrix.f);
+            var startLeft = numOnly(cssMatrix.e);
+            this.scrollTo({y:startTop-pos.y,x:startLeft-pos.x},time);
+        }
+		
+		//debug JS scrolling
+		//jsScroller = $.debug.type(jsScroller, 'jsScroller');
+		
+		//return main function
+        return scroller;
+    })();
+})(jq);
+
+/**
+ * jq.popup - a popup/alert library for html5 mobile apps
+ * @copyright Indiepath 2011 - Tim Fisher
+ * Modifications/enhancements by appMobi for jqMobi
+ * 
+ */
+
+/* EXAMPLE
+  $('body').popup({
+	    title:"Alert! Alert!",
+	    message:"This is a test of the emergency alert system!! Don't PANIC!",
+	    cancelText:"Cancel me", 
+	    cancelCallback: function(){console.log("cancelled");},
+	    doneText:"I'm done!",
+	    doneCallback: function(){console.log("Done for!");},
+	    cancelOnly:false,
+        doneClass:'button',
+        cancelClass:'button',
+        onShow:function(){console.log('showing popup');}
+        autoCloseDone:true, //default is true will close the popup when done is clicked.
+        suppressTitle:false //Do not show the title if set to true
+  });
+  
+  You can programatically trigger a close by dispatching a "close" event to it.
+  
+  $('body').popup({title:'Alert',id:'myTestPopup'});
+  $("#myTestPopup").trigger("close");
+  
+ */
+(function($) {
+    
+    $.fn.popup = function(opts) {
+        return new popup(this[0], opts);
+    };
+    var queue = [];
+    var popup = (function() {
+        var popup = function(containerEl, opts) {
+            
+            if (typeof containerEl === "string" || containerEl instanceof String) {
+                this.container = document.getElementById(containerEl);
+            } else {
+                this.container = containerEl;
+            }
+            if (!this.container) {
+                alert("Error finding container for popup " + containerEl);
+                return;
+            }
+            
+            try {
+                if (typeof (opts) === "string" || typeof (opts) === "number")
+                    opts = {message: opts,cancelOnly: "true",cancelText: "OK"};
+                this.id = id = opts.id = opts.id || $.uuid(); //opts is passed by reference
+                var self = this;
+                this.title = opts.suppressTitle?"":(opts.title || "Alert");
+                this.message = opts.message || "";
+                this.cancelText = opts.cancelText || "Cancel";
+                this.cancelCallback = opts.cancelCallback || function() {
+                };
+                this.cancelClass = opts.cancelClass || "button";
+                this.doneText = opts.doneText || "Done";
+                this.doneCallback = opts.doneCallback || function(self) {
+                	self.hide();
+                };
+                this.doneClass = opts.doneClass || "button";
+                this.cancelOnly = opts.cancelOnly || false;
+                this.onShow = opts.onShow || function(){};
+                this.autoCloseDone=opts.autoCloseDone!==undefined?opts.autoCloseDone:true;
+                
+                queue.push(this);
+                if (queue.length == 1)
+                    this.show();
+            } catch (e) {
+                console.log("error adding popup " + e);
+            }
+        
+        };
+        
+        popup.prototype = {
+            id: null,
+            title: null,
+            message: null,
+            cancelText: null,
+            cancelCallback: null,
+            cancelClass: null,
+            doneText: null,
+            doneCallback: null,
+            doneClass: null,
+            cancelOnly: false,
+            onShow: null,
+            autoCloseDone:true,
+            supressTitle:false,
+            show: function() {
+                var self = this;
+                var markup = '<div id="' + this.id + '" class="jqPopup hidden">\
+	        				<header>' + this.title + '</header>\
+	        				<div><div style="width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right"></div>' + this.message + '</div>\
+	        				<footer style="clear:both;">\
+	        					<a href="javascript:;" class="'+this.cancelClass+'" id="cancel">' + this.cancelText + '</a>\
+	        					<a href="javascript:;" class="'+this.doneClass+'" id="action">' + this.doneText + '</a>\
+	        				</footer>\
+	        			</div></div>';
+                $(this.container).append($(markup));
+                
+                var $el=$("#"+this.id);
+                $el.bind("close", function(){
+                	self.hide();
+                })
+                
+                if (this.cancelOnly) {
+                    $el.find('A#action').hide();
+                    $el.find('A#cancel').addClass('center');
+                }
+                $el.find('A').each(function() {
+                    var button = $(this);
+                    button.bind('click', function(e) {
+                        if (button.attr('id') == 'cancel') {
+                            self.cancelCallback.call(self.cancelCallback, self);
+                            self.hide();
+                        } else {
+                            self.doneCallback.call(self.doneCallback, self);
+                            if(self.autoCloseDone)
+                                self.hide();
+                        }
+                        e.preventDefault();
+                     });
+                });
+                self.positionPopup();
+                $.blockUI(0.5);
+                $el.removeClass('hidden');
+                $el.bind("orientationchange", function() {
+                    self.positionPopup();
+                });
+                
+                this.onShow(this);
+                
+            },
+            
+            hide: function() {
+                var self = this;
+                $('#' + self.id).addClass('hidden');
+                $.unblockUI();
+                setTimeout(function() {
+                    self.remove();
+                }, 250);
+            },
+            
+            remove: function() {
+                var self = this;
+                var $el=$("#"+self.id);
+                $el.unbind("close");
+                $el.find('BUTTON#action').unbind('click');
+                $el.find('BUTTON#cancel').unbind('click');
+                $el.unbind("orientationchange").remove();
+                queue.splice(0, 1);
+                if (queue.length > 0)
+                    queue[0].show();
+            },
+            
+            positionPopup: function() {
+                var popup = $('#' + this.id);
+                popup.css("top", ((window.innerHeight / 2.5) + window.pageYOffset) - (popup[0].clientHeight / 2) + "px");
+                popup.css("left", (window.innerWidth / 2) - (popup[0].clientWidth / 2) + "px");
+            }
+        };
+        
+        return popup;
+    })();
+    var uiBlocked = false;
+    $.blockUI = function(opacity) {
+        if (uiBlocked)
+            return;
+        opacity = opacity ? " style='opacity:" + opacity + ";'" : "";
+        $('BODY').prepend($("<div id='mask'" + opacity + "></div>"));
+        $('BODY DIV#mask').bind("touchstart", function(e) {
+            e.preventDefault();
+        });
+        $('BODY DIV#mask').bind("touchmove", function(e) {
+            e.preventDefault();
+        });
+        uiBlocked = true
+    };
+    
+    $.unblockUI = function() {
+        uiBlocked = false;
+        $('BODY DIV#mask').unbind("touchstart");
+        $('BODY DIV#mask').unbind("touchmove");
+        $("BODY DIV#mask").remove();
+    };
+    /**
+     * Here we override the window.alert function due to iOS eating touch events on native alerts
+     */
+    window.alert = function(text) {
+        if(text===null||text===undefined)
+            text="null";
+        if($("#jQUi").length>0)
+            $("#jQUi").popup(text.toString());
+        else
+            $(document.body).popup(text.toString());
+    }
+    window.confirm = function(text) {
+        throw "Due to iOS eating touch events from native confirms, please use our popup plugin instead";
+    }
+})(jq);
+/**
+ * jq.web.actionsheet - a actionsheet for html5 mobile apps
+ * Copyright 2012 - AppMobi 
+ */
+(function($) {
+    $.fn["actionsheet"] = function(opts) {
+        var tmp;
+        for (var i = 0; i < this.length; i++) {
+            tmp = new actionsheet(this[i], opts);
+        }
+        return this.length == 1 ? tmp : this;
+    };
+    var actionsheet = (function() {
+        if (!window.WebKitCSSMatrix)
+            return;
+        
+        var actionsheet = function(elID, opts) {
+            if (typeof elID == "string" || elID instanceof String) {
+                this.el = document.getElementById(elID);
+            } else {
+                this.el = elID;
+            }
+            if (!this.el) {
+                alert("Could not find element for actionsheet " + elID);
+                return;
+            }
+            
+            if (this instanceof actionsheet) {
+                if(typeof(opts)=="object"){
+                for (j in opts) {
+                    this[j] = opts[j];
+                }
+                }
+            } else {
+                return new actionsheet(elID, opts);
+            }
+            
+            try {
+                var that = this;
+                var markStart = '<div id="jq_actionsheet"><div style="width:100%">';
+                var markEnd = '</div>';
+                var markup;
+                if (typeof opts == "string") {
+                    markup = $(markStart + opts +"<a href='javascript:;' class='cancel'>Cancel</a>"+markEnd);
+                } else if (typeof opts == "object") {
+                    markup = $(markStart + markEnd);
+                    var container = $(markup.children().get());
+                    opts.push({text:"Cancel",cssClasses:"cancel"});
+                    for (var i = 0; i < opts.length; i++) {
+                        var item = $('<a href="javascript:;" >' + (opts[i].text || "TEXT NOT ENTERED") + '</a>');
+                        item[0].onclick = (opts[i].handler || function() {});
+                        if (opts[i].cssClasses && opts[i].cssClasses.length > 0)
+                            item.addClass(opts[i].cssClasses);
+                        container.append(item);
+                    }
+                }
+                $(elID).find("#jq_actionsheet").remove();
+                $(elID).find("#jq_action_mask").remove();
+                actionsheetEl = $(elID).append(markup);
+                
+                markup.get().style.webkitTransition="all 0ms";
+                markup.css("-webkit-transform", "translate3d(0,"+(window.innerHeight*2) + "px,0)");
+                this.el.style.overflow = "hidden";
+                markup.on("click", "a",function(){that.hideSheet()});
+                this.activeSheet=markup;
+                $(elID).append('<div id="jq_action_mask" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px;z-index:9998;background:rgba(0,0,0,.4)"/>');
+                setTimeout(function(){
+                    markup.get().style.webkitTransition="all 200ms";
+                    var height=window.innerHeight-parseInt(markup.css("height"));
+                    markup.css("-webkit-transform", "translate3d(0,"+(height)+"px,0)");
+                 },10);
+            } catch (e) {
+                alert("error adding actionsheet" + e);
+            }
+        };
+        actionsheet.prototype = {
+            activeSheet:null,
+            hideSheet: function() {
+                var that=this;
+                this.activeSheet.off("click","a",function(){that.hideSheet()});
+                $(this.el).find("#jq_action_mask").remove();
+                this.activeSheet.get().style.webkitTransition="all 0ms";
+                var markup = this.activeSheet;
+                var theEl = this.el;
+                setTimeout(function(){
+                    
+                	markup.get().style.webkitTransition="all 500ms";
+                	markup.css("-webkit-transform", "translate3d(0,"+(window.innerHeight*2) + "px,0)");
+                	setTimeout(function(){
+		                markup.remove();
+		                markup=null;
+		                theEl.style.overflow = "none";
+	                },500);
+                },10);            
+            }
+        };
+        return actionsheet;
+    })();
+})(jq);
+
+/*
+ * jq.web.passwordBox - password box replacement for html5 mobile apps on android due to a bug with CSS3 translate3d
+ * @copyright 2011 - AppMobi
+ */
+(function ($) {
+    $["passwordBox"] = function () {
+
+        return new passwordBox();
+    };
+
+    var passwordBox = function () {
+            this.oldPasswords = {};
+        };
+    passwordBox.prototype = {
+        showPasswordPlainText: false,
+        getOldPasswords: function (elID) {
+         //   if ($.os.android == false) return; -  iOS users seem to want this too, so we'll let everyone join the party
+            var container = elID && document.getElementById(elID) ? document.getElementById(elID) : document;
+            if (!container) {
+                alert("Could not find container element for passwordBox " + elID);
+                return;
+            }
+            var sels = container.getElementsByTagName("input");
+
+            var that = this;
+            for (var i = 0; i < sels.length; i++) {
+                if (sels[i].type != "password") continue;
+
+                sels[i].type = "text";
+                sels[i].style['-webkit-text-security'] = "disc";
+            }
+        },
+
+        changePasswordVisiblity: function (what, id) {
+            what = parseInt(what);
+            var theEl = document.getElementById(id);
+            if (what == 1) { //show
+                theEl.style['-webkit-text-security'] = "none";
+            } else {
+                theEl.style['-webkit-text-security'] = "disc";
+            }
+            theEl = null;
+        }
+    };
+})(jq);
+/*
+ * Copyright: AppMobi
+ * Description:  This script will replace all drop downs with friendly select controls.  Users can still interact
+ * with the old drop down box as normal with javascript, and this will be reflected
+ 
+ */
+(function($) {
+    $['selectBox'] = {
+        scroller: null,
+        getOldSelects: function(elID) {
+            if (!$.os.android || $.os.androidICS)
+               return;
+            if (!$.fn['scroller']) {
+                alert("This library requires jq.web.Scroller");
+                return;
+            }
+            var container = elID && document.getElementById(elID) ? document.getElementById(elID) : document;
+            if (!container) {
+                alert("Could not find container element for jq.web.selectBox " + elID);
+                return;
+            }
+            var sels = container.getElementsByTagName("select");
+            var that = this;
+            for (var i = 0; i < sels.length; i++) {
+                if (sels[i].hasSelectBoxFix)
+                    continue;
+                (function(theSel) {
+                    var fakeInput = document.createElement("div");
+					var theSelStyle = window.getComputedStyle(theSel);
+					var width = theSelStyle.width=='intrinsic' ? '100%' : theSelStyle.width;
+                    var selWidth = parseInt(width) > 0 ? width : '100px';
+                    var selHeight = parseInt(theSel.style.height) > 0 ? theSel.style.height : (parseInt(theSelStyle.height) ? theSelStyle.height : '20px');
+                    fakeInput.style.width = selWidth;
+                    fakeInput.style.height = selHeight;
+					fakeInput.style.margin = theSelStyle.margin;
+					fakeInput.style.position = theSelStyle.position;
+					fakeInput.style.left = theSelStyle.left;
+					fakeInput.style.top = theSelStyle.top;
+					fakeInput.style.lineHeight = theSelStyle.lineHeight;
+                    //fakeInput.style.position = "absolute";
+                    //fakeInput.style.left = "0px";
+                    //fakeInput.style.top = "0px";
+                    fakeInput.style.zIndex = "1";
+                    if (theSel.value)
+                        fakeInput.innerHTML = theSel.options[theSel.selectedIndex].text;
+                    fakeInput.style.background = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAeCAIAAABFWWJ4AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkM1NjQxRUQxNUFEODExRTA5OUE3QjE3NjI3MzczNDAzIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkM1NjQxRUQyNUFEODExRTA5OUE3QjE3NjI3MzczNDAzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QzU2NDFFQ0Y1QUQ4MTFFMDk5QTdCMTc2MjczNzM0MDMiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QzU2NDFFRDA1QUQ4MTFFMDk5QTdCMTc2MjczNzM0MDMiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6YWbdCAAAAlklEQVR42mIsKChgIBGwAHFPTw/xGkpKSlggrG/fvhGjgYuLC0gyMZAOoPb8//9/0Or59+8f8XrICQN66SEnDOgcp3AgKiqKqej169dY9Hz69AnCuHv3rrKyMrIKoAhcVlBQELt/gIqwstHD4B8quH37NlAQSKKJEwg3iLbBED8kpeshoGcwh5uuri5peoBFMEluAwgwAK+5aXfuRb4gAAAAAElFTkSuQmCC') right top no-repeat";
+                    fakeInput.style.backgroundColor = "white";
+                    fakeInput.style.lineHeight = selHeight;
+                    fakeInput.style.backgroundSize = "contain"; 
+                    fakeInput.className = "jqmobiSelect_fakeInput " + theSel.className;
+                    fakeInput.id = theSel.id + "_jqmobiSelect";
+                    
+                    fakeInput.style.border = "1px solid gray";
+                    fakeInput.style.color = "black";
+                    fakeInput.linkId = theSel.id;
+                    fakeInput.onclick = function(e) {
+                        that.initDropDown(this.linkId);
+                    };
+                    theSel.parentNode.appendChild(fakeInput);
+                    //theSel.parentNode.style.position = "relative";
+                    theSel.style.display = "none";
+                    theSel.style.webkitAppearance = "none";
+                    // Create listeners to watch when the select value has changed.
+                    // This is needed so the users can continue to interact as normal,
+                    // via jquery or other frameworks
+                    for (var j = 0; j < theSel.options.length; j++) {
+                        if (theSel.options[j].selected) {
+                            fakeInput.value = theSel.options[j].text;
+                        }
+                        theSel.options[j].watch( "selected", function(prop, oldValue, newValue) {
+                            if (newValue == true) {
+                                that.updateMaskValue(this.parentNode.id, this.text, this.value);
+                                this.parentNode.value = this.value;
+                            }
+                            return newValue;
+                        });
+                    }
+                    theSel.watch("selectedIndex", function(prop, oldValue, newValue) {
+                        if (this.options[newValue]) {
+                            that.updateMaskValue(this.id, this.options[newValue].text, this.options[newValue].value);
+                            this.value = this.options[newValue].value;
+                        }
+                        return newValue;
+                    });
+                    
+                    fakeInput = null;
+                    imageMask = null;
+                    sels[i].hasSelectBoxFix = true;
+                
+                
+                })(sels[i]);
+            }
+            that.createHtml();
+        },
+        updateDropdown: function(id) {
+            var el = document.getElementById(id);
+            if (!el)
+                return;
+            for (var j = 0; j < el.options.length; j++) {
+                if (el.options[j].selected)
+                    fakeInput.value = el.options[j].text;
+                el.options[j].watch("selected", function(prop, oldValue, newValue) {
+                    if (newValue == true) {
+                        that.updateMaskValue(this.parentNode.id, this.text, this.value);
+                        this.parentNode.value = this.value;
+                    }
+                    return newValue;
+                });
+            }
+            el = null;
+        },
+        initDropDown: function(elID) {
+            
+            var that = this;
+            var el = document.getElementById(elID);
+            if (el.disabled)
+                return;
+            if (!el || !el.options || el.options.length == 0)
+                return;
+            var htmlTemplate = "";
+            var foundInd = 0;
+            document.getElementById("jqmobiSelectBoxScroll").innerHTML = "";
+            
+            document.getElementById("jqmobiSelectBoxHeaderTitle").innerHTML = (el.name != undefined && el.name != "undefined" && el.name != "" ? el.name : elID);
+            
+            for (var j = 0; j < el.options.length; j++) {
+                var currInd = j;
+                el.options[j].watch( "selected", function(prop, oldValue, newValue) {
+                    if (newValue == true) {
+                        that.updateMaskValue(this.parentNode.id, this.text, this.value);
+                        this.parentNode.value = this.value;
+                    }
+                    return newValue;
+                });
+                var checked = (el.value == el.options[j].value) ? true : false;
+                var button = "";
+                var bg = "background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0.17, rgb(102,102,102)),color-stop(0.59, rgb(94,94,94)))";
+                var foundID;
+                var div = document.createElement("div");
+                div.className = "jqmobiSelectRow";
+                if (checked) {
+                    bg = "background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0.17, rgb(8,8,8)),color-stop(0.59, rgb(38,38,38)))";
+                    button = "checked";
+                    foundInd = j;
+                    foundID = "id='jqmobiSelectBox_found'";
+                    div.className = "jqmobiSelectRowFound";
+                } else {
+                    foundID = "";
+                }
+                
+                div.id = foundID;
+                div.style.cssText = ";line-height:40px;font-size:14px;padding-left:10px;height:40px;width:100%;position:relative;width:100%;border-bottom:1px solid black;background:white;";
+                var anchor = document.createElement("a");
+                anchor.href = "javascript:;";
+                div.tmpValue = j;
+                div.onclick = function(e) {
+                    that.setDropDownValue(elID, this.tmpValue);
+                };
+                anchor.style.cssText = "text-decoration:none;color:black;";
+                anchor.innerHTML = el.options[j].text;
+                var span = document.createElement("span");
+                span.style.cssText = "float:right;margin-right:20px;margin-top:-2px";
+                var rad = document.createElement("button");
+                if (foundID) {
+                    rad.style.cssText = "background: #000;padding: 0px 0px;border-radius:15px;border:3px solid black;";
+                    rad.className = "jqmobiSelectRowButtonFound";
+                } else {
+                    rad.style.cssText = "background: #ffffff;padding: 0px 0px;border-radius:15px;border:3px solid black;";
+                    rad.className = "jqmobiSelectRowButton";
+                }
+                rad.style.width = "20px";
+                rad.style.height = "20px";
+                
+                rad.checked = button;
+                
+                anchor.className = "jqmobiSelectRowText";
+                span.appendChild(rad);
+                div.appendChild(anchor);
+                div.appendChild(span);
+                
+                document.getElementById("jqmobiSelectBoxScroll").appendChild(div);
+                
+                span = null;
+                rad = null;
+                anchor = null;
+            }
+            try {
+                document.getElementById("jqmobiSelectModal").style.display = 'block';
+            } catch (e) {
+                console.log("Error showing div " + e);
+            }
+            try {
+                if (div) {
+                    var scrollThreshold = numOnly(div.style.height);
+                    var offset = numOnly(document.getElementById("jqmobiSelectBoxHeader").style.height);
+                    
+                    if (foundInd * scrollThreshold + offset >= numOnly(document.getElementById("jqmobiSelectBoxFix").clientHeight) - offset)
+                        var scrollToPos = (foundInd) * -scrollThreshold + offset;
+                    else
+                        scrollToPos = 0;
+                    this.scroller.scrollTo({
+                        x: 0,
+                        y: scrollToPos
+                    });
+                }
+            } catch (e) {
+                console.log("error init dropdown" + e);
+            }
+            div = null;
+            el = null;
+        },
+        updateMaskValue: function(elID, value, val2) {
+            
+            var el = document.getElementById(elID + "_jqmobiSelect");
+            var el2 = document.getElementById(elID);
+            if (el)
+                el.innerHTML = value;
+            if (typeof (el2.onchange) == "function")
+                el2.onchange(val2);
+            el = null;
+            el2 = null;
+        },
+        setDropDownValue: function(elID, value) {
+            
+            var el = document.getElementById(elID);
+            if (el) {
+                el.selectedIndex = value;
+            }
+            this.scroller.scrollTo({
+                x: 0,
+                y: 0
+            });
+            this.hideDropDown();
+            el = null;
+        },
+        hideDropDown: function() {
+            document.getElementById("jqmobiSelectModal").style.display = 'none';
+            document.getElementById("jqmobiSelectBoxScroll").innerHTML = "";
+        },
+        createHtml: function() {
+            var that = this;
+            if (document.getElementById("jqmobiSelectBoxContainer")) {
+                return;
+            }
+            var modalDiv = document.createElement("div");
+            
+            modalDiv.style.cssText = "position:absolute;top:0px;bottom:0px;left:0px;right:0px;background:rgba(0,0,0,.7);z-index:200000;display:none;";
+            modalDiv.id = "jqmobiSelectModal";
+            
+            var myDiv = document.createElement("div");
+            myDiv.id = "jqmobiSelectBoxContainer";
+            myDiv.style.cssText = "position:absolute;top:8%;bottom:10%;display:block;width:90%;margin:auto;margin-left:5%;height:90%px;background:white;color:black;border:1px solid black;border-radius:6px;";
+            myDiv.innerHTML = "<div id='jqmobiSelectBoxHeader' style=\"display:block;font-family:'Eurostile-Bold', Eurostile, Helvetica, Arial, sans-serif;color:#fff;font-weight:bold;font-size:18px;line-height:34px;height:34px; text-transform:uppercase;text-align:left;text-shadow:rgba(0,0,0,.9) 0px -1px 1px;    padding: 0px 8px 0px 8px;    border-top-left-radius:5px; border-top-right-radius:5px; -webkit-border-top-left-radius:5px; -webkit-border-top-right-radius:5px;    background:#39424b;    margin:1px;\"><div style='float:left;' id='jqmobiSelectBoxHeaderTitle'></div><div style='float:right;width:60px;margin-top:-5px'><div id='jqmobiSelectClose' class='button' style='width:60px;height:32px;line-height:32px;'>Close</div></div></div>";
+            myDiv.innerHTML += '<div id="jqmobiSelectBoxFix"  style="position:relative;height:90%;background:white;overflow:hidden;width:100%;"><div id="jqmobiSelectBoxScroll"></div></div>';
+            var that = this;
+            modalDiv.appendChild(myDiv);
+            
+            $(document).ready(function() {
+               
+                if(jq("#jQUi"))
+                   jq("#jQUi").append(modalDiv);
+                else
+                    document.body.appendChild(modalDiv);
+                var close = $("#jqmobiSelectClose").get();
+                close.onclick = function() {
+                    that.hideDropDown();
+                };
+                
+                var styleSheet = $("<style>.jqselectscrollBarV{opacity:1 !important;}</style>").get();
+                document.body.appendChild(styleSheet);
+                try {
+                    that.scroller = $("#jqmobiSelectBoxScroll").scroller({
+                        scroller: false,
+                        verticalScroll: true,
+                        vScrollCSS: "jqselectscrollBarV"
+                    });
+                
+                } catch (e) {
+                    console.log("Error creating select html " + e);
+                }
+                modalDiv = null;
+                myDiv = null;
+                styleSheet = null;
+            });
+        }
+    };
+//The following is based off Eli Grey's shim
+//https://gist.github.com/384583
+//We use HTMLElement to not cause problems with other objects
+if (!HTMLElement.prototype.watch) {
+	HTMLElement.prototype.watch = function (prop, handler) {
+		var oldval = this[prop], newval = oldval,
+		getter = function () {
+			return newval;
+		},
+		setter = function (val) {
+			oldval = newval;
+			return newval = handler.call(this, prop, oldval, val);
+		};
+		if (delete this[prop]) { // can't watch constants
+			if (HTMLElement.defineProperty) { // ECMAScript 5
+				HTMLElement.defineProperty(this, prop, {
+					get: getter,
+					set: setter,
+					enumerable: false,
+					configurable: true
+				});
+			} else if (HTMLElement.prototype.__defineGetter__ && HTMLElement.prototype.__defineSetter__) { // legacy
+				HTMLElement.prototype.__defineGetter__.call(this, prop, getter);
+				HTMLElement.prototype.__defineSetter__.call(this, prop, setter);
+			}
+		}
+	};
+}
+if (!HTMLElement.prototype.unwatch) {
+	HTMLElement.prototype.unwatch = function (prop) {
+		var val = this[prop];
+		delete this[prop]; // remove accessors
+		this[prop] = val;
+	};
+}   
+})(jq);
+
+//Touch events are from zepto/touch.js
+(function($) {
+    var touch = {}, touchTimeout;
+    
+    function parentIfText(node) {
+        return 'tagName' in node ? node : node.parentNode;
+    }
+    
+    function swipeDirection(x1, x2, y1, y2) {
+        var xDelta = Math.abs(x1 - x2), yDelta = Math.abs(y1 - y2);
+        if (xDelta >= yDelta) {
+            return (x1 - x2 > 0 ? 'Left' : 'Right');
+        } else {
+            return (y1 - y2 > 0 ? 'Up' : 'Down');
+        }
+    }
+    
+    var longTapDelay = 750;
+    function longTap() {
+        if (touch.last && (Date.now() - touch.last >= longTapDelay)) {
+            touch.el.trigger('longTap');
+            touch = {};
+        }
+    }
+    $(document).ready(function() {
+        $(document.body).bind('touchstart', function(e) {
+            var now = Date.now(), delta = now - (touch.last || now);
+            touch.el = $(parentIfText(e.touches[0].target));
+            touchTimeout && clearTimeout(touchTimeout);
+            touch.x1 = e.touches[0].pageX;
+            touch.y1 = e.touches[0].pageY;
+            if (delta > 0 && delta <= 250)
+                touch.isDoubleTap = true;
+            touch.last = now;
+            setTimeout(longTap, longTapDelay);
+            if (!touch.el.data("ignore-pressed"))
+                touch.el.addClass("selected");
+        }).bind('touchmove', function(e) {
+            touch.x2 = e.touches[0].pageX;
+            touch.y2 = e.touches[0].pageY;
+        }).bind('touchend', function(e) {
+            if (!touch.el)
+                return;
+            if (!touch.el.data("ignore-pressed"))
+                touch.el.removeClass("selected");
+            if (touch.isDoubleTap) {
+                touch.el.trigger('doubleTap');
+                touch = {};
+            } else if (touch.x2 > 0 || touch.y2 > 0) {
+                (Math.abs(touch.x1 - touch.x2) > 30 || Math.abs(touch.y1 - touch.y2) > 30) && 
+                touch.el.trigger('swipe') && 
+                touch.el.trigger('swipe' + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)));
+                touch.x1 = touch.x2 = touch.y1 = touch.y2 = touch.last = 0;
+            } else if ('last' in touch) {
+                touch.el.trigger('tap');
+                
+                touchTimeout = setTimeout(function() {
+                    touchTimeout = null;
+                    if (touch.el)
+                        touch.el.trigger('singleTap');
+                    touch = {};
+                }, 250);
+            }
+        }).bind('touchcancel', function() {
+            touch = {}
+        });
+    });
+    
+    ['swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown', 'doubleTap', 'tap', 'singleTap', 'longTap'].forEach(function(m) {
+        $.fn[m] = function(callback) {
+            return this.bind(m, callback)
+        }
+    });
+})(jq);
+
+//TouchLayer contributed by Carlos Ouro @ Badoo
+//un-authoritive layer between touches and actions on the DOM 
+//(un-authoritive: listeners do not require useCapture)
+//handles overlooking JS and native scrolling, panning, 
+//no delay on click, edit mode focus, preventing defaults, resizing content, 
+//enter/exit edit mode (keyboard on screen), prevent clicks on momentum, etc
+//It can be used independently in other apps but it is required by jqUi
+
+//Object Events
+
+//Enter Edit Mode:
+//pre-enter-edit - when a possible enter-edit is actioned - happens before actual click or focus (android can still reposition elements and event is actioned)
+//cancel-enter-edit - when a pre-enter-edit does not result in a enter-edit
+//enter-edit - on a enter edit mode focus
+//enter-edit-reshape - focus resized/scrolled event
+
+//in-edit-reshape - resized/scrolled event when a different element is focused
+
+//Exit Edit Mode
+//exit-edit - on blur
+//exit-edit-reshape - blur resized/scrolled event
+
+//Other
+//orientationchange-reshape - resize event due to an orientationchange action
+//reshape - window.resize/window.scroll event (ignores onfocus "shaking") - general reshape notice
+
+(function() {
+	//singleton
+    $.touchLayer = function(el) {
+		$.touchLayer = new touchLayer(el);
+		return $.touchLayer;
+    };
+	//configuration stuff
+	var inputElements = ['input', 'select', 'textarea'];
+	var autoBlurInputTypes = ['button', 'radio', 'checkbox', 'range'];
+	var requiresJSFocus = $.os.ios;	//devices which require .focus() on dynamic click events
+	var verySensitiveTouch = $.os.blackberry;	//devices which have a very sensitive touch and touchmove is easily fired even on simple taps
+	var inputElementRequiresNativeTap = $.os.blackberry || ($.os.android && !$.os.chrome);	//devices which require the touchstart event to bleed through in order to actually fire the click on select elements
+	var selectElementRequiresNativeTap = $.os.blackberry || ($.os.android && !$.os.chrome);	//devices which require the touchstart event to bleed through in order to actually fire the click on select elements
+	var focusScrolls = $.os.ios;	//devices scrolling on focus instead of resizing
+	var focusResizes = $.os.blackberry10;
+	var requirePanning = $.os.ios;	//devices which require panning feature
+    var addressBarError = 0.97;	//max 3% error in position
+	var maxHideTries = 2;	//HideAdressBar does not retry more than 2 times (3 overall)
+	
+	var touchLayer = function(el) {
+		this.clearTouchVars();
+        el.addEventListener('touchstart', this, false);
+		el.addEventListener('touchmove', this, false);
+		el.addEventListener('touchend', this, false);
+		el.addEventListener('click', this, false);
+		document.addEventListener('scroll', this, false);
+	    window.addEventListener("resize", this, false);
+		window.addEventListener("orientationchange", this, false);
+		this.layer=el;
+		//proxies
+		this.scrollEndedProxy_ = $.proxy(this.scrollEnded, this);
+		this.exitEditProxy_ = $.proxy(this.exitExit, this, []);
+		this.launchFixUIProxy_ = $.proxy(this.launchFixUI, this);
+		var that = this;
+		this.scrollTimeoutExpireProxy_ = function(){
+			that.scrollTimeout_=null;
+			that.scrollTimeoutEl_.addEventListener('scroll', that.scrollEndedProxy_, false);
+		};
+		this.retestAndFixUIProxy_ = function(){
+			if(jq.os.android) that.layer.style.height = '100%';
+			$.asap(that.testAndFixUI, that, arguments);
+		};
+		//js scrollers self binding
+		$.bind(this,'scrollstart',function(el){that.fireEvent('UIEvents', 'scrollstart', el, false, false);});
+		$.bind(this,'scrollend',function(el){that.fireEvent('UIEvents', 'scrollend', el, false, false);});
+		//fix layer positioning
+		this.launchFixUI(5);	//try a lot to set page into place
+    }
+	
+    touchLayer.prototype = {
+        dX: 0,
+        dY: 0,
+        cX: 0,
+        cY: 0,
+		//elements
+		layer: null,
+		scrollingEl_: null,
+		scrollTimeoutEl_:null,
+		//handles / proxies
+		scrollTimeout_:null,
+		reshapeTimeout_:null,
+		scrollEndedProxy_:null,
+		exitEditProxy_:null,
+		launchFixUIProxy_:null,
+		reHideAddressBarTimeout_:null,
+		retestAndFixUIProxy_:null,
+		//options
+		panElementId: "header",
+		//public locks
+		blockClicks:false,
+		//private locks
+		allowDocumentScroll_:false,
+		ignoreNextResize_:false,
+		blockPossibleClick_:false,
+		//status vars
+		isScrolling: false,
+		isScrollingVertical_: false,
+		wasPanning_:false,
+		isPanning_:false,
+		isFocused_:false,
+		justBlurred_:false,
+		requiresNativeTap: false,
+		holdingReshapeType_:null,
+		
+        handleEvent: function(e) {            
+            switch (e.type) {
+                case 'touchstart':
+                    this.onTouchStart(e);
+                    break;
+                case 'touchmove':
+                    this.onTouchMove(e);
+                    break;
+                case 'touchend':
+                    this.onTouchEnd(e);
+                    break;
+                case 'click':
+                    this.onClick(e);
+                    break;
+	            case 'blur':
+	               	this.onBlur(e);
+	                break;
+				case 'scroll':
+					this.onScroll(e);
+					break;
+				case 'orientationchange':
+					this.onOrientationChange(e);
+					break;
+				case 'resize':
+					this.onResize(e);
+					break;
+            }
+        },
+		launchFixUI:function(maxTries){
+			//this.log("launchFixUI");
+			if(!maxTries) maxTries = maxHideTries;
+			if(this.reHideAddressBarTimeout_==null) return this.testAndFixUI(0, maxTries);
+		},
+		resetFixUI:function(){
+			//this.log("resetFixUI");
+			if(this.reHideAddressBarTimeout_) clearTimeout(this.reHideAddressBarTimeout_);
+			this.reHideAddressBarTimeout_ = null;
+		},
+		testAndFixUI:function(retry, maxTries){
+			//this.log("testAndFixUI");
+			//for ios or if the heights are incompatible (and not close)
+			var refH = this.getReferenceHeight();
+			var curH = this.getCurrentHeight();
+			if((refH!=curH && !(curH*addressBarError<refH && refH*addressBarError<curH)) ){
+				//panic! page is out of place!
+				this.hideAddressBar(retry, maxTries);
+				return true;
+			}
+			if (jq.os.android) this.resetFixUI();
+			return false;
+		},
+		hideAddressBar:function(retry, maxTries) {
+			if(retry>=maxTries) {
+				this.resetFixUI();
+				return;	//avoid a possible loop
+			}
+			
+			//this.log("hiding address bar");
+	        if (jq.os.desktop||jq.os.chrome) {
+	            this.layer.style.height="100%";
+	        } else if (jq.os.android) {
+				//on some phones its immediate
+				window.scrollTo(1, 1);
+		        this.layer.style.height = this.isFocused_ ? (window.innerHeight) + "px" : (window.outerHeight / window.devicePixelRatio) + 'px';
+				//sometimes android devices are stubborn
+				that = this;
+				//re-test in a bit (some androids (SII, Nexus S, etc) fail to resize on first try)
+				var nextTry = retry+1;
+				this.reHideAddressBarTimeout_ = setTimeout(this.retestAndFixUIProxy_, 250*nextTry, [nextTry, maxTries]);	//each fix is progressibily longer (slower phones fix)
+	        } 
+	        else if(!this.isFocused_){
+	            document.documentElement.style.height = "5000px";
+	            window.scrollTo(0, 0);
+	            document.documentElement.style.height = window.innerHeight + "px";
+	            this.layer.style.height = window.innerHeight + "px";
+	        }
+	    },
+		getReferenceHeight:function(){
+			//the height the page should be at
+			if(jq.os.android){
+				return Math.ceil(window.outerHeight / window.devicePixelRatio);
+			} else return window.innerHeight;
+		},
+		getCurrentHeight:function(){
+			//the height the page really is at
+			if(jq.os.android){
+				return window.innerHeight;
+			} else return numOnly(document.documentElement.style.height);	//TODO: works well on iPhone, test BB
+		},
+		onOrientationChange:function(e){
+			//this.log("orientationchange");
+			//if a resize already happened, fire the orientationchange
+			if(!this.holdingReshapeType_ && this.reshapeTimeout_){
+				this.fireReshapeEvent('orientationchange');
+			} else this.previewReshapeEvent('orientationchange');
+		},
+		onResize:function(e){
+			//avoid infinite loop on iPhone
+			if(this.ignoreNextResize_) {
+				//this.log('ignored resize');
+				this.ignoreNextResize_=false;
+				return;
+			}
+			//this.logInfo('resize');
+			if(this.launchFixUI()){
+				this.reshapeAction();
+			}
+		},
+		onClick:function(e){
+			//handle forms
+			var tag =  e.target && e.target.tagName != undefined ? e.target.tagName.toLowerCase() : '';
+			
+			//this.log("click on "+tag);
+			
+            if (inputElements.indexOf(tag)!==-1 && (!this.isFocused_ || !e.target.isSameNode(this.focusedElement))) {
+
+				var type =  e.target && e.target.type != undefined ? e.target.type.toLowerCase() : '';
+				var autoBlur = autoBlurInputTypes.indexOf(type)!==-1;
+				
+				//focus
+				if(!autoBlur) {
+					//remove previous blur event if this keeps focus
+					if(this.isFocused_){
+						this.focusedElement.removeEventListener('blur', this, false);
+					}
+					this.focusedElement = e.target;
+					this.focusedElement.addEventListener('blur', this, false);
+					//android bug workaround for UI
+					if(!this.isFocused_ && !this.justBlurred_) {
+						//this.log("enter edit mode");
+						$.trigger(this, 'enter-edit', [e.target]);
+						//fire / preview reshape event
+						if($.os.ios) {
+							var that = this;
+							setTimeout(function(){that.fireReshapeEvent('enter-edit');}, 300);	//TODO: get accurate reading from window scrolling motion and get rid of timeout
+						} else this.previewReshapeEvent('enter-edit');
+					}
+					this.isFocused_ = true;
+				} else {
+					this.isFocused_=false;
+				}
+				this.justBlurred_ = false;
+				this.allowDocumentScroll_ = true;
+				
+				//fire focus action
+				if(requiresJSFocus){
+					e.target.focus();
+				}
+				
+				//BB10 needs to be preventDefault on touchstart and thus need manual blur on click
+            } else if($.os.blackberry10 && this.isFocused_) {
+				//this.log("forcing blur on bb10 ");
+				this.focusedElement.blur();
+			}
+		},
+		previewReshapeEvent:function(ev){
+			//a reshape event of this type should fire within the next 750 ms, otherwise fire it yourself
+			that = this;
+			this.reshapeTimeout_ = setTimeout(function(){
+				that.fireReshapeEvent(ev);
+				that.reshapeTimeout_=null;
+				that.holdingReshapeType_=null;
+			}, 750);
+			this.holdingReshapeType_ = ev;
+		},
+		fireReshapeEvent:function(ev){
+			//this.log(ev?ev+'-reshape':'unknown-reshape');
+			$.trigger(this, 'reshape');	//trigger a general reshape notice
+			$.trigger(this, ev?ev+'-reshape':'unknown-reshape');	//trigger the specific reshape
+		},
+		reshapeAction:function(){
+			if(this.reshapeTimeout_){
+				//we have a specific reshape event waiting for a reshapeAction, fire it now
+				clearTimeout(this.reshapeTimeout_);
+				this.fireReshapeEvent(this.holdingReshapeType_);
+				this.holdingReshapeType_ = null;
+				this.reshapeTimeout_=null;
+			} else this.previewReshapeEvent();
+		},
+		onBlur:function(e){
+			if(jq.os.android && e.target == window) return;	//ignore window blurs
+			//this.log("blurring");
+			this.isFocused_=false;
+			//just in case...
+			if(this.focusedElement) this.focusedElement.removeEventListener('blur', this, false);
+			this.focusedElement = null;
+			//make sure this blur is not followed by another focus
+			this.justBlurred_=true;
+			$.asap(this.exitEditProxy_, this, [e.target]);
+		},
+		exitExit:function(el){
+			this.justBlurred_ = false;
+			if(!this.isFocused_) {
+				//this.log("exit edit mode");
+				$.trigger(this, 'exit-edit', [el]);
+				//do not allow scroll anymore
+				this.allowDocumentScroll_=false;
+				//fire / preview reshape event
+				if($.os.ios) {
+					var that = this; 
+					setTimeout(function(){that.fireReshapeEvent('exit-edit');}, 300);	//TODO: get accurate reading from window scrolling motion and get rid of timeout
+				} else this.previewReshapeEvent('exit-edit');
+			}
+		},
+		onScroll:function(e){
+			//this.log("document scroll detected "+document.body.scrollTop);
+			if(!this.allowDocumentScroll_ && !this.isPanning_ && e.target.isSameNode(document)) {
+				this.allowDocumentScroll_ = true;
+				if(this.wasPanning_){
+					this.wasPanning_ = false;
+					//give it a couple of seconds
+					setTimeout(this.launchFixUIProxy_, 2000, [maxHideTries]);
+				} else {
+					//this.log("scroll forced page into place");
+					this.launchFixUI();
+				}
+			}
+		},
+
+        onTouchStart: function(e) {
+			//setup initial touch position
+            this.dX = e.touches[0].pageX;
+            this.dY = e.touches[0].pageY;
+			this.lastTimestamp = e.timeStamp;
+			
+			
+            
+			//check dom if necessary
+			if(requirePanning||$.feat.nativeTouchScroll) this.checkDOMTree(e.target, this.layer);
+			//scrollend check
+			if(this.isScrolling){
+				//remove prev timeout
+				if(this.scrollTimeout_!=null){
+					clearTimeout(this.scrollTimeout_);
+					//different element, trigger scrollend anyway
+					if(this.scrollTimeoutEl_ != this.scrollingEl_) this.scrollEnded(false);
+					else this.blockPossibleClick_=true;
+					//check if event was already set
+				} else if(this.scrollTimeoutEl_){
+					//trigger 
+					this.scrollEnded(true);
+					this.blockPossibleClick_=true;
+				}
+				
+			}
+			
+			
+            // We allow forcing native tap in android devices (required in special cases)
+            var forceNativeTap = (jq.os.android && e && e.target && e.target.getAttribute && e.target.getAttribute("data-touchlayer") == "ignore");
+            
+			//if on edit mode, allow all native touches 
+			//(BB10 must still be prevented, always clicks even after move)
+			if(forceNativeTap || (this.isFocused_ && !$.os.blackberry10)) {
+				this.requiresNativeTap=true;
+				this.allowDocumentScroll_=true;
+			
+			//some stupid phones require a native tap in order for the native input elements to work
+			} else if(inputElementRequiresNativeTap && e.target && e.target.tagName != undefined){
+				var tag = e.target.tagName.toLowerCase();
+				if(inputElements.indexOf(tag)!==-1) {
+					//notify scrollers (android forms bug), except for selects
+					if(tag!='select') $.trigger(this, 'pre-enter-edit', [e.target]);
+					this.requiresNativeTap = true;
+				}
+			}
+			
+			////this.log("Touchstart: "+
+			//	(this.isFocused_?"focused ":"")+
+			//	(this.isPanning_?"panning ":"")+
+			//	(this.requiresNativeTap?"nativeTap ":"")+
+			//	(this.isScrolling?"scrolling ":"")+
+			//	(this.allowDocumentScroll_?"allowDocumentScroll_ ":"")
+			//);
+			
+			//prevent default if possible
+			if(!this.isScrolling && !this.isPanning_ && !this.requiresNativeTap) {
+				e.preventDefault();
+				//demand vertical scroll (don't let it pan the page)
+			} else if(this.isScrollingVertical_){
+				this.demandVerticalScroll();
+			}
+        },
+		demandVerticalScroll:function(){
+			//if at top or bottom adjust scroll
+			var atTop = this.scrollingEl_.scrollTop<=0;
+			if(atTop){
+				//this.log("adjusting scrollTop to 1");
+				this.scrollingEl_.scrollTop=1;
+			} else {
+				var scrollHeight = this.scrollingEl_.scrollTop+this.scrollingEl_.clientHeight;
+				var atBottom = scrollHeight>=this.scrollingEl_.scrollHeight;
+				if(atBottom) {
+					//this.log("adjusting scrollTop to max-1");
+					this.scrollingEl_.scrollTop=this.scrollingEl_.scrollHeight-this.scrollingEl_.clientHeight-1;
+				}
+			}
+		},
+		//set rules here to ignore scrolling check on these elements
+		//consider forcing user to use scroller object to assess these... might be causing bugs
+		ignoreScrolling:function(el){
+			if(el['scrollWidth']===undefined || el['clientWidth']===undefined) return true;
+			if(el['scrollHeight']===undefined || el['clientHeight']===undefined) return true;
+			return false;
+		},
+		
+		allowsVerticalScroll:function(el, styles){
+			var overflowY = styles.overflowY;
+			if(overflowY == 'scroll') return true;
+			if(overflowY == 'auto' && el['scrollHeight'] > el['clientHeight'])
+				return true;
+			return false;
+		},
+		allowsHorizontalScroll:function(el, styles){
+			var overflowX = styles.overflowX;
+			if(overflowX == 'scroll') return true;
+			if(overflowX == 'auto' && el['scrollWidth'] > el['clientWidth'])
+				return true;
+			return false;
+		},
+		
+		
+		//check if pan or native scroll is possible
+		checkDOMTree : function(el, parentTarget){
+			
+			//check panning
+			//temporarily disabled for android - click vs panning issues
+			if(requirePanning && this.panElementId==el.id){
+				this.isPanning_ = true;
+				return;
+			}
+			//check native scroll
+			if($.feat.nativeTouchScroll){
+				
+				//prevent errors
+				if(this.ignoreScrolling(el)) {
+					return;
+				}
+			
+				//check if vertical or hor scroll are allowed
+				var styles = window.getComputedStyle(el);
+				if (this.allowsVerticalScroll(el, styles)){
+					this.isScrollingVertical_=true;
+					this.scrollingEl_ = el;
+					this.isScrolling = true;
+					return;
+				} else if(this.allowsHorizontalScroll(el, styles)){
+					this.isScrollingVertical_=false;
+					this.scrollingEl_ = null;
+					this.isScrolling = true;
+				}
+				
+			}
+			//check recursive up to top element
+			var isTarget = el.isSameNode(parentTarget);
+			if(!isTarget && el.parentNode) this.checkDOMTree(el.parentNode, parentTarget);
+		},
+		//scroll finish detectors
+		scrollEnded : function(e){
+			//this.log("scrollEnded");
+			if(e) this.scrollTimeoutEl_.removeEventListener('scroll', this.scrollEndedProxy_, false);
+			this.fireEvent('UIEvents', 'scrollend', this.scrollTimeoutEl_, false, false);
+			this.scrollTimeoutEl_=null;
+		},
+		
+        
+        onTouchMove: function(e) {
+			//set it as moved
+			var wasMoving = this.moved;
+			this.moved = true;
+			//very sensitive devices check
+			if(verySensitiveTouch){
+				this.cY = e.touches[0].pageY - this.dY;
+				this.cX = e.touches[0].pageX - this.dX;
+			}
+			//panning check
+			if(this.isPanning_) {
+				return;
+			}
+			//native scroll (for scrollend)
+			if(this.isScrolling){
+				if(!wasMoving) {
+					//this.log("scrollstart");
+					this.fireEvent('UIEvents', 'scrollstart', this.scrollingEl_, false, false);
+				}
+				if(this.isScrollingVertical_) {
+					this.speedY = (this.lastY - e.touches[0].pageY)/(e.timeStamp-this.lastTimestamp);
+					this.lastY = e.touches[0].pageY;
+					this.lastTimestamp = e.timeStamp;
+				}
+			}
+			//non-native scroll devices
+			if(!this.isScrolling && (!$.os.blackberry10 || !this.requiresNativeTap)){
+				//legacy stuff for old browsers
+	            e.preventDefault();
+				////this.log("TouchMove (preventDefault): "+
+				//	(this.isFocused_?"focused ":"")+
+				//	(this.isPanning_?"panning ":"")+
+				//	(this.requiresNativeTap?"nativeTap ":"")+
+				//	(this.isScrolling?"scrolling ":"")+
+				//	(this.moved?"moved ":"")
+				//);
+				return;
+			}
+			
+			////this.log("TouchMove: "+
+			//	(this.isFocused_?"focused ":"")+
+			//	(this.isPanning_?"panning ":"")+
+			//	(this.requiresNativeTap?"nativeTap ":"")+
+			//	(this.isScrolling?"scrolling ":"")+
+			//	(this.moved?"moved ":"")
+			//);
+        },
+        
+        onTouchEnd: function(e) {
+			//double check moved for sensitive devices
+			var itMoved = this.moved;
+			if(verySensitiveTouch){
+				itMoved = itMoved && !(Math.abs(this.cX) < 10 && Math.abs(this.cY) < 10);
+			}
+			
+			//don't allow document scroll unless a specific click demands it further ahead
+			if(!jq.os.ios || !this.requiresNativeTap) this.allowDocumentScroll_=false;
+			
+			//panning action
+			if(this.isPanning_ && itMoved){
+				//wait 2 secs and cancel
+				this.wasPanning_ = true;
+				
+			//a generated click
+			} else if (!itMoved && !this.requiresNativeTap) {
+				
+				//NOTE: on android if touchstart is not preventDefault(), click will fire even if touchend is prevented
+				//this is one of the reasons why scrolling and panning can not be nice and native like on iPhone
+				e.preventDefault();
+				
+				//fire click
+				if(!this.blockClicks && !this.blockPossibleClick_){
+	                var theTarget = e.target;
+	                if (theTarget.nodeType == 3)
+	                    theTarget = theTarget.parentNode;
+				
+					this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
+				}
+				
+            } else if(itMoved){
+				//setup scrollend stuff
+				if(this.isScrolling){
+					this.scrollTimeoutEl_ = this.scrollingEl_;
+					if(Math.abs(this.speedY)<0.01){
+						//fire scrollend immediatly
+						//this.log(" scrollend immediately "+this.speedY);
+						this.scrollEnded(false);
+					} else {
+						//wait for scroll event
+						//this.log($.debug.since()+" setting scroll timeout "+this.speedY);
+						this.scrollTimeout_ = setTimeout(this.scrollTimeoutExpireProxy_,30)
+					}
+				}
+				//trigger cancel-enter-edit on inputs
+				if(this.requiresNativeTap){
+            		if(!this.isFocused_) $.trigger(this, 'cancel-enter-edit', [e.target]);
+				}
+            }
+			
+			
+			
+			////this.log("TouchEnd: "+
+			//	(this.isFocused_?"focused ":"")+
+			//	(this.isPanning_?"panning ":"")+
+			//	(this.requiresNativeTap?"nativeTap ":"")+
+			//	(this.isScrolling?"scrolling ":"")+
+			//	(itMoved?"moved ":"")
+			//);
+			
+			
+			//clear up vars
+			this.clearTouchVars();
+        },
+		
+		clearTouchVars:function(){
+			//this.log("clearing touchVars");
+			this.speedY = this.lastY = this.cY = this.cX = this.dX = this.dY = 0;
+            this.moved = false;
+			this.isPanning_ = false;
+			this.isScrolling = false;
+			this.isScrollingVertical_ = false;
+			this.requiresNativeTap = false;
+			this.blockPossibleClick_ = false;
+		},
+		
+		fireEvent:function(eventType, eventName, target, bubbles, mouseToTouch){
+			//this.log("Firing event "+eventName);
+			//create the event and set the options
+			var theEvent = document.createEvent(eventType);
+			theEvent.initEvent(eventName, bubbles, true);
+			theEvent.target = target;
+			//jq.DesktopBrowsers flag
+			if(mouseToTouch) theEvent.mouseToTouch = true;
+			target.dispatchEvent(theEvent);
+		}
+		
+		// ,
+		// logInfo:function(prefix){
+		// 	this.log(prefix+": {window:(ih"+window.innerHeight+"|oh"+window.outerHeight+"|s"+document.body.scrollTop+"|y"+window.pageYOffset+"}");
+		// },
+		// log : function(str){
+		// 	$.debug.log(str);
+		// }
+    };
+    
+})();
+
+/**
  * jq.ui - A User Interface library for creating jqMobi applications
  * 
  * @copyright 2011
@@ -51,13 +2847,7 @@
            ```
          */
          this.availableTransitions = {};
-         this.availableTransitions.up = this.slideUpTransition;
-         this.availableTransitions.down = this.slideDownTransition;
-         this.availableTransitions.fade = this.fadeTransition;
-         this.availableTransitions.flip = this.flipTransition;
-         this.availableTransitions.pop = this.popTransition;
-         this.availableTransitions['default'] = this.slideTransition;
-         this.availableTransitions['none'] = this.noTransition;
+         this.availableTransitions['default'] =this.availableTransitions['none'] = this.noTransition;
     };
     
     
@@ -482,34 +3272,6 @@
 		},
 		
         /**
-         * Re-wire events on the bottom navbar after content has been updateded
-           ```
-           $.ui.updateNavbar();//toggle it
-           ```
-         * @title $.ui.updateNavbar([force])
-         * @api private
-         */
-        updateNavbar: function() {
-            var that = this;
-            var links = jq(this.navbar).find("a");
-            for (var i = 0; i < links.length; i++) {
-                links[i].setAttribute("data-ignore-pressed", "true");
-                links[i].setAttribute("resetHistory", "true");
-                links[i].oldclick = links[i].onclick;
-                
-                links[i].onclick = function(e) {
-                    if (that.doingTransition)
-                        return;
-                    jq("#navbar a").removeClass("selected");
-                    jq(this).addClass("selected");
-                    if (this.oldclick)
-                        this.oldclick(e);
-                }
-            
-            }
-            links = null;
-        },
-        /**
          * Updates the elements in the navbar
            ```
            $.ui.updateNavbarElements(elements);
@@ -532,7 +3294,7 @@
                 }
                 nb.append(node);
             }
-            this.updateNavbar();
+             jq("#navbar a").data("ignore-pressed", "true").data("resetHistory", "true");
         },
         /**
          * Updates the elements in the side menu
@@ -682,6 +3444,13 @@
             var el = $am(id);
             if (!el)
                 return;
+            
+            var newDiv = document.createElement("div");
+            newDiv.innerHTML = content;
+            if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
+                
+             
+            
             if (el.getAttribute("js-scrolling") && el.getAttribute("js-scrolling").toLowerCase() == "yes"){
                 $.cleanUpContent(el.childNodes[0], false, true);
                 el.childNodes[0].innerHTML = content;
@@ -690,6 +3459,8 @@
                 $.cleanUpContent(el, false, true);
                 el.innerHTML = content;
             }
+                
+            if($(newDiv).title) el.title = $(newDiv).title;
         },
         /**
          * Dynamically create a new panel on the fly.  It wires events, creates the scroller, applies Android fixes, etc.
@@ -705,9 +3476,12 @@
             var myEl = $am(el);
             if (!myEl) {
                 var newDiv = document.createElement("div");
-                newDiv.id = el;
-                newDiv.title = title;
                 newDiv.innerHTML = content;
+                if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
+                
+                if(!newDiv.title&&title) newDiv.title = title;
+                var newId = (newDiv.id)? newDiv.id : el; //figure out the new id - either the id from the loaded div.panel or the crc32 hash
+                newDiv.id = newId;
             } else {
                 newDiv = myEl;
             }
@@ -717,7 +3491,7 @@
             myEl = null;
             that.addDivAndScroll(newDiv, refresh, refreshFunc);
             newDiv = null;
-            return;
+            return newId;
         },
         /**
          *  Takes a div and sets up scrolling for it..
@@ -784,15 +3558,6 @@
 			scrollEl = null;
         },
 
-        /**
-         * This has been depricated, as it was a design flaw on my end.  People were updating segments of the panel and not the whole part.  It's counter intuitive to have to call 
-         * $.ui.updateAnchors(object,reset) after each change.
-         * @title $.ui.updateAnchors(element,resetHistory);
-         * @api private
-         */
-        updateAnchors: function(domEl, reset) {
-            return;
-        },
         /**
          *  Scrolls a panel to the top
            ```
@@ -1238,7 +4003,7 @@
             });
             
             this.modalWindow = modalDiv;
-            this.updateNavbar();
+            
             var defer = {};
             var contentDivs = this.viewportContainer.get().querySelectorAll(".panel");
             for (var i = 0; i < contentDivs.length; i++) {
@@ -1306,35 +4071,49 @@
                 //window.setTimeout(function() {
                 var loadFirstDiv=function(){
                     //activeDiv = firstDiv;
-                    that.firstDiv.style.display = "block";
-                    that.css3animate(that.firstDiv, {
-                        x: "0%",
-						success:function(){
-							that.clearAnimations(that.firstDiv);
-						}
-                    });
+                    //activeDiv = firstDiv;
+                    if (defaultHash.length > 0 && that.loadDefaultHash&&defaultHash!=("#"+that.firstDiv.id)&&$(defaultHash).length>0)
+                    {
+                        that.activeDiv=$(defaultHash).get();
+                        jq("#header #backButton").css("visibility","visible");
+                        that.setBackButtonText(that.activeDiv.title)
+                        that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
+                    }
+                    else
+                        previousTarget="#"+that.activeDiv.id;
+                    
+                    that.activeDiv.style.display = "block";
+                    
+                   
                     if (that.activeDiv.title)
-                        that.titleBar.innerHTML = that.activeDiv.title;
+                        that.setTitle(that.activeDiv.title);
                     that.parsePanelFunctions(that.activeDiv);
                     //Load the default hash
-                    if (defaultHash.length > 0 && that.loadDefaultHash) 
-                    {
-                        that.loadContent(defaultHash);
-                    }
+                    
+                    that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
                     modalDiv = null;
                     maskDiv = null;
                     that.launchCompleted = true;
-                    jq(document).trigger("jq.ui.ready");
-                    $.asap(function() {
-                        // Run after the first div animation has been triggered
-                        jq("#splashscreen").remove();
-                    });
-
-                    that.defaultFooter = jq("#navbar").children();
+                    
+                   if(jq("#navbar a").length>0){
+                        jq("#navbar a").data("ignore-pressed", "true").data("resetHistory", "true");
+                        that.defaultFooter = jq("#navbar").children();
+                        that.updateNavbarElements(that.defaultFooter);
+                    }
                     var firstMenu = jq("nav").get();
-                    that.defaultMenu = jq(firstMenu).children();
-
-                    that.updateSideMenu(that.defaultMenu);
+                    if(firstMenu){
+                        that.defaultMenu = jq(firstMenu).children();
+                        that.updateSideMenu(that.defaultMenu);
+                    }
+                    that.defaultHeader = jq("#header").children();
+                    jq(document).trigger("jq.ui.ready");
+                    jq("#splashscreen").remove();
+                    jq("#navbar").on("click", "a", function(e) {
+                        jq("#navbar a").not(this).removeClass("selected");
+                        setTimeout(function() {
+                            $(e.target).addClass("selected");
+                        }, 10);
+                    });
                 };
                 if(loadingDefer){
                     $(document).one("defer:loaded",loadFirstDiv);
@@ -1343,389 +4122,6 @@
                     window.setTimeout(loadFirstDiv,100);	//could this be $.asap?
             }
            
-        },
-		
-		/*transitions helpers*/
-		
-
-        /**
-         * Initiate a sliding transition.  This is a sample to show how transitions are implemented.  These are registered in $.ui.availableTransitions and take in three parameters.
-         * @param {Object} previous panel
-         * @param {Object} current panel
-         * @param {Boolean} go back
-         * @title $.ui.slideTransition(previousPanel,currentPanel,goBack);
-         */
-        slideTransition: function(oldDiv, currDiv, back) {
-            oldDiv.style.display = "block";
-            currDiv.style.display = "block";
-            var that = this;
-            if (back) {
-                that.css3animate(oldDiv, {
-					x:"0%",
-					y:"0%",
-					complete:function(){
-		                that.css3animate(oldDiv, {
-		                    x: "100%",
-		                    time: "150ms",
-		                    complete: function() {
-		                        that.finishTransition(oldDiv, currDiv);
-		                    }
-		                }).link(currDiv, {
-	                        x: "0%",
-	                        time: "150ms"
-	                    });
-					}
-				}).link(currDiv, {
-					x:"-100%",
-					y:"0%"
-				});
-            } else {
-                that.css3animate(oldDiv, {
-					x:"0%",
-					y:"0%",
-					complete:function(){
-		                that.css3animate(oldDiv, {
-		                    x: "-100%",
-		                    time: "150ms",
-		                    complete: function() {
-		                        that.finishTransition(oldDiv, currDiv);
-		                    }
-		                }).link(currDiv, {
-	                        x: "0%",
-	                        time: "150ms"
-	                    });
-					}
-				}).link(currDiv, {
-					x:"100%",
-					y:"0%"
-				});
-            }
-        },
-        /**
-         * This is here to keep the parser from continuing on
-         * @api private
-         */
-        slideUpTransition: function(oldDiv, currDiv, back) {
-            oldDiv.style.display = "block";
-            currDiv.style.display = "block";
-            var that = this;
-            if (back) {
-                currDiv.style.zIndex = 1;
-                oldDiv.style.zIndex = 2;
-				
-				that.clearAnimations(currDiv);
-
-                that.css3animate(oldDiv, {
-                    y: "100%",
-                    x: "0%",
-                    time: "150ms",
-                    complete: function() {
-                        that.finishTransition(oldDiv);
-                        currDiv.style.zIndex = 2;
-                        oldDiv.style.zIndex = 1;
-                    }
-                });
-            } else {
-                currDiv.style.zIndex = 2;
-                oldDiv.style.zIndex = 1;
-                that.css3animate(currDiv, {
-                    y: "100%",
-                    x: "0%",
-                    complete: function() {
-                        that.css3animate(currDiv, {
-                            y: "0%",
-                            x: "0%",
-                            time: "150ms",
-							complete: function(canceled) {
-								if(canceled) {
-									that.finishTransition(oldDiv, currDiv);
-									return;
-								}
-								
-								that.clearAnimations(currDiv);
-		                        that.css3animate(oldDiv, {
-		                            x: "-100%",
-		                            y: 0,
-		                            complete: function() {
-		                                that.finishTransition(oldDiv);
-		                            }
-		                        });
-								
-							}
-                        });
-                    }
-                });
-            }
-        },
-        slideDownTransition: function(oldDiv, currDiv, back) {
-            oldDiv.style.display = "block";
-            currDiv.style.display = "block";
-            var that = this
-            if (back) {
-                currDiv.style.zIndex = 1;
-                oldDiv.style.zIndex = 2;
-                that.clearAnimations(currDiv);
-                that.css3animate(oldDiv, {
-                    y: "-100%",
-                    x: "0%",
-                    time: "150ms",
-                    complete: function(canceled) {
-						if(canceled) {
-							that.finishTransition(oldDiv, currDiv);
-							return;
-						}
-						
-                        that.css3animate(oldDiv, {
-                            x: "-100%",
-                            y: 0,
-                            complete: function() {
-                                that.finishTransition(oldDiv);
-                            
-                            }
-                        });
-                        currDiv.style.zIndex = 2;
-                        oldDiv.style.zIndex = 1;
-                    }
-                });
-            } else {
-                oldDiv.style.zIndex = 1;
-                currDiv.style.zIndex = 2;
-                that.css3animate(currDiv, {
-                    y: "-100%",
-                    x: "0%",
-                    complete: function() {
-                        that.css3animate(currDiv, {
-                            y: "0%",
-                            x: "0%",
-                            time: "150ms",
-							complete: function(canceled){
-								if(canceled) {
-									that.finishTransition(oldDiv, currDiv);
-									return;
-								}
-								
-								that.clearAnimations(currDiv);
-		                        that.css3animate(oldDiv, {
-		                            x: "-100%",
-		                            y: 0,
-		                            complete: function() {
-		                                that.finishTransition(oldDiv);
-		                            }
-		                        });
-								
-							}
-                        });
-                    }
-                });
-            }
-        },
-        flipTransition: function(oldDiv, currDiv, back) {
-            oldDiv.style.display = "block";
-            currDiv.style.display = "block";
-            var that = this
-            if (back) {
-                that.css3animate(currDiv, {
-                    x: "100%",
-                    scale: .8,
-                    rotateY: "180deg",
-                    complete: function() {
-                        that.css3animate(currDiv, {
-                            x: "0%",
-							scale: 1,
-                            time: "150ms",
-							rotateY: "0deg",
-							complete: function(){
-								that.clearAnimations(currDiv);
-							}
-                        });
-                    }
-                });
-                that.css3animate(oldDiv, {
-                    x: "100%",
-                    time: "150ms",
-                    scale: .8,
-                    rotateY: "180deg",
-                    complete: function() {
-                        that.css3animate(oldDiv, {
-                            x: "-100%",
-                            opacity: 1,
-		                    scale: 1,
-		                    rotateY: "0deg",
-                            complete: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
-                        currDiv.style.zIndex = 2;
-                        oldDiv.style.zIndex = 1;
-                    }
-                });
-            } else {
-                oldDiv.style.zIndex = 1;
-                currDiv.style.zIndex = 2;
-                that.css3animate(oldDiv, {
-                    x: "100%",
-                    time: "150ms",
-                    scale: .8,
-                    rotateY: "180deg",
-                    complete: function() {
-                        that.css3animate(oldDiv, {
-                            x: "-100%",
-                            y: 0,
-                            time: "1ms",
-		                    scale: 1,
-		                    rotateY: "0deg",
-                            complete: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
-                    }
-                });
-                that.css3animate(currDiv, {
-                    x: "100%",
-                    time: "1ms",
-                    scale: .8,
-                    rotateY: "180deg",
-                    complete: function() {
-                        that.css3animate(currDiv, {
-                            x: "0%",
-                            time: "150ms",
-		                    scale: 1,
-		                    rotateY: "0deg",
-							complete:function(){
-								that.clearAnimations(currDiv);
-							}
-                        });
-                    }
-                });
-            }
-        },
-        fadeTransition: function(oldDiv, currDiv, back) {
-            oldDiv.style.display = "block";
-            currDiv.style.display = "block";
-            var that = this
-            if (back) {
-                currDiv.style.zIndex = 1;
-                oldDiv.style.zIndex = 2;
-                that.clearAnimations(currDiv);
-                that.css3animate(oldDiv, {
-                    x: "0%",
-                    time: "150ms",
-                    opacity: .1,
-                    complete: function(canceled) {
-						if(canceled) {
-							that.finishTransition(oldDiv, currDiv);
-							return;
-						}
-						
-                        that.css3animate(oldDiv, {
-                            x: "-100%",
-                            opacity: 1,
-                            complete: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        
-                        });
-                        currDiv.style.zIndex = 2;
-                        oldDiv.style.zIndex = 1;
-                    }
-                });
-            } else {
-                oldDiv.style.zIndex = 1;
-                currDiv.style.zIndex = 2;
-				currDiv.style.opacity = 0;
-                that.css3animate(currDiv, {
-                    x: "0%",
-                    opacity: .1,
-                    complete: function() {
-		                that.css3animate(currDiv, {
-		                    x: "0%",
-		                    time: "150ms",
-		                    opacity: 1,
-							complete:function(canceled){
-								if(canceled) {
-									that.finishTransition(oldDiv, currDiv);
-									return;
-								}
-								
-								that.clearAnimations(currDiv);
-		                        that.css3animate(oldDiv, {
-		                            x: "-100%",
-		                            y: 0,
-		                            complete: function() {
-		                                that.finishTransition(oldDiv);
-		                            }
-		                        });
-							}
-		                });
-                    }
-                });
-            }
-        },
-        popTransition: function(oldDiv, currDiv, back) {
-            oldDiv.style.display = "block";
-            currDiv.style.display = "block";
-            var that = this
-            if (back) {
-                currDiv.style.zIndex = 1;
-                oldDiv.style.zIndex = 2;
-                that.clearAnimations(currDiv);
-                that.css3animate(oldDiv, {
-                    x: "0%",
-                    time: "150ms",
-                    opacity: .1,
-                    scale: .2,
-                    origin: "-50%"+" 50%",
-                    complete: function(canceled) {
-						if(canceled) {
-							that.finishTransition(oldDiv);
-							return;
-						}
-						
-                        that.css3animate(oldDiv, {
-                            x: "-100%",
-                            complete: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
-                        currDiv.style.zIndex = 2;
-                        oldDiv.style.zIndex = 1;
-                    }
-                });
-            } else {
-                oldDiv.style.zIndex = 1;
-                currDiv.style.zIndex = 2;
-                that.css3animate(currDiv, {
-                    x: "0%",
-                    y: "0%",
-                    scale: .2,
-                    origin: "-50%"+" 50%",
-                    opacity: .1,
-                    complete: function() {
-                        that.css3animate(currDiv, {
-                            x: "0%",
-                            time: "150ms",
-                            scale: 1,
-                            opacity: 1,
-                            origin: "0%"+" 0%",
-							complete: function(canceled){
-								if(canceled) {
-									that.finishTransition(oldDiv, currDiv);
-									return;
-								}
-								
-								that.clearAnimations(currDiv);
-		                        that.css3animate(oldDiv, {
-		                            x: "100%",
-		                            y: 0,
-		                            complete: function() {
-		                                that.finishTransition(oldDiv);
-		                            }
-		                        });
-							}
-                        });
-                    }
-                });
-            }
         },
         noTransition: function(oldDiv, currDiv, back) {
             currDiv.style.display = "block";
@@ -1852,6 +4248,409 @@
             document.documentElement.style.minHeight = window.innerHeight;
         }, 300);
     });
+
 })();
 
+
+
+(function($ui){
+    
+        function fadeTransition (oldDiv, currDiv, back) {
+            oldDiv.style.display = "block";
+            currDiv.style.display = "block";
+            var that = this
+            if (back) {
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
+                that.clearAnimations(currDiv);
+                that.css3animate(oldDiv, {
+                    x: "0%",
+                    time: "150ms",
+                    opacity: .1,
+                    complete: function(canceled) {
+                        if(canceled) {
+                            that.finishTransition(oldDiv, currDiv);
+                            return;
+                        }
+                        
+                        that.css3animate(oldDiv, {
+                            x: "-100%",
+                            opacity: 1,
+                            complete: function() {
+                                that.finishTransition(oldDiv);
+                            }
+                        
+                        });
+                        currDiv.style.zIndex = 2;
+                        oldDiv.style.zIndex = 1;
+                    }
+                });
+            } else {
+                oldDiv.style.zIndex = 1;
+                currDiv.style.zIndex = 2;
+                currDiv.style.opacity = 0;
+                that.css3animate(currDiv, {
+                    x: "0%",
+                    opacity: .1,
+                    complete: function() {
+                        that.css3animate(currDiv, {
+                            x: "0%",
+                            time: "150ms",
+                            opacity: 1,
+                            complete:function(canceled){
+                                if(canceled) {
+                                    that.finishTransition(oldDiv, currDiv);
+                                    return;
+                                }
+                                
+                                that.clearAnimations(currDiv);
+                                that.css3animate(oldDiv, {
+                                    x: "-100%",
+                                    y: 0,
+                                    complete: function() {
+                                        that.finishTransition(oldDiv);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        $ui.availableTransitions.fade = fadeTransition;
+})($.ui);
+(function($ui){
+    
+        function flipTransition (oldDiv, currDiv, back) {
+             oldDiv.style.display = "block";
+            currDiv.style.display = "block";
+            var that = this
+            if (back) {
+                that.css3animate(currDiv, {
+                    x: "100%",
+                    scale: .8,
+                    rotateY: "180deg",
+                    complete: function() {
+                        that.css3animate(currDiv, {
+                            x: "0%",
+                            scale: 1,
+                            time: "150ms",
+                            rotateY: "0deg",
+                            complete: function(){
+                                that.clearAnimations(currDiv);
+                            }
+                        });
+                    }
+                });
+                that.css3animate(oldDiv, {
+                    x: "100%",
+                    time: "150ms",
+                    scale: .8,
+                    rotateY: "180deg",
+                    complete: function() {
+                        that.css3animate(oldDiv, {
+                            x: "-100%",
+                            opacity: 1,
+                            scale: 1,
+                            rotateY: "0deg",
+                            complete: function() {
+                                that.finishTransition(oldDiv);
+                            }
+                        });
+                        currDiv.style.zIndex = 2;
+                        oldDiv.style.zIndex = 1;
+                    }
+                });
+            } else {
+                oldDiv.style.zIndex = 1;
+                currDiv.style.zIndex = 2;
+                that.css3animate(oldDiv, {
+                    x: "100%",
+                    time: "150ms",
+                    scale: .8,
+                    rotateY: "180deg",
+                    complete: function() {
+                        that.css3animate(oldDiv, {
+                            x: "-100%",
+                            y: 0,
+                            time: "1ms",
+                            scale: 1,
+                            rotateY: "0deg",
+                            complete: function() {
+                                that.finishTransition(oldDiv);
+                            }
+                        });
+                    }
+                });
+                that.css3animate(currDiv, {
+                    x: "100%",
+                    time: "1ms",
+                    scale: .8,
+                    rotateY: "180deg",
+                    complete: function() {
+                        that.css3animate(currDiv, {
+                            x: "0%",
+                            time: "150ms",
+                            scale: 1,
+                            rotateY: "0deg",
+                            complete:function(){
+                                that.clearAnimations(currDiv);
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        $ui.availableTransitions.flip = flipTransition;
+})($.ui);
+(function($ui){
+        
+         function popTransition(oldDiv, currDiv, back) {
+            oldDiv.style.display = "block";
+            currDiv.style.display = "block";
+            var that = this
+            if (back) {
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
+                that.clearAnimations(currDiv);
+                that.css3animate(oldDiv, {
+                    x: "0%",
+                    time: "150ms",
+                    opacity: .1,
+                    scale: .2,
+                    origin: "-50%"+" 50%",
+                    complete: function(canceled) {
+                        if(canceled) {
+                            that.finishTransition(oldDiv);
+                            return;
+                        }
+                        
+                        that.css3animate(oldDiv, {
+                            x: "-100%",
+                            complete: function() {
+                                that.finishTransition(oldDiv);
+                            }
+                        });
+                        currDiv.style.zIndex = 2;
+                        oldDiv.style.zIndex = 1;
+                    }
+                });
+            } else {
+                oldDiv.style.zIndex = 1;
+                currDiv.style.zIndex = 2;
+                that.css3animate(currDiv, {
+                    x: "0%",
+                    y: "0%",
+                    scale: .2,
+                    origin: "-50%"+" 50%",
+                    opacity: .1,
+                    complete: function() {
+                        that.css3animate(currDiv, {
+                            x: "0%",
+                            time: "150ms",
+                            scale: 1,
+                            opacity: 1,
+                            origin: "0%"+" 0%",
+                            complete: function(canceled){
+                                if(canceled) {
+                                    that.finishTransition(oldDiv, currDiv);
+                                    return;
+                                }
+                                
+                                that.clearAnimations(currDiv);
+                                that.css3animate(oldDiv, {
+                                    x: "100%",
+                                    y: 0,
+                                    complete: function() {
+                                        that.finishTransition(oldDiv);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        $ui.availableTransitions.pop = popTransition;
+})($.ui);
+(function($ui){
+    
+        /**
+         * Initiate a sliding transition.  This is a sample to show how transitions are implemented.  These are registered in $ui.availableTransitions and take in three parameters.
+         * @param {Object} previous panel
+         * @param {Object} current panel
+         * @param {Boolean} go back
+         * @title $ui.slideTransition(previousPanel,currentPanel,goBack);
+         */
+        function slideTransition(oldDiv, currDiv, back) {
+          	 oldDiv.style.display = "block";
+            currDiv.style.display = "block";
+            var that = this;
+            if (back) {
+                that.css3animate(oldDiv, {
+					x:"0%",
+					y:"0%",
+					complete:function(){
+		                that.css3animate(oldDiv, {
+		                    x: "100%",
+		                    time: "150ms",
+		                    complete: function() {
+		                        that.finishTransition(oldDiv, currDiv);
+		                    }
+		                }).link(currDiv, {
+	                        x: "0%",
+	                        time: "150ms"
+	                    });
+					}
+				}).link(currDiv, {
+					x:"-100%",
+					y:"0%"
+				});
+            } else {
+                that.css3animate(oldDiv, {
+					x:"0%",
+					y:"0%",
+					complete:function(){
+		                that.css3animate(oldDiv, {
+		                    x: "-100%",
+		                    time: "150ms",
+		                    complete: function() {
+		                        that.finishTransition(oldDiv, currDiv);
+		                    }
+		                }).link(currDiv, {
+	                        x: "0%",
+	                        time: "150ms"
+	                    });
+					}
+				}).link(currDiv, {
+					x:"100%",
+					y:"0%"
+				});
+            }
+        }
+        $ui.availableTransitions.slide = slideTransition;
+        $ui.availableTransitions['default'] = slideTransition;
+})($.ui);
+(function($ui){
+    
+        function slideDownTransition (oldDiv, currDiv, back) {
+            oldDiv.style.display = "block";
+            currDiv.style.display = "block";
+            var that = this
+            if (back) {
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
+                that.clearAnimations(currDiv);
+                that.css3animate(oldDiv, {
+                    y: "-100%",
+                    x: "0%",
+                    time: "150ms",
+                    complete: function(canceled) {
+                        if(canceled) {
+                            that.finishTransition(oldDiv, currDiv);
+                            return;
+                        }
+                        
+                        that.css3animate(oldDiv, {
+                            x: "-100%",
+                            y: 0,
+                            complete: function() {
+                                that.finishTransition(oldDiv);
+                            
+                            }
+                        });
+                        currDiv.style.zIndex = 2;
+                        oldDiv.style.zIndex = 1;
+                    }
+                });
+            } else {
+                oldDiv.style.zIndex = 1;
+                currDiv.style.zIndex = 2;
+                that.css3animate(currDiv, {
+                    y: "-100%",
+                    x: "0%",
+                    complete: function() {
+                        that.css3animate(currDiv, {
+                            y: "0%",
+                            x: "0%",
+                            time: "150ms",
+                            complete: function(canceled){
+                                if(canceled) {
+                                    that.finishTransition(oldDiv, currDiv);
+                                    return;
+                                }
+                                
+                                that.clearAnimations(currDiv);
+                                that.css3animate(oldDiv, {
+                                    x: "-100%",
+                                    y: 0,
+                                    complete: function() {
+                                        that.finishTransition(oldDiv);
+                                    }
+                                });
+                                
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        $ui.availableTransitions.down = slideDownTransition;
+})($.ui);
+(function($ui){
+    
+        function slideUpTransition(oldDiv, currDiv, back) {
+             oldDiv.style.display = "block";
+            currDiv.style.display = "block";
+            var that = this;
+            if (back) {
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
+                
+                that.clearAnimations(currDiv);
+
+                that.css3animate(oldDiv, {
+                    y: "100%",
+                    x: "0%",
+                    time: "150ms",
+                    complete: function() {
+                        that.finishTransition(oldDiv);
+                        currDiv.style.zIndex = 2;
+                        oldDiv.style.zIndex = 1;
+                    }
+                });
+            } else {
+                currDiv.style.zIndex = 2;
+                oldDiv.style.zIndex = 1;
+                that.css3animate(currDiv, {
+                    y: "100%",
+                    x: "0%",
+                    complete: function() {
+                        that.css3animate(currDiv, {
+                            y: "0%",
+                            x: "0%",
+                            time: "150ms",
+                            complete: function(canceled) {
+                                if(canceled) {
+                                    that.finishTransition(oldDiv, currDiv);
+                                    return;
+                                }
+                                
+                                that.clearAnimations(currDiv);
+                                that.css3animate(oldDiv, {
+                                    x: "-100%",
+                                    y: 0,
+                                    complete: function() {
+                                        that.finishTransition(oldDiv);
+                                    }
+                                });
+                                
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        $ui.availableTransitions.up = slideUpTransition;
+})($.ui);
 
