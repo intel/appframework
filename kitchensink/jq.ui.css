@@ -69,6 +69,7 @@ width:100%;
 } /* Horizontal line. */
 
 .jqmScrollbar { background:white !important; } /* Sets the color of the scrollbar */
+.jqmScrollPanel { width:100%; min-height:100%; }
 
 #jQUi {
 	position:absolute;
@@ -819,7 +820,8 @@ select[disabled]~div {
 
 	
 .hasMenu{
--webkit-transition: all 300ms;
+/*removed - should neve be all (performance), 300ms param should go into jq.ui.js; also default should not have accelaration, avoid iPhone blur*/
+/* -webkit-transition: all 300ms; */
  position:absolute !important;
  left:0px !important;
 }
