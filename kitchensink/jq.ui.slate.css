@@ -55,6 +55,7 @@ width:100%;
 } /* Horizontal line. */
 
 .jqmScrollbar { background:white !important; } /* Sets the color of the scrollbar */
+.jqmScrollPanel { width:100%; min-height:100%; }
 
 #jQUi {
 	position:absolute;
@@ -748,7 +749,6 @@ input.jq-ui-slider[type=radio]:focus:disabled + label
 select[disabled]~div { opacity:.7; }
 	
 .hasMenu{
--webkit-transition: all 300ms;
  position:absolute !important;
  left:0px !important;
 }
