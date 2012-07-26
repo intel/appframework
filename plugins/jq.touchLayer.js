@@ -342,6 +342,7 @@
 				//remove prev timeout
 				if(this.scrollTimeout_!=null){
 					clearTimeout(this.scrollTimeout_);
+					this.scrollTimeout_=null;
 					//different element, trigger scrollend anyway
 					if(this.scrollTimeoutEl_ != this.scrollingEl_) this.scrollEnded(false);
 					else this.blockPossibleClick_=true;
