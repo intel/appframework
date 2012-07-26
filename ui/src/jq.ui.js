@@ -828,16 +828,19 @@
             }
             
             
-            var fnc = what.getAttribute("data-load");
-            if (typeof fnc == "string" && window[fnc]) {
-                window[fnc](what);
-            }
+           
             if (oldDiv) {
                 fnc = oldDiv.getAttribute("data-unload");
                 if (typeof fnc == "string" && window[fnc]) {
                     window[fnc](oldDiv);
                 }
             }
+            $(what).trigger("unloadpanel");
+             var fnc = what.getAttribute("data-load");
+            if (typeof fnc == "string" && window[fnc]) {
+                window[fnc](what);
+            }
+            $(what).trigger("loadpanel");
             if (this.isSideMenuOn()){
 				this.toggleSideMenu(false);
             }
