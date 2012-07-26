@@ -1252,7 +1252,7 @@ if (!window.jq || typeof (jq) !== "function") {
         $.ajax = function(opts) {
             var xhr;
             try {
-                xhr = new window.XMLHttpRequest();
+				
                 var settings = opts || {};
                 for (var key in ajaxSettings) {
                     if (!settings[key])
@@ -1314,6 +1314,11 @@ if (!window.jq || typeof (jq) !== "function") {
                 var abortTimeout;
                 var context = settings.context;
                 var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
+				
+				//ok, we are really using xhr
+				xhr = new window.XMLHttpRequest();
+				
+				
                 xhr.onreadystatechange = function() {
                     var mime = settings.dataType;
                     if (xhr.readyState === 4) {
@@ -1344,6 +1349,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     }
                 };
                 xhr.open(settings.type, settings.url, true);
+				if (settings.withCredentials) xhr.withCredentials = true;
                 
                 if (settings.contentType)
                     settings.headers['Content-Type'] = settings.contentType;
