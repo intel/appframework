@@ -294,8 +294,7 @@
             previousTarget = '#' + newHash.replace('#', '');
 
             var previousHash = window.location.hash;
-            var firstSlash = newHash.indexOf('/');
-            var panelName = newHash.substring(1, firstSlash == -1?null:firstSlash - 1);
+            var panelName = this.getPanelId(newHash);
 
             try {
                 window.history.replaceState(panelName, panelName, window.location.pathname + newHash);
@@ -304,6 +303,12 @@
             catch (e) {
             }
         },
+		/*gets the panel name from an hash*/
+		getPanelId:function(hash){
+            var firstSlash = hash.indexOf('/');
+            return hash.substring(1, firstSlash == -1?null:firstSlash - 1);
+		},
+		
         /**
          * Update a badge on the selected target.  Position can be
             bl = bottom left
@@ -1278,10 +1283,10 @@
                 //window.setTimeout(function() {
                 var loadFirstDiv=function(){
                     //activeDiv = firstDiv;
-                    //activeDiv = firstDiv;
-                    if (defaultHash.length > 0 && that.loadDefaultHash&&defaultHash!=("#"+that.firstDiv.id)&&$(defaultHash).length>0)
+					var firstPanelId = that.getPanelId(defaultHash);
+                    if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId!=("#"+that.firstDiv.id) && $(firstPanelId).length>0)
                     {
-                        that.activeDiv=$(defaultHash).get();
+						that.activeDiv=$(firstPanelId).get();
                         jq("#header #backButton").css("visibility","visible");
                         that.setBackButtonText(that.activeDiv.title)
                         that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
@@ -1314,12 +1319,15 @@
                     }
                     that.defaultHeader = jq("#header").children();
                     jq(document).trigger("jq.ui.ready");
-                    jq("#splashscreen").remove();
+					$.asap(function() {
+						// Run after the first div animation has been triggered - avoids flashing
+						jq("#splashscreen").remove();
+					});
                     jq("#navbar").on("click", "a", function(e) {
                         jq("#navbar a").not(this).removeClass("selected");
-                        setTimeout(function() {
+                        $.asap(function() {
                             $(e.target).addClass("selected");
-                        }, 10);
+                        });
                     });
                 };
                 if(loadingDefer){
