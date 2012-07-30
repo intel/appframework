@@ -291,10 +291,11 @@
          * @title $.ui.updateHash(newHash)
          */
         updateHash: function(newHash) {
-            previousTarget = '#' + newHash.replace('#', '');
+            newHash = newHash.indexOf('/')==-1?'#' + newHash:newHash;	//force having the # in the begginning as a standard
+			previousTarget = newHash;
 
             var previousHash = window.location.hash;
-            var panelName = this.getPanelId(newHash);
+            var panelName = this.getPanelId(newHash).substring(1);	//remove the #
 
             try {
                 window.history.replaceState(panelName, panelName, window.location.pathname + newHash);
@@ -306,7 +307,7 @@
 		/*gets the panel name from an hash*/
 		getPanelId:function(hash){
             var firstSlash = hash.indexOf('/');
-            return hash.substring(1, firstSlash == -1?null:firstSlash - 1);
+            return firstSlash == -1? hash : hash.substring(0, firstSlash - 1);
 		},
 		
         /**
@@ -908,166 +909,170 @@
             }
                 
             if (target.indexOf("#") == -1 && anchor && loadAjax) {
-
-                // XML Request
-                if (this.activeDiv.id == "jQui_ajax" && target == this.ajaxUrl)
-                    return;
-                if (target.indexOf("http") == -1)
-                    target = AppMobi.webRoot + target;
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.onreadystatechange = function() {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        this.doingTransition = false;
-                            
-                        var doReturn = false;
-
-                        //Here we check to see if we are retaining the div, if so update it
-                        if ($am(urlHash) !== undefined) {
-                            that.updateContentDiv(urlHash, xmlhttp.responseText);
-                            $am(urlHash).title = anchor.title ? anchor.title : target;
-                        } else if (anchor.getAttribute("data-persist-ajax")) {
-                                
-                            var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
-                            refreshFunction = refresh ? 
-                            function() {
-                                anchor.refresh = true;
-                                that.loadContent(target, newTab, back, transition, anchor);
-                                anchor.refresh = false;
-                            } : null;
-                            that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
-                            $am(urlHash).title = anchor.title ? anchor.title : target;
-                        } else {
-                            that.updateContentDiv("jQui_ajax", xmlhttp.responseText);
-                            $am("jQui_ajax").title = anchor.title ? anchor.title : target;
-                            that.loadContent("#jQui_ajax", newTab, back);
-                            doReturn = true;
-                        }
-                        //Let's load the content now.
-                        //We need to check for any script tags and handle them
-                        var div = document.createElement("div");
-                        div.innerHTML = xmlhttp.responseText;
-                        that.parseScriptTags(div);
-                        if (doReturn)
-                            return;
-                            
-                        return that.loadContent("#" + urlHash);
-                        
-                    }
-                };
-                ajaxUrl = target;
-                var newtarget = this.useAjaxCacheBuster?target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000:target;
-                xmlhttp.open("GET", newtarget, true);
-                xmlhttp.send();
-                // show Ajax Mask
-                this.showMask();
-                return;
+				this.loadAjax(target, newTab, back, transition, anchor);
             } else {
-                // load a div
-                what = target.replace("#", "");
-
-                var slashIndex = what.indexOf('/');
-                var hashLink = "";
-                if (slashIndex != -1) {
-                    // Ignore everything after the slash for loading
-                    hashLink = what.substr(slashIndex);
-                    what = what.substr(0, slashIndex);
-                }
-
-                what = $am(what);
-                    
-                if (!what)
-                    throw ("Target: " + target + " was not found");
-                if (what == this.activeDiv && !back){
-                	//toggle the menu if applicable
-		            if (this.isSideMenuOn()) this.toggleSideMenu(false);
-					return;
-                }
-                    
-                if (what.getAttribute("data-modal") == "true" || what.getAttribute("modal") == "true") {
-                    return this.showModal(what.id);
-                }
-                what.style.display = "block";
-                    
-                    
-                    
-                this.transitionType = transition;
-                var oldDiv = this.activeDiv;
-                var currWhat = what;
-                    
-                if (oldDiv == currWhat) //prevent it from going to itself
-                    return;
-                    
-                if (newTab) {
-                    this.history = [];
-                    this.history.push({
-                        target: "#" + this.firstDiv.id,
-                        transition: transition
-                    });
-                } else if (!back) {
-                    this.history.push({
-                        target: previousTarget,
-                        transition: transition
-                    });
-                }
-                try {
-                    window.history.pushState(what.id, what.id, startPath + '#' + what.id + hashLink);
-                    $(window).trigger("hashchange", {newUrl: startPath + '#' + what.id + hashLink,oldURL: startPath + previousTarget});
-                } 
-                catch (e) {
-                }
-                    
-                previousTarget = '#' + what.id + hashLink;
-                    
-                if (this.resetScrollers && this.scrollingDivs[what.id]) {
-                    this.scrollingDivs[what.id].scrollTo({
-                        x: 0,
-                        y: 0
-                    });
-                }
-                this.doingTransition = true;
-				this.runTransition(transition, oldDiv, currWhat, back);
-                
-                    
-                if (back) {
-                    if (this.history.length > 0) {
-                        var val = this.history[this.history.length - 1];
-						var slashIndex = val.target.indexOf('/');
-						if (slashIndex != -1) {
-						    var prevId = val.target.substr(0, slashIndex);
-						} else var prevId = val.target;
-                        var el = $am(prevId.replace("#", ""));
-						//make sure panel is there
-                        if(el) this.setBackButtonText(el.title);
-						else this.setBackButtonText("Back");
-                    }
-                } else if (this.activeDiv.title)
-                    this.setBackButtonText(this.activeDiv.title)
-                else
-                    this.setBackButtonText("Back");
-                if (what.title) {
-                    this.titleBar.innerHTML = what.title;
-                }
-                if (newTab) {
-                    this.setBackButtonText(this.firstDiv.title)
-                }
-                    
-                if (this.history.length == 0) {
-                    this.backButton.style.visibility = "hidden";
-                    this.history = [];
-                } else if (this.showBackbutton)
-                    this.backButton.style.visibility = "visible";
-                this.activeDiv = what;
-                if (this.scrollingDivs[this.activeDiv.id]) {
-                    this.scrollingDivs[this.activeDiv.id].enable();
-                }
-                if (this.scrollingDivs[oldDiv.id]) {
-                    this.scrollingDivs[oldDiv.id].disable();
-                }
-                //Let's check if it has a function to run to update the data
-                this.parsePanelFunctions(what, oldDiv);
-                window.scrollTo(1,1);
+                this.loadDiv(target, newTab, back, transition);
 			}
         },
+		loadDiv:function(){
+            // load a div
+            what = target.replace("#", "");
+
+            var slashIndex = what.indexOf('/');
+            var hashLink = "";
+            if (slashIndex != -1) {
+                // Ignore everything after the slash for loading
+                hashLink = what.substr(slashIndex);
+                what = what.substr(0, slashIndex);
+            }
+
+            what = $am(what);
+                    
+            if (!what)
+                throw ("Target: " + target + " was not found");
+            if (what == this.activeDiv && !back){
+            	//toggle the menu if applicable
+	            if (this.isSideMenuOn()) this.toggleSideMenu(false);
+				return;
+            }
+                    
+            if (what.getAttribute("data-modal") == "true" || what.getAttribute("modal") == "true") {
+                return this.showModal(what.id);
+            }
+            what.style.display = "block";
+                    
+                    
+                    
+            this.transitionType = transition;
+            var oldDiv = this.activeDiv;
+            var currWhat = what;
+                    
+            if (oldDiv == currWhat) //prevent it from going to itself
+                return;
+                    
+            if (newTab) {
+                this.history = [];
+                this.history.push({
+                    target: "#" + this.firstDiv.id,
+                    transition: transition
+                });
+            } else if (!back) {
+                this.history.push({
+                    target: previousTarget,
+                    transition: transition
+                });
+            }
+            try {
+                window.history.pushState(what.id, what.id, startPath + '#' + what.id + hashLink);
+                $(window).trigger("hashchange", {newUrl: startPath + '#' + what.id + hashLink,oldURL: startPath + previousTarget});
+            } 
+            catch (e) {
+            }
+                    
+            previousTarget = '#' + what.id + hashLink;
+                    
+            if (this.resetScrollers && this.scrollingDivs[what.id]) {
+                this.scrollingDivs[what.id].scrollTo({
+                    x: 0,
+                    y: 0
+                });
+            }
+            this.doingTransition = true;
+			this.runTransition(transition, oldDiv, currWhat, back);
+                
+                    
+            if (back) {
+                if (this.history.length > 0) {
+                    var val = this.history[this.history.length - 1];
+					var slashIndex = val.target.indexOf('/');
+					if (slashIndex != -1) {
+					    var prevId = val.target.substr(0, slashIndex);
+					} else var prevId = val.target;
+                    var el = $am(prevId.replace("#", ""));
+					//make sure panel is there
+                    if(el) this.setBackButtonText(el.title);
+					else this.setBackButtonText("Back");
+                }
+            } else if (this.activeDiv.title)
+                this.setBackButtonText(this.activeDiv.title)
+            else
+                this.setBackButtonText("Back");
+            if (what.title) {
+                this.titleBar.innerHTML = what.title;
+            }
+            if (newTab) {
+                this.setBackButtonText(this.firstDiv.title)
+            }
+                    
+            if (this.history.length == 0) {
+                this.backButton.style.visibility = "hidden";
+                this.history = [];
+            } else if (this.showBackbutton)
+                this.backButton.style.visibility = "visible";
+            this.activeDiv = what;
+            if (this.scrollingDivs[this.activeDiv.id]) {
+                this.scrollingDivs[this.activeDiv.id].enable();
+            }
+            if (this.scrollingDivs[oldDiv.id]) {
+                this.scrollingDivs[oldDiv.id].disable();
+            }
+            //Let's check if it has a function to run to update the data
+            this.parsePanelFunctions(what, oldDiv);
+            //window.scrollTo(1,1); //jumping 1px in iPhone - is this really necessary? android only?
+		},
+		loadAjax:function(){
+            // XML Request
+            if (this.activeDiv.id == "jQui_ajax" && target == this.ajaxUrl)
+                return;
+            if (target.indexOf("http") == -1)
+                target = AppMobi.webRoot + target;
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    this.doingTransition = false;
+                            
+                    var doReturn = false;
+
+                    //Here we check to see if we are retaining the div, if so update it
+                    if ($am(urlHash) !== undefined) {
+                        that.updateContentDiv(urlHash, xmlhttp.responseText);
+                        $am(urlHash).title = anchor.title ? anchor.title : target;
+                    } else if (anchor.getAttribute("data-persist-ajax")) {
+                                
+                        var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
+                        refreshFunction = refresh ? 
+                        function() {
+                            anchor.refresh = true;
+                            that.loadContent(target, newTab, back, transition, anchor);
+                            anchor.refresh = false;
+                        } : null;
+                        that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
+                        $am(urlHash).title = anchor.title ? anchor.title : target;
+                    } else {
+                        that.updateContentDiv("jQui_ajax", xmlhttp.responseText);
+                        $am("jQui_ajax").title = anchor.title ? anchor.title : target;
+                        that.loadContent("#jQui_ajax", newTab, back);
+                        doReturn = true;
+                    }
+                    //Let's load the content now.
+                    //We need to check for any script tags and handle them
+                    var div = document.createElement("div");
+                    div.innerHTML = xmlhttp.responseText;
+                    that.parseScriptTags(div);
+                    if (doReturn)
+                        return;
+                            
+                    return that.loadContent("#" + urlHash);
+                        
+                }
+            };
+            ajaxUrl = target;
+            var newtarget = this.useAjaxCacheBuster?target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000:target;
+            xmlhttp.open("GET", newtarget, true);
+            xmlhttp.send();
+            // show Ajax Mask
+            this.showMask();
+		},
 		
 		runTransition: function(transition, oldDiv, currWhat, back){
             if (!this.availableTransitions[transition]) transition = 'default';
@@ -1282,6 +1287,7 @@
                 
                 //window.setTimeout(function() {
                 var loadFirstDiv=function(){
+					
                     //activeDiv = firstDiv;
 					var firstPanelId = that.getPanelId(defaultHash);
                     if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId!=("#"+that.firstDiv.id) && $(firstPanelId).length>0)
@@ -1289,20 +1295,22 @@
 						that.activeDiv=$(firstPanelId).get();
                         jq("#header #backButton").css("visibility","visible");
                         that.setBackButtonText(that.activeDiv.title)
-                        that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
                     }
                     else
                         previousTarget="#"+that.activeDiv.id;
-                    
+					
+					
                     that.activeDiv.style.display = "block";
                     
                    
                     if (that.activeDiv.title)
                         that.setTitle(that.activeDiv.title);
                     that.parsePanelFunctions(that.activeDiv);
-                    //Load the default hash
                     
-                    that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
+					//remove the line below becuase adding a "ghost" default div into history does not seem to make sense
+					//the first page in the history of the current session will be this one
+					//the splash standing panel (which we have no idea what it is) should not be the root of history
+                    //that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
                     modalDiv = null;
                     maskDiv = null;
                     that.launchCompleted = true;
