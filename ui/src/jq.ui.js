@@ -22,9 +22,17 @@
 	            jq("#jQUi #navbar").addClass("hasMenu off");
 	        }
 			//boot touchLayer
-			//TODO: touchLayer should be initiated here, but requires jQUI element to exist
-			//if $.ui.launch can optionally create the jQUI object, we should had that option here somehow...
-	        jQUi = document.getElementById("jQUi");
+			//create jQUi element if it still does not exist
+	        var jQUi = document.getElementById("jQUi");
+            if (jQUi == null) {
+                jQUi = document.createElement("div");
+                container.id = "jQUi";
+                var body = document.body;
+                while (body.firstChild) {
+                    container.appendChild(body.firstChild);
+                }
+                jq(document.body).prepend(container);
+            }
 			$.touchLayer(jQUi);
 	    });
 		
@@ -1118,16 +1126,7 @@
             this.content = $am("content");
             this.header = $am("header");
             this.menu = $am("menu");
-            if (this.viewportContainer.length == 0) {
-                var container = document.createElement("div");
-                container.id = "jQUi";
-                var body = document.body;
-                while (body.firstChild) {
-                    container.appendChild(body.firstChild);
-                }
-                jq(document.body).prepend(container);
-                this.viewportContainer = jq("#jQUi");
-            }
+			
 			//set anchor click handler for UI
 			this.viewportContainer[0].addEventListener('click', function(e){
 				var theTarget = e.target;
