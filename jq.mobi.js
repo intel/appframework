@@ -2040,6 +2040,7 @@ if (!window.jq || typeof (jq) !== "function") {
 		var contexts = [];
 		var params = [];
         $.asap = function(fn, context, args) {
+			if(!$.isFunction(fn)) throw "$.asap - argument is not a valid function";
             timeouts.push(fn);
 			contexts.push(context?context:{});
 			params.push(args?args:[]);
