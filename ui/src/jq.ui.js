@@ -1000,8 +1000,19 @@
             }
             this.doingTransition = true;
 			this.runTransition(transition, oldDiv, currWhat, back);
-                
+            
+			this.loadContentData(what, newTab, back, transition);
+			
                     
+            
+            if (this.scrollingDivs[oldDiv.id]) {
+                this.scrollingDivs[oldDiv.id].disable();
+            }
+            //Let's check if it has a function to run to update the data
+            this.parsePanelFunctions(what, oldDiv);
+            //window.scrollTo(1,1); //jumping 1px in iPhone - is this really necessary? android only?
+		},
+		loadContentData:function(what, newTab, back, transition){
             if (back) {
                 if (this.history.length > 0) {
                     var val = this.history[this.history.length - 1];
@@ -1034,12 +1045,6 @@
             if (this.scrollingDivs[this.activeDiv.id]) {
                 this.scrollingDivs[this.activeDiv.id].enable();
             }
-            if (this.scrollingDivs[oldDiv.id]) {
-                this.scrollingDivs[oldDiv.id].disable();
-            }
-            //Let's check if it has a function to run to update the data
-            this.parsePanelFunctions(what, oldDiv);
-            //window.scrollTo(1,1); //jumping 1px in iPhone - is this really necessary? android only?
 		},
 		loadAjax:function(target, newTab, back, transition, anchor){
             // XML Request
@@ -1308,30 +1313,16 @@
                 //window.setTimeout(function() {
                 var loadFirstDiv=function(){
 					
-                    //activeDiv = firstDiv;
+                    //go to activeDiv
 					var firstPanelId = that.getPanelId(defaultHash);
-                    if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId!=("#"+that.firstDiv.id) && $(firstPanelId).length>0)
-                    {
-						that.activeDiv=$(firstPanelId).get();
-                        jq("#header #backButton").css("visibility","visible");
-                        that.setBackButtonText(that.activeDiv.title)
-                    }
-                    //else previousTarget="#"+that.activeDiv.id;
+					that.history=[{target:'#'+that.firstDiv.id}];	//set the first id as origin of path
+                    if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId!=("#"+that.firstDiv.id)) {
+						that.loadContent(firstPanelId, true, false, 'none');	//load the active page as a newTab with no transition
+                    } else {
+						that.loadContentData(that.firstDiv);	//load the info off the first panel
+						that.parsePanelFunctions(that.firstDiv);
+					}
 					
-					
-                    that.activeDiv.style.display = "block";
-                    
-                   
-                    if (that.activeDiv.title)
-                        that.setTitle(that.activeDiv.title);
-                    that.parsePanelFunctions(that.activeDiv);
-                    
-					//remove the line below becuase adding a "ghost" default div into history does not seem to make sense
-					//the first page in the history of the current session will be this one
-					//the splash standing panel (which we have no idea what it is) should not be the root of history
-                    //that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
-                    modalDiv = null;
-                    maskDiv = null;
                     that.launchCompleted = true;
                     
                    if(jq("#navbar a").length>0){
@@ -1339,29 +1330,35 @@
                         that.defaultFooter = jq("#navbar").children();
                         that.updateNavbarElements(that.defaultFooter);
                     }
+					//setup initial menu
                     var firstMenu = jq("nav").get();
                     if(firstMenu){
                         that.defaultMenu = jq(firstMenu).children();
                         that.updateSideMenu(that.defaultMenu);
                     }
+					//get default header
                     that.defaultHeader = jq("#header").children();
-                    jq(document).trigger("jq.ui.ready");
-					$.asap(function() {
-						// Run after the first div animation has been triggered - avoids flashing
-						jq("#splashscreen").remove();
-					});
+					//
                     jq("#navbar").on("click", "a", function(e) {
                         jq("#navbar a").not(this).removeClass("selected");
                         $.asap(function() {
                             $(e.target).addClass("selected");
                         });
                     });
+					
+					//trigger ui ready
+                    jq(document).trigger("jq.ui.ready");
+					//remove splashscreen
+					$.asap(function() {
+						// Run after the first div animation has been triggered - avoids flashing
+						jq("#splashscreen").remove();
+					});
                 };
                 if(loadingDefer){
                     $(document).one("defer:loaded",loadFirstDiv);
                 }
                 else
-                    window.setTimeout(loadFirstDiv,100);	//could this be $.asap?
+                    $.asap(loadFirstDiv);
             }
            
         },
