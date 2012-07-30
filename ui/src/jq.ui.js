@@ -984,10 +984,8 @@
                 return;
                     
             if (newTab) {
-				console.log("pushing firstDiv "+this.firstDiv.id);
 				this.pushHistory("#" + this.firstDiv.id, what.id, transition, hashLink);
             } else if (!back) {
-				console.log("pushing prev "+previousTarget);
 				this.pushHistory(previousTarget, what.id, transition, hashLink);
             }
             
@@ -1133,6 +1131,9 @@
 				checkAnchorClick(e, theTarget);
 			}, false);
 			
+			
+			//enter-edit scroll paddings fix
+			//focus scroll adjust fix
 			var enterEditEl = null;
 			//on enter-edit keep a reference of the actioned element
 			$.bind($.touchLayer, 'enter-edit', function(el){ enterEditEl = el; });
@@ -1173,7 +1174,7 @@
 			
 			
 			
-			
+			//elements setup
             if (!this.navbar) {
                 this.navbar = document.createElement("div");
                 this.navbar.id = "navbar";
@@ -1197,23 +1198,25 @@
                     vScrollCSS: "jqmScrollbar"
                 });
             }
-            
-            
             if (!this.content) {
                 this.content = document.createElement("div");
                 this.content.id = "content";
                 this.viewportContainer.append(this.content);
             }
 			
+			//insert backbutton (should optionally be left to developer..)
             this.header.innerHTML = '<a id="backButton"  href="javascript:;"></a> <h1 id="pageTitle"></h1>' + header.innerHTML;
             this.backButton = $am("backButton");
             this.backButton.className = "button";
-            
             this.backButton.onclick = function() {
 				that.goBack();
             };
             this.backButton.style.visibility = "hidden";
+			
+			//page title (should optionally be left to developer..)
             this.titleBar = $am("pageTitle");
+			
+			//setup ajax mask
             this.addContentDiv("jQui_ajax", "");
             var maskDiv = document.createElement("div");
             maskDiv.id = "jQui_mask";
@@ -1222,9 +1225,10 @@
             maskDiv.style.zIndex = 20000;
             maskDiv.style.display = "none";
             document.body.appendChild(maskDiv);
+			
+			//setup modalDiv
             var modalDiv = document.createElement("div");
             modalDiv.id = "jQui_modal";
-            
             this.viewportContainer.append(modalDiv);
             modalDiv.appendChild(jq("<div id='modalContainer'></div>").get());
             this.scrollingDivs['modal_container'] = jq("#modalContainer").scroller({
@@ -1235,6 +1239,8 @@
             
             this.modalWindow = modalDiv;
             
+			
+			//get first div, defer
             var defer = {};
             var contentDivs = this.viewportContainer.get().querySelectorAll(".panel");
             for (var i = 0; i < contentDivs.length; i++) {
