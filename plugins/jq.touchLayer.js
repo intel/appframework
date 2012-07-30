@@ -66,6 +66,16 @@
 			if(jq.os.android) that.layer.style.height = '100%';
 			$.asap(that.testAndFixUI, that, arguments);
 		};
+		//iPhone double clicks workaround
+		this.blockCaptureClickProxy_ = function(){
+			that.blockCaptureClick_=false;
+		}
+		document.addEventListener('click', function(e){
+			if(that.blockCaptureClick_){
+				e.preventDefault();
+				e.stopPropagation();
+			}
+		}, true);
 		//js scrollers self binding
 		$.bind(this,'scrollstart',function(el){that.fireEvent('UIEvents', 'scrollstart', el, false, false);});
 		$.bind(this,'scrollend',function(el){that.fireEvent('UIEvents', 'scrollend', el, false, false);});
@@ -98,6 +108,7 @@
 		allowDocumentScroll_:false,
 		ignoreNextResize_:false,
 		blockPossibleClick_:false,
+		blockCaptureClick_:false,
 		//status vars
 		isScrolling: false,
 		isScrollingVertical_: false,
@@ -551,6 +562,8 @@
 	                    theTarget = theTarget.parentNode;
 				
 					this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
+					this.blockCaptureClick_=true;
+					$.asap(this.unblockCaptureClickProxy_);
 				}
 				
             } else if(itMoved){
