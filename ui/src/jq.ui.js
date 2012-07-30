@@ -263,9 +263,9 @@
         goBack: function() {
 			if (this.history.length > 0) {
                 var that = this;
+				var tmpEl = this.history.pop();
                 $.asap(
                     function() {
-                        var tmpEl = that.history.pop();
                         that.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
                         that.transitionType = tmpEl.transition;
                         //for Android 4.0.x, we must touchLayer.hideAdressBar()
@@ -284,6 +284,31 @@
             this.history = [];
             this.backButton.style.visibility = "hidden";
         },
+		
+        /**
+         * PushHistory
+           ```
+           $.ui.pushHistory(previousPage, newPage, transition, hashExtras)
+           ```
+           
+         * @title $.ui.pushHistory()
+         */
+        pushHistory: function(previousPage, newPage, transition, hashExtras) {
+            //push into local history
+            this.history.push({
+                target: previousPage,
+                transition: transition
+            });
+			//push into the browser history
+            try {
+                window.history.pushState(newPage, newPage, startPath + '#' + newPage + hashExtras);
+                $(window).trigger("hashchange", {newUrl: startPath + '#' + newPage + hashExtras,oldURL: startPath + previousPage});
+            } 
+            catch (e) {
+            }
+        },
+		
+		
         /**
          * Updates the current window hash
          *
@@ -291,15 +316,15 @@
          * @title $.ui.updateHash(newHash)
          */
         updateHash: function(newHash) {
-            newHash = newHash.indexOf('/')==-1?'#' + newHash:newHash;	//force having the # in the begginning as a standard
+            newHash = newHash.indexOf('#')==-1?'#' + newHash:newHash;	//force having the # in the begginning as a standard
 			previousTarget = newHash;
 
             var previousHash = window.location.hash;
             var panelName = this.getPanelId(newHash).substring(1);	//remove the #
 
             try {
-                window.history.replaceState(panelName, panelName, window.location.pathname + newHash);
-                $(window).trigger("hashchange", {newUrl: window.location.pathname + newHash, oldUrl: window.location.pathname + previousHash});
+                window.history.replaceState(panelName, panelName, startPath + newHash);
+                $(window).trigger("hashchange", {newUrl: startPath + newHash, oldUrl: startPath + previousHash});
             }
             catch (e) {
             }
@@ -914,7 +939,7 @@
                 this.loadDiv(target, newTab, back, transition);
 			}
         },
-		loadDiv:function(){
+		loadDiv:function(target, newTab, back, transition){
             // load a div
             what = target.replace("#", "");
 
@@ -951,23 +976,13 @@
                 return;
                     
             if (newTab) {
-                this.history = [];
-                this.history.push({
-                    target: "#" + this.firstDiv.id,
-                    transition: transition
-                });
+				console.log("pushing firstDiv "+this.firstDiv.id);
+				this.pushHistory("#" + this.firstDiv.id, what.id, transition, hashLink);
             } else if (!back) {
-                this.history.push({
-                    target: previousTarget,
-                    transition: transition
-                });
+				console.log("pushing prev "+previousTarget);
+				this.pushHistory(previousTarget, what.id, transition, hashLink);
             }
-            try {
-                window.history.pushState(what.id, what.id, startPath + '#' + what.id + hashLink);
-                $(window).trigger("hashchange", {newUrl: startPath + '#' + what.id + hashLink,oldURL: startPath + previousTarget});
-            } 
-            catch (e) {
-            }
+            
                     
             previousTarget = '#' + what.id + hashLink;
                     
@@ -1020,7 +1035,7 @@
             this.parsePanelFunctions(what, oldDiv);
             //window.scrollTo(1,1); //jumping 1px in iPhone - is this really necessary? android only?
 		},
-		loadAjax:function(){
+		loadAjax:function(target, newTab, back, transition, anchor){
             // XML Request
             if (this.activeDiv.id == "jQui_ajax" && target == this.ajaxUrl)
                 return;
@@ -1296,8 +1311,7 @@
                         jq("#header #backButton").css("visibility","visible");
                         that.setBackButtonText(that.activeDiv.title)
                     }
-                    else
-                        previousTarget="#"+that.activeDiv.id;
+                    //else previousTarget="#"+that.activeDiv.id;
 					
 					
                     that.activeDiv.style.display = "block";
