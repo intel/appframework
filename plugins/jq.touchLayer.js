@@ -67,7 +67,7 @@
 			$.asap(that.testAndFixUI, that, arguments);
 		};
 		//iPhone double clicks workaround
-		this.blockCaptureClickProxy_ = function(){
+		this.unblockCaptureClickProxy_ = function(){
 			that.blockCaptureClick_=false;
 		}
 		document.addEventListener('click', function(e){
@@ -100,6 +100,7 @@
 		launchFixUIProxy_:null,
 		reHideAddressBarTimeout_:null,
 		retestAndFixUIProxy_:null,
+		unblockCaptureClickProxy_:null,
 		//options
 		panElementId: "header",
 		//public locks
