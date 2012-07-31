@@ -1481,7 +1481,7 @@
                     }, 50);
                 }, 350);
             }
-            if(prevField)
+            if(prevField&&prevField!=theTarget)
             {
                 prevField.blur(),prevField=null;
             }

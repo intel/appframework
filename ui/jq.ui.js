@@ -935,7 +935,7 @@
             
             try {
                 var that = this;
-                var markStart = '</div><div id="jq_actionsheet"><div style="width:100%">';
+                var markStart = '<div><div id="jq_actionsheet"><div style="width:100%">';
                 var markEnd = '</div></div>';
                 var markup;
                 if (typeof opts == "string") {
@@ -2839,7 +2839,7 @@
                     }, 50);
                 }, 350);
             }
-            if(prevField)
+            if(prevField&&prevField!=theTarget)
             {
                 prevField.blur(),prevField=null;
             }
