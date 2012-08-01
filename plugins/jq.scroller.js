@@ -223,7 +223,11 @@
 				this.scrollBy({y:newTop, x:0}, 0);	
 			},
 			setPaddings:function(top, bottom){
-				$(this.el).css('paddingTop', top+"px").css('paddingBottom', bottom+"px");
+				var el = $(this.el);
+				var curTop = numOnly(el.css('paddingTop'));
+				el.css('paddingTop', top+"px").css('paddingBottom', bottom+"px");
+				//don't let padding mess with scroll
+				this.scrollBy({y:top-curTop, x:0});
 			},
 			//freak of mathematics, but for our cases it works
 			divide:function(a, b){return b!=0 ? a/b : 0;},
