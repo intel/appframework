@@ -2916,8 +2916,15 @@ if (!HTMLElement.prototype.unwatch) {
         launchCompleted: false,
         activeDiv: "",
         customClickHandler:"",
-        
-        
+        activeDiv: "",
+        menuAnimation: null,
+        togglingSideMenu:false,
+        autoBoot: function(){
+            this.hasLaunched = true;
+            if (this.autoLaunch) {
+                this.launch();
+            }
+        },
         css3animate: function(el, opts) {
             el = jq(el);
             if (!el.__proto__["css3Animate"])
@@ -3376,6 +3383,26 @@ if (!HTMLElement.prototype.unwatch) {
             }
              jq("#navbar a").data("ignore-pressed", "true").data("resetHistory", "true");
         },
+         /**
+         * Updates the elements in the header
+           ```
+           $.ui.updateHeaderElements(elements);
+           ```
+         * @param {String|Object} Elements
+         * @title $.ui.updateHeaderElement(Elements)
+         */
+        updateHeaderElements: function(elems) {
+            var nb = jq("#header");
+            if (elems === undefined || elems == null)
+                return;
+            if (typeof (elems) == "string")
+                return nb.html(elems), null;
+            nb.html("");
+            for (var i = 0; i < elems.length; i++) {
+                var node = elems[i].cloneNode(true);
+                nb.append(node);
+            }
+        },
         /**
          * Updates the elements in the side menu
            ```
@@ -3482,8 +3509,7 @@ if (!HTMLElement.prototype.unwatch) {
             var that = this;
             try {
                 if ($am(id)) {
-                    //jq("#modalContainer").html('<div style="width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right"></div>'+$am(id).childNodes[0].innerHTML+'');
-                    jq("#modalContainer").html($am(id).childNodes[0].innerHTML+'');
+                    jq("#modalContainer").html($.feat.nativeTouchScroll?$am(id).innerHTML:$am(id).childNodes[0].innerHTML+'');
                     jq('#modalContainer').append("<a href='javascript:;' onclick='$.ui.hideModal();' class='closebutton modalbutton'></a>");
                     this.modalWindow.style.display = "block";
                     
@@ -3701,6 +3727,29 @@ if (!HTMLElement.prototype.unwatch) {
                     jq("#navbar a").removeClass("selected");
                     jq("#" + what.getAttribute("data-tab")).addClass("selected");
                 }
+
+                //Load inline footers
+                var inlineFooters = $(what).find("footer");
+                if (inlineFooters.length > 0) 
+                {
+                    that.customFooter = what.id;
+                    that.updateNavbarElements(inlineFooters.children());
+                }
+                //load inline headers
+                var inlineHeader = $(what).find("header");
+                
+                
+                if (inlineHeader.length > 0) 
+                {
+                    that.customHeader = what.id;
+                    that.updateHeaderElements(inlineHeader.children());
+                }
+                //check if the panel has a footer
+                if (what.getAttribute("data-tab")) { //Allow the dev to force the footer menu
+                    
+                    jq("#navbar a").removeClass("selected");
+                    jq("#navbar #" + what.getAttribute("data-tab")).addClass("selected");
+                }
             });
             var hasMenu = what.getAttribute("data-nav");
             if (hasMenu && this.customMenu != hasMenu) {
@@ -3876,7 +3925,7 @@ if (!HTMLElement.prototype.unwatch) {
             else
                 this.setBackButtonText("Back");
             if (what.title) {
-                this.titleBar.innerHTML = what.title;
+                this.setTitle(what.title);
             }
             if (newTab) {
                 this.setBackButtonText(this.firstDiv.title)
@@ -4057,9 +4106,9 @@ if (!HTMLElement.prototype.unwatch) {
             this.header.innerHTML = '<a id="backButton"  href="javascript:;"></a> <h1 id="pageTitle"></h1>' + header.innerHTML;
             this.backButton = $am("backButton");
             this.backButton.className = "button";
-            this.backButton.onclick = function() {
-				that.goBack();
-            };
+             jq(document).on("click", "#backButton", function() {
+                that.goBack();
+            });
             this.backButton.style.visibility = "hidden";
 			
 			//page title (should optionally be left to developer..)
@@ -4109,7 +4158,6 @@ if (!HTMLElement.prototype.unwatch) {
                 }
                 if (el.getAttribute("data-defer")){
                     defer[id] = el.getAttribute("data-defer");
-                    defer.length++;
                 }
 
                 el = null;
@@ -4164,8 +4212,10 @@ if (!HTMLElement.prototype.unwatch) {
                     if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId!=("#"+that.firstDiv.id)) {
 						that.loadContent(firstPanelId, true, false, 'none');	//load the active page as a newTab with no transition
                     } else {
+
 						that.loadContentData(that.firstDiv);	//load the info off the first panel
 						that.parsePanelFunctions(that.firstDiv);
+                        that.firstDiv.style.display="block";
 					}
 					
                     that.launchCompleted = true;
@@ -4286,7 +4336,7 @@ if (!HTMLElement.prototype.unwatch) {
             }
 			
 			//empty links
-            if (theTarget.href=="#" || theTarget.href.length==0)
+            if (theTarget.href=="#" || theTarget.href.length==0||theTarget.hash.length==0)
                 return;
             
             

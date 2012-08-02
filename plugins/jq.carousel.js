@@ -5,21 +5,21 @@
  */
 (function($) {
     var cache = [];
-	var objId=function(obj){
-		if(!obj.jqmCarouselId) obj.jqmCarouselId=$.uuid();
-		return obj.jqmCarouselId;
-	}
+    var objId=function(obj){
+        if(!obj.jqmCarouselId) obj.jqmCarouselId=$.uuid();
+        return obj.jqmCarouselId;
+    }
     $.fn.carousel = function(opts) {
         var tmp, id;
         for (var i = 0; i < this.length; i++) {
-			//cache system
-			id = objId(this[i]);
-			if(!cache[id]){
-				tmp = new carousel(this[i], opts);
-				cache[id] = tmp;
-			} else {
-				tmp = cache[id];
-			}
+            //cache system
+            id = objId(this[i]);
+            if(!cache[id]){
+                tmp = new carousel(this[i], opts);
+                cache[id] = tmp;
+            } else {
+                tmp = cache[id];
+            }
         }
         return this.length == 1 ? tmp : this;
     };
@@ -51,15 +51,16 @@
                 
                 return new carousel(containerEl, opts);
             }
-            try {
+        
+                 
                 var that = this;
-				jq(this.container).bind('destroy', function(){
-					var id = that.container.jqmCarouselId;
-					//window event need to be cleaned up manually, remaining binds are automatically killed in the dom cleanup process
-	                window.removeEventListener("orientationchange", that.orientationHandler, false);
-					if(cache[id]) delete cache[id];
-				});
-				
+                jq(this.container).bind('destroy', function(){
+                    var id = that.container.jqmCarouselId;
+                    //window event need to be cleaned up manually, remaining binds are automatically killed in the dom cleanup process
+                    window.removeEventListener("orientationchange", that.orientationHandler, false);
+                    if(cache[id]) delete cache[id];
+                });
+                
                 this.pagingDiv = this.pagingDiv ? document.getElementById(this.pagingDiv) : null;
 
 
@@ -71,12 +72,20 @@
                 if (this.vertical) {
                     this.horizontal = false;
                 }
-                var tmpHTML = this.container.innerHTML;
-                //this.container.innerHTML = "";
+                
                 var el = document.createElement("div");
-
-                var arr = Array.prototype.slice.call(this.container.childNodes);
-
+                this.container.appendChild(el);
+                var $el=$(el);
+                var $container=$(this.container);
+                var data = Array.prototype.slice.call(this.container.childNodes);
+                while(data.length>0)
+                {
+                    var myEl=data.splice(0,1);
+                    myEl=$container.find(myEl)
+                    if(myEl.get()==el)
+                       continue;
+                    $el.append(myEl.get());
+                }
                 if (this.horizontal) {
                     el.style.display = "-webkit-box";
                     el.style['-webkit-box-flex'] = 1;
@@ -84,27 +93,16 @@
                 else {
                     el.style.display = "block";
                 }
-                $(el).append(arr);
-                this.container.appendChild(el);
                 
                 this.el = el;
                 this.refreshItems();
-
                 var jqEl = jq(el);
                 jqEl.bind('touchmove', function(e) {that.touchMove(e);});
                 jqEl.bind('touchend', function(e) {that.touchEnd(e);});
                 jqEl.bind('touchstart', function(e) {that.touchStart(e);});
-				this.orientationHandler = function() {
-                    // Introduce some delay to ensure the measure is correct
-                    setTimeout(function() {
-                        that.refreshItems(0);
-                    }, 500);
-                };
+                this.orientationHandler = function() {that.onMoveIndex(that.carouselIndex,0);};
                 window.addEventListener("orientationchange", this.orientationHandler, false);
            
-			} catch (e) {
-                console.log("error adding carousel " + e);
-            }
         };
         
         carousel.prototype = {
@@ -144,8 +142,6 @@
                     this.movingElement = true;
                     this.startY = e.touches[0].pageY;
                     this.startX = e.touches[0].pageX;
-                    //e.preventDefault();
-                    //e.stopPropagation();
                     if (this.vertical) {
                         try {
                             this.cssMoveStart = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el, null).webkitTransform).f);
@@ -162,8 +158,6 @@
                 }
             },
             touchMove: function(e) {
-                // e.preventDefault();
-                // e.stopPropagation();
                 if(!this.movingElement)
                    return;
                 if (e.touches.length > 1) {
@@ -266,18 +260,11 @@
                 
                 this.myDivWidth = numOnly(this.container.clientWidth);
                 this.myDivHeight = numOnly(this.container.clientHeight);
-
                 var runFinal = false;
-<<<<<<< HEAD
-                try {
-                    
-                    document.getElementById(this.container.id + "_" + this.carouselIndex).className = this.pagingCssName;
-=======
 
                     if(document.getElementById(this.container.id + "_" + this.carouselIndex))
                         document.getElementById(this.container.id + "_" + this.carouselIndex).className = this.pagingCssName;
 
->>>>>>> a69474fee0ea28c82230592553cf8e973cc4ad4e
                     var newTime = Math.abs(newInd - this.carouselIndex);
                     
                     var ind = newInd;
@@ -297,18 +284,16 @@
                         movePos.x = (ind * this.myDivWidth * -1);
                     }
                     
-                    var time = (typeof transitionTime !== 'undefined') && transitionTime != null ?transitionTime: 50 + parseInt((newTime * 20));
+                    var time =transitionTime?transitionTime: 50 + parseInt((newTime * 20));
                     this.moveCSS3(this.el, movePos, time);
                     if (this.carouselIndex != ind)
                         runFinal = true;
                     this.carouselIndex = ind;
                     if (this.pagingDiv) {
-						var tmpEl = document.getElementById(this.container.id + "_" + this.carouselIndex);
+                        var tmpEl = document.getElementById(this.container.id + "_" + this.carouselIndex);
                         if(tmpEl) tmpEl.className = this.pagingCssNameSelected;
                     }
-                } catch (e) {
-                    console.log("Error " + e);
-                }
+               
                 if (runFinal && this.pagingFunction && typeof this.pagingFunction == "function")
                     this.pagingFunction(currInd);
             },
@@ -335,11 +320,13 @@
                     this.refreshItems();
                 }
             },
-            refreshItems: function(transitionTime) {
+            refreshItems: function() {
                 var childrenCounter = 0;
                 var that = this;
                 var el = this.el;
                 n = el.childNodes[0];
+                var widthParam;
+                var heightParam = "100%";
                 var elems = [];
                 for (; n; n = n.nextSibling) {
                     if (n.nodeType === 1) {
@@ -347,18 +334,16 @@
                         childrenCounter++;
                     }
                 }
-
-                this.myDivWidth = numOnly(this.container.clientWidth);
-                this.myDivHeight = numOnly(this.container.clientHeight);
-
+                var param = (100 / childrenCounter) + "%";
                 this.childrenCount = childrenCounter;
+                widthParam = parseFloat(100 / this.childrenCount) + "%";
                 for (var i = 0; i < elems.length; i++) {
                     if (this.horizontal) {
-                        elems[i].style.width = this.myDivWidth + "px";
+                        elems[i].style.width = widthParam;
                         elems[i].style.height = "100%";
                     } 
                     else {
-                        elems[i].style.height = this.myDivHeight + "px";
+                        elems[i].style.height = widthParam;
                         elems[i].style.width = "100%";
                         elems[i].style.display = "block";
                     }
@@ -368,14 +353,14 @@
                     y: 0
                 });
                 if (this.horizontal) {
-                    el.style.width = (this.childrenCount * this.myDivWidth) + "px";
+                    el.style.width = Math.ceil((this.childrenCount) * 100) + "%";
                     el.style.height = "100%";
                     el.style['min-height'] = "100%"
                 } 
                 else {
                     el.style.width = "100%";
-                    el.style.height = (this.childrenCount * this.myDivHeight) + "px";
-                    el.style['min-height'] = (this.childrenCount * this.myDivHeight) + "px";
+                    el.style.height = Math.ceil((this.childrenCount) * 100) + "%";
+                    el.style['min-height'] = Math.ceil((this.childrenCount) * 100) + "%";
                 }
                 // Create the paging dots
                 if (this.pagingDiv) {
@@ -415,7 +400,7 @@
                     this.pagingDiv.style.width = (this.childrenCount) * 50 + "px";
                     this.pagingDiv.style.height = "25px";
                 }
-                this.onMoveIndex(this.carouselIndex, transitionTime);
+                this.onMoveIndex(this.carouselIndex);
             
             }
         
