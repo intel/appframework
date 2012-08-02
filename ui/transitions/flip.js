@@ -1,33 +1,40 @@
 (function($ui){
     
         function flipTransition (oldDiv, currDiv, back) {
-            oldDiv.style.display = "block";
+             oldDiv.style.display = "block";
             currDiv.style.display = "block";
-            var that = $ui
+            var that = this
             if (back) {
                 that.css3animate(currDiv, {
                     x: "100%",
-                    time: "1ms",
                     scale: .8,
                     rotateY: "180deg",
-                    callback: function() {
+                    complete: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
-                            time: "200ms"
+                            scale: 1,
+                            time: "150ms",
+                            rotateY: "0deg",
+                            complete: function(){
+                                that.clearAnimations(currDiv);
+                            }
                         });
                     }
                 });
                 that.css3animate(oldDiv, {
-                    x: "10%",
-                    time: "200ms",
+                    x: "100%",
+                    time: "150ms",
                     scale: .8,
                     rotateY: "180deg",
-                    callback: function() {
-                        that.finishTransition(oldDiv);
+                    complete: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
-                            time: "1ms",
-                            opacity: 1
+                            x: "-100%",
+                            opacity: 1,
+                            scale: 1,
+                            rotateY: "0deg",
+                            complete: function() {
+                                that.finishTransition(oldDiv);
+                            }
                         });
                         currDiv.style.zIndex = 2;
                         oldDiv.style.zIndex = 1;
@@ -38,15 +45,19 @@
                 currDiv.style.zIndex = 2;
                 that.css3animate(oldDiv, {
                     x: "100%",
-                    time: "200ms",
-                    scale: '.8',
+                    time: "150ms",
+                    scale: .8,
                     rotateY: "180deg",
-                    callback: function() {
-                        that.finishTransition(oldDiv);
+                    complete: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             y: 0,
-                            time: "1ms"
+                            time: "1ms",
+                            scale: 1,
+                            rotateY: "0deg",
+                            complete: function() {
+                                that.finishTransition(oldDiv);
+                            }
                         });
                     }
                 });
@@ -55,10 +66,15 @@
                     time: "1ms",
                     scale: .8,
                     rotateY: "180deg",
-                    callback: function() {
+                    complete: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
-                            time: "200ms"
+                            time: "150ms",
+                            scale: 1,
+                            rotateY: "0deg",
+                            complete:function(){
+                                that.clearAnimations(currDiv);
+                            }
                         });
                     }
                 });

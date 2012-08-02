@@ -175,28 +175,45 @@ if (!window.jq || typeof (jq) !== "function") {
          * @param {String|Element|Object} [context]
          * @api private
          */
-        
+ 		function _selectorAll(selector, what){
+ 			try{
+ 				return what.querySelectorAll(selector);
+ 			} catch(e){
+ 				return [];
+ 			}
+ 		};
         function _selector(selector, what) {
             var dom;
-                if (selector[0] === "#" && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
-                    if (what == document)
-                        dom = what.getElementById(selector.replace("#", ""));
-                    else
-                        dom = [].slice.call(what.querySelectorAll(selector));
-                    return dom;
-                } 
-                selector=selector.trim();
-                if (selector[0] === "<" && selector[selector.length - 1] === ">")  //html
-                {
-                    var tmp = document.createElement("div");
-                    tmp.innerHTML = selector.trim();
-                    dom = [].slice.call(tmp.childNodes);
-                } else {
-                    dom = [].slice.call(what.querySelectorAll(selector));
-                }
+
+			selector=selector.trim();
+            if (selector[0] === "#" && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
+                if (what == document)
+                    dom = what.getElementById(selector.replace("#", ""));
+                else
+                    dom = [].slice.call(_selectorAll(selector, what));
+            } else if (selector[0] === "<" && selector[selector.length - 1] === ">")  //html
+            {
+                var tmp = document.createElement("div");
+                tmp.innerHTML = selector.trim();
+                dom = [].slice.call(tmp.childNodes);
+            } else {
+                dom = [].slice.call(_selectorAll(selector, what));
+            }
             return dom;
         }
+		
+        /**
+        * Checks to see if the parameter is a $jqm object
+            ```
+            var foo=$('#header');
+            $.is$(foo);
+            ```
 
+        * @param {Object} element
+        * @return {Boolean}
+        * @title $.is$(param)
+        */
+		$.is$ = function(obj){return obj instanceof $jqm;}
         /**
         * Map takes in elements and executes a callback function on each and returns a collection
         ```
@@ -327,8 +344,7 @@ if (!window.jq || typeof (jq) !== "function") {
         */
         $.isObject = function(obj) {
             return typeof obj === "object";
-        }
-
+        };
 
         /**
          * Prototype for jqm object.  Also extens $.fn
@@ -449,10 +465,13 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (html === undefined)
                     return this[0].innerHTML;
                 for (var i = 0; i < this.length; i++) {
+                    $.cleanUpContent(this[i], false, true);
                     this[i].innerHTML = html;
                 }
                 return this;
             },
+
+
             /**
             * Gets or sets the innerText for the collection.
             * If used as a get, the first elements innerText is returned
@@ -518,6 +537,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             empty: function() {
                 for (var i = 0; i < this.length; i++) {
+                    $.cleanUpContent(this[i], false, true);
                     this[i].innerHTML = '';
                 }
                 return this;
@@ -699,6 +719,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (elems == undefined)
                     return this;
                 for (var i = 0; i < elems.length; i++) {
+                    $.cleanUpContent(elems[i], true, true);
                     elems[i].parentNode.removeChild(elems[i]);
                 }
                 return this;
@@ -753,6 +774,35 @@ if (!window.jq || typeof (jq) !== "function") {
                         this[i].className = classList.trim();
                     else
                         this[i].className = "";
+                }
+                return this;
+            },
+            /**
+            * Replaces a css class on elements.
+                ```
+                $().replaceClass("on", "off");
+                ```
+
+            * @param {String} classes that are space delimited
+			* @param {String} classes that are space delimited
+            * @return {Object} jqMobi object
+            * @title $().replaceClass(old, new)
+            */
+            replaceClass: function(name, newName) {
+                for (var i = 0; i < this.length; i++) {
+                    if (name == undefined) {
+                        this[i].className = newName;
+                        continue;
+                    }
+                    var classList = this[i].className;
+                    name.split(/\s+/g).concat(newName.split(/\s+/g)).forEach(function(cname) {
+                        classList = classList.replace(classRE(cname), " ");
+                    });
+					classList=classList.trim();
+                    if (classList.length > 0){
+                    	this[i].className = (classList+" "+newName).trim();
+                    } else
+                        this[i].className = newName;
                 }
                 return this;
             },
@@ -899,8 +949,10 @@ if (!window.jq || typeof (jq) !== "function") {
                 return {
                     left: obj.left + window.pageXOffset,
                     top: obj.top + window.pageYOffset,
-                    width: parseInt(obj.width),
-                    height: parseInt(obj.height)
+                    right: obj.right + window.pageXOffset,
+                    bottom: obj.bottom + window.pageYOffset,
+                    width: obj.right-obj.left,
+                    height: obj.bottom-obj.top
                 };
             },
             /**
@@ -1225,7 +1277,7 @@ if (!window.jq || typeof (jq) !== "function") {
         $.ajax = function(opts) {
             var xhr;
             try {
-                xhr = new window.XMLHttpRequest();
+				
                 var settings = opts || {};
                 for (var key in ajaxSettings) {
                     if (!settings[key])
@@ -1290,6 +1342,11 @@ if (!window.jq || typeof (jq) !== "function") {
                 var abortTimeout;
                 var context = settings.context;
                 var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
+				
+				//ok, we are really using xhr
+				xhr = new window.XMLHttpRequest();
+				
+				
                 xhr.onreadystatechange = function() {
                     var mime = settings.dataType;
                     if (xhr.readyState === 4) {
@@ -1320,6 +1377,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     }
                 };
                 xhr.open(settings.type, settings.url, settings.async);
+				if (settings.withCredentials) xhr.withCredentials = true;
                 
                 if (settings.contentType)
                     settings.headers['Content-Type'] = settings.contentType;
@@ -1486,15 +1544,24 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os = {};
             $.os.webkit = userAgent.match(/WebKit\/([\d.]+)/) ? true : false;
             $.os.android = userAgent.match(/(Android)\s+([\d.]+)/) || userAgent.match(/Silk-Accelerated/) ? true : false;
+			$.os.androidICS = $.os.android && userAgent.match(/(Android)\s4/) ? true : false;
             $.os.ipad = userAgent.match(/(iPad).*OS\s([\d_]+)/) ? true : false;
             $.os.iphone = !$.os.ipad && userAgent.match(/(iPhone\sOS)\s([\d_]+)/) ? true : false;
             $.os.webos = userAgent.match(/(webOS|hpwOS)[\s\/]([\d.]+)/) ? true : false;
             $.os.touchpad = $.os.webos && userAgent.match(/TouchPad/) ? true : false;
             $.os.ios = $.os.ipad || $.os.iphone;
-            $.os.blackberry = userAgent.match(/BlackBerry/) || userAgent.match(/PlayBook/) ? true : false;
-            $.os.opera = userAgent.match(/Opera Mobi/) ? true : false;
+            $.os.ios6 = $.os.ios &&  userAgent.match(/(OS)\s([6])/) ? true : false;
+			$.os.playbook = userAgent.match(/PlayBook/) ? true : false;
+            $.os.blackberry = $.os.playbook || userAgent.match(/BlackBerry/) ? true : false;
+			$.os.blackberry10 = $.os.blackberry && userAgent.match(/Safari\/536/) ? true : false;
+            $.os.chrome = userAgent.match(/Chrome/) ? true : false;
+			$.os.opera = userAgent.match(/Opera Mobi/) ? true : false;
             $.os.fennec = userAgent.match(/fennec/i) ? true : false;
-            $.os.desktop = !($.os.ios || $.os.android || $.os.blackberry || $.os.opera || $.os.fennec);
+			$.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || 'ontouchstart' in window);
+            $.os.desktop = !($.os.ios || $.os.android || $.os.blackberry || $.os.opera || $.os.fennec || $.os.supportsTouch);
+			//features
+			$.feat = {};
+			$.feat.nativeTouchScroll = ($.os.ios ? !userAgent.match(/OS\s[1-4]/) : false);
         }
         detectUA($, navigator.userAgent);
         $.__detectUA = detectUA; //needed for unit tests
@@ -1853,9 +1920,9 @@ if (!window.jq || typeof (jq) !== "function") {
         * @return {Object} jqMobi object
         * @title $().trigger(event,data);
         */
-        $.fn.trigger = function(event, data) {
+        $.fn.trigger = function(event, data, props) {
             if (typeof event == 'string')
-                event = $.Event(event);
+                event = $.Event(event, props);
             event.data = data;
             for (var i = 0; i < this.length; i++) {
                 this[i].dispatchEvent(event)
@@ -1880,26 +1947,143 @@ if (!window.jq || typeof (jq) !== "function") {
             event.initEvent(type, bubbles, true, null, null, null, null, null, null, null, null, null, null, null, null);
             return event;
         };
+		
+		/* Events system for objects */
+		$.bind = function(obj, ev, f){
+			if(!obj.__events) obj.__events = {};
+			if(!$.isArray(ev)) ev = [ev];
+			for(var i=0; i<ev.length; i++){
+				if(!obj.__events[ev[i]]) obj.__events[ev[i]] = [];
+				obj.__events[ev[i]].push(f);
+			}
+		};
+		$.trigger = function(obj, ev, args){
+			var ret = true;
+			if(!obj.__events) return ret;
+			if(!$.isArray(ev)) ev = [ev];
+			if(!$.isArray(args)) args = [];
+			for(var i=0; i<ev.length; i++){
+				if(obj.__events[ev[i]]){
+					var evts = obj.__events[ev[i]];
+					for(var j = 0; j<evts.length; j++)
+						if($.isFunction(evts[j]) && evts[j].apply({}, args)===false) 
+							ret = false;
+				}
+			}
+			return ret;
+		};
+		$.unbind = function(obj, ev, f){
+			if(!obj.__events) return ret;
+			if(!$.isArray(ev)) ev = [ev];
+			for(var i=0; i<ev.length; i++){
+				if(obj.__events[ev[i]]){
+					var evts = obj.__events[ev[i]];
+					for(var j = 0; j<evts.length; j++){
+						if(evts[j]==f) {
+							evts.splice(j,1);
+							break;
+						}
+					}
+				}
+			}
+		};
+		
         
         /**
          * Creates a proxy function so you can change the 'this' context in the function
+		 * Update: now also allows multiple argument call or for you to pass your own arguments
          ```
             var newObj={foo:bar}
             $("#main").bind("click",$.proxy(function(evt){console.log(this)},newObj);
+			
+			or 
+			
+			( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj) )('foo', 'bar');
+			
+			or 
+			
+			( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj, ['foo', 'bar']) )();
          ```
          
          * @param {Function} Callback
          * @param {Object} Context
          * @title $.proxy(callback,context);
          */
-         
-        $.proxy=function(fnc,ctx){
-           var tmp=function(evt){
-           
-              return fnc.call(ctx,evt);
-           }
-           return tmp;
+		$.proxy=function(f, c, args){
+           	return function(){
+				if(args) return f.apply(c, args);	//use provided arguments
+               	return f.apply(c, arguments);	//use scope function call arguments
+            }
+		}
+
+        /**
+         * Removes listeners on a div and its children recursively
+         ```
+         * @param {HTMLDivElement} the element to clean up recursively
+         */
+		function cleanUpNode(node, kill){
+			//kill it before it lays eggs!
+			if(kill && node.dispatchEvent){
+	            var e = $.Event('destroy', {bubbles:false});
+	            node.dispatchEvent(e);
+			}
+			//cleanup itself
+            var id = jqmid(node);
+            if(id && handlers[id]){
+		    	for(var key in handlers[id])
+		        	node.removeEventListener(handlers[id][key].e, handlers[id][key].proxy, false);
+            	delete handlers[id];
+            }
+		}
+		function cleanUpContent(node, kill){
+            if(!node) return;
+			//cleanup children
+            var children = node.childNodes;
+            if(children && children.length > 0)
+                for(var child in children)
+                    cleanUpContent(children[child], kill);
+			
+			cleanUpNode(node, kill);
+		}
+		var cleanUpAsap = function(els, kill){
+        	for(var i=0;i<els.length;i++){
+            	cleanUpContent(els[i], kill);
+            }	
+		}
+        $.cleanUpContent = function(node, itself, kill){
+            if(!node) return;
+			//cleanup children
+            var cn = node.childNodes;
+            if(cn && cn.length > 0){
+				//destroy everything in a few ms to avoid memory leaks
+				//remove them all and copy objs into new array
+				$.asap(cleanUpAsap, {}, [slice.apply(cn, [0]), kill]);
+            }
+			//cleanUp this node
+			if(itself) cleanUpNode(node, kill);
         }
+		
+        // Like setTimeout(fn, 0); but much faster
+		var timeouts = [];
+		var contexts = [];
+		var params = [];
+        $.asap = function(fn, context, args) {
+			if(!$.isFunction(fn)) throw "$.asap - argument is not a valid function";
+            timeouts.push(fn);
+			contexts.push(context?context:{});
+			params.push(args?args:[]);
+			//post a message to ourselves so we know we have to execute a function from the stack 
+            window.postMessage("jqm-asap", "*");
+        }
+		window.addEventListener("message", function(event) {
+            if (event.source == window && event.data == "jqm-asap") {
+                event.stopPropagation();
+                if (timeouts.length > 0) {	//just in case...
+                    (timeouts.shift()).apply(contexts.shift(), params.shift());
+                }
+            }
+        }, true);
+		
         
          /**
          * End of APIS
@@ -1914,8 +2098,12 @@ if (!window.jq || typeof (jq) !== "function") {
     //Helper function used in jq.mobi.plugins.
     if (!window.numOnly) {
         window.numOnly = function numOnly(val) {
-            if (isNaN(parseFloat(val)))
-                val = val.replace(/[^0-9.-]/, "");
+			if (val===undefined || val==='') return 0;
+			if ( isNaN( parseFloat(val) ) ){
+				if(val.replace){
+					val = val.replace(/[^0-9.-]/, "");
+				} else return 0;
+			}  
             return parseFloat(val);
         }
     }

@@ -3,22 +3,28 @@
         function fadeTransition (oldDiv, currDiv, back) {
             oldDiv.style.display = "block";
             currDiv.style.display = "block";
-            var that = $ui
+            var that = this
             if (back) {
-                that.css3animate(currDiv, {
-                    x: "0%",
-                    time: "1ms"
-                });
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
+                that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
                     x: "0%",
-                    time: "200ms",
+                    time: "150ms",
                     opacity: .1,
-                    callback: function() {
-                        that.finishTransition(oldDiv);
+                    complete: function(canceled) {
+                        if(canceled) {
+                            that.finishTransition(oldDiv, currDiv);
+                            return;
+                        }
+                        
                         that.css3animate(oldDiv, {
-                            x: 0,
-                            time: "1ms",
-                            opacity: 1
+                            x: "-100%",
+                            opacity: 1,
+                            complete: function() {
+                                that.finishTransition(oldDiv);
+                            }
+                        
                         });
                         currDiv.style.zIndex = 2;
                         oldDiv.style.zIndex = 1;
@@ -27,29 +33,30 @@
             } else {
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
-                that.css3animate(oldDiv, {
-                    x: "0%",
-                    time: "200ms",
-                    callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: 0,
-                            y: 0,
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
-                    }
-                });
                 currDiv.style.opacity = 0;
                 that.css3animate(currDiv, {
                     x: "0%",
-                    time: "1ms",
-                    callback: function() {
+                    opacity: .1,
+                    complete: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
-                            time: "200ms",
-                            opacity: 1
+                            time: "150ms",
+                            opacity: 1,
+                            complete:function(canceled){
+                                if(canceled) {
+                                    that.finishTransition(oldDiv, currDiv);
+                                    return;
+                                }
+                                
+                                that.clearAnimations(currDiv);
+                                that.css3animate(oldDiv, {
+                                    x: "-100%",
+                                    y: 0,
+                                    complete: function() {
+                                        that.finishTransition(oldDiv);
+                                    }
+                                });
+                            }
                         });
                     }
                 });
@@ -60,33 +67,40 @@
 (function($ui){
     
         function flipTransition (oldDiv, currDiv, back) {
-            oldDiv.style.display = "block";
+             oldDiv.style.display = "block";
             currDiv.style.display = "block";
-            var that = $ui
+            var that = this
             if (back) {
                 that.css3animate(currDiv, {
                     x: "100%",
-                    time: "1ms",
                     scale: .8,
                     rotateY: "180deg",
-                    callback: function() {
+                    complete: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
-                            time: "200ms"
+                            scale: 1,
+                            time: "150ms",
+                            rotateY: "0deg",
+                            complete: function(){
+                                that.clearAnimations(currDiv);
+                            }
                         });
                     }
                 });
                 that.css3animate(oldDiv, {
-                    x: "10%",
-                    time: "200ms",
+                    x: "100%",
+                    time: "150ms",
                     scale: .8,
                     rotateY: "180deg",
-                    callback: function() {
-                        that.finishTransition(oldDiv);
+                    complete: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
-                            time: "1ms",
-                            opacity: 1
+                            x: "-100%",
+                            opacity: 1,
+                            scale: 1,
+                            rotateY: "0deg",
+                            complete: function() {
+                                that.finishTransition(oldDiv);
+                            }
                         });
                         currDiv.style.zIndex = 2;
                         oldDiv.style.zIndex = 1;
@@ -97,15 +111,19 @@
                 currDiv.style.zIndex = 2;
                 that.css3animate(oldDiv, {
                     x: "100%",
-                    time: "200ms",
-                    scale: '.8',
+                    time: "150ms",
+                    scale: .8,
                     rotateY: "180deg",
-                    callback: function() {
-                        that.finishTransition(oldDiv);
+                    complete: function() {
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             y: 0,
-                            time: "1ms"
+                            time: "1ms",
+                            scale: 1,
+                            rotateY: "0deg",
+                            complete: function() {
+                                that.finishTransition(oldDiv);
+                            }
                         });
                     }
                 });
@@ -114,10 +132,15 @@
                     time: "1ms",
                     scale: .8,
                     rotateY: "180deg",
-                    callback: function() {
+                    complete: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
-                            time: "200ms"
+                            time: "150ms",
+                            scale: 1,
+                            rotateY: "0deg",
+                            complete:function(){
+                                that.clearAnimations(currDiv);
+                            }
                         });
                     }
                 });
@@ -130,23 +153,28 @@
          function popTransition(oldDiv, currDiv, back) {
             oldDiv.style.display = "block";
             currDiv.style.display = "block";
-            var that = $ui
+            var that = this
             if (back) {
-                that.css3animate(currDiv, {
-                    x: "0%",
-                    time: "1ms"
-                });
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
+                that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
                     x: "0%",
-                    time: "200ms",
+                    time: "150ms",
                     opacity: .1,
                     scale: .2,
-                    origin: "50% 50%",
-                    callback: function() {
-                        that.finishTransition(oldDiv);
+                    origin: "-50%"+" 50%",
+                    complete: function(canceled) {
+                        if(canceled) {
+                            that.finishTransition(oldDiv);
+                            return;
+                        }
+                        
                         that.css3animate(oldDiv, {
-                            x: 0,
-                            time: "1ms"
+                            x: "-100%",
+                            complete: function() {
+                                that.finishTransition(oldDiv);
+                            }
                         });
                         currDiv.style.zIndex = 2;
                         oldDiv.style.zIndex = 1;
@@ -155,34 +183,34 @@
             } else {
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
-                that.css3animate(oldDiv, {
-                    x: "0%",
-                    time: "200ms",
-                    callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: 0,
-                            y: 0,
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
-                    }
-                });
                 that.css3animate(currDiv, {
                     x: "0%",
                     y: "0%",
-                    time: "1ms",
                     scale: .2,
-                    origin: "50% 50%",
+                    origin: "-50%"+" 50%",
                     opacity: .1,
-                    callback: function() {
+                    complete: function() {
                         that.css3animate(currDiv, {
                             x: "0%",
-                            time: "200ms",
+                            time: "150ms",
                             scale: 1,
                             opacity: 1,
-                            origin: "0% 0%"
+                            origin: "0%"+" 0%",
+                            complete: function(canceled){
+                                if(canceled) {
+                                    that.finishTransition(oldDiv, currDiv);
+                                    return;
+                                }
+                                
+                                that.clearAnimations(currDiv);
+                                that.css3animate(oldDiv, {
+                                    x: "100%",
+                                    y: 0,
+                                    complete: function() {
+                                        that.finishTransition(oldDiv);
+                                    }
+                                });
+                            }
                         });
                     }
                 });
@@ -200,50 +228,49 @@
          * @title $ui.slideTransition(previousPanel,currentPanel,goBack);
          */
         function slideTransition(oldDiv, currDiv, back) {
-            oldDiv.style.display = "block";
+          	 oldDiv.style.display = "block";
             currDiv.style.display = "block";
-            var that = $ui
-            
+            var that = this;
             if (back) {
                 that.css3animate(oldDiv, {
-                    x: "100%",
-                    time: "200ms",
-                    callback: function() {
-                        that.finishTransition(oldDiv);
-                        that.css3animate(oldDiv, {
-                            x: 0,
-                            time: "0ms"
-                        });
-                    }
-                });
-                that.css3animate(currDiv, {
-                    x: "-100%",
-                    time: "0ms",
-                    callback: function() {
-                        that.css3animate(currDiv, {
-                            x: "0%",
-                            time: "200ms"
-                        });
-                    }
-                });
+					x:"0%",
+					y:"0%",
+					complete:function(){
+		                that.css3animate(oldDiv, {
+		                    x: "100%",
+		                    time: "150ms",
+		                    complete: function() {
+		                        that.finishTransition(oldDiv, currDiv);
+		                    }
+		                }).link(currDiv, {
+	                        x: "0%",
+	                        time: "150ms"
+	                    });
+					}
+				}).link(currDiv, {
+					x:"-100%",
+					y:"0%"
+				});
             } else {
                 that.css3animate(oldDiv, {
-                    x: "-100%",
-                    time: "200ms",
-                    callback: function() {
-                        that.finishTransition(oldDiv);
-                    }
-                });
-                that.css3animate(currDiv, {
-                    x: "100%",
-                    time: "0ms",
-                    callback: function() {
-                        that.css3animate(currDiv, {
-                            x: "0%",
-                            time: "200ms"
-                        });
-                    }
-                });
+					x:"0%",
+					y:"0%",
+					complete:function(){
+		                that.css3animate(oldDiv, {
+		                    x: "-100%",
+		                    time: "150ms",
+		                    complete: function() {
+		                        that.finishTransition(oldDiv, currDiv);
+		                    }
+		                }).link(currDiv, {
+	                        x: "0%",
+	                        time: "150ms"
+	                    });
+					}
+				}).link(currDiv, {
+					x:"100%",
+					y:"0%"
+				});
             }
         }
         $ui.availableTransitions.slide = slideTransition;
@@ -254,23 +281,28 @@
         function slideDownTransition (oldDiv, currDiv, back) {
             oldDiv.style.display = "block";
             currDiv.style.display = "block";
-            var that = $ui;
+            var that = this
             if (back) {
-                that.css3animate(currDiv, {
-                    x: "0%",
-                    y: "0%",
-                    time: "1ms"
-                });
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
+                that.clearAnimations(currDiv);
                 that.css3animate(oldDiv, {
                     y: "-100%",
                     x: "0%",
-                    time: "200ms",
-                    callback: function() {
-                        that.finishTransition(oldDiv);
+                    time: "150ms",
+                    complete: function(canceled) {
+                        if(canceled) {
+                            that.finishTransition(oldDiv, currDiv);
+                            return;
+                        }
+                        
                         that.css3animate(oldDiv, {
-                            x: 0,
+                            x: "-100%",
                             y: 0,
-                            time: "1ms"
+                            complete: function() {
+                                that.finishTransition(oldDiv);
+                            
+                            }
                         });
                         currDiv.style.zIndex = 2;
                         oldDiv.style.zIndex = 1;
@@ -279,29 +311,30 @@
             } else {
                 oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
-                that.css3animate(oldDiv, {
-                    x: "0%",
-                    time: "200ms",
-                    callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: 0,
-                            y: 0,
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
-                    }
-                });
                 that.css3animate(currDiv, {
                     y: "-100%",
                     x: "0%",
-                    time: "1ms",
-                    callback: function() {
+                    complete: function() {
                         that.css3animate(currDiv, {
                             y: "0%",
                             x: "0%",
-                            time: "200ms"
+                            time: "150ms",
+                            complete: function(canceled){
+                                if(canceled) {
+                                    that.finishTransition(oldDiv, currDiv);
+                                    return;
+                                }
+                                
+                                that.clearAnimations(currDiv);
+                                that.css3animate(oldDiv, {
+                                    x: "-100%",
+                                    y: 0,
+                                    complete: function() {
+                                        that.finishTransition(oldDiv);
+                                    }
+                                });
+                                
+                            }
                         });
                     }
                 });
@@ -309,59 +342,56 @@
         }
         $ui.availableTransitions.down = slideDownTransition;
 })($.ui);
+
 (function($ui){
     
         function slideUpTransition(oldDiv, currDiv, back) {
-            oldDiv.style.display = "block";
+             oldDiv.style.display = "block";
             currDiv.style.display = "block";
-            var that = $ui;
+            var that = this;
             if (back) {
-                that.css3animate(currDiv, {
-                    x: "00%",
-                    y: "0%",
-                    time: "1ms"
-                });
+                currDiv.style.zIndex = 1;
+                oldDiv.style.zIndex = 2;
+                
+                that.clearAnimations(currDiv);
+
                 that.css3animate(oldDiv, {
                     y: "100%",
-                    x: "00%",
-                    time: "200ms",
-                    callback: function() {
+                    x: "0%",
+                    time: "150ms",
+                    complete: function() {
                         that.finishTransition(oldDiv);
-                        that.css3animate(oldDiv, {
-                            x: 0,
-                            y: 0,
-                            time: "1ms"
-                        });
                         currDiv.style.zIndex = 2;
                         oldDiv.style.zIndex = 1;
                     }
                 });
             } else {
-                oldDiv.style.zIndex = 1;
                 currDiv.style.zIndex = 2;
-                that.css3animate(oldDiv, {
-                    x: "00%",
-                    time: "200ms",
-                    callback: function() {
-                        that.css3animate(oldDiv, {
-                            x: 0,
-                            y: 0,
-                            time: "1ms",
-                            callback: function() {
-                                that.finishTransition(oldDiv);
-                            }
-                        });
-                    }
-                });
+                oldDiv.style.zIndex = 1;
                 that.css3animate(currDiv, {
                     y: "100%",
-                    x: "00%",
-                    time: "1ms",
-                    callback: function() {
+                    x: "0%",
+                    complete: function() {
                         that.css3animate(currDiv, {
                             y: "0%",
-                            x: "00%",
-                            time: "200ms"
+                            x: "0%",
+                            time: "150ms",
+                            complete: function(canceled) {
+                                if(canceled) {
+                                    that.finishTransition(oldDiv, currDiv);
+                                    return;
+                                }
+                                
+                                that.clearAnimations(currDiv);
+                                that.css3animate(oldDiv, {
+                                    x: "-100%",
+                                    y: 0,
+                                    complete: function() {
+                                        that.finishTransition(oldDiv);
+                                    }
+                                });
+                                
+                            }
                         });
                     }
                 });
