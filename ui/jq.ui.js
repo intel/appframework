@@ -1759,7 +1759,8 @@
             if (!jq("#content").hasClass("hasMenu"))
                 return;
             if (jq("#menu").css("display") != "block" && ((force !== undefined && force !== false) || force === undefined)) {
-                this.scrollingDivs["menu_scroller"].initEvents();
+                if(this.scrollingDivs["menu_scroller"])
+                    this.scrollingDivs["menu_scroller"].initEvents();
                 jq("#menu").show();
                 window.setTimeout(function() {
                     jq("#menu").addClass("on");
@@ -1769,7 +1770,8 @@
                 }, 1); //needs to run after
             
             } else if (force === undefined || (force !== undefined && force === false)) {
-                this.scrollingDivs["menu_scroller"].removeEvents();
+                if(this.scrollingDivs["menu_scroller"])
+                    this.scrollingDivs["menu_scroller"].removeEvents();
                 
                 jq("#header").removeClass("on");
                 jq("#menu").removeClass("on");
@@ -2962,8 +2964,6 @@
                 if (theTarget.href.toLowerCase().indexOf("javascript:") != 0) {
                     if (jq.ui.isAppMobi)
                         AppMobi.device.launchExternal(theTarget.href);
-                    else if (!jq.os.desktop)
-                        brokerClickEventMobile(theTarget);
                     else
                         window.open(theTarget);
                     return true;
@@ -2983,14 +2983,6 @@
 
             return true;
         }
-    }
-    function brokerClickEventMobile(theTarget) {
-        if (jq.os.desktop)
-            return;
-        var clickevent = document.createEvent('Event');
-        clickevent.initEvent('click', true, false);
-        theTarget.target = "_blank";
-        theTarget.dispatchEvent(clickevent);
     }
 })();
 
