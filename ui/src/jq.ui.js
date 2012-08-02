@@ -1272,7 +1272,8 @@
                 this.scrollingDivs["menu_scroller"] = jq("#menu_scroller").scroller({
                     scrollBars: false,
                     verticalScroll: true,
-                    vScrollCSS: "jqmScrollbar"
+                    vScrollCSS: "jqmScrollbar",
+                    useJsScroll:true
                 });
             }
 
