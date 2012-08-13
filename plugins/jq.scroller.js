@@ -248,7 +248,7 @@
                                 this.hscrollBar.style.top = (window.innerHeight - numOnly(this.hscrollBar.style.height)) + "px";
                             else
                                 this.hscrollBar.style.bottom = numOnly(this.hscrollBar.style.height);
-                            this.vscrollBar.webkitTransition = '';
+                            this.hscrollBar.webkitTransition = '';
                             
                           //  this.hscrollBar.style.opacity = 1;
                         }

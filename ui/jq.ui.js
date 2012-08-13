@@ -403,7 +403,7 @@
                                 this.hscrollBar.style.top = (window.innerHeight - numOnly(this.hscrollBar.style.height)) + "px";
                             else
                                 this.hscrollBar.style.bottom = numOnly(this.hscrollBar.style.height);
-                            this.vscrollBar.webkitTransition = '';
+                            this.hscrollBar.webkitTransition = '';
                             
                           //  this.hscrollBar.style.opacity = 1;
                         }
@@ -935,7 +935,7 @@
             
             try {
                 var that = this;
-                var markStart = '<div><div id="jq_actionsheet"><div style="width:100%">';
+                var markStart = '<div id="jq_actionsheet"><div style="width:100%">';
                 var markEnd = '</div></div>';
                 var markup;
                 if (typeof opts == "string") {
@@ -2965,7 +2965,10 @@
                     if (jq.ui.isAppMobi)
                         AppMobi.device.launchExternal(theTarget.href);
                     else
-                        window.open(theTarget);
+                    {
+                        theTarget.target="_blank"
+                        window.open(theTarget.href);
+                    }
                     return true;
                 }
                 return false;
