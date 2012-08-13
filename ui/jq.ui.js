@@ -960,7 +960,7 @@
 	            else
 	                this.vscrollBar.style.right = "0px";
 	            this.vscrollBar.style.webkitTransition = '';
-	            this.vscrollBar.style.opacity = 1;
+	           // this.vscrollBar.style.opacity = 1;
 			}
 			
 			//horizontal scroll
@@ -969,8 +969,8 @@
                     this.hscrollBar.style.top = (window.innerHeight - numOnly(this.hscrollBar.style.height)) + "px";
                 else
                     this.hscrollBar.style.bottom = numOnly(this.hscrollBar.style.height);
-                this.vscrollBar.style.webkitTransition = ''; 
-                this.hscrollBar.style.opacity = 1;
+                this.hscrollBar.style.webkitTransition = ''; 
+               // this.hscrollBar.style.opacity = 1;
 			}
 
 			//save scrollInfo
@@ -1052,6 +1052,10 @@
 			this.moved = true;
 
 			this.saveEventInfo(event);
+			if(this.elementInfo.requiresVScrollBar)
+				this.vscrollBar.style.opacity=1;
+			if(this.elementInfo.requiresHScrollBar)
+				this.hscrollBar.style.opacity=1;
         }
 		
 		jsScroller.prototype.doScroll=function(){
