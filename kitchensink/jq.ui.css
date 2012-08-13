@@ -204,7 +204,6 @@ color:#333;
 font:bold 21px/18px 'Arial Black', Arial Black, Gadget, Arial, Helvetica, sans-serif;
 text-align:center;
 text-decoration:none;
--webkit-transition:all 0.2s ease; transition:all 0.2s ease;
 }
 .closebutton:before { content:'x'; }
 .closebutton.selected,.closebutton.modalButton.selected {
@@ -397,10 +396,9 @@ font-size:48px;
 }
 
 .jqMenuClose{
-	position:absolute;
-	top:5px;
-	right:10px;
+	position:relative;
 	z-index:2;
+	float:right;
 }
 
 #menu  .title {

@@ -1270,11 +1270,13 @@
                 this.menu.innerHTML = '<div id="menu_scroller"></div>';
                 this.viewportContainer.append(this.menu);
                 this.scrollingDivs["menu_scroller"] = jq("#menu_scroller").scroller({
-                    scrollBars: false,
+                    scrollBars: true,
                     verticalScroll: true,
                     vScrollCSS: "jqmScrollbar",
-                    useJsScroll:true
+                    useJsScroll:!$.feat.nativeTouchScroll
                 });
+                if($.feat.nativeTouchScroll)
+                    $("#menu_scroller").css("height","100%");
             }
 
             if (!this.content) {
@@ -1287,7 +1289,7 @@
             this.header.innerHTML = '<a id="backButton"  href="javascript:;"></a> <h1 id="pageTitle"></h1>' + header.innerHTML;
             this.backButton = $am("backButton");
             this.backButton.className = "button";
-             jq(document).on("click", "#backButton", function() {
+            jq(document).on("click", "#header #backButton", function() {
                 that.goBack();
             });
             this.backButton.style.visibility = "hidden";
@@ -1387,19 +1389,7 @@
                 //window.setTimeout(function() {
                 var loadFirstDiv=function(){
 					
-                    //go to activeDiv
-					var firstPanelId = that.getPanelId(defaultHash);
-					that.history=[{target:'#'+that.firstDiv.id}];	//set the first id as origin of path
-                    if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId!=("#"+that.firstDiv.id)) {
-						that.loadContent(firstPanelId, true, false, 'none');	//load the active page as a newTab with no transition
-                    } else {
-
-						that.loadContentData(that.firstDiv);	//load the info off the first panel
-						that.parsePanelFunctions(that.firstDiv);
-                        that.firstDiv.style.display="block";
-					}
-					
-                    that.launchCompleted = true;
+                  
                     
                    if(jq("#navbar a").length>0){
                         jq("#navbar a").data("ignore-pressed", "true").data("resetHistory", "true");
@@ -1422,6 +1412,21 @@
                         });
                     });
 					
+
+                    //go to activeDiv
+                    var firstPanelId = that.getPanelId(defaultHash);
+                    that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
+                    if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId!=("#"+that.firstDiv.id)) {
+                        that.loadContent(firstPanelId, true, false, 'none');    //load the active page as a newTab with no transition
+                    } else {
+
+                        that.loadContentData(that.firstDiv);    //load the info off the first panel
+                        that.parsePanelFunctions(that.firstDiv);
+                        that.firstDiv.style.display="block";
+                    }
+                    
+                    that.launchCompleted = true;
+
 					//trigger ui ready
                     jq(document).trigger("jq.ui.ready");
 					//remove splashscreen

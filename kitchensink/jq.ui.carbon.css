@@ -371,10 +371,9 @@ background:#333;
 }
 
 .jqMenuClose{
-	position:absolute;
-	top:5px;
-	right:10px;
+	position:relative;
 	z-index:2;
+	float:right;
 }
 
 #menu .title {
