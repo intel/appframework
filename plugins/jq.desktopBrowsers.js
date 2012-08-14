@@ -12,6 +12,7 @@
 	
 	var redirectMouseToTouch = function(type, originalEvent, newTarget) 
 	{
+
 		var theTarget = newTarget ? newTarget : originalEvent.target;
 		
 	    //stop propagation, and remove default behavior for everything but INPUT, TEXTAREA & SELECT fields
@@ -42,13 +43,14 @@
 	}
 	
     var mouseDown = false,
-		lastTarget = null;
+		lastTarget = null,firstMove=false;
 
     document.addEventListener("mousedown", function(e) 
     {
 		mouseDown = true;
 		lastTarget = e.target;
         redirectMouseToTouch("touchstart", e);
+        firstMove = true;
     }, true);
 
     document.addEventListener("mouseup", function(e) 
@@ -62,6 +64,7 @@
     document.addEventListener("mousemove", function(e) 
     {
         if (!mouseDown) return;
+        if(firstMove) return firstMove=false
         redirectMouseToTouch("touchmove", e);
     }, true);
 		
@@ -77,7 +80,7 @@
 	document.addEventListener("selectstart", preventAll, true);
 	document.addEventListener("click", function(e) 
     {
-		if(!e.mouseToTouch){
+		if(!e.mouseToTouch&&e.target==lastTarget){
 	        preventAll(e);
 		}
     }, true);

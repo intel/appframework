@@ -2890,6 +2890,7 @@ if (!HTMLElement.prototype.unwatch) {
     
     
     ui.prototype = {
+        loadContentQueue:[],
         isAppMobi: false,
         titlebar: "",
         navbar: "",
@@ -3821,8 +3822,11 @@ if (!HTMLElement.prototype.unwatch) {
          */
         loadContent: function(target, newTab, back, transition, anchor) {
             
-            if (this.doingTransition)
-                return;
+            if (this.doingTransition){
+                var that=this;
+                this.loadContentQueue.push([target,newTab,back,transition,anchor]);
+                return
+            }
             
             what = null;
             var that = this;
@@ -4265,6 +4269,13 @@ if (!HTMLElement.prototype.unwatch) {
                 else
                     $.asap(loadFirstDiv);
             }
+            var that=this;
+            $.bind($.ui,"content-loaded",function(){
+                if(that.loadContentQueue.length>0){
+                    var tmp=that.loadContentQueue.splice(0,1)[0];
+                    that.loadContent(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4]);
+                }
+            });
            
         },
         noTransition: function(oldDiv, currDiv, back) {
@@ -4290,6 +4301,7 @@ if (!HTMLElement.prototype.unwatch) {
             oldDiv.style.display = 'none';
             this.doingTransition = false;
 			if(currDiv) this.clearAnimations(currDiv);
+            $.trigger(this,"content-loaded");
         },
 		
         /**
