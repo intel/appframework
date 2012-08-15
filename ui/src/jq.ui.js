@@ -112,14 +112,7 @@
                 throw "css3Animate plugin is required";
             return el.css3Animate(opts);
         },
-        /**
-         * This is the time transitions will run for.
-           ```
-           $.ui.transitionTime='400ms';
-           ```
-         * @title $.ui.transitionTime;
-         */
-        transitionTime:"500",
+
         /**
          * this is a boolean when set to true (default) it will load that panel when the app is started
            ```
@@ -355,7 +348,7 @@
 		/*gets the panel name from an hash*/
 		getPanelId:function(hash){
             var firstSlash = hash.indexOf('/');
-            return firstSlash == -1? hash : hash.substring(0, firstSlash - 1);
+            return firstSlash == -1? hash : hash.substring(0, firstSlash);
 		},
 
         /**
@@ -517,6 +510,13 @@
 				});
             }
         },
+        /**
+         * Disables the side menu
+           ```
+           $.ui.disableSideMenu();
+           ```
+        * @title $.ui.disableSideMenu();
+        */
 		disableSideMenu:function(){
 			var that = this;
 			var els = jq("#content, #menu, #header, #navbar");
@@ -526,6 +526,13 @@
 				});
 			} else els.removeClass("hasMenu");
 		},
+        /**
+         * Enables the side menu
+           ```
+           $.ui.enableSideMenu();
+           ```
+        * @title $.ui.enableSideMenu();
+        */
 		enableSideMenu:function(){
 			var that = this;
 			var els = jq("#content, #menu, #header, #navbar");
@@ -1026,6 +1033,18 @@
                 this.loadDiv(target, newTab, back, transition);
 			}
         },
+        /**
+         * This is called internally by loadContent.  Here we are loading a div instead of an Ajax link
+           ```
+           $.ui.loadDiv("#main",false,false,"up");
+           ```
+         * @param {String} target
+         * @param {Boolean} newtab (resets history)
+         * @param {Boolean} go back (initiate the back click)
+         * @param {String} transition
+         * @title $.ui.loadDiv(target,newTab,goBack,transition);
+         * @api private
+         */
 		loadDiv:function(target, newTab, back, transition){
             // load a div
             what = target.replace("#", "");
@@ -1091,6 +1110,18 @@
             this.parsePanelFunctions(what, oldDiv);
             //window.scrollTo(1,1); //jumping 1px in iPhone - is this really necessary? android only?
 		},
+        /**
+         * This is called internally by loadDiv.  This sets up the back button in the header and scroller for the panel
+           ```
+           $.ui.loadContentData("#main",false,false,"up");
+           ```
+         * @param {String} target
+         * @param {Boolean} newtab (resets history)
+         * @param {Boolean} go back (initiate the back click)
+         * @param {String} transition
+         * @title $.ui.loadDiv(target,newTab,goBack,transition);
+         * @api private
+         */
 		loadContentData:function(what, newTab, back, transition){
             if (back) {
                 if (this.history.length > 0) {
@@ -1125,6 +1156,18 @@
                 this.scrollingDivs[this.activeDiv.id].enable();
             }
 		},
+        /**
+         * This is called internally by loadContent.  Here we are using Ajax to fetch the data
+           ```
+           $.ui.loadDiv("page.html",false,false,"up");
+           ```
+         * @param {String} target
+         * @param {Boolean} newtab (resets history)
+         * @param {Boolean} go back (initiate the back click)
+         * @param {String} transition
+         * @title $.ui.loadDiv(target,newTab,goBack,transition);
+         * @api private
+         */
 		loadAjax:function(target, newTab, back, transition, anchor){
             // XML Request
             if (this.activeDiv.id == "jQui_ajax" && target == this.ajaxUrl)
@@ -1178,7 +1221,14 @@
             // show Ajax Mask
             this.showMask();
 		},
-		
+		/**
+         * This executes the transition for the panel
+            ```
+            $.ui.runTransition(transition,oldDiv,currDiv,back)
+            ```
+         * @api private
+         * @title $.ui.runTransition(transition,oldDiv,currDiv,back)
+         */
 		runTransition: function(transition, oldDiv, currWhat, back){
             if (!this.availableTransitions[transition]) transition = 'default';
             this.availableTransitions[transition].call(this, oldDiv, currWhat, back);
@@ -1394,7 +1444,6 @@
                 var loadFirstDiv=function(){
 					
                   
-                    
                    if(jq("#navbar a").length>0){
                         jq("#navbar a").data("ignore-pressed", "true").data("resetHistory", "true");
                         that.defaultFooter = jq("#navbar").children();
@@ -1421,12 +1470,13 @@
                     var firstPanelId = that.getPanelId(defaultHash);
                     that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
                     if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId!=("#"+that.firstDiv.id)) {
-                        that.loadContent(firstPanelId, true, false, 'none');    //load the active page as a newTab with no transition
+                        that.loadContent(defaultHash, true, false, 'none');    //load the active page as a newTab with no transition
                     } else {
 
                         that.loadContentData(that.firstDiv);    //load the info off the first panel
                         that.parsePanelFunctions(that.firstDiv);
                         that.firstDiv.style.display="block";
+                        $("#header #backButton").css("visibility","hidden");
                     }
                     
                     that.launchCompleted = true;
@@ -1454,13 +1504,16 @@
             });
            
         },
+        /**
+         * This is the default transition.  It simply shows the new panel and hides the old
+         */
         noTransition: function(oldDiv, currDiv, back) {
             currDiv.style.display = "block";
 			oldDiv.style.display = "block";
             var that = this;
             that.clearAnimations(currDiv);
 			that.css3animate(oldDiv, {
-                x: "-100%",
+                x: "0%",
                 y: 0
             });
             that.finishTransition(oldDiv);
@@ -1566,6 +1619,7 @@
     
     
     $.ui = new ui;
+    
 })(jq);
 
 
