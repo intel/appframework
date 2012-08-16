@@ -2885,7 +2885,6 @@ if (!HTMLElement.prototype.unwatch) {
 
          this.availableTransitions = {};
          this.availableTransitions['default'] =this.availableTransitions['none'] = this.noTransition;
-
     };
     
     
@@ -4326,6 +4325,12 @@ if (!HTMLElement.prototype.unwatch) {
                     that.loadContent(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4]);
                 }
             });
+            if(window.navigator.standalone){
+                alert("standalone");
+                jq("#jQUi #header").bind("touchmove",function(e){
+                    e.preventDefault();
+                });
+            }
            
         },
         /**

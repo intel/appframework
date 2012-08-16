@@ -61,7 +61,6 @@
 
          this.availableTransitions = {};
          this.availableTransitions['default'] =this.availableTransitions['none'] = this.noTransition;
-
     };
     
     
@@ -1502,6 +1501,12 @@
                     that.loadContent(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4]);
                 }
             });
+            if(window.navigator.standalone){
+
+                jq("#jQUi #header").bind("touchmove",function(e){
+                    e.preventDefault();
+                });
+            }
            
         },
         /**
