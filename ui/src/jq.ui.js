@@ -283,6 +283,7 @@
                     function() {
                         that.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
                         that.transitionType = tmpEl.transition;
+                        document.location.hash=tmpEl.target;
                         //for Android 4.0.x, we must touchLayer.hideAdressBar()
                     });
             }
@@ -558,7 +559,7 @@
             if (elems === undefined || elems == null)
                 return;
             if (typeof (elems) == "string")
-                return nb.html(elems), null;
+                return nb.html(elems,true), null;
             nb.html("");
             for (var i = 0; i < elems.length; i++) {
                 var node = elems[i].cloneNode(true);
@@ -583,7 +584,7 @@
             if (elems === undefined || elems == null)
                 return;
             if (typeof (elems) == "string")
-                return nb.html(elems), null;
+                return nb.html(elems,true), null;
             nb.html("");
             for (var i = 0; i < elems.length; i++) {
                 var node = elems[i].cloneNode(true);
@@ -606,7 +607,7 @@
             if (elems === undefined || elems == null)
                 return;
             if (typeof (elems) == "string")
-                return nb.html(elems), null;
+                return nb.html(elems,true), null;
             nb.html('');
             var close = document.createElement("a");
             close.className = "closebutton jqMenuClose";
@@ -696,7 +697,7 @@
             var that = this;
             try {
                 if ($am(id)) {
-                    jq("#modalContainer").html($.feat.nativeTouchScroll?$am(id).innerHTML:$am(id).childNodes[0].innerHTML+'');
+                    jq("#modalContainer").html($.feat.nativeTouchScroll?$am(id).innerHTML:$am(id).childNodes[0].innerHTML+'',true);
                     jq('#modalContainer').append("<a href='javascript:;' onclick='$.ui.hideModal();' class='closebutton modalbutton'></a>");
                     this.modalWindow.style.display = "block";
                     
@@ -717,7 +718,7 @@
          * @title $.ui.hideModal();
          */
         hideModal: function() {
-            $am("modalContainer").innerHTML = "";
+            $am("modalContainer").html("",true);
             $am("jQui_modal").style.display = "none";
             
             this.scrollingDivs['modal_container'].disable();
