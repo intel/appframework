@@ -1377,14 +1377,14 @@
         var that = this;
         if (window.AppMobi)
             document.addEventListener("appMobi.device.ready", function() {
-                that.hasLaunched = true;
                 if (that.autoLaunch) {
+                    that.hasLaunched = true;
                     that.launch();
                 }
             }, false);
         else if (document.readyState == "complete" || document.readyState == "loaded") {
-            that.hasLaunched = true;
             if (that.autoLaunch) {
+                that.hasLaunched = true;
                 that.launch();
             }
         } else
@@ -2964,6 +2964,8 @@
                 if (theTarget.href.toLowerCase().indexOf("javascript:") != 0) {
                     if (jq.ui.isAppMobi)
                         AppMobi.device.launchExternal(theTarget.href);
+                    else if(jq.os.android)
+                        brokerClickEventMobile(theTarget)
                     else
                     {
                         theTarget.target="_blank"
@@ -2986,6 +2988,14 @@
 
             return true;
         }
+    }
+    function brokerClickEventMobile(theTarget) {
+        if (jq.os.desktop)
+            return;
+        var clickevent = document.createEvent('Event');
+        clickevent.initEvent('click', true, false);
+        theTarget.target = "_blank";
+        theTarget.dispatchEvent(clickevent);
     }
 })();
 
