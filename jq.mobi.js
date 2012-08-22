@@ -16,7 +16,6 @@ if (!window.jq || typeof (jq) !== "function") {
      * @api private
      */
     var jq = (function(window) {
-        "use strict";
         var undefined, document = window.document, 
         emptyArray = [], 
         slice = emptyArray.slice, 
@@ -453,19 +452,23 @@ if (!window.jq || typeof (jq) !== "function") {
                 ```
                 $("#foo").html(); //gets the first elements html
                 $("#foo").html('new html');//sets the html
+                $("#foo").html('new html',false); //Do not do memory management cleanup
                 ```
 
             * @param {String} html to set
+            * @param {Bool} [cleanup] - set to false for performance tests and if you do not want to execute memory management cleanup
             * @return {Object} a jqMobi object
             * @title $().html([html])
             */
-            html: function(html) {
+            html: function(html,cleanup) {
                 if (this.length === 0)
                     return undefined;
                 if (html === undefined)
                     return this[0].innerHTML;
+
                 for (var i = 0; i < this.length; i++) {
-                    $.cleanUpContent(this[i], false, true);
+                    if(cleanup!==false)
+                        $.cleanUpContent(this[i], false, true);
                     this[i].innerHTML = html;
                 }
                 return this;
@@ -1948,7 +1951,17 @@ if (!window.jq || typeof (jq) !== "function") {
             return event;
         };
 		
-		/* Events system for objects */
+        /* The following are for events on objects */
+		/**
+         * Bind an event to an object instead of a DOM Node 
+           ```
+           $.bind(this,'event',function(){});
+           ```
+         * @param {Object} object
+         * @param {String} event name
+         * @param {Function} function to execute
+         * @title $.bind(object,event,function);
+         */
 		$.bind = function(obj, ev, f){
 			if(!obj.__events) obj.__events = {};
 			if(!$.isArray(ev)) ev = [ev];
@@ -1957,6 +1970,17 @@ if (!window.jq || typeof (jq) !== "function") {
 				obj.__events[ev[i]].push(f);
 			}
 		};
+
+        /**
+         * Trigger an event to an object instead of a DOM Node 
+           ```
+           $.trigger(this,'event',arguments);
+           ```
+         * @param {Object} object
+         * @param {String} event name
+         * @param {Array} arguments
+         * @title $.trigger(object,event,argments);
+         */
 		$.trigger = function(obj, ev, args){
 			var ret = true;
 			if(!obj.__events) return ret;
@@ -1972,7 +1996,17 @@ if (!window.jq || typeof (jq) !== "function") {
 			}
 			return ret;
 		};
-		$.unbind = function(obj, ev, f){
+        /**
+         * Unbind an event to an object instead of a DOM Node 
+           ```
+           $.unbind(this,'event',function(){});
+           ```
+         * @param {Object} object
+         * @param {String} event name
+         * @param {Function} function to execute
+         * @title $.unbind(object,event,function);
+         */
+        $.unbind = function(obj, ev, f){
 			if(!obj.__events) return ret;
 			if(!$.isArray(ev)) ev = [ev];
 			for(var i=0; i<ev.length; i++){
@@ -2018,8 +2052,11 @@ if (!window.jq || typeof (jq) !== "function") {
 
         /**
          * Removes listeners on a div and its children recursively
-         ```
+            ```
+             cleanUpNode(node,kill)
+            ```
          * @param {HTMLDivElement} the element to clean up recursively
+         * @api private
          */
 		function cleanUpNode(node, kill){
 			//kill it before it lays eggs!
@@ -2050,6 +2087,17 @@ if (!window.jq || typeof (jq) !== "function") {
             	cleanUpContent(els[i], kill);
             }	
 		}
+
+        /**
+         * Function to clean up node content to prevent memory leaks
+           ```
+           $.cleanUpContent(node,itself,kill)
+           ```
+         * @param {HTMLNode} node
+         * @param {Bool} kill itself
+         * @param {kill} Kill nodes
+         * @title $.cleanUpContent(node,itself,kill)
+         */
         $.cleanUpContent = function(node, itself, kill){
             if(!node) return;
 			//cleanup children
@@ -2067,6 +2115,15 @@ if (!window.jq || typeof (jq) !== "function") {
 		var timeouts = [];
 		var contexts = [];
 		var params = [];
+        /**
+         * This adds a command to execute in the JS stack, but is faster then setTimeout
+           ```
+           $.asap(function,context,args)
+           ```
+         * @param {Function} function
+         * @param {Object} context
+         * @param {Array} arguments
+         */
         $.asap = function(fn, context, args) {
 			if(!$.isFunction(fn)) throw "$.asap - argument is not a valid function";
             timeouts.push(fn);
@@ -2089,8 +2146,6 @@ if (!window.jq || typeof (jq) !== "function") {
          * End of APIS
          * @api private
          */
-
-        //End zepto/events.js
         return $;
 
     })(window);

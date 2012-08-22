@@ -230,10 +230,10 @@
 					var success = callbacks[i]['success'];
 					var failure = callbacks[i]['failure'];
 					//fire callbacks
-	                if(complete && typeof (complete == "function")) complete(canceled);
+	                if(complete && typeof (complete) == "function") complete(canceled);
 					//success/failure
-					if(canceled && failure && typeof (failure == "function")) failure();
-					else if(success && typeof (success == "function")) success();
+					if(canceled && failure && typeof (failure) == "function") failure();
+					else if(success && typeof (success) == "function") success();
 				}
 			},
 			cancel:function(){
