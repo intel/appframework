@@ -3543,7 +3543,7 @@ if (!HTMLElement.prototype.unwatch) {
          * @title $.ui.hideModal();
          */
         hideModal: function() {
-            $am("modalContainer").html("",true);
+            $("#modalContainer").html("",true);
             $am("jQui_modal").style.display = "none";
             
             this.scrollingDivs['modal_container'].disable();
@@ -3709,61 +3709,59 @@ if (!HTMLElement.prototype.unwatch) {
             var hasFooter = what.getAttribute("data-footer");
             var hasHeader = what.getAttribute("data-header");
             
-			//Note: this used to be a setTimeout(,10) and I set it to $.asap
-			//It should be ok, but if anyone finds a bug related to it feel free to change it back
-            $.asap(function() {
-                if (hasFooter && hasFooter.toLowerCase() == "none") {
-                    that.toggleNavMenu(false);
-                } else {
-                    that.toggleNavMenu(true);
+            //$asap removed since animations are fixed in css3animate
+            if (hasFooter && hasFooter.toLowerCase() == "none") {
+                that.toggleNavMenu(false);
+            } else {
+                that.toggleNavMenu(true);
+            }
+            if (hasFooter && that.customFooter != hasFooter) {
+                that.customFooter = hasFooter;
+                that.updateNavbarElements(jq("#" + hasFooter).children());
+            } else if (hasFooter != that.customFooter) {
+                if (that.customFooter)
+                    that.updateNavbarElements(that.defaultFooter);
+                that.customFooter = false;
+            }
+            if (hasHeader && that.customHeader != hasHeader) {
+                that.customHeader = hasHeader;
+                that.updateHeaderElements(jq("#" + hasHeader).children());
+            } else if (hasHeader != that.customHeader) {
+                if (that.customHeader)
+                {
+                    that.updateHeaderElements(that.defaultHeader);
+                    that.setTitle(that.activeDiv.title);
                 }
-                if (hasFooter && that.customFooter != hasFooter) {
-                    that.customFooter = hasFooter;
-                    that.updateNavbarElements(jq("#" + hasFooter).children());
-                } else if (hasFooter != that.customFooter) {
-                    if (that.customFooter)
-                        that.updateNavbarElements(that.defaultFooter);
-                    that.customFooter = false;
-                }
-                if (hasHeader && that.customHeader != hasHeader) {
-                    that.customHeader = hasHeader;
-                    that.updateHeaderElements(jq("#" + hasHeader).children());
-                } else if (hasHeader != that.customHeader) {
-                    if (that.customHeader)
-                    {
-                        that.updateHeaderElements(that.defaultHeader);
-                        that.setTitle(that.activeDiv.title);
-                    }
-                    that.customHeader = false;
-                }
-                if (what.getAttribute("data-tab")) { //Allow the dev to force the footer menu
-                    jq("#navbar a").removeClass("selected");
-                    jq("#" + what.getAttribute("data-tab")).addClass("selected");
-                }
+                that.customHeader = false;
+            }
+            if (what.getAttribute("data-tab")) { //Allow the dev to force the footer menu
+                jq("#navbar a").removeClass("selected");
+                jq("#" + what.getAttribute("data-tab")).addClass("selected");
+            }
 
-                //Load inline footers
-                var inlineFooters = $(what).find("footer");
-                if (inlineFooters.length > 0) 
-                {
-                    that.customFooter = what.id;
-                    that.updateNavbarElements(inlineFooters.children());
-                }
-                //load inline headers
-                var inlineHeader = $(what).find("header");
+            //Load inline footers
+            var inlineFooters = $(what).find("footer");
+            if (inlineFooters.length > 0) 
+            {
+                that.customFooter = what.id;
+                that.updateNavbarElements(inlineFooters.children());
+            }
+            //load inline headers
+            var inlineHeader = $(what).find("header");
+            
+            
+            if (inlineHeader.length > 0) 
+            {
+                that.customHeader = what.id;
+                that.updateHeaderElements(inlineHeader.children());
+            }
+            //check if the panel has a footer
+            if (what.getAttribute("data-tab")) { //Allow the dev to force the footer menu
                 
-                
-                if (inlineHeader.length > 0) 
-                {
-                    that.customHeader = what.id;
-                    that.updateHeaderElements(inlineHeader.children());
-                }
-                //check if the panel has a footer
-                if (what.getAttribute("data-tab")) { //Allow the dev to force the footer menu
-                    
-                    jq("#navbar a").removeClass("selected");
-                    jq("#navbar #" + what.getAttribute("data-tab")).addClass("selected");
-                }
-            });
+                jq("#navbar a").removeClass("selected");
+                jq("#navbar #" + what.getAttribute("data-tab")).addClass("selected");
+            }
+            
             var hasMenu = what.getAttribute("data-nav");
             if (hasMenu && this.customMenu != hasMenu) {
 				this.customMenu = hasMenu;
@@ -3924,7 +3922,6 @@ if (!HTMLElement.prototype.unwatch) {
             this.doingTransition = true;
 			this.runTransition(transition, oldDiv, currWhat, back);
             
-			this.loadContentData(what, newTab, back, transition);
 			
                     
             
@@ -3933,7 +3930,9 @@ if (!HTMLElement.prototype.unwatch) {
             }
             //Let's check if it has a function to run to update the data
             this.parsePanelFunctions(what, oldDiv);
-            //window.scrollTo(1,1); //jumping 1px in iPhone - is this really necessary? android only?
+            //Need to call after parsePanelFunctions, since new headers can override
+            this.loadContentData(what, newTab, back, transition);
+            
 		},
         /**
          * This is called internally by loadDiv.  This sets up the back button in the header and scroller for the panel
@@ -3997,6 +3996,10 @@ if (!HTMLElement.prototype.unwatch) {
             // XML Request
             if (this.activeDiv.id == "jQui_ajax" && target == this.ajaxUrl)
                 return;
+            var urlHash = "url" + crc32(target); //Ajax urls
+            var that=this;
+            if (target.indexOf("http") == -1)
+                target = AppMobi.webRoot + target;
             if (target.indexOf("http") == -1)
                 target = AppMobi.webRoot + target;
             var xmlhttp = new XMLHttpRequest();
@@ -4418,7 +4421,7 @@ if (!HTMLElement.prototype.unwatch) {
             }
 			
 			//empty links
-            if (theTarget.href=="#" || theTarget.href.length==0||theTarget.hash.length==0)
+            if (theTarget.href=="#" || (theTarget.href.length==0&&theTarget.hash.length==0))
                 return;
             
             
