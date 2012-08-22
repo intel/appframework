@@ -65,6 +65,7 @@
     
     
     ui.prototype = {
+        showLoading:true,
         loadContentQueue:[],
         isAppMobi: false,
         titlebar: "",
@@ -1223,6 +1224,7 @@
             xmlhttp.open("GET", newtarget, true);
             xmlhttp.send();
             // show Ajax Mask
+            if(this.showLoading)
             this.showMask();
 		},
 		/**

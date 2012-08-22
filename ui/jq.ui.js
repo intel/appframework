@@ -2889,6 +2889,7 @@ if (!HTMLElement.prototype.unwatch) {
     
     
     ui.prototype = {
+        showLoading:true,
         loadContentQueue:[],
         isAppMobi: false,
         titlebar: "",
@@ -4047,6 +4048,7 @@ if (!HTMLElement.prototype.unwatch) {
             xmlhttp.open("GET", newtarget, true);
             xmlhttp.send();
             // show Ajax Mask
+            if(this.showLoading)
             this.showMask();
 		},
 		/**
