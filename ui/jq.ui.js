@@ -3107,7 +3107,8 @@ if (!HTMLElement.prototype.unwatch) {
                     function() {
                         that.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
                         that.transitionType = tmpEl.transition;
-                        document.location.hash=tmpEl.target;
+                        //document.location.hash=tmpEl.target;
+                        that.updateHash(tmpEl.target);
                         //for Android 4.0.x, we must touchLayer.hideAdressBar()
                     });
             }
