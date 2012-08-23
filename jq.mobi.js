@@ -767,16 +767,16 @@ if (!window.jq || typeof (jq) !== "function") {
                 for (var i = 0; i < this.length; i++) {
                     if (name == undefined) {
                         this[i].className = '';
-                        return this;
+                    } else {                    	           	
+	                    var classList = this[i].className;
+	                    name.split(/\s+/g).forEach(function(cname) {
+	                        classList = classList.replace(classRE(cname), " ");
+	                    });
+	                    if (classList.length > 0)
+	                        this[i].className = classList.trim();
+	                    else
+	                        this[i].className = "";
                     }
-                    var classList = this[i].className;
-                    name.split(/\s+/g).forEach(function(cname) {
-                        classList = classList.replace(classRE(cname), " ");
-                    });
-                    if (classList.length > 0)
-                        this[i].className = classList.trim();
-                    else
-                        this[i].className = "";
                 }
                 return this;
             },
