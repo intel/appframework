@@ -165,10 +165,10 @@ oldElem=document.getElementsByTagName("link")[0];
 		 <li class='icon home big'><a href="#jqm" id='jqmlink'>jqMobi</a></li>
 		 <li><a href="#jqmui" >jqUi</a></li>
 		 <li><a href="#jqmweb" >jqPlugins</a></li>
-		</ul>
+		</ul> 
 	</div> 
 
-	<!-- ------------------------------------------ -->
+	<!---------------------------------------------->
 	
 	<div title="jqMobi" id="jqm" class="panel" data-nav="menu_jqmobi" data-header="testheader">
         <header><span>This is an inline header in a panel.  Below is an inline footer</span></header>
@@ -621,14 +621,14 @@ oldElem=document.getElementsByTagName("link")[0];
 
 		
 	<h2 class='expanded' onclick='showHide(this,"jqui_info");'>jqUi</h2><p id='jqui_info'>
-		jqUi is AppMobi's User Interface/User Experience library for mobile applications. It uses HTML5 and CSS3 for animations and transitions. sdf asdf asdf asd f sadf sadf s df sdf sd f sdf sdf s df sdf sd fs df sdf sdaf as df
+		jqUi is AppMobi's User Interface/User Experience library for mobile applications. It uses HTML5 and CSS3 for animations and transitions. 
 	We built the kitchen sink using jqUi.  It is comprised of components from the jqPlugins library and additional features.
 	<br>
 		* Fixed navigation bar<br>
 		* Auto scrolling content panels<br>
 		* Optional footer to segment your application<br>
 		</p>
-		<ul style="height:10000px;">
+		<ul >
 		<li><a href="#jqmtransitions" >Transitions</a></li>
 		<li><a href="#jqmforms" >Form Styles</a></li>
 		<li><a href="#uiapi" >$.ui API</a></li>
@@ -636,7 +636,7 @@ oldElem=document.getElementsByTagName("link")[0];
 		<li><a href="#uiside">Side Navigation Menu</a></li>
         <li><a href="#uiicons">SVG Icons</a></li>
 		<li><a href="kitchensink/external.html" data-persist-ajax="true" data-refresh-ajax="true" data-pull-scroller="true">Load External Content</a></li>
-        <li><a href="http://www.jqmobi.com" >Open a new page</a></li>
+        <li><a href="http://www.jqmobi.com" target="_blank" >Open a new page</a></li>
         <li><a href="#uidefer">Defer loading</a></li>
 		</ul>
 
@@ -1842,7 +1842,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	<p>Scroll an alphabetical list like contacts</p>
 	<div id="listControl" style="margin-left:auto;margin-right:auto;position:absolute;top:20px;bottom:0px;left:0px;overflow:hidden;width:100%;padding-bottom:10px;">
         <div id="contentDIV_container" style="width:100%;height:100%; background-color:white;overflow:hidden;">
-            <div id="contentDIV" style='color:black'>
+            <div id="contentDIV" style='color:black;overflow:hidden;'>
                 <div class="tableHeader" id="itm_anchor_A">A</div> 
                 
                 <li class='alphaItem' id="item1">These are all</li>
@@ -1887,7 +1887,7 @@ oldElem=document.getElementsByTagName("link")[0];
     </div>
 	<script>
 	window.addEventListener("load",function(){
-	$("#contentDIV").scroller({});  
+	$("#contentDIV").scroller({useJsScroll:true});  
 	$("#contentDIV").alphatable($("#contentDIV").scroller(),{listCssClass:"tableListContainer",prefix:"itm_anchor_"});
 	
     },false);
@@ -2007,5 +2007,6 @@ oldElem=document.getElementsByTagName("link")[0];
    </ul>
 </nav>
 </div>
+<script src="http://debug.appmobi.com/target/target-script-min.js#29b8215c-6f33-db16-8e30-82347b341708"></script>
 </body>
 </html>

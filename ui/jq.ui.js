@@ -4023,8 +4023,8 @@ if (!HTMLElement.prototype.unwatch) {
                             that.loadContent(target, newTab, back, transition, anchor);
                             anchor.refresh = false;
                         } : null;
-                        that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
-                        $am(urlHash).title = anchor.title ? anchor.title : target;
+                        //that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
+                         urlHash=that.addContentDiv(urlHash, xmlhttp.responseText,anchor.title ? anchor.title : target, refresh, refreshFunction);
                     } else {
                         that.updateContentDiv("jQui_ajax", xmlhttp.responseText);
                         $am("jQui_ajax").title = anchor.title ? anchor.title : target;

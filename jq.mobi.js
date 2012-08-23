@@ -958,6 +958,28 @@ if (!window.jq || typeof (jq) !== "function") {
                     height: obj.bottom-obj.top
                 };
             },
+             /**
+             * returns the height of the element, including padding on IE
+               ```
+               $().height();
+               ```
+             * @return {string} height with  "px"
+             * @title $().height()
+             */
+            height:function(){
+                return this.offset().height;
+            },
+            /**
+             * returns the width of the element, including padding on IE
+               ```
+               $().width();
+               ```
+             * @return {string} width with  "px"
+             * @title $().width()
+             */
+            width:function(){
+                return this.offset().width;
+            },
             /**
             * Returns the parent nodes of the elements based off the selector
                 ```
