@@ -1104,15 +1104,18 @@
                         }
                         theSel.options[j].watch( "selected", function(prop, oldValue, newValue) {
                             if (newValue == true) {
-                                that.updateMaskValue(this.parentNode.id, this.text, this.value);
+                                if(!theSel.getAttribute("multiple"))
+                                    that.updateMaskValue(this.parentNode.id, this.text, this.value);
                                 this.parentNode.value = this.value;
                             }
                             return newValue;
                         });
                     }
                     theSel.watch("selectedIndex", function(prop, oldValue, newValue) {
+
                         if (this.options[newValue]) {
-                            that.updateMaskValue(this.id, this.options[newValue].text, this.options[newValue].value);
+                            if(!theSel.getAttribute("multiple"))
+                                that.updateMaskValue(this.id, this.options[newValue].text, this.options[newValue].value);
                             this.value = this.options[newValue].value;
                         }
                         return newValue;
@@ -1125,6 +1128,7 @@
                 
                 })(sels[i]);
             }
+
             that.createHtml();
         },
         updateDropdown: function(id) {
@@ -1148,6 +1152,7 @@
             
             var that = this;
             var el = document.getElementById(elID);
+
             if (el.disabled)
                 return;
             if (!el || !el.options || el.options.length == 0)
@@ -1167,36 +1172,24 @@
                     }
                     return newValue;
                 });
-                var checked = (el.value == el.options[j].value) ? true : false;
+                var checked = (el.options[j].selected) ? true : false;
                 var button = "";
-                var bg = "background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0.17, rgb(102,102,102)),color-stop(0.59, rgb(94,94,94)))";
-                var foundID;
                 var div = document.createElement("div");
                 div.className = "jqmobiSelectRow";
-                if (checked) {
-                    bg = "background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0.17, rgb(8,8,8)),color-stop(0.59, rgb(38,38,38)))";
-                    button = "checked";
-                    foundInd = j;
-                    foundID = "id='jqmobiSelectBox_found'";
-                    div.className = "jqmobiSelectRowFound";
-                } else {
-                    foundID = "";
-                }
-                
-                div.id = foundID;
+               // div.id = foundID;
                 div.style.cssText = ";line-height:40px;font-size:14px;padding-left:10px;height:40px;width:100%;position:relative;width:100%;border-bottom:1px solid black;background:white;";
                 var anchor = document.createElement("a");
                 anchor.href = "javascript:;";
                 div.tmpValue = j;
                 div.onclick = function(e) {
-                    that.setDropDownValue(elID, this.tmpValue);
+                    that.setDropDownValue(elID, this.tmpValue,this);
                 };
                 anchor.style.cssText = "text-decoration:none;color:black;";
                 anchor.innerHTML = el.options[j].text;
                 var span = document.createElement("span");
                 span.style.cssText = "float:right;margin-right:20px;margin-top:-2px";
                 var rad = document.createElement("button");
-                if (foundID) {
+                if (checked) {
                     rad.style.cssText = "background: #000;padding: 0px 0px;border-radius:15px;border:3px solid black;";
                     rad.className = "jqmobiSelectRowButtonFound";
                 } else {
@@ -1206,7 +1199,7 @@
                 rad.style.width = "20px";
                 rad.style.height = "20px";
                 
-                rad.checked = button;
+                rad.checked = checked;
                 
                 anchor.className = "jqmobiSelectRowText";
                 span.appendChild(rad);
@@ -1248,6 +1241,7 @@
             
             var el = document.getElementById(elID + "_jqmobiSelect");
             var el2 = document.getElementById(elID);
+
             if (el)
                 el.innerHTML = value;
             if (typeof (el2.onchange) == "function")
@@ -1255,18 +1249,40 @@
             el = null;
             el2 = null;
         },
-        setDropDownValue: function(elID, value) {
+        setDropDownValue: function(elID, value,div) {
             
+
             var el = document.getElementById(elID);
-            if (el) {
+            if(!el)
+                return
+
+            if(!el.getAttribute("multiple")){
                 el.selectedIndex = value;
-                $(el).trigger("change");
+                $(el).find("option").forEach(function(obj){
+                    obj.selected=false;
+                });  
+                $(el).find("option:nth-child("+(value+1)+")").get(0).selected=true;
+                this.scroller.scrollTo({
+                    x: 0,
+                    y: 0
+                });
+                this.hideDropDown();
             }
-            this.scroller.scrollTo({
-                x: 0,
-                y: 0
-            });
-            this.hideDropDown();
+            else {
+                //multi select
+                
+                var myEl=$(el).find("option:nth-child("+(value+1)+")").get(0);
+                if(myEl.selected){
+                    myEl.selected=false;
+                    $(div).find("button").css("background","#fff");    
+                }
+                else {
+                     myEl.selected=true;
+                    $(div).find("button").css("background","#000");  
+                }
+
+            }
+            $(el).trigger("change");
             el = null;
         },
         hideDropDown: function() {
@@ -1278,6 +1294,7 @@
             if (document.getElementById("jqmobiSelectBoxContainer")) {
                 return;
             }
+
             var modalDiv = document.createElement("div");
             
             modalDiv.style.cssText = "position:absolute;top:0px;bottom:0px;left:0px;right:0px;background:rgba(0,0,0,.7);z-index:200000;display:none;";
@@ -1308,7 +1325,7 @@
                     that.scroller = $("#jqmobiSelectBoxScroll").scroller({
                         scroller: false,
                         verticalScroll: true,
-                        vScrollCSS: "jqselectscrollBarV"
+                        vScrollCSS: "jqselectscrollBarV",
                     });
                 
                 } catch (e) {
