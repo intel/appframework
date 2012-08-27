@@ -328,8 +328,6 @@ background:#333;
 	position:absolute;
 	bottom:0px; top:0px; left:0px;
 	background:#493325;
-	-webkit-transform:translate3d(0,0,0);
-    -webkit-transition: all 300ms !important;
 }
 
 #menu_scroller { padding-bottom:10px; }
@@ -720,17 +718,37 @@ input.jq-ui-slider + label {
    -webkit-transition:all 0.3s  ease-in-out;
 } 
 
-.hasMenu{
 
+.hasMenu{
+/*removed - should neve be all (performance), 300ms param should go into jq.ui.js; also default should not have accelaration, avoid iPhone blur*/
+/* -webkit-transition: all 300ms; */
  position:absolute !important;
  left:0px !important;
 }
-.hasMenu.on {
-  position:absolute !important;
-  -webkit-transform:translate3d(200px,0,0);
+/*menu on/off mechanism, note .hasMenu.off and #menu.on default to no transform*/
+.hasMenu.to-on {
+  -webkit-transition: -webkit-transform 150ms;
+}
+.hasMenu.on, .hasMenu.to-on {
+  -webkit-transform:translate3d(200px,0px,0px);
+}
+.hasMenu.to-off {
+  -webkit-transition: -webkit-transform 150ms;
+  -webkit-transform:translate3d(0px,0px,0px);
 }
 #menu.on {
-left:0px !important;
+    -webkit-transform:none;
+	-webkit-transition:none;
+}
+#menu.to-on {
+    -webkit-transition: -webkit-transform 150ms;
+    -webkit-transform:translate3d(0px,0px,0px);
+}
+#menu.to-off {
+    -webkit-transition: -webkit-transform 150ms;
+}
+#menu, #menu.off, #menu.to-off {
+    -webkit-transform:translate3d(-200px,0px,0px);
 }
 
 #badgetablet{

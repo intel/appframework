@@ -330,8 +330,7 @@ background:#333;
 	display:none;
 	position:absolute; top:0px; left:0px;
 	background:#000;
-	-webkit-transform:translate3d(0,0,0);
-    -webkit-transition: all 300ms !important;
+
 }
 
 #menu_scroller { padding-bottom:10px; }
@@ -722,15 +721,11 @@ input.jq-ui-slider[type=radio]:focus:disabled + label
 select[disabled]~div { opacity:.7; }
 	
 .hasMenu{
-
+/*removed - should neve be all (performance), 300ms param should go into jq.ui.js; also default should not have accelaration, avoid iPhone blur*/
+/* -webkit-transition: all 300ms; */
  position:absolute !important;
  left:0px !important;
 }
-<<<<<<< HEAD
-.hasMenu.on {
-    position:absolute !important;
-    -webkit-transform:translate3d(200px,0,0);
-=======
 /*menu on/off mechanism, note .hasMenu.off and #menu.on default to no transform*/
 .hasMenu.to-on {
   -webkit-transition: -webkit-transform 150ms;
@@ -741,7 +736,6 @@ select[disabled]~div { opacity:.7; }
 .hasMenu.to-off {
   -webkit-transition: -webkit-transform 150ms;
   -webkit-transform:translate3d(0px,0px,0px);
->>>>>>> a69474fee0ea28c82230592553cf8e973cc4ad4e
 }
 #menu.on {
     -webkit-transform:none;
@@ -768,10 +762,6 @@ select[disabled]~div { opacity:.7; }
 	.hasMenu, .hasMenu.on  {
 		position:absolute !important;
 		left:256px !important;
-        -webkit-transition: all 0ms !important;
-        -webkit-transform:translate3d(0,0,0);
-<<<<<<< HEAD
-=======
 	}
 	#badgephone{
 		display:none !important;
@@ -781,26 +771,19 @@ select[disabled]~div { opacity:.7; }
 	}
 	.jqMenuClose {
 		display:none !important;
->>>>>>> a69474fee0ea28c82230592553cf8e973cc4ad4e
 	}
 	
 	nav~#menu {
 		z-index:200 !important;
 		width:256px !important;
+		bottom:0px !important;
 		height:100% !important;
 		display:block !important;
-<<<<<<< HEAD
-		position:absolute !important; left:0px !important;
-		background:rgba(29,29,29,1) !important;
-		-webkit-transform:translate3d(0,0,0) !important;
-        -webkit-transition: all 0ms !important;
-=======
 		position:absolute !important; top:0px !important; 
 		left:0px !important;
 		background:rgba(29,29,28,1) !important;
 		-webkit-transform:translate3d(0px,0px,0px) !important;
 		-webkit-transition:none !important;
->>>>>>> a69474fee0ea28c82230592553cf8e973cc4ad4e
 	}
     
 }
