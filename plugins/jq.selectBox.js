@@ -6,11 +6,10 @@
  */
 (function($) {
     $['selectBox'] = {
-        oldSelects: {},
         scroller: null,
         getOldSelects: function(elID) {
-            if ($.os.android == false)
-                return;
+            if (!$.os.android || $.os.androidICS)
+               return;
             if (!$.fn['scroller']) {
                 alert("This library requires jq.web.Scroller");
                 return;
@@ -23,22 +22,31 @@
             var sels = container.getElementsByTagName("select");
             var that = this;
             for (var i = 0; i < sels.length; i++) {
-                if (this.oldSelects[sels[i].id])
+                if (sels[i].hasSelectBoxFix)
                     continue;
                 (function(theSel) {
                     var fakeInput = document.createElement("div");
-                    var selWidth = parseInt(theSel.style.width) > 0 ? parseInt(theSel.style.width) : 100;
-                    var selHeight = parseInt(theSel.style.height) > 0 ? parseInt(theSel.style.height) : 20;
-                    fakeInput.style.width = selWidth + "px";
-                    fakeInput.style.height = selHeight + "px";
-                    fakeInput.style.position = "absolute";
-                    fakeInput.style.left = "0px";
-                    fakeInput.style.top = "0px";
+					var theSelStyle = window.getComputedStyle(theSel);
+					var width = theSelStyle.width=='intrinsic' ? '100%' : theSelStyle.width;
+                    var selWidth = parseInt(width) > 0 ? width : '100px';
+                    var selHeight = parseInt(theSel.style.height) > 0 ? theSel.style.height : (parseInt(theSelStyle.height) ? theSelStyle.height : '20px');
+                    fakeInput.style.width = selWidth;
+                    fakeInput.style.height = selHeight;
+					fakeInput.style.margin = theSelStyle.margin;
+					fakeInput.style.position = theSelStyle.position;
+					fakeInput.style.left = theSelStyle.left;
+					fakeInput.style.top = theSelStyle.top;
+					fakeInput.style.lineHeight = theSelStyle.lineHeight;
+                    //fakeInput.style.position = "absolute";
+                    //fakeInput.style.left = "0px";
+                    //fakeInput.style.top = "0px";
                     fakeInput.style.zIndex = "1";
                     if (theSel.value)
                         fakeInput.innerHTML = theSel.options[theSel.selectedIndex].text;
                     fakeInput.style.background = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAeCAIAAABFWWJ4AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyBpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBXaW5kb3dzIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkM1NjQxRUQxNUFEODExRTA5OUE3QjE3NjI3MzczNDAzIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkM1NjQxRUQyNUFEODExRTA5OUE3QjE3NjI3MzczNDAzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6QzU2NDFFQ0Y1QUQ4MTFFMDk5QTdCMTc2MjczNzM0MDMiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6QzU2NDFFRDA1QUQ4MTFFMDk5QTdCMTc2MjczNzM0MDMiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6YWbdCAAAAlklEQVR42mIsKChgIBGwAHFPTw/xGkpKSlggrG/fvhGjgYuLC0gyMZAOoPb8//9/0Or59+8f8XrICQN66SEnDOgcp3AgKiqKqej169dY9Hz69AnCuHv3rrKyMrIKoAhcVlBQELt/gIqwstHD4B8quH37NlAQSKKJEwg3iLbBED8kpeshoGcwh5uuri5peoBFMEluAwgwAK+5aXfuRb4gAAAAAElFTkSuQmCC') right top no-repeat";
                     fakeInput.style.backgroundColor = "white";
+                    fakeInput.style.lineHeight = selHeight;
+                    fakeInput.style.backgroundSize = "contain"; 
                     fakeInput.className = "jqmobiSelect_fakeInput " + theSel.className;
                     fakeInput.id = theSel.id + "_jqmobiSelect";
                     
@@ -49,7 +57,7 @@
                         that.initDropDown(this.linkId);
                     };
                     theSel.parentNode.appendChild(fakeInput);
-                    theSel.parentNode.style.position = "relative";
+                    //theSel.parentNode.style.position = "relative";
                     theSel.style.display = "none";
                     theSel.style.webkitAppearance = "none";
                     // Create listeners to watch when the select value has changed.
@@ -62,17 +70,16 @@
                         theSel.options[j].watch( "selected", function(prop, oldValue, newValue) {
                             if (newValue == true) {
                                 if(!theSel.getAttribute("multiple"))
-                                    that.updateMaskValue(this.parentNode.id, this.text, this.value);
+                                that.updateMaskValue(this.parentNode.id, this.text, this.value);
                                 this.parentNode.value = this.value;
                             }
                             return newValue;
                         });
                     }
                     theSel.watch("selectedIndex", function(prop, oldValue, newValue) {
-
                         if (this.options[newValue]) {
                             if(!theSel.getAttribute("multiple"))
-                                that.updateMaskValue(this.id, this.options[newValue].text, this.options[newValue].value);
+                            that.updateMaskValue(this.id, this.options[newValue].text, this.options[newValue].value);
                             this.value = this.options[newValue].value;
                         }
                         return newValue;
@@ -80,12 +87,11 @@
                     
                     fakeInput = null;
                     imageMask = null;
-                    that.oldSelects[theSel.id] = 1;
+                    sels[i].hasSelectBoxFix = true;
                 
                 
                 })(sels[i]);
             }
-
             that.createHtml();
         },
         updateDropdown: function(id) {
@@ -109,7 +115,6 @@
             
             var that = this;
             var el = document.getElementById(elID);
-
             if (el.disabled)
                 return;
             if (!el || !el.options || el.options.length == 0)
@@ -198,7 +203,6 @@
             
             var el = document.getElementById(elID + "_jqmobiSelect");
             var el2 = document.getElementById(elID);
-
             if (el)
                 el.innerHTML = value;
             if (typeof (el2.onchange) == "function")
@@ -208,7 +212,7 @@
         },
         setDropDownValue: function(elID, value,div) {
             
-
+            
             var el = document.getElementById(elID);
             if(!el)
                 return
@@ -219,11 +223,11 @@
                     obj.selected=false;
                 });  
                 $(el).find("option:nth-child("+(value+1)+")").get(0).selected=true;
-                this.scroller.scrollTo({
-                    x: 0,
-                    y: 0
-                });
-                this.hideDropDown();
+            this.scroller.scrollTo({
+                x: 0,
+                y: 0
+            });
+            this.hideDropDown();
             }
             else {
                 //multi select
@@ -251,7 +255,6 @@
             if (document.getElementById("jqmobiSelectBoxContainer")) {
                 return;
             }
-
             var modalDiv = document.createElement("div");
             
             modalDiv.style.cssText = "position:absolute;top:0px;bottom:0px;left:0px;right:0px;background:rgba(0,0,0,.7);z-index:200000;display:none;";
@@ -282,7 +285,7 @@
                     that.scroller = $("#jqmobiSelectBoxScroll").scroller({
                         scroller: false,
                         verticalScroll: true,
-                        vScrollCSS: "jqselectscrollBarV",
+                        vScrollCSS: "jqselectscrollBarV"
                     });
                 
                 } catch (e) {
@@ -294,39 +297,40 @@
             });
         }
     };
-    //The following is based off Eli Grey's shim
-    //https://gist.github.com/384583
-    //We use HTMLElement to not cause problems with other objects
-    if (!HTMLElement.prototype.watch) {
-        HTMLElement.prototype.watch = function (prop, handler) {
-            var oldval = this[prop], newval = oldval,
-            getter = function () {
-                return newval;
-            },
-            setter = function (val) {
-                oldval = newval;
-                return newval = handler.call(this, prop, oldval, val);
-            };
-            if (delete this[prop]) { // can't watch constants
-                if (HTMLElement.defineProperty) { // ECMAScript 5
-                    HTMLElement.defineProperty(this, prop, {
-                        get: getter,
-                        set: setter,
-                        enumerable: false,
-                        configurable: true
-                    });
-                } else if (HTMLElement.prototype.__defineGetter__ && HTMLElement.prototype.__defineSetter__) { // legacy
-                    HTMLElement.prototype.__defineGetter__.call(this, prop, getter);
-                    HTMLElement.prototype.__defineSetter__.call(this, prop, setter);
-                }
-            }
-        };
-    }
-    if (!HTMLElement.prototype.unwatch) {
-        HTMLElement.prototype.unwatch = function (prop) {
-            var val = this[prop];
-            delete this[prop]; // remove accessors
-            this[prop] = val;
-        };
-    }   
+
+//The following is based off Eli Grey's shim
+//https://gist.github.com/384583
+//We use HTMLElement to not cause problems with other objects
+if (!HTMLElement.prototype.watch) {
+	HTMLElement.prototype.watch = function (prop, handler) {
+		var oldval = this[prop], newval = oldval,
+		getter = function () {
+			return newval;
+		},
+		setter = function (val) {
+			oldval = newval;
+			return newval = handler.call(this, prop, oldval, val);
+		};
+		if (delete this[prop]) { // can't watch constants
+			if (HTMLElement.defineProperty) { // ECMAScript 5
+				HTMLElement.defineProperty(this, prop, {
+					get: getter,
+					set: setter,
+					enumerable: false,
+					configurable: true
+				});
+			} else if (HTMLElement.prototype.__defineGetter__ && HTMLElement.prototype.__defineSetter__) { // legacy
+				HTMLElement.prototype.__defineGetter__.call(this, prop, getter);
+				HTMLElement.prototype.__defineSetter__.call(this, prop, setter);
+			}
+		}
+	};
+}
+if (!HTMLElement.prototype.unwatch) {
+	HTMLElement.prototype.unwatch = function (prop) {
+		var val = this[prop];
+		delete this[prop]; // remove accessors
+		this[prop] = val;
+	};
+}   
 })(jq);

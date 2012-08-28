@@ -58,6 +58,7 @@ width:100%;
 } /* Horizontal line. */
 
 .jqmScrollbar { background:white !important; } /* Sets the color of the scrollbar */
+.jqmScrollPanel { width:100%; min-height:100%; }
 
 #jQUi {
 	position:absolute;
@@ -220,17 +221,13 @@ background:#333;
 	background:transparent;
     margin-top:10px;
     margin-bottom:10px;
-     
+	overflow:auto;
+	-webkit-overflow-scrolling:touch;
+} /* This class is applied to the divs that contain the various "views" or pages of the app. */ 
+.panel > * {
+	-webkit-backface-visibility: hidden;
+	-webkit-perspective: 1000;
 }
-
-.panel * {
--webkit-backface-visibility:hidden;
-}
-
-.panel.active * {
--webkit-transform:translate3d(0,0,0);
-}
-
 
 
 /**********************************************************
@@ -333,8 +330,7 @@ background:#333;
 	display:none;
 	position:absolute; top:0px; left:0px;
 	background:#000;
-	-webkit-transform:translate3d(0,0,0);
-    -webkit-transition: all 300ms !important;
+
 }
 
 #menu_scroller { padding-bottom:10px; }
@@ -355,11 +351,10 @@ background:#333;
 	z-index:1;
 }
 
-.jqMenuClose {
-	position:absolute;
-	top:5px;
-	right:10px;
+.jqMenuClose{
+	position:relative;
 	z-index:2;
+	float:right;
 }
 
 #menu .title {
@@ -726,17 +721,38 @@ input.jq-ui-slider[type=radio]:focus:disabled + label
 select[disabled]~div { opacity:.7; }
 	
 .hasMenu{
--webkit-transition: all 300ms;
+/*removed - should neve be all (performance), 300ms param should go into jq.ui.js; also default should not have accelaration, avoid iPhone blur*/
+/* -webkit-transition: all 300ms; */
  position:absolute !important;
  left:0px !important;
 }
-.hasMenu.on {
-    position:absolute !important;
-    -webkit-transform:translate3d(200px,0,0);
+/*menu on/off mechanism, note .hasMenu.off and #menu.on default to no transform*/
+.hasMenu.to-on {
+  -webkit-transition: -webkit-transform 150ms;
+}
+.hasMenu.on, .hasMenu.to-on {
+  -webkit-transform:translate3d(200px,0px,0px);
+}
+.hasMenu.to-off {
+  -webkit-transition: -webkit-transform 150ms;
+  -webkit-transform:translate3d(0px,0px,0px);
 }
 #menu.on {
-left:0px !important;
+    -webkit-transform:none;
+	-webkit-transition:none;
 }
+#menu.to-on {
+    -webkit-transition: -webkit-transform 150ms;
+    -webkit-transform:translate3d(0px,0px,0px);
+}
+#menu.to-off {
+    -webkit-transition: -webkit-transform 150ms;
+}
+#menu, #menu.off, #menu.to-off {
+    -webkit-transform:translate3d(-200px,0px,0px);
+}
+
+
 
 #badgetablet{
 	display:none !important;
@@ -746,22 +762,28 @@ left:0px !important;
 	.hasMenu, .hasMenu.on  {
 		position:absolute !important;
 		left:256px !important;
-        -webkit-transition: all 0ms !important;
-        -webkit-transform:translate3d(0,0,0);
 	}
-	#badgephone{ display:none !important; }
-	#badgetablet{ display:inline-block !important; }
-	.jqMenuClose { display:none !important;	}
+	#badgephone{
+		display:none !important;
+	}
+	#badgetablet{
+		display:inline-block !important;
+	}
+	.jqMenuClose {
+		display:none !important;
+	}
 	
 	nav~#menu {
 		z-index:200 !important;
 		width:256px !important;
+		bottom:0px !important;
 		height:100% !important;
 		display:block !important;
-		position:absolute !important; left:0px !important;
-		background:rgba(29,29,29,1) !important;
-		-webkit-transform:translate3d(0,0,0) !important;
-        -webkit-transition: all 0ms !important;
+		position:absolute !important; top:0px !important; 
+		left:0px !important;
+		background:rgba(29,29,28,1) !important;
+		-webkit-transform:translate3d(0px,0px,0px) !important;
+		-webkit-transition:none !important;
 	}
     
 }

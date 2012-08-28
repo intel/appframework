@@ -50,11 +50,7 @@
             scrollToLetter: function (letter) {
                 var el = document.getElementById(this.prefix + letter);
                 if (el) {
-                    var yPos = -el.offsetTop;
-                    this.scroller.scrollTo({
-                        x: 0,
-                        y: yPos
-                    });
+                    this.scroller.scrollToItem(el);
                 }
             },
             setupIndex: function () {
@@ -80,6 +76,7 @@
                     that.showLetter(letter.innerHTML);
                     that.scrollToLetter(letter.innerHTML);
                     event.preventDefault();
+                    event.stopPropagation();
                 }, false);
                 containerDiv.addEventListener("touchmove", function (event) {
                     var letter = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
@@ -89,6 +86,7 @@
                     that.showLetter(letter.innerHTML);
                     that.scrollToLetter(letter.innerHTML);
                     event.preventDefault();
+                    event.stopPropagation();
                 }, false);
 
                 //Create the alphabet

@@ -5,18 +5,23 @@
  */
 (function($) {
     var cache = [];
+    var objId=function(obj){
+        if(!obj.jqmCarouselId) obj.jqmCarouselId=$.uuid();
+        return obj.jqmCarouselId;
+    }
     $.fn.carousel = function(opts) {
-        if (opts === undefined && this.length > 0) 
-        {
-            return cache[this[0].id] ? cache[this[0].id] : null;
-        }
-        var tmp;
+        var tmp, id;
         for (var i = 0; i < this.length; i++) {
-            tmp = new carousel(this[i], opts);
-            if (this[i].id)
-                cache[this[i].id] = tmp;
+            //cache system
+            id = objId(this[i]);
+            if(!cache[id]){
+                tmp = new carousel(this[i], opts);
+                cache[id] = tmp;
+            } else {
+                tmp = cache[id];
+            }
         }
-        return this.length === 1 ? tmp : this;
+        return this.length == 1 ? tmp : this;
     };
     
     var carousel = (function() {
@@ -46,8 +51,16 @@
                 
                 return new carousel(containerEl, opts);
             }
-            try {
+        
+                 
                 var that = this;
+                jq(this.container).bind('destroy', function(){
+                    var id = that.container.jqmCarouselId;
+                    //window event need to be cleaned up manually, remaining binds are automatically killed in the dom cleanup process
+                    window.removeEventListener("orientationchange", that.orientationHandler, false);
+                    if(cache[id]) delete cache[id];
+                });
+                
                 this.pagingDiv = this.pagingDiv ? document.getElementById(this.pagingDiv) : null;
 
 
@@ -59,12 +72,20 @@
                 if (this.vertical) {
                     this.horizontal = false;
                 }
-                var tmpHTML = this.container.innerHTML;
-                //this.container.innerHTML = "";
+                
                 var el = document.createElement("div");
-
-                var arr = Array.prototype.slice.call(this.container.childNodes);
-
+                this.container.appendChild(el);
+                var $el=$(el);
+                var $container=$(this.container);
+                var data = Array.prototype.slice.call(this.container.childNodes);
+                while(data.length>0)
+                {
+                    var myEl=data.splice(0,1);
+                    myEl=$container.find(myEl)
+                    if(myEl.get()==el)
+                       continue;
+                    $el.append(myEl.get());
+                }
                 if (this.horizontal) {
                     el.style.display = "-webkit-box";
                     el.style['-webkit-box-flex'] = 1;
@@ -72,28 +93,16 @@
                 else {
                     el.style.display = "block";
                 }
-                $(el).append(arr);
-                this.container.appendChild(el);
                 
                 this.el = el;
                 this.refreshItems();
-                el.addEventListener('touchmove', function(e) {
-                    that.touchMove(e);
-                }, false);
-                el.addEventListener('touchend', function(e) {
-                    that.touchEnd(e);
-                }, false);
-                el.addEventListener('touchstart', function(e) {
-                    that.touchStart(e);
-                }, false);
-                var that = this;
-                window.addEventListener("orientationchange", function() {
-                    that.onMoveIndex(that.carouselIndex,0);
-                }, false);
-            
-            } catch (e) {
-                console.log("error adding carousel " + e);
-            }
+                var jqEl = jq(el);
+                jqEl.bind('touchmove', function(e) {that.touchMove(e);});
+                jqEl.bind('touchend', function(e) {that.touchEnd(e);});
+                jqEl.bind('touchstart', function(e) {that.touchStart(e);});
+                this.orientationHandler = function() {that.onMoveIndex(that.carouselIndex,0);};
+                window.addEventListener("orientationchange", this.orientationHandler, false);
+           
         };
         
         carousel.prototype = {
@@ -133,8 +142,6 @@
                     this.movingElement = true;
                     this.startY = e.touches[0].pageY;
                     this.startX = e.touches[0].pageX;
-                    //e.preventDefault();
-                    //e.stopPropagation();
                     if (this.vertical) {
                         try {
                             this.cssMoveStart = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el, null).webkitTransform).f);
@@ -151,8 +158,6 @@
                 }
             },
             touchMove: function(e) {
-                // e.preventDefault();
-                // e.stopPropagation();
                 if(!this.movingElement)
                    return;
                 if (e.touches.length > 1) {
@@ -256,9 +261,10 @@
                 this.myDivWidth = numOnly(this.container.clientWidth);
                 this.myDivHeight = numOnly(this.container.clientHeight);
                 var runFinal = false;
-                try {
-                    
-                    document.getElementById(this.container.id + "_" + this.carouselIndex).className = this.pagingCssName;
+
+                    if(document.getElementById(this.container.id + "_" + this.carouselIndex))
+                        document.getElementById(this.container.id + "_" + this.carouselIndex).className = this.pagingCssName;
+
                     var newTime = Math.abs(newInd - this.carouselIndex);
                     
                     var ind = newInd;
@@ -284,12 +290,10 @@
                         runFinal = true;
                     this.carouselIndex = ind;
                     if (this.pagingDiv) {
-                        
-                        document.getElementById(this.container.id + "_" + this.carouselIndex).className = this.pagingCssNameSelected;
+                        var tmpEl = document.getElementById(this.container.id + "_" + this.carouselIndex);
+                        if(tmpEl) tmpEl.className = this.pagingCssNameSelected;
                     }
-                } catch (e) {
-                    console.log("Error " + e);
-                }
+               
                 if (runFinal && this.pagingFunction && typeof this.pagingFunction == "function")
                     this.pagingFunction(currInd);
             },

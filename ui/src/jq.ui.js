@@ -9,39 +9,48 @@
     var startPath = window.location.pathname;
     var defaultHash = window.location.hash;
     var previousTarget = defaultHash;
-    
- 
-    if(!("pushState" in window.history)){
-       window.history['pushState']=function(){}
-    }
     var ui = function() {
         // Init the page
         var that = this;
-        if (window.AppMobi)
-            document.addEventListener("appMobi.device.ready", function() {
-                if (that.autoLaunch) {
-                    that.hasLaunched = true;
-                    that.launch();
+		
+		//setup the menu and boot touchLayer
+	    jq(document).ready(function() {
+			//setup the menu
+	        if (jq("nav").length > 0) {
+	            jq("#jQUi #header").addClass("hasMenu off");
+	            jq("#jQUi #content").addClass("hasMenu off");
+	            jq("#jQUi #navbar").addClass("hasMenu off");
+	        }
+			//boot touchLayer
+			//create jQUi element if it still does not exist
+	        var jQUi = document.getElementById("jQUi");
+            if (jQUi == null) {
+                jQUi = document.createElement("div");
+                container.id = "jQUi";
+                var body = document.body;
+                while (body.firstChild) {
+                    container.appendChild(body.firstChild);
                 }
-            }, false);
-        else if (document.readyState == "complete" || document.readyState == "loaded") {
-            if (that.autoLaunch) {
-                that.hasLaunched = true;
-                that.launch();
+                jq(document.body).prepend(container);
             }
-        } else
-            document.addEventListener("DOMContentLoaded", function() {
-                that.hasLaunched = true;
-                if (that.autoLaunch) {
-                    that.launch();
-                }
-            }, false);
+			$.touchLayer(jQUi);
+	    });
+		
+        if (window.AppMobi)
+            document.addEventListener("appMobi.device.ready", function(){that.autoBoot();}, false);
+        else if (document.readyState == "complete" || document.readyState == "loaded") {
+            this.autoBoot();
+        } else 
+            document.addEventListener("DOMContentLoaded", function(){that.autoBoot();}, false);
+			
         if (!window.AppMobi)
             AppMobi = {}, AppMobi.webRoot = "";
+			
+		//click back event
         window.addEventListener("popstate", function() {
-            that.goBack();
+			that.goBack();
         }, false);
-
+		
         /**
          * Helper function to setup the transition objects
          * Custom transitions can be added via $.ui.availableTransitions
@@ -49,19 +58,17 @@
            $.ui.availableTransitions['none']=function();
            ```
          */
-        (function(obj) {
-            obj.availableTransitions = {};
-            obj.availableTransitions['none'] = that.noTransition;
-            obj.availableTransitions['default'] = that.noTransition;
-        })(this);
+
+         this.availableTransitions = {};
+         this.availableTransitions['default'] =this.availableTransitions['none'] = this.noTransition;
     };
     
     
     ui.prototype = {
-        fixAndroidInputs:true,
-        isAjaxApp:false,
-        isAppMobi: false,
         showLoading:true,
+        loadContentQueue:[],
+        isAppMobi: false,
+        titlebar: "",
         navbar: "",
         header: "",
         viewportContainer: "",
@@ -79,8 +86,8 @@
         defaultMenu: "",
         _readyFunc: null,
         doingTransition: false,
-        passwordBox: new jq.passwordBox(),
-        selectBox: jq.selectBox,
+        passwordBox: jq.passwordBox ? new jq.passwordBox() : false,
+        selectBox: jq.selectBox ? jq.selectBox : false,
         ajaxUrl: "",
         transitionType: "slide",
         scrollingDivs: [],
@@ -90,22 +97,22 @@
         launchCompleted: false,
         activeDiv: "",
         customClickHandler:"",
-        
-        
+        activeDiv: "",
+        menuAnimation: null,
+        togglingSideMenu:false,
+        autoBoot: function(){
+            this.hasLaunched = true;
+            if (this.autoLaunch) {
+                this.launch();
+            }
+        },
         css3animate: function(el, opts) {
             el = jq(el);
             if (!el.__proto__["css3Animate"])
                 throw "css3Animate plugin is required";
             return el.css3Animate(opts);
         },
-        /**
-         * This is the time transitions will run for.
-           ```
-           $.ui.transitionTime='400ms';
-           ```
-         * @title $.ui.transitionTime;
-         */
-        transitionTime:"500",
+
         /**
          * this is a boolean when set to true (default) it will load that panel when the app is started
            ```
@@ -114,8 +121,7 @@
            ```
          *@title $.ui.loadDefaultHash
          */
-        loadDefaultHash: true,
-
+        loadDefaultHash:true,
         /**
          * This is a boolean that when set to true will add "&cache=_rand_" to any ajax loaded link
            ```
@@ -146,10 +152,7 @@
          * @title $.ui.actionsheet()
          */
         actionsheet: function(opts) {
-            el = jq("#jQUi");
-            if (!el.__proto__["actionsheet"])
-                throw "actionsheet plugin is required";
-            return el.actionsheet(opts);
+            return jq("#jQUi").actionsheet(opts);
         },
         /**
          * This is a wrapper to jq.popup.js plugin.  If you pass in a text string, it acts like an alert box and just gives a message
@@ -170,12 +173,9 @@
          * @title $.ui.popup(opts)
          */
         popup: function(opts) {
-            el = jq("#jQUi");
-            if (!el.__proto__["popup"])
-                throw "popup plugin is required";
-            return el.popup(opts);
+            return $("#jQUi").popup(opts);
         },
-
+        
         /**
          *This will throw up a mask and block the UI
          ```
@@ -252,10 +252,10 @@
          * @title $.ui.ready
          */
         ready: function(param) {
-            if (this.launchCompleted)
+            if(this.launchCompleted) 
                 param();
             else
-                document.addEventListener("jq.ui.ready", param, false);
+                document.addEventListener("jq.ui.ready",param,false);
         },
         /**
          * Override the back button class name
@@ -277,11 +277,17 @@
          * @title $.ui.goBack()
          */
         goBack: function() {
-            
-            if (this.history.length > 0) {
-                var tmpEl = this.history.pop();
-                this.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
-                this.transitionType = tmpEl.transition;
+			if (this.history.length > 0) {
+                var that = this;
+				var tmpEl = this.history.pop();
+                $.asap(
+                    function() {
+                        that.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
+                        that.transitionType = tmpEl.transition;
+                        //document.location.hash=tmpEl.target;
+                        that.updateHash(tmpEl.target);
+                        //for Android 4.0.x, we must touchLayer.hideAdressBar()
+                    });
             }
         },
         /**
@@ -296,6 +302,57 @@
             this.history = [];
             this.backButton.style.visibility = "hidden";
         },
+		
+        /**
+         * PushHistory
+           ```
+           $.ui.pushHistory(previousPage, newPage, transition, hashExtras)
+           ```
+           
+         * @title $.ui.pushHistory()
+         */
+        pushHistory: function(previousPage, newPage, transition, hashExtras) {
+            //push into local history
+            this.history.push({
+                target: previousPage,
+                transition: transition
+            });
+			//push into the browser history
+            try {
+                window.history.pushState(newPage, newPage, startPath + '#' + newPage + hashExtras);
+                $(window).trigger("hashchange", {newUrl: startPath + '#' + newPage + hashExtras,oldURL: startPath + previousPage});
+            } 
+            catch (e) {
+            }
+        },
+		
+		
+        /**
+         * Updates the current window hash
+         *
+         * @param {String} newHash New Hash value
+         * @title $.ui.updateHash(newHash)
+         */
+        updateHash: function(newHash) {
+            newHash = newHash.indexOf('#')==-1?'#' + newHash:newHash;	//force having the # in the begginning as a standard
+			previousTarget = newHash;
+
+            var previousHash = window.location.hash;
+            var panelName = this.getPanelId(newHash).substring(1);	//remove the #
+
+            try {
+                window.history.replaceState(panelName, panelName, startPath + newHash);
+                $(window).trigger("hashchange", {newUrl: startPath + newHash, oldUrl: startPath + previousHash});
+            }
+            catch (e) {
+            }
+        },
+		/*gets the panel name from an hash*/
+		getPanelId:function(hash){
+            var firstSlash = hash.indexOf('/');
+            return firstSlash == -1? hash : hash.substring(0, firstSlash);
+		},
+
         /**
          * Update a badge on the selected target.  Position can be
             bl = bottom left
@@ -377,15 +434,14 @@
          * @param {Boolean} [force]
          * @title $.ui.toggleHeaderMenu([force])
          */
-        toggleHeaderMenu: function(force) {
-            
+         toggleHeaderMenu: function(force) {
             if (jq("#header").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
                 jq("#content").css("top", "0px");
                 jq("#header").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
                 jq("#header").show();
-                jq("#content").css("top", jq("#header").css("height"));
-            
+				var val = numOnly(jq("#header").css("height"));
+                jq("#content").css("top", val+'px');
             }
         },
         /**
@@ -396,44 +452,102 @@
          * @param {Boolean} [force]
          * @title $.ui.toggleSideMenu([force])
          */
-        toggleSideMenu: function(force) {
+        toggleSideMenu: function(force, callback) {
+			if(!this.isSideMenuEnabled() || this.togglingSideMenu) return;
+            this.togglingSideMenu = true;
+
             var that = this;
-            if (!jq("#content").hasClass("hasMenu"))
-                return;
-            if (jq("#menu").css("display") != "block" && ((force !== undefined && force !== false) || force === undefined)) {
-                if(this.scrollingDivs["menu_scroller"])
-                    this.scrollingDivs["menu_scroller"].initEvents();
-                jq("#menu").show();
-                window.setTimeout(function() {
-                    jq("#menu").addClass("on");
-                    jq("#header").addClass("on");
-                    jq("#navbar").addClass("on");
-                    jq("#content").addClass("on");
-                }, 1); //needs to run after
+            var menu = jq("#menu");
+			var els = jq("#content, #menu, #header, #navbar");
+			
+            if (!(menu.hasClass("on") || menu.hasClass("to-on")) && ((force !== undefined && force !== false) || force === undefined)) {
+
+				menu.show();
+				$.asap(function(){
+					that.css3animate(els,{
+						"removeClass":"to-off off on",
+						"addClass":"to-on",
+						complete:function(canceled){
+							if(!canceled){
+	                            that.css3animate(els,{
+									"removeClass":"to-off off to-on",
+									"addClass":"on",
+									time:0,
+									complete:function(){
+                                        that.togglingSideMenu = false;
+										if(callback) callback(false);
+									}
+								});
+							} else{
+                                that.togglingSideMenu = false;
+                                if(callback) callback(true);
+                            }
+						}
+					});
+				});	
             
             } else if (force === undefined || (force !== undefined && force === false)) {
-                if(this.scrollingDivs["menu_scroller"])
-                    this.scrollingDivs["menu_scroller"].removeEvents();
-                
-                jq("#header").removeClass("on");
-                jq("#menu").removeClass("on");
-                jq("#navbar").removeClass("on");
-                jq("#content").removeClass("on");
-                setTimeout(function() {
-                    jq("#menu").hide();
-                }, 300); //lame I know
+
+
+				that.css3animate(els,{
+					"removeClass":"on off to-on",
+					"addClass":"to-off",
+					complete:function(canceled){
+						if(!canceled){
+	                        that.css3animate(els,{
+								"removeClass":"to-off on to-on",
+								"addClass":"off",
+								time:0,
+								complete:function(){
+	                                menu.hide();
+                                    that.togglingSideMenu = false;
+									if(callback) callback(false);
+								}
+							});
+						} else{
+                            that.togglingSideMenu = false;
+                            if(callback) callback(true);
+                        }
+					}
+				});
             }
         },
         /**
-         * depricated
+         * Disables the side menu
            ```
-           $.ui.updateNavbar();//toggle it
+           $.ui.disableSideMenu();
            ```
-         * @title $.ui.updateNavbar([force])
-         * @api private
-         */
-        updateNavbar: function() {
-        },
+        * @title $.ui.disableSideMenu();
+        */
+		disableSideMenu:function(){
+			var that = this;
+			var els = jq("#content, #menu, #header, #navbar");
+			if(this.isSideMenuOn()){
+				this.toggleSideMenu(false, function(canceled){
+					if(!canceled) els.removeClass("hasMenu");
+				});
+			} else els.removeClass("hasMenu");
+		},
+        /**
+         * Enables the side menu
+           ```
+           $.ui.enableSideMenu();
+           ```
+        * @title $.ui.enableSideMenu();
+        */
+		enableSideMenu:function(){
+			var that = this;
+			var els = jq("#content, #menu, #header, #navbar");
+			els.addClass("hasMenu");
+		},
+		isSideMenuEnabled:function(){
+			return jq("#content").hasClass("hasMenu");
+		},
+		isSideMenuOn:function(){
+			var menu = jq('#menu');
+			return this.isSideMenuEnabled() && (menu.hasClass("on") || menu.hasClass("to-on"));
+		},
+
         /**
          * Updates the elements in the navbar
            ```
@@ -447,15 +561,19 @@
             if (elems === undefined || elems == null)
                 return;
             if (typeof (elems) == "string")
-                return nb.html(elems), null;
+                return nb.html(elems,true), null;
             nb.html("");
             for (var i = 0; i < elems.length; i++) {
                 var node = elems[i].cloneNode(true);
+                if (elems[i].oldhash) {
+                    node.href = elems[i].oldhref;
+                    node.onclick = elems[i].oldonclick;
+                }
                 nb.append(node);
             }
-            jq("#navbar a").data("ignore-pressed", "true").data("resetHistory", "true");
+             jq("#navbar a").data("ignore-pressed", "true").data("resetHistory", "true");
         },
-        /**
+         /**
          * Updates the elements in the header
            ```
            $.ui.updateHeaderElements(elements);
@@ -468,14 +586,13 @@
             if (elems === undefined || elems == null)
                 return;
             if (typeof (elems) == "string")
-                return nb.html(elems), null;
+                return nb.html(elems,true), null;
             nb.html("");
             for (var i = 0; i < elems.length; i++) {
                 var node = elems[i].cloneNode(true);
                 nb.append(node);
             }
         },
-
         /**
          * Updates the elements in the side menu
            ```
@@ -492,13 +609,13 @@
             if (elems === undefined || elems == null)
                 return;
             if (typeof (elems) == "string")
-                return nb.html(elems), null;
+                return nb.html(elems,true), null;
             nb.html('');
             var close = document.createElement("a");
             close.className = "closebutton jqMenuClose";
             close.href = "javascript:;"
             close.onclick = function() {
-                that.toggleSideMenu();
+                that.toggleSideMenu(false);
             };
             nb.append(close);
             var tmp = document.createElement("div");
@@ -514,6 +631,7 @@
                 nb.append(node);
             }
             //Move the scroller to the top and hide it
+            this.scrollingDivs['menu_scroller'].hideScrollbars();
             this.scrollingDivs['menu_scroller'].scrollTo({
                 x: 0,
                 y: 0
@@ -579,19 +697,20 @@
          */
         showModal: function(id) {
             var that = this;
-            
-            if ($am(id)) {
-                //jq("#modalContainer").html('<div style="width:1px;height:1px;-webkit-transform:translate3d(0,0,0);float:right"></div>' + $am(id).childNodes[0].innerHTML + '');
-                jq("#modalContainer").html($am(id).childNodes[0].innerHTML);
-                jq('#modalContainer').append("<a href='javascript:;' onclick='$.ui.hideModal();' class='closebutton modalbutton'></a>");
-                this.modalWindow.style.display = "block";
-                
-                button = null;
-                content = null;
-                this.scrollingDivs['modal_container'].initEvents();
-                this.scrollToTop('modal');
+            try {
+                if ($am(id)) {
+                    jq("#modalContainer").html($.feat.nativeTouchScroll?$am(id).innerHTML:$am(id).childNodes[0].innerHTML+'',true);
+                    jq('#modalContainer').append("<a href='javascript:;' onclick='$.ui.hideModal();' class='closebutton modalbutton'></a>");
+                    this.modalWindow.style.display = "block";
+                    
+                    button = null;
+                    content = null;
+                    this.scrollingDivs['modal_container'].enable();
+                    this.scrollToTop('modal');
+                }
+            } catch (e) {
+                console.log("Error with modal - " + e, this.modalWindow);
             }
-        
         },
         /**
          * Hide the modal window and remove the content
@@ -601,10 +720,10 @@
          * @title $.ui.hideModal();
          */
         hideModal: function() {
-            $am("modalContainer").innerHTML = "";
+            $("#modalContainer").html("",true);
             $am("jQui_modal").style.display = "none";
             
-            this.scrollingDivs['modal_container'].removeEvents();
+            this.scrollingDivs['modal_container'].disable();
         },
 
         /**
@@ -622,16 +741,19 @@
                 return;
             
             var newDiv = document.createElement("div");
-	        newDiv.innerHTML = content;
-	        if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
-	            
+            newDiv.innerHTML = content;
+            if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
+                
              
             
-            if (el.getAttribute("scrolling") && el.getAttribute("scrolling").toLowerCase() == "no")
-               el.innerHTML = newDiv.innerHTML;
-            else
-                el.childNodes[0].innerHTML = newDiv.innerHTML;
-                
+            if (el.getAttribute("js-scrolling") && el.getAttribute("js-scrolling").toLowerCase() == "yes"){
+                $.cleanUpContent(el.childNodes[0], false, true);
+                el.childNodes[0].innerHTML = content;
+            }
+            else{
+                $.cleanUpContent(el, false, true);
+                el.innerHTML = content;
+            }                
             if($(newDiv).title) el.title = $(newDiv).title;
         },
         /**
@@ -647,13 +769,13 @@
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
             var myEl = $am(el);
             if (!myEl) {
-            	var newDiv = document.createElement("div");
-	            newDiv.innerHTML = content;
-	            if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
-	            
-				if(!newDiv.title&&title) newDiv.title = title;
-				var newId = (newDiv.id)? newDiv.id : el; //figure out the new id - either the id from the loaded div.panel or the crc32 hash
-				newDiv.id = newId;
+                var newDiv = document.createElement("div");
+                newDiv.innerHTML = content;
+                if($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0) newDiv = $(newDiv).children('.panel').get();
+                
+                if(!newDiv.title&&title) newDiv.title = title;
+                var newId = (newDiv.id)? newDiv.id : el; //figure out the new id - either the id from the loaded div.panel or the crc32 hash
+                newDiv.id = newId;
             } else {
                 newDiv = myEl;
             }
@@ -675,58 +797,61 @@
          * @api private
          */
         addDivAndScroll: function(tmp, refreshPull, refreshFunc) {
-            var addScroller = true;
-            if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling").toLowerCase() == "no")
-                addScroller = false;
-            if (!addScroller) {
+			var jsScroll = false;
+			var overflowStyle = tmp.style.overflow;
+			var hasScroll = overflowStyle!='hidden'&&overflowStyle!='visible';
+			
+			//sets up scroll when required and not supported
+			if(!$.feat.nativeTouchScroll&&hasScroll) tmp.setAttribute("js-scrolling", "yes");
+			
+            if (tmp.getAttribute("js-scrolling") && tmp.getAttribute("js-scrolling").toLowerCase() == "yes"){
+				jsScroll = true;
+				hasScroll = true;
+            }
+            
+			
+                
+            if (!jsScroll) {
                 this.content.appendChild(tmp);
-                tmp = null;
-                return;
+				var scrollEl = tmp;
+            } else {
+	            //WE need to clone the div so we keep events
+	            var scrollEl = tmp.cloneNode(false);
+            
+            
+	            tmp.title = null;
+	            tmp.id = null;
+	            tmp.removeAttribute("footer");
+	            tmp.removeAttribute("nav");
+	            jq(tmp).replaceClass("panel", "jqmScrollPanel");
+            
+	            scrollEl.appendChild(tmp);
+            
+	            this.content.appendChild(scrollEl);
+            	
+	            if(this.selectBox!==false) this.selectBox.getOldSelects(scrollEl.id);
+	            if(this.passwordBox!==false) this.passwordBox.getOldPasswords(scrollEl.id);
+            	
             }
-            //WE need to clone the div so we keep events
-            var myDiv = tmp.cloneNode(false);
+
+			if(hasScroll){
+	            this.scrollingDivs[scrollEl.id] = (jq(tmp).scroller({
+	                scrollBars: true,
+	                verticalScroll: true,
+	                horizontalScroll: false,
+	                vScrollCSS: "jqmScrollbar",
+	                refresh: refreshPull,
+					useJsScroll:jsScroll,
+					autoEnable:false	//dont enable the events unnecessarilly
+	            }));
+				//backwards compatibility
+				if(refreshFunc) $.bind(this.scrollingDivs[scrollEl.id], 'refresh-release', function(trigger){if(trigger) refreshFunc()});
+			}
             
-            
-            tmp.title = null;
-            tmp.id = null;
-            tmp.removeAttribute("footer");
-            tmp.removeAttribute("nav");
-            jq(tmp).removeClass("panel");
-            tmp.style.width = "100%";
-            //tmp.style.height = "inherit";
-            
-            myDiv.appendChild(tmp);
-            
-            this.content.appendChild(myDiv);
-            
-            this.selectBox.getOldSelects(myDiv.id);
-            this.passwordBox.getOldPasswords(myDiv.id);
-            
-            if (addScroller) {
-                this.scrollingDivs[myDiv.id] = (jq(tmp).scroller({
-                    scrollBars: true,
-                    verticalScroll: true,
-                    horizontalScroll: false,
-                    vScrollCSS: "jqmScrollbar",
-                    refresh: false
-                }));
-                this.scrollingDivs[myDiv.id].removeEvents();
-            }
-            
-            
-            myDiv = null;
-            tmp = null;
+			tmp = null;
+			scrollEl = null;
         },
 
-        /**
-         * This has been depricated, as it was a design flaw on my end.  People were updating segments of the panel and not the whole part.  It's counter intuitive to have to call 
-         * $.ui.updateAnchors(object,reset) after each change.
-         * This will be removed in 1.1
-         * @title $.ui.updateAnchors(element,resetHistory);
-         * @api private
-         */
-        updateAnchors: function(domEl, reset) {
-        },
         /**
          *  Scrolls a panel to the top
            ```
@@ -743,21 +868,6 @@
                 }, 0);
             }
         },
-        /**
-         *  Scrolls all panels to the top and fixes position when orientation changes
-           ```
-           $.ui.updateOrientation(event);
-           ```
-         * @param {Event} event
-         * @title $.ui.updateOrientation(event);
-         * @api private
-         */
-        updateOrientation: function(event) {
-            for (var j in this.scrollingDivs) {
-                if (typeof (this.scrollingDivs[j]) !== "function")
-                    this.scrollToTop(j);
-            }            
-        },
 
         /**
          *  This is used when a transition fires to do helper events.  We check to see if we need to change the nav menus, footer, and fire
@@ -771,87 +881,92 @@
          * @api private
          */
         parsePanelFunctions: function(what, oldDiv) {
+            //check for custom footer
             var that = this;
             var hasFooter = what.getAttribute("data-footer");
             var hasHeader = what.getAttribute("data-header");
-            window.setTimeout(function() {
-                if (hasFooter && hasFooter.toLowerCase() == "none") {
-                    that.toggleNavMenu(false);
-                } else {
-                    that.toggleNavMenu(true);
+            
+            //$asap removed since animations are fixed in css3animate
+            if (hasFooter && hasFooter.toLowerCase() == "none") {
+                that.toggleNavMenu(false);
+            } else {
+                that.toggleNavMenu(true);
+            }
+            if (hasFooter && that.customFooter != hasFooter) {
+                that.customFooter = hasFooter;
+                that.updateNavbarElements(jq("#" + hasFooter).children());
+            } else if (hasFooter != that.customFooter) {
+                if (that.customFooter)
+                    that.updateNavbarElements(that.defaultFooter);
+                that.customFooter = false;
+            }
+            if (hasHeader && that.customHeader != hasHeader) {
+                that.customHeader = hasHeader;
+                that.updateHeaderElements(jq("#" + hasHeader).children());
+            } else if (hasHeader != that.customHeader) {
+                if (that.customHeader)
+                {
+                    that.updateHeaderElements(that.defaultHeader);
+                    that.setTitle(that.activeDiv.title);
                 }
-                if (hasFooter && that.customFooter != hasFooter) {
-                    that.customFooter = hasFooter;
-                    that.updateNavbarElements(jq("#" + hasFooter).children());
-                } else if (hasFooter != that.customFooter) {
-                    if (that.customFooter)
-                        that.updateNavbarElements(that.defaultFooter);
-                    that.customFooter = false;
-                }
-                
-                
-                if (hasHeader && that.customHeader != hasHeader) {
-                    that.customHeader = hasHeader;
-                    that.updateHeaderElements(jq("#" + hasHeader).children());
-                } else if (hasHeader != that.customHeader) {
-                    if (that.customHeader)
-                    {
-                        that.updateHeaderElements(that.defaultHeader);
-                        that.setTitle(that.activeDiv.title);
-                    }
-                    that.customHeader = false;
-                }
+                that.customHeader = false;
+            }
+            if (what.getAttribute("data-tab")) { //Allow the dev to force the footer menu
+                jq("#navbar a").removeClass("selected");
+                jq("#" + what.getAttribute("data-tab")).addClass("selected");
+            }
 
-                //Load inline footers
-                var inlineFooters = $(what).find("footer");
-                if (inlineFooters.length > 0) 
-                {
-                    that.customFooter = what.id;
-                    that.updateNavbarElements(inlineFooters.children());
-                }
-                //load inline headers
-                var inlineHeader = $(what).find("header");
+            //Load inline footers
+            var inlineFooters = $(what).find("footer");
+            if (inlineFooters.length > 0) 
+            {
+                that.customFooter = what.id;
+                that.updateNavbarElements(inlineFooters.children());
+            }
+            //load inline headers
+            var inlineHeader = $(what).find("header");
+            
+            
+            if (inlineHeader.length > 0) 
+            {
+                that.customHeader = what.id;
+                that.updateHeaderElements(inlineHeader.children());
+            }
+            //check if the panel has a footer
+            if (what.getAttribute("data-tab")) { //Allow the dev to force the footer menu
                 
-                
-                if (inlineHeader.length > 0) 
-                {
-                    that.customHeader = what.id;
-                    that.updateHeaderElements(inlineHeader.children());
-                }
-                //check if the panel has a footer
-                if (what.getAttribute("data-tab")) { //Allow the dev to force the footer menu
-                    
-                    jq("#navbar a").removeClass("selected");
-                    jq("#navbar #" + what.getAttribute("data-tab")).addClass("selected");
-                }
-                 var hasMenu = what.getAttribute("data-nav");
-                if (hasMenu && that.customMenu != hasMenu) {
-                    that.customMenu = hasMenu;
-                    that.updateSideMenu(jq("#" + hasMenu).children());
-                } else if (hasMenu != that.customMenu) {
-                    if (that.customMenu)
-                        that.updateSideMenu(that.defaultMenu);
-                    that.customMenu = false;
-                }
-                
-            }, 10);
+                jq("#navbar a").removeClass("selected");
+                jq("#navbar #" + what.getAttribute("data-tab")).addClass("selected");
+            }
+            
+            var hasMenu = what.getAttribute("data-nav");
+            if (hasMenu && this.customMenu != hasMenu) {
+				this.customMenu = hasMenu;
+                this.updateSideMenu(jq("#" + hasMenu).children());
+            } else if (hasMenu != this.customMenu) {
+                if (this.customMenu){
+					this.updateSideMenu(this.defaultMenu);
+                }  
+                this.customMenu = false;
+            }
+            
+            
            
-            
-            
-            //Fire unload first
             if (oldDiv) {
                 fnc = oldDiv.getAttribute("data-unload");
                 if (typeof fnc == "string" && window[fnc]) {
                     window[fnc](oldDiv);
                 }
             }
-            var fnc = what.getAttribute("data-load");
+            $(what).trigger("unloadpanel");
+             var fnc = what.getAttribute("data-load");
             if (typeof fnc == "string" && window[fnc]) {
                 window[fnc](what);
             }
-            if (this.menu.style.display == "block")
-                this.toggleSideMenu(); //Close on phones to prevent orientation change bug.
-        
+            $(what).trigger("loadpanel");
+            if (this.isSideMenuOn()){
+				this.toggleSideMenu(false);
+            }
         },
         /**
          * Helper function that parses a contents html for any script tags and either adds them or executes the code
@@ -863,12 +978,12 @@
             var scripts = div.getElementsByTagName("script");
             div = null;
             for (var i = 0; i < scripts.length; i++) {
-                if (scripts[i].src.length > 0 && !this.remoteJSPages[scripts[i].src]) {
+                if (scripts[i].src.length > 0 && !that.remoteJSPages[scripts[i].src]) {
                     var doc = document.createElement("script");
                     doc.type = scripts[i].type;
                     doc.src = scripts[i].src;
                     document.getElementsByTagName('head')[0].appendChild(doc);
-                    this.remoteJSPages[scripts[i].src] = 1;
+                    that.remoteJSPages[scripts[i].src] = 1;
                     doc = null;
                 } else {
                     window.eval(scripts[i].innerHTML);
@@ -890,9 +1005,11 @@
          */
         loadContent: function(target, newTab, back, transition, anchor) {
             
-            if (this.doingTransition)
-                return;
-            
+            if (this.doingTransition){
+                var that=this;
+                this.loadContentQueue.push([target,newTab,back,transition,anchor]);
+                return
+            }
             
             what = null;
             var that = this;
@@ -904,187 +1021,225 @@
 
                     //ajax div already exists.  Let's see if we should be refreshing it.
                     loadAjax = false;
-                    if ((anchor && anchor.getAttribute("data-refresh-ajax") === 'true') || (anchor && anchor.refresh && anchor.refresh === true)||this.isAjaxApp) {
+                    if (anchor.getAttribute("data-refresh-ajax") === 'true' || (anchor.refresh && anchor.refresh === true||this.isAjaxApp)) {
                         loadAjax = true;
                     } else
                         target = "#" + urlHash;
                 }
-            }
-            
+            }  
             if (target.indexOf("#") == -1 && anchor && loadAjax) {
-
-                // XML Request
-                if (this.activeDiv.id == "jQui_ajax" && target == this.ajaxUrl)
-                    return;
-                if (target.indexOf("http") == -1)
-                    target = AppMobi.webRoot + target;
-               
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.onreadystatechange = function() {
-                    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                        this.doingTransition = false;
-                        
-                        var doReturn = false;
-
-                        //Here we check to see if we are retaining the div, if so update it
-                        if ($am(urlHash) !== undefined) {
-                            that.updateContentDiv(urlHash, xmlhttp.responseText);
-                            if(!$am(urlHash).title) $am(urlHash).title = anchor.title ? anchor.title : target;
-                        } else if (that.isAjaxApp || anchor.getAttribute("data-persist-ajax")) {    
-                            var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
-                            refreshFunction = refresh ? 
-                            function() {
-                                anchor.refresh = true;
-                                that.loadContent(target, newTab, back, transition, anchor);
-                                anchor.refresh = false;
-                            } : null
-                            that.addContentDiv(urlHash, xmlhttp.responseText,anchor.title ? anchor.title : target, refresh, refreshFunction);
-                        } else {
-                            that.updateContentDiv("jQui_ajax", xmlhttp.responseText);
-                            $am("jQui_ajax").title = anchor.title ? anchor.title : target;
-                            that.loadContent("#jQui_ajax", newTab, back);
-                            doReturn = true;
-                        }
-                        //Let's load the content now.
-                        //We need to check for any script tags and handle them
-                        var div = document.createElement("div");
-                        div.innerHTML = xmlhttp.responseText;
-                        that.parseScriptTags(div);
-                        if (doReturn)
-                            return;
-                        return that.loadContent("#" + urlHash, false, back, null);
-                    
-                    }
-                };
-                ajaxUrl = target;
-                var newtarget = this.useAjaxCacheBuster ? target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000 : target;
-                xmlhttp.open("GET", newtarget, true);
-                xmlhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-                xmlhttp.send();
-                // show Ajax Mask
-                if(this.showLoading)
-                    this.showMask();
-                return;
+				this.loadAjax(target, newTab, back, transition, anchor);
             } else {
-                // load a div
-                
-                what = target.replace("#", "");
-                
-                var slashIndex = what.indexOf('/');
-                var hashLink = "";
-                if (slashIndex != -1) {
-                    // Ignore everything after the slash for loading
-                    hashLink = what.substr(slashIndex);
-                    what = what.substr(0, slashIndex);
-                }
-                
-                what = $am(what);
-                
-                if (!what)
-                    throw ("Target: " + target + " was not found");
-                if (what == this.activeDiv && !back)
-                    return;
-                
-                if (what.getAttribute("data-modal") == "true" || what.getAttribute("modal") == "true") {
-                    return this.showModal(what.id);
-                }
-                
-                
-                
-                this.transitionType = transition;
-                var oldDiv = this.activeDiv;
-                var currWhat = what;
-                
-                
-                if (oldDiv == currWhat) //prevent it from going to itself
-                    return;
-                
-                if (newTab) {
-                    
-                    this.history = [];
-                    if(("#" + this.firstDiv.id)!=target){
-                        this.history.push({
-                            target: "#" + this.firstDiv.id,
-                            transition: transition
-                        });
-                    }
-                } else if (!back) {
-                    this.history.push({
-                        target: previousTarget,
-                        transition: transition
-                    });
-                
-                }
-                window.history.pushState(what.id, what.id, startPath + '#' + what.id + hashLink);
-                $(window).trigger("hashchange", {newUrl: startPath + '#' + what.id + hashLink,oldURL: startPath + "#" + this.activeDiv.id});
-                
-                previousTarget = '#' + what.id + hashLink;
-                
-                if (this.resetScrollers && this.scrollingDivs[what.id]) {
-                    this.scrollingDivs[what.id].scrollTo({
-                        x: 0,
-                        y: 0
-                    });
-                }
-                $(what).addClass("active");
-                
-                what.style.display = "block";
-                that.doingTransition = true;
-                if (that.availableTransitions[transition])
-                    that.availableTransitions[transition].call(that, oldDiv, currWhat, back);
-                else
-                    that.availableTransitions['default'].call(that, oldDiv, currWhat, back);
-
-                
-
-                this.activeDiv = what;
-                
-                if (this.scrollingDivs[this.activeDiv.id]) {
-                    this.scrollingDivs[this.activeDiv.id].initEvents();
-                }
-                if (this.scrollingDivs[oldDiv.id]) {
-                    this.scrollingDivs[oldDiv.id].removeEvents();
-                }
-                //Let's check if it has a function to run to update the data
-               
-                  
-                
-                setTimeout(function(){
-                    that.parsePanelFunctions(what, oldDiv);
-                },300);
-                setTimeout(function(){
-                  
-                    if (back) {
-                        if (that.history.length > 0) {
-                            var val = that.history[that.history.length - 1];
-                            
-                            var el = $am(val.target.replace("#", ""));
-                            that.setBackButtonText(el.title)
-                        }
-                    } else if (that.activeDiv.title)
-                        that.setBackButtonText(that.activeDiv.title)
-                    else
-                        that.setBackButtonText("Back");
-                    if (what.title) {
-                        that.setTitle(what.title);
-                    }
-                    if (newTab) {
-                        that.setBackButtonText(that.firstDiv.title)
-                    }
-                    
-                    //Update the back buttons
-                     if (that.history.length == 0) {
-                        jq("#header #backButton").css("visibility","hidden");
-                        that.history = [];
-                    } else if (that.showBackbutton){
-                        jq("#header #backButton").css("visibility","visible");
-                    }
-                },370);
-                window.scrollTo(1, 1);
-            
-            }
+                this.loadDiv(target, newTab, back, transition);
+			}
         },
+        /**
+         * This is called internally by loadContent.  Here we are loading a div instead of an Ajax link
+           ```
+           $.ui.loadDiv("#main",false,false,"up");
+           ```
+         * @param {String} target
+         * @param {Boolean} newtab (resets history)
+         * @param {Boolean} go back (initiate the back click)
+         * @param {String} transition
+         * @title $.ui.loadDiv(target,newTab,goBack,transition);
+         * @api private
+         */
+		loadDiv:function(target, newTab, back, transition){
+            // load a div
+            what = target.replace("#", "");
 
+            var slashIndex = what.indexOf('/');
+            var hashLink = "";
+            if (slashIndex != -1) {
+                // Ignore everything after the slash for loading
+                hashLink = what.substr(slashIndex);
+                what = what.substr(0, slashIndex);
+            }
+
+            what = $am(what);
+                    
+            if (!what)
+                throw ("Target: " + target + " was not found");
+            if (what == this.activeDiv && !back){
+            	//toggle the menu if applicable
+	            if (this.isSideMenuOn()) this.toggleSideMenu(false);
+				return;
+            }
+                    
+            if (what.getAttribute("data-modal") == "true" || what.getAttribute("modal") == "true") {
+                return this.showModal(what.id);
+            }
+            what.style.display = "block";
+                    
+                    
+                    
+            this.transitionType = transition;
+            var oldDiv = this.activeDiv;
+            var currWhat = what;
+                    
+            if (oldDiv == currWhat) //prevent it from going to itself
+                return;
+                    
+            if (newTab) {
+				this.pushHistory("#" + this.firstDiv.id, what.id, transition, hashLink);
+            } else if (!back) {
+				this.pushHistory(previousTarget, what.id, transition, hashLink);
+            }
+            
+                    
+            previousTarget = '#' + what.id + hashLink;
+                    
+            if (this.resetScrollers && this.scrollingDivs[what.id]) {
+                this.scrollingDivs[what.id].scrollTo({
+                    x: 0,
+                    y: 0
+                });
+            }
+            this.doingTransition = true;
+			this.runTransition(transition, oldDiv, currWhat, back);
+            
+			
+                    
+            
+            if (this.scrollingDivs[oldDiv.id]) {
+                this.scrollingDivs[oldDiv.id].disable();
+            }
+            //Let's check if it has a function to run to update the data
+            this.parsePanelFunctions(what, oldDiv);
+            //Need to call after parsePanelFunctions, since new headers can override
+            this.loadContentData(what, newTab, back, transition);
+            
+		},
+        /**
+         * This is called internally by loadDiv.  This sets up the back button in the header and scroller for the panel
+           ```
+           $.ui.loadContentData("#main",false,false,"up");
+           ```
+         * @param {String} target
+         * @param {Boolean} newtab (resets history)
+         * @param {Boolean} go back (initiate the back click)
+         * @param {String} transition
+         * @title $.ui.loadDiv(target,newTab,goBack,transition);
+         * @api private
+         */
+		loadContentData:function(what, newTab, back, transition){
+            if (back) {
+                if (this.history.length > 0) {
+                    var val = this.history[this.history.length - 1];
+					var slashIndex = val.target.indexOf('/');
+					if (slashIndex != -1) {
+					    var prevId = val.target.substr(0, slashIndex);
+					} else var prevId = val.target;
+                    var el = $am(prevId.replace("#", ""));
+					//make sure panel is there
+                    if(el) this.setBackButtonText(el.title);
+					else this.setBackButtonText("Back");
+                }
+            } else if (this.activeDiv.title)
+                this.setBackButtonText(this.activeDiv.title)
+            else
+                this.setBackButtonText("Back");
+            if (what.title) {
+                this.setTitle(what.title);
+            }
+            if (newTab) {
+                this.setBackButtonText(this.firstDiv.title)
+            }
+                    
+            if (this.history.length == 0) {
+                this.backButton.style.visibility = "hidden";
+                this.history = [];
+            } else if (this.showBackbutton)
+                this.backButton.style.visibility = "visible";
+            this.activeDiv = what;
+            if (this.scrollingDivs[this.activeDiv.id]) {
+                this.scrollingDivs[this.activeDiv.id].enable();
+            }
+		},
+        /**
+         * This is called internally by loadContent.  Here we are using Ajax to fetch the data
+           ```
+           $.ui.loadDiv("page.html",false,false,"up");
+           ```
+         * @param {String} target
+         * @param {Boolean} newtab (resets history)
+         * @param {Boolean} go back (initiate the back click)
+         * @param {String} transition
+         * @title $.ui.loadDiv(target,newTab,goBack,transition);
+         * @api private
+         */
+		loadAjax:function(target, newTab, back, transition, anchor){
+            // XML Request
+            if (this.activeDiv.id == "jQui_ajax" && target == this.ajaxUrl)
+                return;
+            var urlHash = "url" + crc32(target); //Ajax urls
+            var that=this;
+            if (target.indexOf("http") == -1)
+                target = AppMobi.webRoot + target;
+            if (target.indexOf("http") == -1)
+                target = AppMobi.webRoot + target;
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    this.doingTransition = false;
+                            
+                    var doReturn = false;
+
+                    //Here we check to see if we are retaining the div, if so update it
+                    if ($am(urlHash) !== undefined) {
+                        that.updateContentDiv(urlHash, xmlhttp.responseText);
+                        $am(urlHash).title = anchor.title ? anchor.title : target;
+                    } else if (anchor.getAttribute("data-persist-ajax")) {
+                                
+                        var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
+                        refreshFunction = refresh ? 
+                        function() {
+                            anchor.refresh = true;
+                            that.loadContent(target, newTab, back, transition, anchor);
+                            anchor.refresh = false;
+                        } : null;
+                        //that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
+                         urlHash=that.addContentDiv(urlHash, xmlhttp.responseText,anchor.title ? anchor.title : target, refresh, refreshFunction);
+                    } else {
+                        that.updateContentDiv("jQui_ajax", xmlhttp.responseText);
+                        $am("jQui_ajax").title = anchor.title ? anchor.title : target;
+                        that.loadContent("#jQui_ajax", newTab, back);
+                        doReturn = true;
+                    }
+                    //Let's load the content now.
+                    //We need to check for any script tags and handle them
+                    var div = document.createElement("div");
+                    div.innerHTML = xmlhttp.responseText;
+                    that.parseScriptTags(div);
+                    if (doReturn)
+                        return;
+                            
+                    return that.loadContent("#" + urlHash);
+                        
+                }
+            };
+            ajaxUrl = target;
+            var newtarget = this.useAjaxCacheBuster?target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000:target;
+            xmlhttp.open("GET", newtarget, true);
+            xmlhttp.send();
+            // show Ajax Mask
+            if(this.showLoading)
+            this.showMask();
+		},
+		/**
+         * This executes the transition for the panel
+            ```
+            $.ui.runTransition(transition,oldDiv,currDiv,back)
+            ```
+         * @api private
+         * @title $.ui.runTransition(transition,oldDiv,currDiv,back)
+         */
+		runTransition: function(transition, oldDiv, currWhat, back){
+            if (!this.availableTransitions[transition]) transition = 'default';
+            this.availableTransitions[transition].call(this, oldDiv, currWhat, back);
+		},
+		
         /**
          * This is callled when you want to launch jqUi.  If autoLaunch is set to true, it gets called on DOMContentLoaded.
          * If autoLaunch is set to false, you can manually invoke it.
@@ -1100,23 +1255,63 @@
                 this.hasLaunched = true;
                 return;
             }
+		
+			var that = this;
             this.isAppMobi = (window.AppMobi && typeof (AppMobi) == "object" && AppMobi.app !== undefined) ? true : false;
-            var that = this;
             this.viewportContainer = jq("#jQUi");
             this.navbar = $am("navbar");
             this.content = $am("content");
             this.header = $am("header");
             this.menu = $am("menu");
-            if (this.viewportContainer.length == 0) {
-                var container = document.createElement("div");
-                container.id = "jQUi";
-                var body = document.body;
-                while (body.firstChild) {
-                    container.appendChild(body.firstChild);
-                }
-                jq(document.body).prepend(container);
-                this.viewportContainer = jq("#jQUi");
-            }
+			//set anchor click handler for UI
+			this.viewportContainer[0].addEventListener('click', function(e){
+				var theTarget = e.target;
+				checkAnchorClick(e, theTarget);
+			}, false);
+			
+			
+			//enter-edit scroll paddings fix
+			//focus scroll adjust fix
+			var enterEditEl = null;
+			//on enter-edit keep a reference of the actioned element
+			$.bind($.touchLayer, 'enter-edit', function(el){ enterEditEl = el; });
+			//enter-edit-reshape panel padding and scroll adjust
+			$.bind($.touchLayer, 'enter-edit-reshape', function(){
+				//onReshape UI fixes
+				//check if focused element is within active panel
+				var jQel = $(enterEditEl);
+				var jQactive = jQel.closest(that.activeDiv);
+				if(jQactive && jQactive.size()>0){
+					if($.os.ios || $.os.chrome){
+						var paddingTop, paddingBottom;
+						if(document.body.scrollTop){
+							paddingTop=document.body.scrollTop-jQactive.offset().top;
+						} else {
+							paddingTop=0;
+						}
+						//not exact, can be a little above the actual value
+						//but we haven't found an accurate way to measure it and this is the best so far
+						paddingBottom=jQactive.offset().bottom-jQel.offset().bottom;	
+						that.scrollingDivs[that.activeDiv.id].setPaddings(paddingTop, paddingBottom);
+
+					} else if($.os.android || $.os.blackberry){
+						var elPos = jQel.offset();
+						var containerPos = jQactive.offset();
+						if(elPos.bottom>containerPos.bottom && elPos.height<containerPos.height){
+							//apply fix
+							that.scrollingDivs[that.activeDiv.id].scrollToItem(jQel, 'bottom');
+						}
+					}
+				}
+			});
+			if($.os.ios){
+				$.bind($.touchLayer, 'exit-edit-reshape', function(){
+					that.scrollingDivs[that.activeDiv.id].setPaddings(0, 0);
+				});
+			}
+			
+			//elements setup
+
             if (!this.navbar) {
                 this.navbar = document.createElement("div");
                 this.navbar.id = "navbar";
@@ -1132,29 +1327,37 @@
                 this.menu = document.createElement("div");
                 this.menu.id = "menu";
                 this.menu.style.overflow = "hidden";
-                this.menu.innerHTML = "<div id='menu_scroller'></div>";
+                this.menu.innerHTML = '<div id="menu_scroller"></div>';
                 this.viewportContainer.append(this.menu);
                 this.scrollingDivs["menu_scroller"] = jq("#menu_scroller").scroller({
                     scrollBars: true,
                     verticalScroll: true,
-                    vScrollCSS: "jqmScrollbar"
+                    vScrollCSS: "jqmScrollbar",
+                    useJsScroll:!$.feat.nativeTouchScroll
                 });
+                if($.feat.nativeTouchScroll)
+                    $("#menu_scroller").css("height","100%");
             }
-            
-            
+
             if (!this.content) {
                 this.content = document.createElement("div");
                 this.content.id = "content";
                 this.viewportContainer.append(this.content);
             }
-            this.header.innerHTML = '<a id="backButton"  href="javascript:;"></a> <h1 id="pageTitle"></h1>' + this.header.innerHTML;
+			
+			//insert backbutton (should optionally be left to developer..)
+            this.header.innerHTML = '<a id="backButton"  href="javascript:;"></a> <h1 id="pageTitle"></h1>' + header.innerHTML;
             this.backButton = $am("backButton");
             this.backButton.className = "button";
-            
-            jq(document).on("click", "#backButton", function() {
+            jq(document).on("click", "#header #backButton", function() {
                 that.goBack();
             });
             this.backButton.style.visibility = "hidden";
+			
+			//page title (should optionally be left to developer..)
+            this.titleBar = $am("pageTitle");
+			
+			//setup ajax mask
             this.addContentDiv("jQui_ajax", "");
             var maskDiv = document.createElement("div");
             maskDiv.id = "jQui_mask";
@@ -1163,9 +1366,9 @@
             maskDiv.style.zIndex = 20000;
             maskDiv.style.display = "none";
             document.body.appendChild(maskDiv);
+			//setup modalDiv
             var modalDiv = document.createElement("div");
             modalDiv.id = "jQui_modal";
-            
             this.viewportContainer.append(modalDiv);
             modalDiv.appendChild(jq("<div id='modalContainer'></div>").get());
             this.scrollingDivs['modal_container'] = jq("#modalContainer").scroller({
@@ -1175,7 +1378,8 @@
             });
             
             this.modalWindow = modalDiv;
-            var defer = [];
+			//get first div, defer
+            var defer = {};
             var contentDivs = this.viewportContainer.get().querySelectorAll(".panel");
             for (var i = 0; i < contentDivs.length; i++) {
                 var el = contentDivs[i];
@@ -1197,15 +1401,13 @@
                 }
                 if (el.getAttribute("data-defer")){
                     defer[id] = el.getAttribute("data-defer");
-                    defer.length++;
                 }
+
                 el = null;
             }
-            if(!this.firstDiv)
-               this.firstDiv=$("#content").children().get(0);
             contentDivs = null;
             var loadingDefer=false;
-            var toLoad=defer.length;
+            var toLoad=Object.keys(defer).length;
             if(toLoad>0){
                 loadingDefer=true;
                 var loaded=0;
@@ -1239,102 +1441,121 @@
                 var that = this;
                 // Fix a bug in iOS where translate3d makes the content blurry
                 this.activeDiv = this.firstDiv;
-              
+
+                if (this.scrollingDivs[this.activeDiv.id]) {
+                    this.scrollingDivs[this.activeDiv.id].enable();
+                }
+                
                 //window.setTimeout(function() {
                 var loadFirstDiv=function(){
-                    //activeDiv = firstDiv;
-                    if (defaultHash.length > 0 && that.loadDefaultHash&&defaultHash!=("#"+that.firstDiv.id)&&$(defaultHash).length>0)
-                    {
-                        that.activeDiv=$(defaultHash).get();
-                        jq("#header #backButton").css("visibility","visible");
-                        that.setBackButtonText(that.activeDiv.title)
-                        that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
-                    }
-                    else
-                        previousTarget="#"+that.activeDiv.id;
-                    if (that.scrollingDivs[that.activeDiv.id]) {
-                        that.scrollingDivs[that.activeDiv.id].initEvents();
-                    }
-                    that.activeDiv.style.display = "block";
-                    
-                   
-                    if (that.activeDiv.title)
-                        that.setTitle(that.activeDiv.title);
-                    that.parsePanelFunctions(that.activeDiv);
-                    //Load the default hash
-                    
-                    that.history=[{target:"#"+that.firstDiv.id}]; //Reset the history to the first div
-                    modalDiv = null;
-                    maskDiv = null;
-                    that.launchCompleted = true;
-                    
+					
+                  
                    if(jq("#navbar a").length>0){
                         jq("#navbar a").data("ignore-pressed", "true").data("resetHistory", "true");
                         that.defaultFooter = jq("#navbar").children();
                         that.updateNavbarElements(that.defaultFooter);
                     }
+					//setup initial menu
                     var firstMenu = jq("nav").get();
                     if(firstMenu){
                         that.defaultMenu = jq(firstMenu).children();
                         that.updateSideMenu(that.defaultMenu);
                     }
+					//get default header
                     that.defaultHeader = jq("#header").children();
+					//
+                    jq("#navbar").on("click", "a", function(e) {
+                        jq("#navbar a").not(this).removeClass("selected");
+                        $.asap(function() {
+                            $(e.target).addClass("selected");
+                        });
+                    });
+					
+
+                    //go to activeDiv
+                    var firstPanelId = that.getPanelId(defaultHash);
+                    that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
+                    if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId!=("#"+that.firstDiv.id)) {
+                        that.loadContent(defaultHash, true, false, 'none');    //load the active page as a newTab with no transition
+                    } else {
+
+                        that.loadContentData(that.firstDiv);    //load the info off the first panel
+                        that.parsePanelFunctions(that.firstDiv);
+                        that.firstDiv.style.display="block";
+                        $("#header #backButton").css("visibility","hidden");
+                    }
+                    
+                    that.launchCompleted = true;
+
+					//trigger ui ready
                     jq(document).trigger("jq.ui.ready");
-                    jq("#splashscreen").remove();
+					//remove splashscreen
+					$.asap(function() {
+						// Run after the first div animation has been triggered - avoids flashing
+						jq("#splashscreen").remove();
+					});
                 };
                 if(loadingDefer){
                     $(document).one("defer:loaded",loadFirstDiv);
                 }
                 else
-                    loadFirstDiv();
+                    $.asap(loadFirstDiv);
             }
-        
+            var that=this;
+            $.bind($.ui,"content-loaded",function(){
+                if(that.loadContentQueue.length>0){
+                    var tmp=that.loadContentQueue.splice(0,1)[0];
+                    that.loadContent(tmp[0],tmp[1],tmp[2],tmp[3],tmp[4]);
+                }
+            });
+            if(window.navigator.standalone){
+
+                jq("#jQUi #header").bind("touchmove",function(e){
+                    e.preventDefault();
+                });
+            }
+           
         },
-        
+        /**
+         * This is the default transition.  It simply shows the new panel and hides the old
+         */
         noTransition: function(oldDiv, currDiv, back) {
-            oldDiv.style.display = "block";
             currDiv.style.display = "block";
-            var that = this
-            if (back) {
-                that.css3animate(currDiv, {
-                    x: "0%",
-                    time: "1ms"
-                });
-                that.css3animate(oldDiv, {
-                    x: 0,
-                    time: "1ms"
-                });
-            
-            } else {
-                
-                that.css3animate(oldDiv, {
-                    x: 0,
-                    y: 0,
-                    time: "1ms"
-                });
-                that.css3animate(currDiv, {
-                    x: "0%",
-                    time: "1ms"
-                });
-            }
+			oldDiv.style.display = "block";
+            var that = this;
+            that.clearAnimations(currDiv);
+			that.css3animate(oldDiv, {
+                x: "0%",
+                y: 0
+            });
             that.finishTransition(oldDiv);
             currDiv.style.zIndex = 2;
             oldDiv.style.zIndex = 1;
-            $(oldDiv).removeClass('active');
         },
-
-        /**
+		/**
          * This must be called at the end of every transition to hide the old div and reset the doingTransition variable
          *
          * @param {Object} Div that transitioned out
          * @title $.ui.finishTransition(oldDiv)
          */
-        finishTransition: function(oldDiv) {
-            
+        finishTransition: function(oldDiv, currDiv) {
             oldDiv.style.display = 'none';
             this.doingTransition = false;
-        
+			if(currDiv) this.clearAnimations(currDiv);
+            $.trigger(this,"content-loaded");
+        },
+		
+        /**
+         * This must be called at the end of every transition to remove all transforms and transitions attached to the inView object (performance + native scroll)
+         *
+         * @param {Object} Div that transitioned out
+         * @title $.ui.finishTransition(oldDiv)
+         */
+        clearAnimations: function(inViewDiv) {
+			inViewDiv.style.webkitTransform = "none";
+			inViewDiv.style.webkitTransition = "none";
         }
+		
     /**
          * END
          * @api private
@@ -1342,10 +1563,57 @@
     };
     
     function $am(el) {
-        el = el.indexOf("#") == -1 ? "#" + el : el;
+        el = typeof el == 'string' && el.indexOf("#") == -1 ? "#" + el : el;
         return jq(el).get(0);
     }
-    
+	
+	//lookup for a clicked anchor recursively and fire UI own actions when applicable 
+    var checkAnchorClick = function(e, theTarget) {
+			
+		if(theTarget.isSameNode(jQUi)) {
+			return;
+		}
+			
+		//this technique fails when considerable content exists inside anchor, should be recursive ?
+        if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
+            return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
+			
+		//anchors
+		if (theTarget.tagName.toLowerCase() == "a") {
+            if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1||theTarget.getAttribute("data-ignore")) {
+                return;
+            }
+            
+            //external links
+            if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) 
+            {
+                if (theTarget.href.toLowerCase().indexOf("javascript:") != 0) {
+                    if (jq.ui.isAppMobi) {
+                    	e.preventDefault();
+						AppMobi.device.launchExternal(theTarget.href);
+                    } else if (!jq.os.desktop){
+                    	e.target.target = "_blank";
+                    }
+                }
+                return;
+            }
+			
+			//empty links
+            if (theTarget.href=="#" || (theTarget.href.length==0&&theTarget.hash.length==0))
+                return;
+            
+            
+			//internal links
+			e.preventDefault();
+            var mytransition = theTarget.getAttribute("data-transition");
+            var resetHistory = theTarget.getAttribute("data-resetHistory");
+            resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
+            var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
+            jq.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
+			return;
+        }
+    }
+	
     var table = "00000000 77073096 EE0E612C 990951BA 076DC419 706AF48F E963A535 9E6495A3 0EDB8832 79DCB8A4 E0D5E91E 97D2D988 09B64C2B 7EB17CBD E7B82D07 90BF1D91 1DB71064 6AB020F2 F3B97148 84BE41DE 1ADAD47D 6DDDE4EB F4D4B551 83D385C7 136C9856 646BA8C0 FD62F97A 8A65C9EC 14015C4F 63066CD9 FA0F3D63 8D080DF5 3B6E20C8 4C69105E D56041E4 A2677172 3C03E4D1 4B04D447 D20D85FD A50AB56B 35B5A8FA 42B2986C DBBBC9D6 ACBCF940 32D86CE3 45DF5C75 DCD60DCF ABD13D59 26D930AC 51DE003A C8D75180 BFD06116 21B4F4B5 56B3C423 CFBA9599 B8BDA50F 2802B89E 5F058808 C60CD9B2 B10BE924 2F6F7C87 58684C11 C1611DAB B6662D3D 76DC4190 01DB7106 98D220BC EFD5102A 71B18589 06B6B51F 9FBFE4A5 E8B8D433 7807C9A2 0F00F934 9609A88E E10E9818 7F6A0DBB 086D3D2D 91646C97 E6635C01 6B6B51F4 1C6C6162 856530D8 F262004E 6C0695ED 1B01A57B 8208F4C1 F50FC457 65B0D9C6 12B7E950 8BBEB8EA FCB9887C 62DD1DDF 15DA2D49 8CD37CF3 FBD44C65 4DB26158 3AB551CE A3BC0074 D4BB30E2 4ADFA541 3DD895D7 A4D1C46D D3D6F4FB 4369E96A 346ED9FC AD678846 DA60B8D0 44042D73 33031DE5 AA0A4C5F DD0D7CC9 5005713C 270241AA BE0B1010 C90C2086 5768B525 206F85B3 B966D409 CE61E49F 5EDEF90E 29D9C998 B0D09822 C7D7A8B4 59B33D17 2EB40D81 B7BD5C3B C0BA6CAD EDB88320 9ABFB3B6 03B6E20C 74B1D29A EAD54739 9DD277AF 04DB2615 73DC1683 E3630B12 94643B84 0D6D6A3E 7A6A5AA8 E40ECF0B 9309FF9D 0A00AE27 7D079EB1 F00F9344 8708A3D2 1E01F268 6906C2FE F762575D 806567CB 196C3671 6E6B06E7 FED41B76 89D32BE0 10DA7A5A 67DD4ACC F9B9DF6F 8EBEEFF9 17B7BE43 60B08ED5 D6D6A3E8 A1D1937E 38D8C2C4 4FDFF252 D1BB67F1 A6BC5767 3FB506DD 48B2364B D80D2BDA AF0A1B4C 36034AF6 41047A60 DF60EFC3 A867DF55 316E8EEF 4669BE79 CB61B38C BC66831A 256FD2A0 5268E236 CC0C7795 BB0B4703 220216B9 5505262F C5BA3BBE B2BD0B28 2BB45A92 5CB36A04 C2D7FFA7 B5D0CF31 2CD99E8B 5BDEAE1D 9B64C2B0 EC63F226 756AA39C 026D930A 9C0906A9 EB0E363F 72076785 05005713 95BF4A82 E2B87A14 7BB12BAE 0CB61B38 92D28E9B E5D5BE0D 7CDCEFB7 0BDBDF21 86D3D2D4 F1D4E242 68DDB3F8 1FDA836E 81BE16CD F6B9265B 6FB077E1 18B74777 88085AE6 FF0F6A70 66063BCA 11010B5C 8F659EFF F862AE69 616BFFD3 166CCF45 A00AE278 D70DD2EE 4E048354 3903B3C2 A7672661 D06016F7 4969474D 3E6E77DB AED16A4A D9D65ADC 40DF0B66 37D83BF0 A9BCAE53 DEBB9EC5 47B2CF7F 30B5FFE9 BDBDF21C CABAC28A 53B39330 24B4A3A6 BAD03605 CDD70693 54DE5729 23D967BF B3667A2E C4614AB8 5D681B02 2A6F2B94 B40BBE37 C30C8EA1 5A05DF1B 2D02EF8D"; /* Number */
     var crc32 = function( /* String */str,  /* Number */crc) {
         if (crc == undefined)
@@ -1363,362 +1631,21 @@
     
     
     $.ui = new ui;
+    
 })(jq);
 
-//The following functions are utilitiy functions for jqUi.  They are not apart of the base class, but help with locking the page scroll,
-//input box issues, remove the address bar on iOS and android, etc
-(function() {
-    var jQUi;
 
-    //Check to see if any <nav> items are found. If so, add the CSS classes
-    jq(document).ready(function() {
-        if (jq("nav").length > 0) {
-            jq("#jQUi #header").addClass("hasMenu");
-            jq("#jQUi #content").addClass("hasMenu");
-            jq("#jQUi #navbar").addClass("hasMenu");
-        }
-        jQUi = jq("#jQUi");
-        setTimeout(function(){
-        hideAddressBar();
-        },100);
-    });
-    
+
+//The following functions are utilitiy functions for jqUi within appMobi.
+//TODO: consider taking all appMobi constraints from jQUI into this code
+(function() {
     document.addEventListener("appMobi.device.ready", function() { //in AppMobi, we need to undo the height stuff since it causes issues.
         setTimeout(function() {
-            jQUi.css("height", "100%"), document.body.style.height = "100%";
+            document.getElementById('jQUi').style.height="100%"; 
+			document.body.style.height = "100%";
             document.documentElement.style.minHeight = window.innerHeight;
         }, 300);
     });
-    
-    
-    window.addEventListener("orientationchange", function(e) {
-        jq.ui.updateOrientation()
-        window.setTimeout(function() {
-            hideAddressBar();
-        }, 200);
-    }, false);
-    
-    if (jq.os.android) 
-    {
-        window.addEventListener("resize", function(e) {
-            window.scrollTo(0,1);            
-             jq.ui.updateOrientation();
-            if(document.body.clientWidth>=700)
-                $.ui.toggleSideMenu(false);
-            window.setTimeout(function() {
-                hideAddressBar();
-            }, 100);
-        }, false);
-    }
-    
-    
-    function hideAddressBar() {
-        if (jq.os.desktop)
-            return jQUi.css("height", "100%");
-        if (jq.os.android) {
-            window.scrollTo(1, 1);
-            if (document.documentElement.scrollHeight < window.outerHeight / window.devicePixelRatio)
-                jQUi.css("height", (window.outerHeight / window.devicePixelRatio) + 'px');
-        } 
-        else {
-            document.documentElement.style.height = "5000px";
-            
-            window.scrollTo(0, 1);
-            document.documentElement.style.height = window.innerHeight + "px";
-            jQUi.css("height", window.innerHeight + "px");
-        }
-    }
-    //The following is based on Cubiq.org - iOS no click delay.  We use this to capture events to input boxes to fix Android...and fix iOS ;)
-    //We had to make a lot of fixes to allow access to input elements on android, etc.
-    function NoClickDelay(el) {
-        if (typeof (el) === "string")
-            el = document.getElementById(el);
-        el.addEventListener('touchstart', this, false);
-    }
-    var prevClickField;
-    var prevPanel;
-    var prevField;
-    var closeField;
-    NoClickDelay.prototype = {
-        dX: 0,
-        dY: 0,
-        cX: 0,
-        cY: 0,
-        handleEvent: function(e) {
-            switch (e.type) {
-                case 'touchstart':
-                    this.onTouchStart(e);
-                    break;
-                case 'touchmove':
-                    this.onTouchMove(e);
-                    break;
-                case 'touchend':
-                    this.onTouchEnd(e);
-                    break;
-            }
-        },
-        
-        onTouchStart: function(e) {
-            
-            this.dX = e.touches[0].pageX;
-            this.dY = e.touches[0].pageY;
 
-            var theTarget = e.target;
-            if (theTarget.nodeType == 3)
-                theTarget = theTarget.parentNode;
-            if(closeField)
-                clearTimeout(closeField),closeField=null;
-            if(prevField&&jq.os.android&&$.ui.fixAndroidInputs){
-                prevField=null;
-                var field = document.createElement('input');
-                field.setAttribute('type', 'text');
-                field.id="myhack";
-                document.body.appendChild(field);
-
-                closeField=setTimeout(function() {
-                    field.focus();
-                    setTimeout(function() {
-                        field.blur();
-                        field.parentNode.removeChild(field);
-                    }, 50);
-                }, 350);
-            }
-            if(prevField&&prevField!=theTarget)
-            {
-                prevField.blur(),prevField=null;
-            }
-           
-            if(prevPanel){
-                //prevField.blur();
-                prevPanel.css("-webkit-transform","translate3d(0px,0px,0px)");
-                prevPanel.css("left","0");
-                prevField=null;
-                prevPanel=null;
-            }
-            
-            var tagname = theTarget.tagName.toLowerCase();
-            var type=theTarget.type||"";
-            if((tagname=="a"&& theTarget.href.indexOf("tel:")===0)||((tagname=="input")||tagname=="textarea"||tagname=="select")&&type!="checkbox"&&type!="radio"){
-                prevField=theTarget;
-                if(jq.os.android&&$.ui.fixAndroidInputs){
-                    theTarget.focus();
-                    //prevField=theTarget;
-                    prevPanel=$(theTarget).closest(".panel");
-                    prevPanel.css("left","-100%");
-                    prevPanel.css("-webkit-transition-duration","0ms");
-                    prevPanel.css("-webkit-transform","translate3d(100%,0px,0px)");
-                    prevPanel.css("position","absolute");
-                    return;
-                }
-            }
-            else
-                e.preventDefault();
-            this.moved = false;
-            document.addEventListener('touchmove', this, true);
-            document.addEventListener('touchend', this, true);
-            
-        },
-        
-        onTouchMove: function(e) {
-            
-            this.moved = true;
-            this.cX = e.touches[0].pageX - this.dX;
-            this.cY = e.touches[0].pageY - this.dY;
-            
-           // e.preventDefault();
-           return false;
-        },
-        onTouchEnd: function(e) {
-            document.removeEventListener('touchmove', this, true);
-            document.removeEventListener('touchend', this, true);
-            
-            if ((!jq.os.blackberry && !this.moved) || (jq.os.blackberry && (Math.abs(this.cX) < 5 || Math.abs(this.cY) < 5))) {
-                var theTarget = e.target;
-                if (theTarget.nodeType == 3)
-                    theTarget = theTarget.parentNode;
-                
-                var theEvent = document.createEvent('MouseEvents');
-                theEvent.initEvent('click', true, true);
-                theTarget.dispatchEvent(theEvent);
-                e.preventDefault();
-            }
-            
-            prevClickField = null;
-            this.dX = this.cX = this.cY = this.dY = 0;
-            return false;
-            
-        }
-    };
-    
-    
-    
-    jq(document).ready(function() {
-        document.body.addEventListener('touchmove', function(e) {
-            e.preventDefault();
-            if(jq.os.android)
-                e.stopPropagation();
-            window.scrollTo(1, 1);
-        }, false);
-        if (!jq.os.desktop)
-            new NoClickDelay(document.getElementById("jQUi"));
-            
-        document.getElementById("jQUi").addEventListener("click", function(e) {
-            
-            var theTarget = e.target;
-            if (theTarget.nodeType == 3)
-                theTarget = theTarget.parentNode;
-            if (checkAnchorClick(theTarget)) {
-                e.preventDefault();
-                return false;
-            }
-        }, true);
-        
-        jq("#navbar").on("click", "a", function(e) {
-            jq("#navbar a").removeClass("selected");
-            setTimeout(function() {
-                $(e.target).addClass("selected");
-            }, 10);
-        });
-    });
-    
-    function checkAnchorClick(theTarget) {
-        var parent = false;
-        while (theTarget.tagName && theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
-            parent = true, theTarget = theTarget.parentNode; //let's try the parent so <a href="#foo"><img src="whatever.jpg"></a> will work
-        if (theTarget&&theTarget.tagName&&theTarget.tagName.toLowerCase() == "a") {
-        
-        
-            var custom=(typeof jq.ui.customClickHandler=="function")?jq.ui.customClickHandler:false;
-            if(custom!==false&&jq.ui.customClickHandler(theTarget)){
-               return true;
-            }
-            if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1 || theTarget.getAttribute("data-ignore")) {
-                return false;
-            }
-            
-          
-            
-            if(theTarget.href.indexOf("tel:")===0)
-               return false;
-            if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) 
-            {
-                
-                if (theTarget.href.toLowerCase().indexOf("javascript:") != 0) {
-                    if (jq.ui.isAppMobi)
-                        AppMobi.device.launchExternal(theTarget.href);
-                    else if(jq.os.android)
-                        brokerClickEventMobile(theTarget)
-                    else
-                    {
-                        theTarget.target="_blank"
-                        window.open(theTarget.href);
-                    }
-                    return true;
-                }
-                return false;
-            }
-            if ((theTarget.href.indexOf("#") !== -1 && theTarget.hash.length == 0) || theTarget.href.length == 0)
-                return true;
-            
-            var mytransition = theTarget.getAttribute("data-transition");
-            var resetHistory = theTarget.getAttribute("data-resetHistory");
-            var back = (theTarget.getAttribute("data-reverse") && theTarget.getAttribute("data-reverse") == 'true')?true:false;
-            resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
-            
-            var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
-            jq.ui.loadContent(href, resetHistory, back, mytransition, theTarget);
-
-            return true;
-        }
-    }
-    function brokerClickEventMobile(theTarget) {
-        if (jq.os.desktop)
-            return;
-        var clickevent = document.createEvent('Event');
-        clickevent.initEvent('click', true, false);
-        theTarget.target = "_blank";
-        theTarget.dispatchEvent(clickevent);
-    }
 })();
 
-//Touch events are from zepto/touch.js
-
-(function($) {
-    var touch = {}, touchTimeout;
-
-    function parentIfText(node) {
-        return 'tagName' in node ? node : node.parentNode;
-    }
-
-    function swipeDirection(x1, x2, y1, y2) {
-        var xDelta = Math.abs(x1 - x2), yDelta = Math.abs(y1 - y2);
-        if (xDelta >= yDelta) {
-            return (x1 - x2 > 0 ? 'Left' : 'Right');
-        } else {
-            return (y1 - y2 > 0 ? 'Up' : 'Down');
-        }
-    }
-
-    var longTapDelay = 750;
-    function longTap() {
-        if (touch.last && (Date.now() - touch.last >= longTapDelay)) {
-            touch.el.trigger('longTap');
-            touch = {};
-        }
-    }
-    $(document).ready(function() {
-        $(document.body).bind('touchstart', function(e) {
-            var now = Date.now(), delta = now - (touch.last || now);
-            touch.el = $(parentIfText(e.touches[0].target));
-            touchTimeout && clearTimeout(touchTimeout);
-            touch.x1 = e.touches[0].pageX;
-            touch.y1 = e.touches[0].pageY;
-            if (delta > 0 && delta <= 250)
-                touch.isDoubleTap = true;
-            touch.last = now;
-            setTimeout(longTap, longTapDelay);
-            if (!touch.el.data("ignore-pressed"))
-                touch.el.addClass("selected");
-            else
-                touch.el.closest(".selectable").addClass("selected");
-        }).bind('touchmove', function(e) {
-            touch.x2 = e.touches[0].pageX;
-            touch.y2 = e.touches[0].pageY;
-        }).bind('touchend', function(e) {
-            if (!touch.el) {
-                touch = {};
-                return;
-                }
-            if (!touch.el.data("ignore-pressed"))
-                touch.el.removeClass("selected");
-            else
-                touch.el.closest(".selectable").removeClass("selected");
-            if (touch.isDoubleTap) {
-                touch.el.trigger('doubleTap');
-                touch = {};
-            } else if (Math.abs(touch.x1 - touch.x2) > 5 || Math.abs(touch.y1 - touch.y2) > 5) {
-                (Math.abs(touch.x1 - touch.x2) > 30 || Math.abs(touch.y1 - touch.y2) > 30) &&
-                touch.el.trigger('swipe') &&
-                touch.el.trigger('swipe' + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)));
-                touch.x1 = touch.x2 = touch.y1 = touch.y2 = touch.last = 0;
-                touch={};
-            } else if ('last' in touch) {
-                touch.el.trigger('tap');
-                touchTimeout = setTimeout(function() {
-                    touchTimeout = null;
-                    if (touch.el)
-                        touch.el.trigger('singleTap');
-                    touch = {};
-                }, 250);
-            }
-        }).bind('touchcancel', function() {
-            touch = {}
-        });
-    });
-
-    ['swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown', 'doubleTap', 'tap', 'singleTap', 'longTap'].forEach(function(m) {
-        $.fn[m] = function(callback) {
-            return this.bind(m, callback)
-        }
-    });
-})(jq);

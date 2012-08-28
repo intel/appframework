@@ -49,7 +49,7 @@
 <script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/xhr.js"></script> 	
 -->
 <script type="text/javascript" charset="utf-8" src="./jq.mobi.js"></script> 
-<!-- include touch.js on desktop browsers only -->
+<!-- include jq.desktopBrowsers.js on desktop browsers only -->
 <script>
 function loadedPanel(what){
     //We are going to set the badge as the number of li elements inside the target
@@ -60,7 +60,7 @@ function loadedPanel(what){
 	}
 if(!((window.DocumentTouch&&document instanceof DocumentTouch)||'ontouchstart' in window)){
 var script=document.createElement("script");
-script.src="touch.js";
+script.src="plugins/jq.desktopBrowsers.js";
 var tag=$("head").append(script);
 $.os.android=true; //let's make it run like an android device
 $.os.desktop=true;
@@ -95,12 +95,13 @@ oldElem=document.getElementsByTagName("link")[0];
 </script>
 
 
+<script type="text/javascript" charset="utf-8" src="./plugins/jq.debug.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.swipe.js"></script> 
-<script type="text/javascript" charset="utf-8" src="./plugins/jq.template.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.carousel.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.drawer.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.shake.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.alphatable.js"></script> 
+<script type="text/javascript" charset="utf-8" src="./plugins/jq.template.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./ui/jq.ui.js"></script> 
 
 <script type="text/javascript">
@@ -115,15 +116,6 @@ oldElem=document.getElementsByTagName("link")[0];
     };
     document.addEventListener("DOMContentLoaded",init,false);  
 	$.ui.ready(function(){console.log('ready');});
-   
-    /* This code prevents users from dragging the page */
-    var preventDefaultScroll = function(event) {
-        event.preventDefault();
-        window.scroll(0,0);
-        return false;
-    };
-	
-	document.addEventListener('touchmove', preventDefaultScroll, false);
 
     /* This code is used to run as soon as appMobi activates */
     var onDeviceReady=function(){
@@ -138,8 +130,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	function showHide(obj,objToHide){
 		var el=$("#"+objToHide)[0];
 		
-		var $obj=$(obj);
-		if($obj.hasClass("expanded")){
+		if(obj.className=="expanded"){
 			obj.className="collapsed";
 		}
 		else{
@@ -166,7 +157,7 @@ oldElem=document.getElementsByTagName("link")[0];
     </div>
 
 <div id="content">
-	<div title='Welcome' id="main" class="panel" selected="true" data-load="loadedPanel" data-unload="unloadedPanel" data-tab="navbar_home" >
+	<div title='Welcome' id="main" class="panel" selected="true" data-load="loadedPanel" data-unload="unloadedPanel" data-tab="navbar_home">
 
 	<h2 class='expanded' onclick='showHide(this,"main_info");'>Welcome</h2>
 		<p id='main_info'>Welcome to the kitchen sink demo for jqMobi.  Here you will find samples of how to use the jqMobi libraries.  Please select an option from below.</p>
@@ -174,10 +165,10 @@ oldElem=document.getElementsByTagName("link")[0];
 		 <li class='icon home big'><a href="#jqm" id='jqmlink'>jqMobi</a></li>
 		 <li><a href="#jqmui" >jqUi</a></li>
 		 <li><a href="#jqmweb" >jqPlugins</a></li>
-		</ul>
+		</ul> 
 	</div> 
 
-	<!-- ------------------------------------------ -->
+	<!---------------------------------------------->
 	
 	<div title="jqMobi" id="jqm" class="panel" data-nav="menu_jqmobi" data-header="testheader">
         <header><span>This is an inline header in a panel.  Below is an inline footer</span></header>
@@ -628,15 +619,16 @@ oldElem=document.getElementsByTagName("link")[0];
 	<!-- jqUi -->
 	<div title="jqUi" id="jqmui" class="panel"  data-footer='footerui' data-tab="navbar_ui">
 
-
-	<h2 class='expanded' onclick='showHide(this,"jqui_info");'>jqUi</h2><p id='jqui_info'>jqUi is AppMobi's User Interface/User Experience library for mobile applications. It uses HTML5 and CSS3 for animations and transitions.<br />
+		
+	<h2 class='expanded' onclick='showHide(this,"jqui_info");'>jqUi</h2><p id='jqui_info'>
+		jqUi is AppMobi's User Interface/User Experience library for mobile applications. It uses HTML5 and CSS3 for animations and transitions. 
 	We built the kitchen sink using jqUi.  It is comprised of components from the jqPlugins library and additional features.
 	<br>
 		* Fixed navigation bar<br>
 		* Auto scrolling content panels<br>
 		* Optional footer to segment your application<br>
 		</p>
-		<ul>
+		<ul >
 		<li><a href="#jqmtransitions" >Transitions</a></li>
 		<li><a href="#jqmforms" >Form Styles</a></li>
 		<li><a href="#uiapi" >$.ui API</a></li>
@@ -644,7 +636,7 @@ oldElem=document.getElementsByTagName("link")[0];
 		<li><a href="#uiside">Side Navigation Menu</a></li>
         <li><a href="#uiicons">SVG Icons</a></li>
 		<li><a href="kitchensink/external.html" data-persist-ajax="true" data-refresh-ajax="true" data-pull-scroller="true">Load External Content</a></li>
-        <li><a href="http://www.jqmobi.com" >Open a new page</a></li>
+        <li><a href="http://www.jqmobi.com" target="_blank" >Open a new page</a></li>
         <li><a href="#uidefer">Defer loading</a></li>
 		</ul>
 
@@ -1118,23 +1110,24 @@ oldElem=document.getElementsByTagName("link")[0];
 	</div>
 
 	<!-- jqPlugins > jQ.scroller -->
-	<div title="Scroller" class="panel" id="webslider" scrolling="no">
+	<div title="Scroller" class="panel" id="webslider" style="overflow:hidden;">
 	<script>
 		var init_scroller = function () {
 		   $("#scroller").scroller({
+			    refresh:true,
 				scrollBars: true,
 				verticalScroll: true,
 				horizontalScroll: false,
 				vScrollCSS: "jqmScrollbar",
 				hScrollCSS: "jqmScrollbar"
-			});
+			}).enable();
 		};
 		window.addEventListener("load", init_scroller, false);
 	</script>
 	<div id="outercontent"
 			style="height: 95%; width:95%; overflow: hidden; position: relative">
 			
-			<div id="scroller"><div>Lorem ipsum dolor sit amet, consectetur
+			<div id="scroller" style="overflow: auto;"><div>Lorem ipsum dolor sit amet, consectetur
 				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
 				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
 				sed convallis elementum, magna diam pharetra magna, id vestibulum est
@@ -1458,7 +1451,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	</div>
 
 	<!-- jqPlugins > jQ.carousel -->
-	<div title="Carousel" class="panel" id="webcarousel"  scrolling="no">
+	<div title="Carousel" class="panel" id="webcarousel"  style="overflow:hidden;">
 		<style>
 		.carousel_paging2 {
 			border-radius: 10px;
@@ -1532,7 +1525,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	</div>
 
 	<!-- jqPlugins > jQ.swipeListener -->
-	<div title="Swipe" class="panel" id="webswipe" scrolling="no">
+	<div title="Swipe" class="panel" id="webswipe" style="overflow:hidden;">
 		<style>
 			.result {position:absolute;left:100px;}
 		</style>
@@ -1632,6 +1625,22 @@ oldElem=document.getElementsByTagName("link")[0];
 					<option value="73">7Three</option>
 				</select>
 			</span>
+			<br><br><br>
+			This is a multi select box test<br>
+			<span>
+				<select id="test4" multiple="multiple">
+					<option value="1">One</option>
+					<option value="2">Two</option>
+					<option value="3">Three</option>
+					<option value="11">1One</option>
+					<option value="22">2Two</option>
+					<option value="33">3Three</option>
+					<option value="43">4Three</option>
+					<option value="53">5Three</option>
+					<option value="63">6Three</option>
+					<option value="73">7Three</option>
+				</select>
+			</span>
 		</div>
 		<br/>
 		<br/>
@@ -1672,7 +1681,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	</div>
 
 	<!-- jqPlugins > jQ.css3animate -->
-	<div title="Animate" class="panel" id="webanimate" scrolling="no">
+	<div title="Animate" class="panel" id="webanimate" style="overflow:hidden;">
 		<script>
 			function moveOnce() {
 				$("#animate").css3Animate({
@@ -1738,7 +1747,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	<!-- ------------------------------------------ -->
 
 	<!-- jqPlugins > jQ.drawer -->
-	<div title="Drawer" class="panel" id="webdrawer" scrolling="no">
+	<div title="Drawer" class="panel" id="webdrawer" style="overflow:hidden;">
 	<br><br>
 	<p>a pulldown tool like the notifications bar</p>
 	<div id="drawer" style="position:relative;top:-270px;height:220px;background:black;width:100%;z-index:100">
@@ -1835,7 +1844,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	</div>
     
     <!-- jqPlugins -> jqAlphaTable-->
-    <div title="Alpha Table" class="panel" id="webalphatable" scrolling="no">
+    <div title="Alpha Table" class="panel" id="webalphatable" style="overflow:hidden;">
     <style>
     #contentDIV .alphaItem {padding:5px;}
     #contentDIV .alphaItem:nth-child(even) {background: #CCC}
@@ -1849,7 +1858,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	<p>Scroll an alphabetical list like contacts</p>
 	<div id="listControl" style="margin-left:auto;margin-right:auto;position:absolute;top:20px;bottom:0px;left:0px;overflow:hidden;width:100%;padding-bottom:10px;">
         <div id="contentDIV_container" style="width:100%;height:100%; background-color:white;overflow:hidden;">
-            <div id="contentDIV" style='color:black'>
+            <div id="contentDIV" style='color:black;overflow:hidden;'>
                 <div class="tableHeader" id="itm_anchor_A">A</div> 
                 
                 <li class='alphaItem' id="item1">These are all</li>
@@ -1894,8 +1903,9 @@ oldElem=document.getElementsByTagName("link")[0];
     </div>
 	<script>
 	window.addEventListener("load",function(){
-	$("#contentDIV").scroller({});  
+	$("#contentDIV").scroller({useJsScroll:true});  
 	$("#contentDIV").alphatable($("#contentDIV").scroller(),{listCssClass:"tableListContainer",prefix:"itm_anchor_"});
+	
     },false);
 	</script>
     <style>

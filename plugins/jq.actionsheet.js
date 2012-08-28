@@ -38,7 +38,7 @@
             try {
                 var that = this;
                 var markStart = '<div id="jq_actionsheet"><div style="width:100%">';
-                var markEnd = '</div></div>';
+                var markEnd = '</div>';
                 var markup;
                 if (typeof opts == "string") {
                     markup = $(markStart + opts +"<a href='javascript:;' class='cancel'>Cancel</a>"+markEnd);

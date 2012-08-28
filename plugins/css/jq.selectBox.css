@@ -1,0 +1,35 @@
+/*
+ * Since the styles are built in, you have to override values with !important
+ */
+
+/* Row of selected item */
+.jqmobiSelectRowFound {
+}
+
+/* Button (radio) for the found item in the list */
+.jqmobiSelectRowButtonFound{
+}
+
+
+/* Row for items in the list */
+.jqmobiSelectRow{
+
+}
+
+/* button for the items in the list */
+.jqmobiSelectRowButton{
+
+}
+
+/* class for the item text displayed */
+.jqmobiSelectRowText{
+}
+
+/* Header for select box */
+#jqmobiSelectBoxHeader{
+}
+
+/* div that holds the options listed*/
+#jqmobiSelectBoxFix {
+
+}
