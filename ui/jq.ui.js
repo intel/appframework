@@ -2833,7 +2833,6 @@ if (!HTMLElement.prototype.unwatch) {
     };
     
 })();
-
 /**
  * jq.ui - A User Interface library for creating jqMobi applications
  * 
@@ -4419,6 +4418,9 @@ if (!HTMLElement.prototype.unwatch) {
             if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1||theTarget.getAttribute("data-ignore")) {
                 return;
             }
+
+            if(theTarget.href.indexOf("tel:")===0)
+               return false;
             
             //external links
             if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) 
