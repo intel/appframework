@@ -781,6 +781,17 @@ select[disabled]~div { opacity:.7; }
 		background:rgba(29,29,28,1) !important;
 		-webkit-transform:translate3d(0,0,0) !important;
 	}
+	.hasMenu.to-on {
+		-webkit-transition: none !important;
+	}
+	.hasMenu.on, .hasMenu.to-on {
+		-webkit-transform:translate3d(0px,0px,0px) !important;
+		-webkit-transition:none !important;
+	}
+	.hasMenu.to-off {
+		-webkit-transform:translate3d(0px,0px,0px) !important;
+		-webkit-transition:none !important;
+	}
 }
 
 /** Below are styles for plugins */

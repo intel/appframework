@@ -881,6 +881,17 @@ select[disabled]~div {
 		-webkit-transform:translate3d(0px,0px,0px) !important;
 		-webkit-transition:none !important;
 	}
+	.hasMenu.to-on {
+		-webkit-transition: none !important;
+	}
+	.hasMenu.on, .hasMenu.to-on {
+		-webkit-transform:translate3d(0px,0px,0px) !important;
+		-webkit-transition:none !important;
+	}
+	.hasMenu.to-off {
+		-webkit-transform:translate3d(0px,0px,0px) !important;
+		-webkit-transition:none !important;
+	}
     
 }
 #jq_actionsheet {
