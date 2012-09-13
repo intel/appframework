@@ -4237,6 +4237,8 @@ if (!HTMLElement.prototype.unwatch) {
                 if (el.getAttribute("data-defer")){
                     defer[id] = el.getAttribute("data-defer");
                 }
+                if(!this.firstDiv)
+                    this.firstDiv=$am(id);
 
                 el = null;
             }
