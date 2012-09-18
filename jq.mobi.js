@@ -25,7 +25,8 @@ if (!window.jq || typeof (jq) !== "function") {
         jsonPHandlers = [], 
         _jsonPID = 1,
         fragementRE=/^\s*<(\w+)[^>]*>/,
-        _attrCache={};
+        _attrCache={},
+        _propCache={};
         
         
         /**
@@ -723,7 +724,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     return undefined;                
                 if (value === undefined && !$.isObject(prop)) {
                     var res;
-                    var val = (this[0].jqmCacheId&&_propCache[this[0].jqmCacheId][prop])?(this[0].jqmCacheId&&_propCache[this[0].jqmCacheId][prop]):!(res=this[0].getAttribute(prop))&&prop in this[0]?this[0][attr]:result;
+                    var val = (this[0].jqmCacheId&&_propCache[this[0].jqmCacheId][prop])?(this[0].jqmCacheId&&_propCache[this[0].jqmCacheId][prop]):!(res=this[0][prop])&&prop in this[0]?this[0][prop]:res;
                     return val;
                 }
                 for (var i = 0; i < this.length; i++) {
@@ -766,10 +767,10 @@ if (!window.jq || typeof (jq) !== "function") {
                 var that = this;
                 for (var i = 0; i < this.length; i++) {
                     prop.split(/\s+/g).forEach(function(param) {
-                        if(that[i][param]){
-                            that[i][param]=null
-                            if(that[i].jqmCacheId&&propCache[that[i].jqmCacheId][prop])
-                                delete propCache[that[i].jqmCacheId][prop];
+                        if(that[i][param])
+                            delete that[i][param];
+                        if(that[i].jqmCacheId&&_propCache[that[i].jqmCacheId][prop]){
+                                delete _propCache[that[i].jqmCacheId][prop];
                         }
                     });
                 }
@@ -2094,7 +2095,7 @@ if (!window.jq || typeof (jq) !== "function") {
 				if(obj.__events[ev[i]]){
 					var evts = obj.__events[ev[i]];
 					for(var j = 0; j<evts.length; j++)
-						if($.isFunction(evts[j]) && evts[j].apply({}, args)===false) 
+						if($.isFunction(evts[j]) && evts[j].apply(obj, args)===false) 
 							ret = false;
 				}
 			}
@@ -2117,6 +2118,8 @@ if (!window.jq || typeof (jq) !== "function") {
 				if(obj.__events[ev[i]]){
 					var evts = obj.__events[ev[i]];
 					for(var j = 0; j<evts.length; j++){
+                        if(f==undefined)
+                            delete evts[j];
 						if(evts[j]==f) {
 							evts.splice(j,1);
 							break;
@@ -2154,16 +2157,8 @@ if (!window.jq || typeof (jq) !== "function") {
             }
 		}
 
-        $.create=function(what,params){
-            var tmp=document.createElement(what);
-            
-            for(var j in params){
-                tmp[j]=params[j];
-            }
-            return $(tmp);
-        }
-
-        /**
+      
+         /**
          * Removes listeners on a div and its children recursively
             ```
              cleanUpNode(node,kill)

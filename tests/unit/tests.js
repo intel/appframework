@@ -339,6 +339,50 @@ test("removeAttr",function(){
    
 });
 
+
+test("prop",function(){
+
+  expect(3);
+  var div=$("#foo").get(0);
+  div.bar="foo";
+  equal( jq("#foo").prop("bar"), "foo", "Retrieve property" );
+  QUnit.reset();
+
+  jq("#foo").prop("bar","bar");
+  equal( jq("#foo").prop("bar"), "bar", "Set/Retrieve property" );
+
+  var obj={"foo":"bar"}
+  jq("#foo").prop("bar",obj);
+  equal( jq("#foo").prop("bar"), obj, "Set/Retrieve property object" );
+
+
+});
+
+
+test("removeProp",function(){
+  expect(5);
+  var div=$("#foo").get(0);
+  div.bar="foo";
+  equal( jq("#foo").removeProp( "bar" ).prop("bar"), null, "remove bar" );
+  QUnit.reset();
+  equal( jq("#foo").removeProp("id").prop("id"), null, "Remove id" );
+  QUnit.reset();
+  
+  
+  var b=document.getElementById("foo");
+  b.myprop="test";
+  equal(b.myprop,"test","Create property");
+  jq(b).removeProp("test");
+  equal(jq(b).prop("test"),null,"Remove property");
+
+  QUnit.reset();
+  var obj={"foo":"bar"}
+  jq("#foo").prop("bar",obj);
+  jq("#foo").removeProp("bar");
+  equal(jq("#foo").prop("bar"),null,"Remove property object");
+   
+});
+
 test("filter",function(){
 
    expect(3);
@@ -488,6 +532,43 @@ test("trigger",function(){
    QUnit.reset();
 });
 
+test("$.bind/$.unbind/$.trigger",function(){
+  
+  var myobj={};
+  myobj.counter=0;
+  var increment=function(){
+    this.counter++;
+  }
+  var doInc=false;
+  var inc2=function(){
+    if(doInc)
+      this.counter++;
+  }
+  jq.bind(myobj,"test",increment);
+  jq.bind(myobj,"test",inc2);
+  equals(myobj.counter,0,"Make sure myobj.counter=0");
+
+  jq.trigger(myobj,"test");
+  equals(myobj.counter,1,"$.trigger");
+
+  jq.trigger(myobj,"test");
+  equals(myobj.counter,2,"$.trigger");
+  jq.unbind(myobj,"test",increment);
+  jq.trigger(myobj,"test");
+  equals(myobj.counter,2,"$.unbind  increment- should not increment");
+  doInc=true;
+  jq.trigger(myobj,"test");
+  equals(myobj.counter,3,"Increment off inc function");
+
+  jq.unbind(myobj,"test");
+  jq.trigger(myobj,"test");
+  equals(myobj.counter,3,"Remove all");
+
+  
+});
+
+
+
 test("Delegate/Undelegate",function(){
 
   expect(7);
@@ -590,6 +671,17 @@ test("On/Off",function(){
   QUnit.reset();
   
 });
+
+test("$.bind",function(){
+  expect(0);
+})
+test("$.unbind",function(){
+  expect(0);
+})
+
+test("$.trigger",function(){
+  expect(0);
+})
 
 test("append",function(){
 
