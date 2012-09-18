@@ -651,7 +651,6 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (this.length === 0)
                     return undefined;                
                 if (value === undefined && !$.isObject(attr)) {
-                    
                     var val = (this[0].jqmCacheId&&_attrCache[this[0].jqmCacheId][attr])?(this[0].jqmCacheId&&_attrCache[this[0].jqmCacheId][attr]):this[0].getAttribute(attr);
                     return val;
                 }
@@ -704,6 +703,79 @@ if (!window.jq || typeof (jq) !== "function") {
                 }
                 return this;
             },
+
+            /**
+            * Gets or sets a property on an element
+            * If used as a getter, we return the first elements value.  If nothing is in the collection, we return undefined
+                ```
+                $().prop("foo"); //Gets the first elements 'foo' property
+                $().prop("foo","bar");//Sets the elements 'foo' property to 'bar'
+                $().prop("foo",{bar:'bar'}) //Adds the object to an internal cache
+                ```
+
+            * @param {String|Object} property to act upon.  If it's an object (hashmap), it will set the attributes based off the kvp.
+            * @param {String|Array|Object|function} [value] to set
+            * @return {String|Object|Array|Function} If used as a getter, return the property value.  If a setter, return a jqMobi object
+            * @title $().prop(property,[value])
+            */
+            prop: function(prop, value) {
+                if (this.length === 0)
+                    return undefined;                
+                if (value === undefined && !$.isObject(prop)) {
+                    var res;
+                    var val = (this[0].jqmCacheId&&_propCache[this[0].jqmCacheId][prop])?(this[0].jqmCacheId&&_propCache[this[0].jqmCacheId][prop]):!(res=this[0].getAttribute(prop))&&prop in this[0]?this[0][attr]:result;
+                    return val;
+                }
+                for (var i = 0; i < this.length; i++) {
+                    if ($.isObject(prop)) {
+                        for (var key in prop) {
+                            $(this[i]).prop(key,prop[key]);
+                        }
+                    }
+                    else if($.isArray(value)||$.isObject(value)||$.isFunction(value))
+                    {
+                        
+                        if(!this[i].jqmCacheId)
+                            this[i].jqmCacheId=$.uuid();
+                        
+                        if(!_propCache[this[i].jqmCacheId])
+                            _propCache[this[i].jqmCacheId]={}
+                        _propCache[this[i].jqmCacheId][prop]=value;
+                    }
+                    else if (value == null && value !== undefined)
+                    {
+                        $(this[i]).removeProp(prop);
+                    }
+                    else{
+                        this[i][prop]= value;
+                    }
+                }
+                return this;
+            },
+            /**
+            * Removes a property on the elements
+                ```
+                $().removeProp("foo");
+                ```
+
+            * @param {String} properties that can be space delimited
+            * @return {Object} jqMobi object
+            * @title $().removeProp(attribute)
+            */
+            removeProp: function(prop) {
+                var that = this;
+                for (var i = 0; i < this.length; i++) {
+                    prop.split(/\s+/g).forEach(function(param) {
+                        if(that[i][param]){
+                            that[i][param]=null
+                            if(that[i].jqmCacheId&&propCache[that[i].jqmCacheId][prop])
+                                delete propCache[that[i].jqmCacheId][prop];
+                        }
+                    });
+                }
+                return this;
+            },
+
             /**
             * Removes elements based off a selector
                 ```
@@ -948,7 +1020,17 @@ if (!window.jq || typeof (jq) !== "function") {
             offset: function() {
                 if (this.length === 0)
                     return undefined;
-                var obj = this[0].getBoundingClientRect();
+                if(this[0]==window)
+                    return {
+                        left:0,
+                        top:0,
+                        right:0,
+                        bottom:0,
+                        width:window.innerWidth,
+                        height:window.innerHeight
+                    }
+                else
+                    var obj = this[0].getBoundingClientRect();
                 return {
                     left: obj.left + window.pageXOffset,
                     top: obj.top + window.pageYOffset,
@@ -2071,6 +2153,15 @@ if (!window.jq || typeof (jq) !== "function") {
                	return f.apply(c, arguments);	//use scope function call arguments
             }
 		}
+
+        $.create=function(what,params){
+            var tmp=document.createElement(what);
+            
+            for(var j in params){
+                tmp[j]=params[j];
+            }
+            return $(tmp);
+        }
 
         /**
          * Removes listeners on a div and its children recursively

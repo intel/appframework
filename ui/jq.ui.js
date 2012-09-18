@@ -1039,8 +1039,6 @@
 			return true;
 		}
 		
-		
-		
         jsScroller.prototype.onTouchMove=function(event) {
             if (this.currentScrollingObject == null) return;
 			//event.preventDefault();
@@ -1049,13 +1047,16 @@
 			this.calculateTarget(scrollInfo);
 				
 			this.lastScrollInfo = scrollInfo;
+			if(!this.moved) {
+				if(this.elementInfo.requiresVScrollBar)
+					this.vscrollBar.style.opacity=1;
+				if(this.elementInfo.requiresHScrollBar)
+					this.hscrollBar.style.opacity=1;
+			}
 			this.moved = true;
 
 			this.saveEventInfo(event);
-			if(this.elementInfo.requiresVScrollBar)
-				this.vscrollBar.style.opacity=1;
-			if(this.elementInfo.requiresHScrollBar)
-				this.hscrollBar.style.opacity=1;
+			
         }
 		
 		jsScroller.prototype.doScroll=function(){
@@ -2833,6 +2834,7 @@ if (!HTMLElement.prototype.unwatch) {
     };
     
 })();
+
 /**
  * jq.ui - A User Interface library for creating jqMobi applications
  * 
@@ -3646,8 +3648,9 @@ if (!HTMLElement.prototype.unwatch) {
             
 			
                 
-            if (!jsScroll) {
+            if (!jsScroll||tmp.getAttribute("scrolling")&&tmp.getAttribute("scrolling")=="no") {
                 this.content.appendChild(tmp);
+                hasScroll=false;
 				var scrollEl = tmp;
             } else {
 	            //WE need to clone the div so we keep events
@@ -4346,12 +4349,17 @@ if (!HTMLElement.prototype.unwatch) {
                 }
             });
             if(window.navigator.standalone){
-
-                jq("#jQUi #header").bind("touchmove",function(e){
-                    e.preventDefault();
-                });
+                this.blockPageScroll();
             }
            
+        },
+        /**
+         * This blocks the page from scrolling/panning.  Usefull for native apps
+         */
+        blockPageScroll: function(){
+            jq("#jQUi #header").bind("touchmove",function(e){
+                e.preventDefault();
+            });
         },
         /**
          * This is the default transition.  It simply shows the new panel and hides the old

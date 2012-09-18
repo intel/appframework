@@ -811,8 +811,9 @@
             
 			
                 
-            if (!jsScroll) {
+            if (!jsScroll||tmp.getAttribute("scrolling")&&tmp.getAttribute("scrolling")=="no") {
                 this.content.appendChild(tmp);
+                hasScroll=false;
 				var scrollEl = tmp;
             } else {
 	            //WE need to clone the div so we keep events
@@ -1511,12 +1512,17 @@
                 }
             });
             if(window.navigator.standalone){
-
-                jq("#jQUi #header").bind("touchmove",function(e){
-                    e.preventDefault();
-                });
+                this.blockPageScroll();
             }
            
+        },
+        /**
+         * This blocks the page from scrolling/panning.  Usefull for native apps
+         */
+        blockPageScroll: function(){
+            jq("#jQUi #header").bind("touchmove",function(e){
+                e.preventDefault();
+            });
         },
         /**
          * This is the default transition.  It simply shows the new panel and hides the old

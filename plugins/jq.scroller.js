@@ -725,8 +725,6 @@
 			return true;
 		}
 		
-		
-		
         jsScroller.prototype.onTouchMove=function(event) {
             if (this.currentScrollingObject == null) return;
 			//event.preventDefault();
@@ -735,13 +733,16 @@
 			this.calculateTarget(scrollInfo);
 				
 			this.lastScrollInfo = scrollInfo;
+			if(!this.moved) {
+				if(this.elementInfo.requiresVScrollBar)
+					this.vscrollBar.style.opacity=1;
+				if(this.elementInfo.requiresHScrollBar)
+					this.hscrollBar.style.opacity=1;
+			}
 			this.moved = true;
 
 			this.saveEventInfo(event);
-			if(this.elementInfo.requiresVScrollBar)
-				this.vscrollBar.style.opacity=1;
-			if(this.elementInfo.requiresHScrollBar)
-				this.hscrollBar.style.opacity=1;
+			
         }
 		
 		jsScroller.prototype.doScroll=function(){
