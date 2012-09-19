@@ -1370,7 +1370,7 @@
 			//setup modalDiv
             var modalDiv = document.createElement("div");
             modalDiv.id = "jQui_modal";
-            this.viewportContainer.append(modalDiv);
+            this.viewportContainer.prepend(modalDiv);
             modalDiv.appendChild(jq("<div id='modalContainer'></div>").get());
             this.scrollingDivs['modal_container'] = jq("#modalContainer").scroller({
                 scrollBars: true,
