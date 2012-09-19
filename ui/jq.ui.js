@@ -408,6 +408,7 @@
 		scrollerCore.prototype = {
 			//core default properties
 			refresh:false,
+			refreshContent:"Pull to Refresh",
 			refreshHangTimeout:2000,
 			refreshHeight:60,
 			refreshElement:null,
@@ -477,7 +478,7 @@
 					if(orginalEl!=null){
 						var jqEl = jq(orginalEl);
 					} else {
-						var jqEl = jq("<div id='" + this.container.id + "_pulldown' class='jqscroll_refresh' style='border-radius:.6em;border: 1px solid #2A2A2A;background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#666666),color-stop(1,#222222));background:#222222;margin:0px;height:60px;position:relative;text-align:center;line-height:60px;color:white;width:100%;'>Pull to Refresh</div>");
+						var jqEl = jq("<div id='" + this.container.id + "_pulldown' class='jqscroll_refresh' style='border-radius:.6em;border: 1px solid #2A2A2A;background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#666666),color-stop(1,#222222));background:#222222;margin:0px;height:60px;position:relative;text-align:center;line-height:60px;color:white;width:100%;'>"+this.refreshContent+"</div>");
 					}
 				} else {
 					var jqEl = jq(this.refreshElement);
@@ -501,6 +502,9 @@
 					var that = this;
 					if(this.refreshHangTimeout>0) this.refreshCancelCB = setTimeout(function(){that.hideRefresh()}, this.refreshHangTimeout);
 	            }
+			},
+			setRefreshContent:function(content){
+				jq(this.container).find(".jqscroll_refresh").html(content);
 			},
 			lock:function(){
 				if(this.scrollingLocked) return;

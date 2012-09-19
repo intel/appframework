@@ -1669,7 +1669,8 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os.desktop = !($.os.ios || $.os.android || $.os.blackberry || $.os.opera || $.os.fennec || $.os.supportsTouch);
 			//features
 			$.feat = {};
-			$.feat.nativeTouchScroll = ($.os.ios ? !userAgent.match(/OS\s[1-4]/) : false);
+			$.feat.nativeTouchScroll = typeof(document.documentElement.getElementsByTagName("head")[0].style["-webkit-overflow-scrolling"])!=="undefined"
+            //($.os.ios ? !userAgent.match(/OS\s[1-4]/) : false);
         }
         detectUA($, navigator.userAgent);
         $.__detectUA = detectUA; //needed for unit tests
