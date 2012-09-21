@@ -2867,7 +2867,7 @@ if (!HTMLElement.prototype.unwatch) {
 	        var jQUi = document.getElementById("jQUi");
             if (jQUi == null) {
                 jQUi = document.createElement("div");
-                container.id = "jQUi";
+                jQUi.id = "jQUi";
                 var body = document.body;
                 while (body.firstChild) {
                     container.appendChild(body.firstChild);
@@ -3637,11 +3637,12 @@ if (!HTMLElement.prototype.unwatch) {
          * @title $.ui.addDivAndScroll(element);
          * @api private
          */
-        addDivAndScroll: function(tmp, refreshPull, refreshFunc) {
+        addDivAndScroll: function(tmp, refreshPull, refreshFunc,container) {
 			var jsScroll = false;
 			var overflowStyle = tmp.style.overflow;
 			var hasScroll = overflowStyle!='hidden'&&overflowStyle!='visible';
 			
+            container=container||this.content;
 			//sets up scroll when required and not supported
 			if(!$.feat.nativeTouchScroll&&hasScroll) tmp.setAttribute("js-scrolling", "yes");
 			
@@ -3653,7 +3654,7 @@ if (!HTMLElement.prototype.unwatch) {
 			
                 
             if (!jsScroll||tmp.getAttribute("scrolling")&&tmp.getAttribute("scrolling")=="no") {
-                this.content.appendChild(tmp);
+                container.appendChild(tmp);
                 hasScroll=false;
 				var scrollEl = tmp;
             } else {
@@ -3663,13 +3664,18 @@ if (!HTMLElement.prototype.unwatch) {
             
 	            tmp.title = null;
 	            tmp.id = null;
-	            tmp.removeAttribute("footer");
-	            tmp.removeAttribute("nav");
+	            tmp.removeAttribute("data-footer");
+	            tmp.removeAttribute("data-nav");
+                tmp.removeAttribute("data-header");
+                tmp.removeAttribute("selected");
+                tmp.removeAttribute("data-load");
+                tmp.removeAttribute("data-unload");
+                tmp.removeAttribute("data-tab");
 	            jq(tmp).replaceClass("panel", "jqmScrollPanel");
             
 	            scrollEl.appendChild(tmp);
             
-	            this.content.appendChild(scrollEl);
+	            container.appendChild(scrollEl);
             	
 	            if(this.selectBox!==false) this.selectBox.getOldSelects(scrollEl.id);
 	            if(this.passwordBox!==false) this.passwordBox.getOldPasswords(scrollEl.id);
@@ -4428,7 +4434,7 @@ if (!HTMLElement.prototype.unwatch) {
             return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
 			
 		//anchors
-		if (theTarget.tagName.toLowerCase() == "a") {
+		if (theTarget.tagName!=="undefined"&&theTarget.tagName.toLowerCase() == "a") {
             if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1||theTarget.getAttribute("data-ignore")) {
                 return;
             }
