@@ -177,14 +177,17 @@
 			},
 			fireRefreshRelease:function(triggered, allowHide){
 				if(!this.refresh) return;
-				var autoCancel = $.trigger(this, 'refresh-release', [triggered])!==false;
-				this.preventHideRefresh = false;
-                this.refreshRunning = true;
+
 				if(!triggered){
 					if(allowHide){
 					    this.hideRefresh();
 					}
-				} else if(autoCancel) {
+					return;
+				}
+				var autoCancel = $.trigger(this, 'refresh-release', [triggered])!==false;
+				this.preventHideRefresh = false;
+                this.refreshRunning = true;
+				if(autoCancel) {
 					var that = this;
 					if(this.refreshHangTimeout>0) this.refreshCancelCB = setTimeout(function(){that.hideRefresh()}, this.refreshHangTimeout);
 	            }
@@ -331,6 +334,8 @@
 			this.eventsActive = false;
         }
 		nativeScroller.prototype.addPullToRefresh=function(el, leaveRefresh){
+			this.el.removeEventListener('touchstart', this, false);
+			this.el.addEventListener('touchstart', this, false);
 			if(!leaveRefresh) this.refresh = true;
             if (this.refresh && this.refresh == true) {
 	        	this.coreAddPullToRefresh(el);

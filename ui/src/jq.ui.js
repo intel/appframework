@@ -812,10 +812,14 @@
             
 			
                 
-            if (!jsScroll||tmp.getAttribute("scrolling")&&tmp.getAttribute("scrolling")=="no") {
-                container.appendChild(tmp);
+            if(tmp.getAttribute("scrolling")&&tmp.getAttribute("scrolling")=="no"){
                 hasScroll=false;
-				var scrollEl = tmp;
+                jsScroll=false;
+            }
+            
+            if (!jsScroll) {
+                container.appendChild(tmp);
+                var scrollEl = tmp;
             } else {
 	            //WE need to clone the div so we keep events
 	            var scrollEl = tmp.cloneNode(false);
@@ -984,6 +988,7 @@
                 return;
             var scripts = div.getElementsByTagName("script");
             div = null;
+            var that=this;
             for (var i = 0; i < scripts.length; i++) {
                 if (scripts[i].src.length > 0 && !that.remoteJSPages[scripts[i].src]) {
                     var doc = document.createElement("script");
@@ -1034,7 +1039,8 @@
                         target = "#" + urlHash;
                 }
             }  
-            if (target.indexOf("#") == -1 && anchor && loadAjax) {
+            if (target.indexOf("#") == -1 && loadAjax) {
+                anchor=anchor||document.createElement("a");//Hack to allow passing in no anchor
 				this.loadAjax(target, newTab, back, transition, anchor);
             } else {
                 this.loadDiv(target, newTab, back, transition);
