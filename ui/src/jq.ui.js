@@ -669,9 +669,9 @@
          */
         setBackButtonVisibility:function(show){
             if(!show)
-                 jq("#header #backButton").hide()
+                jq("#header #backButton").css("visibility","hidden");
             else
-                 jq("#header #backButton").show();
+                jq("#header #backButton").css("visibility","visible");
         },
         /**
          * Show the loading mask
