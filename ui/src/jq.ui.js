@@ -664,6 +664,15 @@
             else
                 jq("#header #backButton").html(text);
         },
+         /**
+         * Toggle visibility of the back button
+         */
+        setBackButtonVisibility:function(show){
+            if(!show)
+                 jq("#header #backButton").hide()
+            else
+                 jq("#header #backButton").show();
+        },
         /**
          * Show the loading mask
            ```
@@ -1022,6 +1031,8 @@
                 this.loadContentQueue.push([target,newTab,back,transition,anchor]);
                 return
             }
+            if(target.length===0)
+                return;
             
             what = null;
             var that = this;
@@ -1161,10 +1172,10 @@
             }
                     
             if (this.history.length == 0) {
-                this.backButton.style.visibility = "hidden";
+                this.setBackButtonVisibility(false);
                 this.history = [];
             } else if (this.showBackbutton)
-                this.backButton.style.visibility = "visible";
+                this.setBackButtonVisibility(true);
             this.activeDiv = what;
             if (this.scrollingDivs[this.activeDiv.id]) {
                 this.scrollingDivs[this.activeDiv.id].enable();
@@ -1489,11 +1500,11 @@
 
                     //go to activeDiv
                     var firstPanelId = that.getPanelId(defaultHash);
-                    that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
+                    //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
                     if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId!=("#"+that.firstDiv.id)) {
                         that.loadContent(defaultHash, true, false, 'none');    //load the active page as a newTab with no transition
                     } else {
-
+                        previousTarget="#"+that.firstDiv.id;
                         that.loadContentData(that.firstDiv);    //load the info off the first panel
                         that.parsePanelFunctions(that.firstDiv);
                         that.firstDiv.style.display="block";
