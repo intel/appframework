@@ -767,6 +767,7 @@ select[disabled]~div { opacity:.7; }
 		position:absolute !important;
 		left:256px !important;
         -webkit-transition: all 0ms !important;
+        -webkit-transform:translate3d(0,0,0);
 	}
 	#badgephone{ display:none !important; }
 	#badgetablet{ display:inline-block !important; }
