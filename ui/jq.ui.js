@@ -2510,7 +2510,7 @@ if (!HTMLElement.prototype.unwatch) {
 		},
 		onBlur:function(e){
 			if(jq.os.android && e.target == window) return;	//ignore window blurs
-			//this.log("blurring");
+			if(jq.os.ios) return;
 			this.isFocused_=false;
 			//just in case...
 			if(this.focusedElement) this.focusedElement.removeEventListener('blur', this, false);
@@ -2894,7 +2894,9 @@ if (!HTMLElement.prototype.unwatch) {
 			
 		//click back event
         window.addEventListener("popstate", function() {
-			that.goBack();
+			var id=$.ui.getPanelId(document.location.hash);
+            if(id!="#"+$.ui.activeDiv.id)
+                that.goBack();
         }, false);
 		
         /**

@@ -48,7 +48,9 @@
 			
 		//click back event
         window.addEventListener("popstate", function() {
-			that.goBack();
+			var id=$.ui.getPanelId(document.location.hash);
+            if(id!="#"+$.ui.activeDiv.id)
+                that.goBack();
         }, false);
 		
         /**

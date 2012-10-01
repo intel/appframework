@@ -301,7 +301,7 @@
 		},
 		onBlur:function(e){
 			if(jq.os.android && e.target == window) return;	//ignore window blurs
-			//this.log("blurring");
+			if(jq.os.ios) return;
 			this.isFocused_=false;
 			//just in case...
 			if(this.focusedElement) this.focusedElement.removeEventListener('blur', this, false);
