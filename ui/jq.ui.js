@@ -3633,6 +3633,8 @@ if (!HTMLElement.prototype.unwatch) {
                 if(!newDiv.title&&title) newDiv.title = title;
                 var newId = (newDiv.id)? newDiv.id : el; //figure out the new id - either the id from the loaded div.panel or the crc32 hash
                 newDiv.id = newId;
+                if(newDiv.id!=el)
+                    newDiv.setAttribute("data-crc",el);
             } else {
                 newDiv = myEl;
             }
@@ -3888,7 +3890,12 @@ if (!HTMLElement.prototype.unwatch) {
             var loadAjax = true;
             if (target.indexOf("#") == -1) {
                 var urlHash = "url" + crc32(target); //Ajax urls
-                if ($am(urlHash)) {
+                var crcCheck=jq("div.panel[data-crc='"+urlHash+"']");
+                if(crcCheck.length>0){
+                    if(crcCheck.length>0)
+                        target="#"+crcCheck.get(0).id
+                }
+                else if ($am(urlHash)) {
 
                     //ajax div already exists.  Let's see if we should be refreshing it.
                     loadAjax = false;
