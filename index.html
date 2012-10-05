@@ -42,7 +42,6 @@
         color:red;
     }
 	.jqmscrollBar {background:white !important;}	
-	
 </style>
 <!-- uncomment for AppMobi apps
 <script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/appmobi.js"></script> 
@@ -94,7 +93,6 @@ oldElem=document.getElementsByTagName("link")[0];
 
 </script>
 
-
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.debug.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.swipe.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.carousel.js"></script> 
@@ -124,6 +122,7 @@ oldElem=document.getElementsByTagName("link")[0];
 		webRoot=AppMobi.webRoot+"kitchensink/";
 	    //hide splash screen
 	    AppMobi.device.hideSplashScreen();	
+	    $.ui.blockPageScroll(); //block the page from scrolling at the header/footer
 		
     };
     document.addEventListener("appMobi.device.ready",onDeviceReady,false);    
@@ -158,7 +157,6 @@ oldElem=document.getElementsByTagName("link")[0];
 
 <div id="content">
 	<div title='Welcome' id="main" class="panel" selected="true" data-load="loadedPanel" data-unload="unloadedPanel" data-tab="navbar_home">
-
 	<h2 class='expanded' onclick='showHide(this,"main_info");'>Welcome</h2>
 		<p id='main_info'>Welcome to the kitchen sink demo for jqMobi.  Here you will find samples of how to use the jqMobi libraries.  Please select an option from below.</p>
 		<ul>
@@ -171,7 +169,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	<!---------------------------------------------->
 	
 	<div title="jqMobi" id="jqm" class="panel" data-nav="menu_jqmobi" data-header="testheader">
-        <header><span>This is an inline header in a panel.  Below is an inline footer</span></header>
+       <!-- <header><span>This is an inline header in a panel.  Below is an inline footer</span></header>-->
 		<h2 class='expanded' onclick='showHide(this,"jqmobi_info");'>jqMobi</h2>
 		<p id='jqmobi_info'>jqMobi is a blazingly fast query selector tool that is optmimized for HTML5 browsers.</p>
 
@@ -1084,7 +1082,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	<div title="Modal" id="transition7" class="panel splashscreen" data-modal="true" data-footer='footerui' >I'm a modal window...woot woot
 	<br><br><br>
 	Check the input box out below.  <br>
-	<input type="text" class="jq-ui-forms">
+	<input type="text" class="jq-ui-forms" id="modal_test">
 	</div>
 	<!-- ------------------------------------------ -->
 
@@ -1110,24 +1108,40 @@ oldElem=document.getElementsByTagName("link")[0];
 	</div>
 
 	<!-- jqPlugins > jQ.scroller -->
-	<div title="Scroller" class="panel" id="webslider" style="overflow:hidden;">
+	<div title="Scroller" class="panel" id="webslider" style="overflow:hidden;" scrolling="no">
 	<script>
 		var init_scroller = function () {
-		   $("#scroller").scroller({
-			    refresh:true,
+		   var myScroller=$("#scroller").scroller({
+		   		refreshContent:"I will change",
 				scrollBars: true,
 				verticalScroll: true,
 				horizontalScroll: false,
 				vScrollCSS: "jqmScrollbar",
 				hScrollCSS: "jqmScrollbar"
-			}).enable();
+			});
+		   myScroller.enable();
+		   myScroller.addPullToRefresh();
+		   $.bind(myScroller,"refresh-tigger",function(){
+				this.setRefreshContent("New content");
+		   })
+		   $.bind(myScroller,"refresh-release",function(){
+		   		var that=this;
+		   		this.setRefreshContent("New content...");
+				setTimeout(function(){
+					that.hideRefresh();
+				},5000);
+		   		return false; //tells it to not auto-cancel the refresh
+		   });
+		    $.bind(myScroller,"refresh-cancel",function(){
+		    	console.log("cancelled");
+		    });
 		};
 		window.addEventListener("load", init_scroller, false);
 	</script>
 	<div id="outercontent"
-			style="height: 95%; width:95%; overflow: hidden; position: relative">
+			style="height: 95%; width:95%; position: relative">
 			
-			<div id="scroller" style="overflow: auto;"><div>Lorem ipsum dolor sit amet, consectetur
+			<div id="scroller"><div>Lorem ipsum dolor sit amet, consectetur
 				adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui
 				sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue
 				sed convallis elementum, magna diam pharetra magna, id vestibulum est

@@ -386,7 +386,11 @@
 		//initialize and js/native mode selector
         var scroller = function(elID, opts) {
             
-			if(!boundTouchLayer && $.touchLayer && $.isObject($.touchLayer)) bindTouchLayer();
+
+			if(!boundTouchLayer && $.touchLayer && $.isObject($.touchLayer)) 
+				bindTouchLayer()
+			else
+				$.touchLayer={};
 			
             if (typeof elID == "string" || elID instanceof String) {
                 var el = document.getElementById(elID);
@@ -606,6 +610,12 @@
 			//this.refresh=true;
 
 			this.container = this.el;
+			//Check if parent is also set to overflow:hidden and enable it - make backwards compatible with old JS style
+			var $el=$(el);
+			
+			$el.parent().css("overflow","auto");
+			$el.css("-webkit-overflow-scrolling","touch");
+
 			this.addPullToRefresh(null, true);
 			if(this.autoEnable) this.enable();
 		}
