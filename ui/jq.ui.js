@@ -4539,23 +4539,25 @@ if (!HTMLElement.prototype.unwatch) {
     //lookup for a clicked anchor recursively and fire UI own actions when applicable 
     var checkAnchorClick = function(e, theTarget) {
 
+			
             if(theTarget.isSameNode(jQUi)) {
                 return;
             }
-
-            //this technique fails when considerable content exists inside anchor, should be recursive ?
+			
+			//this technique fails when considerable content exists inside anchor, should be recursive ?
             if(theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode) return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
             //anchors
             if(theTarget.tagName !== "undefined" && theTarget.tagName.toLowerCase() == "a") {
 
-                var custom = (typeof jq.ui.customClickHandler == "function") ? jq.ui.customClickHandler : false;
-                if(custom !== false && jq.ui.customClickHandler(theTarget)) {
-                    return true;
-                }
-
-                if(theTarget.href.toLowerCase().indexOf("javascript:") !== -1 || theTarget.getAttribute("data-ignore")) {
-                    return;
-                }
+            var custom=(typeof jq.ui.customClickHandler=="function")?jq.ui.customClickHandler:false;
+            if(custom!==false){
+                e.preventDefault();
+                jq.ui.customClickHandler(theTarget);
+                return;
+            }
+            if(theTarget.href.toLowerCase().indexOf("javascript:") !== -1 || theTarget.getAttribute("data-ignore")) {
+                return;
+            }
 
 
 
