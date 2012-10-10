@@ -4478,8 +4478,10 @@ if (!HTMLElement.prototype.unwatch) {
 		if (theTarget.tagName!=="undefined"&&theTarget.tagName.toLowerCase() == "a") {
 
             var custom=(typeof jq.ui.customClickHandler=="function")?jq.ui.customClickHandler:false;
-            if(custom!==false&&jq.ui.customClickHandler(theTarget)){
-               return true;
+            if(custom!==false){
+                e.preventDefault();
+                jq.ui.customClickHandler($(theTarget).attr("href"));
+                return;
             }
 
             if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1||theTarget.getAttribute("data-ignore")) {
