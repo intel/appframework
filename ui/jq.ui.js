@@ -2391,13 +2391,13 @@ if (!HTMLElement.prototype.unwatch) {
 				$.asap(that.testAndFixUI, that, arguments);
 			};
 			//iPhone double clicks workaround
-			this.unblockCaptureClickProxy_ = function() {
-				that.blockCaptureClick_ = false;
-			}
 			document.addEventListener('click', function(e) {
-				if(that.blockCaptureClick_) {
-					e.preventDefault();
-					e.stopPropagation();
+				if(e.clientX!==undefined&&that.lastTouchStartX!=null)
+				{
+					if(2>Math.abs(that.lastTouchStartX-e.clientX)&&2>Math.abs(that.lastTouchStartY-e.clientY)){
+						e.preventDefault();
+						e.stopPropagation();
+					}
 				}
 			}, true);
 			//js scrollers self binding
@@ -2416,6 +2416,8 @@ if (!HTMLElement.prototype.unwatch) {
 		dY: 0,
 		cX: 0,
 		cY: 0,
+		touchStartX:null,
+		touchStartY:null,
 		//elements
 		layer: null,
 		scrollingEl_: null,
@@ -2428,7 +2430,6 @@ if (!HTMLElement.prototype.unwatch) {
 		launchFixUIProxy_: null,
 		reHideAddressBarTimeout_: null,
 		retestAndFixUIProxy_: null,
-		unblockCaptureClickProxy_: null,
 		//options
 		panElementId: "header",
 		//public locks
@@ -2437,7 +2438,6 @@ if (!HTMLElement.prototype.unwatch) {
 		allowDocumentScroll_: false,
 		ignoreNextResize_: false,
 		blockPossibleClick_: false,
-		blockCaptureClick_: false,
 		//status vars
 		isScrolling: false,
 		isScrollingVertical_: false,
@@ -2674,7 +2674,7 @@ if (!HTMLElement.prototype.unwatch) {
 			this.dX = e.touches[0].pageX;
 			this.dY = e.touches[0].pageY;
 			this.lastTimestamp = e.timeStamp;
-
+			this.lastTouchStartX=this.lastTouchStartY=null;
 
 
 			//check dom if necessary
@@ -2889,8 +2889,8 @@ if (!HTMLElement.prototype.unwatch) {
 					if(theTarget.nodeType == 3) theTarget = theTarget.parentNode;
 
 					this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
-					this.blockCaptureClick_ = true;
-					$.asap(this.unblockCaptureClickProxy_);
+					this.lastTouchStartX=this.dX;
+					this.lastTouchStartY=this.dY;
 				}
 
 			} else if(itMoved) {
@@ -3012,6 +3012,8 @@ if (!HTMLElement.prototype.unwatch) {
             //click back event
             window.addEventListener("popstate", function() {
                 var id = $.ui.getPanelId(document.location.hash);
+                //make sure we allow hash changes outside jqUi
+                if(!$.ui.historyCache[id.replace("#","")]) return;
                 if(id != "#" + $.ui.activeDiv.id) that.goBack();
             }, false);
 
@@ -3039,6 +3041,7 @@ if (!HTMLElement.prototype.unwatch) {
         backButton: "",
         remotePages: {},
         history: [],
+        historyCache: {},
         homeDiv: "",
         screenWidth: "",
         content: "",
@@ -3286,6 +3289,7 @@ if (!HTMLElement.prototype.unwatch) {
                     newUrl: startPath + '#' + newPage + hashExtras,
                     oldURL: startPath + previousPage
                 });
+                this.historyCache[newPage]=1;
             } catch(e) {}
         },
 

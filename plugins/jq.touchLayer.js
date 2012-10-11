@@ -60,13 +60,13 @@
 				$.asap(that.testAndFixUI, that, arguments);
 			};
 			//iPhone double clicks workaround
-			this.unblockCaptureClickProxy_ = function() {
-				that.blockCaptureClick_ = false;
-			}
 			document.addEventListener('click', function(e) {
-				if(that.blockCaptureClick_) {
-					e.preventDefault();
-					e.stopPropagation();
+				if(e.clientX!==undefined&&that.lastTouchStartX!=null)
+				{
+					if(2>Math.abs(that.lastTouchStartX-e.clientX)&&2>Math.abs(that.lastTouchStartY-e.clientY)){
+						e.preventDefault();
+						e.stopPropagation();
+					}
 				}
 			}, true);
 			//js scrollers self binding
@@ -85,6 +85,8 @@
 		dY: 0,
 		cX: 0,
 		cY: 0,
+		touchStartX:null,
+		touchStartY:null,
 		//elements
 		layer: null,
 		scrollingEl_: null,
@@ -97,7 +99,6 @@
 		launchFixUIProxy_: null,
 		reHideAddressBarTimeout_: null,
 		retestAndFixUIProxy_: null,
-		unblockCaptureClickProxy_: null,
 		//options
 		panElementId: "header",
 		//public locks
@@ -106,7 +107,6 @@
 		allowDocumentScroll_: false,
 		ignoreNextResize_: false,
 		blockPossibleClick_: false,
-		blockCaptureClick_: false,
 		//status vars
 		isScrolling: false,
 		isScrollingVertical_: false,
@@ -343,7 +343,7 @@
 			this.dX = e.touches[0].pageX;
 			this.dY = e.touches[0].pageY;
 			this.lastTimestamp = e.timeStamp;
-
+			this.lastTouchStartX=this.lastTouchStartY=null;
 
 
 			//check dom if necessary
@@ -558,8 +558,8 @@
 					if(theTarget.nodeType == 3) theTarget = theTarget.parentNode;
 
 					this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
-					this.blockCaptureClick_ = true;
-					$.asap(this.unblockCaptureClickProxy_);
+					this.lastTouchStartX=this.dX;
+					this.lastTouchStartY=this.dY;
 				}
 
 			} else if(itMoved) {
