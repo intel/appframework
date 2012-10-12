@@ -4342,7 +4342,8 @@ if (!HTMLElement.prototype.unwatch) {
             this.scrollingDivs['modal_container'] = jq("#modalContainer").scroller({
                 scrollBars: true,
                 vertical: true,
-                vScrollCSS: "jqmScrollbar"
+                vScrollCSS: "jqmScrollbar",
+                noParent:true,
             });
 
             this.modalWindow = modalDiv;
