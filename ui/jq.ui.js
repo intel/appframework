@@ -2967,6 +2967,7 @@ if (!HTMLElement.prototype.unwatch) {
  */
 (function($) {
 
+
     var hasLaunched = false;
     var startPath = window.location.pathname;
     var defaultHash = window.location.hash;
