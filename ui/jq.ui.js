@@ -4160,7 +4160,7 @@ if (!HTMLElement.prototype.unwatch) {
                     if($am(urlHash) !== undefined) {
                         that.updateContentDiv(urlHash, xmlhttp.responseText);
                         $am(urlHash).title = anchor.title ? anchor.title : target;
-                    } else if(anchor.getAttribute("data-persist-ajax")) {
+                    } else if(anchor.getAttribute("data-persist-ajax")||that.isAjaxApp) {
 
                         var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
                         refreshFunction = refresh ?
