@@ -3990,10 +3990,14 @@ if (!HTMLElement.prototype.unwatch) {
             var that = this;
             that.hideMask();
             var loadAjax = true;
+
             if(target.indexOf("#") == -1) {
                 var urlHash = "url" + crc32(target); //Ajax urls
                 var crcCheck = jq("div.panel[data-crc='" + urlHash + "']");
-                if(crcCheck.length > 0) {
+                if($am(target)){
+                    loadAjax=false;
+                }
+                else if(crcCheck.length > 0) {
                     if(crcCheck.length > 0) target = "#" + crcCheck.get(0).id
                 } else if($am(urlHash)) {
 
