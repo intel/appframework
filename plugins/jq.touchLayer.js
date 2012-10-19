@@ -42,6 +42,7 @@
 			el.addEventListener('touchmove', this, false);
 			el.addEventListener('touchend', this, false);
 			el.addEventListener('click', this, false);
+			el.addEventListener("focusin",this,false);
 			document.addEventListener('scroll', this, false);
 			window.addEventListener("resize", this, false);
 			window.addEventListener("orientationchange", this, false);
@@ -143,6 +144,9 @@
 			case 'resize':
 				this.onResize(e);
 				break;
+			case 'focusin':
+				this.onFocusIn(e);
+				break;
 			}
 		},
 		launchFixUI: function(maxTries) {
@@ -230,7 +234,6 @@
 
 			//this.log("click on "+tag);
 			if(inputElements.indexOf(tag) !== -1 && (!this.isFocused_ || !e.target.isSameNode(this.focusedElement))) {
-
 				var type = e.target && e.target.type != undefined ? e.target.type.toLowerCase() : '';
 				var autoBlur = autoBlurInputTypes.indexOf(type) !== -1;
 
@@ -296,9 +299,12 @@
 				this.reshapeTimeout_ = null;
 			} else this.previewReshapeEvent();
 		},
+		onFocusIn:function(e){
+			if(!this.isFocused_)
+				this.onClick(e);
+		},
 		onBlur: function(e) {
 			if(jq.os.android && e.target == window) return; //ignore window blurs
-			if(jq.os.ios) return;
 			this.isFocused_ = false;
 			//just in case...
 			if(this.focusedElement) this.focusedElement.removeEventListener('blur', this, false);
