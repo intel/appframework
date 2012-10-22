@@ -2636,7 +2636,6 @@ if (!HTMLElement.prototype.unwatch) {
 		},
 		onBlur: function(e) {
 			if(jq.os.android && e.target == window) return; //ignore window blurs
-			var that=this;
 			this.isFocused_ = false;
 			//just in case...
 			if(this.focusedElement) this.focusedElement.removeEventListener('blur', this, false);
@@ -4087,15 +4086,16 @@ if (!HTMLElement.prototype.unwatch) {
             this.doingTransition = true;
             this.runTransition(transition, oldDiv, currWhat, back);
 
-
-
-            if(this.scrollingDivs[oldDiv.id]) {
-                this.scrollingDivs[oldDiv.id].disable();
-            }
             //Let's check if it has a function to run to update the data
             this.parsePanelFunctions(what, oldDiv);
             //Need to call after parsePanelFunctions, since new headers can override
             this.loadContentData(what, newTab, back, transition);
+            var that=this;
+             setTimeout(function(){
+                if(that.scrollingDivs[oldDiv.id]) {
+                    that.scrollingDivs[oldDiv.id].disable();
+                }
+            },200);
 
         },
         /**
@@ -4355,7 +4355,7 @@ if (!HTMLElement.prototype.unwatch) {
                 scrollBars: true,
                 vertical: true,
                 vScrollCSS: "jqmScrollbar",
-                noParent:true,
+                noParent:true
             });
 
             this.modalWindow = modalDiv;

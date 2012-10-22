@@ -1119,15 +1119,16 @@
             this.doingTransition = true;
             this.runTransition(transition, oldDiv, currWhat, back);
 
-
-
-            if(this.scrollingDivs[oldDiv.id]) {
-                this.scrollingDivs[oldDiv.id].disable();
-            }
             //Let's check if it has a function to run to update the data
             this.parsePanelFunctions(what, oldDiv);
             //Need to call after parsePanelFunctions, since new headers can override
             this.loadContentData(what, newTab, back, transition);
+            var that=this;
+             setTimeout(function(){
+                if(that.scrollingDivs[oldDiv.id]) {
+                    that.scrollingDivs[oldDiv.id].disable();
+                }
+            },200);
 
         },
         /**
@@ -1387,7 +1388,7 @@
                 scrollBars: true,
                 vertical: true,
                 vScrollCSS: "jqmScrollbar",
-                noParent:true,
+                noParent:true
             });
 
             this.modalWindow = modalDiv;
