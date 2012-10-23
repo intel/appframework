@@ -3671,7 +3671,7 @@ if (!HTMLElement.prototype.unwatch) {
 
                     button = null;
                     content = null;
-                    this.scrollingDivs['modal_container'].enable();
+                    this.scrollingDivs['modal_container'].enable(!that.resetScrollers);
                     this.scrollToTop('modal');
                 }
             } catch(e) {
@@ -4138,7 +4138,7 @@ if (!HTMLElement.prototype.unwatch) {
             } else if(this.showBackbutton) this.setBackButtonVisibility(true);
             this.activeDiv = what;
             if(this.scrollingDivs[this.activeDiv.id]) {
-                this.scrollingDivs[this.activeDiv.id].enable();
+                this.scrollingDivs[this.activeDiv.id].enable(!this.resetScrollers);
             }
         },
         /**
