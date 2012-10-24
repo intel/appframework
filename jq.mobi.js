@@ -415,7 +415,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             
             ready: function(callback) {
-                if (document.readyState === "complete" || document.readyState === "loaded")
+                if (document.readyState === "complete" || document.readyState === "loaded"|| document.readyState === "interactive")
                     callback();
                 document.addEventListener("DOMContentLoaded", callback, false);
                 return this;
