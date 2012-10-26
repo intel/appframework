@@ -1235,6 +1235,7 @@
             ajaxUrl = target;
             var newtarget = this.useAjaxCacheBuster ? target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000 : target;
             xmlhttp.open("GET", newtarget, true);
+            xmlhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xmlhttp.send();
             // show Ajax Mask
             if(this.showLoading) this.showMask();
