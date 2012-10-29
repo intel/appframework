@@ -25,11 +25,8 @@
     };
     
     var carousel = (function() {
-        if (!window.WebKitCSSMatrix) {
-            return;
-        }
-        var translateOpen = 'm11' in new WebKitCSSMatrix() ? "3d(" : "(";
-        var translateClose = 'm11' in new WebKitCSSMatrix() ? ",0)" : ")";
+        var translateOpen =$.feat.cssTransformStart;
+        var translateClose = $.feat.cssTransformEnd;
         
         var carousel = function(containerEl, opts) {
             if (typeof containerEl === "string" || containerEl instanceof String) {
@@ -66,9 +63,6 @@
 
                 // initial setup
                 this.container.style.overflow = "hidden";
-                this.container.style['-webkit-box-orient'] = "vertical";
-                this.container.style['display'] = "-webkit-box";
-                this.container.style['-webkit-box-orient'] = "vertical";
                 if (this.vertical) {
                     this.horizontal = false;
                 }
@@ -87,8 +81,8 @@
                     $el.append(myEl.get());
                 }
                 if (this.horizontal) {
-                    el.style.display = "-webkit-box";
-                    el.style['-webkit-box-flex'] = 1;
+                    el.style.display = "block";
+                    el.style.float="left";
                 } 
                 else {
                     el.style.display = "block";
@@ -130,8 +124,8 @@
                 this.myDivWidth = numOnly(this.container.clientWidth);
                 this.myDivHeight = numOnly(this.container.clientHeight);
                 this.lockMove=false;
-                if (event.touches[0].target && event.touches[0].target.type !== undefined) {
-                    var tagname = event.touches[0].target.tagName.toLowerCase();
+                if (e.touches[0].target && e.touches[0].target.type !== undefined) {
+                    var tagname = e.touches[0].target.tagName.toLowerCase();
                     if (tagname === "select" || tagname === "input" || tagname === "button")  // stuff we need to allow
                     {
                         return;
@@ -142,15 +136,17 @@
                     this.movingElement = true;
                     this.startY = e.touches[0].pageY;
                     this.startX = e.touches[0].pageX;
+                    var cssMatrix=$.getCssMatrix(this.el);
+
                     if (this.vertical) {
                         try {
-                            this.cssMoveStart = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el, null).webkitTransform).f);
+                            this.cssMoveStart = numOnly(cssMatrix.f);
                         } catch (ex1) {
                             this.cssMoveStart = 0;
                         }
                     } else {
                         try {
-                            this.cssMoveStart = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el, null).webkitTransform).e);
+                            this.cssMoveStart = numOnly(cssMatrix.e);
                         } catch (ex1) {
                             this.cssMoveStart = 0;
                         }
@@ -172,8 +168,10 @@
                 if (this.vertical) {
                     var movePos = { x: 0, y: 0 };
                     this.dy = e.touches[0].pageY - this.startY;
+                    
                     this.dy += this.cssMoveStart;
                     movePos.y = this.dy;
+
                     e.preventDefault();
                     //e.stopPropagation();
                 } else {
@@ -202,7 +200,8 @@
                 // e.stopPropagation();
                 var runFinal = false;
                 try {
-                    var endPos = this.vertical ? numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el, null).webkitTransform).f) : numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el, null).webkitTransform).e);
+                    var cssMatrix=$.getCssMatrix(this.el);
+                    var endPos = this.vertical ? numOnly(cssMatrix.f) : numOnly(cssMatrix.e);
                     if (endPos > 0) {
                         this.moveCSS3(this.el, {
                             x: 0,
@@ -305,12 +304,11 @@
                     time = parseInt(time);
                 if (!timingFunction)
                     timingFunction = "linear";
-                
-                el.style.webkitTransform = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
-                el.style.webkitTransitionDuration = time + "ms";
-                el.style.webkitBackfaceVisiblity = "hidden";
-                el.style.webkitTransformStyle = "preserve-3d";
-                el.style.webkitTransitionTimingFunction = timingFunction;
+                el.style[$.feat.cssPrefix+"Transform"] = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
+                el.style[$.feat.cssPrefix+"TransitionDuration"] = time + "ms";
+                el.style[$.feat.cssPrefix+"BackfaceVisibility"] = "hidden";
+                el.style[$.feat.cssPrefix+"TransformStyle"] = "preserve-3d";
+                el.style[$.feat.cssPrefix+"TransitionTimingFunction"] = timingFunction;
             },
             
             addItem: function(el) {
@@ -341,6 +339,7 @@
                     if (this.horizontal) {
                         elems[i].style.width = widthParam;
                         elems[i].style.height = "100%";
+                        elems[i].style.float="left";
                     } 
                     else {
                         elems[i].style.height = widthParam;

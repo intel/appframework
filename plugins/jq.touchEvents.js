@@ -24,11 +24,13 @@
     }
     $(document).ready(function() {
         $(document.body).bind('touchstart', function(e) {
+            if(!e.touches||e.touches.length==0) return;
             var now = Date.now(), delta = now - (touch.last || now);
+            if(!e.touches||e.touches.length==0) return;
             touch.el = $(parentIfText(e.touches[0].target));
             touchTimeout && clearTimeout(touchTimeout);
-            touch.x1 = e.touches[0].pageX;
-            touch.y1 = e.touches[0].pageY;
+            touch.x1 = touch.x2= e.touches[0].pageX;
+            touch.y1 = touch.y2=e.touches[0].pageY;
             if (delta > 0 && delta <= 250)
                 touch.isDoubleTap = true;
             touch.last = now;

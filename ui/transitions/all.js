@@ -228,7 +228,7 @@
          * @title $ui.slideTransition(previousPanel,currentPanel,goBack);
          */
         function slideTransition(oldDiv, currDiv, back) {
-          	 oldDiv.style.display = "block";
+          	oldDiv.style.display = "block";
             currDiv.style.display = "block";
             var that = this;
             if (back) {

@@ -10,9 +10,9 @@
         return this.length == 1 ? tmp : this;
     };
     var drawer = (function () {
-        if (!window.WebKitCSSMatrix) return;
-        var translateOpen = 'm11' in new WebKitCSSMatrix() ? "3d(" : "(";
-        var translateClose = 'm11' in new WebKitCSSMatrix() ? ",0)" : ")";
+        
+        var translateOpen =$.feat.cssTransformStart;
+        var translateClose = $.feat.cssTransformEnd;
         var touchStarted = false;
 
         var drawer = function (elID, opts) {
@@ -89,7 +89,7 @@
                             var newTop = this.startTop + deltaY;
                             var top = -newTop;
                             try {
-                                var prevTop = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform).f);
+                                var prevTop = numOnly($.getCssMatrix(this.el).f);
                             } catch (prevTopE) {
                                 var prevTop = 0;
                             }
@@ -104,7 +104,7 @@
                             var newLeft = this.startLeft + deltaX;
                             var left = -newLeft;
                             try {
-                                var prevLeft = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform).e);
+                                var prevLeft = numOnly($.getCssMatrix(this.el).e);
                             } catch (prevTopE) {
                                 var prevLeft = 0;
                             }
@@ -142,8 +142,8 @@
                     if (this.direction=="left") this.maxLeft*=-1;
                     if (event.touches.length == 1 && this.boolScrollLock == false) {
                         try {
-                            this.startTop = numOnly(new WebKitCSSMatrix(window.getComputedStyle(eleScrolling).webkitTransform).f);
-                            this.startLeft = numOnly(new WebKitCSSMatrix(window.getComputedStyle(eleScrolling).webkitTransform).e);
+                            this.startTop = numOnly($.getCssMatrix(this.el).f);
+                            this.startLeft = numOnly($.getCssMatrix(this.el).e);
                         } catch (e) {
                             this.startTop = 0;
                             this.startLeft=0;
@@ -173,7 +173,7 @@
                     if(this.direction=="up"||this.direction=="down"){
                         var myDistance = -this.vdistanceMoved;
                         var percentMoved = Math.ceil(Math.abs(myDistance) / Math.abs(this.maxTop) * 100);
-                        var prevTop = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform).f);
+                        var prevTop = numOnly($.getCssMatrix(this.el).f);
                         if (percentMoved > 17) {
 
                             if (myDistance > 0) drawerPoints.y = this.maxTop;
@@ -187,7 +187,7 @@
                     else {
                         var myDistance = -this.hdistanceMoved;
                         var percentMoved = Math.ceil(Math.abs(myDistance) / Math.abs(this.maxLeft) * 100);
-                        var prevLeft = numOnly(new WebKitCSSMatrix(window.getComputedStyle(this.el).webkitTransform).e);
+                        var prevLeft = numOnly($.getCssMatrix(this.el).e);
                         if (percentMoved > 17) {
 
                             if (myDistance > 0) drawerPoints.x = this.maxLeft;
@@ -213,10 +213,11 @@
                 if (!time) time = 0;
                 if (!timingFunction) timingFunction = "linear";
 
-                el.style.webkitTransform = "translate" + translateOpen + distanceToMove.x+"px," + distanceToMove.y + "px" + translateClose;
-                el.style.webkitTransitionDuration = time + "ms";
-                el.style.webkitBackfaceVisiblity = "hidden";
-                el.style.webkitTransitionTimingFunction = timingFunction;
+                el.style[$.feat.cssPrefix+"Transform"] = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
+                el.style[$.feat.cssPrefix+"TransitionDuration"] = time + "ms";
+                el.style[$.feat.cssPrefix+"BackfaceVisibility"] = "hidden";
+                el.style[$.feat.cssPrefix+"TransformStyle"] = "preserve-3d";
+                el.style[$.feat.cssPrefix+"TransitionTimingFunction"] = timingFunction;
             }
         };
         return drawer;

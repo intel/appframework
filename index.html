@@ -12,13 +12,6 @@
 
 <link rel="stylesheet" type="text/css" href="kitchensink/jq.ui.css" title="default"/>
 
-<link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.carbon.css" title="carbon" disabled='true'/>
-<link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.eco.css" title="eco" disabled='true' />
-<link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.frosty.css" title="frosty" disabled='true'/>
-<link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.slate.css" title="slate" disabled='true'/>
-<link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.volcano.css" title="volcano" disabled='true' />
-
-
 <style>
 	.scrollBar{background:white;}
     h3 {text-align:center; font-size:35px;}
@@ -59,12 +52,15 @@ function loadedPanel(what){
 	function unloadedPanel(what){
 	console.log("unloaded "+what.id);
 	}
+
 if(!((window.DocumentTouch&&document instanceof DocumentTouch)||'ontouchstart' in window)){
-var script=document.createElement("script");
-script.src="plugins/jq.desktopBrowsers.js";
-var tag=$("head").append(script);
-$.os.android=true; //let's make it run like an android device
-$.os.desktop=true;
+	var script=document.createElement("script");
+	script.src="plugins/jq.desktopBrowsers.js";
+	var tag=$("head").append(script);
+	if(!$.os.ie){
+	//	$.os.desktop=true;
+	//	$.feat.nativeTouchScroll=true;
+	}
 }
 var oldElem="default";
 function setActiveStyleSheet(title) {
@@ -110,6 +106,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	var webRoot="./kitchensink/";
 	$.ui.autoLaunch=false;
     $.ui.openLinksNewTab=false;
+    $.ui.resetScrollers=false;
     var init = function(){
 	   $.ui.backButtonText="Back";  
 	   window.setTimeout(function(){$.ui.launch();},1500);
@@ -154,8 +151,7 @@ oldElem=document.getElementsByTagName("link")[0];
         <span class='ui-icon ui-icon-loading spin'></span><h1 >Starting app</h1>
     </div>
     <div id="header">
-        <img id='badgephone' onclick='jq.ui.toggleSideMenu()' align="right" src='kitchensink/images/badge.png' style='padding-top:10px'>
-        <img id='badgetablet' align="right" src='kitchensink/images/badge.png' style='padding-top:10px'>
+        <a id='menubadge' onclick='jq.ui.toggleSideMenu()' style='float:right;margin-top:4px' class='menuButton'></a>
     </div>
 
 <div id="content">
@@ -772,15 +768,15 @@ oldElem=document.getElementsByTagName("link")[0];
 				
 				<h4>Gender:</h4>
 				<br>
-				<p><input type="radio" value="male" id="male" name="gender" class="jq-ui-forms"/> <label for="male">Male</label></p>
-				<p><input type="radio" value="Female" id="female" name="gender" class="jq-ui-forms" /> <label for="female">Female</label></p>
+				<input type="radio" value="male" id="male" name="gender" class="jq-ui-forms"/> <label for="male">Male</label>
+				<input type="radio" value="Female" id="female" name="gender" class="jq-ui-forms" /> <label for="female">Female</label>
 				
 				<h4>Stuff you like:</h4>
 				<br>
-				<p><input type="checkbox" value="CSS3" id="css3" class="jq-ui-forms" /> <label for="css3">CSS3</label></p>
-				<p><input type="checkbox" value="HTML5" id="html5" class="jq-ui-forms" /> <label for="html5">HTML5</label></p>
-				<p><input type="checkbox" value="JavaScript" id="javascript" class="jq-ui-forms" /> <label for="javascript">JavaScript</label></p>
-				<p><input type="checkbox" value="Other" id="other" class="jq-ui-forms" /> <label for="other">Other</label></p>
+				<input type="checkbox" value="CSS3" id="css3" class="jq-ui-forms" /> <label for="css3">CSS3</label>
+				<input type="checkbox" value="HTML5" id="html5" class="jq-ui-forms" /> <label for="html5">HTML5</label>
+				<input type="checkbox" value="JavaScript" id="javascript" class="jq-ui-forms" /> <label for="javascript">JavaScript</label>
+				<input type="checkbox" value="Other" id="other" class="jq-ui-forms" /> <label for="other">Other</label>
 				
 			</fieldset>
 			
@@ -789,15 +785,15 @@ oldElem=document.getElementsByTagName("link")[0];
 				
 				<h4>Disabling and checking radio inputs:</h4>
 				<br>
-				<p><input type="radio" value="disabled" id="disabled" name="disabled" disabled class="jq-ui-forms"/> <label for="disabled">This is disabled</label></p>
-				<p><input type="radio" value="check" id="check" name="check" checked class="jq-ui-forms" /> <label for="check">This is checked</label></p>
+				<input type="radio" value="disabled" id="disabled" name="disabled" disabled class="jq-ui-forms"/> <label for="disabled">This is disabled</label>
+				<input type="radio" value="check" id="check" name="check" checked class="jq-ui-forms" /> <label for="check">This is checked</label>
 				
 				<h4>Disabling and checking checkbox inputs:</h4>
 				<br>
-				<p><input type="checkbox" value="disabled" id="disabled2" disabled class="jq-ui-forms"/> <label for="disabled2">This is disabled</label></p>
-				<p><input type="checkbox" value="check" id="check2" checked class="jq-ui-forms" /> <label for="check2">This is checked</label></p>
-				<p><input type="checkbox" value="Stop" id="disablecheck" disabled checked class="jq-ui-forms"/> <label for="disablecheck">This is checked and disabled</label></p>
-				<p><input type="checkbox" value="Other" id="other2" class="jq-ui-forms"/> <label for="other2">Other</label></p>
+				<input type="checkbox" value="disabled" id="disabled2" disabled class="jq-ui-forms"/> <label for="disabled2">This is disabled</label>
+				<input type="checkbox" value="check" id="check2" checked class="jq-ui-forms" /> <label for="check2">This is checked</label>
+				<input type="checkbox" value="Stop" id="disablecheck" disabled checked class="jq-ui-forms"/> <label for="disablecheck">This is checked and disabled</label>
+				<input type="checkbox" value="Other" id="other2" class="jq-ui-forms"/> <label for="other2">Other</label>
 				
 				
 				
@@ -807,16 +803,18 @@ oldElem=document.getElementsByTagName("link")[0];
 				<legend>Sliders</legend>
 				
 				<h4>Gender:</h4>
-				<p><input type="radio" value="maleslider" id="slidermale" name="gender" class="jq-ui-slider"/> <label  for="slidermale">Male</label></p>
-				<p><input type="radio" value="femaleslider" id="sliderfemale" name="gender" class="jq-ui-slider" /> <label for="sliderfemale">Female</label></p>
+				<br>
+				<input type="radio" value="maleslider" id="slidermale" name="gender" class="jq-ui-slider"/> <label  for="slidermale">Male</label>
+				<input type="radio" value="femaleslider" id="sliderfemale" name="gender" class="jq-ui-slider" /> <label for="sliderfemale">Female</label>
 				
 				<h4>Stuff you like:</h4>
-				<p><input type="checkbox" value="CSS3" id="css3slider" class="jq-ui-slider" /> <label for="css3slider">CSS3</label></p>
-				<p><input type="checkbox" value="HTML5" id="html5slider" class="jq-ui-slider"/> <label for="html5slider">HTML5</label></p>
-				<p><input type="checkbox" value="JavaScript" id="javascriptslider" class="jq-ui-slider"/> <label for="javascriptslider">JavaScript</label></p>
-				<p><input type="checkbox" value="Other" id="otherslider" class="jq-ui-slider"/> <label for="otherslider">Other</label></p>
-				<p><input type="checkbox" value="Other" id="otherd" class="jq-ui-slider" disabled /> <label for="otherd">Disabled</label></p>
-				<p><input type="checkbox" value="Other" id="otherdc" class="jq-ui-slider" disabled checked /> <label for="otherdc">Disabled</label></p>
+				<br>
+				<input type="checkbox" value="CSS3" id="css3slider" class="jq-ui-slider" /> <label for="css3slider">CSS3</label>
+				<input type="checkbox" value="HTML5" id="html5slider" class="jq-ui-slider"/> <label for="html5slider">HTML5</label>
+				<input type="checkbox" value="JavaScript" id="javascriptslider" class="jq-ui-slider"/> <label for="javascriptslider">JavaScript</label>
+				<input type="checkbox" value="Other" id="otherslider" class="jq-ui-slider"/> <label for="otherslider">Other</label>
+				<input type="checkbox" value="Other" id="otherd" class="jq-ui-slider" disabled /> <label for="otherd">Disabled</label>
+				<input type="checkbox" value="Other" id="otherdc" class="jq-ui-slider" disabled checked /> <label for="otherdc">Disabled</label>
 				
 			</fieldset>
             
@@ -2005,15 +2003,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	   <li> <a href="javascript:;" onclick="$.ui.toggleSideMenu()"  >Toggle Side</a></li>
 	   <li> <a href="javascript:;" onclick="$.ui.toggleNavMenu()"  >Toggle Footer</a></li>
 	  </ul>
-      <div class="title">Themes</div>
-      <ul>
-        <li><a href="javascript:;" onclick="setActiveStyleSheet('default')">Default</a></li>
-        <li><a href="javascript:;" onclick="setActiveStyleSheet('carbon')">Carbon</a></li>
-        <li><a href="javascript:;" onclick="setActiveStyleSheet('eco')">Eco</a></li>
-        <li><a href="javascript:;" onclick="setActiveStyleSheet('frosty')">Frosty</a></li>
-        <li><a href="javascript:;" onclick="setActiveStyleSheet('slate')">Slate</a></li>
-        <li><a href="javascript:;" onclick="setActiveStyleSheet('volcano')">Volcano</a></li>
-      </ul>
+	  
 </nav>
 <nav id="menu_jqmobi">
    <div class='title'>Selectors</div>
