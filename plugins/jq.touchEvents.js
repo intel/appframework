@@ -1,5 +1,6 @@
 //Touch events are from zepto/touch.js
 (function($) {
+    console.log("Wtf");
     var touch = {}, touchTimeout;
     
     function parentIfText(node) {
@@ -41,6 +42,7 @@
             touch.x2 = e.touches[0].pageX;
             touch.y2 = e.touches[0].pageY;
         }).bind('touchend', function(e) {
+
             if (!touch.el)
                 return;
             if (!touch.el.data("ignore-pressed"))
@@ -55,6 +57,7 @@
                 touch.x1 = touch.x2 = touch.y1 = touch.y2 = touch.last = 0;
             } else if ('last' in touch) {
                 touch.el.trigger('tap');
+
                 
                 touchTimeout = setTimeout(function() {
                     touchTimeout = null;

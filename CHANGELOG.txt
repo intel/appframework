@@ -4,6 +4,7 @@ There are CSS file fixes from the 1.11 release to support Win8.  If you do not w
 
 Known Issues
   - SVG icon/font pack is not working
+  - IE10 dispatches all events at the document level randomly.  Anything registerd via document.addEventListener gets called
 
 Enhancements
 

@@ -100,6 +100,7 @@
 
 	    document.addEventListener("MSPointerMove", function(e) 
 	    {
+
 	        if (!mouseDown) return;
 	        if(firstMove) return firstMove=false
 	        redirectMouseToTouch("touchmove", e);
