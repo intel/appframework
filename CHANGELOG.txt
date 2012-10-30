@@ -1,12 +1,17 @@
 1.2 
 
-There are CSS file fixes from the 1.11 release to support Win8.  If you do not want to support Win8, old CSS files will work fine.
+There are CSS file fixes from the 1.11 release to support Win8.  If you do not want to support Win8, old CSS files will work fine.  
+
+Known Issues
+  - SVG icon/font pack is not working
 
 Enhancements
 
 jq.mobi.js
 
 $.os.ie - detect WP8
+
+$().vendorCss() - Get/Set CSS properties with vendor specific prefixes.
 
 $.feat.cssPrefix - cross browser vendor prefix ("Webkit","Moz","O","MS","") - use for css3
 
@@ -23,9 +28,6 @@ added _shimNodes - performance improvements to query selector.  instead of calli
 
 
 "-webkit-" specific styles have been removed.  All style references in javascript use $.feat.cssPrefix now.
-
-
-jq-ui-forms no longer uses an image for checkboxes or radio buttons
 
 Fixes
 

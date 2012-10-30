@@ -527,6 +527,22 @@ if (!window.jq || typeof (jq) !== "function") {
                 return this;
             },
             /**
+             * Gets or sets css vendor specific css properties
+            * If used as a get, the first elements css property is returned
+                ```
+                $().css("background"); // Gets the first elements background
+                $().css("background","red")  //Sets the elements background to red
+                ```
+
+            * @param {String} attribute to get
+            * @param {String} value to set as
+            * @return {Object} a jqMobi object
+            * @title $().css(attribute,[value])
+            */
+            vendorCss:function(attribute,value,obj){
+                return this.css($.feat.cssPrefix+attribute,value,obj);
+            },
+            /**
             * Sets the innerHTML of all elements to an empty string
                 ```
                 $().empty();
