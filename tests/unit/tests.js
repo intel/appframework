@@ -60,27 +60,27 @@ test("selector",function(){
    equals(elem.id,"foobar","Test creating element");
    
    var text='<div id="parent_test_cont">'+
-	   '<div class="parent1" id="parent1">'+
-		  '<span class="parsel">Foo</span>'+
-		  '<span class="parsel">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent2">'+
-		  '<span class="parsel">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent3">'+
-		  '<p class="parsel">Foo</p>'+
-		'</div>'+
-		'<span class="parent1" id="parent3">'+
-		  '<p class="parsel">Foo</p>'+
-		'</span>'+
-	'</div>';
-	$("#foo").append(text);
-	 var tmp = $('#parent_test_cont');
-	 
+     '<div class="parent1" id="parent1">'+
+      '<span class="parsel">Foo</span>'+
+      '<span class="parsel">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent2">'+
+      '<span class="parsel">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent3">'+
+      '<p class="parsel">Foo</p>'+
+    '</div>'+
+    '<span class="parent1" id="parent3">'+
+      '<p class="parsel">Foo</p>'+
+    '</span>'+
+  '</div>';
+  $("#foo").append(text);
+   var tmp = $('#parent_test_cont');
+   
      equals($('span', tmp).length,4,"Test passing in a context of existing objects");
 
      equals($(" <div /> ").length,1,"Test removing spaces in query selector when constructing HTML");   
-	QUnit.reset();
+  QUnit.reset();
     
     
 
@@ -100,56 +100,56 @@ test("map",function(){
 });
 
 test("html", function() {
-	expect(2);
+  expect(2);
 
-	var test="This is a test";
-	
-	$("#foo").html(test);
-	equals(document.getElementById("foo").innerHTML,test,"Test setting html");
+  var test="This is a test";
+  
+  $("#foo").html(test);
+  equals(document.getElementById("foo").innerHTML,test,"Test setting html");
     QUnit.reset();
-	document.getElementById("foo").innerHTML=test;
-	equals($("#foo").html(),test,"Test getting html");
-	QUnit.reset();
+  document.getElementById("foo").innerHTML=test;
+  equals($("#foo").html(),test,"Test getting html");
+  QUnit.reset();
 });
 
 test("text", function() {
-	expect(2);
+  expect(2);
 
-	var test="This is a test";
-	
-	$("#foo").text(test);
-	equals($("#foo").text(),test,"Test setting html");
+  var test="This is a test";
+  
+  $("#foo").text(test);
+  equals($("#foo").text(),test,"Test setting html");
     QUnit.reset();
-	document.getElementById("foo").innerText=test;
-	equals($("#foo").text(),test,"Test getting html");
-	QUnit.reset();
+  document.getElementById("foo").innerText=test;
+  equals($("#foo").text(),test,"Test getting html");
+  QUnit.reset();
 });
 
 
 test("css", function() {
-	expect(3);
+  expect(3);
 
-	QUnit.reset();
-	var defBackground="green";
-	equals($("#foo").css("background"),defBackground,"Test getting a css property");
+  QUnit.reset();
+  var defBackground="green";
+  equals($("#foo").css("background"),defBackground,"Test getting a css property");
     QUnit.reset();
-	$("#foo").css("background","red");
-	equals($("#foo").css("background"),"red","Test setting a css property");
+  $("#foo").css("background","red");
+  equals($("#foo").css("background"),"red","Test setting a css property");
     QUnit.reset();
-	
-	var atts={
-	background:"red",
-	color:"white",
-	display:"inline-block"
-	}
-	
-	passed=true;
-	$("#foo").css(atts).each(function(){
-	   if(this.style.background!="red"||this.style.color!="white"||this.style.display!="inline-block")
-	      passed=false;
-	});
-	equals(passed,true,"Testing setting multiple css properties");
-	QUnit.reset();
+  
+  var atts={
+  background:"red",
+  color:"white",
+  display:"inline-block"
+  }
+  
+  passed=true;
+  $("#foo").css(atts).each(function(){
+     if(this.style.background!="red"||this.style.color!="white"||this.style.display!="inline-block")
+        passed=false;
+  });
+  equals(passed,true,"Testing setting multiple css properties");
+  QUnit.reset();
 });
 
 test("empy",function(){
@@ -162,7 +162,7 @@ test("empy",function(){
    var passed=true;
    $(".foo").empty().each(function(){
       if(this.innerHTML!=""||this.innerHTML.length>0)
-	     passed=false;
+       passed=false;
     });
    
    equals(passed,true,"Testing emptying multiple elements");
@@ -179,14 +179,14 @@ test("hide",function(){
    var passed=true;
    $(".foo").hide().each(function(){
       if(this.style.display!="none"){
-	     passed=false;
+       passed=false;
       }
     });
    
    equals(passed,true,"Test hiding multiple elements");
    
    QUnit.reset();
-	
+  
    $("#foo").css("display","inline-block");
    $("#foo").hide();
    equals($("#foo").attr("jqmOldStyle"),"inline-block","Test that hide sets the old display in the jqmOldStyle attribute");
@@ -204,13 +204,13 @@ test("show",function(){
    $(".foo").css("display","block");
    $(".foo").show().each(function(){
       if(this.style.display!="block"){
-	     passed=false;
+       passed=false;
       }
     });
    
    equals(passed,true,"Test showing multiple elements");
    QUnit.reset();
-	
+  
    $("#foo").css("display","inline-block");
    $("#foo").hide();
    $("#foo").show();
@@ -221,44 +221,44 @@ test("show",function(){
 test("toggle",function(){
     expect(6);
 
-	var elem=$("#foo").get(0);
+  var elem=$("#foo").get(0);
 
-	elem.style.display="inline-block";
+  elem.style.display="inline-block";
 
-	$("#foo").toggle();
-	equals(elem.style.display,"none","Testing toggle hides an element");
-	$("#foo").toggle(true)
-	equals(elem.style.display,"inline-block","Testing toggle restores an element with the old display");
-	QUnit.reset();
-	
-	var elem=$("#foo").get(0);
-	$("#foo").hide();
-	$("#foo").toggle(false);
-	equals(elem.style.display,"none","Testing toggle with show set to false");
-	QUnit.reset();
-	var elem=$("#foo").get(0);
-	$("#foo").toggle(true);
-	equals(elem.style.display,"none","Testing toggle with show set to true");
-	QUnit.reset();
-	
-	var passed=true;
-	$(".foo").css("display","inline-block");
+  $("#foo").toggle();
+  equals(elem.style.display,"none","Testing toggle hides an element");
+  $("#foo").toggle(true)
+  equals(elem.style.display,"inline-block","Testing toggle restores an element with the old display");
+  QUnit.reset();
+  
+  var elem=$("#foo").get(0);
+  $("#foo").hide();
+  $("#foo").toggle(false);
+  equals(elem.style.display,"none","Testing toggle with show set to false");
+  QUnit.reset();
+  var elem=$("#foo").get(0);
+  $("#foo").toggle(true);
+  equals(elem.style.display,"none","Testing toggle with show set to true");
+  QUnit.reset();
+  
+  var passed=true;
+  $(".foo").css("display","inline-block");
     $(".foo").toggle().each(function(){
       if(this.style.display!="none"){
-	     passed=false;
+       passed=false;
       }
     });
-	equals(passed,true,"Testing toggle hides a group of elements");
-	passed=true;
-	$(".foo").toggle().each(function(){
+  equals(passed,true,"Testing toggle hides a group of elements");
+  passed=true;
+  $(".foo").toggle().each(function(){
       if(this.style.display!="inline-block"){
-	     passed=false;
+       passed=false;
       }
     });
-	equals(passed,true,"Testing toggle restores a group of elements with the old display");
-	QUnit.reset();
+  equals(passed,true,"Testing toggle restores a group of elements with the old display");
+  QUnit.reset();
 
-	
+  
 });
 
 test("val",function(){
@@ -290,10 +290,10 @@ test("attr",function(){
    
    var pass = true;
 
-	jq("div").attr({foo: "baz", zoo: "ping"}).each(function(){
-		if ( this.getAttribute("foo") != "baz" && this.getAttribute("zoo") != "ping" ) pass = false;
-	});
-	ok( pass, "Set Multiple Attributes" );
+  jq("div").attr({foo: "baz", zoo: "ping"}).each(function(){
+    if ( this.getAttribute("foo") != "baz" && this.getAttribute("zoo") != "ping" ) pass = false;
+  });
+  ok( pass, "Set Multiple Attributes" );
     QUnit.reset();
     
     var func=function(){return "bar";}
@@ -311,26 +311,26 @@ test("removeAttr",function(){
    expect(11);
    equal( jq("#foo").removeAttr( "class" ).attr("class"), undefined, "remove class" );
    QUnit.reset();
-	equal( jq("#foo").removeAttr("id").attr("id"), undefined, "Remove id" );
-	QUnit.reset();
-	
-	
-	var div = jq("<div id='a' alt='b' title='c' rel='d'></div>"),
-		tests = {
-			id: "a",
-			alt: "b",
-			title: "c",
-			rel: "d"
-		};
+  equal( jq("#foo").removeAttr("id").attr("id"), undefined, "Remove id" );
+  QUnit.reset();
+  
+  
+  var div = jq("<div id='a' alt='b' title='c' rel='d'></div>"),
+    tests = {
+      id: "a",
+      alt: "b",
+      title: "c",
+      rel: "d"
+    };
 
-	jq.each( tests, function( key, val ) {
-		equal( div.attr(key), val, "Attribute `" + key + "` exists, and has a value of `" + val + "`" );
-	});
+  jq.each( tests, function( key, val ) {
+    equal( div.attr(key), val, "Attribute `" + key + "` exists, and has a value of `" + val + "`" );
+  });
 
-	div.removeAttr("id   alt  title  rel");
-	jq.each( tests, function( key, val ) {
-		equal( div.attr(key), undefined, "Attribute `" + key + "` was removed" );
-	});
+  div.removeAttr("id   alt  title  rel");
+  jq.each( tests, function( key, val ) {
+    equal( div.attr(key), undefined, "Attribute `" + key + "` was removed" );
+  });
    QUnit.reset();
    var myArr=[1,2,3]
    $("#foo").attr("myArr",myArr);
@@ -407,12 +407,12 @@ test("remove",function(){
    QUnit.reset();
    $("div").remove(jq("#foo"));
    equals($("div").size(),3,"Removing an element with a selector");
-	QUnit.reset();
-	$("div").remove(document.getElementById("foo"))
-	equals($("div").size(),3,"Removing by an element");
-	QUnit.reset();
-	ok($("#fadfasfdnotfound").remove());
-	QUnit.reset();
+  QUnit.reset();
+  $("div").remove(document.getElementById("foo"))
+  equals($("div").size(),3,"Removing by an element");
+  QUnit.reset();
+  ok($("#fadfasfdnotfound").remove());
+  QUnit.reset();
 });
 
 test("addClass",function() {
@@ -432,16 +432,16 @@ test("addClass",function() {
    var found=true;
    $(".foo").each(function(){
       if(this.className!="foo bar")
-	     found=false;
-	});
-	ok(found,"Adding a class to multiple items");
-	QUnit.reset();
-	var elem=$("#foo").get();
+       found=false;
+  });
+  ok(found,"Adding a class to multiple items");
+  QUnit.reset();
+  var elem=$("#foo").get();
     elem.className="foo";
     $("#foo").addClass('foo');
     equals(elem.className,"foo","Add an already existing class");
     QUnit.reset();
-	
+  
 });
 
 test("hasClass",function(){
@@ -793,7 +793,7 @@ test("get",function(){
   equals($("#foo2").get(),document.getElementById("foo2"),"Checking no index");
   equals($("div").get(-2),elem,"Checking by negative index");
   equals($("div").get(5),undefined,"Checking outside the size");
-	QUnit.reset();
+  QUnit.reset();
 });
 
 test("offset",function(){
@@ -809,7 +809,7 @@ test("offset",function(){
    for(var j in resultcrds)
    {
       if(coords[j]!=resultcrds[j])
-	     passed=false;
+       passed=false;
    }
    ok(passed,"Testing getting offset coordinates");
    QUnit.reset();
@@ -818,227 +818,227 @@ test("offset",function(){
 test("parent",function(){
    expect(5);
    var text='<div id="parent_test_cont">'+
-	   '<div class="parent1" id="parent1">'+
-		  '<span class="parsel">Foo</span>'+
-		  '<span class="parsel">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent2">'+
-		  '<span class="parsel">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent3">'+
-		  '<p class="parsel">Foo</p>'+
-		'</div>'+
-		'<div class="parent1" id="parent3">'+
-		  '<p class="parsel">Foo</p>'+
-		'</div>'+
-	'</div>';
-	
-	//Test to get a single parent
-	
-	$("#foo").append(text);
+     '<div class="parent1" id="parent1">'+
+      '<span class="parsel">Foo</span>'+
+      '<span class="parsel">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent2">'+
+      '<span class="parsel">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent3">'+
+      '<p class="parsel">Foo</p>'+
+    '</div>'+
+    '<div class="parent1" id="parent3">'+
+      '<p class="parsel">Foo</p>'+
+    '</div>'+
+  '</div>';
+  
+  //Test to get a single parent
+  
+  $("#foo").append(text);
 
-	var elem1=$("#parent_test_cont").get();
-	equals(elem1,$("#parent1").parent().get(),"Test a single parent");
-	QUnit.reset();
-	
-	$("#foo").append(text);
-	var elem1=$("#parent_test_cont").get();
-	equals(elem1,$(".parent1").parent().get(),"Test a common parent from a collection");
-	QUnit.reset();
-	
-	$("#foo").append(text);
-	var knownparents=$(".parent1");
-	var parents=$(".parsel").parent();
-	var found=true;
-	parents.each(function(){
-	  if(knownparents.indexOf(this)<0)
-	     found=false
-	});
-	
-	ok(found,"Test getting unique parents with multiple children");
-	QUnit.reset();
-	$("#foo").append(text);
-	var elem=$("#parent1").get();
-	equals(elem,$(".parsel").parent("#parent1").get(),"Test filtering for parents");
-	
-	QUnit.reset();
-	$("#foo").append(text);
-	var elem=$("#parent1").get();
-	equals(elem,$(".parsel").parent($("#parent1")).get(),"Test filtering for parents off object");
-	
+  var elem1=$("#parent_test_cont").get();
+  equals(elem1,$("#parent1").parent().get(),"Test a single parent");
+  QUnit.reset();
+  
+  $("#foo").append(text);
+  var elem1=$("#parent_test_cont").get();
+  equals(elem1,$(".parent1").parent().get(),"Test a common parent from a collection");
+  QUnit.reset();
+  
+  $("#foo").append(text);
+  var knownparents=$(".parent1");
+  var parents=$(".parsel").parent();
+  var found=true;
+  parents.each(function(){
+    if(knownparents.indexOf(this)<0)
+       found=false
+  });
+  
+  ok(found,"Test getting unique parents with multiple children");
+  QUnit.reset();
+  $("#foo").append(text);
+  var elem=$("#parent1").get();
+  equals(elem,$(".parsel").parent("#parent1").get(),"Test filtering for parents");
+  
+  QUnit.reset();
+  $("#foo").append(text);
+  var elem=$("#parent1").get();
+  equals(elem,$(".parsel").parent($("#parent1")).get(),"Test filtering for parents off object");
+  
 });
 
 test("children",function(){
    expect(4);
    var text='<div id="parent_test_cont">'+
-	   '<div class="parent1" id="parent1">'+
-		  '<span class="parsel parent1">Foo</span>'+
-		  '<span id="spantest" class="parsel parent1 child1">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent2">'+
-		  '<span class="parsel" id="span1">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent3">'+
-		  '<p class="parsel">Foo</p>'+
-		'</div>'+
-		'<div class="parent1" id="parent3">'+
-		  '<p class="parsel child1">Foo</p>'+
-		'</div>'+
-	'</div>';
+     '<div class="parent1" id="parent1">'+
+      '<span class="parsel parent1">Foo</span>'+
+      '<span id="spantest" class="parsel parent1 child1">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent2">'+
+      '<span class="parsel" id="span1">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent3">'+
+      '<p class="parsel">Foo</p>'+
+    '</div>'+
+    '<div class="parent1" id="parent3">'+
+      '<p class="parsel child1">Foo</p>'+
+    '</div>'+
+  '</div>';
     
-	
-	QUnit.reset();
-	$("#foo").append(text);
-	var elem=$("#span1").get();
-	var child=$("#parent2").children();
-	ok(child.length==1&&child.get()==elem,"Testing getting a child");
-	
+  
+  QUnit.reset();
+  $("#foo").append(text);
+  var elem=$("#span1").get();
+  var child=$("#parent2").children();
+  ok(child.length==1&&child.get()==elem,"Testing getting a child");
+  
     QUnit.reset();
-	$("#foo").append(text);
-	var elem=$(".parent1");
-	var child=$("#parent1").children();
-	var passed=true;
-	child.each(function(){
-	   if(elem.indexOf(this)<0)
-	      passed=false;
-	});
-	ok(passed,"Test getting multiple children");
-	
-	QUnit.reset();
-	$("#foo").append(text);
-	var elem=$("#spantest").get();
-	var child=$("#parent1").children(".child1").get();
+  $("#foo").append(text);
+  var elem=$(".parent1");
+  var child=$("#parent1").children();
+  var passed=true;
+  child.each(function(){
+     if(elem.indexOf(this)<0)
+        passed=false;
+  });
+  ok(passed,"Test getting multiple children");
+  
+  QUnit.reset();
+  $("#foo").append(text);
+  var elem=$("#spantest").get();
+  var child=$("#parent1").children(".child1").get();
     equals(elem,child,"Test passing in a selector on children");
-	
-	QUnit.reset();
-	$("#foo").append(text);
-	var elem=$("#spantest").get();
-	var child=$("#parent1").children($(".child1")).get();
+  
+  QUnit.reset();
+  $("#foo").append(text);
+  var elem=$("#spantest").get();
+  var child=$("#parent1").children($(".child1")).get();
     equals(elem,child,"Test passing in an object on children");
-	
-	
-	
+  
+  
+  
 });
 
 test("siblings",function(){
    expect(5);
    var text='<div id="parent_test_cont">'+
-	   '<div class="parent1" id="parent1">'+
-		  '<span class="parsel parent1">Foo</span>'+
-		  '<span id="spantest" class="parsel parent1 child1">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent2">'+
-		  '<span class="parsel" id="span1">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent3">'+
-		  '<p class="parsel">Foo</p>'+
-		'</div>'+
-		'<div class="parent1 parent2" id="parent3">'+
-		  '<p class="parsel child1">Foo</p>'+
-		'</div>'+
-	'</div>';
+     '<div class="parent1" id="parent1">'+
+      '<span class="parsel parent1">Foo</span>'+
+      '<span id="spantest" class="parsel parent1 child1">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent2">'+
+      '<span class="parsel" id="span1">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent3">'+
+      '<p class="parsel">Foo</p>'+
+    '</div>'+
+    '<div class="parent1 parent2" id="parent3">'+
+      '<p class="parsel child1">Foo</p>'+
+    '</div>'+
+  '</div>';
 
-	QUnit.reset();
-	$("#foo").append(text);	
-	equals($("#span1").siblings().length,0,"Test element has no siblings");
-	
-	QUnit.reset();
-	$("#foo").append(text);	
-	equals($("#spantest").siblings().length,1,"Test element has one siblings");
-	
-	QUnit.reset();
-	$("#foo").append(text);	
-	equals($("#parent1").siblings().length,3,"Test element has multiple siblings");
-	
-	QUnit.reset();
-	$("#foo").append(text);	
-	equals($("#parent1").siblings(".parent2").get(),$(".parent2").get(),"Test filtering siblings");
-	
-	QUnit.reset();
-	$("#foo").append(text);	
-	equals($("#parent1").siblings($(".parent2")).get(),$(".parent2").get(),"Test filtering siblings by object");
+  QUnit.reset();
+  $("#foo").append(text); 
+  equals($("#span1").siblings().length,0,"Test element has no siblings");
+  
+  QUnit.reset();
+  $("#foo").append(text); 
+  equals($("#spantest").siblings().length,1,"Test element has one siblings");
+  
+  QUnit.reset();
+  $("#foo").append(text); 
+  equals($("#parent1").siblings().length,3,"Test element has multiple siblings");
+  
+  QUnit.reset();
+  $("#foo").append(text); 
+  equals($("#parent1").siblings(".parent2").get(),$(".parent2").get(),"Test filtering siblings");
+  
+  QUnit.reset();
+  $("#foo").append(text); 
+  equals($("#parent1").siblings($(".parent2")).get(),$(".parent2").get(),"Test filtering siblings by object");
 });
 
 test("closest",function(){
    expect(4);
   var text='<div id="parent_test_cont">'+
-	   '<div class="parent1" id="parent1">'+
-		  '<span class="parsel parent1">Foo</span>'+
-		  '<span id="spantest" class="parsel parent1 child1">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent2">'+
-		  '<span class="parsel" id="span1">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent3">'+
-		  '<p class="parsel">Foo</p>'+
-		'</div>'+
-		'<div class="parent1 parent2" id="parent3">'+
-		  '<p class="parsel child1">Foo</p>'+
-		'</div>'+
-		'<span >'+
-		  '<p id="ptest">Foo</p>'+
-		'</span>'+
-	'</div>';
+     '<div class="parent1" id="parent1">'+
+      '<span class="parsel parent1">Foo</span>'+
+      '<span id="spantest" class="parsel parent1 child1">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent2">'+
+      '<span class="parsel" id="span1">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent3">'+
+      '<p class="parsel">Foo</p>'+
+    '</div>'+
+    '<div class="parent1 parent2" id="parent3">'+
+      '<p class="parsel child1">Foo</p>'+
+    '</div>'+
+    '<span >'+
+      '<p id="ptest">Foo</p>'+
+    '</span>'+
+  '</div>';
 
-	QUnit.reset();
-	$("#foo").append(text);	
-	var elem=$("#parent1").get();
-	var tmp=$("#spantest").closest("div").get();
-	equals(elem,tmp,"Test getting closest element 1 level up");
-	
-	QUnit.reset();
-	$("#foo").append(text);	
-	var elem=$("#parent_test_cont").get();
-	var tmp=$("#ptest").closest("div").get();
-	equals(elem,tmp,"Test getting closest element 2 level up");
-	
-		
-	QUnit.reset();
-	$("#foo").append(text);	
-	var elem=$("#parent_test_cont").get();
-	var tmp=$("#ptest").closest("#parent_test_cont").get();
-	equals(elem,tmp,"Test passing going up two levels based off string selector");
-	
-		QUnit.reset();
-	$("#foo").append(text);	
-	var elem=$("#parent_test_cont").get();
-	var tmp=$("#ptest").closest(elem).get();
-	equals(elem,tmp,"Test passing going up two levels based off object");
+  QUnit.reset();
+  $("#foo").append(text); 
+  var elem=$("#parent1").get();
+  var tmp=$("#spantest").closest("div").get();
+  equals(elem,tmp,"Test getting closest element 1 level up");
+  
+  QUnit.reset();
+  $("#foo").append(text); 
+  var elem=$("#parent_test_cont").get();
+  var tmp=$("#ptest").closest("div").get();
+  equals(elem,tmp,"Test getting closest element 2 level up");
+  
+    
+  QUnit.reset();
+  $("#foo").append(text); 
+  var elem=$("#parent_test_cont").get();
+  var tmp=$("#ptest").closest("#parent_test_cont").get();
+  equals(elem,tmp,"Test passing going up two levels based off string selector");
+  
+    QUnit.reset();
+  $("#foo").append(text); 
+  var elem=$("#parent_test_cont").get();
+  var tmp=$("#ptest").closest(elem).get();
+  equals(elem,tmp,"Test passing going up two levels based off object");
 });
 
 test("find",function(){
 expect(3);
 var text='<div id="parent_test_cont">'+
-	   '<div class="parent1" id="parent1">'+
-		  '<span class="parsel parent1">Foo</span>'+
-		  '<span id="spantest" class="parsel parent1 child1">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent2">'+
-		  '<span class="parsel" id="span1">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent3">'+
-		  '<p class="parsel">Foo</p>'+
-		'</div>'+
-		'<div class="parent1 parent2" id="parent3">'+
-		  '<p class="parsel child1">Foo</p>'+
-		'</div>'+
-		'<span >'+
-		  '<p id="ptest">Foo</p>'+
-		'</span>'+
-	'</div>';
+     '<div class="parent1" id="parent1">'+
+      '<span class="parsel parent1">Foo</span>'+
+      '<span id="spantest" class="parsel parent1 child1">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent2">'+
+      '<span class="parsel" id="span1">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent3">'+
+      '<p class="parsel">Foo</p>'+
+    '</div>'+
+    '<div class="parent1 parent2" id="parent3">'+
+      '<p class="parsel child1">Foo</p>'+
+    '</div>'+
+    '<span >'+
+      '<p id="ptest">Foo</p>'+
+    '</span>'+
+  '</div>';
 
-	QUnit.reset();
-	$("#foo").append(text);	
-	equals($("#parent1").find("span").length,2,"Find two spans in a div");
-	
-	
-	QUnit.reset();
-	$("#foo").append(text);	
-	equals($("#parent1").find("#spantest").get(),$("#spantest").get(),"Find using an id selector");
-	
-	QUnit.reset();
-	$("#foo").append(text);	
-	equals($("#parent1").find($("span")).size(),2,"Find passing in an object that has more elements and search inside");
+  QUnit.reset();
+  $("#foo").append(text); 
+  equals($("#parent1").find("span").length,2,"Find two spans in a div");
+  
+  
+  QUnit.reset();
+  $("#foo").append(text); 
+  equals($("#parent1").find("#spantest").get(),$("#spantest").get(),"Find using an id selector");
+  
+  QUnit.reset();
+  $("#foo").append(text); 
+  equals($("#parent1").find($("span")).size(),2,"Find passing in an object that has more elements and search inside");
 
 
 });
@@ -1046,35 +1046,35 @@ var text='<div id="parent_test_cont">'+
 
 test("not",function(){
 expect(4);
-	var text='<div id="parent_test_cont">'+
-	   '<div class="parent1" id="parent1">'+
-		  '<span class="parsel parent1">Foo</span>'+
-		  '<span id="spantest" class="parsel parent1 child1">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent2">'+
-		  '<span class="parsel" id="span1">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent3">'+
-		  '<p class="parsel">Foo</p>'+
-		'</div>'+
-		'<div class="parent1 parent2" id="parent3">'+
-		  '<p class="parsel child1">Foo</p>'+
-		'</div>'+
-		'<span id="removeTest" >'+
-		  '<p id="ptest">Foo</p>'+
-		'</span>'+
-	'</div>';
+  var text='<div id="parent_test_cont">'+
+     '<div class="parent1" id="parent1">'+
+      '<span class="parsel parent1">Foo</span>'+
+      '<span id="spantest" class="parsel parent1 child1">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent2">'+
+      '<span class="parsel" id="span1">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent3">'+
+      '<p class="parsel">Foo</p>'+
+    '</div>'+
+    '<div class="parent1 parent2" id="parent3">'+
+      '<p class="parsel child1">Foo</p>'+
+    '</div>'+
+    '<span id="removeTest" >'+
+      '<p id="ptest">Foo</p>'+
+    '</span>'+
+  '</div>';
 
-	QUnit.reset();
-	$("#foo").append(text);	
-	
-	equals($("#parent_test_cont").find("div").not("#parent2").size(),3,"Filter out a specific element");
-	
-	equals($("#parent_test_cont").children().not("div").size(),1,"Filter out based off selector");
-	
-	equals($("#parent_test_cont").children().not($("#removeTest")).size(),4,"Filter out based off jqMobi object");
-	var elem=document.getElementById("removeTest");
-	equals($("#parent_test_cont").children().not(elem).size(),4,"Filter out based off  object");
+  QUnit.reset();
+  $("#foo").append(text); 
+  
+  equals($("#parent_test_cont").find("div").not("#parent2").size(),3,"Filter out a specific element");
+  
+  equals($("#parent_test_cont").children().not("div").size(),1,"Filter out based off selector");
+  
+  equals($("#parent_test_cont").children().not($("#removeTest")).size(),4,"Filter out based off jqMobi object");
+  var elem=document.getElementById("removeTest");
+  equals($("#parent_test_cont").children().not(elem).size(),4,"Filter out based off  object");
    
 });
 test("data",function(){
@@ -1104,28 +1104,28 @@ expect(4);
 
 test("end",function(){
     expect(1);
-	var text='<div id="parent_test_cont">'+
-	   '<div class="parent1" id="parent1">'+
-		  '<span class="parsel parent1">Foo</span>'+
-		  '<span id="spantest" class="parsel parent1 child1">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent2">'+
-		  '<span class="parsel" id="span1">Foo</span>'+
-		'</div>'+
-		'<div class="parent1" id="parent3">'+
-		  '<p class="parsel">Foo</p>'+
-		'</div>'+
-		'<div class="parent1 parent2" id="parent3">'+
-		  '<p class="parsel child1">Foo</p>'+
-		'</div>'+
-		'<span id="removeTest" >'+
-		  '<p id="ptest">Foo</p>'+
-		'</span>'+
-	'</div>';
+  var text='<div id="parent_test_cont">'+
+     '<div class="parent1" id="parent1">'+
+      '<span class="parsel parent1">Foo</span>'+
+      '<span id="spantest" class="parsel parent1 child1">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent2">'+
+      '<span class="parsel" id="span1">Foo</span>'+
+    '</div>'+
+    '<div class="parent1" id="parent3">'+
+      '<p class="parsel">Foo</p>'+
+    '</div>'+
+    '<div class="parent1 parent2" id="parent3">'+
+      '<p class="parsel child1">Foo</p>'+
+    '</div>'+
+    '<span id="removeTest" >'+
+      '<p id="ptest">Foo</p>'+
+    '</span>'+
+  '</div>';
 
-	QUnit.reset();
-	$("#foo").append(text);	
-	equals($("#parent_test_cont").get(),$("#parent_test_cont").not("div").end().get(),"Testing end lements");
+  QUnit.reset();
+  $("#foo").append(text); 
+  equals($("#parent_test_cont").get(),$("#parent_test_cont").not("div").end().get(),"Testing end lements");
 
 });
 
@@ -1178,6 +1178,40 @@ test("serialize",function(){
     var basestr="test[name]=jqMobi&test[available]=true&test[version]=0.9.5"
    equals(jq("#myform").serialize('test'),basestr,"Testing serialize");
    QUnit.reset();
+});
+
+test("eq",function(){
+  QUnit.reset();
+  equals($("#foo").eq(0).length,1,"Test against itself with eq=0");
+
+  equals($("#foo").eq(-2).length,0,"Test against itself with eq=-2 (no index found)");
+  equals($("#foo").eq(-2).length,0,"Test against itself with eq=-2 (no index found)");
+
+  var elem=$("#foo2");
+  equals($(".foo").eq(1).get(0),elem.get(0),"Collection with index =1");
+  equals($(".foo").eq(-1).get(0),elem.get(0),"Collection with index =0-1");
+});
+
+test("index",function(){
+  QUnit.reset();
+  var elem=$("#foo").get(0);
+  equals($("#foo").index(elem),0,"Test index against self object");
+  equals($("#foo").index("#foo"),0,"Test index against self selector");
+
+
+  var elem=$("#foo2");
+  equals($(".foo").index(elem),1,"Test index against collection object");
+  equals($(".foo").index("#foo2"),1,"Test index against collection selector");
+});
+
+test("is",function(){
+
+  QUnit.reset();
+  ok($("#foo").is("div"),"Test #foo is of type div");
+
+  ok($("#foo").is($("#foo").get(0)),"Test #foo actually #foo by element");
+
+  ok($("#foo").is($("#foo")),"Test #foo actually #foo by jqMobi object");
 });
 
 
@@ -1254,33 +1288,33 @@ var userAgents={
 
 test("ajaxGet",function(){
     stop();
-	
-	$.get("server.php?data=foo",function(data){equals(data,"foo");start()});
+  
+  $.get("server.php?data=foo",function(data){equals(data,"foo");start()});
 
 });
 test("ajaxPost",function(){
     stop();
-	
-	$.post("server.php",{data:'foo'},function(data){equals(data,"foo");start()});
+  
+  $.post("server.php",{data:'foo'},function(data){equals(data,"foo");start()});
 
 });
 test("ajax",function(){
     stop();
-	
-	$.ajax({url:"server.php?data=foo",success:function(data){equals(data,"foo");start()}});
+  
+  $.ajax({url:"server.php?data=foo",success:function(data){equals(data,"foo");start()}});
 });
 
 test("ajax sync",function(){
     
-	var fixer=0;
-	$.ajax({url:"server.php?data=foo",async:false,success:function(data){fixer=1}});
+  var fixer=0;
+  $.ajax({url:"server.php?data=foo",async:false,success:function(data){fixer=1}});
     equals(fixer,1);
 });
 
 test("jsonp",function(){
     
  stop();
-	
+  
   $.jsonP({url:'server.php?jsonp=?',success:function(data){equals(data,"foo");start()}});
 });
 test("getJSON",function(){

@@ -173,7 +173,7 @@ if (!window.jq || typeof (jq) !== "function") {
         function _selector(selector, what) {
             
 
-			//selector=selector.trim();
+			selector=selector.trim();
             if (selector[0] === "#" && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
                 if (what == document)
                     _shimNodes(what.getElementById(selector.replace("#", "")),this);
@@ -1306,7 +1306,46 @@ if (!window.jq || typeof (jq) !== "function") {
                     });
                 }
                 return $.param(params,grouping);
+            },
+
+            /* added in 1.2 */
+            /**
+             * Reduce the set of elements based off index
+                ```
+               $().eq(index)
+               ```
+             * @param {Int} index - Index to filter by. If negative, it will go back from the end
+             * @return {Object} jqMobi object
+             * @title $().eq(index)
+             */
+            eq:function(ind){
+                return $(this.get(ind));
+            },
+            /**
+             * Returns the index of the selected element in the collection
+               ```
+               $().index(elem)
+               ```
+             * @param {String|Object} element to look for.  Can be a selector or object
+             * @return integer - index of selected element
+             * @title $().index(elem)
+             */
+            index:function(elem){
+                return elem?this.indexOf($(elem)[0]):this.parent().children().indexOf(this[0]);
+            },
+            /**
+              * Returns boolean if the object is a type of the selector
+              ```
+              $().is(selector)
+              ```
+             * param {String|Object|Function} selector to act upon
+             * @return boolean
+             * @title $().is(selector)
+             */
+            is:function(selector){
+                return !!selector&&this.filter(selector).length>0;
             }
+
         };
 
 
@@ -2285,7 +2324,13 @@ if (!window.jq || typeof (jq) !== "function") {
 		
 
 
-        
+        //custom events since people want to do $().click instead of $().bind("click")
+
+        ["click","keydown","keyup","keypress","submit","load","resize","dblclick","change","select","error"].forEach(function(event){
+            $.fn[event]=function(cb){
+                return callback?this.bind(event,callback):this.trigger(event);
+            }
+        });
          /**
          * End of APIS
          * @api private

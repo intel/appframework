@@ -3,12 +3,18 @@
 There are CSS file fixes from the 1.11 release to support Win8.  If you do not want to support Win8, old CSS files will work fine.  
 
 Known Issues
-  - SVG icon/font pack is not working
   - IE10 dispatches all events at the document level randomly.  Anything registerd via document.addEventListener gets called
 
 Enhancements
 
 jq.mobi.js
+
+added $().eq, $().is, $().index functions and unit tests
+
+added wrappers for "click keydown keyup keypress submit load resize change select error" event bindings 
+   $().click(fn) -  will create a click listener
+   $().click() - will trigger a click event
+   
 
 $.os.ie - detect WP8
 
