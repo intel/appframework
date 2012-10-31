@@ -970,8 +970,9 @@
                 if(typeof fnc == "string" && window[fnc]) {
                     window[fnc](oldDiv);
                 }
+                $(oldDiv).trigger("unloadpanel");
             }
-            $(what).trigger("unloadpanel");
+            
             var fnc = what.getAttribute("data-load");
             if(typeof fnc == "string" && window[fnc]) {
                 window[fnc](what);
