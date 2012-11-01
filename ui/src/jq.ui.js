@@ -1153,6 +1153,7 @@
                 return;
             
             if (newTab) {
+                this.clearHistory();
                 this.pushHistory("#" + this.firstDiv.id, what.id, transition, hashLink);
             } else if (!back) {
                 this.pushHistory(previousTarget, what.id, transition, hashLink);
