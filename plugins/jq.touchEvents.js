@@ -1,6 +1,5 @@
 //Touch events are from zepto/touch.js
 (function($) {
-    console.log("Wtf");
     var touch = {}, touchTimeout;
     
     function parentIfText(node) {

@@ -386,6 +386,10 @@
 			if(!leaveRefresh) this.refresh = true;
 			if(this.refresh && this.refresh == true) {
 				this.coreAddPullToRefresh(el);
+                this.refreshContainer.style.position="absolute";
+                this.refreshContainer.style.top="-60px";
+                this.refreshContainer.style.height="60px";
+                this.refreshContainer.style.display="block";
 			}
 		}
 		nativeScroller.prototype.onTouchStart = function(e) {
@@ -396,14 +400,8 @@
 
 				this.el.addEventListener('touchmove', this, false);
 				this.dY = e.touches[0].pageY;
-				if(this.refresh && this.dY == 0) {
-					this.refreshContainer.style.display = "block";
-					this.refreshHeight = this.refreshContainer.firstChild.clientHeight;
-					this.scrollTo({
-						y: this.refreshHeight,
-						x: this.scrollLeft
-					});
-					this.refreshContainer.style.height = this.refreshHeight + 'px';
+				if(this.refresh && this.dY <0) {
+					this.showRefresh();
 
 				}
 			}
@@ -421,31 +419,35 @@
 
 
 			//check for trigger
-			if(!this.refreshTriggered && this.refresh && (this.el.scrollTop) < 0) {
-				this.refreshContainer.style.display = "block";
-				this.refreshContainer.style.height = this.refreshHeight + 'px';
-				this.refreshTriggered = true;
-				$.trigger(this, 'refresh-trigger');
-				this.scrollTo({
-					y: this.refreshHeight,
-					x: this.scrollLeft
-				});
+			if(this.refresh && (this.el.scrollTop) < 0) {
+				this.showRefresh();
 				//check for cancel
 			} else if(this.refreshTriggered && this.refresh && (this.el.scrollTop > this.refreshHeight)) {
 				this.refreshTriggered = false;
 				if(this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
-				this.refreshContainer.style.display = "none";
+				this.hideRefresh(false);
 				$.trigger(this, 'refresh-cancel');
 			}
 
 			this.cY = newcY;
 			e.stopPropagation();
 		}
+        nativeScroller.prototype.showRefresh=function(){
+            if(!this.refreshTriggered){
+                this.refreshTriggered = true;
+                $.trigger(this, 'refresh-trigger');
+            }
+        }
 		nativeScroller.prototype.onTouchEnd = function(e) {
 
 			var triggered = this.el.scrollTop <= 0;
 
 			this.fireRefreshRelease(triggered, true);
+            if(triggered){
+                //lock in place
+                this.refreshContainer.style.position="relative";
+                this.refreshContainer.style.top="0px";
+            }
 
 			this.dY = this.cY = 0;
 			this.el.removeEventListener('touchmove', this, false);
@@ -471,8 +473,8 @@
 						that.el.scrollTop=0;
 						that.logPos(that.el.scrollLeft, 0);
 					}
-					that.refreshContainer.style.height = '0';
-					that.refreshContainer.style.display = "none";
+					that.refreshContainer.style.top = "-60px";
+					that.refreshContainer.style.position="absolute";
 					that.dY = that.cY = 0;
 				};
 

@@ -2326,7 +2326,7 @@ if (!window.jq || typeof (jq) !== "function") {
 
         //custom events since people want to do $().click instead of $().bind("click")
 
-        ["click","keydown","keyup","keypress","submit","load","resize","dblclick","change","select","error"].forEach(function(event){
+        ["click","keydown","keyup","keypress","submit","load","resize","change","select","error"].forEach(function(event){
             $.fn[event]=function(cb){
                 return callback?this.bind(event,callback):this.trigger(event);
             }
