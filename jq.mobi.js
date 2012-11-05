@@ -1467,6 +1467,8 @@ if (!window.jq || typeof (jq) !== "function") {
                                 } catch (e) {
                                     error = e;
                                 }
+                            } else if (mime === 'application/xml, text/xml') {
+		                        result = xhr.responseXML;
                             } else
                                 result = xhr.responseText;
                             //If we're looking at a local file, we assume that no response sent back means there was an error
