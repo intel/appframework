@@ -626,7 +626,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             val: function(value) {
                 if (this.length === 0)
-                    return undefined;
+                    return (value === undefined) ? undefined : this;
                 if (value == undefined)
                     return this[0].value;
                 for (var i = 0; i < this.length; i++) {
@@ -650,7 +650,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             attr: function(attr, value) {
                 if (this.length === 0)
-                    return undefined;                
+                    return (value === undefined) ? undefined : this;
                 if (value === undefined && !$.isObject(attr)) {
                     var val = (this[0].jqmCacheId&&_attrCache[this[0].jqmCacheId][attr])?(this[0].jqmCacheId&&_attrCache[this[0].jqmCacheId][attr]):this[0].getAttribute(attr);
                     return val;
@@ -721,7 +721,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             prop: function(prop, value) {
                 if (this.length === 0)
-                    return undefined;                
+                    return (value === undefined) ? undefined : this;
                 if (value === undefined && !$.isObject(prop)) {
                     var res;
                     var val = (this[0].jqmCacheId&&_propCache[this[0].jqmCacheId][prop])?(this[0].jqmCacheId&&_propCache[this[0].jqmCacheId][prop]):!(res=this[0][prop])&&prop in this[0]?this[0][prop]:res;
@@ -1467,6 +1467,8 @@ if (!window.jq || typeof (jq) !== "function") {
                                 } catch (e) {
                                     error = e;
                                 }
+                            } else if (mime === 'application/xml, text/xml') {
+		                        result = xhr.responseXML;
                             } else
                                 result = xhr.responseText;
                             //If we're looking at a local file, we assume that no response sent back means there was an error
