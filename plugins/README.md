@@ -367,7 +367,7 @@ To use jq.css3animate you must
 1.  Call the function
 
 ``` js
-$("#div").css3animate(options);
+$("#div").css3Animate(options);
 ```
 
 There are additional configuration options that are passed in as an object parameter
@@ -390,7 +390,7 @@ var options={
    callback:function(){console.log("finished animation")}
 }
 
-$("#div").css3animate(options);
+$("#div").css3Animate(options);
 
 ```
 
