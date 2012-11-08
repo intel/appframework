@@ -413,7 +413,8 @@ if (!window.jq || typeof (jq) !== "function") {
             ready: function(callback) {
                 if (document.readyState === "complete" || document.readyState === "loaded"||(!$.os.ie&&document.readyState==="interactive")) //IE10 fires interactive too early
                     callback();
-                document.addEventListener("DOMContentLoaded", callback, false);
+                else
+                    document.addEventListener("DOMContentLoaded", callback, false);
                 return this;
             },
             /**
@@ -638,7 +639,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             val: function(value) {
                 if (this.length === 0)
-                    return undefined;
+                    return (value === undefined) ? undefined : this;
                 if (value == undefined)
                     return this[0].value;
                 for (var i = 0; i < this.length; i++) {
@@ -662,7 +663,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             attr: function(attr, value) {
                 if (this.length === 0)
-                    return undefined;                
+                    return (value === undefined) ? undefined : this;            
                 if (value === undefined && !$.isObject(attr)) {
                     var val = (this[0].jqmCacheId&&_attrCache[this[0].jqmCacheId][attr])?(this[0].jqmCacheId&&_attrCache[this[0].jqmCacheId][attr]):this[0].getAttribute(attr);
                     return val;
@@ -733,7 +734,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             prop: function(prop, value) {
                 if (this.length === 0)
-                    return undefined;                
+                    return (value === undefined) ? undefined : this;          
                 if (value === undefined && !$.isObject(prop)) {
                     var res;
                     var val = (this[0].jqmCacheId&&_propCache[this[0].jqmCacheId][prop])?(this[0].jqmCacheId&&_propCache[this[0].jqmCacheId][prop]):!(res=this[0][prop])&&prop in this[0]?this[0][prop]:res;
@@ -956,6 +957,33 @@ if (!window.jq || typeof (jq) !== "function") {
                     }
                 }
                 return this;
+            },
+             /**
+            * Appends the current collection to the selector
+                ```
+                $().appendTo("#foo"); //Append an object;
+                ```
+
+            * @param {String|Object} Selector to append to
+            * @param {Boolean} [insert] insert or append
+            * @title $().appendTo(element,[insert])
+            */
+            appendTo:function(selector,insert){
+                var tmp=$(selector);
+                tmp.append(this);
+            },
+             /**
+            * Prepends the current collection to the selector
+                ```
+                $().prependTo("#foo"); //Prepend an object;
+                ```
+
+            * @param {String|Object} Selector to prepent to
+            * @title $().prependTo(element)
+            */
+            prependTo:function(selector){
+                var tmp=$(selector);
+                tmp.append(this,true);
             },
             /**
             * Prepends to the elements
@@ -1518,6 +1546,8 @@ if (!window.jq || typeof (jq) !== "function") {
                                 } catch (e) {
                                     error = e;
                                 }
+                            } else if (mime === 'application/xml, text/xml') {
+                                result = xhr.responseXML;
                             } else
                                 result = xhr.responseText;
                             //If we're looking at a local file, we assume that no response sent back means there was an error
@@ -1857,13 +1887,12 @@ if (!window.jq || typeof (jq) !== "function") {
          * @param {String|Object} events
          * @param {Function} function that will be executed when event triggers
          * @param {String|Array|Object} [selector]
-         * @param {Boolean} [getDelegate]
+         * @param {Function} [getDelegate]
          * @api private
          */
         function add(element, events, fn, selector, getDelegate) {
             var id = jqmid(element), 
             set = (handlers[id] || (handlers[id] = []));
-            
             eachEvent(events, fn, function(event, fn) {
                 var delegate = getDelegate && getDelegate(fn, event), 
                 callback = delegate || fn;
@@ -1883,6 +1912,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 set.push(handler);
                 element.addEventListener(handler.e, proxyfn, false);
             });
+            element=null;
         }
 
         /**

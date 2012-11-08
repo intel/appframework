@@ -715,6 +715,34 @@ test("append",function(){
   equals($("#foo").html(),"<p>1</p><p>2</p>","Appending multiple <p>'s");
 });
 
+test("appendTo",function(){
+
+  expect(3);
+
+  $("#foo").html('');
+  $("<div>tmp</div>").appendTo("#foo");
+  //$("#foo").append("string");
+  equals($("#foo").html(),"<div>tmp</div>","Append a string");
+  QUnit.reset();
+  $("#foo").html('');
+  var div=$("<div>Something</div>").get(0);
+  $(div).appendTo("#foo");
+  equals($("#foo").get().childNodes[0],div,"Appending a dom element");
+
+
+  QUnit.reset();
+  $("#foo").html('');
+  var div=$("<div>Something</div>").get(0);
+  $(div).appendTo("#foo");
+
+  var div2=$("<div>Something2</div>").get(0);
+  $(div2).appendTo("#foo");
+  equals($("#foo").get().childNodes[1],div2,"Appending a dom element");
+  
+});
+
+
+
 test("prepend",function(){
 
   expect(5);
@@ -747,6 +775,32 @@ test("prepend",function(){
   QUnit.reset();
   
 });
+
+test("prependTo",function(){
+expect(3);
+
+  $("#foo").html('');
+  $("<div>tmp</div>").prependTo("#foo");
+  //$("#foo").append("string");
+  equals($("#foo").html(),"<div>tmp</div>","Append a string");
+  QUnit.reset();
+  $("#foo").html('');
+  var div=$("<div>Something</div>").get(0);
+  $(div).prependTo("#foo");
+  equals($("#foo").get().childNodes[0],div,"Appending a dom element");
+
+
+  QUnit.reset();
+  $("#foo").html('');
+  var div=$("<div>Something</div>").get(0);
+  $(div).prependTo("#foo");
+
+  var div2=$("<div>Something2</div>").get(0);
+  $(div2).prependTo("#foo");
+  equals($("#foo").get().childNodes[1],div,"Appending a dom element");
+
+});
+
 test("insertBefore",function(){
 
   expect(2);
