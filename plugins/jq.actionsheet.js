@@ -56,7 +56,7 @@
                 actionsheetEl = $(elID).append(markup);
                 
                 markup.get().style[$.feat.cssPrefix+'Transition']="all 0ms";
-                markup.css($.feat.cssPrefix+"Transform", $.feat.cssTransformStart+"0,0"+$.feat.cssTransformEnd);
+                markup.css($.feat.cssPrefix+"Transform",  "translate"+$.feat.cssTransformStart+"0,0"+$.feat.cssTransformEnd);
                 markup.css("top",window.innerHeight+"px");
                 this.el.style.overflow = "hidden";
                 markup.on("click", "a",function(){that.hideSheet()});
@@ -64,7 +64,7 @@
                 $(elID).append('<div id="jq_action_mask" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px;z-index:9998;background:rgba(0,0,0,.4)"/>');
                 setTimeout(function(){
                     markup.get().style[$.feat.cssPrefix+'Transition']="all 300ms";
-                    markup.css($.feat.cssPrefix+"Transform", $.feat.cssTransformStart+"0,"+(-(markup.height()))+"px"+$.feat.cssTransformEnd);
+                    markup.css($.feat.cssPrefix+"Transform", "translate"+ $.feat.cssTransformStart+"0,"+(-(markup.height()))+"px"+$.feat.cssTransformEnd);
                  },10);
             } catch (e) {
                 alert("error adding actionsheet" + e);
@@ -82,7 +82,8 @@
                 setTimeout(function(){
                     
                 	markup.get().style[$.feat.cssPrefix+'Transition']="all 300ms";
-                	markup.css($.feat.cssPrefix+"Transform", $.feat.cssTransformStart+"0,0px"+$.feat.cssTransformEnd);
+
+                	markup.css($.feat.cssPrefix+"Transform", "translate"+$.feat.cssTransformStart+"0,0px"+$.feat.cssTransformEnd);
                 	setTimeout(function(){
 		                markup.remove();
 		                markup=null;

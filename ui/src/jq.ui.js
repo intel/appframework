@@ -1718,7 +1718,7 @@
                 href = href.substring(prefix.length+1);
             }
             //empty links
-            if (href == "#" || (href.length == 0 && theTarget.hash.length == 0))
+            if (href == "#" ||(href.indexOf("#")===href.length-1)|| (href.length == 0 && theTarget.hash.length == 0))
                 return;
 
             //internal links
