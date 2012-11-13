@@ -3,11 +3,11 @@
 **********************************************************/
 
 /* Color variables (non-text) */
-@color-bg: #000; /* General background color */
+@color-bg: #131D26; /* General background color */
 
-@color-grad1-base: #555; /* Gradient 1 is used in the masthead and for list items. */
-@color-grad2-base: #333; /* Gradient 2 is used in the footer. */
-@color-grad3-base: #666; /* Gradient 3 is used in buttons. */
+@color-grad1-base: #162F45; /* Gradient 1 is used in the masthead and for list items. */
+@color-grad2-base: #2D3944; /* Gradient 2 is used in the footer. */
+@color-grad3-base: #535353; /* Gradient 3 is used in buttons. */
 
 @color-scrollbar: #fff; 
 
@@ -27,7 +27,7 @@
 
 /* Input style variables */
 @input-radius: 6px;
-@color-form-borders: #666;
+@color-form-borders: #CCCCCC;
 
 
 /**********************************************************
@@ -43,7 +43,7 @@
 **********************************************************/
 body {
 	margin:0px;
-	overflow-x:hidden;
+	overflow:hidden;
 }
 * {
     -webkit-user-select: none; /* Prevent copy paste for all elements except text fields */
@@ -60,7 +60,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	position: absolute;
 	top: 0px;  bottom: 0px;
 	width: 100%;
-	overflow-x: hidden;
+	overflow: hidden;
 	-webkit-text-size-adjust: none;
 	-webkit-box-sizing: border-box;
 	display: -webkit-box; /* Orient first container vertically */
@@ -369,6 +369,35 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 /**********************************************************
 	BUTTON STYLES
 **********************************************************/
+
+	.menuButton {
+
+		position:relative;
+		width:48px;	height:48px;
+		padding:9px 4px;
+		border-right:1px solid #666;
+		box-shadow:1px 0 0 #000;
+		background-color:transparent;
+		display:inline-block;
+	}
+	.menuButton:active { background:rgba(255,255,255,0.4); }
+	.menuButton:before {
+		content:'';
+		position:absolute;
+		width:80%; height:6px;
+		border-radius:20px;
+		background:#fff;
+		box-shadow:0 12px 0 #fff;
+	}
+	.menuButton:after {
+		content:'';
+		position:absolute;
+		top:33px;
+		width:80%; height:6px;
+		border-radius:20px;
+		background:#fff;
+	}
+
 #backButton {
 	display: block;
 	position: absolute;
