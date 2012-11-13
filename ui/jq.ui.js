@@ -3799,7 +3799,7 @@ if (!HTMLElement.prototype.unwatch) {
                 var newId = (newDiv.id) ? newDiv.id : el.replace("#",""); //figure out the new id - either the id from the loaded div.panel or the crc32 hash
                 newDiv.id = newId;
                 if (newDiv.id != el)
-                    newDiv.setAttribute("data-crc", el);
+                    newDiv.setAttribute("data-crc", el.replace("#",""));
             } else {
                 newDiv = myEl;
             }
