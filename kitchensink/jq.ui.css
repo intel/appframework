@@ -245,10 +245,6 @@ background:#333;
 	-webkit-backface-visibility: hidden;
 	-webkit-perspective: 1000;
 } /* This class is applied to the divs that contain the various "views" or pages of the app. */ 
-.panel > * {
-	-webkit-backface-visibility: hidden;
-	-webkit-perspective: 1000;
-}
 
 
 
@@ -375,10 +371,6 @@ font-size:48px;
 	overflow-y:auto;
 	overflow-x:hidden;
 	-webkit-overflow-scrolling:touch;
-}
-#menu_scroller > * {
-	-webkit-backface-visibility: hidden;
-	-webkit-perspective: 1000;
 }
 
 

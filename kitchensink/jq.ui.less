@@ -162,10 +162,6 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		overflow-y:auto;
 		overflow-x:hidden;
 	} 
-	.panel > * {
-	-webkit-backface-visibility: hidden;
-	-webkit-perspective: 1000;
-}
 
 
 /* FOOTER NAVIGATION BAR */
@@ -193,7 +189,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		overflow: hidden;
 	}
 
-	#navbar a:active, #navbar a:focus, #navbar a:active:focus, #navbar .selected {
+	#navbar a:active, #navbar a:focus, #navbar a:active:focus, #navbar a.selected {
 		color: @color-text-navbar !important;
 		background-color: fadein(darken(desaturate(@color-grad2-base, 50%), 20%), 85%);
 	}
@@ -297,11 +293,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		overflow-x:hidden;
 	    -webkit-overflow-scrolling:touch;
 	}	
-	#menu_scroller > * {
-	witem--bestebkit-backface-visibility: hidden;
-		-webkit-perspective: 1000;
-	}
-
+	
 	#menu > * {
 		width: 90%;
 		margin: 0 auto;
@@ -437,7 +429,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	-webkit-transition: all 0.2s ease; transition: all 0.2s ease;
 } /* Styling for CSS-generated buttons, including the back button. These buttons can bue used anywhere in the UI. */
 
-.button.pressed {
+.button.selected {
 	border: 1px solid darken(@color-grad3-base, 80%);
 	-webkit-box-shadow: 0 0 0 4px darken(@color-grad3-base, 90%); box-shadow: 0 0 0 1px darken(@color-grad3-base, 90%);
 } /* behavior of button for touch interaction */
