@@ -6,6 +6,7 @@
 	-webkit-user-select:none; /* Prevent copy paste for all elements except text fields */
 	-webkit-tap-highlight-color:rgba(255, 255, 255, 0); /* set highlight color for user interaction */
 	-ms-touch-action:none;
+	-webkit-touch-callout: none; /* prevent the popup menu on any links*/
 } 
 
 input,textarea { -webkit-user-select:text; } /* allow users to select text that appears in input fields */

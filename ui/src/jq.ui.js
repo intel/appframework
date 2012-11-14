@@ -1681,7 +1681,6 @@
         //anchors
         if (theTarget.tagName !== "undefined" && theTarget.tagName.toLowerCase() == "a") {
             
-            console.log("Called");
             var custom = (typeof jq.ui.customClickHandler == "function") ? jq.ui.customClickHandler : false;
             if (custom !== false) {
                 e.preventDefault();

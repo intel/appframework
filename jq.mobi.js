@@ -1750,15 +1750,17 @@ if (!window.jq || typeof (jq) !== "function") {
 			//features
 			$.feat = {};
             var head=document.documentElement.getElementsByTagName("head")[0];
-			$.feat.nativeTouchScroll =  typeof(head.style["-webkit-overflow-scrolling"])!=="undefined"&&$.os.ios;
+			$.feat.nativeTouchScroll =  typeof(head.style["-webkit-overflow-scrolling"])!=="undefined";
             $.feat.cssPrefix=$.os.webkit?"Webkit":$.os.fennec?"Moz":$.os.ie?"ms":$.os.opera?"O":"";
             $.feat.cssTransformStart=!$.os.opera?"3d(":"(";
             $.feat.cssTransformEnd=!$.os.opera?",0)":")";
             if($.os.android&&!$.os.webkit)
                 $.os.android=false;
         }
+
         detectUA($, navigator.userAgent);
         $.__detectUA = detectUA; //needed for unit tests
+        alert($.feat.nativeTouchScroll);
         if (typeof String.prototype.trim !== 'function') {
 
             /**
