@@ -44,11 +44,11 @@
 body {
 	margin:0px;
 	overflow:hidden;
+	-ms-touch-action: none;
 }
 * {
     -webkit-user-select: none; /* Prevent copy paste for all elements except text fields */
 	-webkit-tap-highlight-color: rgba(255,255,255,.5); /* Set highlight color for user interaction */
-    -ms-touch-action:none;
 }
 input, textarea { -webkit-user-select: text; } /* Allow text selection for input and text fields */
 
@@ -199,6 +199,8 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	    position: absolute; 
 	    top: 0px; left: 0px;
 		-webkit-overflow-scrolling:touch;
+		-ms-touch-action: auto !important;
+        -ms-overflow-style:-ms-autohiding-scrollbar !important;
 		background: @color-bg;
 		overflow-y:auto;
 		overflow-x:hidden;
@@ -333,6 +335,8 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	    overflow-y:auto;
 		overflow-x:hidden;
 	    -webkit-overflow-scrolling:touch;
+	    -ms-touch-action: auto !important;
+        -ms-overflow-style:-ms-autohiding-scrollbar !important;
 	}	
 	
 	#menu > * {
@@ -509,19 +513,23 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	z-index: 9999;
 } 
 
-.closebutton  {
-	position: absolute;
-	top: 6px; right: 6px;
-	display: block;
-	height: 24px !important; width:24px !important;
-	border-radius: 12px;
-	border: 1px solid #666;
-	background: #fff;
-	color: #333;
-	font: bold 21px/18px 'Arial Black', Arial Black, Gadget, Arial, Helvetica, sans-serif;
-	text-align: center;
-	text-decoration: none;
-	-webkit-transition:all 0.2s ease; transition:all 0.2s ease;
+.closebutton {
+  position: relative;
+  float:right;
+  top: 6px;
+  right: 6px;
+  display: block;
+  height: 24px !important;
+  width: 24px !important;
+  border-radius: 12px;
+  border: 1px solid #666;
+  background: #fff;
+  color: #333;
+  font: bold 21px/18px 'Arial Black', Arial Black, Gadget, Arial, Helvetica, sans-serif;
+  text-align: center;
+  text-decoration: none;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
 }
 .closebutton:before { content:'x'; }
 .closebutton.selected,.closebutton.modalButton.selected {
