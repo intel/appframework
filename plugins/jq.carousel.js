@@ -82,7 +82,7 @@
                 }
                 if (this.horizontal) {
                     el.style.display = "block";
-                    el.style.float="left";
+                    el.style['float']="left";
                 } 
                 else {
                     el.style.display = "block";
@@ -339,7 +339,7 @@
                     if (this.horizontal) {
                         elems[i].style.width = widthParam;
                         elems[i].style.height = "100%";
-                        elems[i].style.float="left";
+                        elems[i].style['float']="left";
                     } 
                     else {
                         elems[i].style.height = widthParam;
