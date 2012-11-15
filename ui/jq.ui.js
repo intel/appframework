@@ -4058,7 +4058,7 @@ if (!HTMLElement.prototype.unwatch) {
             
             what = null;
             var that = this;
-            that.hideMask();
+            
             var loadAjax = true;
             
             if (target.indexOf("#") == -1) {
@@ -4247,7 +4247,7 @@ if (!HTMLElement.prototype.unwatch) {
                     var doReturn = false;
 
                     //Here we check to see if we are retaining the div, if so update it
-                    if (jq("#" + urlHash.length > 0)) {
+                    if (jq("#" + urlHash).length > 0) {
                         that.updateContentDiv(urlHash, xmlhttp.responseText);
                         jq("#" + urlHash).get(0).title = anchor.title ? anchor.title : target;
                     } else if (anchor.getAttribute("data-persist-ajax") || that.isAjaxApp) {
@@ -4273,10 +4273,16 @@ if (!HTMLElement.prototype.unwatch) {
                     div.innerHTML = xmlhttp.responseText;
                     that.parseScriptTags(div);
                     if (doReturn)
+                    {
+                         if (that.showLoading)
+                            that.hideMask();
                         return;
+                    }
                     
-                    return that.loadContent("#" + urlHash);
-                
+                    that.loadContent("#" + urlHash);
+                    if (that.showLoading)
+                       that.hideMask();
+                    return null;
                 }
             };
             ajaxUrl = target;
@@ -4550,7 +4556,7 @@ if (!HTMLElement.prototype.unwatch) {
                     //go to activeDiv
                     var firstPanelId = that.getPanelId(defaultHash);
                     //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
-                    if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId != ("#" + that.firstDiv.id)) {
+                    if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId != ("#" + that.firstDiv.id)&&$(firstPanelId).length>0) {
                         that.loadContent(defaultHash, true, false, 'none'); //load the active page as a newTab with no transition
                     } else {
                         previousTarget = "#" + that.firstDiv.id;

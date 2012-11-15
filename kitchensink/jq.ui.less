@@ -9,13 +9,11 @@
 @color-grad2-base: #2D3944; /* Gradient 2 is used in the footer. */
 @color-grad3-base: #535353; /* Gradient 3 is used in buttons. */
 
-@color-scrollbar: #fff; 
 
 /* Text style variables */
 @typeface-text: Arial, Helvetica, sans-serif;
 @size-font-text: 14px;
 @color-font-text: #fff;
-@color-shadow-text: #fff; /*rgba(0,0,0,.8) Text shadow works best in black or white, depending on background. Set opacity to 0 to hide it. */
 
 @typeface-heading: Arial, Helvetica, sans-serif;
 @size-font-heading: 24px;
@@ -38,6 +36,37 @@
 @size-leading-heading: @size-font-heading * 1.2;
 
 
+
+/**********************************************************
+   MIXINS
+***********************************************************/
+.shadow1Mixin(@color) {}
+.shadow1Mixin(@color) when (lightness(@color-font-heading) >= 50%) { text-shadow:0 -1px fadein(darken(@color-grad1-base, 100%), 15%); }
+.shadow1Mixin(@color) when (lightness(@color-font-heading) < 50%) { text-shadow:0 1px fadein(lighten(@color-grad1-base, 100%), 15%); }
+
+.shadow2Mixin(@color) {}
+.shadow2Mixin(@color) when (lightness(@color-font-heading) >= 50%) { text-shadow:1px 1px 3px fadein(darken(@color-grad1-base, 100%), 15%); }
+.shadow2Mixin(@color) when (lightness(@color-font-heading) < 50%) { text-shadow:1px 1px 3px fadein(lighten(@color-grad1-base, 100%), 15%); }
+
+
+.buttonShadowMixn(@color) {}
+.buttonShadowMixn(@color) when (lightness(@color-font-text) >= 50%) { text-shadow:0 -1px fadein(darken(@color-font-text, 100%), 15%); }
+.buttonShadowMixn(@color) when (lightness(@color-grad3-base) >= 50%) { border: 1px solid darken(@color-grad3-base, 25%); }
+.buttonShadowMixn(@color) when (lightness(@color-font-text) < 50%) { text-shadow:0 1px fadein(lighten(@color-font-text, 100%), 15%); }
+.buttonShadowMixn(@color) when (lightness(@color-grad3-base) < 50%) { border: 1px solid @color-grad3-base; }
+
+.buttonSelectedShadowMixn(@color) {}
+
+.buttonSelectedShadowMixn(@color) when (lightness(@color-grad3-base) >= 50%) { border: 1px solid @color-grad3-base; }
+.buttonSelectedShadowMixn(@color) when (lightness(@color-grad3-base) >= 50%) { color: @color-grad3-base; }
+.buttonSelectedShadowMixn(@color) when (lightness(@color-grad3-base) < 50%) { border: 1px solid lighten(@color-grad3-base, 25%); }
+.buttonSelectedShadowMixn(@color) when (lightness(@color-grad3-base) < 50%) { color: lighten(@color-grad3-base, 25%); }
+
+
+.ulShadowMixn(@color){}
+.ulShadowMixn(@color) when (lightness(@color-grad2-base) >= 50%) { border-bottom: 1px solid darken(@color-grad2-base, 50%); }
+.ulShadowMixn(@color) when (lightness(@color-grad2-base) < 50%) { border-bottom: 1px solid lighten(@color-grad2-base, 50%); }
+
 /**********************************************************
   JQ UI STYLES
 **********************************************************/
@@ -45,10 +74,12 @@ body {
 	margin:0px;
 	overflow:hidden;
 	-ms-touch-action: none;
+
 }
 * {
     -webkit-user-select: none; /* Prevent copy paste for all elements except text fields */
 	-webkit-tap-highlight-color: rgba(255,255,255,.5); /* Set highlight color for user interaction */
+	-webkit-touch-callout: none; /* prevent the popup menu on any links*/
 }
 input, textarea { -webkit-user-select: text; } /* Allow text selection for input and text fields */
 
@@ -95,7 +126,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		font-weight: bold; 
 		line-height: @size-leading-heading;
 		color: @color-font-heading;
-		text-shadow: 0 -1px 0 @color-shadow-heading;
+		.shadow1Mixin(@color-font-heading);
 		text-overflow: ellipsis;
 	}
 
@@ -170,6 +201,13 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	} /*Masthead box */
 	#header > * { position: relative;  z-index: 2; }
 
+	.headerMixen(@color){
+
+	}
+
+	.headerMixen(@color) when (lightness(@color-font-heading) >= 50%) { text-shadow:0 -1px fadein(darken(@color-grad1-base, 100%), 15%); }
+	.headerMixen(@color) when (lightness(@color-font-heading) < 50%) { text-shadow:0 1px fadein(lighten(@color-grad1-base, 100%), 15%); }
+
 	#header > h1 {
 		position: absolute;
 		overflow: hidden;
@@ -179,6 +217,8 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		text-shadow:0 -1px darken(@color-grad1-base, 80%);
 	    z-index: 1;
 		white-space: nowrap;
+
+		.headerMixen(@color-grad1-base);
 	} /* Masthead text */
 
 
@@ -219,6 +259,9 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		text-align: center !important;
 	}
 
+	.navbarAMixin(@color){}
+	.navbarAMixin(@color) when (lightness(@color-text-navbar) >= 50%) { text-shadow:0 -1px fadein(darken(@color-text-navbar, 100%), 15%); }
+	.navbarAMixin(@color) when (lightness(@color-text-navbar) < 50%) { text-shadow:0 1px fadein(lighten(@color-text-navbar, 100%), 15%); }
 	#navbar a {
 		position: relative;
 		width: 62px;  height: 60px;
@@ -228,14 +271,26 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		text-decoration: none;
 		color: fadein(@color-text-navbar, 20%);
 		text-align: center;
-		text-shadow: 0 -1px 0 @color-shadow-navbar;
+		.navbarAMixin(@color-text-navbar);
 		overflow: hidden;
 	}
 
-	#navbar a:active, #navbar a:focus, #navbar a:active:focus, #navbar a.selected {
+	.navbarAActiveMixen(@color){}
+	.navbarAActiveMixen(@color) when (lightness(@color-grad2-base) >= 50%) {
 		color: @color-text-navbar !important;
-		background-color: fadein(darken(desaturate(@color-grad2-base, 50%), 20%), 85%);
+		background-color: fadein(darken(desaturate(@color-grad2-base, 50%), 20%), 80%);
 	}
+	.navbarAActiveMixen(@color) when (lightness(@color-grad2-base) < 50%) {
+		color: @color-text-navbar !important;
+		background-color: fadein(lighten(desaturate(@color-grad2-base, 50%), 20%), 80%);
+	}
+
+	#navbar a:active, #navbar a:focus, #navbar a:active:focus, #navbar a.selected {
+		.navbarAActiveMixen(@color-grad2-base);
+	}
+
+
+
 	#navbar a:not(:last-of-type) { border-right: 1px solid darken(desaturate(@color-grad2-base, 50%), 50%); }
 
 	#navbar .icon:before {
@@ -320,13 +375,18 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		transform:translate(-200px,0px);
     }
 	#menu.on { left:0px !important; }
+
+	.menuMixin(@color){}
+	.menuMixin(@color) when (lightness(@color-bg) >= 50%) { background: darken(@color-bg, 20%); }
+	.menuMixin(@color) when (lightness(@color-bg) < 50%) { background: lighten(@color-bg, 20%); }
+
 	#menu {
 		display: none;
 		position: absolute; 
 		top:0px; left:0px; bottom: 0px;
 		z-index:1;
 		width: 200px; height: 100%;
-		background: darken(@color-bg, 20%);
+		.menuMixin(@color-bg);
 	}
 
 	#menu_scroller {
@@ -353,7 +413,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		font-weight: bold; 
 		line-height: @size-leading-heading;
 		color: @color-font-heading;
-		text-shadow: 0 -1px 0 @color-shadow-heading;
+		.shadow1Mixin(@color-font-heading);
 		text-align: center !important;
 	    text-overflow: ellipsis;
 		white-space: nowrap;
@@ -494,14 +554,14 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	line-height: 36px;
 	text-decoration:none;
 	text-align:center;
-	text-shadow: 0 -1px 0 darken(@color-grad3-base, 80%);
+	.buttonShadowMixn(@color-grad3-base);
 	text-overflow: ellipsis; 
 	-webkit-box-shadow: 0 0 0 1px darken(@color-grad3-base, 80%); box-shadow: 0 0 0 1px darken(@color-grad3-base, 80%);
 	-webkit-transition: all 0.2s ease; transition: all 0.2s ease;
 } /* Styling for CSS-generated buttons, including the back button. These buttons can bue used anywhere in the UI. */
 
 .button.selected {
-	border: 1px solid darken(@color-grad3-base, 80%);
+	.buttonSelectedShadowMixn(@color-grad3-base);
 	-webkit-box-shadow: 0 0 0 4px darken(@color-grad3-base, 90%); box-shadow: 0 0 0 1px darken(@color-grad3-base, 90%);
 } /* behavior of button for touch interaction */
 
@@ -559,8 +619,8 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		line-height: 48px;
 		color: @color-font-heading;
 		text-decoration: none;
-		text-shadow: 0 -1px 0 @color-shadow-heading;
-		border-bottom: 1px solid darken(@color-grad2-base, 50%);
+		.shadow1Mixin(@color-font-heading);
+		.ulShadowMixn(@color-grad2-base);
 	} /* A touchable, interactive list item. */
 
 	ul > li > a:after {
@@ -591,7 +651,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		line-height: 48px; 
 		padding: 0px 8px;
 		color: @color-font-heading;
-		text-shadow: 0 -1px 0 @color-shadow-heading;
+		.shadow1Mixin(@color-font-heading);
 		background: @color-grad1-base;
 	} /* Header class used for non-navigable header bars (h1 is reserved for the header) */
 
@@ -655,85 +715,11 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		-webkit-perspective: 1000;
 	}
 
-	.jqmScrollbar { background-color: @color-scrollbar !important; } /* Sets the color of the scrollbar */
+	.jqmScrollbar { background-color: @color-font-text !important; } /* Sets the color of the scrollbar */
 
 
-/* LOADSCREEN STYLES */
-	#splashscreen {
-		position: absolute;
-		top: 0px; bottom: 0px;
-		width: 100%;
-		left: 0px;
-		min-height: 100%;
-		background: @color-bg !important;
-		color: white !important;
-		font-size: 30px;
-		text-align:center;
-		z-index: 9999;
-		display: block;
-		margin: 0 auto !important;
-		padding-top: 80px !important;
-	}
-	.splashscreen {
-		background: @color-bg !important;
-		padding-left: 40px;
-		padding-top: 30px !important;
-		min-height: 100%;
-	}
-	.ui-icon {
-		background: rgba(0,0,0,.4);
-		background-repeat: no-repeat;
-		border-radius: 9px;
-	}
 
-	.ui-loader { 
-		display: none; 
-		position: absolute; 
-		opacity: .85; 
-		z-index: 100; 
-		left: 50%; 
-		width: 200px; 
-		margin-left: -100px; margin-top: -35px; 
-		padding: 10px 30px; 
-		background: rgba(0,0,0,.4);
-		border-radius: 9px;
-	}
-	.ui-loader h1 { 
-		font-size: 15px; 
-		text-align: center; 
-	}
-	.ui-loader .ui-icon { 
-		position: static; 
-		display: block; 
-		opacity: .9; 
-		margin: 0 auto; 
-		width: 35px; 
-		height: 35px; 
-		background-color: transparent; 
-	}
-
-	.spin  {
-		-webkit-transform: rotate(360deg);
-		-webkit-animation-name: spin;
-		-webkit-animation-duration: 1s;
-		-webkit-animation-iteration-count:  infinite;
-	}
-	@-webkit-keyframes spin {
-		from {-webkit-transform: rotate(0deg);}
-	  	to {-webkit-transform: rotate(360deg);}
-	}
-
-	.ui-icon-loading {
-		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjBAMAAADs965qAAAAA3NCSVQICAjb4U/gAAAAMFBMVEX////x8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHvvEhiAAAAEHRSTlMAESIzRFVmd4iZqrvM3e7/dpUBFQAAAAlwSFlzAAAK6wAACusBgosNWgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAEaSURBVCiRY2AgATCapaUqoIiIzN5z5syZJiQRltW7gUJ3705C6OraDRG6GwATkli1evdusNBTuKJVq3c4MjBX3733DqqMfdWqFWDbau+9ewIRspy5KgHMYL737g1EX+fMaVAjbN+9KwDLzZxZAHPMu3cXwEbNnAl397p3YDslOmD6GBjs/v8AURodzXAh3v+/QZRHRyNciPP/f4hQA1yIHVMICtzLC9CFzMuL0IXEy0vQhdjK0+BsRqgv0tIMYEKCggJgmbS0QJgiQUEIwy0tVQCmCCokmhYaCFMElWMKDQ01BIkoKcKEGFRDQ1yMlISUgEIwe5iAQi7GxkpKSjBFwMh2cXEGCSkiOVcFLIQswsAgZGxshCpCBgAA0FNYp5zwDegAAAAASUVORK5CYII=);
-		width: 40px;
-		height: 40px;
-		border-radius: 20px;
-		background-size: 35px 35px;
-	}
-		
-	.ui-corner-all { border-radius:.6em; }
-	#jQui_mask { position:absolute; top:45%; }
-
+	
 
 /* FORM ELEMENTS */
 	fieldset h4 {
@@ -744,7 +730,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		font-size:@size-font-heading * .75;
 		line-height:21px;
 		margin-bottom:-8px; margin-top:8px;
-		text-shadow:1px 1px 3px @color-shadow-heading;
+		.shadow2Mixin(@color-font-heading);
 	} /* Style for subhead for a group of labels/inputs within a fieldset. */
 
 	fieldset {
@@ -752,7 +738,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		padding:12px 18px 12px 18px;
 		-webkit-border-radius:5px;
 		border-radius:5px;
-		border:1px solid #595d61;
+		border:1px solid @color-grad2-base;
 		outline:0;
 		width:95%;
 	}
@@ -779,7 +765,6 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		overflow: hidden;
 		color: @color-font-text;
 		text-transform: uppercase;
-		text-shadow: 1px 1px 3px @color-shadow-text;
 	} /* This is the name that appears at the top left of the fieldset. */
 
 	textarea.jq-ui-forms { 
@@ -1138,11 +1123,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	}
 
 
-}
-
-
-@media handheld, only screen and (min-width: 768px) {
-	#jQUi {
+	@media handheld, only screen and (min-width: 768px) {
 		.hasMenu, .hasMenu.on  {
 			position:absolute !important;
 			left:256px !important;
@@ -1162,7 +1143,6 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 			height:100% !important;
 			display:block !important;
 			position:absolute !important;  left:0px !important;
-			background:@color-bg !important;
 			-webkit-transform:translate3d(0,0,0) !important;
 		    -webkit-transition:none !important;
 			transform:translate(0,0);
@@ -1185,5 +1165,82 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 			transition:none !important;
 		}
 	}
-   
 }
+
+	/* LOADSCREEN STYLES */
+	#splashscreen {
+		position: absolute;
+		top: 0px; bottom: 0px;
+		width: 100%;
+		left: 0px;
+		min-height: 100%;
+		background: @color-bg !important;
+		color: white !important;
+		font-size: 30px;
+		text-align:center;
+		z-index: 9999;
+		display: block;
+		margin: 0 auto !important;
+		padding-top: 80px !important;
+	}
+	.splashscreen {
+		background: @color-bg !important;
+		padding-left: 40px;
+		padding-top: 30px !important;
+		min-height: 100%;
+	}
+
+	.ui-icon {
+		background: rgba(0,0,0,.4);
+		background-repeat: no-repeat;
+		border-radius: 9px;
+	}
+
+	.ui-loader { 
+		display: none; 
+		position: absolute; 
+		opacity: .85; 
+		z-index: 100; 
+		left: 50%; 
+		width: 200px; 
+		margin-left: -100px; margin-top: -35px; 
+		padding: 10px 30px; 
+		background: rgba(0,0,0,.4);
+		border-radius: 9px;
+	}
+	.ui-loader h1 { 
+		font-size: 15px; 
+		text-align: center; 
+	}
+	.ui-loader .ui-icon { 
+		position: static; 
+		display: block; 
+		opacity: .9; 
+		margin: 0 auto !important; 
+		width: 35px; 
+		height: 35px; 
+		background-color: transparent; 
+	}
+
+	.spin  {
+		-webkit-transform: rotate(360deg);
+		-webkit-animation-name: spin;
+		-webkit-animation-duration: 1s;
+		-webkit-animation-iteration-count:  infinite;
+	}
+	@-webkit-keyframes spin {
+		from {-webkit-transform: rotate(0deg);}
+	  	to {-webkit-transform: rotate(360deg);}
+	}
+
+	.ui-icon-loading {
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjBAMAAADs965qAAAAA3NCSVQICAjb4U/gAAAAMFBMVEX////x8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHvvEhiAAAAEHRSTlMAESIzRFVmd4iZqrvM3e7/dpUBFQAAAAlwSFlzAAAK6wAACusBgosNWgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAEaSURBVCiRY2AgATCapaUqoIiIzN5z5syZJiQRltW7gUJ3705C6OraDRG6GwATkli1evdusNBTuKJVq3c4MjBX3733DqqMfdWqFWDbau+9ewIRspy5KgHMYL737g1EX+fMaVAjbN+9KwDLzZxZAHPMu3cXwEbNnAl397p3YDslOmD6GBjs/v8AURodzXAh3v+/QZRHRyNciPP/f4hQA1yIHVMICtzLC9CFzMuL0IXEy0vQhdjK0+BsRqgv0tIMYEKCggJgmbS0QJgiQUEIwy0tVQCmCCokmhYaCFMElWMKDQ01BIkoKcKEGFRDQ1yMlISUgEIwe5iAQi7GxkpKSjBFwMh2cXEGCSkiOVcFLIQswsAgZGxshCpCBgAA0FNYp5zwDegAAAAASUVORK5CYII=);
+		width: 40px;
+		height: 40px;
+		border-radius: 20px;
+		background-size: 35px 35px;
+	}
+		
+	.ui-corner-all { border-radius:.6em; }
+	#jQui_mask { position:absolute; top:45%; }
+

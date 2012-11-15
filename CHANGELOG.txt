@@ -2,8 +2,8 @@
 
 There are CSS file fixes from the 1.11 release to support Win8.  If you do not want to support Win8, old CSS files will work fine.  
 
-Known Issues
-  - IE10 dispatches all events at the document level randomly.  Anything registerd via document.addEventListener gets called
+We have depricated the custom stylesheets.  Slate will be the only one provided.  You can use the style builder now and we have options that are close matches to the old stylesheets
+
 
 Enhancements
 
@@ -16,9 +16,12 @@ added wrappers for "click keydown keyup keypress submit load resize change selec
    $().click() - will trigger a click event
    
 
-$.os.ie - detect WP8
+$.os.ie - detect W8/WP8 devices
 
 $().vendorCss() - Get/Set CSS properties with vendor specific prefixes.
+	$obj.vendorCss("Transform","translate3d(0,0,0)";
+	$obj.css("WebkitTransform","translate3d(0,0,0)";
+
 
 $.feat.cssPrefix - cross browser vendor prefix ("Webkit","Moz","O","MS","") - use for css3
 
@@ -34,9 +37,19 @@ $.getCssMatrix(ele) - returns a matrix with the CSS3 values.  If the browser pro
 added _shimNodes - performance improvements to query selector.  instead of calling [].slice.call to convert nodelist to array and then sort, we sort the node list
 
 
-"-webkit-" specific styles have been removed.  All style references in javascript use $.feat.cssPrefix now.
+"-webkit-" specific styles have been removed in the js code.  All style references in javascript use $.feat.cssPrefix now.
+
+Native scrolling is available on WP8 and Android 4.1+ devices
+
+
 
 Fixes
 
 Fix actionsheet positioning at start
+
+Provide a fix for IE10 dispatching events to random elements - There's a bug in IE10 when an anchor's href is set to "javascript:;"
+
+Fix routing of clicks in IE10 and Chrome
+
+
 
