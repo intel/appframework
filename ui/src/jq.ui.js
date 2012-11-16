@@ -1404,14 +1404,14 @@
                 if(el.parentNode && el.parentNode.id != "content") {
                     el.parentNode.removeChild(el);
                     var id = el.id;
-                    this.addDivAndScroll(tmp);
                     if(tmp.getAttribute("selected")) this.firstDiv = $am(id);
+                    this.addDivAndScroll(tmp);
                 } else if(!el.parsedContent) {
                     el.parsedContent = 1;
                     el.parentNode.removeChild(el);
                     var id = el.id;
-                    this.addDivAndScroll(tmp);
                     if(tmp.getAttribute("selected")) this.firstDiv = $am(id);
+                    this.addDivAndScroll(tmp);
                 }
                 if(el.getAttribute("data-defer")) {
                     defer[id] = el.getAttribute("data-defer");
