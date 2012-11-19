@@ -1,5 +1,7 @@
 <?php
-    
+    /*
+     * This is a simple find and replace script, just run after pulling from an update branch
+     */
     $replaceArray = array(
 	'ui/jq.ui.js' => array(
 	    '$' => 'jq',
