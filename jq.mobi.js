@@ -185,16 +185,16 @@ if (!window.jq || typeof (jq) !== "function") {
         function _selector(selector, what) {
             var dom;
 
-			selector=selector.trim();
+			selector=selector.toString().trim();
             if (selector[0] === "#" && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
                 if (what == document)
-                    dom = what.getElementById(selector.replace("#", ""));
+                    dom = what.getElementById(selector.toString().toString().replace("#", ""));
                 else
                     dom = [].slice.call(_selectorAll(selector, what));
             } else if (selector[0] === "<" && selector[selector.length - 1] === ">")  //html
             {
                 var tmp = document.createElement("div");
-                tmp.innerHTML = selector.trim();
+                tmp.innerHTML = selector.toString().trim();
                 dom = [].slice.call(tmp.childNodes);
             } else {
                 dom = [].slice.call(_selectorAll(selector, what));
@@ -821,7 +821,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     });
                     
                     this[i].className += (cls ? " " : "") + classList.join(" ");
-                    this[i].className = this[i].className.trim();
+                    this[i].className = this[i].className.toString().trim();
                 }
                 return this;
             },
@@ -844,10 +844,10 @@ if (!window.jq || typeof (jq) !== "function") {
                     }
                     var classList = this[i].className;
                     name.split(/\s+/g).forEach(function(cname) {
-                        classList = classList.replace(classRE(cname), " ");
+                        classList = classList.toString().toString().replace(classRE(cname), " ");
                     });
                     if (classList.length > 0)
-                        this[i].className = classList.trim();
+                        this[i].className = classList.toString().trim();
                     else
                         this[i].className = "";
                 }
@@ -872,11 +872,11 @@ if (!window.jq || typeof (jq) !== "function") {
                     }
                     var classList = this[i].className;
                     name.split(/\s+/g).concat(newName.split(/\s+/g)).forEach(function(cname) {
-                        classList = classList.replace(classRE(cname), " ");
+                        classList = classList.toString().toString().replace(classRE(cname), " ");
                     });
-					classList=classList.trim();
+					classList=classList.toString().trim();
                     if (classList.length > 0){
-                    	this[i].className = (classList+" "+newName).trim();
+                    	this[i].className = (classList+" "+newName).toString().trim();
                     } else
                         this[i].className = newName;
                 }
@@ -1340,7 +1340,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 delete window[callbackName];
                 options.success.call(context, data);
             };
-            script.src = options.url.replace(/=\?/, '=' + callbackName);
+            script.src = options.url.toString().toString().replace(/=\?/, '=' + callbackName);
             if(options.error)
             {
                script.onerror=function(){
@@ -1682,7 +1682,7 @@ if (!window.jq || typeof (jq) !== "function") {
              * Helper function for iOS 3.1.3
              */
             String.prototype.trim = function() {
-                this.replace(/(\r\n|\n|\r)/gm, "").replace(/^\s+|\s+$/, '');
+                this.toString().toString().replace(/(\r\n|\n|\r)/gm, "").toString().toString().replace(/^\s+|\s+$/, '');
                 return this
             };
         }
@@ -1760,7 +1760,7 @@ if (!window.jq || typeof (jq) !== "function") {
          * @api private
          */
         function matcherFor(ns) {
-            return new RegExp('(?:^| )' + ns.replace(' ', ' .* ?') + '(?: |$)');
+            return new RegExp('(?:^| )' + ns.toString().toString().replace(' ', ' .* ?') + '(?: |$)');
         }
 
         /**
@@ -2267,7 +2267,7 @@ if (!window.jq || typeof (jq) !== "function") {
 			if (val===undefined || val==='') return 0;
 			if ( isNaN( parseFloat(val) ) ){
 				if(val.replace){
-					val = val.replace(/[^0-9.-]/, "");
+					val = val.toString().toString().replace(/[^0-9.-]/, "");
 				} else return 0;
 			}  
             return parseFloat(val);

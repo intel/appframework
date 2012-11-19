@@ -3,9 +3,13 @@
      * This is a simple find and replace script, just run after pulling from an update branch
      */
     $replaceArray = array(
+	'jq.mobi.js' => array(
+	    '.replace(' => '.toString().replace(',   // Fixes "Uncaught TypeError: Object #<SVGAnimatedString> has no method 'replace'"
+	    '.trim(' => '.toString().trim('   // Fixes "Uncaught TypeError: Object #<SVGAnimatedString> has no method 'replace'"
+	),
 	'ui/jq.ui.js' => array(
 	    '$' => 'jq',
-	    'isjq' => 'is$'
+	    'isjq' => 'is$',
 	)
     );
     
