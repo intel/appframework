@@ -277,19 +277,6 @@
             }
         }
         
-        // var tmp = new $.css3AnimateQueue();
-        // tmp.push({id:"animate",x:20,y:30,time:"300ms"});
-        // tmp.push({id:"animate",x:20,y:30,time:"500ms",previous:true});
-        // tmp.push({id:"animate",x:0,y:0,time:"0ms"});
-        // tmp.push({id:"animate",x:20,y:30,time:"300ms"});
-        // tmp.push({id:"animate",x:20,y:30,time:"500ms",previous:true});
-        // tmp.push(function(){reset()});
-        // tmp.run();
-        
-        //uncomment for performance debug
-        //css3Animate = $.debug.type(css3Animate, 'css3Animate');
-        
-        
         return css3Animate;
     })();
 
@@ -1473,13 +1460,13 @@
 			if(this.vscrollBar){
 				this.vscrollBar.style[$.feat.cssPrefix+"Transform"] = "none";
 				this.vscrollBar.style[$.feat.cssPrefix+"Transition"] = "none";
-				this.vscrollBar.style[$.feat.cssPrefix+"Terspective"] = "none";
+				this.vscrollBar.style[$.feat.cssPrefix+"Perspective"] = "none";
 				this.vscrollBar.style[$.feat.cssPrefix+"BackfaceVisibility"] = "visible";
 			}
 			if(this.hscrollBar){
 				this.hscrollBar.style[$.feat.cssPrefix+"Transform"] = "none";
 				this.hscrollBar.style[$.feat.cssPrefix+"Transition"] = "none";
-				this.hscrollBar.style[$.feat.cssPrefix+"{erspective"] = "none";
+				this.hscrollBar.style[$.feat.cssPrefix+"Perspective"] = "none";
 				this.hscrollBar.style[$.feat.cssPrefix+"BackfaceVisibility"] = "visible";
 			}
 
@@ -1595,10 +1582,6 @@
 		jsScroller.prototype.scrollToTop=function(time){
 			this.scrollTo({x:0,y:0},time);
 		}
-
-		//debug JS scrolling
-		//jsScroller = $.debug.type(jsScroller, 'jsScroller');
-		//return main function
 		return scroller;
 	})();
 })(jq);
@@ -4272,6 +4255,7 @@ if (!HTMLElement.prototype.unwatch) {
                     var div = document.createElement("div");
                     div.innerHTML = xmlhttp.responseText;
                     that.parseScriptTags(div);
+
                     if (doReturn)
                     {
                          if (that.showLoading)
@@ -4463,16 +4447,16 @@ if (!HTMLElement.prototype.unwatch) {
                 if (el.parentNode && el.parentNode.id != "content") {
                     el.parentNode.removeChild(el);
                     var id = el.id;
-                    this.addDivAndScroll(tmp);
                     if (tmp.getAttribute("selected"))
                         this.firstDiv = jq("#" + id).get(0);
+                    this.addDivAndScroll(tmp);
                 } else if (!el.parsedContent) {
                     el.parsedContent = 1;
                     el.parentNode.removeChild(el);
                     var id = el.id;
-                    this.addDivAndScroll(tmp);
                     if (tmp.getAttribute("selected"))
                         this.firstDiv = jq("#" + id).get(0);
+                    this.addDivAndScroll(tmp);
                 }
                 if (el.getAttribute("data-defer")) {
                     defer[id] = el.getAttribute("data-defer");
@@ -4672,9 +4656,9 @@ if (!HTMLElement.prototype.unwatch) {
             
             var custom = (typeof jq.ui.customClickHandler == "function") ? jq.ui.customClickHandler : false;
             if (custom !== false) {
-                e.preventDefault();
-                jq.ui.customClickHandler(theTarget);
-                return;
+                if(jq.ui.customClickHandler(theTarget))
+                   return e.preventDefault();
+                
             }
             if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1 || theTarget.getAttribute("data-ignore")) {
                 return;

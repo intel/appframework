@@ -1481,16 +1481,16 @@
                 if (el.parentNode && el.parentNode.id != "content") {
                     el.parentNode.removeChild(el);
                     var id = el.id;
-                    this.addDivAndScroll(tmp);
                     if (tmp.getAttribute("selected"))
                         this.firstDiv = jq("#" + id).get(0);
+                    this.addDivAndScroll(tmp);
                 } else if (!el.parsedContent) {
                     el.parsedContent = 1;
                     el.parentNode.removeChild(el);
                     var id = el.id;
-                    this.addDivAndScroll(tmp);
                     if (tmp.getAttribute("selected"))
                         this.firstDiv = jq("#" + id).get(0);
+                    this.addDivAndScroll(tmp);
                 }
                 if (el.getAttribute("data-defer")) {
                     defer[id] = el.getAttribute("data-defer");
@@ -1690,9 +1690,9 @@
             
             var custom = (typeof jq.ui.customClickHandler == "function") ? jq.ui.customClickHandler : false;
             if (custom !== false) {
-                e.preventDefault();
-                jq.ui.customClickHandler(theTarget);
-                return;
+                if(jq.ui.customClickHandler(theTarget))
+                   return e.preventDefault();
+                
             }
             if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1 || theTarget.getAttribute("data-ignore")) {
                 return;

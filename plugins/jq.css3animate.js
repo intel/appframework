@@ -277,19 +277,6 @@
             }
         }
         
-        // var tmp = new $.css3AnimateQueue();
-        // tmp.push({id:"animate",x:20,y:30,time:"300ms"});
-        // tmp.push({id:"animate",x:20,y:30,time:"500ms",previous:true});
-        // tmp.push({id:"animate",x:0,y:0,time:"0ms"});
-        // tmp.push({id:"animate",x:20,y:30,time:"300ms"});
-        // tmp.push({id:"animate",x:20,y:30,time:"500ms",previous:true});
-        // tmp.push(function(){reset()});
-        // tmp.run();
-        
-        //uncomment for performance debug
-        //css3Animate = $.debug.type(css3Animate, 'css3Animate');
-        
-        
         return css3Animate;
     })();
 
