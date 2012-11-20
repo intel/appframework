@@ -1,32 +1,22 @@
 /**********************************************************
   THEME VARIABLES -- TO BE MOVED TO EXTERNAL FILE, PER THEME
 **********************************************************/
+@color-bg: #131d26; /* General background color. Side-sliding menu is also based on this*/
+@color-1: #162F45; /* Used in the header . */
+@color-2: #2D3944; /* Used for footer. */
+@color-3: #2D3944; /* Used for list items.*/
+@color-4: #ddd; /* Used for buttons.*/
+@color-general-text: #fff; /* Used for text over the background. */
+@color-heading-text: #fff; /* Used for list items. */
+@color-navbar-text: #fff; /* Used for nav bar icons and. */
 
-/* Color variables (non-text) */
-@color-bg: #131D26; /* General background color */
-
-@color-grad1-base: #162F45; /* Gradient 1 is used in the masthead and for list items. */
-@color-grad2-base: #2D3944; /* Gradient 2 is used in the footer. */
-@color-grad3-base: #535353; /* Gradient 3 is used in buttons. */
-
-
-/* Text style variables */
 @typeface-text: Arial, Helvetica, sans-serif;
 @size-font-text: 14px;
-@color-font-text: #fff;
 
 @typeface-heading: Arial, Helvetica, sans-serif;
-@size-font-heading: 24px;
-@color-font-heading: #fff;
-@color-shadow-heading:#fff; /* rgba(0,0,0,.8) Heading shadow works best in black or white, depending on background. Set opacity to 0 to hide it. */
+@size-font-heading: 21px;
 
-@color-text-navbar: #fff;
-@color-shadow-navbar: #fff; /* rgba(0,0,0,.8) Navigation text shadow works best in black or white, depending on background. Set opacity to 0 to hide it. */
-
-/* Input style variables */
-@input-radius: 6px;
-@color-form-borders: #CCCCCC;
-
+@the-radius: 4px;
 
 /**********************************************************
   CALCULATED VARIABLES 
@@ -36,57 +26,42 @@
 @size-leading-heading: @size-font-heading * 1.2;
 
 
-
 /**********************************************************
-   MIXINS
+   LETTERPRESSED TEXT MIXIN
 ***********************************************************/
-.shadow1Mixin(@color) {}
-.shadow1Mixin(@color) when (lightness(@color-font-heading) >= 50%) { text-shadow:0 -1px fadein(darken(@color-grad1-base, 100%), 15%); }
-.shadow1Mixin(@color) when (lightness(@color-font-heading) < 50%) { text-shadow:0 1px fadein(lighten(@color-grad1-base, 100%), 15%); }
+.textShadowMixin(@color) { }
+.textShadowMixin(@color) when (lightness(@color-heading-text) >= 50%) { text-shadow:0 -1px rgba(0,0,0,.5); }
+.textShadowMixin(@color) when (lightness(@color-heading-text) < 50%) { text-shadow:0 1px rgba(255,255,255,.5); }
 
-.shadow2Mixin(@color) {}
-.shadow2Mixin(@color) when (lightness(@color-font-heading) >= 50%) { text-shadow:1px 1px 3px fadein(darken(@color-grad1-base, 100%), 15%); }
-.shadow2Mixin(@color) when (lightness(@color-font-heading) < 50%) { text-shadow:1px 1px 3px fadein(lighten(@color-grad1-base, 100%), 15%); }
-
-
-.buttonShadowMixn(@color) {}
-.buttonShadowMixn(@color) when (lightness(@color-font-text) >= 50%) { text-shadow:0 -1px fadein(darken(@color-font-text, 100%), 15%); }
-.buttonShadowMixn(@color) when (lightness(@color-grad3-base) >= 50%) { border: 1px solid darken(@color-grad3-base, 25%); }
-.buttonShadowMixn(@color) when (lightness(@color-font-text) < 50%) { text-shadow:0 1px fadein(lighten(@color-font-text, 100%), 15%); }
-.buttonShadowMixn(@color) when (lightness(@color-grad3-base) < 50%) { border: 1px solid @color-grad3-base; }
-
-.buttonSelectedShadowMixn(@color) {}
-
-.buttonSelectedShadowMixn(@color) when (lightness(@color-grad3-base) >= 50%) { border: 1px solid @color-grad3-base; }
-.buttonSelectedShadowMixn(@color) when (lightness(@color-grad3-base) >= 50%) { color: @color-grad3-base; }
-.buttonSelectedShadowMixn(@color) when (lightness(@color-grad3-base) < 50%) { border: 1px solid lighten(@color-grad3-base, 25%); }
-.buttonSelectedShadowMixn(@color) when (lightness(@color-grad3-base) < 50%) { color: lighten(@color-grad3-base, 25%); }
-
-
-.ulShadowMixn(@color){}
-.ulShadowMixn(@color) when (lightness(@color-grad2-base) >= 50%) { border-bottom: 1px solid darken(@color-grad2-base, 50%); }
-.ulShadowMixn(@color) when (lightness(@color-grad2-base) < 50%) { border-bottom: 1px solid lighten(@color-grad2-base, 50%); }
 
 /**********************************************************
   JQ UI STYLES
 **********************************************************/
 body {
-	margin:0px;
-	overflow:hidden;
 	-ms-touch-action: none;
+	overflow-x:hidden;
+	-webkit-text-size-adjust:none;
+}
 
-}
 * {
-    -webkit-user-select: none; /* Prevent copy paste for all elements except text fields */
-	-webkit-tap-highlight-color: rgba(255,255,255,.5); /* Set highlight color for user interaction */
+	-webkit-user-select: none; /* Prevent copy paste for all elements except text fields */
+	-webkit-tap-highlight-color: rgba(255,255,255,0.5); /* Set highlight color for user interaction */
 	-webkit-touch-callout: none; /* prevent the popup menu on any links*/
+	-webkit-box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	-webkit-box-sizing: border-box; box-sizing: border-box;
 }
+
 input, textarea { -webkit-user-select: text; } /* Allow text selection for input and text fields */
 
 #jQUi {
 
-/* DISPLAY PARAMETERS */
-	* {	margin: 0; padding: 0; box-sizing:border-box; }
+
+/**********************************************************
+  DISPLAY PARAMETERS
+**********************************************************/
+	* {	margin: 0; padding: 0; box-sizing:border-box;  -webkit-box-sizing: border-box; }
 	img { border: none; } 
 	position: absolute;
 	top: 0px;  bottom: 0px;
@@ -99,24 +74,25 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	-webkit-box-align: stretch;
 
 
-/* USER INTERACTION STYLES AND BEHAVIOR */
-	
-
-/* DEFAULT STYLES */
+/**********************************************************
+  DEFAULT STYLES
+**********************************************************/
 	background-color: @color-bg;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: @size-font-text;
 	line-height: @size-leading-text;
-	color: @color-font-text;
+	color: @color-general-text;
 
 
-/* TAG ATTRIBUTES */
+/**********************************************************
+  TAG ATTRIBUTES
+**********************************************************/
 	p {
 		font-family: @typeface-text;
 		font-size: @size-font-text;
 		font-weight: normal; 
 		line-height: @size-leading-text;
-		color: @color-font-text;
+		color: @color-general-text;
 		padding: 12px;
 	}
 
@@ -125,88 +101,85 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		font-size: @size-font-heading;
 		font-weight: bold; 
 		line-height: @size-leading-heading;
-		color: @color-font-heading;
-		.shadow1Mixin(@color-font-heading);
+		color: @color-heading-text;
+		.textShadowMixin(@color-heading-text);
 		text-overflow: ellipsis;
 	}
 
 
 /* UI GRADIENTS (mixins to be used in header, footer, buttons, etc.) */
 
-	.gradient1Gen(@color) {
-		
+	.gradient1Gen(@color) {	}
+	.gradient1Gen(@color) when (lightness(@color-1)>=20%) {
+		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, lighten(@color-1, 10%)), color-stop(50%, @color-1), color-stop(50%,darken(@color-1, 5%)), color-stop(100%, darken(@color-1, 15%)));
+		background-image: -webkit-linear-gradient(top, color-stop(0%, lighten(@color-1, 10%)), color-stop(50%, @color-1), color-stop(50%,darken(@color-1, 5%)), color-stop(100%, darken(@color-1, 15%)));
+		background-image: linear-gradient(to bottom, color-stop(0%, lighten(@color-1, 10%)), color-stop(50%, @color-1), color-stop(50%,darken(@color-1, 5%)), color-stop(100%, darken(@color-1, 15%)));
+	}
+	.gradient1Gen(@color) when (lightness(@color-1)<20%) {
+		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, lighten(@color-1, 10%)), color-stop(50%, lighten(@color-1, 15%)), color-stop(50%, @color-1));
+		background-image: -webkit-linear-gradient(top, color-stop(0%, lighten(@color-1, 10%)), color-stop(50%, lighten(@color-1, 15%)), color-stop(50%, @color-1));
+		background-image: linear-gradient(to bottom, color-stop(0%, lighten(@color-1, 10%)), color-stop(50%, lighten(@color-1, 15%)), color-stop(50%, @color-1));
 	}
 
-	.gradient1Gen(@color) when (lightness(@color)>=50) {
-		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @color-grad1-base), color-stop(100%, darken(@color-grad1-base, 25%)));
-		background-image: -webkit-linear-gradient(top, color-stop(0%,@color-grad1-base), color-stop(100%, darken(@color-grad1-base, 25%)));
-		background-image: linear-gradient(to bottom, color-stop(0%, @color-grad1-base), color-stop(100%, darken(@color-grad1-base, 25%)));
+	.gradient2Gen(@color2) { }
+	.gradient2Gen(@color2) when (lightness(@color-2)>=20%){
+		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, lighten(@color-2, 10%)), color-stop(50%, @color-2), color-stop(50%,darken(@color-2, 5%)), color-stop(100%, darken(@color-2, 15%)));
+		background-image: -webkit-linear-gradient(top, color-stop(0%, lighten(@color-2, 10%)), color-stop(50%, @color-2), color-stop(50%,darken(@color-2, 5%)), color-stop(100%, darken(@color-2, 15%)));
+		background-image: linear-gradient(to bottom, color-stop(0%, lighten(@color-2, 10%)), color-stop(50%, @color-2), color-stop(50%,darken(@color-2, 5%)), color-stop(100%, darken(@color-2, 15%)));
+	}
+	.gradient2Gen(@color2) when (lightness(@color-2)<20%){
+		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, lighten(@color-2, 10%)), color-stop(50%, lighten(@color-2, 15%)), color-stop(50%, @color-2));
+		background-image: -webkit-linear-gradient(top, color-stop(0%, lighten(@color-2, 10%)), color-stop(50%, lighten(@color-2, 15%)), color-stop(50%, @color-2));
+		background-image: linear-gradient(to bottom, color-stop(0%, lighten(@color-2, 10%)), color-stop(50%, lighten(@color-2, 15%)), color-stop(50%, @color-2));
 	}
 
-	.gradient1Gen(@color) when (lightness(@color)<50) {
-		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, lighten(@color-grad1-base, 25%)), color-stop(100%, @color-grad1-base));
-		background-image: -webkit-linear-gradient(top, color-stop(0%,lighten(@color-grad1-base, 25%)), color-stop(100%, @color-grad1-base));
-		background-image: linear-gradient(to bottom, color-stop(0%, lighten(@color-grad1-base, 25%)), color-stop(100%, @color-grad1-base));
+	.gradient3Gen(@color3) { }
+	.gradient3Gen(@color3) when (lightness(@color-3)>=80%){ 
+		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @color-3), color-stop(100%, darken(@color-3, 10%)));
+		background-image: -webkit-linear-gradient(top, color-stop(0%, @color-3), color-stop(100%, darken(@color-3, 10%)));
+		background-image: linear-gradient(to bottom, color-stop(0%, @color-3), color-stop(100%, darken(@color-3, 10%)));
+	}
+	.gradient3Gen(@color3) when (lightness(@color-3)<80%){
+		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, lighten(@color-3, 15%)), color-stop(90%, @color-3));
+		background-image: -webkit-linear-gradient(top, color-stop(0%, lighten(@color-3, 15%)), color-stop(90%, @color-3 90%));
+		background-image: linear-gradient(to bottom, color-stop(0%, lighten(@color-3, 15%)), color-stop(90%, @color-3));
 	}
 
-
-	.gradient2Gen(@color) {
-		
+	.gradient4Gen(@color4) { }
+	.gradient4Gen(@color4) when (lightness(@color-4)>=80%){ 
+		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, @color-4), color-stop(100%, darken(@color-4, 20%)));
+		background-image: -webkit-linear-gradient(top, color-stop(10%, @color-4), color-stop(100%,darken(@color-3, 20%)));
+		background-image: linear-gradient(to bottom, color-stop(10%, @color-4), color-stop(100%, darken(@color-4, 20%)));
 	}
-	.gradient2Gen(@color) when (lightness(@color)>=50){
-		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @color-grad2-base), color-stop(100%, darken(@color-grad2-base, 25%)));
-		background-image: -webkit-linear-gradient(top, @color-grad2-base 0%, darken(@color-grad2-base, 25%) 100%);
-		background-image: linear-gradient(to bottom, @color-grad2-base 0%, darken(@color-grad2-base, 25%) 100%);
-	}
-	.gradient2Gen(@color) when (lightness(@color)<50){
-		background-image: -webkit-gradient(linear, left top, left bottom, lighten(@color-grad2-base, 25%), color-stop(100%, @color-grad2-base));
-		background-image: -webkit-linear-gradient(top, lighten(@color-grad2-base, 25%) 0%, @color-grad2-base 100%);
-		background-image: linear-gradient(to bottom, lighten(@color-grad2-base, 25%)  0%, @color-grad2-base 100%);
-	}
-	.gradient3Gen(@color){
-		
-	}
-
-	.gradient3Gen(@color) when (lightness(@color)>=50){ 
-		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, @color-grad3-base), color-stop(100%, darken(@color-grad3-base, 25%)));
-		background-image: -webkit-linear-gradient(top, @color-grad3-base 0%, darken(@color-grad3-base, 25%) 100%);
-		background-image: linear-gradient(to bottom, @color-grad3-base 0%, darken(@color-grad3-base, 25%) 100%);
-	}
-	.gradient3Gen(@color) when (lightness(@color)<50){
-		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, lighten(@color-grad3-base, 25%)), color-stop(100%, @color-grad3-base ));
-		background-image: -webkit-linear-gradient(top, lighten(@color-grad3-base, 25%) 0%,  @color-grad3-base 100%);
-		background-image: linear-gradient(to bottom, lighten(@color-grad3-base, 25%) 0%, @color-grad3-base 100%);
+	.gradient4Gen(@color4) when (lightness(@color-4)<80%){
+		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, lighten(@color-4, 25%)), color-stop(90%, @color-4));
+		background-image: -webkit-linear-gradient(top, color-stop(0%, lighten(@color-4, 25%)), color-stop(90%, @color-4 90%));
+		background-image: linear-gradient(to bottom, color-stop(0%, lighten(@color-4, 25%)), color-stop(90%, @color-4));
 	}
 	
-
-	.gradient1 {
-		.gradient1Gen(@color-grad1-base);
-	}
-	.gradient2 {
-		.gradient1Gen(@color-grad2-base);	
-	}
-	.gradient3 {
-		.gradient1Gen(@color-grad3-base);	
-	}
+	.gradient1 { .gradient1Gen(@color-1); }
+	.gradient2 { .gradient2Gen(@color-2); }
+	.gradient3 { .gradient3Gen(@color-3); }
+	.gradient4 { .gradient4Gen(@color-4); }
 	
 
-/* MASTHEAD */
+/**********************************************************
+  MASTHEAD
+**********************************************************/
 	#header {
 		display: block;
 		left: 0px;  right: 0px;
 		height:48px;
 		z-index: 250;
 		.gradient1;
-		-webkit-box-shadow: 0px 0px 24px rgba(0,0,0,0.8); box-shadow: 0px 0px 24px rgba(0,0,0,0.8);
+		border-bottom:1px solid darken(@color-2, 20%);
+		-webkit-box-shadow: 0px 2px 8px rgba(0,0,0,0.4); box-shadow: 0px 2px 8px rgba(0,0,0,0.4);
 	} /*Masthead box */
 	#header > * { position: relative;  z-index: 2; }
 
-	.headerMixen(@color){
-
-	}
-
-	.headerMixen(@color) when (lightness(@color-font-heading) >= 50%) { text-shadow:0 -1px fadein(darken(@color-grad1-base, 100%), 15%); }
-	.headerMixen(@color) when (lightness(@color-font-heading) < 50%) { text-shadow:0 1px fadein(lighten(@color-grad1-base, 100%), 15%); }
+	.headerMixin(@color) { }
+	.headerMixin(@color) when (lightness(@color-heading-text) >= 50%) { text-shadow:0 -1px fadeout(darken(@color-1, 100%), 50%); }
+	.headerMixin(@color) when (lightness(@color-heading-text) < 50%) { text-shadow:0 1px fadeout(lighten(@color-1, 100%), 50%); }
 
 	#header > h1 {
 		position: absolute;
@@ -214,15 +187,15 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		width: 100%;  height: 48px; 
 		line-height: 44px !important;
 		text-align: center !important;
-		text-shadow:0 -1px darken(@color-grad1-base, 80%);
 	    z-index: 1;
 		white-space: nowrap;
-
-		.headerMixen(@color-grad1-base);
+		.headerMixin(@color-heading-text);
 	} /* Masthead text */
 
 
-/* CONTENT AREA */
+/**********************************************************
+  CONTENT AREA
+**********************************************************/
 	#content {
 		position: absolute;
 		top: 48px; bottom: 62px; left: 0px; right: 0px;
@@ -247,51 +220,46 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	} 
 
 
-/* FOOTER NAVIGATION BAR */
+/**********************************************************
+  NAV BAR
+**********************************************************/
 	#navbar {
 		position: absolute;
-		left: 0px; right: 0px; bottom: 0px;
+		left: 0; right: 0; bottom: 0;
 		z-index: 1000;
 		height: 62px; 
-		padding: 0px 1px;
+		padding: 0 1px;
 		.gradient2;
-		-webkit-box-shadow: 0px 0px 24px rgba(0,0,0,0.8); box-shadow:0px 0px 24px rgba(0,0,0,0.8);
+		border-top:1px solid lighten(@color-2, 20%);
+		-webkit-box-shadow: 0px -2px 8px rgba(0,0,0,0.4); box-shadow:0px -2px 8px rgba(0,0,0,0.4);
 		text-align: center !important;
 	}
 
-	.navbarAMixin(@color){}
-	.navbarAMixin(@color) when (lightness(@color-text-navbar) >= 50%) { text-shadow:0 -1px fadein(darken(@color-text-navbar, 100%), 15%); }
-	.navbarAMixin(@color) when (lightness(@color-text-navbar) < 50%) { text-shadow:0 1px fadein(lighten(@color-text-navbar, 100%), 15%); }
+	.navbarAMixin(@color) { }
+	.navbarAMixin(@color) when (lightness(@color-navbar-text) >= 50%) { text-shadow:0 -1px fadeout(darken(@color-navbar-text, 100%), 50%); }
+	.navbarAMixin(@color) when (lightness(@color-navbar-text) < 50%) { text-shadow:0 1px fadeout(lighten(@color-navbar-text, 100%), 50%); }
+
 	#navbar a {
 		position: relative;
 		width: 62px;  height: 60px;
 		display: inline-block;
 		margin: 0px auto;
-		font:bold 12px/100px Arial, Helvetica, sans-serif;
+		font:normal 11px/102px Arial, Helvetica, sans-serif;
 		text-decoration: none;
-		color: fadein(@color-text-navbar, 20%);
+		color: @color-navbar-text;
 		text-align: center;
-		.navbarAMixin(@color-text-navbar);
+		.navbarAMixin(@color-navbar-text);
 		overflow: hidden;
+		
 	}
 
-	.navbarAActiveMixen(@color){}
-	.navbarAActiveMixen(@color) when (lightness(@color-grad2-base) >= 50%) {
-		color: @color-text-navbar !important;
-		background-color: fadein(darken(desaturate(@color-grad2-base, 50%), 20%), 80%);
-	}
-	.navbarAActiveMixen(@color) when (lightness(@color-grad2-base) < 50%) {
-		color: @color-text-navbar !important;
-		background-color: fadein(lighten(desaturate(@color-grad2-base, 50%), 20%), 80%);
-	}
+	.navbarAActiveMixin(@color) { }
+	.navbarAActiveMixin(@color) when (lightness(@color-2) >= 20%) { background-color:fadeout(darken(@color-2, 15%), 30%); }
+	.navbarAActiveMixin(@color) when (lightness(@color-2) < 20%) { background-color:fadeout(lighten(@color-2, 15%), 30%); }
 
-	#navbar a:active, #navbar a:focus, #navbar a:active:focus, #navbar a.selected {
-		.navbarAActiveMixen(@color-grad2-base);
-	}
+	#navbar a:active, #navbar a:focus, #navbar a:active:focus, #navbar a.selected {	.navbarAActiveMixin(@color-2);	}
 
-
-
-	#navbar a:not(:last-of-type) { border-right: 1px solid darken(desaturate(@color-grad2-base, 50%), 50%); }
+	#navbar a:not(:last-of-type) { border-right: 1px solid darken(@color-2, 25%); box-shadow:-1px 0 0 lighten(@color-2, 15%) inset; }
 
 	#navbar .icon:before {
 		position: absolute;
@@ -303,19 +271,18 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 
 	.jq-badge {
 		-webkit-box-direction: reverse; 
-		-webkit-box-sizing: border-box;
 		position: absolute;
-		top: 2px; right: 2px;
+		top: 6px; right: 32px;
 		width: 22px; height: 22px;
 		border-radius: 11px;
 		background: red;
 		border: 2px solid white;
-		margin: 2px;
-		box-shadow: 0 1px 4px rgba(0,0,0,.65);
-		font:bold 12px/20px Arial, Helvetica, sans-serif;
+		box-shadow: 0 2px 3px rgba(0,0,0,.65);
+		font:normal 12px/18px Arial, Helvetica, sans-serif;
 		color: white;
 		text-align: center;
 		text-overflow: ellipsis;
+		text-shadow: 0 -1px rgba(0,0,0,.5);
 		overflow: hidden;
 		z-index: 100;
 	}
@@ -334,7 +301,9 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	footer, header, nav { display:none; } /* Custom footers - always hidden */
 
 
-/* SIDE-SLIDING MENU */
+/**********************************************************
+  SIDE-SLIDING MENU
+**********************************************************/
 	.hasMenu{
  		position:absolute !important;
  		left:0px !important;
@@ -376,7 +345,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
     }
 	#menu.on { left:0px !important; }
 
-	.menuMixin(@color){}
+	.menuMixin(@color) {}
 	.menuMixin(@color) when (lightness(@color-bg) >= 50%) { background: darken(@color-bg, 20%); }
 	.menuMixin(@color) when (lightness(@color-bg) < 50%) { background: lighten(@color-bg, 20%); }
 
@@ -412,8 +381,8 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		font-size: @size-font-heading;
 		font-weight: bold; 
 		line-height: @size-leading-heading;
-		color: @color-font-heading;
-		.shadow1Mixin(@color-font-heading);
+		color: @color-heading-text;
+		.textShadowMixin(@color-heading-text);
 		text-align: center !important;
 	    text-overflow: ellipsis;
 		white-space: nowrap;
@@ -430,7 +399,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	#menu .title {
 		margin: 12px 0 3px; 
 		font-size: 16px;
-		color: @color-font-heading;
+		color: @color-heading-text;
 		font-weight: bold;
 	}
 
@@ -444,204 +413,204 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		background: inherit;
 	} /* A plain, non-interactive list item--best suited to a heading. */
 
+	.menuBGMixin(@bgcolor) when (lightness(@bgcolor)<20){
+		border-color: lighten(@bgcolor, 20%) lighten(@bgcolor, 10%) darken(@bgcolor, 5%) lighten(@bgcolor, 10%);
+		background:lighten(@bgcolor,10%);
+	}
+	.menuBGMixin(@bgcolor) when (lightness(@bgcolor)>=20){
+		border-color: darken(@bgcolor, 10%) darken(@bgcolor, 15%) darken(@bgcolor, 25%) darken(@bgcolor, 15%);
+		background:darken(@bgcolor,10%);
+	}
 	#menu ul > li > a {
 		display: block;
 		width: 100%; height: 28px;
+		margin-left: -10px;
 		font-family: @typeface-text;
 		font-weight: normal;
 		font-size: @size-font-text;
-		line-height: 28px;
+		line-height: 25px;
 		padding-left: 6px;
-		color: @color-font-text;
+		color: @color-general-text;
 		text-decoration: none;
 		border-style: solid;
 		border-width: 1px;
-		.menuBGMixen(@color-bg);
-	} 
+		.menuBGMixin(@color-bg);
+	}
+
 	#menu ul > li > a:after { content: ""; }
-	#menu ul > li:last-child > a { border-bottom: 1px solid lighten(@color-bg, 25%); }
 
-	.menuBGMixen(@bgcolor) when (lightness(@bgcolor)<50){
-		border-color: lighten(@bgcolor, 25%) lighten(@bgcolor, 25%) transparent lighten(@bgcolor, 25%);
-		background:lighten(@bgcolor,10%);
-	}
-	.menuBGMixen(@bgcolor) when (lightness(@bgcolor)>=50){
-		border-color: darken(@bgcolor, 25%) lighten(@bgcolor, 25%) transparent lighten(@bgcolor, 25%);
-		background:darken(@bgcolor,10%);
-	}
+	.menuulSelectedMixin (@color) when (lightness(@color)<80%) { background:lighten(@color,20%); }
+	.menuulSelectedMixin (@color) when (lightness(@color)>=80%) { background:darken(@color,20%); }
+	.menuulSelectedMixin(@color) { }
 
-	.menuBGMixen(@bgcolor){
-		z-index:@bgcolor;
-		text-decoration:lightness(@bgcolor);
-	}
-
-	.menuulSelectedMixen (@color) when (lightness(@color)<50%){
-		background:lighten(@color,20%);
-	}
-	.menuulSelectedMixen (@color) when (lightness(@color)>=50%){
-		background:darken(@color,20%);
-	}
-	.menuulSelectedMixen(@color){
-	}
-
-	#menu ul > li >a.selected, ul > li.selected{
-		.menuulSelectedMixen(@color-bg)
-	}
+	#menu ul > li >a.selected, ul > li.selected { .menuulSelectedMixin(@color-bg); border-color: @color-heading-text; }
 
 
 /**********************************************************
 	BUTTON STYLES
 **********************************************************/
+	.buttonBorderMixin(@color) { }
+	.buttonBorderMixin(@color) when (lightness(@color-4)>=20%) { border:1px solid darken(@color-4, 25%); }
+	.buttonBorderMixin(@color) when (lightness(@color-4)<20%) { border:1px solid lighten(@color-4, 25%); }
+
+	.buttonTextMixin(@color) { }
+	.buttonTextMixin(@color) when (lightness(@color-4)>=50%) { 
+		color:darken(@color-4, 85%);
+		text-shadow:0 1px 0 rgba(255,255,255,.5);
+	}
+	.buttonTextMixin(@color) when (lightness(@color-4)<50%) { 
+		color:lighten(@color-4, 85%);
+		text-shadow:0 -1px 0 rgba(0,0,0,.5);
+	}
+
+	.button {
+		position: relative;
+		display: inline-block;
+		height: 36px; min-width: 60px;
+		padding: 0px 8px;
+		margin: 6px; 
+		cursor: pointer;
+		z-index: 1;
+		-webkit-border-radius: 18px; border-radius: 18px;
+		background-color: @color-4;
+		border:1px solid @color-4;
+		.buttonBorderMixin(@color-4);
+		font-family: @typeface-text; 
+		font-size: @size-font-text;
+		.buttonTextMixin(@color-4);
+		font-weight: bold;
+		line-height: 34px;
+		text-decoration: none;
+		text-align: center;
+		text-overflow: ellipsis;
+	} /* Styling for CSS-generated buttons, including the back button. These buttons can bue used anywhere in the UI. */
+
+	.buttonSelBorderMixin(@color) { }
+	.buttonSelBorderMixin(@color) when (lightness(@color-4)>=90%) { border:1px solid darken(@color-4, 40%); }
+	.buttonSelBorderMixin(@color) when (lightness(@color-4)<90%) { border:1px solid lighten(@color-4, 40%); }
+
+	.button.selected { 
+		.buttonSelBorderMixin(@color-4);
+		.gradient4;
+	} /* Behavior of button for touch interaction. */
+
+	#backButton {
+		display: block;
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		max-width: 60px;
+		text-overflow: ellipsis;
+	} /* Sets up positioning of the back button which appears in the header */
+
+	#backButton > div {
+		max-width: 60px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	} /* sets up sizing and handling of excess text for the type in the back button */
 
 	.menuButton {
-
 		position:relative;
-		width:48px;	height:48px;
-		padding:9px 4px;
-		border-right:1px solid #666;
-		box-shadow:1px 0 0 #000;
+		width:48px;	height:100%;
+		padding:12px 12px;
+		border-left:1px solid darken(@color-1, 25%);
+		box-shadow:1px 0 0 lighten(@color-1, 15%) inset;
 		background-color:transparent;
 		display:inline-block;
 	}
-	.menuButton:active { background:rgba(255,255,255,0.4); }
+
+	.menuButtonActiveMixin(@color) { }
+	.menuButtonActiveMixin(@color) when (lightness(@color-1)>=20%) { background-color:fadeout(darken(@color-1, 15%), 30%); }
+	.menuButtonActiveMixin(@color) when (lightness(@color-1)<20%) { background-color:fadeout(lighten(@color-1, 15%), 30%); }
+	.menuButton:active { .menuButtonActiveMixin(@color-1) }
+
 	.menuButton:before {
 		content:'';
 		position:absolute;
-		width:80%; height:6px;
+		width:50%; height:4px;
 		border-radius:20px;
-		background:#fff;
-		box-shadow:0 12px 0 #fff;
+		background:@color-heading-text;
+		box-shadow:0 9px 0 @color-heading-text;
 	}
 	.menuButton:after {
 		content:'';
 		position:absolute;
-		top:33px;
-		width:80%; height:6px;
+		top:30px;
+		width:50%; height:4px;
 		border-radius:20px;
-		background:#fff;
+		background:@color-heading-text;
 	}
 
-#backButton {
-	display: block;
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	max-width: 60px;
-	text-overflow: ellipsis;
-} /* Sets up positioning of the back button which appears in the header */
+	.modalbutton {
+		position: absolute;
+		top: 0px;  right: 5px;
+		width: 58px; height: 32px;
+		line-height: 32px;
+		z-index: 9999;
+	} 
 
-#backButton > div {
-	max-width: 60px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-} /* sets up sizing and handling of excess text for the type in the back button */
-
-.button {
-	position: relative;
-	display: inline-block;
-	height: 36px; min-width: 60px;
-	padding: 0px 8px;
-	-webkit-border-radius: 18px; border-radius: 18px;
-	.gradient3;
-	border: 1px solid @color-grad3-base;
-	margin: 6px; 
-	cursor: pointer;
-	z-index: 1;
-	font-family: @typeface-text; 
-	font-size: @size-font-text;
-	color: @color-font-text;
-	font-weight: bold;
-	line-height: 36px;
-	text-decoration:none;
-	text-align:center;
-	.buttonShadowMixn(@color-grad3-base);
-	text-overflow: ellipsis; 
-	-webkit-box-shadow: 0 0 0 1px darken(@color-grad3-base, 80%); box-shadow: 0 0 0 1px darken(@color-grad3-base, 80%);
-	-webkit-transition: all 0.2s ease; transition: all 0.2s ease;
-} /* Styling for CSS-generated buttons, including the back button. These buttons can bue used anywhere in the UI. */
-
-.button.selected {
-	.buttonSelectedShadowMixn(@color-grad3-base);
-	-webkit-box-shadow: 0 0 0 4px darken(@color-grad3-base, 90%); box-shadow: 0 0 0 1px darken(@color-grad3-base, 90%);
-} /* behavior of button for touch interaction */
-
-.modalbutton {
-	position: absolute;
-	top: 0px;  right: 5px;
-	width: 58px; height: 32px;
-	line-height: 32px;
-	z-index: 9999;
-} 
-
-.closebutton {
-  position: relative;
-  float:right;
-  top: 6px;
-  right: 6px;
-  display: block;
-  height: 24px !important;
-  width: 24px !important;
-  border-radius: 12px;
-  border: 1px solid #666;
-  background: #fff;
-  color: #333;
-  font: bold 21px/18px 'Arial Black', Arial Black, Gadget, Arial, Helvetica, sans-serif;
-  text-align: center;
-  text-decoration: none;
-  -webkit-transition: all 0.2s ease;
-  transition: all 0.2s ease;
-}
-.closebutton:before { content:'x'; }
-.closebutton.selected,.closebutton.modalButton.selected {
-	color:#fff;
-	background:#333; 
-}
+	.closebutton {
+		position: relative;
+		float:right;
+		top: 6px;
+		right: 6px;
+		display: block;
+		height: 24px !important;
+		width: 24px !important;
+		border-radius: 12px;
+		border: 1px solid #666;
+		background: #fff;
+		color: #333;
+		font: bold 21px/18px 'Arial Black', Arial Black, Gadget, Arial, Helvetica, sans-serif;
+		text-align: center;
+		text-decoration: none;
+	}
+	.closebutton:before { content:'x'; }
+	.closebutton.selected,.closebutton.modalButton.selected {
+		color:#fff;
+		background:#333; 
+	}
 
 
-/* LIST NAVIGATION */
+/**********************************************************
+  LIST NAV AND ITEMS
+**********************************************************/
 	ul { }
-	 
+	
 	ul > li {
 		display: block;
 		width: 100%; height: 48px;
 		list-style: none;
-		background: @color-grad2-base;
-		margin-bottom: 1px;
+		background: @color-3;
 	} /* A plain, non-interactive list item--best suited to a heading. */
 
 	ul > li > a {
 		display: block;
 		width: 100%; height: 48px;
+		border-width: 1px;
+		border-style: solid;
+		border-color: lighten(@color-3, 20%) transparent darken(@color-3, 20%) transparent;
 		padding-left:8px;
 		font-family: @typeface-heading;
 		font-weight: bold;
 		font-size: @size-font-heading * .75;
 		line-height: 48px;
-		color: @color-font-heading;
+		color: @color-heading-text;
 		text-decoration: none;
-		.shadow1Mixin(@color-font-heading);
-		.ulShadowMixn(@color-grad2-base);
+		.textShadowMixin(@color-heading-text);
+		
 	} /* A touchable, interactive list item. */
 
 	ul > li > a:after {
 		content: ">";
 		position: absolute;
+		font-size: @size-font-heading;
 		right: 15px;
 	}
-	ul > li > a[selected], ul > li > a:active { color:#fff !important; } /* A selected and active states for interactive list items. */
+	ul > li > a[selected], ul > li > a:active {  } /* A selected and active states for interactive list items. */
 
-	.ulSelectedMixen (@color) when (lightness(@color)<50%){
-		background:lighten(@color,10%);
-	}
-	.ulSelectedMixen (@color) when (lightness(@color)>=50%){
-		background:darken(@color,10%);
-	}
-	.ulSelectedMixen(@color){
-	}
-
-	ul > li >a.selected, ul > li.selected{
-		.ulSelectedMixen(@color-grad1-base)
-	}
+	ul > li >a.selected, ul > li.selected { .gradient3; }
+	
 	h2 {
 		display:block;
 		width: 100%; height: 48px;
@@ -650,59 +619,69 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		font-size: @size-font-heading * .75;
 		line-height: 48px; 
 		padding: 0px 8px;
-		color: @color-font-heading;
-		.shadow1Mixin(@color-font-heading);
-		background: @color-grad1-base;
+		color: @color-heading-text;
+		.textShadowMixin(@color-heading-text);
+		background: @color-3;
+		border-width: 1px;
+		border-style: solid;
+		border-color: lighten(@color-3, 25%) transparent darken(@color-3, 25%) transparent;
 	} /* Header class used for non-navigable header bars (h1 is reserved for the header) */
+
+	h2[selected] {  } /* A selected and active states for interactive list items. */
+	h2.selected { .gradient3; }
 
 	.collapsed:after {
 		float:right;
 		content:'';
-		border-left: 5px solid transparent;
-		border-right: 5px solid transparent;
-		border-top: 6px solid #fff;
+		border-left:9px solid transparent;
+		border-right:9px solid transparent;
+		border-top:13px solid @color-heading-text;
 		display:block;
 		position:absolute;
-		top:16px; right:13px;
+		top:19px; right:12px;
 	}
-	.collapsed:before {
+/*	.collapsed:before {
+		display:none;
 		float:right;
 		content:'';
 		color:transparent;
 		background:transparent;
-		width:14px; height:14px; 
+		width:30px; height:30px; 
 		display: block;
-		border:2px solid white;
-		border-radius:3px;
+		border:1px solid @color-heading-text;
+		border-radius:18px;
 		position:absolute;
-		top: 9px; right: 9px;
-	}
+		top:8px; right:5px;
+	}*/
 	.expanded:after {
-		float: right;
-		content: '';
-		border-left: 5px solid transparent;
-		border-right: 5px solid transparent;
-		border-bottom: 6px solid #fff;
-		display: block;
-		position: absolute;
-		top: 14px; right: 13px;
+		float:right;
+		content:'';
+		border-left:9px solid transparent;
+		border-right:9px solid transparent;
+		border-bottom:13px solid @color-heading-text;
+		display:block;
+		position:absolute;
+		top:16px; right:12px;
 	}
-	.expanded:before {
-		float: right;
-		content: '';
-		color: transparent;
-		background: transparent;
-		width :14px; height: 14px; 
-		display: block;
-		border: 2px solid white;
-		border-radius: 3px;
-		position: absolute;
-		top: 9px; right: 9px;
-	}
+/*	.expanded:before {
+		display:none;
+		float:right;
+		content:'';
+		color:transparent;
+		background:transparent;
+		width:30px; height:30px;
+		display:block;
+		border:1px solid @color-heading-text;
+		border-radius:18px;
+		position:absolute;
+		top:8px; right:5px;
+	}*/
 
 
 
-/* MISCELLANEOUS FUNCTIONAL UI ELEMENTS */
+/**********************************************************
+  MISCELLANEOUS UI ELEMENTS
+**********************************************************/
 	#modalContainer { width:100%; }
 	#jQui_modal {
 		display: none;
@@ -715,22 +694,100 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		-webkit-perspective: 1000;
 	}
 
-	.jqmScrollbar { background-color: @color-font-text !important; } /* Sets the color of the scrollbar */
+	.jqmScrollbar { background-color: @color-general-text !important; } /* Sets the color of the scrollbar */
 
 
+/**********************************************************
+  LOAD SCREEN
+**********************************************************/
+	#splashscreen {
+		position: absolute;
+		top: 0px; bottom: 0px;
+		width: 100%;
+		left: 0px;
+		min-height: 100%;
+		background: @color-bg !important;
+		color: white !important;
+		font-size: 30px;
+		text-align:center;
+		z-index: 9999;
+		display: block;
+		margin: 0 auto !important;
+		padding-top: 80px !important;
+	}
+	.splashscreen {
+		background: @color-bg !important;
+		padding-left: 40px;
+		padding-top: 30px !important;
+		min-height: 100%;
+	}
+	.ui-icon {
+		background: rgba(0,0,0,.4);
+		background-repeat: no-repeat;
+		border-radius: 9px;
+	}
 
-	
+	.ui-loader { 
+		display: none; 
+		position: absolute; 
+		opacity: .85; 
+		z-index: 100; 
+		left: 50%; 
+		width: 200px; 
+		margin-left: -100px; margin-top: -35px; 
+		padding: 10px 30px; 
+		background: rgba(0,0,0,.4);
+		border-radius: 9px;
+	}
+	.ui-loader h1 { 
+		font-size: 15px; 
+		text-align: center; 
+	}
+	.ui-loader .ui-icon { 
+		position: static; 
+		display: block; 
+		opacity: .9; 
+		margin: 0 auto; 
+		width: 35px; 
+		height: 35px; 
+		background-color: transparent; 
+	}
 
-/* FORM ELEMENTS */
+	.spin  {
+		-webkit-transform: rotate(360deg);
+		-webkit-animation-name: spin;
+		-webkit-animation-duration: 1s;
+		-webkit-animation-iteration-count:  infinite;
+	}
+	@-webkit-keyframes spin {
+		from {-webkit-transform: rotate(0deg);}
+	  	to {-webkit-transform: rotate(360deg);}
+	}
+
+	.ui-icon-loading {
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjBAMAAADs965qAAAAA3NCSVQICAjb4U/gAAAAMFBMVEX////x8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHvvEhiAAAAEHRSTlMAESIzRFVmd4iZqrvM3e7/dpUBFQAAAAlwSFlzAAAK6wAACusBgosNWgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAEaSURBVCiRY2AgATCapaUqoIiIzN5z5syZJiQRltW7gUJ3705C6OraDRG6GwATkli1evdusNBTuKJVq3c4MjBX3733DqqMfdWqFWDbau+9ewIRspy5KgHMYL737g1EX+fMaVAjbN+9KwDLzZxZAHPMu3cXwEbNnAl397p3YDslOmD6GBjs/v8AURodzXAh3v+/QZRHRyNciPP/f4hQA1yIHVMICtzLC9CFzMuL0IXEy0vQhdjK0+BsRqgv0tIMYEKCggJgmbS0QJgiQUEIwy0tVQCmCCokmhYaCFMElWMKDQ01BIkoKcKEGFRDQ1yMlISUgEIwe5iAQi7GxkpKSjBFwMh2cXEGCSkiOVcFLIQswsAgZGxshCpCBgAA0FNYp5zwDegAAAAASUVORK5CYII=);
+		width: 40px;
+		height: 40px;
+		border-radius: 20px;
+		background-size: 35px 35px;
+	}
+		
+	.ui-corner-all { border-radius:.6em; }
+	#jQui_mask { position:absolute; top:45%; }
+
+
+/**********************************************************
+  FORM ELEMENTS
+**********************************************************/
 	fieldset h4 {
 		text-align:left;
 		font-family: @typeface-heading;
-		color:@color-font-heading;
+		color:@color-heading-text;
 		font-weight:bold;
 		font-size:@size-font-heading * .75;
 		line-height:21px;
 		margin-bottom:-8px; margin-top:8px;
-		.shadow2Mixin(@color-font-heading);
+		.textShadowMixin(@color-heading-text);
 	} /* Style for subhead for a group of labels/inputs within a fieldset. */
 
 	fieldset {
@@ -738,7 +795,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		padding:12px 18px 12px 18px;
 		-webkit-border-radius:5px;
 		border-radius:5px;
-		border:1px solid @color-grad2-base;
+		border:1px solid @color-2;
 		outline:0;
 		width:95%;
 	}
@@ -763,7 +820,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		font-size: @size-font-text * 1.25;
 		font-weight: bold;
 		overflow: hidden;
-		color: @color-font-text;
+		color: @color-general-text;
 		text-transform: uppercase;
 	} /* This is the name that appears at the top left of the fieldset. */
 
@@ -771,15 +828,16 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		display: block;
 		margin: 4px 0 18px;
 		padding: 8px;
-		border: solid 1px @color-form-borders;
+		border: solid 1px @color-general-text;
 		outline: 0;
-		color: @color-font-text;
+		color: @color-general-text;
 		background: @color-bg;
-		-webkit-border-radius: @input-radius; border-radius: @input-radius;
+		-webkit-border-radius: @the-radius; border-radius: @the-radius;
 		-webkit-box-shadow: inset 2px 2px 6px rgba(0,0,0,.5); box-shadow: inset 2px 2px 6px rgba(0,0,0,.5);
 		width: 85%;
 		min-height: 150px;
 		line-height: 120%;
+		
 	} /* These properties determine the look of textarea inputs. */
 
 	input.jq-ui-forms { 
@@ -787,15 +845,16 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		width: 65%;
 		margin-top: 4px; margin-bottom: 12px;
 		padding: 8px;
-		border: solid 1px #999;
+		border: solid 1px @color-2;
 		outline: 0;
-		color: #fff;
+		color: @color-general-text;
 		background: @color-bg;
-		-webkit-border-radius: @input-radius; border-radius: @input-radius;
-		-webkit-box-shadow: inset 2px 2px 6px fadeout(darken(@color-bg, 90%), 80%); box-shadow: inset 2px 2px 6px fadeout(darken(@color-bg, 90%), 80%);
+		-webkit-border-radius: @the-radius; border-radius: @the-radius;
+		-webkit-box-shadow: inset 2px 2px 6px fadeout(darken(@color-bg, 50%), 70%); box-shadow: inset 2px 2px 6px fadeout(darken(@color-bg, 50%), 70%);
+		
 	} /* These properties combine to create the look of the input fields. */
 
-	input.jq-ui-forms:hover, textarea:hover, input.jq-ui-forms:focus, textarea:focus { border-color:#ccc; } /* Changes the border color of the input field while active. */
+	input.jq-ui-forms:hover, textarea:hover, input.jq-ui-forms:focus, textarea:focus { border-color:@color-general-text; } /* Changes the border color of the input field while active. */
 
 	input.jq-ui-forms[type=checkbox], input.jq-ui-forms[type=radio]  {
 		position: absolute;
@@ -893,17 +952,17 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	{ background-position:-28px 0px; }
 
 
-	/********    slider controls */
+/**********************************************************
+  SLIDER CONTROL
+**********************************************************/
 	input.jq-ui-slider {
 		position:absolute;
 		left:0;
 		opacity:0;
-		 -webkit-appearance: none;
+		-webkit-appearance: none;
 	} /* Blocks rendering of the native radio controls. */
-
 		
 	input.jq-ui-slider + label { 
-
 		float:left;
 		font-size:15px;
 		font-weight:normal;
@@ -917,13 +976,13 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		display:inline-block;
 	    -webkit-transition: all 0.3s  ease-in-out;
 	    transition: all 0.3s  ease-in-out;
-
 	} 
+
 	input.jq-ui-slider[type=radio]:disabled:checked + label,
 	input.jq-ui-slider[type=radio]:focus:disabled:checked + label,
 	input.jq-ui-slider[type=checkbox]:disabled:checked + label,
 	input.jq-ui-slider[type=checkbox]:focus:disabled:checked + label
-	{ background-position:-29px 0px; opacity:.7 !important;}
+	{ background-position:-29px 0px; opacity:.7 !important; }
 
 	/* Styles for "disabled." */
 	input.jq-ui-slider[type=checkbox]:disabled + label,
@@ -932,71 +991,85 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	input.jq-ui-slider[type=radio]:focus:disabled + label
 	{ background-position:0 0; opacity:.7 !important; }
 		
-
-
 	select[disabled]~div { opacity:.7; }
 
+
+/**********************************************************
+  ACTION SHEET
+**********************************************************/
 	#jq_actionsheet {
 		position:absolute;
-		left:0px;
-		right:0px;
-		padding-left:10px;
-		padding-right:10px;
-		padding-top:10px;
+		left:0px; right:0px;
+		padding:10px;
 		margin:auto;
-		background:black;
 		float:left;
 		z-index:9999;
-		border-top:#fff 1px solid;
-		background:rgba(71,71,71,.95);
-		background-image:-webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,.4)), to(rgba(255,255,255,0)), color-stop(.08,rgba(255,255,255,.1)), color-stop(.08,rgba(255,255,255,0)));
-		background-image:-webkit-linear-gradient(top, rgba(255,255,255,.4) 0%, rgba(255,255,255,.1) 8%, rgba(255,255,255,0) 8%);
-		box-shadow:0px -1px 2px rgba(0,0,0,.4);
-		transition:all 300ms;
-		-webkit-transition:all 300ms;
+		background:fadeout(@color-1, 5%);
+		border-top:1px solid lighten(@color-1, 20%);
+		box-shadow:0 0 12px rgba(0,0,0,.5);
+		-webkit-transition:all 0.15s ease; transition:all 0.15s ease;		
 	}
+
+	.actionMixin(@color) { }
+	.actionMixin(@color) when (lightness(@color-4)>=20%) { border:1px solid darken(@color-4, 25%); }
+	.actionMixin(@color) when (lightness(@color-4)<20%) { border:1px solid lighten(@color-4, 25%); }
+
+	.actionTextMixin(@color) { }
+	.actionTextMixin(@color) when (lightness(@color-4)>=50%) { 
+		color:darken(@color-4, 85%);
+		text-shadow:0 1px 0 rgba(255,255,255,.5);
+	}
+	.actionTextMixin(@color) when (lightness(@color-4)<50%) { 
+		color:lighten(@color-4, 85%);
+		text-shadow:0 -1px 0 rgba(0,0,0,.5);
+	}
+
 	#jq_actionsheet a {
-		text-decoration:none;
-		-webkit-transition:all 0.4s ease; 
-		 text-shadow:0px -1px rgba(0,0,0,.8);
-		padding:0px .25em;
-		border:1px solid rgba(0,0,0,.8);
-		text-overflow:ellipsis; 
-		-webkit-border-radius:.75em; border-radius:.75em;
-		background-image:-webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,.4)), to(rgba(255,255,255,0)), color-stop(.5,rgba(255,255,255,.1)), color-stop(.5,rgba(255,255,255,0)));
-		background-image:-webkit-linear-gradient(top, rgba(255,255,255,.5) 0%, rgba(255,255,255,.2) 50%, rgba(255,255,255,0) 50%);
-		-webkit-box-shadow:0px 1px 1px rgba(255,255,255,0.7); box-shadow:0px 1px 1px rgba(255,255,255,0.7);
 		display:block;
-		color:white;
-		text-align:center;
-		line-height:36px;
-		font-size:20px;
+		height:36px; width:300px;
+		padding:0 12px;
+		margin:0 auto 12px;
+		-webkit-border-radius:18px; border-radius:18px;
+		background-color:@color-4;
+		.actionMixin(@color-4);
+		font-family:@typeface-heading;
+		font-size:@size-font-heading;
+		.actionTextMixin(@color-4);
+		line-height:34px;
 		font-weight:bold;
-		margin-bottom:10px;
-		background-color:rgba(130,130,130,1);
+		text-align:center;
+		text-decoration:none;
+		text-overflow:ellipsis; 
+		-webkit-transition:all 0.15s ease; transition:all 0.15s ease;		
 	}
 
-	#jq_actionsheet a.selected {
-		background-color:rgba(150,150,150,1);
+	.actionSelBorderMixin(@color) { }
+	.actionSelBorderMixin(@color) when (lightness(@color-4)>=90%) { border:1px solid darken(@color-4, 40%); }
+	.actionSelBorderMixin(@color) when (lightness(@color-4)<90%) { border:1px solid lighten(@color-4, 40%); }
+
+	#jq_actionsheet a.selected { 
+		.actionSelBorderMixin(@color-4);
+		.gradient4; 
 	}
 
-	#jq_actionsheet a.cancel {
-	 background-color:rgba(43,43,43,1);
+	#jq_actionsheet a.cancel { 
+		background-color:red; 
+		border-color: maroon; 
+		color:white;
+		.textShadowMixin(white);
+	}
+	#jq_actionsheet a.cancel.selected { 
+		border-color: white; 
+		background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, red), color-stop(100%, maroon));
+		background-image: -webkit-linear-gradient(top, color-stop(0%, red), color-stop(100%, maroon));
+		background-image: linear-gradient(to bottom, color-stop(0%, red), color-stop(100%, maroon));
 	}
 
-	#jq_actionsheet a.cancel.selected {
-		background-color:rgba(73,73,73,1);
-	}
-	#jq_actionsheet a.red {
-		 color:white;
-		 background-color:rgba(204,0,0,1);
-	}
 
-	#jq_actionsheet a.red.selected {
-		 background-color:rgba(255,0,0,1); 
-	}
-
-	BODY>DIV#mask{
+/**********************************************************
+  POPUP
+**********************************************************/
+	body > div #mask {
 		display:block;
 		width:100%; 
 		height:100%; 
@@ -1007,123 +1080,95 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		left:0;
 	}
 
+	.popupBorderMixin(@color) { }
+	.popupBorderMixin(@color) when (lightness(@color-2) >= 80%) { border:solid 1px darken(@color-2, 25%); }
+	.popupBorderMixin(@color) when (lightness(@color-2) < 80%) { border:solid 1px lighten(@color-2, 25%); }
+
 	.jqPopup {
-		display: block;
-		width: 280px;
 		float:left;
-		border: solid 1px #72767b;
-		-webkit-box-shadow: 0px 4px 6px #555, 0 0 20px rgba(255,255,255,0.5);
-		-webkit-border-radius: 10px;
-		border-radius:10px;
-		padding: 10px;
-		opacity: 1;
-		-webkit-transform: scale(1);
-		-webkit-transition: all 0.20s  ease-in-out;
-		transform:scale(1);
-		transition: all 0.20s  ease-in-out;
-		position: absolute;
-		z-index: 1000000;
-		margin-left: auto!important;
-		margin-right: auto!important;
-		background: rgba(70,70,70,1);
-		background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(70,70,70,0.8)),    to(rgba(0,20,20,0.8)));
-	}
-	.jqPopup * {
-	color:white;
+		display:block;
+		position:absolute;
+		width:300px;
+		z-index:1000000;
+		margin:auto !important;
+		padding:12px;
+		background:@color-2;
+		.popupBorderMixin(@color-2);
+		box-shadow:0 0 18px fadeout(@color-bg, 20%);
+		border-radius:@the-radius;
+		font-family:@typeface-heading;
+		color:@color-heading-text;
+		opacity:1;
+		-webkit-transform:scale(1); transform:scale(1);
+		-webkit-transition:all 0.15s ease-in-out; transition:all 0.15s ease-in-out;
 	}
 
 	.jqPopup.hidden {
-		opacity: 0;
-		-webkit-transform: scale(0);
+		opacity:0;
+		-webkit-transform:scale(0);
 		transform:scale(0);
-		top: 50%;
-		left: 50%;
-		margin: 0px auto;
+		top:50%;
+		left:50%;
+		margin:0 auto;
 	}
 
-	.jqPopup header{
-		font-weight:bold;
-		font-size:20px;    
-		margin:0;
-		padding:0;
+	.jqPopup header {
 		display:block !important;
+		font-size:@size-font-heading * .75;
+		line-height:@size-leading-heading * .75;
+		font-weight:bold;
 	}
 
-	.jqPopup div{
-		font-size:12px;
+	.jqPopup div { 
+		font-size:@size-font-text;
+		line-height:@size-leading-text * .75;
+		font-weight:normal; 
 	}
 
-	.jqPopup footer{
+	.jqPopup footer {
+		display:block !important;
 		width:100%;    
 		text-align:center;
-		display:block !important;
 	}
 
-	.jqPopup footer a#cancel{
-		float:left;
-	}
+	.jqPopup footer a#cancel { float:left; }
 
-	.jqPopup footer a#action{
+	.jqPopup footer a#action {
 		float:right;
 		margin-right:4px;
 	}
 
-	.jqPopup footer a.center{
+	.jqPopup footer a.center {
 		float:none!important;
 		width:80%;
 		margin:8px;
 	}
 
-
-
-
-	/** This can be your default scrollbar class.  You must use !important to override the default inline styles */
+	/** This can be your default scrollbar class. You must use !important to override the default inline styles */
 	.scrollBar { 
 	   position:absolute !important;
 	   width:5px !important;
 	   height:20px !important;
 	   border-radius:2px !important;
-	   border:1px soldid black !important;
+	   border:1px solid black !important;
 	   background:black !important;
 	   opacity:0 !important;
-	}/*
-	 * Since the styles are built in, you have to override values with !important
-	 */
+	} /* Since the styles are built in, you have to override values with !important */
 
-	/* Row of selected item */
-	.jqmobiSelectRowFound {
-	}
+	.jqmobiSelectRowFound {	} /* Row of selected item */
+	.jqmobiSelectRowButtonFound { } /* Button (radio) for the found item in the list */
+	.jqmobiSelectRow { } /* Row for items in the list */
+	.jqmobiSelectRowButton { } /* button for the items in the list */
+	.jqmobiSelectRowText { } /* class for the item text displayed */
+	
+	#jqmobiSelectBoxHeader { } /* Header for select box */
+	#jqmobiSelectBoxFix { } /* div that holds the options listed*/
 
-	/* Button (radio) for the found item in the list */
-	.jqmobiSelectRowButtonFound{
-	}
-
-
-	/* Row for items in the list */
-	.jqmobiSelectRow{
-
-	}
-
-	/* button for the items in the list */
-	.jqmobiSelectRowButton{
-
-	}
-
-	/* class for the item text displayed */
-	.jqmobiSelectRowText{
-	}
-
-	/* Header for select box */
-	#jqmobiSelectBoxHeader{
-	}
-
-	/* div that holds the options listed*/
-	#jqmobiSelectBoxFix {
-
-	}
+}
 
 
-	@media handheld, only screen and (min-width: 768px) {
+@media handheld, only screen and (min-width: 768px) {
+	#jQUi {
 		.hasMenu, .hasMenu.on  {
 			position:absolute !important;
 			left:256px !important;
@@ -1143,6 +1188,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 			height:100% !important;
 			display:block !important;
 			position:absolute !important;  left:0px !important;
+			background:@color-bg !important;
 			-webkit-transform:translate3d(0,0,0) !important;
 		    -webkit-transition:none !important;
 			transform:translate(0,0);
@@ -1165,82 +1211,5 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 			transition:none !important;
 		}
 	}
+   
 }
-
-	/* LOADSCREEN STYLES */
-	#splashscreen {
-		position: absolute;
-		top: 0px; bottom: 0px;
-		width: 100%;
-		left: 0px;
-		min-height: 100%;
-		background: @color-bg !important;
-		color: white !important;
-		font-size: 30px;
-		text-align:center;
-		z-index: 9999;
-		display: block;
-		margin: 0 auto !important;
-		padding-top: 80px !important;
-	}
-	.splashscreen {
-		background: @color-bg !important;
-		padding-left: 40px;
-		padding-top: 30px !important;
-		min-height: 100%;
-	}
-
-	.ui-icon {
-		background: rgba(0,0,0,.4);
-		background-repeat: no-repeat;
-		border-radius: 9px;
-	}
-
-	.ui-loader { 
-		display: none; 
-		position: absolute; 
-		opacity: .85; 
-		z-index: 100; 
-		left: 50%; 
-		width: 200px; 
-		margin-left: -100px; margin-top: -35px; 
-		padding: 10px 30px; 
-		background: rgba(0,0,0,.4);
-		border-radius: 9px;
-	}
-	.ui-loader h1 { 
-		font-size: 15px; 
-		text-align: center; 
-	}
-	.ui-loader .ui-icon { 
-		position: static; 
-		display: block; 
-		opacity: .9; 
-		margin: 0 auto !important; 
-		width: 35px; 
-		height: 35px; 
-		background-color: transparent; 
-	}
-
-	.spin  {
-		-webkit-transform: rotate(360deg);
-		-webkit-animation-name: spin;
-		-webkit-animation-duration: 1s;
-		-webkit-animation-iteration-count:  infinite;
-	}
-	@-webkit-keyframes spin {
-		from {-webkit-transform: rotate(0deg);}
-	  	to {-webkit-transform: rotate(360deg);}
-	}
-
-	.ui-icon-loading {
-		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjBAMAAADs965qAAAAA3NCSVQICAjb4U/gAAAAMFBMVEX////x8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHvvEhiAAAAEHRSTlMAESIzRFVmd4iZqrvM3e7/dpUBFQAAAAlwSFlzAAAK6wAACusBgosNWgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAEaSURBVCiRY2AgATCapaUqoIiIzN5z5syZJiQRltW7gUJ3705C6OraDRG6GwATkli1evdusNBTuKJVq3c4MjBX3733DqqMfdWqFWDbau+9ewIRspy5KgHMYL737g1EX+fMaVAjbN+9KwDLzZxZAHPMu3cXwEbNnAl397p3YDslOmD6GBjs/v8AURodzXAh3v+/QZRHRyNciPP/f4hQA1yIHVMICtzLC9CFzMuL0IXEy0vQhdjK0+BsRqgv0tIMYEKCggJgmbS0QJgiQUEIwy0tVQCmCCokmhYaCFMElWMKDQ01BIkoKcKEGFRDQ1yMlISUgEIwe5iAQi7GxkpKSjBFwMh2cXEGCSkiOVcFLIQswsAgZGxshCpCBgAA0FNYp5zwDegAAAAASUVORK5CYII=);
-		width: 40px;
-		height: 40px;
-		border-radius: 20px;
-		background-size: 35px 35px;
-	}
-		
-	.ui-corner-all { border-radius:.6em; }
-	#jQui_mask { position:absolute; top:45%; }
-
