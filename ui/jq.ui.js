@@ -4041,9 +4041,8 @@ if (!HTMLElement.prototype.unwatch) {
             
             what = null;
             var that = this;
-            
             var loadAjax = true;
-            
+            anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
             if (target.indexOf("#") == -1) {
                 var urlHash = "url" + crc32(target); //Ajax urls
                 var crcCheck = jq("div.panel[data-crc='" + urlHash + "']");
@@ -4064,7 +4063,6 @@ if (!HTMLElement.prototype.unwatch) {
                 }
             }
             if (target.indexOf("#") == -1 && loadAjax) {
-                anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
                 this.loadAjax(target, newTab, back, transition, anchor);
             } else {
                 this.loadDiv(target, newTab, back, transition);
