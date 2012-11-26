@@ -897,6 +897,7 @@ select[disabled]~div {
 		border-radius:20px;
 		background:#fff;
 		box-shadow:0 12px 0 #fff;
+		-webkit-box-shadow:0 12px 0 #fff;
 	}
 	.menuButton:after {
 		content:'';
