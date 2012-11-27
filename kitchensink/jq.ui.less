@@ -218,6 +218,11 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		overflow-y:auto;
 		overflow-x:hidden;
 	} 
+	.panel > * {
+	    -webkit-backface-visibility: hidden;
+	    -webkit-perspective: 1000;
+	}
+
 
 
 /**********************************************************
@@ -311,6 +316,8 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	.hasMenu{
  		position:absolute !important;
  		left:0px !important;
+ 		-webkit-transition-timing-function:linear;
+  		transition-timing-function:linear;
 	}
 		/*menu on/off mechanism, note .hasMenu.off and #menu.on default to no transform*/
 	.hasMenu.to-on {
@@ -360,6 +367,8 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		z-index:1;
 		width: 200px; height: 100%;
 		.menuMixin(@color-bg);
+		-webkit-transition-timing-function:linear;
+  		transition-timing-function:linear;
 	}
 
 	#menu_scroller {
