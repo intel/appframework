@@ -9,7 +9,7 @@
 
 <link rel="stylesheet" type="text/css" href="styles/icons.css" /> 
 
-<link rel="stylesheet"  type="text/css" href="themes/jq.ui.css" title="default" />
+<link rel="stylesheet"  type="text/css" href="themes/jq.ui.bad.css" title="default" />
 
 
 <!-- uncomment for AppMobi apps
@@ -23,12 +23,11 @@
 <!-- include touch.js on desktop browsers only -->
 <script>
 
+
 if(!((window.DocumentTouch&&document instanceof DocumentTouch)||'ontouchstart' in window)){
-var script=document.createElement("script");
-script.src="touch.js";
-var tag=$("head").append(script);
-$.os.android=true; //let's make it run like an android device
-$.os.desktop=true;
+    var script=document.createElement("script");
+    script.src="js/jq.desktopBrowsers.js";
+    var tag=$("head").append(script);
 }
 
 $(document).ready(function(){
@@ -52,15 +51,8 @@ $(document).ready(function(){
     document.addEventListener("DOMContentLoaded",init,false);  
 	$.ui.ready(function(){console.log('ready');});
    
-    /* This code prevents users from dragging the page */
-    var preventDefaultScroll = function(event) {
-        event.preventDefault();
-        window.scroll(0,0);
-        return false;
-    };
+    
 	
-	document.addEventListener('touchmove', preventDefaultScroll, false);
-
     /* This code is used to run as soon as appMobi activates */
     var onDeviceReady=function(){
 		AppMobi.device.setRotateOrientation("portrait");
