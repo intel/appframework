@@ -1310,7 +1310,7 @@ if (!window.jq || typeof (jq) !== "function") {
             complete: empty,
             context: undefined,
             timeout: 0,
-            crossDomain:false
+            crossDomain: null
         };
         /**
         * Execute a jsonP call, allowing cross domain scripting
@@ -1388,7 +1388,7 @@ if (!window.jq || typeof (jq) !== "function") {
 				
                 var settings = opts || {};
                 for (var key in ajaxSettings) {
-                    if (!settings[key])
+                    if (typeof(settings[key]) == 'undefined')
                         settings[key] = ajaxSettings[key];
                 }
                 
@@ -1442,7 +1442,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     return $.jsonP(settings);
                 }
                 
-                if (!settings.crossDomain) settings.crossDomain = /^([\w-]+:)?\/\/([^\/]+)/.test(settings.url) &&
+                if (settings.crossDomain === null) settings.crossDomain = /^([\w-]+:)?\/\/([^\/]+)/.test(settings.url) &&
                     RegExp.$2 != window.location.host;
                 
                 if(!settings.crossDomain)
