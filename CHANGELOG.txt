@@ -1,8 +1,8 @@
 1.2 
 
-There are CSS file fixes from the 1.11 release to support Win8.  If you do not want to support Win8, old CSS files will work fine.  
+There are CSS file fixes from the 1.11 release to support Win8.  If you do not want to support Win8, 1.1x CSS files will work fine.  
 
-We have depricated the custom stylesheets.  Slate will be the only one provided.  You can use the style builder now and we have options that are close matches to the old stylesheets
+We have depricated the custom stylesheets.  Slate will be the only one provided.  You can use the style builder now and we have defaults that are close matches to the old stylesheets.
 
 
 Enhancements
@@ -25,10 +25,11 @@ $().vendorCss() - Get/Set CSS properties with vendor specific prefixes.
 
 $.feat.cssPrefix - cross browser vendor prefix ("Webkit","Moz","O","MS","") - use for css3
 
-$.feat.cssTransformStart - detects support for 2d or 3d transforms
+$.feat.cssTransformStart - detects support for 2d or 3d transforms and has the appropriate start
 $.feat.cssTransformEnd - detects support for 2d or 3d transforms 
-   e.g  $obj.css($.feat.cssPrefix+"Transform",$.feat.cssTransformStart+"0,0"+$.feat.cssTransformEnd);
+    e.g  $obj.css($.feat.cssPrefix+"Transform","translate"+$.feat.cssTransformStart+"(0,0"+$.feat.cssTransformEnd+")");
         $obj.css("WebkitTransform","translate3d(0,0,0)";
+
 
 
 $.getCssMatrix(ele) - returns a matrix with the CSS3 values.  If the browser provides a native implementation (webkit) we use that, otherwise it's a basic matrix
