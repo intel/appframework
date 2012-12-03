@@ -14,9 +14,8 @@
     };
 
     var alphaTable = (function () {
-        if (!window.WebKitCSSMatrix) return;
-        var translateOpen = 'm11' in new WebKitCSSMatrix() ? "3d(" : "(";
-        var translateClose = 'm11' in new WebKitCSSMatrix() ? ",0)" : ")";
+        var translateOpen =$.feat.cssTransformStart;
+        var translateClose = $.feat.cssTransformEnd;
         var alphaTable = function (el, scroller, opts) {
 
                 if (typeof el == "string") el = document.getElementById(el);
@@ -50,7 +49,11 @@
             scrollToLetter: function (letter) {
                 var el = document.getElementById(this.prefix + letter);
                 if (el) {
-                    this.scroller.scrollToItem(el);
+                    var yPos = -el.offsetTop;
+                    this.scroller.scrollTo({
+                        x: 0,
+                        y: yPos
+                    });
                 }
             },
             setupIndex: function () {
@@ -67,12 +70,16 @@
                 //To allow updating as we "scroll" with our finger, we need to capture the position on the containerDiv element and calculate the Y coordinates.
                 //On mobile devices, you can not do an "onmouseover" over multiple items and trigger events.
                 containerDiv.addEventListener("touchstart", function (event) {
+
+                    
                     if(event.touches[0].target==this) return;
                     that.isMoving = true;
                     
                     var letter = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
                     if(!letter||!letter.getAttribute("alphatable-item")||letter.getAttribute("alphatable-item").length==0)
-                       return;
+                       var letter = event.touches[0].target;
+
+                    if(letter.innerHTML.length>1) return;
                     that.showLetter(letter.innerHTML);
                     that.scrollToLetter(letter.innerHTML);
                     event.preventDefault();
@@ -81,12 +88,12 @@
                 containerDiv.addEventListener("touchmove", function (event) {
                     var letter = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
                     if(!letter||!letter.getAttribute("alphatable-item")||letter.getAttribute("alphatable-item").length==0)
-                       return;
+                       var letter = event.touches[0].target;
+                    if(letter.innerHTML.length>1) return;
                     if (!that.isMoving) return;
                     that.showLetter(letter.innerHTML);
                     that.scrollToLetter(letter.innerHTML);
                     event.preventDefault();
-                    event.stopPropagation();
                 }, false);
 
                 //Create the alphabet
@@ -120,7 +127,7 @@
             },
             setupLetterBox: function () {
                 var div = document.createElement("div");
-                div.style.cssText = "-webkit-transform:translate3d(0,0,0);display:none;position:absolute;top:35%;left:35%;height:2em;width:15%;line-height:2em;text-align:center;font-size:2em;color:blue;background:#666;z-index:999999;border:1px solid black;border-raidus:10px;";
+                div.style.cssText = $.feat.cssPrefix+"-transform:translate3d(0,0,0);display:none;position:absolute;top:35%;left:35%;height:2em;width:15%;line-height:2em;text-align:center;font-size:2em;color:blue;background:#666;z-index:999999;border:1px solid black;border-raidus:10px;";
                 div.className = this.letterBoxCssClass;
                 div.innerHTML = "";
                 this.letterBox = div;

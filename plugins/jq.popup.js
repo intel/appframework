@@ -130,7 +130,10 @@
                 $el.bind("orientationchange", function() {
                     self.positionPopup();
                 });
-                
+               
+                //force header/footer showing to fix CSS style bugs
+                $el.find("header").show();
+                $el.find("footer").show();
                 this.onShow(this);
                 
             },
