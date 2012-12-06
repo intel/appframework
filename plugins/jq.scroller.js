@@ -364,8 +364,8 @@
 			//set current scroll
 			if(!firstExecution) this.adjustScroll();
 			//set events
-			//if(this.refresh || this.infinite&&!jq.os.desktop) this.el.addEventListener('touchstart', this, false);
-			//this.el.addEventListener('scroll', this, false)
+			if(this.refresh || this.infinite&&!jq.os.desktop) this.el.addEventListener('touchstart', this, false);
+			this.el.addEventListener('scroll', this, false)
 		}
 		nativeScroller.prototype.disable = function(destroy) {
 			if(!this.eventsActive) return;
