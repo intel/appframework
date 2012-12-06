@@ -1912,7 +1912,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 set.push(handler);
                 element.addEventListener(handler.e, proxyfn, false);
             });
-            element=null;
+            //element=null;
         }
 
         /**
