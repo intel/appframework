@@ -4056,8 +4056,13 @@ if (!HTMLElement.prototype.unwatch) {
                     loadAjax = false;
                 } 
                 else if (crcCheck.length > 0) {
-                    if (crcCheck.length > 0)
-                        target = "#" + crcCheck.get(0).id
+                    loadAjax = false;
+                    if (anchor.getAttribute("data-refresh-ajax") === 'true' || (anchor.refresh && anchor.refresh === true || this.isAjaxApp)) {
+                        loadAjax = true;
+                    }
+                    else {
+                        target = "#" + crcCheck.get(0).id;
+                    }
                 } else if (jq("#" + urlHash).length > 0) {
 
                     //ajax div already exists.  Let's see if we should be refreshing it.
