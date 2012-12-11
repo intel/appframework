@@ -3712,6 +3712,7 @@ if (!HTMLElement.prototype.unwatch) {
                     content = null;
                     this.scrollingDivs['modal_container'].enable(!that.resetScrollers);
                     this.scrollToTop('modal');
+                     jq("#modalContainer").data("panel",id);
                 }
             } catch (e) {
                 console.log("Error with modal - " + e, this.modalWindow);
@@ -3729,6 +3730,14 @@ if (!HTMLElement.prototype.unwatch) {
             jq("#jQui_modal").hide()
             
             this.scrollingDivs['modal_container'].disable();
+
+            var tmp=$($("#modalContainer").data("panel"));
+            var fnc = tmp.data("unload");
+            if (typeof fnc == "string" && window[fnc]) {
+                window[fnc](what);
+            }
+            tmp.trigger("unloadpanel");
+
         },
 
         /**
@@ -4099,15 +4108,17 @@ if (!HTMLElement.prototype.unwatch) {
                     this.toggleSideMenu(false);
                 return;
             }
+            this.transitionType = transition;
+            var oldDiv = this.activeDiv;
+            var currWhat = what;
             
             if (what.getAttribute("data-modal") == "true" || what.getAttribute("modal") == "true") {
+                this.parsePanelFunctions(what, oldDiv);
                 return this.showModal(what.id);
             }
                         
             
-            this.transitionType = transition;
-            var oldDiv = this.activeDiv;
-            var currWhat = what;
+          
             
             if (oldDiv == currWhat) //prevent it from going to itself
                 return;
