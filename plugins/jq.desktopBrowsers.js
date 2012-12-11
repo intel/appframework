@@ -41,6 +41,16 @@
 	    touchevt.target = theTarget;
 		
 		touchevt.mouseToTouch = true;
+		if($.os.ie) {
+		//handle inline event handlers for target and parents (for bubbling)
+			var elem = originalEvent.target;
+			while(elem!=null) {
+				if(elem.hasAttribute("on"+type)) {
+					eval(elem.getAttribute("on"+type));
+				}
+				elem = elem.parentElement;
+			}
+		}
 	    theTarget.dispatchEvent(touchevt);
 	}
 	
