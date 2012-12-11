@@ -1376,3 +1376,11 @@ stop();
   var obj={foo:"bar"};
   $.getJSON("server.php?json","",function(data){equals(data.foo,obj.foo);start()});
 });
+
+
+var testGlobal=0;
+test ("parseJS",function(){
+
+  var test="<script>testGlobal='bar'</script>";
+  equals(testGlobal,"bar","Test parsing script tags");
+})

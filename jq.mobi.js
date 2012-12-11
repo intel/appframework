@@ -1547,7 +1547,12 @@ if (!window.jq || typeof (jq) !== "function") {
                                 }
                             } else if (mime === 'application/xml, text/xml') {
                                 result = xhr.responseXML;
-                            } else
+                            } 
+                            else if(mime=="text/html"){
+                                result=xhr.responseText;
+                                $.parseJS(result);
+                            }
+                            else
                                 result = xhr.responseText;
                             //If we're looking at a local file, we assume that no response sent back means there was an error
                             if(xhr.status===0&&result.length===0)
@@ -2351,6 +2356,39 @@ if (!window.jq || typeof (jq) !== "function") {
                 }
             }
         }, true);
+
+        /**
+         * this function executes javascript in HTML.
+           ```
+           $.parseJS(content)
+           ```
+        * @param {String|DOM} content
+        * @title $.parseJS(content);
+        */
+        var remoteJSPages={};
+        $.parseJS= function(div) {
+            if (!div)
+                return;
+            if(typeof(div)=="string"){
+                var elem=document.createElement("div");
+                elem.innerHTML=div;
+                div=elem;
+            }
+            var scripts = div.getElementsByTagName("script");
+            div = null;            
+            for (var i = 0; i < scripts.length; i++) {
+                if (scripts[i].src.length > 0 && !remoteJSPages[scripts[i].src]) {
+                    var doc = document.createElement("script");
+                    doc.type = scripts[i].type;
+                    doc.src = scripts[i].src;
+                    document.getElementsByTagName('head')[0].appendChild(doc);
+                    remoteJSPages[scripts[i].src] = 1;
+                    doc = null;
+                } else {
+                    window.eval(scripts[i].innerHTML);
+                }
+            }
+        };
 		
 
 

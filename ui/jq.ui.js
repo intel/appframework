@@ -3074,7 +3074,6 @@ if (!HTMLElement.prototype.unwatch) {
         transitionType: "slide",
         scrollingDivs: [],
         firstDiv: "",
-        remoteJSPages: {},
         hasLaunched: false,
         launchCompleted: false,
         activeDiv: "",
@@ -4006,21 +4005,7 @@ if (!HTMLElement.prototype.unwatch) {
         parseScriptTags: function(div) {
             if (!div)
                 return;
-            var scripts = div.getElementsByTagName("script");
-            div = null;
-            var that = this;
-            for (var i = 0; i < scripts.length; i++) {
-                if (scripts[i].src.length > 0 && !that.remoteJSPages[scripts[i].src]) {
-                    var doc = document.createElement("script");
-                    doc.type = scripts[i].type;
-                    doc.src = scripts[i].src;
-                    document.getElementsByTagName('head')[0].appendChild(doc);
-                    that.remoteJSPages[scripts[i].src] = 1;
-                    doc = null;
-                } else {
-                    window.eval(scripts[i].innerHTML);
-                }
-            }
+            $.parseJS(div);
         },
         /**
          * This is called to initiate a transition or load content via ajax.
