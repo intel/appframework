@@ -1217,6 +1217,7 @@ textarea {
   background: black !important;
   opacity: 0 !important;
 }
+
 @media handheld, only screen and (min-width: 768px) {
   #jQUi .hasMenu,
   #jQUi .hasMenu.on {
@@ -1236,18 +1237,19 @@ textarea {
   #jQUi .jqMenuClose {
     display: none !important;
   }
-  #jQUi nav ~ #menu {
-    z-index: 200 !important;
-    width: 256px !important;
-    height: 100% !important;
-    display: block !important;
-    position: absolute !important;
-    left: 0px !important;
+  #jQUi nav~#menu {
+    z-index:200 !important;
+    width:256px !important;
+    bottom:0px !important;
+    height:100% !important;
+    display:block !important;
+    position:absolute !important; top:0px !important; 
+    left:0px !important;
     background: #131d26 !important;
-    -webkit-transform: translate3d(0, 0, 0) !important;
-    -webkit-transition: none !important;
-    transform: translate(0, 0);
-    transition: none !important;
+    -webkit-transform:translate3d(0px,0px,0px) !important;
+    -webkit-transition:none !important;
+    transform:translate(0px,0px) !important;
+    transition:none !important;
   }
   #jQUi .hasMenu.to-on {
     -webkit-transition: none !important;
