@@ -710,84 +710,6 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 	.jqmScrollbar { background-color: @color-general-text !important; } /* Sets the color of the scrollbar */
 
 
-/**********************************************************
-  LOAD SCREEN
-**********************************************************/
-	#splashscreen {
-		position: absolute;
-		top: 0px; bottom: 0px;
-		width: 100%;
-		left: 0px;
-		min-height: 100%;
-		background: @color-bg !important;
-		color: white !important;
-		font-size: 30px;
-		text-align:center;
-		z-index: 9999;
-		display: block;
-		margin: 0 auto !important;
-		padding-top: 80px !important;
-	}
-	.splashscreen {
-		background: @color-bg !important;
-		padding-left: 40px;
-		padding-top: 30px !important;
-		min-height: 100%;
-	}
-	.ui-icon {
-		background: rgba(0,0,0,.4);
-		background-repeat: no-repeat;
-		border-radius: 9px;
-	}
-
-	.ui-loader { 
-		display: none; 
-		position: absolute; 
-		opacity: .85; 
-		z-index: 100; 
-		left: 50%; 
-		width: 200px; 
-		margin-left: -100px; margin-top: -35px; 
-		padding: 10px 30px; 
-		background: rgba(0,0,0,.4);
-		border-radius: 9px;
-	}
-	.ui-loader h1 { 
-		font-size: 15px; 
-		text-align: center; 
-	}
-	.ui-loader .ui-icon { 
-		position: static; 
-		display: block; 
-		opacity: .9; 
-		margin: 0 auto; 
-		width: 35px; 
-		height: 35px; 
-		background-color: transparent; 
-	}
-
-	.spin  {
-		-webkit-transform: rotate(360deg);
-		-webkit-animation-name: spin;
-		-webkit-animation-duration: 1s;
-		-webkit-animation-iteration-count:  infinite;
-	}
-	@-webkit-keyframes spin {
-		from {-webkit-transform: rotate(0deg);}
-	  	to {-webkit-transform: rotate(360deg);}
-	}
-
-	.ui-icon-loading {
-		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjBAMAAADs965qAAAAA3NCSVQICAjb4U/gAAAAMFBMVEX////x8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHvvEhiAAAAEHRSTlMAESIzRFVmd4iZqrvM3e7/dpUBFQAAAAlwSFlzAAAK6wAACusBgosNWgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAEaSURBVCiRY2AgATCapaUqoIiIzN5z5syZJiQRltW7gUJ3705C6OraDRG6GwATkli1evdusNBTuKJVq3c4MjBX3733DqqMfdWqFWDbau+9ewIRspy5KgHMYL737g1EX+fMaVAjbN+9KwDLzZxZAHPMu3cXwEbNnAl397p3YDslOmD6GBjs/v8AURodzXAh3v+/QZRHRyNciPP/f4hQA1yIHVMICtzLC9CFzMuL0IXEy0vQhdjK0+BsRqgv0tIMYEKCggJgmbS0QJgiQUEIwy0tVQCmCCokmhYaCFMElWMKDQ01BIkoKcKEGFRDQ1yMlISUgEIwe5iAQi7GxkpKSjBFwMh2cXEGCSkiOVcFLIQswsAgZGxshCpCBgAA0FNYp5zwDegAAAAASUVORK5CYII=);
-		width: 40px;
-		height: 40px;
-		border-radius: 20px;
-		background-size: 35px 35px;
-	}
-		
-	.ui-corner-all { border-radius:.6em; }
-	#jQui_mask { position:absolute; top:45%; }
-
 
 /**********************************************************
   FORM ELEMENTS
@@ -1187,7 +1109,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 			left:256px !important;
 	        -webkit-transition: all 0ms !important;
 	        -webkit-transform:translate3d(0,0,0);
-			transform:translate(0,0);
+			transform:translate(0px,0px);
 			transition:all 0ms !important;
 		}
 
@@ -1204,7 +1126,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 			background:@color-bg !important;
 			-webkit-transform:translate3d(0,0,0) !important;
 		    -webkit-transition:none !important;
-			transform:translate(0,0);
+			transform:translate(0px,0px);
 			transition:none !important;
 		}
 		.hasMenu.to-on {
@@ -1214,15 +1136,99 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		.hasMenu.on, .hasMenu.to-on {
 			-webkit-transform:translate3d(0px,0px,0px) !important;
 			-webkit-transition:none !important;
-			transform:translate(0,0);
+			transform:translate(0px,0px);
 			transition:none !important;
 		}
 		.hasMenu.to-off {
 			-webkit-transform:translate3d(0px,0px,0px) !important;
 			-webkit-transition:none !important;
-			transform:translate(0,0);
+			transform:translate(0px,0px);
 			transition:none !important;
 		}
 	}
    
 }
+
+/* Additional global styles */
+/**********************************************************
+  LOAD SCREEN
+**********************************************************/
+	#splashscreen {
+		position: absolute;
+		top: 0px; bottom: 0px;
+		width: 100%;
+		left: 0px;
+		min-height: 100%;
+		background: @color-bg !important;
+		color: white !important;
+		font-size: 30px;
+		text-align:center;
+		z-index: 9999;
+		display: block;
+		margin: 0 auto !important;
+		padding-top: 80px !important;
+	}
+	.splashscreen {
+		background: @color-bg !important;
+		padding-left: 40px;
+		padding-top: 30px !important;
+		min-height: 100%;
+	}
+	.ui-icon {
+		background: rgba(0,0,0,.4);
+		background-repeat: no-repeat;
+		border-radius: 9px;
+	}
+
+	.ui-loader { 
+		display: none; 
+		position: absolute; 
+		opacity: .85; 
+		z-index: 100; 
+		left: 50%; 
+		width: 200px; 
+		margin-left: -100px; margin-top: -35px; 
+		padding: 10px 30px; 
+		background: rgba(0,0,0,.4);
+		border-radius: 9px;
+	}
+	.ui-loader h1 { 
+		font-size: 15px; 
+		text-align: center; 
+	}
+	.ui-loader .ui-icon { 
+		position: static; 
+		display: block; 
+		opacity: .9; 
+		margin: 0 auto; 
+		width: 35px; 
+		height: 35px; 
+		background-color: transparent; 
+	}
+	#splashscreen .ui-icon {
+  		display:inline-block;
+	}
+	.spin  {
+		-webkit-transform: rotate(360deg);
+		-webkit-animation-name: spin;
+		-webkit-animation-duration: 1s;
+		-webkit-animation-iteration-count:  infinite;
+	}
+	@-webkit-keyframes spin {
+		from {-webkit-transform: rotate(0deg);}
+	  	to {-webkit-transform: rotate(360deg);}
+	}
+
+	.ui-icon-loading {
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjBAMAAADs965qAAAAA3NCSVQICAjb4U/gAAAAMFBMVEX////x8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHvvEhiAAAAEHRSTlMAESIzRFVmd4iZqrvM3e7/dpUBFQAAAAlwSFlzAAAK6wAACusBgosNWgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAEaSURBVCiRY2AgATCapaUqoIiIzN5z5syZJiQRltW7gUJ3705C6OraDRG6GwATkli1evdusNBTuKJVq3c4MjBX3733DqqMfdWqFWDbau+9ewIRspy5KgHMYL737g1EX+fMaVAjbN+9KwDLzZxZAHPMu3cXwEbNnAl397p3YDslOmD6GBjs/v8AURodzXAh3v+/QZRHRyNciPP/f4hQA1yIHVMICtzLC9CFzMuL0IXEy0vQhdjK0+BsRqgv0tIMYEKCggJgmbS0QJgiQUEIwy0tVQCmCCokmhYaCFMElWMKDQ01BIkoKcKEGFRDQ1yMlISUgEIwe5iAQi7GxkpKSjBFwMh2cXEGCSkiOVcFLIQswsAgZGxshCpCBgAA0FNYp5zwDegAAAAASUVORK5CYII=);
+		width: 40px;
+		height: 40px;
+		border-radius: 20px;
+		background-size: 35px 35px;
+	}
+		
+	.ui-corner-all { border-radius:.6em; }
+	
+
+
+#jQui_mask { position:absolute; top:45%; }

@@ -1749,12 +1749,13 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os.chrome = userAgent.match(/Chrome/) ? true : false;
 			$.os.opera = userAgent.match(/Opera/) ? true : false;
             $.os.fennec = userAgent.match(/fennec/i) ? true :userAgent.match(/Firefox/)?true: false;
-            $.os.ie = userAgent.match(/MSIE 10.0/i)?true:false
-			$.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || 'ontouchstart' in window);
-			//features
-			$.feat = {};
+            $.os.ie = userAgent.match(/MSIE 10.0/i)?true:false;
+            $.os.ieTouch=$.os.ie&&userAgent.toLowerCase().match(/touch/i);
+            $.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || 'ontouchstart' in window);
+            //features
+            $.feat = {};
             var head=document.documentElement.getElementsByTagName("head")[0];
-			$.feat.nativeTouchScroll =  typeof(head.style["-webkit-overflow-scrolling"])!=="undefined"||$.os.ie;
+            $.feat.nativeTouchScroll =  typeof(head.style["-webkit-overflow-scrolling"])!=="undefined"||$.os.ieTouch;
             $.feat.cssPrefix=$.os.webkit?"Webkit":$.os.fennec?"Moz":$.os.ie?"ms":$.os.opera?"O":"";
             $.feat.cssTransformStart=!$.os.opera?"3d(":"(";
             $.feat.cssTransformEnd=!$.os.opera?",0)":")";

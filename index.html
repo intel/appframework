@@ -10,8 +10,8 @@
 
 <link rel="stylesheet" type="text/css" href="kitchensink/icons.css" /> 
 
-<link rel="stylesheet" type="text/css" href="kitchensink/jq.ui.less.css" title="default"/>
 
+<link rel="stylesheet" type="text/css" href="kitchensink/jq.ui.less.css" title="default"/>
 <style>
 	.scrollBar{background:white;}
     h3 {text-align:center; font-size:35px;}
@@ -87,7 +87,10 @@ function setActiveStyleSheet(title) {
 }
 $(document).ready(function(){
 oldElem=document.getElementsByTagName("link")[0];
+
 });
+
+
 
 
 </script>
@@ -159,9 +162,9 @@ oldElem=document.getElementsByTagName("link")[0];
 	<h2 class='expanded' onclick='showHide(this,"main_info");'>Welcome</h2>
 		<p id='main_info'>Welcome to the kitchen sink demo for jqMobi.  Here you will find samples of how to use the jqMobi libraries.  Please select an option from below.</p>
 		<ul>
-		 <li class='icon home big'><a href="#jqm" id='jqmlink'>jqMobi</a></li>
-		 <li><a href="#jqmui" >jqUi</a></li>
-		 <li><a href="#jqmweb" >jqPlugins</a></li>
+		 <li class='red'><a href="#jqm" id='jqmlink' class='icon home big'>jqMobi</a></li>
+		 <li class="blue"><a href="#jqmui" >jqUi</a></li>
+		 <li class="teal"><a href="#jqmweb" >jqPlugins</a></li>
 		</ul> 
 	</div> 
 
@@ -173,7 +176,7 @@ oldElem=document.getElementsByTagName("link")[0];
 		<p id='jqmobi_info'>jqMobi is a blazingly fast query selector tool that is optmimized for HTML5 browsers.</p>
 
 		<ul>
-			<li><a href="javascript:;" onClick="$.ui.scrollToBottom('jqm')" >Go To Bottom</a></li>
+			<li><a id="tester" href="javascript:;" onClick="$.ui.scrollToBottom('jqm')" class='flipAnimation'>Go To Bottom</a></li>
 		<li><a href="#jqm1" >$ Selector</a></li>
 		<li><a href="#jqm2" >$().length()</a></li>
 		<li><a href="#jqm3" >$().find()</a></li>
@@ -648,65 +651,64 @@ oldElem=document.getElementsByTagName("link")[0];
        The default is 28 pixels.<br>
        </p>
        <ul>
-          <li class="icon home big"><a href="#">Home Big</a></li>
-          <li class="icon home"><a href="#">Home Default</a></li>
-          <li class="icon home mini"><a href="#">Home Mini</a></li>
-          <li class="icon pencil big"><a href="#">Pencil</a></li>
-          <li class="icon picture big"><a href="#">Picture</a></li>
-          <li class="icon camera big"><a href="#">Camera</a></li>
-          <li class="icon headset big"><a href="#">Headset</a></li>
-          <li class="icon paper big"><a href="#">Paper</a></li>
-          <li class="icon stack big"><a href="#">Stack</a></li>
-          <li class="icon folder big"><a href="#">Folder</a></li>
-          <li class="icon tag big"><a href="#">Tag</a></li>
-          <li class="icon basket big"><a href="#">Basket</a></li>
-          <li class="icon phone big"><a href="#">Phone</a></li>
-          <li class="icon mail big"><a href="#">Mail</a></li>
-          <li class="icon location big"><a href="#">Location</a></li>
-          <li class="icon clock big"><a href="#">Clock</a></li>
-          <li class="icon calendar big"><a href="#">Calendar</a></li>
-          <li class="icon message big"><a href="#">Message</a></li>
-          <li class="icon chat big"><a href="#">Chat</a></li>
-          <li class="icon user big"><a href="#">User</a></li>
-          <li class="icon loading big"><a href="#">Loading</a></li>
-          <li class="icon refresh big"><a href="#">Refresh</a></li>
-          <li class="icon magnifier big"><a href="#">Magnifier</a></li>
-          <li class="icon key big"><a href="#">Key</a></li>
-          <li class="icon settings big"><a href="#">Settings</a></li>
-          <li class="icon graph big"><a href="#">Graph</a></li>
-          <li class="icon trash big"><a href="#">Trash</a></li>
-          <li class="icon pin big"><a href="#">Pin</a></li>
-          <li class="icon target big"><a href="#">Target</a></li>
-          <li class="icon download big"><a href="#">Download</a></li>
-          <li class="icon upload big"><a href="#">Upload</a></li>
-          <li class="icon star big"><a href="#">Star</a></li>
-          <li class="icon heart big"><a href="#">Heart</a></li>
-          <li class="icon warning big"><a href="#">Warning</a></li>
-          <li class="icon add big"><a href="#">Add</a></li>
-          <li class="icon remove big"><a href="#">Remove</a></li>
-          <li class="icon question big"><a href="#">Question</a></li>
-          <li class="icon info big"><a href="#">Info</a></li>
-          <li class="icon error big"><a href="#">Error</a></li>
-          <li class="icon check big"><a href="#">Check</a></li>
-          <li class="icon minimize big"><a href="#">Minimize</a></li>
-          <li class="icon close big"><a href="#">Close</a></li>
-          <li class="icon up big"><a href="#">Up</a></li>
-          <li class="icon down big"><a href="#">Down</a></li>
-          <li class="icon left big"><a href="#">Left</a></li>
-          <li class="icon right big"><a href="#">Right</a></li>
-          <li class="icon tools big"><a href="#">Tools</a></li>
-          <li class="icon html5 big"><a href="#">HTML5</a></li>
-          <li class="icon css big"><a href="#">CSS</a></li>
-          <li class="icon js big"><a href="#">JS</a></li>
-          <li class="icon cloud big"><a href="#">Cloud</a></li>
-          <li class="icon tv big"><a href="#">TV</a></li>
-          <li class="icon wifi big"><a href="#">Wifi</a></li>
-          <li class="icon new big"><a href="#">New</a></li>
-          <li class="icon mic big"><a href="#">Mic</a></li>
-          <li class="icon database big"><a href="#">Database</a></li>
-          <li class="icon busy big"><a href="#">Busy</a></li>
-          <li class="icon bug big"><a href="#">Bug</a></li>
-          <li class="icon lamp big"><a href="#">Lamp</a></li>
+          <li ><a href="#" class="icon home">Home</a></li>
+          <li><a href="#"  class="icon home mini">Home Mini</a></li>
+          <li ><a href="#" class="icon pencil big">Pencil</a></li>
+          <li ><a href="#" class="icon picture big">Picture</a></li>
+          <li ><a href="#" class="icon camera big">Camera</a></li>
+          <li ><a href="#" class="icon headset big">Headset</a></li>
+          <li ><a href="#" class="icon paper big">Paper</a></li>
+          <li ><a href="#" class="icon stack big">Stack</a></li>
+          <li ><a href="#" class="icon folder big">Folder</a></li>
+          <li ><a href="#" class="icon tag big">Tag</a></li>
+          <li ><a href="#" class="icon basket big">Basket</a></li>
+          <li ><a href="#" class="icon phone big">Phone</a></li>
+          <li ><a href="#" class="icon mail big">Mail</a></li>
+          <li ><a href="#" class="icon location big">Location</a></li>
+          <li ><a href="#"  class="icon clock big">Clock</a></li>
+          <li ><a href="#" class="icon calendar big">Calendar</a></li>
+          <li ><a href="#" class="icon message big">Message</a></li>
+          <li ><a href="#" class="icon chat big">Chat</a></li>
+          <li ><a href="#" class="icon user big">User</a></li>
+          <li ><a href="#" class="icon loading big">Loading</a></li>
+          <li ><a href="#" class="icon refresh big">Refresh</a></li>
+          <li ><a href="#" class="icon magnifier big">Magnifier</a></li>
+          <li ><a href="#" class="icon key big">Key</a></li>
+          <li ><a href="#" class="icon settings big">Settings</a></li>
+          <li ><a href="#" class="icon graph big">Graph</a></li>
+          <li ><a href="#" class="icon trash big">Trash</a></li>
+          <li ><a href="#" class="icon pin big">Pin</a></li>
+          <li ><a href="#" class="icon target big">Target</a></li>
+          <li ><a href="#" class="icon download big">Download</a></li>
+          <li ><a href="#" class="icon upload big">Upload</a></li>
+          <li ><a href="#" class="icon star big">Star</a></li>
+          <li ><a href="#" class="icon heart big">Heart</a></li>
+          <li ><a href="#" class="icon warning big">Warning</a></li>
+          <li ><a href="#" class="icon add big">Add</a></li>
+          <li ><a href="#" class="icon remove big">Remove</a></li>
+          <li ><a href="#" class="icon question big">Question</a></li>
+          <li ><a href="#" class="icon info big">Info</a></li>
+          <li ><a href="#" class="icon error big">Error</a></li>
+          <li ><a href="#" class="icon check big">Check</a></li>
+          <li ><a href="#" class="icon minimize big">Minimize</a></li>
+          <li ><a href="#" class="icon close big">Close</a></li>
+          <li ><a href="#" class="icon up big">Up</a></li>
+          <li ><a href="#" class="icon down big">Down</a></li>
+          <li ><a href="#" class="icon left big">Left</a></li>
+          <li ><a href="#" class="icon right big">Right</a></li>
+          <li ><a href="#" class="icon tools big">Tools</a></li>
+          <li ><a href="#" class="icon html5 big">HTML5</a></li>
+          <li ><a href="#" class="icon css big">CSS</a></li>
+          <li><a href="#"  class="icon js big">JS</a></li>
+          <li ><a href="#" class="icon cloud big">Cloud</a></li>
+          <li ><a href="#" class="icon tv big">TV</a></li>
+          <li ><a href="#" class="icon wifi big">Wifi</a></li>
+          <li ><a href="#" class="icon new big">New</a></li>
+          <li><a href="#"  class="icon mic big">Mic</a></li>
+          <li ><a href="#" class="icon database big">Database</a></li>
+          <li ><a href="#" class="icon busy big">Busy</a></li>
+          <li ><a href="#" class="icon bug big">Bug</a></li>
+          <li ><a href="#" class="icon lamp big">Lamp</a></li>
         </ul>
     </div>
     
@@ -1167,7 +1169,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	<div title="Pop" id="transition4" class="panel splashscreen" data-footer='footerui' style="padding-left:0px"><img src="kitchensink/images/splash.png"></div>
 	<div title="Flip" id="transition5" class="panel splashscreen" data-footer='footerui' style="padding-left:0px"><img src="kitchensink/images/splash.png"></div>
 	<div title="Fade" id="transition6" class="panel splashscreen" data-footer='footerui' style="padding-left:0px"><img src="kitchensink/images/splash.png"></div>
-	<div title="Modal" id="transition7" class="panel splashscreen" data-modal="true" data-footer='footerui' >I'm a modal window...woot woot
+	<div title="Modal" id="transition7" class="panel splashscreen" data-modal="true" data-unload="unloadedPanel" >I'm a modal window...woot woot
 	<br><br><br>
 	Check the input box out below.  <br>
 	<input type="text" class="jq-ui-forms" id="modal_test">
@@ -2077,7 +2079,7 @@ oldElem=document.getElementsByTagName("link")[0];
 <nav>
    <div class='title'>Home</div>
    <ul>
-      <li class="icon home mini"><a href="#jqm">Selectors</a></li>
+      <li ><a href="#jqm" class="icon home mini">Selectors</a></li>
    </ul>
    <div class='title'>UI</div>
      <ul>
