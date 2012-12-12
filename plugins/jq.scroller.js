@@ -440,7 +440,7 @@
         }
 		nativeScroller.prototype.onTouchEnd = function(e) {
 
-			var triggered = this.el.scrollTop <= 0;
+			var triggered = this.el.scrollTop <= -(this.refreshHeight);
 
 			this.fireRefreshRelease(triggered, true);
             if(triggered){
@@ -476,6 +476,7 @@
 					that.refreshContainer.style.top = "-60px";
 					that.refreshContainer.style.position="absolute";
 					that.dY = that.cY = 0;
+					$.trigger(that,"refresh-finish");
 				};
 
 			if(animate === false || !that.jqEl.css3Animate) {
@@ -1012,10 +1013,14 @@
 		}
 
 		jsScroller.prototype.hideRefresh = function(animate) {
+			var that=this;
 			if(this.preventHideRefresh) return;
 			this.scrollerMoveCSS({
 				x: 0,
-				y: 0
+				y: 0,
+				complete:function(){
+					$.trigger(that,"refresh-finish");
+				}
 			}, HIDE_REFRESH_TIME);
 			this.refreshTriggered = false;
 		}

@@ -1141,7 +1141,11 @@
             var currWhat = what;
             
             if (what.getAttribute("data-modal") == "true" || what.getAttribute("modal") == "true") {
-                this.parsePanelFunctions(what, oldDiv);
+                var fnc = what.getAttribute("data-load");
+                if (typeof fnc == "string" && window[fnc]) {
+                    window[fnc](what);
+                }
+                $(what).trigger("loadpanel");
                 return this.showModal(what.id);
             }
                         
