@@ -1755,7 +1755,7 @@ if (!window.jq || typeof (jq) !== "function") {
             //features
             $.feat = {};
             var head=document.documentElement.getElementsByTagName("head")[0];
-            $.feat.nativeTouchScroll =  typeof(head.style["-webkit-overflow-scrolling"])!=="undefined"||$.os.ieTouch;
+            $.feat.nativeTouchScroll =  typeof(head.style["-webkit-overflow-scrolling"])!=="undefined";//||$.os.ieTouch;
             $.feat.cssPrefix=$.os.webkit?"Webkit":$.os.fennec?"Moz":$.os.ie?"ms":$.os.opera?"O":"";
             $.feat.cssTransformStart=!$.os.opera?"3d(":"(";
             $.feat.cssTransformEnd=!$.os.opera?",0)":")";
