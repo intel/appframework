@@ -14,6 +14,11 @@ The sources are in the src/ folder.  For demos please see the kitchensink app.
 # Mobile Web Libaries (jq.min.js)
 These libraries can be used in AppMobi or general mobile web development.
 
+
+jq.8tiles
+
+* A plugin for themeing jqUi apps as Win8/Tiles style. 
+
 jq.alphaTable
 
 * A CSS3 Alphabetical/scrolling table.  This creates a table that you can scroll, but have the alphabetical index for users to jump around with.
@@ -65,6 +70,18 @@ jq.fx
 * These are fx helpers for providing some animations
 
 # How to use jQ.Web libraries
+
+#jq.8tiles
+
+To use jq.8tiles add the plugin in your app. Next, remove the reference to your jqUi CSS file and use the supplied jq.8tiles.css instead
+
+``` html
+   <link rel="stylesheet" type="text/css" href="plugins/css/jq.8tiles.css" title="8tiles"/>
+```
+
+``` html
+    <script type="text/javascript" charset="utf-8" src="./plugins/jq.8tiles.js"></script> 
+````
 
 #jq.alphaTable
 
