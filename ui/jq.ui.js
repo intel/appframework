@@ -717,6 +717,7 @@
 
 				}
 			}
+			$.trigger(this,"scrollstart");
 		}
 		nativeScroller.prototype.onTouchMove = function(e) {
 
@@ -771,7 +772,28 @@
 				this.infiniteEndCheck = true;
 			}
 			this.touchEndFired = true;
-			//e.stopPropagation();
+			//pollyfil for scroll end since webkit doesn't give any events during the "flick"
+            var max=200;
+            var self=this;
+            var currPos={
+                top:this.el.scrollTop,
+                left:this.el.scrollLeft
+            };
+            var counter=0;
+            self.nativePolling=setInterval(function(){
+                counter++;
+                if(counter>=max){
+                    clearInterval(self.nativePolling);
+                    return;
+                }
+                if(self.el.scrollTop!=currPos.top||self.el.scrollLeft!=currPos.left){
+                    clearInterval(self.nativePolling);
+                    $.trigger($.touchLayer, 'scrollend', [self.el]); //notify touchLayer of this elements scrollend
+                    $.trigger(self,"scrollend");
+                    //self.doScroll(e);
+                }
+
+            },20);
 		}
 		nativeScroller.prototype.hideRefresh = function(animate) {
 
@@ -1090,6 +1112,7 @@
 			this.doScrollInterval = window.setInterval(function() {
 				that.doScroll();
 			}, this.refreshRate);
+			$.trigger(this,"scrollstart");
 
 		}
 		jsScroller.prototype.getCSSMatrix = function(el) {
@@ -1432,6 +1455,7 @@
 			this.scrollingFinishCB = setTimeout(function() {
 				that.hideScrollbars();
 				$.trigger($.touchLayer, 'scrollend', [that.el]); //notify touchLayer of this elements scrollend
+				$.trigger(that,"scrollend");
 				that.isScrolling = false;
 				that.elementInfo = null; //reset elementInfo when idle
 				if(that.infinite) $.trigger(that, "infinite-scroll-end");
