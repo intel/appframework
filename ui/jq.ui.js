@@ -1816,9 +1816,7 @@
         else
             $(document.body).popup(text.toString());
     }
-    window.confirm = function(text) {
-        throw "Due to iOS eating touch events from native confirms, please use our popup plugin instead";
-    }
+    
 })(jq);
 /**
  * jq.web.actionsheet - a actionsheet for html5 mobile apps
@@ -2435,6 +2433,12 @@ if (!HTMLElement.prototype.unwatch) {
 	var requirePanning = $.os.ios; //devices which require panning feature
 	var addressBarError = 0.97; //max 3% error in position
 	var maxHideTries = 2; //HideAdressBar does not retry more than 2 times (3 overall)
+	var skipTouchEnd=false; //Fix iOS bug with alerts/confirms
+	function getTime(){
+		var d = new Date();
+		var n = d.getTime();
+		return n;
+	}
 	var touchLayer = function(el) {
 			this.clearTouchVars();
 			el.addEventListener('touchstart', this, false);
@@ -2922,6 +2926,12 @@ if (!HTMLElement.prototype.unwatch) {
 		},
 
 		onTouchEnd: function(e) {
+
+			if(skipTouchEnd){
+				skipTouchEnd=false;
+				return false;
+			}
+
 			//double check moved for sensitive devices
 			var itMoved = this.moved;
 			if(verySensitiveTouch) {
@@ -2947,8 +2957,11 @@ if (!HTMLElement.prototype.unwatch) {
 				if(!this.blockClicks && !this.blockPossibleClick_) {
 					var theTarget = e.target;
 					if(theTarget.nodeType == 3) theTarget = theTarget.parentNode;
-
+					var start=getTime();
 					this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
+					var end=getTime();
+					if(end-start>100)
+						skipTouchEnd=true;
 					this.lastTouchStartX=this.dX;
 					this.lastTouchStartY=this.dY;
 				}

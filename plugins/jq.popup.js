@@ -200,7 +200,5 @@
         else
             $(document.body).popup(text.toString());
     }
-    window.confirm = function(text) {
-        throw "Due to iOS eating touch events from native confirms, please use our popup plugin instead";
-    }
+    
 })(jq);
