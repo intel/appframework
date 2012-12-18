@@ -2926,12 +2926,13 @@ if (!HTMLElement.prototype.unwatch) {
 		},
 
 		onTouchEnd: function(e) {
-
-			if(skipTouchEnd){
-				skipTouchEnd=false;
-				return false;
+			if($.os.ios){
+				if(skipTouchEnd==e.changedTouches[0].identifier){
+					e.preventDefault();
+					return false;
+				}
+				skipTouchEnd=e.changedTouches[0].identifier;
 			}
-
 			//double check moved for sensitive devices
 			var itMoved = this.moved;
 			if(verySensitiveTouch) {
@@ -2957,11 +2958,8 @@ if (!HTMLElement.prototype.unwatch) {
 				if(!this.blockClicks && !this.blockPossibleClick_) {
 					var theTarget = e.target;
 					if(theTarget.nodeType == 3) theTarget = theTarget.parentNode;
-					var start=getTime();
 					this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
-					var end=getTime();
-					if(end-start>100)
-						skipTouchEnd=true;
+					
 					this.lastTouchStartX=this.dX;
 					this.lastTouchStartY=this.dY;
 				}
