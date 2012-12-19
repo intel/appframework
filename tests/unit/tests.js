@@ -1219,18 +1219,13 @@ equals(jq.param(elems),"foo=bar&name=jqMobi");
 });
 
 test("serialize",function(){
-   var basestr="name=jqMobi&available=true&version=0.9.5"
+   var basestr="name=jqMobi&available=true&available=false&version=0.9.5"
    equals(jq("#myform").serialize(),basestr,"Testing serialize");
    QUnit.reset();
-
-   var basestr="name=jqMobi&version=1.0"
-   $("#available").get().checked=false;
-   $("#version").val("1.0");
+   $("#myform #available").get(0).options[1].selected=false;
+   
+   var basestr="name=jqMobi&available=true&version=0.9.5"
    equals(jq("#myform").serialize(),basestr,"Testing serialize");
-   $("#available").get().checked=true;
-   $("#version").val("0.9.5");
-    var basestr="test[name]=jqMobi&test[available]=true&test[version]=0.9.5"
-   equals(jq("#myform").serialize('test'),basestr,"Testing serialize");
    QUnit.reset();
 });
 
@@ -1382,5 +1377,6 @@ var testGlobal=0;
 test ("parseJS",function(){
 
   var test="<script>testGlobal='bar'</script>";
+  $.parseJS(test);
   equals(testGlobal,"bar","Test parsing script tags");
 })

@@ -1314,26 +1314,37 @@ if (!window.jq || typeof (jq) !== "function") {
             /**
              * Serailizes a form into a query string
                ```
-               $().serialize(grouping);
+               $().serialize();
                ```
-             * @param {String} [grouping] - optional grouping to the fields -e.g users[name]
              * @return {String}
-             * @title $().serialize(grouping)
+             * @title $().serialize()
              */
-            serialize: function(grouping) {
+            serialize: function() {
                 if (this.length == 0)
                     return "";
-                var params = {};
+                var params = [];
                 for (var i = 0; i < this.length; i++) 
                 {
                     this.slice.call(this[i].elements).forEach(function(elem) {
                         var type = elem.getAttribute("type");
                         if (elem.nodeName.toLowerCase() != "fieldset" && !elem.disabled && type != "submit" 
                         && type != "reset" && type != "button" && ((type != "radio" && type != "checkbox") || elem.checked))
-                            params[elem.getAttribute("name")] = elem.value;
+                        {
+
+                            if(elem.getAttribute("name")){
+                                if(elem.type=="select-multiple"){
+                                    for(var j=0;j<elem.options.length;j++){
+                                        if(elem.options[j].selected)
+                                            params.push(elem.getAttribute("name")+"="+encodeURIComponent(elem.options[j].value))
+                                    }
+                                }
+                                else
+                                    params.push(elem.getAttribute("name")+"="+encodeURIComponent(elem.value))
+                            }
+                        }
                     });
                 }
-                return $.param(params,grouping);
+                return params.join("&");
             },
 
             /* added in 1.2 */

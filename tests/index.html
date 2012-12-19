@@ -8,7 +8,7 @@
 	
 	
 
-	<script src="../jq.mobi.js"></script>
+	<script src="jq.mobi.js"></script>
 
 	<script src="qunit/qunit.js"></script>
 	<script>
@@ -46,7 +46,10 @@
      <form id="myform" onsubmit="return false">
        <fieldset>
         <input type="text" name="name" value="jqMobi">
-        <input id='available' type="checkbox" name="available" value="true" checked>
+        <select id="available" name="available" multiple>
+        	<option selected value='true'>true</option>
+        	<option selected value='false'>false</option>
+        </select>
         <select id='version' name="version"><option value="0.9.5">0.9.5</option><option value="1.0">1.0</option><select>
         <input type="submit" value="Go">
         </fieldset>
