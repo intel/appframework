@@ -2809,14 +2809,10 @@ if (!HTMLElement.prototype.unwatch) {
 					this.requiresNativeTap = true;
 				}
 			}
+			else if(e.target&&e.target.tagName!==undefined&&e.target.tagName.toLowerCase()=="input"&&e.target.type=="range"){
+                this.requiresNativeTap=true;
+            }
 
-			////this.log("Touchstart: "+
-			//	(this.isFocused_?"focused ":"")+
-			//	(this.isPanning_?"panning ":"")+
-			//	(this.requiresNativeTap?"nativeTap ":"")+
-			//	(this.isScrolling?"scrolling ":"")+
-			//	(this.allowDocumentScroll_?"allowDocumentScroll_ ":"")
-			//);
 			//prevent default if possible
 			if(!this.isScrolling && !this.isPanning_ && !this.requiresNativeTap) {
 				e.preventDefault();
@@ -2932,7 +2928,7 @@ if (!HTMLElement.prototype.unwatch) {
 				}
 			}
 			//non-native scroll devices
-			if(!this.isScrolling && (!$.os.blackberry10 || !this.requiresNativeTap)) {
+			if(!this.isScrolling && (!$.os.blackberry10 && !this.requiresNativeTap)) {
 				//legacy stuff for old browsers
 				e.preventDefault();
 				return;
