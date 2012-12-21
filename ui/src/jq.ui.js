@@ -738,7 +738,7 @@
                     
                     button = null;
                     content = null;
-                    this.scrollingDivs['modal_container'].enable(!that.resetScrollers);
+                    this.scrollingDivs['modal_container'].enable(that.resetScrollers);
                     this.scrollToTop('modal');
                      jq("#modalContainer").data("panel",id);
                 }
@@ -1165,9 +1165,7 @@
             
             previousTarget = '#' + what.id + hashLink;
             
-            if (this.resetScrollers && this.scrollingDivs[what.id]) {
-                this.scrollingDivs[what.id].scrollToTop();
-            }
+            
             this.doingTransition = true;
 
             oldDiv.style.display="block";
@@ -1234,7 +1232,7 @@
                 this.setBackButtonVisibility(true);
             this.activeDiv = what;
             if (this.scrollingDivs[this.activeDiv.id]) {
-                this.scrollingDivs[this.activeDiv.id].enable(!this.resetScrollers);
+                this.scrollingDivs[this.activeDiv.id].enable(this.resetScrollers);
             }
         },
         /**

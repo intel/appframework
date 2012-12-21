@@ -362,6 +362,8 @@
 			//unlock overflow
 			this.el.style.overflow = 'auto';
 			//set current scroll
+
+			
 			if(!firstExecution) this.adjustScroll();
 			//set events
 			if(this.refresh || this.infinite&&!jq.os.desktop) this.el.addEventListener('touchstart', this, false);
@@ -558,19 +560,29 @@
 			//console.log("Scrolling stopped");
 		}
 		nativeScroller.prototype.logPos = function(x, y) {
-			this.loggedPcentX = this.divide(x, (this.el.scrollWidth - this.el.clientWidth));
-			this.loggedPcentY = this.divide(y, (this.el.scrollHeight - this.el.clientHeight));
+
+
+			this.loggedPcentX = this.divide(x, (this.el.scrollWidth));
+			this.loggedPcentY = this.divide(y, (this.el.scrollHeight ));
 			this.scrollLeft = x;
 			this.scrollTop = y;
-			//console.log('pcent '+this.loggedPcentY+':'+(y/(this.el.scrollHeight-this.el.clientHeight)));
+
+			if(isNaN(this.loggedPcentX))
+				this.loggedPcentX=0;
+			if(isNaN(this.loggedPcentY))
+				this.loggedPcentY=0;
+
+			//console.log('pcent '+this.loggedPcentY+':'+this.loggedPcentX);
 		}
 		nativeScroller.prototype.adjustScroll = function() {
-			this.jqEl.css('overflow', 'hidden');
-			this.el.scrollLeft = this.loggedPcentX * (this.el.scrollWidth - this.el.scrollWidth);
-			this.el.scrollTop = this.loggedPcentY * (this.el.scrollHeight - this.el.scrollHeight);
+			//this.jqEl.css('overflow', 'hidden');
+			this.adjustScrollOverflowProxy_();
+			
+			this.el.scrollLeft = this.loggedPcentX * (this.el.scrollWidth);
+			this.el.scrollTop = this.loggedPcentY * (this.el.scrollHeight );
 			this.logPos(this.el.scrollLeft, this.el.scrollTop);
-			$.asap(this.adjustScrollOverflowProxy_);
-			//console.log(this.loggedPcentY+'--'+this.el.scrollTop);
+			
+//			$.asap();
 		}
 
 
@@ -622,6 +634,8 @@
 			if(this.eventsActive) return;
 			this.eventsActive = true;
 			if(!firstExecution) this.adjustScroll();
+            else
+                this.scrollerMoveCSS({x:0,y:0},0);
 			//add listeners
 			this.container.addEventListener('touchstart', this, false);
 			this.container.addEventListener('touchmove', this, false);
