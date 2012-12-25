@@ -16,7 +16,7 @@
 	    cancelOnly:false,
         doneClass:'button',
         cancelClass:'button',
-        onShow:function(){console.log('showing popup');}
+        onShow:function(){console.log('showing popup');},
         autoCloseDone:true, //default is true will close the popup when done is clicked.
         suppressTitle:false //Do not show the title if set to true
   });
@@ -59,7 +59,7 @@
                 this.cancelClass = opts.cancelClass || "button";
                 this.doneText = opts.doneText || "Done";
                 this.doneCallback = opts.doneCallback || function(self) {
-                	self.hide();
+                	// no action by default
                 };
                 this.doneClass = opts.doneClass || "button";
                 this.cancelOnly = opts.cancelOnly || false;
