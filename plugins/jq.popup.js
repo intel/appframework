@@ -16,7 +16,7 @@
 	    cancelOnly:false,
         doneClass:'button',
         cancelClass:'button',
-        onShow:function(){console.log('showing popup');}
+        onShow:function(){console.log('showing popup');},
         autoCloseDone:true, //default is true will close the popup when done is clicked.
         suppressTitle:false //Do not show the title if set to true
   });
