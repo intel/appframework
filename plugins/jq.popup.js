@@ -59,7 +59,7 @@
                 this.cancelClass = opts.cancelClass || "button";
                 this.doneText = opts.doneText || "Done";
                 this.doneCallback = opts.doneCallback || function(self) {
-                	self.hide();
+                	// no action by default
                 };
                 this.doneClass = opts.doneClass || "button";
                 this.cancelOnly = opts.cancelOnly || false;
