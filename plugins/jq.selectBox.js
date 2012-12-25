@@ -56,7 +56,7 @@
                     fakeInput.onclick = function(e) {
                         that.initDropDown(this.linkId);
                     };
-                    theSel.parentNode.appendChild(fakeInput);
+                    $(fakeInput).insertBefore($(theSel));
                     //theSel.parentNode.style.position = "relative";
                     theSel.style.display = "none";
                     theSel.style.webkitAppearance = "none";

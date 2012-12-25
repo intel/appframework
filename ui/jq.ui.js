@@ -2036,13 +2036,13 @@
                     fakeInput.className = "jqmobiSelect_fakeInput " + theSel.className;
                     fakeInput.id = theSel.id + "_jqmobiSelect";
                     
-                    fakeInput.style.border = "1px solid gray";
+//                    fakeInput.style.border = "1px solid gray";
                     fakeInput.style.color = "black";
                     fakeInput.linkId = theSel.id;
                     fakeInput.onclick = function(e) {
                         that.initDropDown(this.linkId);
                     };
-                    theSel.parentNode.appendChild(fakeInput);
+                    $(fakeInput).insertBefore($(theSel));
                     //theSel.parentNode.style.position = "relative";
                     theSel.style.display = "none";
                     theSel.style.webkitAppearance = "none";
