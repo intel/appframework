@@ -1689,7 +1689,7 @@
                 this.cancelClass = opts.cancelClass || "button";
                 this.doneText = opts.doneText || "Done";
                 this.doneCallback = opts.doneCallback || function(self) {
-                	self.hide();
+                    // no action by default
                 };
                 this.doneClass = opts.doneClass || "button";
                 this.cancelOnly = opts.cancelOnly || false;
@@ -2042,7 +2042,7 @@
                     fakeInput.onclick = function(e) {
                         that.initDropDown(this.linkId);
                     };
-                    theSel.parentNode.appendChild(fakeInput);
+                    $(fakeInput).insertBefore($(theSel));
                     //theSel.parentNode.style.position = "relative";
                     theSel.style.display = "none";
                     theSel.style.webkitAppearance = "none";
