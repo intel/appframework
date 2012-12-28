@@ -476,8 +476,8 @@ textarea {
 #jQUi #menu,
 #jQUi #menu.off,
 #jQUi #menu.to-off {
-  -webkit-transform: translate3d(-200px, 0px, 0px);
-  transform: translate(-200px, 0px);
+  -webkit-transform: translate3d(0px, 0px, 0px);
+  transform: translate(0px, 0px);
 }
 #jQUi #menu.on {
   left: 0px !important;

@@ -879,8 +879,8 @@ select[disabled]~div {
     transition: transform 150ms;
 }
 #menu, #menu.off, #menu.to-off {
-    -webkit-transform:translate3d(-200px,0px,0px);
-    transform:translate(-200px,0px);
+    -webkit-transform:translate3d(00px,0px,0px);
+    transform:translate(00px,0px);
 }
 
 .menuButton {
