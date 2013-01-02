@@ -4278,8 +4278,6 @@ if (!HTMLElement.prototype.unwatch) {
             var that = this;
             if (target.indexOf("http") == -1)
                 target = AppMobi.webRoot + target;
-            if (target.indexOf("http") == -1)
-                target = AppMobi.webRoot + target;
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
                 if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
