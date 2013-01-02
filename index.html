@@ -12,6 +12,8 @@
 
 
 <link rel="stylesheet" type="text/css" href="kitchensink/jq.ui.less.css" title="default"/>
+<!--<link rel="stylesheet" type="text/css" href="plugins/css/jq.8tiles.css" title="8tiles"/>-->
+
 <style>
 	.scrollBar{background:white;}
     h3 {text-align:center; font-size:35px;}
@@ -53,8 +55,10 @@ function loadedPanel(what){
 	console.log("unloaded "+what.id);
 	}
 
-if(!((window.DocumentTouch&&document instanceof DocumentTouch)||'ontouchstart' in window)){
+
+if(!((window.DocumentTouch&&document instanceof DocumentTouch))){
 	var script=document.createElement("script");
+
 	script.src="plugins/jq.desktopBrowsers.js";
 	var tag=$("head").append(script);
 	if(!$.os.ie){
@@ -102,12 +106,13 @@ oldElem=document.getElementsByTagName("link")[0];
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.shake.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.alphatable.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.template.js"></script> 
+
 <script type="text/javascript" charset="utf-8" src="./ui/jq.ui.js"></script> 
 
 <script type="text/javascript">
     /* This function runs once the page is loaded, but appMobi is not yet active */
 	var webRoot="./kitchensink/";
-	$.ui.autoLaunch=false;
+	//$.ui.autoLaunch=false;
     $.ui.openLinksNewTab=false;
     $.ui.resetScrollers=false;
     var init = function(){
@@ -1193,6 +1198,7 @@ oldElem=document.getElementsByTagName("link")[0];
         <li><a href="#webalphatable" >jq.alphatable</a></li>
 		<li><a href="#webactionsheet" >jq.actionsheet</a></li>
         <li><a href="#webpopup" >jq.popup</a></li>
+        <li><a href="#touchevents" >jq.touchevents</a></li>
 		</ul>
 		<br/><br/>
 	</div>
@@ -1207,7 +1213,7 @@ oldElem=document.getElementsByTagName("link")[0];
 		   // myScroller=$.ui.scrollingDivs['webslider'];
 		   myScroller.addInfinite();
 		   myScroller.addPullToRefresh();
-		  $.bind($.touchLayer, 'scrollend',function()
+		  $.bind(myScroller, 'scrollend',function()
 		{
 			console.log("scroll end");
 		}); 
@@ -2043,6 +2049,37 @@ oldElem=document.getElementsByTagName("link")[0];
 
 	</div>
 
+	<div class="panel" title="touch events" id="touchevents">
+	<script>
+	$(document).ready(function(){
+		$("#taptest").bind("tap",function(){
+			alert("I was tapped");
+		})
+		$("#singletaptest").bind("singleTap",function(){
+			alert("I was single tapped");
+		})
+		$("#longtaptest").bind("longTap",function(){
+			alert("I was a long tap");
+		})
+		$("#doubletaptest").bind("doubleTap",function(){
+			alert("I was a double tap");
+		})
+		$("#swipetest").bind("swipe",function(){
+			alert("I was a swiped");
+		})
+	});
+	</script>
+		<h2>Touch Events</h2>
+
+		<ul>
+			<li><a id='taptest' href="javascript:;">Tap Test</a></li>
+			<li><a id='longtaptest' href="javascript:;">Long Tap Test</a></li>
+			<li><a id='singletaptest' href="javascript:;">Single Tap Test</a></li>
+			<li><a id='doubletaptest' href="javascript:;">Double Tap Test</a></li>
+			<li><a id='swipetest' href="javascript:;">Swipe Test</a></li>
+		</ul>
+	</div>
+
 
 
 
@@ -2142,5 +2179,6 @@ oldElem=document.getElementsByTagName("link")[0];
    </ul>
 </nav>
 </div>
+
 </body>
 </html>

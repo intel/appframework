@@ -2353,8 +2353,9 @@ if (!HTMLElement.prototype.unwatch) {
             if(!e.touches||e.touches.length==0) return;
             touch.el = $(parentIfText(e.touches[0].target));
             touchTimeout && clearTimeout(touchTimeout);
-            touch.x1 = touch.x2= e.touches[0].pageX;
-            touch.y1 = touch.y2=e.touches[0].pageY;
+            touch.x1 =  e.touches[0].pageX;
+            touch.y1 = e.touches[0].pageY;
+            touch.x2=touch.y2=0;
             if (delta > 0 && delta <= 250)
                 touch.isDoubleTap = true;
             touch.last = now;
