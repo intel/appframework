@@ -1742,6 +1742,11 @@ if (!window.jq || typeof (jq) !== "function") {
          * .os.blackberry
          * .os.opera
          * .os.fennec
+         * .os.ie
+         * .os.ieTouch
+         * .os.supportsTouch
+         * .os.playbook
+         * .feat.nativetouchScroll
          * @api private
          */
         function detectUA($, userAgent) {
@@ -1777,7 +1782,6 @@ if (!window.jq || typeof (jq) !== "function") {
         detectUA($, navigator.userAgent);
         $.__detectUA = detectUA; //needed for unit tests
         if (typeof String.prototype.trim !== 'function') {
-
             /**
              * Helper function for iOS 3.1.3
              */
@@ -1800,6 +1804,14 @@ if (!window.jq || typeof (jq) !== "function") {
             }
             return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
         };
+
+        /**
+         * Gets the css matrix, or creates a fake one
+           ```
+           $.getCssMatrix(domElement)
+           ```
+           @returns matrix with postion
+           */
         $.getCssMatrix=function(ele){
             if(ele==undefined) return window.WebKitCSSMatrix||window.MSCSSMatrix|| {a:0,b:0,c:0,d:0,e:0,f:0};
             try{
@@ -2403,12 +2415,13 @@ if (!window.jq || typeof (jq) !== "function") {
         };
 		
 
-
+        /**
         //custom events since people want to do $().click instead of $().bind("click")
+        */
 
         ["click","keydown","keyup","keypress","submit","load","resize","change","select","error"].forEach(function(event){
             $.fn[event]=function(cb){
-                return callback?this.bind(event,callback):this.trigger(event);
+                return cb?this.bind(event,cb):this.trigger(event);
             }
         });
          /**
