@@ -11,7 +11,7 @@
 <link rel="stylesheet" type="text/css" href="kitchensink/icons.css" /> 
 
 
-<link rel="stylesheet" type="text/css" href="kitchensink/jq.ui.less.css" title="default"/>
+<link rel="stylesheet" type="text/css" href="kitchensink/jq.ui.css" title="default"/>
 <!--<link rel="stylesheet" type="text/css" href="plugins/css/jq.8tiles.css" title="8tiles"/>-->
 
 <style>
@@ -56,7 +56,7 @@ function loadedPanel(what){
 	}
 
 
-if(!((window.DocumentTouch&&document instanceof DocumentTouch))){
+if(!((window.DocumentTouch&&document instanceof DocumentTouch)||'ontouchstart' in window)){
 	var script=document.createElement("script");
 
 	script.src="plugins/jq.desktopBrowsers.js";
@@ -121,7 +121,10 @@ oldElem=document.getElementsByTagName("link")[0];
        //$.ui.removeFooterMenu(); This would remove the bottom nav menu
     };
     document.addEventListener("DOMContentLoaded",init,false);  
-	$.ui.ready(function(){});
+	$.ui.ready(function(){
+
+		//$.ui.enableDragMenu();
+	});
 
     /* This code is used to run as soon as appMobi activates */
     var onDeviceReady=function(){
@@ -2109,7 +2112,7 @@ oldElem=document.getElementsByTagName("link")[0];
 </footer>	
 
 <header id="testheader">
-    <a id="backButton" onclick="$.ui.goBack()" class='button' style='left:0px;left:auto;overflow:hidden'>Go Back</a>
+    <a id="backButton"  class='button' style='left:0px;left:auto;overflow:hidden'>Go Back</a>
     <h1>Custom Header</h1>
 </header>
 <!-- ------------------------------------------ -->

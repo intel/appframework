@@ -478,29 +478,27 @@
             if (!(menu.hasClass("on") || menu.hasClass("to-on")) && ((force !== undefined && force !== false) || force === undefined)) {
                 
                 menu.show();
-                $.asap(function() {
-                    that.css3animate(els, {
-                        "removeClass": "to-off off on",
-                        "addClass": "to-on",
-                        complete: function(canceled) {
-                            if (!canceled) {
-                                that.css3animate(els, {
-                                    "removeClass": "to-off off to-on",
-                                    "addClass": "on",
-                                    time: 0,
-                                    complete: function() {
-                                        that.togglingSideMenu = false;
-                                        if (callback)
-                                            callback(false);
-                                    }
-                                });
-                            } else {
-                                that.togglingSideMenu = false;
-                                if (callback)
-                                    callback(true);
-                            }
+                that.css3animate(els, {
+                    "removeClass": "to-off off on",
+                    "addClass": "to-on",
+                    complete: function(canceled) {
+                        if (!canceled) {
+                            that.css3animate(els, {
+                                "removeClass": "to-off off to-on",
+                                "addClass": "on",
+                                time: 0,
+                                complete: function() {
+                                    that.togglingSideMenu = false;
+                                    if (callback)
+                                        callback(false);
+                                }
+                            });
+                        } else {
+                            that.togglingSideMenu = false;
+                            if (callback)
+                                callback(true);
                         }
-                    });
+                    }
                 });
             
             } else if (force === undefined || (force !== undefined && force === false)) {
@@ -1564,9 +1562,7 @@
                     //
                     jq("#navbar").on("click", "a", function(e) {
                         jq("#navbar a").not(this).removeClass("selected");
-                        $.asap(function() {
                             $(e.target).addClass("selected");
-                        });
                     });
 
 
@@ -1592,16 +1588,14 @@
                     //trigger ui ready
                     jq(document).trigger("jq.ui.ready");
                     //remove splashscreen
-                    
-                    $.asap(function() {
-                        // Run after the first div animation has been triggered - avoids flashing
-                        jq("#splashscreen").remove();
-                    });
+
+                    // Run after the first div animation has been triggered - avoids flashing
+                    jq("#splashscreen").remove();
                 };
                 if (loadingDefer) {
                     $(document).one("defer:loaded", loadFirstDiv);
                 } else
-                    $.asap(loadFirstDiv);
+                    loadFirstDiv();
             }
             var that = this;
             $.bind($.ui, "content-loaded", function() {

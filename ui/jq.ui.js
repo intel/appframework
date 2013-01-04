@@ -384,7 +384,7 @@
 
 
 				if(!boundTouchLayer && $.touchLayer && $.isObject($.touchLayer)) bindTouchLayer()
-				else $.touchLayer = {};
+				else if(!($.touchLayer && $.isObject($.touchLayer))) $.touchLayer = {};
 
 				if(typeof elID == "string" || elID instanceof String) {
 					var el = document.getElementById(elID);
@@ -719,7 +719,8 @@
 
 				}
 			}
-			$.trigger(this,"scrollstart");
+			$.trigger(this,"scrollstart",[this.el]);
+			$.trigger($.touchLayer,"scrollstart",[this.el]);
 		}
 		nativeScroller.prototype.onTouchMove = function(e) {
 
@@ -791,7 +792,7 @@
                 if(self.el.scrollTop!=currPos.top||self.el.scrollLeft!=currPos.left){
                     clearInterval(self.nativePolling);
                     $.trigger($.touchLayer, 'scrollend', [self.el]); //notify touchLayer of this elements scrollend
-                    $.trigger(self,"scrollend");
+                    $.trigger(self,"scrollend",[self.el]);
                     //self.doScroll(e);
                 }
 
@@ -1126,7 +1127,8 @@
 			this.doScrollInterval = window.setInterval(function() {
 				that.doScroll();
 			}, this.refreshRate);
-			$.trigger(this,"scrollstart");
+			$.trigger(this,"scrollstart",[this.el]);
+			$.trigger($.touchLayer,"scrollstart",[this.el]);
 
 		}
 		jsScroller.prototype.getCSSMatrix = function(el) {
@@ -1469,7 +1471,7 @@
 			this.scrollingFinishCB = setTimeout(function() {
 				that.hideScrollbars();
 				$.trigger($.touchLayer, 'scrollend', [that.el]); //notify touchLayer of this elements scrollend
-				$.trigger(that,"scrollend");
+				$.trigger(that,"scrollend",[that.el]);
 				that.isScrolling = false;
 				that.elementInfo = null; //reset elementInfo when idle
 				if(that.infinite) $.trigger(that, "infinite-scroll-end");
@@ -2490,9 +2492,13 @@ if (!HTMLElement.prototype.unwatch) {
 			}, true);
 			//js scrollers self binding
 			$.bind(this, 'scrollstart', function(el) {
+				that.isScrolling=true;
+				that.scrollingEl_=el;
 				that.fireEvent('UIEvents', 'scrollstart', el, false, false);
 			});
 			$.bind(this, 'scrollend', function(el) {
+				that.isScrolling=false;
+
 				that.fireEvent('UIEvents', 'scrollend', el, false, false);
 			});
 			//fix layer positioning
@@ -2929,9 +2935,11 @@ if (!HTMLElement.prototype.unwatch) {
 				}
 			}
 			//non-native scroll devices
-			if(!this.isScrolling && (!$.os.blackberry10 && !this.requiresNativeTap)) {
+
+			if((!$.os.blackberry10 && !this.requiresNativeTap)) {
 				//legacy stuff for old browsers
-				e.preventDefault();
+				if(!this.isScrolling ||!$.os.feat.nativeTouchScroll)
+					e.preventDefault();
 				return;
 			}
 		},
@@ -3501,29 +3509,27 @@ if (!HTMLElement.prototype.unwatch) {
             if (!(menu.hasClass("on") || menu.hasClass("to-on")) && ((force !== undefined && force !== false) || force === undefined)) {
                 
                 menu.show();
-                $.asap(function() {
-                    that.css3animate(els, {
-                        "removeClass": "to-off off on",
-                        "addClass": "to-on",
-                        complete: function(canceled) {
-                            if (!canceled) {
-                                that.css3animate(els, {
-                                    "removeClass": "to-off off to-on",
-                                    "addClass": "on",
-                                    time: 0,
-                                    complete: function() {
-                                        that.togglingSideMenu = false;
-                                        if (callback)
-                                            callback(false);
-                                    }
-                                });
-                            } else {
-                                that.togglingSideMenu = false;
-                                if (callback)
-                                    callback(true);
-                            }
+                that.css3animate(els, {
+                    "removeClass": "to-off off on",
+                    "addClass": "to-on",
+                    complete: function(canceled) {
+                        if (!canceled) {
+                            that.css3animate(els, {
+                                "removeClass": "to-off off to-on",
+                                "addClass": "on",
+                                time: 0,
+                                complete: function() {
+                                    that.togglingSideMenu = false;
+                                    if (callback)
+                                        callback(false);
+                                }
+                            });
+                        } else {
+                            that.togglingSideMenu = false;
+                            if (callback)
+                                callback(true);
                         }
-                    });
+                    }
                 });
             
             } else if (force === undefined || (force !== undefined && force === false)) {
@@ -4587,9 +4593,7 @@ if (!HTMLElement.prototype.unwatch) {
                     //
                     jq("#navbar").on("click", "a", function(e) {
                         jq("#navbar a").not(this).removeClass("selected");
-                        $.asap(function() {
                             $(e.target).addClass("selected");
-                        });
                     });
 
 
@@ -4615,16 +4619,14 @@ if (!HTMLElement.prototype.unwatch) {
                     //trigger ui ready
                     jq(document).trigger("jq.ui.ready");
                     //remove splashscreen
-                    
-                    $.asap(function() {
-                        // Run after the first div animation has been triggered - avoids flashing
-                        jq("#splashscreen").remove();
-                    });
+
+                    // Run after the first div animation has been triggered - avoids flashing
+                    jq("#splashscreen").remove();
                 };
                 if (loadingDefer) {
                     $(document).one("defer:loaded", loadFirstDiv);
                 } else
-                    $.asap(loadFirstDiv);
+                    loadFirstDiv();
             }
             var that = this;
             $.bind($.ui, "content-loaded", function() {

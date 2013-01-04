@@ -72,7 +72,7 @@
 
 
 				if(!boundTouchLayer && $.touchLayer && $.isObject($.touchLayer)) bindTouchLayer()
-				else $.touchLayer = {};
+				else if(!($.touchLayer && $.isObject($.touchLayer))) $.touchLayer = {};
 
 				if(typeof elID == "string" || elID instanceof String) {
 					var el = document.getElementById(elID);
@@ -407,7 +407,8 @@
 
 				}
 			}
-			$.trigger(this,"scrollstart");
+			$.trigger(this,"scrollstart",[this.el]);
+			$.trigger($.touchLayer,"scrollstart",[this.el]);
 		}
 		nativeScroller.prototype.onTouchMove = function(e) {
 
@@ -479,7 +480,7 @@
                 if(self.el.scrollTop!=currPos.top||self.el.scrollLeft!=currPos.left){
                     clearInterval(self.nativePolling);
                     $.trigger($.touchLayer, 'scrollend', [self.el]); //notify touchLayer of this elements scrollend
-                    $.trigger(self,"scrollend");
+                    $.trigger(self,"scrollend",[self.el]);
                     //self.doScroll(e);
                 }
 
@@ -814,7 +815,8 @@
 			this.doScrollInterval = window.setInterval(function() {
 				that.doScroll();
 			}, this.refreshRate);
-			$.trigger(this,"scrollstart");
+			$.trigger(this,"scrollstart",[this.el]);
+			$.trigger($.touchLayer,"scrollstart",[this.el]);
 
 		}
 		jsScroller.prototype.getCSSMatrix = function(el) {
@@ -1157,7 +1159,7 @@
 			this.scrollingFinishCB = setTimeout(function() {
 				that.hideScrollbars();
 				$.trigger($.touchLayer, 'scrollend', [that.el]); //notify touchLayer of this elements scrollend
-				$.trigger(that,"scrollend");
+				$.trigger(that,"scrollend",[that.el]);
 				that.isScrolling = false;
 				that.elementInfo = null; //reset elementInfo when idle
 				if(that.infinite) $.trigger(that, "infinite-scroll-end");

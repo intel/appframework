@@ -95,7 +95,7 @@
 			mouseDown = true;
 			lastTarget = e.target;
 			if(e.target.nodeName.toLowerCase()=="a"&&e.target.href.toLowerCase()=="javascript:;")
-				e.target.href=document.location;
+				e.target.href="#";
 	        redirectMouseToTouch("touchstart", e);
 	        firstMove = true;
 	        cancelClickMove=false;

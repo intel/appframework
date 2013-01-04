@@ -80,9 +80,13 @@
 			}, true);
 			//js scrollers self binding
 			$.bind(this, 'scrollstart', function(el) {
+				that.isScrolling=true;
+				that.scrollingEl_=el;
 				that.fireEvent('UIEvents', 'scrollstart', el, false, false);
 			});
 			$.bind(this, 'scrollend', function(el) {
+				that.isScrolling=false;
+
 				that.fireEvent('UIEvents', 'scrollend', el, false, false);
 			});
 			//fix layer positioning
@@ -519,9 +523,11 @@
 				}
 			}
 			//non-native scroll devices
-			if(!this.isScrolling && (!$.os.blackberry10 && !this.requiresNativeTap)) {
+
+			if((!$.os.blackberry10 && !this.requiresNativeTap)) {
 				//legacy stuff for old browsers
-				e.preventDefault();
+				if(!this.isScrolling ||!$.os.feat.nativeTouchScroll)
+					e.preventDefault();
 				return;
 			}
 		},
