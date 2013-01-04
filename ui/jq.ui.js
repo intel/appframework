@@ -2938,7 +2938,7 @@ if (!HTMLElement.prototype.unwatch) {
 
 			if((!$.os.blackberry10 && !this.requiresNativeTap)) {
 				//legacy stuff for old browsers
-				if(!this.isScrolling ||!$.os.feat.nativeTouchScroll)
+				if(!this.isScrolling ||!$.feat.nativeTouchScroll)
 					e.preventDefault();
 				return;
 			}
