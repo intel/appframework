@@ -759,6 +759,11 @@ textarea {
 #jQUi #modalContainer {
   width: 100%;
 }
+#jQUi #modalContainer > * {
+-webkit-backface-visibility: hidden;
+-webkit-perspective: 1000;
+}
+
 #jQUi #jQui_modal {
   display: none;
   -webkit-backface-visibility: hidden;

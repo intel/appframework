@@ -696,6 +696,10 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
   MISCELLANEOUS UI ELEMENTS
 **********************************************************/
 	#modalContainer { width:100%; }
+	#modalContainer > * {
+		-webkit-backface-visibility: hidden;
+		-webkit-perspective: 1000;
+	}
 	#jQui_modal {
 		display: none;
 	    -webkit-backface-visibility: hidden;

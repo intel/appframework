@@ -2924,15 +2924,17 @@ if (!HTMLElement.prototype.unwatch) {
 			}
 			//native scroll (for scrollend)
 			if(this.isScrolling) {
+
 				if(!wasMoving) {
 					//this.log("scrollstart");
 					this.fireEvent('UIEvents', 'scrollstart', this.scrollingEl_, false, false);
 				}
-				if(this.isScrollingVertical_) {
+				//if(this.isScrollingVertical_) {
 					this.speedY = (this.lastY - e.touches[0].pageY) / (e.timeStamp - this.lastTimestamp);
 					this.lastY = e.touches[0].pageY;
+					this.lastX = e.touches[0].pageX;
 					this.lastTimestamp = e.timeStamp;
-				}
+				//}
 			}
 			//non-native scroll devices
 
@@ -3791,7 +3793,7 @@ if (!HTMLElement.prototype.unwatch) {
             var tmp=$($("#modalContainer").data("panel"));
             var fnc = tmp.data("unload");
             if (typeof fnc == "string" && window[fnc]) {
-                window[fnc](what);
+                window[fnc](tmp.get(0));
             }
             tmp.trigger("unloadpanel");
 
@@ -4606,8 +4608,12 @@ if (!HTMLElement.prototype.unwatch) {
                         previousTarget = "#" + that.firstDiv.id;
                         that.loadContentData(that.firstDiv); //load the info off the first panel
                         that.parsePanelFunctions(that.firstDiv);
+                        
                         that.firstDiv.style.display = "block";
                         $("#header #backButton").css("visibility", "hidden");
+                        if (that.firstDiv.getAttribute("data-modal") == "true" || that.firstDiv.getAttribute("modal") == "true") {            
+                            that.showModal(that.firstDiv.id);
+                        }
                     }
                     
                     that.launchCompleted = true;

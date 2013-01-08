@@ -760,7 +760,7 @@
             var tmp=$($("#modalContainer").data("panel"));
             var fnc = tmp.data("unload");
             if (typeof fnc == "string" && window[fnc]) {
-                window[fnc](what);
+                window[fnc](tmp.get(0));
             }
             tmp.trigger("unloadpanel");
 
@@ -1575,8 +1575,12 @@
                         previousTarget = "#" + that.firstDiv.id;
                         that.loadContentData(that.firstDiv); //load the info off the first panel
                         that.parsePanelFunctions(that.firstDiv);
+                        
                         that.firstDiv.style.display = "block";
                         $("#header #backButton").css("visibility", "hidden");
+                        if (that.firstDiv.getAttribute("data-modal") == "true" || that.firstDiv.getAttribute("modal") == "true") {            
+                            that.showModal(that.firstDiv.id);
+                        }
                     }
                     
                     that.launchCompleted = true;
