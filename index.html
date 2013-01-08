@@ -239,7 +239,7 @@ oldElem=document.getElementsByTagName("link")[0];
     <form id="form" onsubmit="return false">
        Name: <input type='text' class='jq-ui-forms' name='name' value='John Smith'><br>
        <input type='checkbox' class='jq-ui-forms' value='yes' checked name='human'><label for='human'>Are you human?</label><br><br>
-       Gender: <span><select id='serialize_gender' name="gender"><option value='m'>Male</option><option value='f'>Female</option><select></span><br><br>
+       Gender: <span><select id='serialize_gender' name="gender"><option value='m'>Male</option><option value='f'>Female</option></select></span><br><br>
        <br>
        <input type="button" onclick="serializeForm()" value="Serialize">
     </form>
@@ -259,7 +259,7 @@ oldElem=document.getElementsByTagName("link")[0];
 		<div class='jqm2'>Div 3 (class="jqm2")</div>
 		<div class='jqm4'>Div 4 (class="jqm4")</div>
 		<br />
-		<a  class="button"href="javascript:;" onclick="alert($('.jqm2').length)">Click to get the Length by classname</a>
+		<a  class="button" href="javascript:;" onclick="alert($('.jqm2').length)">Click to get the Length by classname</a>
 	</div>
 
 	<!-- jqm > jqm find() -->
@@ -269,7 +269,7 @@ oldElem=document.getElementsByTagName("link")[0];
 			<li id='find1'>Item 1</li>
 			<li>Item 2</li>
 		</ul>
-		<a  class="button"href="javascript:;" onclick="alert($('#jqm3').find('li').length)">Click to get the count of li's in the div</a><br /><br />
+		<a  class="button" href="javascript:;" onclick="alert($('#jqm3').find('li').length)">Click to get the count of li's in the div</a><br /><br />
 	</div>
 
 	<!-- jqm > jqm html() -->
@@ -354,7 +354,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	</div>
 
 	<!-- jqm > jqm addClass() -->
-	<div id="jqm15" class="panel"  title=".addClass()"data-nav="menu_jqmobi">
+	<div id="jqm15" class="panel"  title=".addClass()" data-nav="menu_jqmobi">
 		$("#div").addClass() - adds a css class to the element.<br /><br />
 		<div style='border:1px solid black' id="jqm15_content">This is some content</div><br /><br />
 		<a class="button" href='javascript:;' onclick='($("#jqm15_content").addClass("class16"))'>Add a Class</a>
@@ -367,9 +367,9 @@ oldElem=document.getElementsByTagName("link")[0];
 		<a class="button" href='javascript:;' onclick='($("#jqm16_content").removeClass("class16"))'>Remove the Class</a>
 	</div>
 
-	<!-- jqm > jqm hassClass() -->
+	<!-- jqm > jqm hasClass() -->
 	<div id="jqm17" class="panel"  title=".hasClass()" data-nav="menu_jqmobi">
-		$("#div").hassClass() - returns a boolean if an element has a class.<br /><br />
+		$("#div").hasClass() - returns a boolean if an element has a class.<br /><br />
 		<div style='border:1px solid black' id="jqm17_content" class="class16">This is some content</div><br />
 		<a class="button" href='javascript:;' onclick='alert($("#jqm17_content").hasClass("class16"))'>Check if it has the class</a>
 	</div>
@@ -501,7 +501,7 @@ oldElem=document.getElementsByTagName("link")[0];
 
 	<!-- jqm > jqm getJSON() -->
 	<div id="jqm27" class="panel"  title=".getJSON()" data-nav="menu_jqmobi">
-		$.getJSON(url,data,success); - Makes a XMLHpttRequest GET request and returns a JSON object.<br /><br />
+		$.getJSON(url,data,success); - Makes a XMLHttpRequest GET request and returns a JSON object.<br /><br />
 		<script>
 			function doJSON(){
 				$.getJSON(webRoot+'json.html',function(data){$('#jqm27_content').html(JSON.stringify(data))});
@@ -655,7 +655,7 @@ oldElem=document.getElementsByTagName("link")[0];
        <h2 class='expanded' onclick='showHide(this,"icons_info");'>SVG Icons</h2><p id='icons_info'>jqUi provides SVG icons to use throughout your app.  Simply add the icon class, along with the image class name and additional sizes you want.
        <br>
        .mini - 20 pixels high<br>
-       .big - 40 pixels hight<br>
+       .big - 40 pixels high<br>
        The default is 28 pixels.<br>
        </p>
        <ul>
@@ -732,7 +732,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	</div>
 	<div id="uifooter" title="Custom Footers" class="panel" data-footer='footerui'>
      <p>You should notice that the footer is no longer the default.  It is specific to jqUi, with options for Transitions, UI and API</p>
-	 You can create custom fotoers using the &lt;footer&gt; tag.  You then set the id on each panel to change them using the data-footer='id' property. 
+	 You can create custom footers using the &lt;footer&gt; tag.  You then set the id on each panel to change them using the data-footer='id' property. 
 	
 	</div>
 	<div id="jqmforms" title="Form Styles" class="panel" data-footer='footerui'>
@@ -945,7 +945,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	<ul>
 		<li><a href="#uigoback">.goBack()</a></li>
 		<li><a href="#uiclearhistory">.clearHistory()</a></li>
-		<li><a href="#uiaddcontentdiv">.addContentDiv ()</a></li>
+		<li><a href="#uiaddcontentdiv">.addContentDiv()</a></li>
 		
 		<li><a href="#uisettitle">.setTitle(text) </a></li>
 		<li><a href="#uisetbackbutton">.setBackButtonText() </a></li>
@@ -1892,7 +1892,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	This is some content<br><br>
 	This is some content<br><br>
 
-	<div class="drawer_handle" style="z-index:;height:30px;width:100%;background:orange;position:absolute;bottom:0px;text-align:center;line-height:30px;font-size:14px;color:black;background:white">PULL DOWN</div>
+	<div class="drawer_handle" style="height:30px;width:100%;background:orange;position:absolute;bottom:0px;text-align:center;line-height:30px;font-size:14px;color:black;background:white">PULL DOWN</div>
 	</div>
 
 	<div style="position:absolute;bottom:15px;width:100%;z-index:101">
