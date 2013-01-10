@@ -367,6 +367,8 @@ textarea {
   text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
   overflow: hidden;
   border-radius:44px;
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
 }
 #jQUi #navbar a:active,
 #jQUi #navbar a:focus,

@@ -641,6 +641,7 @@
 
 			this.init(el, opts);
 			var $el = $(el);
+			
 			if(opts.noParent !== true) {
 				var oldParent = $el.parent();
 				$el.css('height', oldParent.height());
@@ -2821,8 +2822,9 @@ if (!HTMLElement.prototype.unwatch) {
             }
 
 			//prevent default if possible
-			if(!this.isScrolling && !this.isPanning_ && !this.requiresNativeTap) {
-				e.preventDefault();
+			if(!this.isPanning_ && !this.requiresNativeTap) {
+                if((this.isScrolling && !$.feat.nativeTouchScroll)||(!this.isScrolling))
+					e.preventDefault();
 				//demand vertical scroll (don't let it pan the page)
 			} else if(this.isScrollingVertical_) {
 				this.demandVerticalScroll();

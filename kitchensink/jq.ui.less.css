@@ -370,6 +370,8 @@ textarea {
   text-align: center;
   text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
   overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
 }
 #jQUi #navbar a:active,
 #jQUi #navbar a:focus,

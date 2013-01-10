@@ -1089,8 +1089,21 @@ if (!window.jq || typeof (jq) !== "function") {
              * @return {string} height with  "px"
              * @title $().height()
              */
-            height:function(){
-                return this.offset().height;
+            height:function(val){
+                if(val!=undefined)
+                    return this.css("height",val);
+                if(this[0]==this[0].window)
+                    return window.innerHeight;
+                if(this[0].nodeType==this[0].DOCUMENT_NODE)
+                    return this[0].documentElement['offsetheight'];
+                else
+                {
+                    var tmpVal=this.css("height");
+                    if(tmpVal)
+                        return tmpVal
+                    else
+                        return this.offset().height;
+                }
             },
             /**
              * returns the width of the element, including padding on IE
@@ -1101,7 +1114,19 @@ if (!window.jq || typeof (jq) !== "function") {
              * @title $().width()
              */
             width:function(){
-                return this.offset().width;
+                 if(val==undefined)
+                    return this.css("width",val);
+                if(this[0]==this[0].window)
+                    return window.innerWidth;
+                if(this[0].nodeType==this[0].DOCUMENT_NODE)
+                    return this[0].documentElement['offsetwidth'];
+                else{
+                     var tmpVal=this.css("width");
+                    if(tmpVal)
+                        return tmpVal
+                    else
+                        return this.offset().width;
+                }
             },
             /**
             * Returns the parent nodes of the elements based off the selector

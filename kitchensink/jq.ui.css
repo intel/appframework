@@ -288,6 +288,8 @@ background:#333;
 	width:62px;
 	line-height:100px;
 	position:relative;
+	-webkit-backface-visibility: hidden;
+	-webkit-perspective: 1000;
 }
 
 #navbar a:active, #navbar a:focus, #navbar a:active:focus,  #navbar .selected{

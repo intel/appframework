@@ -329,6 +329,7 @@
 
 			this.init(el, opts);
 			var $el = $(el);
+			
 			if(opts.noParent !== true) {
 				var oldParent = $el.parent();
 				$el.css('height', oldParent.height());
