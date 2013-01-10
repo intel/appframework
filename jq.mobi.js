@@ -1090,6 +1090,8 @@ if (!window.jq || typeof (jq) !== "function") {
              * @title $().height()
              */
             height:function(val){
+                if (this.length === 0)
+                    return undefined;
                 if(val!=undefined)
                     return this.css("height",val);
                 if(this[0]==this[0].window)
@@ -1114,6 +1116,8 @@ if (!window.jq || typeof (jq) !== "function") {
              * @title $().width()
              */
             width:function(){
+                if (this.length === 0)
+                    return undefined;
                  if(val==undefined)
                     return this.css("width",val);
                 if(this[0]==this[0].window)
