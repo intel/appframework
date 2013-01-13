@@ -1712,6 +1712,15 @@
                 }
                 return;
             }
+        
+            // file:/// fixes - this allows it to run on platforms like Cordova
+            // that pass file:/// at the start of hyperlinks
+            if (theTarget.href.indexOf("file:") === 0) {
+                var linkToUse = theTarget.href.replace('file:///android_asset/www/', '');
+                if(jq.ui.customClickHandler(linkToUse)) {
+                   return e.preventDefault();
+                }
+            }
 
             /* IE 10 fixes*/
 
