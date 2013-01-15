@@ -1611,6 +1611,10 @@
             if (window.navigator.standalone) {
                 this.blockPageScroll();
             }
+            /*document.getElementById("header").addEventListener("click",function(e){
+                if(e.clientY<=15&&e.target.nodeName.toLowerCase()=="h1") //hack - the title spans the whole width of the header
+                    $.ui.scrollingDivs[$.ui.activeDiv.id].scrollToTop("10ms");
+            });*/
         
         },
         /**

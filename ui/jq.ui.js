@@ -2981,8 +2981,7 @@ if (!HTMLElement.prototype.unwatch) {
 				if(!this.blockClicks && !this.blockPossibleClick_) {
 					var theTarget = e.target;
 					if(theTarget.nodeType == 3) theTarget = theTarget.parentNode;
-					this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
-					
+					this.fireEvent('Event', 'click', theTarget, true, e.mouseToTouch,e.changedTouches[0]);
 					this.lastTouchStartX=this.dX;
 					this.lastTouchStartY=this.dY;
 				}
@@ -3020,12 +3019,17 @@ if (!HTMLElement.prototype.unwatch) {
 			this.blockPossibleClick_ = false;
 		},
 
-		fireEvent: function(eventType, eventName, target, bubbles, mouseToTouch) {
+		fireEvent: function(eventType, eventName, target, bubbles, mouseToTouch,data) {
 			//this.log("Firing event "+eventName);
 			//create the event and set the options
 			var theEvent = document.createEvent(eventType);
 			theEvent.initEvent(eventName, bubbles, true);
 			theEvent.target = target;
+            if(data){
+                $.each(data,function(key,val){
+                    theEvent[key]=val;
+                });
+            }
 			//jq.DesktopBrowsers flag
 			if(mouseToTouch) theEvent.mouseToTouch = true;
 			target.dispatchEvent(theEvent);
@@ -4646,6 +4650,10 @@ if (!HTMLElement.prototype.unwatch) {
             if (window.navigator.standalone) {
                 this.blockPageScroll();
             }
+            /*document.getElementById("header").addEventListener("click",function(e){
+                if(e.clientY<=15&&e.target.nodeName.toLowerCase()=="h1") //hack - the title spans the whole width of the header
+                    $.ui.scrollingDivs[$.ui.activeDiv.id].scrollToTop("10ms");
+            });*/
         
         },
         /**

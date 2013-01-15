@@ -568,8 +568,7 @@
 				if(!this.blockClicks && !this.blockPossibleClick_) {
 					var theTarget = e.target;
 					if(theTarget.nodeType == 3) theTarget = theTarget.parentNode;
-					this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
-					
+					this.fireEvent('Event', 'click', theTarget, true, e.mouseToTouch,e.changedTouches[0]);
 					this.lastTouchStartX=this.dX;
 					this.lastTouchStartY=this.dY;
 				}
@@ -607,12 +606,17 @@
 			this.blockPossibleClick_ = false;
 		},
 
-		fireEvent: function(eventType, eventName, target, bubbles, mouseToTouch) {
+		fireEvent: function(eventType, eventName, target, bubbles, mouseToTouch,data) {
 			//this.log("Firing event "+eventName);
 			//create the event and set the options
 			var theEvent = document.createEvent(eventType);
 			theEvent.initEvent(eventName, bubbles, true);
 			theEvent.target = target;
+            if(data){
+                $.each(data,function(key,val){
+                    theEvent[key]=val;
+                });
+            }
 			//jq.DesktopBrowsers flag
 			if(mouseToTouch) theEvent.mouseToTouch = true;
 			target.dispatchEvent(theEvent);
