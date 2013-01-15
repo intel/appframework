@@ -329,7 +329,6 @@
 
 			this.init(el, opts);
 			var $el = $(el);
-			
 			if(opts.noParent !== true) {
 				var oldParent = $el.parent();
 				$el.css('height', oldParent.height());
@@ -435,7 +434,6 @@
 			}
 
 			this.cY = newcY;
-//			e.stopPropagation();
 		}
         nativeScroller.prototype.showRefresh=function(){
             if(!this.refreshTriggered){
@@ -625,7 +623,7 @@
 			scrollDiv.style.position = 'absolute';
 			scrollDiv.style.width = width + "px";
 			scrollDiv.style.height = height + "px";
-			scrollDiv.style[$.feat.cssPrefix+'border-radius'] = "2px";
+			scrollDiv.style[$.feat.cssPrefix+'BorderRadius'] = "2px";
 			scrollDiv.style.borderRadius = "2px";
 			scrollDiv.style.opacity = 0;
 			scrollDiv.className = 'scrollBar';
@@ -675,11 +673,11 @@
 		jsScroller.prototype.hideScrollbars = function() {
 			if(this.hscrollBar) {
 				this.hscrollBar.style.opacity = 0
-				this.hscrollBar.style[$.feat.cssPrefix+'transition-duration'] = "0ms";
+				this.hscrollBar.style[$.feat.cssPrefix+'TransitionDuration'] = "0ms";
 			}
 			if(this.vscrollBar) {
 				this.vscrollBar.style.opacity = 0
-				this.vscrollBar.style[$.feat.cssPrefix+'transition-duration']  = "0ms";
+				this.vscrollBar.style[$.feat.cssPrefix+'TransitionDuration']  = "0ms";
 			}
 		}
 
@@ -706,10 +704,7 @@
 				clearTimeout(this.scrollingFinishCB);
 				this.scrollingFinishCB = null;
 			}
-			if(this.doScrollInterval) {
-				clearInterval(this.doScrollInterval);
-				this.doScrollInterval = null;
-			}
+			
 
 			//disable if locked
 			if(event.touches.length != 1 || this.boolScrollLock) return;
@@ -792,7 +787,7 @@
 	                this.vscrollBar.style.left = (window.innerWidth - numOnly(this.vscrollBar.style.width) * 3) + "px";
 	            else
 	                this.vscrollBar.style.right = "0px";
-	            this.vscrollBar.style[$.feat.cssPrefix+"transition"] = '';
+	            this.vscrollBar.style[$.feat.cssPrefix+"Transition"] = '';
 				// this.vscrollBar.style.opacity = 1;
 			}
 
@@ -802,22 +797,16 @@
                     this.hscrollBar.style.top = (window.innerHeight - numOnly(this.hscrollBar.style.height)) + "px";
                 else
                     this.hscrollBar.style.bottom = numOnly(this.hscrollBar.style.height);
-                this.hscrollBar.style[$.feat.cssPrefix+"transition"] = ''; 
+                this.hscrollBar.style[$.feat.cssPrefix+"Transition"] = ''; 
 				// this.hscrollBar.style.opacity = 1;
 			}
 
 			//save scrollInfo
 			this.lastScrollInfo = scrollInfo;
+			this.hasMoved=true;
 
-			//just in case...
-			if(this.doScrollInterval) window.clearInterval(this.doScrollInterval);
-			this.doScrollInterval = null;
-			var that = this;
-			this.doScrollInterval = window.setInterval(function() {
-				that.doScroll();
-			}, this.refreshRate);
-			$.trigger(this,"scrollstart",[this.el]);
-			$.trigger($.touchLayer,"scrollstart",[this.el]);
+			this.scrollerMoveCSS(this.lastScrollInfo, 0);
+			$.trigger(this,"scrollstart");
 
 		}
 		jsScroller.prototype.getCSSMatrix = function(el) {
@@ -909,6 +898,7 @@
 
 
 			this.saveEventInfo(event);
+			this.doScroll();
 
 		}
 
@@ -1099,8 +1089,6 @@
 
 		jsScroller.prototype.onTouchEnd = function(event) {
 
-			window.clearInterval(this.doScrollInterval);
-			this.doScrollInterval = null;
 
 			if(this.currentScrollingObject == null || !this.moved) return;
 			//event.preventDefault();
