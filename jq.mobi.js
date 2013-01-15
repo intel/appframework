@@ -2273,6 +2273,7 @@ if (!window.jq || typeof (jq) !== "function") {
          * @title $.unbind(object,event,function);
          */
         $.unbind = function(obj, ev, f){
+			var ret = true;
 			if(!obj.__events) return ret;
 			if(!$.isArray(ev)) ev = [ev];
 			for(var i=0; i<ev.length; i++){
