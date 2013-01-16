@@ -1010,17 +1010,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 /**********************************************************
   POPUP
 **********************************************************/
-	body > div #mask {
-		display:block;
-		width:100%; 
-		height:100%; 
-		background:#000; 
-		z-index: 999999; 
-		position:absolute; 
-		top:0; 
-		left:0;
-	}
-
+	
 	.popupBorderMixin(@color) { }
 	.popupBorderMixin(@color) when (lightness(@color-2) >= 80%) { border:solid 1px darken(@color-2, 25%); }
 	.popupBorderMixin(@color) when (lightness(@color-2) < 80%) { border:solid 1px lighten(@color-2, 25%); }
@@ -1235,6 +1225,16 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		
 	.ui-corner-all { border-radius:.6em; }
 	
+body > div #mask {
+		display:block;
+		width:100%; 
+		height:100%; 
+		background:#000; 
+		z-index: 999999; 
+		position:absolute; 
+		top:0; 
+		left:0;
+	}
 
 
 #jQui_mask { position:absolute; top:45%; }
