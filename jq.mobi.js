@@ -793,10 +793,12 @@ if (!window.jq || typeof (jq) !== "function") {
             /**
             * Removes elements based off a selector
                 ```
+                $().remove();  //Remove all
                 $().remove(".foo");//Remove off a string selector
                 var element=$("#foo").get();
                 $().remove(element); //Remove by an element
                 $().remove($(".foo"));  //Remove by a collection
+
                 ```
 
             * @param {String|Object|Array} selector to filter against
@@ -971,6 +973,7 @@ if (!window.jq || typeof (jq) !== "function") {
             appendTo:function(selector,insert){
                 var tmp=$(selector);
                 tmp.append(this);
+                return this;
             },
              /**
             * Prepends the current collection to the selector
@@ -984,6 +987,7 @@ if (!window.jq || typeof (jq) !== "function") {
             prependTo:function(selector){
                 var tmp=$(selector);
                 tmp.append(this,true);
+                return this;
             },
             /**
             * Prepends to the elements
