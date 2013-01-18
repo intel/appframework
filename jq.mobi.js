@@ -432,7 +432,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             find: function(sel) {
                 if (this.length === 0)
-                    return undefined;
+                    return this;
                 var elems = [];
                 var tmpElems;
                 for (var i = 0; i < this.length; i++) {
@@ -460,7 +460,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             html: function(html,cleanup) {
                 if (this.length === 0)
-                    return undefined;
+                    return this;
                 if (html === undefined)
                     return this[0].innerHTML;
 
@@ -487,7 +487,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             text: function(text) {
                 if (this.length === 0)
-                    return undefined;
+                    return this;
                 if (text === undefined)
                     return this[0].textContent;
                 for (var i = 0; i < this.length; i++) {
@@ -511,7 +511,7 @@ if (!window.jq || typeof (jq) !== "function") {
             css: function(attribute, value, obj) {
                 var toAct = obj != undefined ? obj : this[0];
                 if (this.length === 0)
-                    return undefined;
+                    return this;
                 if (value == undefined && typeof (attribute) === "string") {
                     var styles = window.getComputedStyle(toAct);
                     return  toAct.style[attribute] ? toAct.style[attribute]: window.getComputedStyle(toAct)[attribute] ;
@@ -1064,7 +1064,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             offset: function() {
                 if (this.length === 0)
-                    return undefined;
+                    return this;
                 if(this[0]==window)
                     return {
                         left:0,
@@ -1095,7 +1095,7 @@ if (!window.jq || typeof (jq) !== "function") {
              */
             height:function(val){
                 if (this.length === 0)
-                    return undefined;
+                    return this;
                 if(val!=undefined)
                     return this.css("height",val);
                 if(this[0]==this[0].window)
@@ -1121,7 +1121,7 @@ if (!window.jq || typeof (jq) !== "function") {
              */
             width:function(){
                 if (this.length === 0)
-                    return undefined;
+                    return this;
                  if(val==undefined)
                     return this.css("width",val);
                 if(this[0]==this[0].window)
@@ -1148,15 +1148,36 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} jqMobi object with unique parents
             * @title $().parent(selector)
             */
-            parent: function(selector) {
+            parent: function(selector,recursive) {
                 if (this.length == 0)
-                    return undefined;
+                    return this;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
-                    if (this[i].parentNode)
-                        elems.push(this[i].parentNode);
+                    var tmp=this[i];
+                    while(tmp.parentNode&&tmp.parentNode!=document){
+                        elems.push(tmp.parentNode);
+                        if(tmp.parentNode)
+                            tmp=tmp.parentNode;
+                        if(!recursive)
+                            break;
+                    }
                 }
                 return this.setupOld($(unique(elems)).filter(selector));
+            },
+             /**
+            * Returns the parents of the elements based off the selector (traversing up until html document)
+                ```
+                $("#foo").parents('.bar');
+                $("#foo").parents($('.bar'));
+                $("#foo").parents($('.bar').get());
+                ```
+
+            * @param {String|Array|Object} [selector]
+            * @return {Object} jqMobi object with unique parents
+            * @title $().parents(selector)
+            */
+            parents: function(selector) {
+                return this.parent(selector,true);
             },
             /**
             * Returns the child nodes of the elements based off the selector
@@ -1173,7 +1194,7 @@ if (!window.jq || typeof (jq) !== "function") {
             children: function(selector) {
                 
                 if (this.length == 0)
-                    return undefined;
+                    return this;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     elems = elems.concat(siblings(this[i].firstChild));
@@ -1195,7 +1216,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             siblings: function(selector) {
                 if (this.length == 0)
-                    return undefined;
+                    return this;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     if (this[i].parentNode)
@@ -1218,7 +1239,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             closest: function(selector, context) {
                 if (this.length == 0)
-                    return undefined;
+                    return this;
                 var elems = [], 
                 cur = this[0];
                 
@@ -1245,7 +1266,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             filter: function(selector) {
                 if (this.length == 0)
-                    return undefined;
+                    return this;
                 
                 if (selector == undefined)
                     return this;
@@ -1271,7 +1292,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             not: function(selector) {
                 if (this.length == 0)
-                    return undefined;
+                    return this;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     var val = this[i];
@@ -1324,7 +1345,7 @@ if (!window.jq || typeof (jq) !== "function") {
             clone: function(deep) {
                 deep = deep === false ? false : true;
                 if (this.length == 0)
-                    return undefined;
+                    return this;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     elems.push(this[i].cloneNode(deep));

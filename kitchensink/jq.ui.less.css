@@ -1155,7 +1155,7 @@ textarea {
   background-image: -webkit-linear-gradient(top, color-stop(0%, #ff0000), color-stop(100%, #800000));
   background-image: linear-gradient(to bottom, color-stop(0%, #ff0000), color-stop(100%, #800000));
 }
-#jQUi body > div #mask {
+body > div #mask {
   display: block;
   width: 100%;
   height: 100%;

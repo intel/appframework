@@ -922,6 +922,23 @@ test("parent",function(){
   
 });
 
+test("parents",function(){
+   expect(4);
+   var text='<div id="parent_test_cont">'+
+     '<div class="parent1" id="parent1">'+
+      '<span class="parsel">Foo</span>'+
+      '<span class="parsel">Foo</span>'+
+    '</div>'+
+  '</div>';
+  $("#foo").append(text);
+  
+  equals($(".parsel").parents().length,7,"Test all parents");
+  equals($(".parsel").parents("div").length,4,"Test filtering divs");
+  equals($(".parsel").parents($("#foo")).get(),$("#foo").get(),"Test filtering object");
+  equals($(".parsel").parents($("#asdfasdfasdf")).length,0,"Test filtering non-existent object");
+  
+});
+
 test("children",function(){
    expect(4);
    var text='<div id="parent_test_cont">'+

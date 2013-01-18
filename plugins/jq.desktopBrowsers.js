@@ -4,7 +4,6 @@
 
 
 ;(function ($) {
-	
 	var cancelClickMove=false;
 	var preventAll = function(e) 
     {
@@ -25,8 +24,10 @@
 	        preventAll(originalEvent);
 	    }
     
-	    var touchevt = document.createEvent("Event");
+	    var touchevt = document.createEvent("MouseEvent");
+
 	    touchevt.initEvent(type, true, true);
+	    touchevt.initMouseEvent(type, true, true, window, originalEvent.detail, originalEvent.screenX, originalEvent.screenY, originalEvent.clientX, originalEvent.clientY, originalEvent.ctrlKey, originalEvent.shiftKey, originalEvent.altKey, originalEvent.metaKey, originalEvent.button, originalEvent.relatedTarget);    
 		if(type!='touchend'){
 		    touchevt.touches = new Array();
 		    touchevt.touches[0] = new Object();
@@ -38,7 +39,6 @@
 		    touchevt.targetTouches = touchevt.touches;  //for jqtouch
 		}
 		//target
-	    touchevt.target = theTarget;
 		
 		touchevt.mouseToTouch = true;
 		if($.os.ie) {
