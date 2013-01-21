@@ -1475,12 +1475,15 @@
                 var el = contentDivs[i];
                 var tmp = el;
                 var id;
+                var prevSibling=el.previousSibling;
                 if (el.parentNode && el.parentNode.id != "content") {
+
                     el.parentNode.removeChild(el);
                     var id = el.id;
                     if (tmp.getAttribute("selected"))
                         this.firstDiv = jq("#" + id).get(0);
                     this.addDivAndScroll(tmp);
+                    jq("#"+id).insertAfter(prevSibling);
                 } else if (!el.parsedContent) {
                     el.parsedContent = 1;
                     el.parentNode.removeChild(el);
@@ -1488,6 +1491,7 @@
                     if (tmp.getAttribute("selected"))
                         this.firstDiv = jq("#" + id).get(0);
                     this.addDivAndScroll(tmp);
+                    jq("#"+id).insertAfter(prevSibling);
                 }
                 if (el.getAttribute("data-defer")) {
                     defer[id] = el.getAttribute("data-defer");
