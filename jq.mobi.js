@@ -1090,7 +1090,7 @@ if (!window.jq || typeof (jq) !== "function") {
                ```
                $().height();
                ```
-             * @return {string} height with  "px"
+             * @return {string} height
              * @title $().height()
              */
             height:function(val){
@@ -1104,7 +1104,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     return this[0].documentElement['offsetheight'];
                 else
                 {
-                    var tmpVal=this.css("height");
+                    var tmpVal=this.css("height").replace("px","");
                     if(tmpVal)
                         return tmpVal
                     else
@@ -1116,7 +1116,7 @@ if (!window.jq || typeof (jq) !== "function") {
                ```
                $().width();
                ```
-             * @return {string} width with  "px"
+             * @return {string} width
              * @title $().width()
              */
             width:function(){
@@ -1129,7 +1129,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 if(this[0].nodeType==this[0].DOCUMENT_NODE)
                     return this[0].documentElement['offsetwidth'];
                 else{
-                     var tmpVal=this.css("width");
+                     var tmpVal=this.css("width").replace("px","");
                     if(tmpVal)
                         return tmpVal
                     else
