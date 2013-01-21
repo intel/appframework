@@ -1615,10 +1615,17 @@
             if (window.navigator.standalone) {
                 this.blockPageScroll();
             }
-            /*document.getElementById("header").addEventListener("click",function(e){
+            this.topClickScroll();
+           
+        },
+        /**
+         * This simulates the click and scroll to top of browsers
+         */
+        topClickScroll:function(){
+             document.getElementById("header").addEventListener("click",function(e){
                 if(e.clientY<=15&&e.target.nodeName.toLowerCase()=="h1") //hack - the title spans the whole width of the header
-                    $.ui.scrollingDivs[$.ui.activeDiv.id].scrollToTop("10ms");
-            });*/
+                    $.ui.scrollingDivs[$.ui.activeDiv.id].scrollToTop("100");
+            });
         
         },
         /**
@@ -1703,8 +1710,7 @@
                 return;
             }
             
-            
-            
+
             if (theTarget.href.indexOf("tel:") === 0)
                 return false;
 
@@ -1766,7 +1772,7 @@
 
 
 //The following functions are utilitiy functions for jqUi within appMobi.
-//TODO: consider taking all appMobi constraints from jQUI into this code
+
 (function() {
     document.addEventListener("appMobi.device.ready", function() { //in AppMobi, we need to undo the height stuff since it causes issues.
         setTimeout(function() {

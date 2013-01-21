@@ -125,6 +125,7 @@
 			infiniteEndCheck: false,
 			infiniteTriggered: false,
 			scrollSkip: false,
+			scrollTopInterval:null,
 			scrollTo:function(params){
 				this.el.scrollTop=Math.abs(params.y);
 				this.el.scrollLeft=Math.abs(params.x);
@@ -133,8 +134,24 @@
             disable:function(){},
             hideScrollbars:function(){},
             addPullToRefresh:function(){},
-            scrollToTop:function(){
-            	this.el.scrollTop=0;
+            /**
+              * We do step animations for 'native' - iOS is acceptable and desktop browsers are fine
+              * instead of css3
+              */
+            scrollToTop:function(time){
+                var time=parseInt(time);
+                if(time==0||isNaN(time))
+            	   return this.el.scrollTop=0;
+                else {
+                    var singleTick=10;
+                   	var distPerTick=(this.el.scrollHeight-this.el.scrollTop)/Math.ceil(time/singleTick);
+                    var self=this;
+                   	self.scrollTopInterval=window.setInterval(function(){
+                        self.el.scrollTop-=distPerTick;
+                        if(self.el.scrollTop<=0)
+                            clearInterval(self.scrollTopInterval);
+                    },singleTick);
+                }
             },
             scrollToBottom:function(){
             	this.el.scrollTop=this.el.scrollHeight;
@@ -169,6 +186,7 @@
 				if(!this.scrollingLocked) {
 					switch(e.type) {
 					case 'touchstart':
+                        clearInterval(this.scrollTopInterval);
 						this.preventHideRefresh = !this.refreshRunning; // if it's not running why prevent it xD
 						this.moved = false;
 						this.onTouchStart(e);
