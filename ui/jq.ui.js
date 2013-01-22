@@ -41,7 +41,7 @@
     };
     
 
-    jq["css3AnimateQueue"] = function () {
+    $["css3AnimateQueue"] = function () {
         return new css3Animate.queue();
     }
 
@@ -314,21 +314,21 @@
  * jq.scroller - rewritten by Carlos Ouro @ Badoo
  * Supports iOS native touch scrolling and a much improved javascript scroller
  */
-(function(jq) {
+(function($) {
 	var HIDE_REFRESH_TIME = 75; // hide animation of pull2ref duration in ms
 	var cache = [];
 	var objId = function(obj) {
-			if(!obj.jqmScrollerId) obj.jqmScrollerId = jq.uuid();
+			if(!obj.jqmScrollerId) obj.jqmScrollerId = $.uuid();
 			return obj.jqmScrollerId;
 		}
-	jq.fn["scroller"] = function(opts) {
+	$.fn["scroller"] = function(opts) {
 		var tmp, id;
 		for(var i = 0; i < this.length; i++) {
 			//cache system
 			id = objId(this[i]);
 			if(!cache[id]) {
 				if(!opts) opts = {};
-				if(!jq.feat.nativeTouchScroll) opts.useJsScroll = true;
+				if(!$.feat.nativeTouchScroll) opts.useJsScroll = true;
 
 				tmp = scroller(this[i], opts);
 				cache[id] = tmp;
@@ -353,7 +353,7 @@
 		if(jq.os.android && !jq.os.chrome&&jq.os.webkit) {
 			var androidFixOn = false;
 			//connect to touchLayer to detect editMode
-			jq.bind(jq.touchLayer, 'pre-enter-edit', function(focusEl) {
+			$.bind($.touchLayer, 'pre-enter-edit', function(focusEl) {
 				if(!androidFixOn) {
 					//console.log("deploying forms scroll android fix"); // @debug
 					androidFixOn = true;
@@ -362,7 +362,7 @@
 					if(checkConsistency(el) && cache[el].needsFormsFix(focusEl)) cache[el].startFormsMode();
 				}
 			});
-			jq.bind(jq.touchLayer, ['cancel-enter-edit', 'exit-edit'], function(focusEl) {
+			$.bind($.touchLayer, ['cancel-enter-edit', 'exit-edit'], function(focusEl) {
 				if(androidFixOn) {
 					//console.log("removing forms scroll android fix"); // @debug
 					androidFixOn = false;
@@ -472,7 +472,7 @@
 			//methods
 			init: function(el, opts) {
 				this.el = el;
-				this.jqEl = jq(this.el);
+				this.jqEl = $(this.el);
 				this.defaultProperties();
 				for(j in opts) {
 					this[j] = opts[j];
@@ -487,12 +487,12 @@
 					that.disable(true); //with destroy notice
 					var id = that.el.jqmScrollerId;
 					if(cache[id]) delete cache[id];
-					jq.unbind(jq.touchLayer, 'orientationchange-reshape', orientationChangeProxy);
+					$.unbind($.touchLayer, 'orientationchange-reshape', orientationChangeProxy);
 				});
-				jq.bind(jq.touchLayer, 'orientationchange-reshape', orientationChangeProxy);
+				$.bind($.touchLayer, 'orientationchange-reshape', orientationChangeProxy);
 			},
 			needsFormsFix: function(focusEl) {
-				return this.useJsScroll && this.isEnabled() && this.el.style.display != "none" && jq(focusEl).closest(this.jqEl).size() > 0;
+				return this.useJsScroll && this.isEnabled() && this.el.style.display != "none" && $(focusEl).closest(this.jqEl).size() > 0;
 			},
 			handleEvent: function(e) {
 				if(!this.scrollingLocked) {
@@ -532,13 +532,13 @@
 				var el = jqEl.get();
 
 				this.refreshContainer = jq("<div style=\"overflow:hidden;width:100%;height:0;margin:0;padding:0;padding-left:5px;padding-right:5px;display:none;\"></div>");
-				jq(this.el).prepend(this.refreshContainer.append(el, 'top'));
+				$(this.el).prepend(this.refreshContainer.append(el, 'top'));
 				this.refreshContainer = this.refreshContainer[0];
 			},
 			fireRefreshRelease: function(triggered, allowHide) {
 				if(!this.refresh || !triggered) return;
 
-				var autoCancel = jq.trigger(this, 'refresh-release', [triggered]) !== false;
+				var autoCancel = $.trigger(this, 'refresh-release', [triggered]) !== false;
 				this.preventHideRefresh = false;
 				this.refreshRunning = true;
 				if(autoCancel) {
@@ -567,7 +567,7 @@
 				}
 			},
 			scrollToItem: function(el, where) { //TODO: add functionality for x position
-				if(!jq.is$(el)) el = jq(el);
+				if(!$.is$(el)) el = $(el);
 
 				if(where == 'bottom') {
 					var itemPos = el.offset();
@@ -589,7 +589,7 @@
 				}, 0);
 			},
 			setPaddings: function(top, bottom) {
-				var el = jq(this.el);
+				var el = $(this.el);
 				var curTop = numOnly(el.css('paddingTop'));
 				el.css('paddingTop', top + "px").css('paddingBottom', bottom + "px");
 				//don't let padding mess with scroll
@@ -621,7 +621,7 @@
 			//this.refresh=true;
 			this.container = this.el.parentNode;
 			this.container.jqmScrollerId = el.jqmScrollerId;
-			this.jqEl = jq(this.container);
+			this.jqEl = $(this.container);
 
 			if(this.container.style.overflow != 'hidden') this.container.style.overflow = 'hidden';
 
@@ -658,15 +658,15 @@
 		nativeScroller = function(el, opts) {
 
 			this.init(el, opts);
-			var jqel = jq(el);
+			var $el = $(el);
 			if(opts.noParent !== true) {
-				var oldParent = jqel.parent();
-				jqel.css('height', oldParent.height());
-				jqel.parent().parent().append(jqel);
+				var oldParent = $el.parent();
+				$el.css('height', oldParent.height());
+				$el.parent().parent().append($el);
 				oldParent.remove();
 			}
 			this.container = this.el;
-			jqel.css("-webkit-overflow-scrolling", "touch");
+			$el.css("-webkit-overflow-scrolling", "touch");
 		}
 		nativeScroller.prototype = new scrollerCore();
 		jsScroller.prototype = new scrollerCore();
@@ -788,7 +788,7 @@
 			this.infiniteEndCheck = true;
 			if(this.infinite && !this.infiniteTriggered && (Math.abs(this.el.scrollTop) >= (this.el.scrollHeight - this.el.clientHeight))) {
 				this.infiniteTriggered = true;
-				jq.trigger(this, "infinite-scroll");
+				$.trigger(this, "infinite-scroll");
 				this.infiniteEndCheck = true;
 			}
 			this.touchEndFired = true;
@@ -874,7 +874,7 @@
 			if(this.infinite) {
 				if(!this.infiniteTriggered && (Math.abs(this.el.scrollTop) >= (this.el.scrollHeight - this.el.clientHeight))) {
 					this.infiniteTriggered = true;
-					jq.trigger(this, "infinite-scroll");
+					$.trigger(this, "infinite-scroll");
 					this.infiniteEndCheck = true;
 				}
 			}
@@ -885,7 +885,7 @@
 			if(this.infinite && this.infiniteEndCheck && this.infiniteTriggered) {
 
 				this.infiniteEndCheck = false;
-				jq.trigger(that, "infinite-scroll-end");
+				$.trigger(that, "infinite-scroll-end");
 			}
 			//console.log("Scrolling stopped");
 		}
@@ -1282,17 +1282,17 @@
 			if(this.refresh && !this.preventPullToRefresh) {
 				if(!this.refreshTriggered && this.lastScrollInfo.top > this.refreshHeight) {
 					this.refreshTriggered = true;
-					jq.trigger(this, 'refresh-trigger');
+					$.trigger(this, 'refresh-trigger');
 				} else if(this.refreshTriggered && this.lastScrollInfo.top < this.refreshHeight) {
 					this.refreshTriggered = false;
-					jq.trigger(this, 'refresh-cancel');
+					$.trigger(this, 'refresh-cancel');
 				}
 			}
 
 			if(this.infinite && !this.infiniteTriggered) {
 				if((Math.abs(this.lastScrollInfo.top) >= (this.el.clientHeight - this.container.clientHeight))) {
 					this.infiniteTriggered = true;
-					jq.trigger(this, "infinite-scroll");
+					$.trigger(this, "infinite-scroll");
 				}
 			}
 
@@ -1467,7 +1467,7 @@
 			if(this.infinite && !this.infiniteTriggered) {
 				if((Math.abs(scrollInfo.y) >= (this.el.clientHeight - this.container.clientHeight))) {
 					this.infiniteTriggered = true;
-					jq.trigger(this, "infinite-scroll");
+					$.trigger(this, "infinite-scroll");
 				}
 			}
 		}
@@ -1481,7 +1481,7 @@
 				$.trigger(that,"scrollend",[that.el]);
 				that.isScrolling = false;
 				that.elementInfo = null; //reset elementInfo when idle
-				if(that.infinite) jq.trigger(that, "infinite-scroll-end");
+				if(that.infinite) $.trigger(that, "infinite-scroll-end");
 			}, duration);
 		}
 
@@ -1645,7 +1645,7 @@
  */
 
 /* EXAMPLE
-  jq('body').popup({
+  $('body').popup({
 	    title:"Alert! Alert!",
 	    message:"This is a test of the emergency alert system!! Don't PANIC!",
 	    cancelText:"Cancel me", 
@@ -1662,13 +1662,13 @@
   
   You can programatically trigger a close by dispatching a "close" event to it.
   
-  jq('body').popup({title:'Alert',id:'myTestPopup'});
-  jq("#myTestPopup").trigger("close");
+  $('body').popup({title:'Alert',id:'myTestPopup'});
+  $("#myTestPopup").trigger("close");
   
  */
-(function(jq) {
+(function($) {
     
-    jq.fn.popup = function(opts) {
+    $.fn.popup = function(opts) {
         return new popup(this[0], opts);
     };
     var queue = [];
@@ -1688,7 +1688,7 @@
             try {
                 if (typeof (opts) === "string" || typeof (opts) === "number")
                     opts = {message: opts,cancelOnly: "true",cancelText: "OK"};
-                this.id = id = opts.id = opts.id || jq.uuid(); //opts is passed by reference
+                this.id = id = opts.id = opts.id || $.uuid(); //opts is passed by reference
                 var self = this;
                 this.title = opts.suppressTitle?"":(opts.title || "Alert");
                 this.message = opts.message || "";
@@ -1738,19 +1738,19 @@
 	        					<a href="javascript:;" class="'+this.doneClass+'" id="action">' + this.doneText + '</a>\
 	        				</footer>\
 	        			</div></div>';
-                jq(this.container).append(jq(markup));
+                $(this.container).append($(markup));
                 
-                var jqel=jq("#"+this.id);
-                jqel.bind("close", function(){
+                var $el=$("#"+this.id);
+                $el.bind("close", function(){
                 	self.hide();
                 })
                 
                 if (this.cancelOnly) {
-                    jqel.find('A#action').hide();
-                    jqel.find('A#cancel').addClass('center');
+                    $el.find('A#action').hide();
+                    $el.find('A#cancel').addClass('center');
                 }
-                jqel.find('A').each(function() {
-                    var button = jq(this);
+                $el.find('A').each(function() {
+                    var button = $(this);
                     button.bind('click', function(e) {
                         if (button.attr('id') == 'cancel') {
                             self.cancelCallback.call(self.cancelCallback, self);
@@ -1764,9 +1764,9 @@
                      });
                 });
                 self.positionPopup();
-                jq.blockUI(0.5);
-                jqel.removeClass('hidden');
-                jqel.bind("orientationchange", function() {
+                $.blockUI(0.5);
+                $el.removeClass('hidden');
+                $el.bind("orientationchange", function() {
                     self.positionPopup();
                 });
                
@@ -1779,8 +1779,8 @@
             
             hide: function() {
                 var self = this;
-                jq('#' + self.id).addClass('hidden');
-                jq.unblockUI();
+                $('#' + self.id).addClass('hidden');
+                $.unblockUI();
                 setTimeout(function() {
                     self.remove();
                 }, 250);
@@ -1788,18 +1788,18 @@
             
             remove: function() {
                 var self = this;
-                var jqel=jq("#"+self.id);
-                jqel.unbind("close");
-                jqel.find('BUTTON#action').unbind('click');
-                jqel.find('BUTTON#cancel').unbind('click');
-                jqel.unbind("orientationchange").remove();
+                var $el=$("#"+self.id);
+                $el.unbind("close");
+                $el.find('BUTTON#action').unbind('click');
+                $el.find('BUTTON#cancel').unbind('click');
+                $el.unbind("orientationchange").remove();
                 queue.splice(0, 1);
                 if (queue.length > 0)
                     queue[0].show();
             },
             
             positionPopup: function() {
-                var popup = jq('#' + this.id);
+                var popup = $('#' + this.id);
                 popup.css("top", ((window.innerHeight / 2.5) + window.pageYOffset) - (popup[0].clientHeight / 2) + "px");
                 popup.css("left", (window.innerWidth / 2) - (popup[0].clientWidth / 2) + "px");
             }
@@ -1808,25 +1808,25 @@
         return popup;
     })();
     var uiBlocked = false;
-    jq.blockUI = function(opacity) {
+    $.blockUI = function(opacity) {
         if (uiBlocked)
             return;
         opacity = opacity ? " style='opacity:" + opacity + ";'" : "";
-        jq('BODY').prepend(jq("<div id='mask'" + opacity + "></div>"));
-        jq('BODY DIV#mask').bind("touchstart", function(e) {
+        $('BODY').prepend($("<div id='mask'" + opacity + "></div>"));
+        $('BODY DIV#mask').bind("touchstart", function(e) {
             e.preventDefault();
         });
-        jq('BODY DIV#mask').bind("touchmove", function(e) {
+        $('BODY DIV#mask').bind("touchmove", function(e) {
             e.preventDefault();
         });
         uiBlocked = true
     };
     
-    jq.unblockUI = function() {
+    $.unblockUI = function() {
         uiBlocked = false;
-        jq('BODY DIV#mask').unbind("touchstart");
-        jq('BODY DIV#mask').unbind("touchmove");
-        jq("BODY DIV#mask").remove();
+        $('BODY DIV#mask').unbind("touchstart");
+        $('BODY DIV#mask').unbind("touchmove");
+        $("BODY DIV#mask").remove();
     };
     /**
      * Here we override the window.alert function due to iOS eating touch events on native alerts
@@ -1834,10 +1834,10 @@
     window.alert = function(text) {
         if(text===null||text===undefined)
             text="null";
-        if(jq("#jQUi").length>0)
-            jq("#jQUi").popup(text.toString());
+        if($("#jQUi").length>0)
+            $("#jQUi").popup(text.toString());
         else
-            jq(document.body).popup(text.toString());
+            $(document.body).popup(text.toString());
     }
     
 })(jq);
@@ -1845,8 +1845,8 @@
  * jq.web.actionsheet - a actionsheet for html5 mobile apps
  * Copyright 2012 - AppMobi 
  */
-(function(jq) {
-    jq.fn["actionsheet"] = function(opts) {
+(function($) {
+    $.fn["actionsheet"] = function(opts) {
         var tmp;
         for (var i = 0; i < this.length; i++) {
             tmp = new actionsheet(this[i], opts);
@@ -1946,8 +1946,8 @@
  * jq.web.passwordBox - password box replacement for html5 mobile apps on android due to a bug with CSS3 translate3d
  * @copyright 2011 - AppMobi
  */
-(function (jq) {
-    jq["passwordBox"] = function () {
+(function ($) {
+    $["passwordBox"] = function () {
 
         return new passwordBox();
     };
@@ -1958,7 +1958,7 @@
     passwordBox.prototype = {
         showPasswordPlainText: false,
         getOldPasswords: function (elID) {
-         //   if (jq.os.android == false) return; -  iOS users seem to want this too, so we'll let everyone join the party
+         //   if ($.os.android == false) return; -  iOS users seem to want this too, so we'll let everyone join the party
             var container = elID && document.getElementById(elID) ? document.getElementById(elID) : document;
             if (!container) {
                 alert("Could not find container element for passwordBox " + elID);
@@ -2002,13 +2002,13 @@
  * with the old drop down box as normal with javascript, and this will be reflected
  
  */
-(function(jq) {
-    jq['selectBox'] = {
+(function($) {
+    $['selectBox'] = {
         scroller: null,
         getOldSelects: function(elID) {
-            if (!jq.os.android || jq.os.androidICS)
+            if (!$.os.android || $.os.androidICS)
                return;
-            if (!jq.fn['scroller']) {
+            if (!$.fn['scroller']) {
                 alert("This library requires jq.web.Scroller");
                 return;
             }
@@ -2217,10 +2217,10 @@
 
             if(!el.getAttribute("multiple")){
                 el.selectedIndex = value;
-                jq(el).find("option").forEach(function(obj){
+                $(el).find("option").forEach(function(obj){
                     obj.selected=false;
                 });  
-                jq(el).find("option:nth-child("+(value+1)+")").get(0).selected=true;
+                $(el).find("option:nth-child("+(value+1)+")").get(0).selected=true;
             this.scroller.scrollTo({
                 x: 0,
                 y: 0
@@ -2230,18 +2230,18 @@
             else {
                 //multi select
                 
-                var myEl=jq(el).find("option:nth-child("+(value+1)+")").get(0);
+                var myEl=$(el).find("option:nth-child("+(value+1)+")").get(0);
                 if(myEl.selected){
                     myEl.selected=false;
-                    jq(div).find("button").css("background","#fff");    
+                    $(div).find("button").css("background","#fff");    
                 }
                 else {
                      myEl.selected=true;
-                    jq(div).find("button").css("background","#000");  
+                    $(div).find("button").css("background","#000");  
                 }
 
             }
-            jq(el).trigger("change");
+            $(el).trigger("change");
             el = null;
         },
         hideDropDown: function() {
@@ -2266,21 +2266,21 @@
             var that = this;
             modalDiv.appendChild(myDiv);
             
-            jq(document).ready(function() {
+            $(document).ready(function() {
                
                 if(jq("#jQUi"))
                    jq("#jQUi").append(modalDiv);
                 else
                     document.body.appendChild(modalDiv);
-                var close = jq("#jqmobiSelectClose").get();
+                var close = $("#jqmobiSelectClose").get();
                 close.onclick = function() {
                     that.hideDropDown();
                 };
                 
-                var styleSheet = jq("<style>.jqselectscrollBarV{opacity:1 !important;}</style>").get();
+                var styleSheet = $("<style>.jqselectscrollBarV{opacity:1 !important;}</style>").get();
                 document.body.appendChild(styleSheet);
                 try {
-                    that.scroller = jq("#jqmobiSelectBoxScroll").scroller({
+                    that.scroller = $("#jqmobiSelectBoxScroll").scroller({
                         scroller: false,
                         verticalScroll: true,
                         vScrollCSS: "jqselectscrollBarV"
@@ -2334,7 +2334,7 @@ if (!HTMLElement.prototype.unwatch) {
 })(jq);
 
 //Touch events are from zepto/touch.js
-(function(jq) {
+(function($) {
     var touch = {}, touchTimeout;
     
     function parentIfText(node) {
@@ -2414,7 +2414,7 @@ if (!HTMLElement.prototype.unwatch) {
     });
     
     ['swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown', 'doubleTap', 'tap', 'singleTap', 'longTap'].forEach(function(m) {
-        jq.fn[m] = function(callback) {
+        $.fn[m] = function(callback) {
             return this.bind(m, callback)
         }
     });
@@ -2478,9 +2478,9 @@ if (!HTMLElement.prototype.unwatch) {
 			window.addEventListener("orientationchange", this, false);
 			this.layer = el;
 			//proxies
-			this.scrollEndedProxy_ = jq.proxy(this.scrollEnded, this);
-			this.exitEditProxy_ = jq.proxy(this.exitExit, this, []);
-			this.launchFixUIProxy_ = jq.proxy(this.launchFixUI, this);
+			this.scrollEndedProxy_ = $.proxy(this.scrollEnded, this);
+			this.exitEditProxy_ = $.proxy(this.exitExit, this, []);
+			this.launchFixUIProxy_ = $.proxy(this.launchFixUI, this);
 			var that = this;
 			this.scrollTimeoutExpireProxy_ = function() {
 				that.scrollTimeout_ = null;
@@ -2488,7 +2488,7 @@ if (!HTMLElement.prototype.unwatch) {
 			};
 			this.retestAndFixUIProxy_ = function() {
 				if(jq.os.android) that.layer.style.height = '100%';
-				jq.asap(that.testAndFixUI, that, arguments);
+				$.asap(that.testAndFixUI, that, arguments);
 			};
 			//iPhone double clicks workaround
 			document.addEventListener('click', function(e) {
@@ -2682,9 +2682,9 @@ if (!HTMLElement.prototype.unwatch) {
 					//android bug workaround for UI
 					if(!this.isFocused_ && !this.justBlurred_) {
 						//this.log("enter edit mode");
-						jq.trigger(this, 'enter-edit', [e.target]);
+						$.trigger(this, 'enter-edit', [e.target]);
 						//fire / preview reshape event
-						if(jq.os.ios) {
+						if($.os.ios) {
 							var that = this;
 							setTimeout(function() {
 								that.fireReshapeEvent('enter-edit');
@@ -2704,7 +2704,7 @@ if (!HTMLElement.prototype.unwatch) {
 				}
 
 				//BB10 needs to be preventDefault on touchstart and thus need manual blur on click
-			} else if(jq.os.blackberry10 && this.isFocused_) {
+			} else if($.os.blackberry10 && this.isFocused_) {
 				//this.log("forcing blur on bb10 ");
 				this.focusedElement.blur();
 			}
@@ -2721,8 +2721,8 @@ if (!HTMLElement.prototype.unwatch) {
 		},
 		fireReshapeEvent: function(ev) {
 			//this.log(ev?ev+'-reshape':'unknown-reshape');
-			jq.trigger(this, 'reshape'); //trigger a general reshape notice
-			jq.trigger(this, ev ? ev + '-reshape' : 'unknown-reshape'); //trigger the specific reshape
+			$.trigger(this, 'reshape'); //trigger a general reshape notice
+			$.trigger(this, ev ? ev + '-reshape' : 'unknown-reshape'); //trigger the specific reshape
 		},
 		reshapeAction: function() {
 			if(this.reshapeTimeout_) {
@@ -2746,17 +2746,17 @@ if (!HTMLElement.prototype.unwatch) {
 			this.focusedElement = null;
 			//make sure this blur is not followed by another focus
 			this.justBlurred_ = true;
-			jq.asap(this.exitEditProxy_, this, [e.target]);
+			$.asap(this.exitEditProxy_, this, [e.target]);
 		},
 		exitExit: function(el) {
 			this.justBlurred_ = false;
 			if(!this.isFocused_) {
 				//this.log("exit edit mode");
-				jq.trigger(this, 'exit-edit', [el]);
+				$.trigger(this, 'exit-edit', [el]);
 				//do not allow scroll anymore
 				this.allowDocumentScroll_ = false;
 				//fire / preview reshape event
-				if(jq.os.ios) {
+				if($.os.ios) {
 					var that = this;
 					setTimeout(function() {
 						that.fireReshapeEvent('exit-edit');
@@ -2788,7 +2788,7 @@ if (!HTMLElement.prototype.unwatch) {
 
 
 			//check dom if necessary
-			if(requirePanning || jq.feat.nativeTouchScroll) this.checkDOMTree(e.target, this.layer);
+			if(requirePanning || $.feat.nativeTouchScroll) this.checkDOMTree(e.target, this.layer);
 			//scrollend check
 			if(this.isScrolling) {
 				//remove prev timeout
@@ -2813,7 +2813,7 @@ if (!HTMLElement.prototype.unwatch) {
 
 			//if on edit mode, allow all native touches 
 			//(BB10 must still be prevented, always clicks even after move)
-			if(forceNativeTap || (this.isFocused_ && !jq.os.blackberry10)) {
+			if(forceNativeTap || (this.isFocused_ && !$.os.blackberry10)) {
 				this.requiresNativeTap = true;
 				this.allowDocumentScroll_ = true;
 
@@ -2822,7 +2822,7 @@ if (!HTMLElement.prototype.unwatch) {
 				var tag = e.target.tagName.toLowerCase();
 				if(inputElements.indexOf(tag) !== -1) {
 					//notify scrollers (android forms bug), except for selects
-					if(tag != 'select') jq.trigger(this, 'pre-enter-edit', [e.target]);
+					if(tag != 'select') $.trigger(this, 'pre-enter-edit', [e.target]);
 					this.requiresNativeTap = true;
 				}
 			}
@@ -2886,7 +2886,7 @@ if (!HTMLElement.prototype.unwatch) {
 				return;
 			}
 			//check native scroll
-			if(jq.feat.nativeTouchScroll) {
+			if($.feat.nativeTouchScroll) {
 
 				//prevent errors
 				if(this.ignoreScrolling(el)) {
@@ -3005,13 +3005,13 @@ if (!HTMLElement.prototype.unwatch) {
 						this.scrollEnded(false);
 					} else {
 						//wait for scroll event
-						//this.log(jq.debug.since()+" setting scroll timeout "+this.speedY);
+						//this.log($.debug.since()+" setting scroll timeout "+this.speedY);
 						this.scrollTimeout_ = setTimeout(this.scrollTimeoutExpireProxy_, 30)
 					}
 				}
 				//trigger cancel-enter-edit on inputs
 				if(this.requiresNativeTap) {
-					if(!this.isFocused_) jq.trigger(this, 'cancel-enter-edit', [e.target]);
+					if(!this.isFocused_) $.trigger(this, 'cancel-enter-edit', [e.target]);
 				}
 			}
 			this.clearTouchVars();
@@ -3110,9 +3110,9 @@ if (!HTMLElement.prototype.unwatch) {
 
         /**
          * Helper function to setup the transition objects
-         * Custom transitions can be added via jq.ui.availableTransitions
+         * Custom transitions can be added via $.ui.availableTransitions
            ```
-           jq.ui.availableTransitions['none']=function();
+           $.ui.availableTransitions['none']=function();
            ```
          */
         
@@ -3171,28 +3171,28 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * this is a boolean when set to true (default) it will load that panel when the app is started
            ```
-           jq.ui.loadDefaultHash=false; //Never load the page from the hash when the app is started
-           jq.ui.loadDefaultHash=true; //Default
+           $.ui.loadDefaultHash=false; //Never load the page from the hash when the app is started
+           $.ui.loadDefaultHash=true; //Default
            ```
-         *@title jq.ui.loadDefaultHash
+         *@title $.ui.loadDefaultHash
          */
         loadDefaultHash: true,
         /**
          * This is a boolean that when set to true will add "&cache=_rand_" to any ajax loaded link
            ```
-           jq.ui.useAjaxCacheBuster=true;
+           $.ui.useAjaxCacheBuster=true;
            ```
-          *@title jq.ui.useAjaxCacheBuster
+          *@title $.ui.useAjaxCacheBuster
           */
         useAjaxCacheBuster: false,
         /**
          * This is a shorthand call to the jq.actionsheet plugin.  We wire it to the jQUi div automatically
            ```
-           jq.ui.actionsheet("<a href='javascript:;' class='button'>Settings</a> <a href='javascript:;' class='button red'>Logout</a>")
-           jq.ui.actionsheet("[{
+           $.ui.actionsheet("<a href='javascript:;' class='button'>Settings</a> <a href='javascript:;' class='button red'>Logout</a>")
+           $.ui.actionsheet("[{
                         text: 'back',
                         cssClasses: 'red',
-                        handler: function () { jq.ui.goBack(); ; }
+                        handler: function () { $.ui.goBack(); ; }
                     }, {
                         text: 'show alert 5',
                         cssClasses: 'blue',
@@ -3204,7 +3204,7 @@ if (!HTMLElement.prototype.unwatch) {
                     }]");
            ```
          * @param {String,Array} links
-         * @title jq.ui.actionsheet()
+         * @title $.ui.actionsheet()
          */
         actionsheet: function(opts) {
             return jq("#jQUi").actionsheet(opts);
@@ -3212,8 +3212,8 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * This is a wrapper to jq.popup.js plugin.  If you pass in a text string, it acts like an alert box and just gives a message
            ```
-           jq.ui.popup(opts);
-           jq.ui.popup( {
+           $.ui.popup(opts);
+           $.ui.popup( {
                         title:"Alert! Alert!",
                         message:"This is a test of the emergency alert system!! Don't PANIC!",
                         cancelText:"Cancel me", 
@@ -3222,42 +3222,42 @@ if (!HTMLElement.prototype.unwatch) {
                         doneCallback: function(){console.log("Done for!");},
                         cancelOnly:false
                       });
-           jq.ui.popup('Hi there');
+           $.ui.popup('Hi there');
            ```
          * @param {Object|String} options
-         * @title jq.ui.popup(opts)
+         * @title $.ui.popup(opts)
          */
         popup: function(opts) {
-            return jq("#jQUi").popup(opts);
+            return $("#jQUi").popup(opts);
         },
 
         /**
          *This will throw up a mask and block the UI
          ```
-         jq.ui.blockUI(.9)
+         $.ui.blockUI(.9)
          ````
          * @param {Float} opacity
-         * @title jq.ui.blockUI(opacity)
+         * @title $.ui.blockUI(opacity)
          */
         blockUI: function(opacity) {
-            jq.blockUI(opacity);
+            $.blockUI(opacity);
         },
         /**
          *This will remove the UI mask
          ```
-         jq.ui.unblockUI()
+         $.ui.unblockUI()
          ````
-         * @title jq.ui.unblockUI()
+         * @title $.ui.unblockUI()
          */
         unblockUI: function() {
-            jq.unblockUI();
+            $.unblockUI();
         },
         /**
          * Will remove the bottom nav bar menu from your application
            ```
-           jq.ui.removeFooterMenu();
+           $.ui.removeFooterMenu();
            ```
-         * @title jq.ui.removeFooterMenu
+         * @title $.ui.removeFooterMenu
          */
         removeFooterMenu: function() {
             jq("#navbar").hide();
@@ -3267,23 +3267,23 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Boolean if you want to show the bottom nav menu.
            ```
-           jq.ui.showNavMenu = false;
+           $.ui.showNavMenu = false;
            ```
-         * @title jq.ui.showNavMenu
+         * @title $.ui.showNavMenu
          */
         showNavMenu: true,
         /**
          * Boolean if you want to auto launch jqUi
            ```
-           jq.ui.autoLaunch = false; //
-         * @title jq.ui.autoLaunch
+           $.ui.autoLaunch = false; //
+         * @title $.ui.autoLaunch
          */
         autoLaunch: true,
         /**
          * Boolean if you want to show the back button
            ```
-           jq.ui.showBackButton = false; //
-         * @title jq.ui.showBackButton
+           $.ui.showBackButton = false; //
+         * @title $.ui.showBackButton
          */
         showBackbutton: true,
         /**
@@ -3293,18 +3293,18 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Boolean if you want to reset the scroller position when navigating panels.  Default is true
            ```
-           jq.ui.resetScrollers=false; //Do not reset the scrollers when switching panels
+           $.ui.resetScrollers=false; //Do not reset the scrollers when switching panels
            ```
-         * @title jq.ui.resetScrollers
+         * @title $.ui.resetScrollers
          */
         resetScrollers: true,
         /**
          * function to fire when jqUi is ready and completed launch
            ```
-           jq.ui.ready(function(){console.log('jqUi is ready');});
+           $.ui.ready(function(){console.log('jqUi is ready');});
            ```
          * @param {Function} function to execute
-         * @title jq.ui.ready
+         * @title $.ui.ready
          */
         ready: function(param) {
             if (this.launchCompleted)
@@ -3318,10 +3318,10 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Override the back button class name
            ```
-           jq.ui.setBackButtonStyle('newClass');
+           $.ui.setBackButtonStyle('newClass');
            ```
          * @param {String} new class name
-         * @title jq.ui.setBackButtonStyle(class)
+         * @title $.ui.setBackButtonStyle(class)
          */
         setBackButtonStyle: function(className) {
             jq("#backButton").get(0).className = className;
@@ -3329,10 +3329,10 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Initiate a back transition
            ```
-           jq.ui.goBack()
+           $.ui.goBack()
            ```
            
-         * @title jq.ui.goBack()
+         * @title $.ui.goBack()
          */
         goBack: function() {
             if (this.history.length > 0) {
@@ -3352,10 +3352,10 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Clear the history queue
            ```
-           jq.ui.clearHistory()
+           $.ui.clearHistory()
            ```
            
-         * @title jq.ui.clearHistory()
+         * @title $.ui.clearHistory()
          */
         clearHistory: function() {
             this.history = [];
@@ -3365,10 +3365,10 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * PushHistory
            ```
-           jq.ui.pushHistory(previousPage, newPage, transition, hashExtras)
+           $.ui.pushHistory(previousPage, newPage, transition, hashExtras)
            ```
            
-         * @title jq.ui.pushHistory()
+         * @title $.ui.pushHistory()
          */
         pushHistory: function(previousPage, newPage, transition, hashExtras) {
             //push into local history
@@ -3379,7 +3379,7 @@ if (!HTMLElement.prototype.unwatch) {
             //push into the browser history
             try {
                 window.history.pushState(newPage, newPage, startPath + '#' + newPage + hashExtras);
-                jq(window).trigger("hashchange", {
+                $(window).trigger("hashchange", {
                     newUrl: startPath + '#' + newPage + hashExtras,
                     oldURL: startPath + previousPage
                 });
@@ -3393,7 +3393,7 @@ if (!HTMLElement.prototype.unwatch) {
          * Updates the current window hash
          *
          * @param {String} newHash New Hash value
-         * @title jq.ui.updateHash(newHash)
+         * @title $.ui.updateHash(newHash)
          */
         updateHash: function(newHash) {
             newHash = newHash.indexOf('#') == -1 ? '#' + newHash : newHash; //force having the # in the begginning as a standard
@@ -3403,7 +3403,7 @@ if (!HTMLElement.prototype.unwatch) {
             var panelName = this.getPanelId(newHash).substring(1); //remove the #
             try {
                 window.history.replaceState(panelName, panelName, startPath + newHash);
-                jq(window).trigger("hashchange", {
+                $(window).trigger("hashchange", {
                     newUrl: startPath + newHash,
                     oldUrl: startPath + previousHash
                 });
@@ -3423,13 +3423,13 @@ if (!HTMLElement.prototype.unwatch) {
             br = bottom right
             tr = top right (default)
            ```
-           jq.ui.updateBadge('#mydiv','3','bl','green');
+           $.ui.updateBadge('#mydiv','3','bl','green');
            ```
          * @param {String} target
          * @param {String} Value
          * @param {String} [position]         
          * @param {String|Object} [color or CSS hash]         
-         * @title jq.ui.updateBadge(target,value,[position],[color])
+         * @title $.ui.updateBadge(target,value,[position],[color])
          */
         updateBadge: function(target, value, position, color) {
             if (position === undefined)
@@ -3459,10 +3459,10 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Removes a badge from the selected target.
            ```
-           jq.ui.removeBadge('#mydiv');
+           $.ui.removeBadge('#mydiv');
            ```
          * @param {String} target
-         * @title jq.ui.removeBadge(target)
+         * @title $.ui.removeBadge(target)
          */
         removeBadge: function(target) {
             jq(target).find("span.jq-badge").remove();
@@ -3470,11 +3470,11 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Toggles the bottom nav nav menu.  Force is a boolean to force show or hide.
            ```
-           jq.ui.toggleNavMenu();//toggle it
-           jq.ui.toggleNavMenu(true); //force show it
+           $.ui.toggleNavMenu();//toggle it
+           $.ui.toggleNavMenu(true); //force show it
            ```
          * @param {Boolean} [force]
-         * @title jq.ui.toggleNavMenu([force])
+         * @title $.ui.toggleNavMenu([force])
          */
         toggleNavMenu: function(force) {
             if (!jq.ui.showNavMenu)
@@ -3491,10 +3491,10 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Toggles the top header menu.
            ```
-           jq.ui.toggleHeaderMenu();//toggle it
+           $.ui.toggleHeaderMenu();//toggle it
            ```
          * @param {Boolean} [force]
-         * @title jq.ui.toggleHeaderMenu([force])
+         * @title $.ui.toggleHeaderMenu([force])
          */
         toggleHeaderMenu: function(force) {
             if (jq("#header").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
@@ -3509,10 +3509,10 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Toggles the side menu.  Force is a boolean to force show or hide.
            ```
-           jq.ui.toggleSideMenu();//toggle it
+           $.ui.toggleSideMenu();//toggle it
            ```
          * @param {Boolean} [force]
-         * @title jq.ui.toggleSideMenu([force])
+         * @title $.ui.toggleSideMenu([force])
          */
         toggleSideMenu: function(force, callback) {
             if (!this.isSideMenuEnabled() || this.togglingSideMenu)
@@ -3580,9 +3580,9 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Disables the side menu
            ```
-           jq.ui.disableSideMenu();
+           $.ui.disableSideMenu();
            ```
-        * @title jq.ui.disableSideMenu();
+        * @title $.ui.disableSideMenu();
         */
         disableSideMenu: function() {
             var that = this;
@@ -3598,9 +3598,9 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Enables the side menu
            ```
-           jq.ui.enableSideMenu();
+           $.ui.enableSideMenu();
            ```
-        * @title jq.ui.enableSideMenu();
+        * @title $.ui.enableSideMenu();
         */
         enableSideMenu: function() {
             var that = this;
@@ -3618,10 +3618,10 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Updates the elements in the navbar
            ```
-           jq.ui.updateNavbarElements(elements);
+           $.ui.updateNavbarElements(elements);
            ```
          * @param {String|Object} Elements
-         * @title jq.ui.updateNavbarElements(Elements)
+         * @title $.ui.updateNavbarElements(Elements)
          */
         updateNavbarElements: function(elems) {
             var nb = jq("#navbar");
@@ -3645,10 +3645,10 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Updates the elements in the header
            ```
-           jq.ui.updateHeaderElements(elements);
+           $.ui.updateHeaderElements(elements);
            ```
          * @param {String|Object} Elements
-         * @title jq.ui.updateHeaderElement(Elements)
+         * @title $.ui.updateHeaderElement(Elements)
          */
         updateHeaderElements: function(elems) {
             var nb = jq("#header");
@@ -3665,10 +3665,10 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Updates the elements in the side menu
            ```
-           jq.ui.updateSideMenu(elements);
+           $.ui.updateSideMenu(elements);
            ```
          * @param {String|Object} Elements
-         * @title jq.ui.updateSideMenu(Elements)
+         * @title $.ui.updateSideMenu(Elements)
          */
         updateSideMenu: function(elems) {
             var that = this;
@@ -3709,11 +3709,11 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Set the title of the current panel
            ```
-           jq.ui.setTitle("new title");
+           $.ui.setTitle("new title");
            ```
            
          * @param {String} value
-         * @title jq.ui.setTitle(value)
+         * @title $.ui.setTitle(value)
          */
         setTitle: function(val) {
             jq("#header #pageTitle").html(val);
@@ -3721,11 +3721,11 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Override the text for the back button
            ```
-           jq.ui.setBackButtonText("GO...");
+           $.ui.setBackButtonText("GO...");
            ```
            
          * @param {String} value
-         * @title jq.ui.setBackButtonText(value)
+         * @title $.ui.setBackButtonText(value)
          */
         setBackButtonText: function(text) {
             if (this.backButtonText.length > 0)
@@ -3745,12 +3745,12 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Show the loading mask
            ```
-           jq.ui.showMask()
-           jq.ui.showMask(;Doing work')
+           $.ui.showMask()
+           $.ui.showMask(;Doing work')
            ```
            
          * @param {String} [text]
-         * @title jq.ui.showMask(text);
+         * @title $.ui.showMask(text);
          */
         showMask: function(text) {
             if (!text)
@@ -3760,7 +3760,7 @@ if (!HTMLElement.prototype.unwatch) {
         },
         /**
          * Hide the loading mask
-         * @title jq.ui.hideMask();
+         * @title $.ui.hideMask();
          */
         hideMask: function() {
             jq("#jQui_mask").hide()
@@ -3768,10 +3768,10 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Load a content panel in a modal window.  We set the innerHTML so event binding will not work.
            ```
-           jq.ui.showModal("#myDiv");
+           $.ui.showModal("#myDiv");
            ```
          * @param {String|Object} panel to show
-         * @title jq.ui.showModal();
+         * @title $.ui.showModal();
          */
         showModal: function(id) {
             var that = this;
@@ -3795,9 +3795,9 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Hide the modal window and remove the content
            ```
-           jq.ui.hideModal("#myDiv");
+           $.ui.hideModal("#myDiv");
            ```
-         * @title jq.ui.hideModal();
+         * @title $.ui.hideModal();
          */
         hideModal: function() {
             $("#modalContainer").html("", true);
@@ -3817,11 +3817,11 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Update the HTML in a content panel
            ```
-           jq.ui.updateContentDiv("#myDiv","This is the new content");
+           $.ui.updateContentDiv("#myDiv","This is the new content");
            ```
          * @param {String,Object} panel
          * @param {String} html to update with
-         * @title jq.ui.updateContentDiv(id,content);
+         * @title $.ui.updateContentDiv(id,content);
          */
         updateContentDiv: function(id, content) {
             id="#"+id.replace("#","");
@@ -3840,7 +3840,7 @@ if (!HTMLElement.prototype.unwatch) {
                 $.cleanUpContent(el.childNodes[0], false, true);
                 el.childNodes[0].innerHTML = content;
             } else {
-                jq.cleanUpContent(el, false, true);
+                $.cleanUpContent(el, false, true);
                 el.innerHTML = content;
             }
             if ($(newDiv).title)
@@ -3849,12 +3849,12 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * Dynamically create a new panel on the fly.  It wires events, creates the scroller, applies Android fixes, etc.
            ```
-           jq.ui.addContentDiv("myDiv","This is the new content","Title");
+           $.ui.addContentDiv("myDiv","This is the new content","Title");
            ```
          * @param {String|Object} Element to add
          * @param {String} Content
          * @param {String} title
-         * @title jq.ui.addContentDiv(id,content,title);
+         * @title $.ui.addContentDiv(id,content,title);
          */
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
             el = typeof (el) !== "string" ? el : el.indexOf("#") == -1 ? "#" + el : el;
@@ -3885,10 +3885,10 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          *  Takes a div and sets up scrolling for it..
            ```
-           jq.ui.addDivAndScroll(object);
+           $.ui.addDivAndScroll(object);
            ```
          * @param {Object} Element
-         * @title jq.ui.addDivAndScroll(element);
+         * @title $.ui.addDivAndScroll(element);
          * @api private
          */
         addDivAndScroll: function(tmp, refreshPull, refreshFunc, container) {
@@ -3970,10 +3970,10 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          *  Scrolls a panel to the top
            ```
-           jq.ui.scrollToTop(id);
+           $.ui.scrollToTop(id);
            ```
          * @param {String} id without hash
-         * @title jq.ui.scrollToTop(id);
+         * @title $.ui.scrollToTop(id);
          */
         scrollToTop: function(id) {
             if (this.scrollingDivs[id]) {
@@ -3990,11 +3990,11 @@ if (!HTMLElement.prototype.unwatch) {
          *  This is used when a transition fires to do helper events.  We check to see if we need to change the nav menus, footer, and fire
          * the load/onload functions for panels
            ```
-           jq.ui.parsePanelFunctions(currentDiv,oldDiv);
+           $.ui.parsePanelFunctions(currentDiv,oldDiv);
            ```
          * @param {Object} current div
          * @param {Object} old div
-         * @title jq.ui.parsePanelFunctions(currentDiv,oldDiv);
+         * @title $.ui.parsePanelFunctions(currentDiv,oldDiv);
          * @api private
          */
         parsePanelFunctions: function(what, oldDiv) {
@@ -4070,7 +4070,7 @@ if (!HTMLElement.prototype.unwatch) {
                 if (typeof fnc == "string" && window[fnc]) {
                     window[fnc](oldDiv);
                 }
-                jq(oldDiv).trigger("unloadpanel");
+                $(oldDiv).trigger("unloadpanel");
             }
             var fnc = what.getAttribute("data-load");
             if (typeof fnc == "string" && window[fnc]) {
@@ -4094,13 +4094,13 @@ if (!HTMLElement.prototype.unwatch) {
          * This is called to initiate a transition or load content via ajax.
          * We can pass in a hash+id or URL and then we parse the panel for additional functions
            ```
-           jq.ui.loadContent("#main",false,false,"up");
+           $.ui.loadContent("#main",false,false,"up");
            ```
          * @param {String} target
          * @param {Boolean} newtab (resets history)
          * @param {Boolean} go back (initiate the back click)
          * @param {String} transition
-         * @title jq.ui.loadContent(target,newTab,goBack,transition);
+         * @title $.ui.loadContent(target,newTab,goBack,transition);
          * @api public
          */
         loadContent: function(target, newTab, back, transition, anchor) {
@@ -4150,13 +4150,13 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * This is called internally by loadContent.  Here we are loading a div instead of an Ajax link
            ```
-           jq.ui.loadDiv("#main",false,false,"up");
+           $.ui.loadDiv("#main",false,false,"up");
            ```
          * @param {String} target
          * @param {Boolean} newtab (resets history)
          * @param {Boolean} go back (initiate the back click)
          * @param {String} transition
-         * @title jq.ui.loadDiv(target,newTab,goBack,transition);
+         * @title $.ui.loadDiv(target,newTab,goBack,transition);
          * @api private
          */
         loadDiv: function(target, newTab, back, transition) {
@@ -4235,13 +4235,13 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * This is called internally by loadDiv.  This sets up the back button in the header and scroller for the panel
            ```
-           jq.ui.loadContentData("#main",false,false,"up");
+           $.ui.loadContentData("#main",false,false,"up");
            ```
          * @param {String} target
          * @param {Boolean} newtab (resets history)
          * @param {Boolean} go back (initiate the back click)
          * @param {String} transition
-         * @title jq.ui.loadDiv(target,newTab,goBack,transition);
+         * @title $.ui.loadDiv(target,newTab,goBack,transition);
          * @api private
          */
         loadContentData: function(what, newTab, back, transition) {
@@ -4284,13 +4284,13 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * This is called internally by loadContent.  Here we are using Ajax to fetch the data
            ```
-           jq.ui.loadDiv("page.html",false,false,"up");
+           $.ui.loadDiv("page.html",false,false,"up");
            ```
          * @param {String} target
          * @param {Boolean} newtab (resets history)
          * @param {Boolean} go back (initiate the back click)
          * @param {String} transition
-         * @title jq.ui.loadDiv(target,newTab,goBack,transition);
+         * @title $.ui.loadDiv(target,newTab,goBack,transition);
          * @api private
          */
         loadAjax: function(target, newTab, back, transition, anchor) {
@@ -4360,10 +4360,10 @@ if (!HTMLElement.prototype.unwatch) {
         /**
          * This executes the transition for the panel
             ```
-            jq.ui.runTransition(transition,oldDiv,currDiv,back)
+            $.ui.runTransition(transition,oldDiv,currDiv,back)
             ```
          * @api private
-         * @title jq.ui.runTransition(transition,oldDiv,currDiv,back)
+         * @title $.ui.runTransition(transition,oldDiv,currDiv,back)
          */
         runTransition: function(transition, oldDiv, currWhat, back) {
             if (!this.availableTransitions[transition])
@@ -4375,10 +4375,10 @@ if (!HTMLElement.prototype.unwatch) {
          * This is callled when you want to launch jqUi.  If autoLaunch is set to true, it gets called on DOMContentLoaded.
          * If autoLaunch is set to false, you can manually invoke it.
            ```
-           jq.ui.autoLaunch=false;
-           jq.ui.launch();
+           $.ui.autoLaunch=false;
+           $.ui.launch();
            ```
-         * @title jq.ui.launch();
+         * @title $.ui.launch();
          */
         launch: function() {
             
@@ -4408,14 +4408,14 @@ if (!HTMLElement.prototype.unwatch) {
             //focus scroll adjust fix
             var enterEditEl = null;
             //on enter-edit keep a reference of the actioned element
-            jq.bind(jq.touchLayer, 'enter-edit', function(el) {
+            $.bind($.touchLayer, 'enter-edit', function(el) {
                 enterEditEl = el;
             });
             //enter-edit-reshape panel padding and scroll adjust
-            jq.bind(jq.touchLayer, 'enter-edit-reshape', function() {
+            $.bind($.touchLayer, 'enter-edit-reshape', function() {
                 //onReshape UI fixes
                 //check if focused element is within active panel
-                var jQel = jq(enterEditEl);
+                var jQel = $(enterEditEl);
                 var jQactive = jQel.closest(that.activeDiv);
                 if (jQactive && jQactive.size() > 0) {
                     if ($.os.ios || $.os.chrome) {
@@ -4469,8 +4469,8 @@ if (!HTMLElement.prototype.unwatch) {
                     scrollBars: true,
                     verticalScroll: true,
                     vScrollCSS: "jqmScrollbar",
-                    useJsScroll: !jq.feat.nativeTouchScroll,
-                    noParent: jq.feat.nativeTouchScroll
+                    useJsScroll: !$.feat.nativeTouchScroll,
+                    noParent: $.feat.nativeTouchScroll
                 });
                 if ($.feat.nativeTouchScroll)
                     $("#menu_scroller").css("height", "100%");
@@ -4704,7 +4704,7 @@ if (!HTMLElement.prototype.unwatch) {
          * This must be called at the end of every transition to hide the old div and reset the doingTransition variable
          *
          * @param {Object} Div that transitioned out
-         * @title jq.ui.finishTransition(oldDiv)
+         * @title $.ui.finishTransition(oldDiv)
          */
         finishTransition: function(oldDiv, currDiv) {
             oldDiv.style.display = 'none';
@@ -4720,7 +4720,7 @@ if (!HTMLElement.prototype.unwatch) {
          * This must be called at the end of every transition to remove all transforms and transitions attached to the inView object (performance + native scroll)
          *
          * @param {Object} Div that transitioned out
-         * @title jq.ui.finishTransition(oldDiv)
+         * @title $.ui.finishTransition(oldDiv)
          */
         clearAnimations: function(inViewDiv) {
             inViewDiv.style[$.feat.cssPrefix + 'Transform'] = "none";
@@ -4833,7 +4833,7 @@ if (!HTMLElement.prototype.unwatch) {
     });
 
 })();
-(function(jqui){
+(function($ui){
     
         function fadeTransition (oldDiv, currDiv, back) {
             oldDiv.style.display = "block";
@@ -4897,9 +4897,9 @@ if (!HTMLElement.prototype.unwatch) {
                 });
             }
         }
-        jqui.availableTransitions.fade = fadeTransition;
-})(jq.ui);
-(function(jqui){
+        $ui.availableTransitions.fade = fadeTransition;
+})($.ui);
+(function($ui){
     
         function flipTransition (oldDiv, currDiv, back) {
              oldDiv.style.display = "block";
@@ -4981,9 +4981,9 @@ if (!HTMLElement.prototype.unwatch) {
                 });
             }
         }
-        jqui.availableTransitions.flip = flipTransition;
-})(jq.ui);
-(function(jqui){
+        $ui.availableTransitions.flip = flipTransition;
+})($.ui);
+(function($ui){
         
          function popTransition(oldDiv, currDiv, back) {
             oldDiv.style.display = "block";
@@ -5051,16 +5051,16 @@ if (!HTMLElement.prototype.unwatch) {
                 });
             }
         }
-        jqui.availableTransitions.pop = popTransition;
-})(jq.ui);
-(function(jqui){
+        $ui.availableTransitions.pop = popTransition;
+})($.ui);
+(function($ui){
     
         /**
-         * Initiate a sliding transition.  This is a sample to show how transitions are implemented.  These are registered in jqui.availableTransitions and take in three parameters.
+         * Initiate a sliding transition.  This is a sample to show how transitions are implemented.  These are registered in $ui.availableTransitions and take in three parameters.
          * @param {Object} previous panel
          * @param {Object} current panel
          * @param {Boolean} go back
-         * @title jqui.slideTransition(previousPanel,currentPanel,goBack);
+         * @title $ui.slideTransition(previousPanel,currentPanel,goBack);
          */
         function slideTransition(oldDiv, currDiv, back) {
           	oldDiv.style.display = "block";
@@ -5108,10 +5108,10 @@ if (!HTMLElement.prototype.unwatch) {
 				});
             }
         }
-        jqui.availableTransitions.slide = slideTransition;
-        jqui.availableTransitions['default'] = slideTransition;
-})(jq.ui);
-(function(jqui){
+        $ui.availableTransitions.slide = slideTransition;
+        $ui.availableTransitions['default'] = slideTransition;
+})($.ui);
+(function($ui){
     
         function slideDownTransition (oldDiv, currDiv, back) {
             oldDiv.style.display = "block";
@@ -5175,10 +5175,10 @@ if (!HTMLElement.prototype.unwatch) {
                 });
             }
         }
-        jqui.availableTransitions.down = slideDownTransition;
-})(jq.ui);
+        $ui.availableTransitions.down = slideDownTransition;
+})($.ui);
 
-(function(jqui){
+(function($ui){
     
         function slideUpTransition(oldDiv, currDiv, back) {
              oldDiv.style.display = "block";
@@ -5232,6 +5232,6 @@ if (!HTMLElement.prototype.unwatch) {
                 });
             }
         }
-        jqui.availableTransitions.up = slideUpTransition;
-})(jq.ui);
+        $ui.availableTransitions.up = slideUpTransition;
+})($.ui);
 
