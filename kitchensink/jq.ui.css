@@ -5,6 +5,8 @@
 * {
 	-webkit-user-select:none; /* Prevent copy paste for all elements except text fields */
 	-webkit-tap-highlight-color:rgba(255, 255, 255, 0); /* set highlight color for user interaction */
+	-ms-touch-action:none;
+	-webkit-touch-callout: none; /* prevent the popup menu on any links*/
 } 
 
 input,textarea { -webkit-user-select:text; } /* allow users to select text that appears in input fields */
@@ -38,7 +40,7 @@ p {
 	font-family:Arial, Helvetica, sans-serif;
 	font-size:14px;
 	line-height:18px;
-	background:#131d26;
+	
 	padding:16px;
 	-webkit-box-shadow:rgba(0,0,0,0.5) 0px 0px 24px inset; box-shadow:rgba(0,0,0,0.5) 0px 0px 24px inset; /* Applies an inner shadow to the text area */
 } /* Paragraph class used for text areas. */
@@ -60,6 +62,11 @@ p {
 #modalContainer {
 width:100%;
 }
+#modalContainer > * {
+-webkit-backface-visibility: hidden;
+-webkit-perspective: 1000;
+}
+
 
 .horzRule {
 	position:relative;
@@ -76,6 +83,8 @@ width:100%;
 	width:100%;
 	top:0px;
 	bottom:0px;
+	overflow:hidden;
+
 }
 
 #jQUi > #splashscreen {
@@ -172,6 +181,7 @@ z-index:2;
 	text-overflow:ellipsis; 
 	-webkit-border-radius:6px; border-radius:6px;
 	background-image:-webkit-gradient(linear, left top, left bottom, from(#fff), to(#999), color-stop(.5,#fff), color-stop(.5,#ccc)); background-image:linear-gradient(left top, left bottom, from(#fff), to(#999), color-stop(.5,#fff), color-stop(.5,#ccc));
+	background:#ccc;
 } /* Styling for CSS-generated buttons, including the back button. These buttons can bue used anywhere in the UI. */
 
 .button.pressed {
@@ -227,7 +237,6 @@ background:#333;
 } /* Accounts for positioning of the content area, which is everything below the header and above the navbar. */
 
 .panel {
-    -webkit-backface-visibility: hidden;
 	z-index:180;
 	width:100%;
 	height:100%;
@@ -236,14 +245,17 @@ background:#333;
 	background:rgba(19,29,38,1);
     margin-top:10px;
     margin-bottom:10px;
-	overflow:auto;
+	overflow-y:auto;
+	overflow-x:hidden;
 	-webkit-overflow-scrolling:touch;
+	-webkit-backface-visibility: hidden;
+	-webkit-perspective: 1000;
 } /* This class is applied to the divs that contain the various "views" or pages of the app. */ 
+
 .panel > * {
 	-webkit-backface-visibility: hidden;
 	-webkit-perspective: 1000;
 }
-
 
 
 /**********************************************************
@@ -276,6 +288,8 @@ background:#333;
 	width:62px;
 	line-height:100px;
 	position:relative;
+	-webkit-backface-visibility: hidden;
+	-webkit-perspective: 1000;
 }
 
 #navbar a:active, #navbar a:focus, #navbar a:active:focus,  #navbar .selected{
@@ -366,12 +380,9 @@ font-size:48px;
 #menu_scroller {
 	padding-bottom:10px;
 	-webkit-backface-visibility: hidden;
-	overflow:auto;
+	overflow-y:auto;
+	overflow-x:hidden;
 	-webkit-overflow-scrolling:touch;
-}
-#menu_scroller > * {
-	-webkit-backface-visibility: hidden;
-	-webkit-perspective: 1000;
 }
 
 
@@ -651,7 +662,7 @@ textarea.jq-ui-forms {
 
 input.jq-ui-forms { 
 	
-	display:inline-block;
+	display:block;
 	width:65%;
 	margin-top:4px; margin-bottom:12px;
 	padding:8px;
@@ -664,6 +675,21 @@ input.jq-ui-forms {
 } /* These properties combine to create the look of the input fields. */
 
 
+#jQUi label {
+	position: relative;
+overflow: visible;
+white-space: nowrap;
+display: block;
+font-family: Arial, Helvetica, sans-serif;
+margin-bottom: 6px;
+color: white;
+font-weight: normal;
+-webkit-box-sizing: border-box !important;
+box-sizing: border-box !important;
+display:block;
+float:none;
+}
+
 
 input.jq-ui-forms:hover, textarea.jq-ui-forms:hover, input.jq-ui-forms:focus, textarea.jq-ui-forms:focus { border-color:#ccc; } /* Changes the border color of the input field while active. */
 
@@ -675,6 +701,7 @@ input.jq-ui-forms[type=checkbox] ,input.jq-ui-forms[type=radio]  {
 	opacity:0;
 	margin-bottom:30px;
     width:0px;
+    display:none;
 } /* Blocks rendering of the native radio controls. */
 
 input.jq-ui-forms[type=checkbox] + label,input.jq-ui-forms[type=radio] + label { 
@@ -775,6 +802,7 @@ input.jq-ui-slider {
 	left:0;
 	opacity:0;
 	 -webkit-appearance: none;
+	 display:none;
 } /* Blocks rendering of the native radio controls. */
 
 	
@@ -789,11 +817,15 @@ input.jq-ui-slider + label {
 	color:#fff; 
 	background-image: url(data:image/png;base64,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);
 	height:24px;
-	width:57px;
+	width:0px;
 	display:inline-block;
+	transition:all 0.3s  ease-in-out;
+	background-repeat: no-repeat;
    -webkit-transition: all 0.3s  ease-in-out;
+   transition: all 0.3s  ease-in-out;
 
 } 
+
 input.jq-ui-slider[type=radio]:disabled:checked + label,
 input.jq-ui-slider[type=radio]:focus:disabled:checked + label,
 input.jq-ui-slider[type=checkbox]:disabled:checked + label,
@@ -825,34 +857,67 @@ select[disabled]~div {
 /*menu on/off mechanism, note .hasMenu.off and #menu.on default to no transform*/
 .hasMenu.to-on {
   -webkit-transition: -webkit-transform 150ms;
+  transition: transform 150ms;
 }
 .hasMenu.on, .hasMenu.to-on {
   -webkit-transform:translate3d(200px,0px,0px);
+  transform:translate(200px,0px);
 }
 .hasMenu.to-off {
   -webkit-transition: -webkit-transform 150ms;
   -webkit-transform:translate3d(0px,0px,0px);
+  transition: transform 150ms;
+  transform:translate(0px,0px);
 }
 #menu.on {
     -webkit-transform:none;
 	-webkit-transition:none;
+	transform:none;
+	transition:none;
 }
 #menu.to-on {
     -webkit-transition: -webkit-transform 150ms;
     -webkit-transform:translate3d(0px,0px,0px);
+    transition: transform 150ms;
+    transform:translate(0px,0px);
 }
 #menu.to-off {
     -webkit-transition: -webkit-transform 150ms;
+    transition: transform 150ms;
 }
 #menu, #menu.off, #menu.to-off {
-    -webkit-transform:translate3d(-200px,0px,0px);
+    -webkit-transform:translate3d(00px,0px,0px);
+    transform:translate(00px,0px);
 }
 
+.menuButton {
 
-
-#badgetablet{
-	display:none !important;
-}
+		position:relative;
+		width:48px;	height:48px;
+		padding:9px 4px;
+		border-right:1px solid #666;
+		box-shadow:1px 0 0 #000;
+		background-color:transparent;
+		display:inline-block;
+	}
+	.menuButton:active { background:rgba(255,255,255,0.4); }
+	.menuButton:before {
+		content:'';
+		position:absolute;
+		width:80%; height:6px;
+		border-radius:20px;
+		background:#fff;
+		box-shadow:0 12px 0 #fff;
+		-webkit-box-shadow:0 12px 0 #fff;
+	}
+	.menuButton:after {
+		content:'';
+		position:absolute;
+		top:33px;
+		width:80%; height:6px;
+		border-radius:20px;
+		background:#fff;
+	}
 
 @media handheld, only screen and (min-width: 768px){
 	.hasMenu, .hasMenu.on  {
@@ -860,6 +925,7 @@ select[disabled]~div {
 		left:256px !important;
 		-webkit-transition: all 0ms !important;
         -webkit-transform:translate3d(0,0,0);
+        transform:translate(0,0,0);
 	}
 	#badgephone{
 		display:none !important;
@@ -882,17 +948,24 @@ select[disabled]~div {
 		background:rgba(29,29,28,1) !important;
 		-webkit-transform:translate3d(0px,0px,0px) !important;
 		-webkit-transition:none !important;
+		transform:translate(0px,0px) !important;
+		transition:none !important;
 	}
 	.hasMenu.to-on {
 		-webkit-transition: none !important;
+		transition: none !important;
 	}
 	.hasMenu.on, .hasMenu.to-on {
 		-webkit-transform:translate3d(0px,0px,0px) !important;
 		-webkit-transition:none !important;
+		transform:translate(0px,0px) !important;
+		transition:none !important;
 	}
 	.hasMenu.to-off {
 		-webkit-transform:translate3d(0px,0px,0px) !important;
 		-webkit-transition:none !important;
+		transform:translate(0px,0px) !important;
+		transition:none !important;
 	}
     
 }
@@ -912,6 +985,8 @@ select[disabled]~div {
     background-image:-webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,.4)), to(rgba(255,255,255,0)), color-stop(.08,rgba(255,255,255,.1)), color-stop(.08,rgba(255,255,255,0)));
     background-image:-webkit-linear-gradient(top, rgba(255,255,255,.4) 0%, rgba(255,255,255,.1) 8%, rgba(255,255,255,0) 8%);
     box-shadow:0px -1px 2px rgba(0,0,0,.4);
+    transition:all 300ms;
+    -webkit-transition:all 300ms;
 }
 #jq_actionsheet a {
     text-decoration:none;
@@ -967,64 +1042,75 @@ BODY>DIV#mask{
 
 .jqPopup {
     display: block;
-    width: 300px;
+    width: 280px;
+    float:left;
     border: solid 1px #72767b;
     -webkit-box-shadow: 0px 4px 6px #555, 0 0 20px rgba(255,255,255,0.5);
     -webkit-border-radius: 10px;
+    border-radius:10px;
     padding: 10px;
     opacity: 1;
     -webkit-transform: scale(1);
     -webkit-transition: all 0.20s  ease-in-out;
+    transform:scale(1);
+    transition: all 0.20s  ease-in-out;
     position: absolute;
     z-index: 1000000;
     margin-left: auto!important;
     margin-right: auto!important;
+    background: rgba(70,70,70,1);
     background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(70,70,70,0.8)),    to(rgba(0,20,20,0.8)));
 }
-.jqPopup >* {
+.jqPopup * {
 color:white;
 }
 
 .jqPopup.hidden {
     opacity: 0;
     -webkit-transform: scale(0);
+    transform:scale(0);
     top: 50%;
     left: 50%;
     margin: 0px auto;
 }
 
-.jqPopup>HEADER{
+.jqPopup header{
     font-weight:bold;
     font-size:20px;    
     margin:0;
     padding:0;
+    display:block !important;
 }
 
-.jqPopup>DIV{
+.jqPopup div{
     font-size:12px;
-    margin:8px;
 }
 
-.jqPopup>FOOTER{
+.jqPopup footer{
     width:100%;    
     text-align:center;
     display:block !important;
 }
 
-.jqPopup>FOOTER>A#cancel{
+.jqPopup footer a#cancel{
     float:left;
 }
 
-.jqPopup>FOOTER>A#action{
+.jqPopup footer a#action{
     float:right;
     margin-right:4px;
 }
 
-.jqPopup>FOOTER>A.center{
+.jqPopup footer a.center{
     float:none!important;
     width:80%;
     margin:8px;
-}/** This can be your default scrollbar class.  You must use !important to override the default inline styles */
+}
+
+
+
+
+/** This can be your default scrollbar class.  You must use !important to override the default inline styles */
 .scrollBar { 
    position:absolute !important;
    width:5px !important;

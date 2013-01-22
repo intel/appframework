@@ -59,7 +59,7 @@
                 this.cancelClass = opts.cancelClass || "button";
                 this.doneText = opts.doneText || "Done";
                 this.doneCallback = opts.doneCallback || function(self) {
-                	self.hide();
+                    // no action by default
                 };
                 this.doneClass = opts.doneClass || "button";
                 this.cancelOnly = opts.cancelOnly || false;
@@ -130,7 +130,10 @@
                 $el.bind("orientationchange", function() {
                     self.positionPopup();
                 });
-                
+               
+                //force header/footer showing to fix CSS style bugs
+                $el.find("header").show();
+                $el.find("footer").show();
                 this.onShow(this);
                 
             },
@@ -197,7 +200,5 @@
         else
             $(document.body).popup(text.toString());
     }
-    window.confirm = function(text) {
-        throw "Due to iOS eating touch events from native confirms, please use our popup plugin instead";
-    }
+    
 })(jq);

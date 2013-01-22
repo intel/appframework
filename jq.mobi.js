@@ -144,20 +144,8 @@ if (!window.jq || typeof (jq) !== "function") {
                 what = document;
             }
             
-            var dom = this.selector(toSelect, what);
-            if (!dom) {
-                return this;
-            } 
-            //reverse the query selector all storage
-            else if ($.isArray(dom)) {
-                for (var j = 0; j < dom.length; j++) {
-                    this[this.length++] = dom[j];
-                }
-            } else {
-                this[this.length++] = dom;
-                return this;
-            }
-            return this;
+            return this.selector(toSelect, what);
+            
         };
 
         /**
@@ -183,25 +171,33 @@ if (!window.jq || typeof (jq) !== "function") {
  			}
  		};
         function _selector(selector, what) {
-            var dom;
+            
 
 			selector=selector.toString().trim();
             if (selector[0] === "#" && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
                 if (what == document)
-                    dom = what.getElementById(selector.toString().toString().replace("#", ""));
+                    _shimNodes(what.getElementById(selector.replace("#", "")),this);
                 else
-                    dom = [].slice.call(_selectorAll(selector, what));
+                    _shimNodes(_selectorAll(selector, what),this);
             } else if (selector[0] === "<" && selector[selector.length - 1] === ">")  //html
             {
                 var tmp = document.createElement("div");
-                tmp.innerHTML = selector.toString().trim();
-                dom = [].slice.call(tmp.childNodes);
+                tmp.innerHTML = selector.trim();
+                _shimNodes(tmp.childNodes,this);
             } else {
-                dom = [].slice.call(_selectorAll(selector, what));
+                _shimNodes((_selectorAll(selector, what)),this);
             }
-            return dom;
+            return this;
         }
 		
+        function _shimNodes(nodes,obj){
+            if(!nodes)
+                return;
+            if(nodes.nodeType)
+                return obj[obj.length++]=nodes;
+            for(var i=0,iz=nodes.length;i<iz;i++)
+                obj[obj.length++]=nodes[i];
+        }
         /**
         * Checks to see if the parameter is a $jqm object
             ```
@@ -415,9 +411,10 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             
             ready: function(callback) {
-                if (document.readyState === "complete" || document.readyState === "loaded"|| document.readyState === "interactive")
+                if (document.readyState === "complete" || document.readyState === "loaded"||(!$.os.ie&&document.readyState==="interactive")) //IE10 fires interactive too early
                     callback();
-                document.addEventListener("DOMContentLoaded", callback, false);
+                else
+                    document.addEventListener("DOMContentLoaded", callback, false);
                 return this;
             },
             /**
@@ -435,7 +432,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             find: function(sel) {
                 if (this.length === 0)
-                    return undefined;
+                    return this;
                 var elems = [];
                 var tmpElems;
                 for (var i = 0; i < this.length; i++) {
@@ -463,7 +460,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             html: function(html,cleanup) {
                 if (this.length === 0)
-                    return undefined;
+                    return this;
                 if (html === undefined)
                     return this[0].innerHTML;
 
@@ -490,7 +487,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             text: function(text) {
                 if (this.length === 0)
-                    return undefined;
+                    return this;
                 if (text === undefined)
                     return this[0].textContent;
                 for (var i = 0; i < this.length; i++) {
@@ -514,7 +511,7 @@ if (!window.jq || typeof (jq) !== "function") {
             css: function(attribute, value, obj) {
                 var toAct = obj != undefined ? obj : this[0];
                 if (this.length === 0)
-                    return undefined;
+                    return this;
                 if (value == undefined && typeof (attribute) === "string") {
                     var styles = window.getComputedStyle(toAct);
                     return  toAct.style[attribute] ? toAct.style[attribute]: window.getComputedStyle(toAct)[attribute] ;
@@ -529,6 +526,22 @@ if (!window.jq || typeof (jq) !== "function") {
                     }
                 }
                 return this;
+            },
+            /**
+             * Gets or sets css vendor specific css properties
+            * If used as a get, the first elements css property is returned
+                ```
+                $().css("background"); // Gets the first elements background
+                $().css("background","red")  //Sets the elements background to red
+                ```
+
+            * @param {String} attribute to get
+            * @param {String} value to set as
+            * @return {Object} a jqMobi object
+            * @title $().css(attribute,[value])
+            */
+            vendorCss:function(attribute,value,obj){
+                return this.css($.feat.cssPrefix+attribute,value,obj);
             },
             /**
             * Sets the innerHTML of all elements to an empty string
@@ -650,7 +663,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             attr: function(attr, value) {
                 if (this.length === 0)
-                    return (value === undefined) ? undefined : this;
+                    return (value === undefined) ? undefined : this;            
                 if (value === undefined && !$.isObject(attr)) {
                     var val = (this[0].jqmCacheId&&_attrCache[this[0].jqmCacheId][attr])?(this[0].jqmCacheId&&_attrCache[this[0].jqmCacheId][attr]):this[0].getAttribute(attr);
                     return val;
@@ -721,7 +734,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             prop: function(prop, value) {
                 if (this.length === 0)
-                    return (value === undefined) ? undefined : this;
+                    return (value === undefined) ? undefined : this;          
                 if (value === undefined && !$.isObject(prop)) {
                     var res;
                     var val = (this[0].jqmCacheId&&_propCache[this[0].jqmCacheId][prop])?(this[0].jqmCacheId&&_propCache[this[0].jqmCacheId][prop]):!(res=this[0][prop])&&prop in this[0]?this[0][prop]:res;
@@ -780,10 +793,12 @@ if (!window.jq || typeof (jq) !== "function") {
             /**
             * Removes elements based off a selector
                 ```
+                $().remove();  //Remove all
                 $().remove(".foo");//Remove off a string selector
                 var element=$("#foo").get();
                 $().remove(element); //Remove by an element
                 $().remove($(".foo"));  //Remove by a collection
+
                 ```
 
             * @param {String|Object|Array} selector to filter against
@@ -945,6 +960,35 @@ if (!window.jq || typeof (jq) !== "function") {
                 }
                 return this;
             },
+             /**
+            * Appends the current collection to the selector
+                ```
+                $().appendTo("#foo"); //Append an object;
+                ```
+
+            * @param {String|Object} Selector to append to
+            * @param {Boolean} [insert] insert or append
+            * @title $().appendTo(element,[insert])
+            */
+            appendTo:function(selector,insert){
+                var tmp=$(selector);
+                tmp.append(this);
+                return this;
+            },
+             /**
+            * Prepends the current collection to the selector
+                ```
+                $().prependTo("#foo"); //Prepend an object;
+                ```
+
+            * @param {String|Object} Selector to prepent to
+            * @title $().prependTo(element)
+            */
+            prependTo:function(selector){
+                var tmp=$(selector);
+                tmp.append(this,true);
+                return this;
+            },
             /**
             * Prepends to the elements
             * This simply calls append and sets insert to true
@@ -1020,7 +1064,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             offset: function() {
                 if (this.length === 0)
-                    return undefined;
+                    return this;
                 if(this[0]==window)
                     return {
                         left:0,
@@ -1046,22 +1090,51 @@ if (!window.jq || typeof (jq) !== "function") {
                ```
                $().height();
                ```
-             * @return {string} height with  "px"
+             * @return {string} height
              * @title $().height()
              */
-            height:function(){
-                return this.offset().height;
+            height:function(val){
+                if (this.length === 0)
+                    return this;
+                if(val!=undefined)
+                    return this.css("height",val);
+                if(this[0]==this[0].window)
+                    return window.innerHeight;
+                if(this[0].nodeType==this[0].DOCUMENT_NODE)
+                    return this[0].documentElement['offsetheight'];
+                else
+                {
+                    var tmpVal=this.css("height").replace("px","");
+                    if(tmpVal)
+                        return tmpVal
+                    else
+                        return this.offset().height;
+                }
             },
             /**
              * returns the width of the element, including padding on IE
                ```
                $().width();
                ```
-             * @return {string} width with  "px"
+             * @return {string} width
              * @title $().width()
              */
             width:function(){
-                return this.offset().width;
+                if (this.length === 0)
+                    return this;
+                 if(val==undefined)
+                    return this.css("width",val);
+                if(this[0]==this[0].window)
+                    return window.innerWidth;
+                if(this[0].nodeType==this[0].DOCUMENT_NODE)
+                    return this[0].documentElement['offsetwidth'];
+                else{
+                     var tmpVal=this.css("width").replace("px","");
+                    if(tmpVal)
+                        return tmpVal
+                    else
+                        return this.offset().width;
+                }
             },
             /**
             * Returns the parent nodes of the elements based off the selector
@@ -1075,15 +1148,36 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} jqMobi object with unique parents
             * @title $().parent(selector)
             */
-            parent: function(selector) {
+            parent: function(selector,recursive) {
                 if (this.length == 0)
-                    return undefined;
+                    return this;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
-                    if (this[i].parentNode)
-                        elems.push(this[i].parentNode);
+                    var tmp=this[i];
+                    while(tmp.parentNode&&tmp.parentNode!=document){
+                        elems.push(tmp.parentNode);
+                        if(tmp.parentNode)
+                            tmp=tmp.parentNode;
+                        if(!recursive)
+                            break;
+                    }
                 }
                 return this.setupOld($(unique(elems)).filter(selector));
+            },
+             /**
+            * Returns the parents of the elements based off the selector (traversing up until html document)
+                ```
+                $("#foo").parents('.bar');
+                $("#foo").parents($('.bar'));
+                $("#foo").parents($('.bar').get());
+                ```
+
+            * @param {String|Array|Object} [selector]
+            * @return {Object} jqMobi object with unique parents
+            * @title $().parents(selector)
+            */
+            parents: function(selector) {
+                return this.parent(selector,true);
             },
             /**
             * Returns the child nodes of the elements based off the selector
@@ -1100,7 +1194,7 @@ if (!window.jq || typeof (jq) !== "function") {
             children: function(selector) {
                 
                 if (this.length == 0)
-                    return undefined;
+                    return this;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     elems = elems.concat(siblings(this[i].firstChild));
@@ -1122,7 +1216,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             siblings: function(selector) {
                 if (this.length == 0)
-                    return undefined;
+                    return this;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     if (this[i].parentNode)
@@ -1145,7 +1239,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             closest: function(selector, context) {
                 if (this.length == 0)
-                    return undefined;
+                    return this;
                 var elems = [], 
                 cur = this[0];
                 
@@ -1172,7 +1266,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             filter: function(selector) {
                 if (this.length == 0)
-                    return undefined;
+                    return this;
                 
                 if (selector == undefined)
                     return this;
@@ -1198,7 +1292,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             not: function(selector) {
                 if (this.length == 0)
-                    return undefined;
+                    return this;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     var val = this[i];
@@ -1251,7 +1345,7 @@ if (!window.jq || typeof (jq) !== "function") {
             clone: function(deep) {
                 deep = deep === false ? false : true;
                 if (this.length == 0)
-                    return undefined;
+                    return this;
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     elems.push(this[i].cloneNode(deep));
@@ -1274,27 +1368,77 @@ if (!window.jq || typeof (jq) !== "function") {
             /**
              * Serailizes a form into a query string
                ```
-               $().serialize(grouping);
+               $().serialize();
                ```
-             * @param {String} [grouping] - optional grouping to the fields -e.g users[name]
              * @return {String}
-             * @title $().serialize(grouping)
+             * @title $().serialize()
              */
-            serialize: function(grouping) {
+            serialize: function() {
                 if (this.length == 0)
                     return "";
-                var params = {};
+                var params = [];
                 for (var i = 0; i < this.length; i++) 
                 {
                     this.slice.call(this[i].elements).forEach(function(elem) {
                         var type = elem.getAttribute("type");
                         if (elem.nodeName.toLowerCase() != "fieldset" && !elem.disabled && type != "submit" 
                         && type != "reset" && type != "button" && ((type != "radio" && type != "checkbox") || elem.checked))
-                            params[elem.getAttribute("name")] = elem.value;
+                        {
+
+                            if(elem.getAttribute("name")){
+                                if(elem.type=="select-multiple"){
+                                    for(var j=0;j<elem.options.length;j++){
+                                        if(elem.options[j].selected)
+                                            params.push(elem.getAttribute("name")+"="+encodeURIComponent(elem.options[j].value))
+                                    }
+                                }
+                                else
+                                    params.push(elem.getAttribute("name")+"="+encodeURIComponent(elem.value))
+                            }
+                        }
                     });
                 }
-                return $.param(params,grouping);
+                return params.join("&");
+            },
+
+            /* added in 1.2 */
+            /**
+             * Reduce the set of elements based off index
+                ```
+               $().eq(index)
+               ```
+             * @param {Int} index - Index to filter by. If negative, it will go back from the end
+             * @return {Object} jqMobi object
+             * @title $().eq(index)
+             */
+            eq:function(ind){
+                return $(this.get(ind));
+            },
+            /**
+             * Returns the index of the selected element in the collection
+               ```
+               $().index(elem)
+               ```
+             * @param {String|Object} element to look for.  Can be a selector or object
+             * @return integer - index of selected element
+             * @title $().index(elem)
+             */
+            index:function(elem){
+                return elem?this.indexOf($(elem)[0]):this.parent().children().indexOf(this[0]);
+            },
+            /**
+              * Returns boolean if the object is a type of the selector
+              ```
+              $().is(selector)
+              ```
+             * param {String|Object|Function} selector to act upon
+             * @return boolean
+             * @title $().is(selector)
+             */
+            is:function(selector){
+                return !!selector&&this.filter(selector).length>0;
             }
+
         };
 
 
@@ -1310,7 +1454,7 @@ if (!window.jq || typeof (jq) !== "function") {
             complete: empty,
             context: undefined,
             timeout: 0,
-            crossDomain:false
+            crossDomain: null
         };
         /**
         * Execute a jsonP call, allowing cross domain scripting
@@ -1388,7 +1532,7 @@ if (!window.jq || typeof (jq) !== "function") {
 				
                 var settings = opts || {};
                 for (var key in ajaxSettings) {
-                    if (!settings[key])
+                    if (typeof(settings[key]) == 'undefined')
                         settings[key] = ajaxSettings[key];
                 }
                 
@@ -1441,8 +1585,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (/=\?/.test(settings.url)) {
                     return $.jsonP(settings);
                 }
-                
-                if (!settings.crossDomain) settings.crossDomain = /^([\w-]+:)?\/\/([^\/]+)/.test(settings.url) &&
+                if (settings.crossDomain === null) settings.crossDomain = /^([\w-]+:)?\/\/([^\/]+)/.test(settings.url) &&
                     RegExp.$2 != window.location.host;
                 
                 if(!settings.crossDomain)
@@ -1468,8 +1611,13 @@ if (!window.jq || typeof (jq) !== "function") {
                                     error = e;
                                 }
                             } else if (mime === 'application/xml, text/xml') {
-		                        result = xhr.responseXML;
-                            } else
+                                result = xhr.responseXML;
+                            } 
+                            else if(mime=="text/html"){
+                                result=xhr.responseText;
+                                $.parseJS(result);
+                            }
+                            else
                                 result = xhr.responseText;
                             //If we're looking at a local file, we assume that no response sent back means there was an error
                             if(xhr.status===0&&result.length===0)
@@ -1648,6 +1796,11 @@ if (!window.jq || typeof (jq) !== "function") {
          * .os.blackberry
          * .os.opera
          * .os.fennec
+         * .os.ie
+         * .os.ieTouch
+         * .os.supportsTouch
+         * .os.playbook
+         * .feat.nativetouchScroll
          * @api private
          */
         function detectUA($, userAgent) {
@@ -1660,24 +1813,29 @@ if (!window.jq || typeof (jq) !== "function") {
             $.os.webos = userAgent.match(/(webOS|hpwOS)[\s\/]([\d.]+)/) ? true : false;
             $.os.touchpad = $.os.webos && userAgent.match(/TouchPad/) ? true : false;
             $.os.ios = $.os.ipad || $.os.iphone;
-            $.os.ios6 = $.os.ios &&  userAgent.match(/(OS)\s([6])/) ? true : false;
 			$.os.playbook = userAgent.match(/PlayBook/) ? true : false;
             $.os.blackberry = $.os.playbook || userAgent.match(/BlackBerry/) ? true : false;
 			$.os.blackberry10 = $.os.blackberry && userAgent.match(/Safari\/536/) ? true : false;
             $.os.chrome = userAgent.match(/Chrome/) ? true : false;
-			$.os.opera = userAgent.match(/Opera Mobi/) ? true : false;
-            $.os.fennec = userAgent.match(/fennec/i) ? true : false;
-			$.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || 'ontouchstart' in window);
-            $.os.desktop = !($.os.ios || $.os.android || $.os.blackberry || $.os.opera || $.os.fennec || $.os.supportsTouch);
-			//features
-			$.feat = {};
-			$.feat.nativeTouchScroll = typeof(document.documentElement.getElementsByTagName("head")[0].style["-webkit-overflow-scrolling"])!=="undefined"&&$.os.ios
-            //($.os.ios ? !userAgent.match(/OS\s[1-4]/) : false);
+			$.os.opera = userAgent.match(/Opera/) ? true : false;
+            $.os.fennec = userAgent.match(/fennec/i) ? true :userAgent.match(/Firefox/)?true: false;
+            $.os.ie = userAgent.match(/MSIE 10.0/i)?true:false;
+            $.os.ieTouch=$.os.ie&&userAgent.toLowerCase().match(/touch/i)?true:false;
+            $.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || 'ontouchstart' in window);
+            //features
+            $.feat = {};
+            var head=document.documentElement.getElementsByTagName("head")[0];
+            $.feat.nativeTouchScroll =  typeof(head.style["-webkit-overflow-scrolling"])!=="undefined"&&$.os.ios;
+            $.feat.cssPrefix=$.os.webkit?"Webkit":$.os.fennec?"Moz":$.os.ie?"ms":$.os.opera?"O":"";
+            $.feat.cssTransformStart=!$.os.opera?"3d(":"(";
+            $.feat.cssTransformEnd=!$.os.opera?",0)":")";
+            if($.os.android&&!$.os.webkit)
+                $.os.android=false;
         }
+
         detectUA($, navigator.userAgent);
         $.__detectUA = detectUA; //needed for unit tests
         if (typeof String.prototype.trim !== 'function') {
-
             /**
              * Helper function for iOS 3.1.3
              */
@@ -1700,6 +1858,33 @@ if (!window.jq || typeof (jq) !== "function") {
             }
             return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
         };
+
+        /**
+         * Gets the css matrix, or creates a fake one
+           ```
+           $.getCssMatrix(domElement)
+           ```
+           @returns matrix with postion
+           */
+        $.getCssMatrix=function(ele){
+            if(ele==undefined) return window.WebKitCSSMatrix||window.MSCSSMatrix|| {a:0,b:0,c:0,d:0,e:0,f:0};
+            try{
+                if(window.WebKitCSSMatrix)
+                    return new WebKitCSSMatrix(window.getComputedStyle(ele).webkitTransform)
+                else if(window.MSCSSMatrix)
+                    return new MSCSSMatrix(window.getComputedStyle(ele).transform);
+                else {
+                    //fake css matrix
+                    var mat = window.getComputedStyle(ele)[$.feat.cssPrefix+'Transform'].replace(/[^0-9\-.,]/g, '').split(',');
+                    return {a:+mat[0],b:+mat[1],c:+mat[2],d:+mat[3], e: +mat[4], f:+mat[5]};
+                }
+            }
+            catch(e){
+                return {a:0,b:0,c:0,d:0,e:0,f:0};
+            }
+        }
+
+        
         /**
          Zepto.js events
          @api private
@@ -1707,10 +1892,8 @@ if (!window.jq || typeof (jq) !== "function") {
 
         //The following is modified from Zepto.js / events.js
         //We've removed depricated jQuery events like .live and allow anonymous functions to be removed
-        var $$ = $.qsa, 
-        handlers = {}, 
-        _jqmid = 1, 
-        specialEvents = {};
+        var handlers = {}, 
+        _jqmid = 1;
         /**
          * Gets or sets the expando property on a javascript element
          * Also increments the internal counter for elements;
@@ -1787,13 +1970,12 @@ if (!window.jq || typeof (jq) !== "function") {
          * @param {String|Object} events
          * @param {Function} function that will be executed when event triggers
          * @param {String|Array|Object} [selector]
-         * @param {Boolean} [getDelegate]
+         * @param {Function} [getDelegate]
          * @api private
          */
         function add(element, events, fn, selector, getDelegate) {
             var id = jqmid(element), 
             set = (handlers[id] || (handlers[id] = []));
-            
             eachEvent(events, fn, function(event, fn) {
                 var delegate = getDelegate && getDelegate(fn, event), 
                 callback = delegate || fn;
@@ -1813,6 +1995,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 set.push(handler);
                 element.addEventListener(handler.e, proxyfn, false);
             });
+            //element=null;
         }
 
         /**
@@ -2050,7 +2233,7 @@ if (!window.jq || typeof (jq) !== "function") {
          */
         
         $.Event = function(type, props) {
-            var event = document.createEvent(specialEvents[type] || 'Events'), 
+            var event = document.createEvent('Events'), 
             bubbles = true;
             if (props)
                 for (var name in props)
@@ -2115,7 +2298,7 @@ if (!window.jq || typeof (jq) !== "function") {
          * @title $.unbind(object,event,function);
          */
         $.unbind = function(obj, ev, f){
-			if(!obj.__events) return ret;
+			if(!obj.__events) return;
 			if(!$.isArray(ev)) ev = [ev];
 			for(var i=0; i<ev.length; i++){
 				if(obj.__events[ev[i]]){
@@ -2251,8 +2434,50 @@ if (!window.jq || typeof (jq) !== "function") {
                 }
             }
         }, true);
+
+        /**
+         * this function executes javascript in HTML.
+           ```
+           $.parseJS(content)
+           ```
+        * @param {String|DOM} content
+        * @title $.parseJS(content);
+        */
+        var remoteJSPages={};
+        $.parseJS= function(div) {
+            if (!div)
+                return;
+            if(typeof(div)=="string"){
+                var elem=document.createElement("div");
+                elem.innerHTML=div;
+                div=elem;
+            }
+            var scripts = div.getElementsByTagName("script");
+            div = null;            
+            for (var i = 0; i < scripts.length; i++) {
+                if (scripts[i].src.length > 0 && !remoteJSPages[scripts[i].src]) {
+                    var doc = document.createElement("script");
+                    doc.type = scripts[i].type;
+                    doc.src = scripts[i].src;
+                    document.getElementsByTagName('head')[0].appendChild(doc);
+                    remoteJSPages[scripts[i].src] = 1;
+                    doc = null;
+                } else {
+                    window.eval(scripts[i].innerHTML);
+                }
+            }
+        };
 		
-        
+
+        /**
+        //custom events since people want to do $().click instead of $().bind("click")
+        */
+
+        ["click","keydown","keyup","keypress","submit","load","resize","change","select","error"].forEach(function(event){
+            $.fn[event]=function(cb){
+                return cb?this.bind(event,cb):this.trigger(event);
+            }
+        });
          /**
          * End of APIS
          * @api private

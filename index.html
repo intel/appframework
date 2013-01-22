@@ -10,14 +10,9 @@
 
 <link rel="stylesheet" type="text/css" href="kitchensink/icons.css" /> 
 
+
 <link rel="stylesheet" type="text/css" href="kitchensink/jq.ui.css" title="default"/>
-
-<link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.carbon.css" title="carbon" disabled='true'/>
-<link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.eco.css" title="eco" disabled='true' />
-<link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.frosty.css" title="frosty" disabled='true'/>
-<link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.slate.css" title="slate" disabled='true'/>
-<link rel="stylesheet"  type="text/css" href="kitchensink/jq.ui.volcano.css" title="volcano" disabled='true' />
-
+<!--<link rel="stylesheet" type="text/css" href="plugins/css/jq.8tiles.css" title="8tiles"/>-->
 
 <style>
 	.scrollBar{background:white;}
@@ -59,12 +54,17 @@ function loadedPanel(what){
 	function unloadedPanel(what){
 	console.log("unloaded "+what.id);
 	}
+
+
 if(!((window.DocumentTouch&&document instanceof DocumentTouch)||'ontouchstart' in window)){
-var script=document.createElement("script");
-script.src="plugins/jq.desktopBrowsers.js";
-var tag=$("head").append(script);
-$.os.android=true; //let's make it run like an android device
-$.os.desktop=true;
+	var script=document.createElement("script");
+
+	script.src="plugins/jq.desktopBrowsers.js";
+	var tag=$("head").append(script);
+	if(!$.os.ie){
+	//	$.os.desktop=true;
+	//	$.feat.nativeTouchScroll=true;
+	}
 }
 var oldElem="default";
 function setActiveStyleSheet(title) {
@@ -91,7 +91,10 @@ function setActiveStyleSheet(title) {
 }
 $(document).ready(function(){
 oldElem=document.getElementsByTagName("link")[0];
+
 });
+
+
 
 
 </script>
@@ -103,20 +106,25 @@ oldElem=document.getElementsByTagName("link")[0];
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.shake.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.alphatable.js"></script> 
 <script type="text/javascript" charset="utf-8" src="./plugins/jq.template.js"></script> 
+
 <script type="text/javascript" charset="utf-8" src="./ui/jq.ui.js"></script> 
 
 <script type="text/javascript">
     /* This function runs once the page is loaded, but appMobi is not yet active */
 	var webRoot="./kitchensink/";
-	$.ui.autoLaunch=false;
+	//$.ui.autoLaunch=false;
     $.ui.openLinksNewTab=false;
+    $.ui.resetScrollers=false;
     var init = function(){
 	   $.ui.backButtonText="Back";  
 	   window.setTimeout(function(){$.ui.launch();},1500);
        //$.ui.removeFooterMenu(); This would remove the bottom nav menu
     };
     document.addEventListener("DOMContentLoaded",init,false);  
-	$.ui.ready(function(){});
+	$.ui.ready(function(){
+
+		//$.ui.enableDragMenu();
+	});
 
     /* This code is used to run as soon as appMobi activates */
     var onDeviceReady=function(){
@@ -154,8 +162,7 @@ oldElem=document.getElementsByTagName("link")[0];
         <span class='ui-icon ui-icon-loading spin'></span><h1 >Starting app</h1>
     </div>
     <div id="header">
-        <img id='badgephone' onclick='jq.ui.toggleSideMenu()' align="right" src='kitchensink/images/badge.png' style='padding-top:10px'>
-        <img id='badgetablet' align="right" src='kitchensink/images/badge.png' style='padding-top:10px'>
+        <a id='menubadge' onclick='jq.ui.toggleSideMenu()' style='float:right;margin-top:0px' class='menuButton'></a>
     </div>
 
 <div id="content">
@@ -163,9 +170,9 @@ oldElem=document.getElementsByTagName("link")[0];
 	<h2 class='expanded' onclick='showHide(this,"main_info");'>Welcome</h2>
 		<p id='main_info'>Welcome to the kitchen sink demo for jqMobi.  Here you will find samples of how to use the jqMobi libraries.  Please select an option from below.</p>
 		<ul>
-		 <li class='icon home big'><a href="#jqm" id='jqmlink'>jqMobi</a></li>
-		 <li><a href="#jqmui" >jqUi</a></li>
-		 <li><a href="#jqmweb" >jqPlugins</a></li>
+		 <li class='red'><a href="#jqm" id='jqmlink' class='icon home big'>jqMobi</a></li>
+		 <li class="blue"><a href="#jqmui" >jqUi</a></li>
+		 <li class="teal"><a href="#jqmweb" >jqPlugins</a></li>
 		</ul> 
 	</div> 
 
@@ -177,7 +184,7 @@ oldElem=document.getElementsByTagName("link")[0];
 		<p id='jqmobi_info'>jqMobi is a blazingly fast query selector tool that is optmimized for HTML5 browsers.</p>
 
 		<ul>
-			<li><a href="javascript:;" onClick="$.ui.scrollToBottom('jqm')" >Go To Bottom</a></li>
+			<li><a id="tester" href="javascript:;" onClick="$.ui.scrollToBottom('jqm')" class='flipAnimation'>Go To Bottom</a></li>
 		<li><a href="#jqm1" >$ Selector</a></li>
 		<li><a href="#jqm2" >$().length()</a></li>
 		<li><a href="#jqm3" >$().find()</a></li>
@@ -232,7 +239,7 @@ oldElem=document.getElementsByTagName("link")[0];
     <form id="form" onsubmit="return false">
        Name: <input type='text' class='jq-ui-forms' name='name' value='John Smith'><br>
        <input type='checkbox' class='jq-ui-forms' value='yes' checked name='human'><label for='human'>Are you human?</label><br><br>
-       Gender: <span><select id='serialize_gender' name="gender"><option value='m'>Male</option><option value='f'>Female</option><select></span><br><br>
+       Gender: <span><select id='serialize_gender' name="gender"><option value='m'>Male</option><option value='f'>Female</option></select></span><br><br>
        <br>
        <input type="button" onclick="serializeForm()" value="Serialize">
     </form>
@@ -252,7 +259,7 @@ oldElem=document.getElementsByTagName("link")[0];
 		<div class='jqm2'>Div 3 (class="jqm2")</div>
 		<div class='jqm4'>Div 4 (class="jqm4")</div>
 		<br />
-		<a  class="button"href="javascript:;" onclick="alert($('.jqm2').length)">Click to get the Length by classname</a>
+		<a  class="button" href="javascript:;" onclick="alert($('.jqm2').length)">Click to get the Length by classname</a>
 	</div>
 
 	<!-- jqm > jqm find() -->
@@ -262,7 +269,7 @@ oldElem=document.getElementsByTagName("link")[0];
 			<li id='find1'>Item 1</li>
 			<li>Item 2</li>
 		</ul>
-		<a  class="button"href="javascript:;" onclick="alert($('#jqm3').find('li').length)">Click to get the count of li's in the div</a><br /><br />
+		<a  class="button" href="javascript:;" onclick="alert($('#jqm3').find('li').length)">Click to get the count of li's in the div</a><br /><br />
 	</div>
 
 	<!-- jqm > jqm html() -->
@@ -347,7 +354,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	</div>
 
 	<!-- jqm > jqm addClass() -->
-	<div id="jqm15" class="panel"  title=".addClass()"data-nav="menu_jqmobi">
+	<div id="jqm15" class="panel"  title=".addClass()" data-nav="menu_jqmobi">
 		$("#div").addClass() - adds a css class to the element.<br /><br />
 		<div style='border:1px solid black' id="jqm15_content">This is some content</div><br /><br />
 		<a class="button" href='javascript:;' onclick='($("#jqm15_content").addClass("class16"))'>Add a Class</a>
@@ -360,9 +367,9 @@ oldElem=document.getElementsByTagName("link")[0];
 		<a class="button" href='javascript:;' onclick='($("#jqm16_content").removeClass("class16"))'>Remove the Class</a>
 	</div>
 
-	<!-- jqm > jqm hassClass() -->
+	<!-- jqm > jqm hasClass() -->
 	<div id="jqm17" class="panel"  title=".hasClass()" data-nav="menu_jqmobi">
-		$("#div").hassClass() - returns a boolean if an element has a class.<br /><br />
+		$("#div").hasClass() - returns a boolean if an element has a class.<br /><br />
 		<div style='border:1px solid black' id="jqm17_content" class="class16">This is some content</div><br />
 		<a class="button" href='javascript:;' onclick='alert($("#jqm17_content").hasClass("class16"))'>Check if it has the class</a>
 	</div>
@@ -494,7 +501,7 @@ oldElem=document.getElementsByTagName("link")[0];
 
 	<!-- jqm > jqm getJSON() -->
 	<div id="jqm27" class="panel"  title=".getJSON()" data-nav="menu_jqmobi">
-		$.getJSON(url,data,success); - Makes a XMLHpttRequest GET request and returns a JSON object.<br /><br />
+		$.getJSON(url,data,success); - Makes a XMLHttpRequest GET request and returns a JSON object.<br /><br />
 		<script>
 			function doJSON(){
 				$.getJSON(webRoot+'json.html',function(data){$('#jqm27_content').html(JSON.stringify(data))});
@@ -648,69 +655,68 @@ oldElem=document.getElementsByTagName("link")[0];
        <h2 class='expanded' onclick='showHide(this,"icons_info");'>SVG Icons</h2><p id='icons_info'>jqUi provides SVG icons to use throughout your app.  Simply add the icon class, along with the image class name and additional sizes you want.
        <br>
        .mini - 20 pixels high<br>
-       .big - 40 pixels hight<br>
+       .big - 40 pixels high<br>
        The default is 28 pixels.<br>
        </p>
        <ul>
-          <li class="icon home big"><a href="#">Home Big</a></li>
-          <li class="icon home"><a href="#">Home Default</a></li>
-          <li class="icon home mini"><a href="#">Home Mini</a></li>
-          <li class="icon pencil big"><a href="#">Pencil</a></li>
-          <li class="icon picture big"><a href="#">Picture</a></li>
-          <li class="icon camera big"><a href="#">Camera</a></li>
-          <li class="icon headset big"><a href="#">Headset</a></li>
-          <li class="icon paper big"><a href="#">Paper</a></li>
-          <li class="icon stack big"><a href="#">Stack</a></li>
-          <li class="icon folder big"><a href="#">Folder</a></li>
-          <li class="icon tag big"><a href="#">Tag</a></li>
-          <li class="icon basket big"><a href="#">Basket</a></li>
-          <li class="icon phone big"><a href="#">Phone</a></li>
-          <li class="icon mail big"><a href="#">Mail</a></li>
-          <li class="icon location big"><a href="#">Location</a></li>
-          <li class="icon clock big"><a href="#">Clock</a></li>
-          <li class="icon calendar big"><a href="#">Calendar</a></li>
-          <li class="icon message big"><a href="#">Message</a></li>
-          <li class="icon chat big"><a href="#">Chat</a></li>
-          <li class="icon user big"><a href="#">User</a></li>
-          <li class="icon loading big"><a href="#">Loading</a></li>
-          <li class="icon refresh big"><a href="#">Refresh</a></li>
-          <li class="icon magnifier big"><a href="#">Magnifier</a></li>
-          <li class="icon key big"><a href="#">Key</a></li>
-          <li class="icon settings big"><a href="#">Settings</a></li>
-          <li class="icon graph big"><a href="#">Graph</a></li>
-          <li class="icon trash big"><a href="#">Trash</a></li>
-          <li class="icon pin big"><a href="#">Pin</a></li>
-          <li class="icon target big"><a href="#">Target</a></li>
-          <li class="icon download big"><a href="#">Download</a></li>
-          <li class="icon upload big"><a href="#">Upload</a></li>
-          <li class="icon star big"><a href="#">Star</a></li>
-          <li class="icon heart big"><a href="#">Heart</a></li>
-          <li class="icon warning big"><a href="#">Warning</a></li>
-          <li class="icon add big"><a href="#">Add</a></li>
-          <li class="icon remove big"><a href="#">Remove</a></li>
-          <li class="icon question big"><a href="#">Question</a></li>
-          <li class="icon info big"><a href="#">Info</a></li>
-          <li class="icon error big"><a href="#">Error</a></li>
-          <li class="icon check big"><a href="#">Check</a></li>
-          <li class="icon minimize big"><a href="#">Minimize</a></li>
-          <li class="icon close big"><a href="#">Close</a></li>
-          <li class="icon up big"><a href="#">Up</a></li>
-          <li class="icon down big"><a href="#">Down</a></li>
-          <li class="icon left big"><a href="#">Left</a></li>
-          <li class="icon right big"><a href="#">Right</a></li>
-          <li class="icon tools big"><a href="#">Tools</a></li>
-          <li class="icon html5 big"><a href="#">HTML5</a></li>
-          <li class="icon css big"><a href="#">CSS</a></li>
-          <li class="icon js big"><a href="#">JS</a></li>
-          <li class="icon cloud big"><a href="#">Cloud</a></li>
-          <li class="icon tv big"><a href="#">TV</a></li>
-          <li class="icon wifi big"><a href="#">Wifi</a></li>
-          <li class="icon new big"><a href="#">New</a></li>
-          <li class="icon mic big"><a href="#">Mic</a></li>
-          <li class="icon database big"><a href="#">Database</a></li>
-          <li class="icon busy big"><a href="#">Busy</a></li>
-          <li class="icon bug big"><a href="#">Bug</a></li>
-          <li class="icon lamp big"><a href="#">Lamp</a></li>
+          <li ><a href="#" class="icon home">Home</a></li>
+          <li><a href="#"  class="icon home mini">Home Mini</a></li>
+          <li ><a href="#" class="icon pencil big">Pencil</a></li>
+          <li ><a href="#" class="icon picture big">Picture</a></li>
+          <li ><a href="#" class="icon camera big">Camera</a></li>
+          <li ><a href="#" class="icon headset big">Headset</a></li>
+          <li ><a href="#" class="icon paper big">Paper</a></li>
+          <li ><a href="#" class="icon stack big">Stack</a></li>
+          <li ><a href="#" class="icon folder big">Folder</a></li>
+          <li ><a href="#" class="icon tag big">Tag</a></li>
+          <li ><a href="#" class="icon basket big">Basket</a></li>
+          <li ><a href="#" class="icon phone big">Phone</a></li>
+          <li ><a href="#" class="icon mail big">Mail</a></li>
+          <li ><a href="#" class="icon location big">Location</a></li>
+          <li ><a href="#"  class="icon clock big">Clock</a></li>
+          <li ><a href="#" class="icon calendar big">Calendar</a></li>
+          <li ><a href="#" class="icon message big">Message</a></li>
+          <li ><a href="#" class="icon chat big">Chat</a></li>
+          <li ><a href="#" class="icon user big">User</a></li>
+          <li ><a href="#" class="icon loading big">Loading</a></li>
+          <li ><a href="#" class="icon refresh big">Refresh</a></li>
+          <li ><a href="#" class="icon magnifier big">Magnifier</a></li>
+          <li ><a href="#" class="icon key big">Key</a></li>
+          <li ><a href="#" class="icon settings big">Settings</a></li>
+          <li ><a href="#" class="icon graph big">Graph</a></li>
+          <li ><a href="#" class="icon trash big">Trash</a></li>
+          <li ><a href="#" class="icon pin big">Pin</a></li>
+          <li ><a href="#" class="icon target big">Target</a></li>
+          <li ><a href="#" class="icon download big">Download</a></li>
+          <li ><a href="#" class="icon upload big">Upload</a></li>
+          <li ><a href="#" class="icon star big">Star</a></li>
+          <li ><a href="#" class="icon heart big">Heart</a></li>
+          <li ><a href="#" class="icon warning big">Warning</a></li>
+          <li ><a href="#" class="icon add big">Add</a></li>
+          <li ><a href="#" class="icon remove big">Remove</a></li>
+          <li ><a href="#" class="icon question big">Question</a></li>
+          <li ><a href="#" class="icon info big">Info</a></li>
+          <li ><a href="#" class="icon error big">Error</a></li>
+          <li ><a href="#" class="icon check big">Check</a></li>
+          <li ><a href="#" class="icon minimize big">Minimize</a></li>
+          <li ><a href="#" class="icon close big">Close</a></li>
+          <li ><a href="#" class="icon up big">Up</a></li>
+          <li ><a href="#" class="icon down big">Down</a></li>
+          <li ><a href="#" class="icon left big">Left</a></li>
+          <li ><a href="#" class="icon right big">Right</a></li>
+          <li ><a href="#" class="icon tools big">Tools</a></li>
+          <li ><a href="#" class="icon html5 big">HTML5</a></li>
+          <li ><a href="#" class="icon css big">CSS</a></li>
+          <li><a href="#"  class="icon js big">JS</a></li>
+          <li ><a href="#" class="icon cloud big">Cloud</a></li>
+          <li ><a href="#" class="icon tv big">TV</a></li>
+          <li ><a href="#" class="icon wifi big">Wifi</a></li>
+          <li ><a href="#" class="icon new big">New</a></li>
+          <li><a href="#"  class="icon mic big">Mic</a></li>
+          <li ><a href="#" class="icon database big">Database</a></li>
+          <li ><a href="#" class="icon busy big">Busy</a></li>
+          <li ><a href="#" class="icon bug big">Bug</a></li>
+          <li ><a href="#" class="icon lamp big">Lamp</a></li>
         </ul>
     </div>
     
@@ -726,123 +732,197 @@ oldElem=document.getElementsByTagName("link")[0];
 	</div>
 	<div id="uifooter" title="Custom Footers" class="panel" data-footer='footerui'>
      <p>You should notice that the footer is no longer the default.  It is specific to jqUi, with options for Transitions, UI and API</p>
-	 You can create custom fotoers using the &lt;footer&gt; tag.  You then set the id on each panel to change them using the data-footer='id' property. 
+	 You can create custom footers using the &lt;footer&gt; tag.  You then set the id on each panel to change them using the data-footer='id' property. 
 	
 	</div>
 	<div id="jqmforms" title="Form Styles" class="panel" data-footer='footerui'>
-	<form>
+		<form>
+	    <fieldset>
+	        <legend>Field elements</legend>
+	        <label for="name">Full Name</label>
+	        <br/>
+	        <input type="text" id="name" class='jq-ui-forms' />
+	        <br/>
+	        <label for="email">E-mail</label>
+	        <br/>
+	        <input type="text" id="email" class='jq-ui-forms' />
+	        <br/>
+	        <label for="password">Password</label>
+	        <br/>	<span><input type="password" id="password" class='jq-ui-forms' /></span>
+	        <br/>
+	        <!-- span is needed for android password fix -->
+	        <label for="country">Country</label>
+	        <br/>	<span><!-- span is needed for android select box fix -->
+					<select id="country" class='jq-ui-forms'>
+						<option value='1'>USA 1</option>
+						<option value='2'>USA 2</option>
+						<option value='3'>USA 3</option>
+						<option value='4'>USA 4</option>
+						<option value='5'>USA 5</option>
+						<option value='6'>USA 6</option>
+						<option value='7'>USA 7</option>
+						<option value='8'>USA 8</option>
+						<option value='9'>USA 9</option>
+						<option value='10'>USA 10</option>
+						</select>
+					</span> 
+	        <br/>
+	        <br/>
+	        <label for="web">Comments</label>
+	        <textarea name="web" class='jq-ui-forms'></textarea>
+	        <br/>
+	    </fieldset>
+	    <fieldset>
+	        <legend>Radios and checkboxes</legend>
+	        	<h4>Gender:</h4>
 
-			<fieldset>
-				<legend>Field elements</legend>
-				
-				<label for="name">Full Name</label><br/>
-				<input type="text" id="name" class='jq-ui-forms'/><br/>
-		
-				<label for="email">E-mail</label><br/>
-				<input type="text" id="email" class='jq-ui-forms' /><br/>
-		
-				<label for="password">Password</label><br/>
-				<span><input type="password" id="password" class='jq-ui-forms' /></span><br/> <!-- span is needed for android password fix -->
-		
-					<label for="country">Country</label><br/>
-					<span><!-- span is needed for android select box fix -->
-				<select id="country" class='jq-ui-forms'>
-					<option value='1'>USA 1</option>
-					<option value='2'>USA 2</option>
-					<option value='3'>USA 3</option>
-					<option value='4'>USA 4</option>
-					<option value='5'>USA 5</option>
-					<option value='6'>USA 6</option>
-					<option value='7'>USA 7</option>
-					<option value='8'>USA 8</option>
-					<option value='9'>USA 9</option>
-					<option value='10'>USA 10</option>
-					</select>
-				</span> <br/>
+	        <br>
+	        <p>
+	            <input type="radio" value="male" id="male" name="gender" class="jq-ui-forms"
+	            />
+	            <label for="male">Male</label>
+	        </p>
+	        <p>
+	            <input type="radio" value="Female" id="female" name="gender" class="jq-ui-forms"
+	            />
+	            <label for="female">Female</label>
+	        </p>
+	        	<h4>Stuff you like:</h4>
 
-		
-	<br/>
-				<label for="web">Comments</label>
-				<textarea name="web" class='jq-ui-forms'></textarea><br/>
-				
-			</fieldset>
-		
-			<fieldset>
-				<legend>Radios and checkboxes</legend>
-				
-				<h4>Gender:</h4>
-				<br>
-				<p><input type="radio" value="male" id="male" name="gender" class="jq-ui-forms"/> <label for="male">Male</label></p>
-				<p><input type="radio" value="Female" id="female" name="gender" class="jq-ui-forms" /> <label for="female">Female</label></p>
-				
-				<h4>Stuff you like:</h4>
-				<br>
-				<p><input type="checkbox" value="CSS3" id="css3" class="jq-ui-forms" /> <label for="css3">CSS3</label></p>
-				<p><input type="checkbox" value="HTML5" id="html5" class="jq-ui-forms" /> <label for="html5">HTML5</label></p>
-				<p><input type="checkbox" value="JavaScript" id="javascript" class="jq-ui-forms" /> <label for="javascript">JavaScript</label></p>
-				<p><input type="checkbox" value="Other" id="other" class="jq-ui-forms" /> <label for="other">Other</label></p>
-				
-			</fieldset>
-			
-			<fieldset>
-				<legend>Disabled and pre-selected</legend>
-				
-				<h4>Disabling and checking radio inputs:</h4>
-				<br>
-				<p><input type="radio" value="disabled" id="disabled" name="disabled" disabled class="jq-ui-forms"/> <label for="disabled">This is disabled</label></p>
-				<p><input type="radio" value="check" id="check" name="check" checked class="jq-ui-forms" /> <label for="check">This is checked</label></p>
-				
-				<h4>Disabling and checking checkbox inputs:</h4>
-				<br>
-				<p><input type="checkbox" value="disabled" id="disabled2" disabled class="jq-ui-forms"/> <label for="disabled2">This is disabled</label></p>
-				<p><input type="checkbox" value="check" id="check2" checked class="jq-ui-forms" /> <label for="check2">This is checked</label></p>
-				<p><input type="checkbox" value="Stop" id="disablecheck" disabled checked class="jq-ui-forms"/> <label for="disablecheck">This is checked and disabled</label></p>
-				<p><input type="checkbox" value="Other" id="other2" class="jq-ui-forms"/> <label for="other2">Other</label></p>
-				
-				
-				
-			</fieldset>
-			
-			<fieldset>
-				<legend>Sliders</legend>
-				
-				<h4>Gender:</h4>
-				<p><input type="radio" value="maleslider" id="slidermale" name="gender" class="jq-ui-slider"/> <label  for="slidermale">Male</label></p>
-				<p><input type="radio" value="femaleslider" id="sliderfemale" name="gender" class="jq-ui-slider" /> <label for="sliderfemale">Female</label></p>
-				
-				<h4>Stuff you like:</h4>
-				<p><input type="checkbox" value="CSS3" id="css3slider" class="jq-ui-slider" /> <label for="css3slider">CSS3</label></p>
-				<p><input type="checkbox" value="HTML5" id="html5slider" class="jq-ui-slider"/> <label for="html5slider">HTML5</label></p>
-				<p><input type="checkbox" value="JavaScript" id="javascriptslider" class="jq-ui-slider"/> <label for="javascriptslider">JavaScript</label></p>
-				<p><input type="checkbox" value="Other" id="otherslider" class="jq-ui-slider"/> <label for="otherslider">Other</label></p>
-				<p><input type="checkbox" value="Other" id="otherd" class="jq-ui-slider" disabled /> <label for="otherd">Disabled</label></p>
-				<p><input type="checkbox" value="Other" id="otherdc" class="jq-ui-slider" disabled checked /> <label for="otherdc">Disabled</label></p>
-				
-			</fieldset>
-            
-            <fieldset>
-                <legend>HTML5 input</legend>
-                
-                <label for="date">Date</label><br/>
-				<input type="date" id="date" class='jq-ui-forms'/><br/>
-                
-                <label for="month">Month</label><br/>
-				<input type="month" id="month" class='jq-ui-forms'/><br/>
-                
-                <label for="datetime">Date/Time</label><br/>
-				<input type="datetime" id="datetime" class='jq-ui-forms'/><br/>
-                
-                <label for="datetime-local">Date/Time Local</label><br/>
-				<input type="datetime-local" id="datetime-local" class='jq-ui-forms'/><br/>
-                
-                <label for="time">Time</label><br/>
-				<input type="time" id="time" class='jq-ui-forms'/><br/>
-                
-                <label for="range">Range</label><br/>
-				<input type="range" id="range" class='jq-ui-forms'/><br/>
-			
-		</form>
-		<br><br><br>
+	        <br>
+	        <p>
+	            <input type="checkbox" value="CSS3" id="css3" class="jq-ui-forms" />
+	            <label for="css3">CSS3</label>
+	        </p>
+	        <p>
+	            <input type="checkbox" value="HTML5" id="html5" class="jq-ui-forms" />
+	            <label for="html5">HTML5</label>
+	        </p>
+	        <p>
+	            <input type="checkbox" value="JavaScript" id="javascript" class="jq-ui-forms"
+	            />
+	            <label for="javascript">JavaScript</label>
+	        </p>
+	        <p>
+	            <input type="checkbox" value="Other" id="other" class="jq-ui-forms" />
+	            <label for="other">Other</label>
+	        </p>
+	    </fieldset>
+	    <fieldset>
+	        <legend>Disabled and pre-selected</legend>
+	        	<h4>Disabling and checking radio inputs:</h4>
+
+	        <br>
+	        <p>
+	            <input type="radio" value="disabled" id="disabled" name="disabled" disabled
+	            class="jq-ui-forms" />
+	            <label for="disabled">This is disabled</label>
+	        </p>
+	        <p>
+	            <input type="radio" value="check" id="check" name="check" checked class="jq-ui-forms"
+	            />
+	            <label for="check">This is checked</label>
+	        </p>
+	        	<h4>Disabling and checking checkbox inputs:</h4>
+
+	        <br>
+	        <p>
+	            <input type="checkbox" value="disabled" id="disabled2" disabled class="jq-ui-forms"
+	            />
+	            <label for="disabled2">This is disabled</label>
+	        </p>
+	        <p>
+	            <input type="checkbox" value="check" id="check2" checked class="jq-ui-forms"
+	            />
+	            <label for="check2">This is checked</label>
+	        </p>
+	        <p>
+	            <input type="checkbox" value="Stop" id="disablecheck" disabled checked
+	            class="jq-ui-forms" />
+	            <label for="disablecheck">This is checked and disabled</label>
+	        </p>
+	        <p>
+	            <input type="checkbox" value="Other" id="other2" class="jq-ui-forms" />
+	            <label for="other2">Other</label>
+	        </p>
+	    </fieldset>
+	    <fieldset>
+	        <legend>Sliders</legend>
+	        	<h4>Gender:</h4>
+
+	        <p>
+	            <input type="radio" value="maleslider" id="slidermale" name="gender" class="jq-ui-slider"
+	            />
+	            <label for="slidermale">Male</label>
+	        </p>
+	        <p>
+	            <input type="radio" value="femaleslider" id="sliderfemale" name="gender"
+	            class="jq-ui-slider" />
+	            <label for="sliderfemale">Female</label>
+	        </p>
+	        	<h4>Stuff you like:</h4>
+
+	        <p>
+	            <input type="checkbox" value="CSS3" id="css3slider" class="jq-ui-slider"
+	            />
+	            <label for="css3slider">CSS3</label>
+	        </p>
+	        <p>
+	            <input type="checkbox" value="HTML5" id="html5slider" class="jq-ui-slider"
+	            />
+	            <label for="html5slider">HTML5</label>
+	        </p>
+	        <p>
+	            <input type="checkbox" value="JavaScript" id="javascriptslider" class="jq-ui-slider"
+	            />
+	            <label for="javascriptslider">JavaScript</label>
+	        </p>
+	        <p>
+	            <input type="checkbox" value="Other" id="otherslider" class="jq-ui-slider"
+	            />
+	            <label for="otherslider">Other</label>
+	        </p>
+	        <p>
+	            <input type="checkbox" value="Other" id="otherd" class="jq-ui-slider"
+	            disabled />
+	            <label for="otherd">Disabled</label>
+	        </p>
+	        <p>
+	            <input type="checkbox" value="Other" id="otherdc" class="jq-ui-slider"
+	            disabled checked />
+	            <label for="otherdc">Disabled</label>
+	        </p>
+	    </fieldset>
+	    <fieldset>
+	        <legend>HTML5 input</legend>
+	        <label for="date">Date</label>
+	        <br/>
+	        <input type="date" id="date" class='jq-ui-forms' />
+	        <br/>
+	        <label for="month">Month</label>
+	        <br/>
+	        <input type="month" id="month" class='jq-ui-forms' />
+	        <br/>
+	        <label for="datetime">Date/Time</label>
+	        <br/>
+	        <input type="datetime" id="datetime" class='jq-ui-forms' />
+	        <br/>
+	        <label for="datetime-local">Date/Time Local</label>
+	        <br/>
+	        <input type="datetime-local" id="datetime-local" class='jq-ui-forms' />
+	        <br/>
+	        <label for="time">Time</label>
+	        <br/>
+	        <input type="time" id="time" class='jq-ui-forms' />
+	        <br/>
+	        <label for="range">Range</label>
+	        <br/>
+	        <input type="range" id="range" class='jq-ui-forms' />
+	        <br/>
+	</form>
+	<br>
+	<br>
+	<br>
 
 	</div>
 
@@ -865,7 +945,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	<ul>
 		<li><a href="#uigoback">.goBack()</a></li>
 		<li><a href="#uiclearhistory">.clearHistory()</a></li>
-		<li><a href="#uiaddcontentdiv">.addContentDiv ()</a></li>
+		<li><a href="#uiaddcontentdiv">.addContentDiv()</a></li>
 		
 		<li><a href="#uisettitle">.setTitle(text) </a></li>
 		<li><a href="#uisetbackbutton">.setBackButtonText() </a></li>
@@ -882,7 +962,7 @@ oldElem=document.getElementsByTagName("link")[0];
         <li><a href="#uiactionsheet">.actionsheet() </a></li>
         
 		<li><a href="#uiscrolltotop">.scrollToTop() </a></li>
-		<li><a href="#uiscrolltoBottom">.scrollToBottm() </a></li>
+		<li><a href="#uiscrolltobottom">.scrollToBottom() </a></li>
 
 	</ul>
 	</div>
@@ -1075,6 +1155,19 @@ oldElem=document.getElementsByTagName("link")[0];
 	<br/><br/>
 	</div>
 
+	<div id="uiscrolltobottom" title="Scroll to Bottom" class="panel" data-footer='footerui'>
+	This allows you to scroll to the top of a page.  Scroll to the bottom for the link.
+	<pre>
+	$.ui.scrollToTop(div_id)
+	</pre>
+	<a href="javascript:;" onclick="$.ui.scrollToBottom('uiscrolltobottom')" class="button">Scroll to Bottom</a>
+	<br><br>
+	Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>Keep scrolling down.<br><br><br><br>
+
+	
+	<br/><br/>
+	</div>
+
 	<!-- jqUi > API -->
 
 	<!-- jqUi > Transitions -->
@@ -1084,7 +1177,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	<div title="Pop" id="transition4" class="panel splashscreen" data-footer='footerui' style="padding-left:0px"><img src="kitchensink/images/splash.png"></div>
 	<div title="Flip" id="transition5" class="panel splashscreen" data-footer='footerui' style="padding-left:0px"><img src="kitchensink/images/splash.png"></div>
 	<div title="Fade" id="transition6" class="panel splashscreen" data-footer='footerui' style="padding-left:0px"><img src="kitchensink/images/splash.png"></div>
-	<div title="Modal" id="transition7" class="panel splashscreen" data-modal="true" data-footer='footerui' >I'm a modal window...woot woot
+	<div title="Modal" id="transition7" class="panel splashscreen" data-modal="true" data-unload="unloadedPanel" >I'm a modal window...woot woot
 	<br><br><br>
 	Check the input box out below.  <br>
 	<input type="text" class="jq-ui-forms" id="modal_test">
@@ -1108,6 +1201,7 @@ oldElem=document.getElementsByTagName("link")[0];
         <li><a href="#webalphatable" >jq.alphatable</a></li>
 		<li><a href="#webactionsheet" >jq.actionsheet</a></li>
         <li><a href="#webpopup" >jq.popup</a></li>
+        <li><a href="#touchevents" >jq.touchevents</a></li>
 		</ul>
 		<br/><br/>
 	</div>
@@ -1122,6 +1216,15 @@ oldElem=document.getElementsByTagName("link")[0];
 		   // myScroller=$.ui.scrollingDivs['webslider'];
 		   myScroller.addInfinite();
 		   myScroller.addPullToRefresh();
+		  $.bind(myScroller, 'scrollend',function()
+		{
+			console.log("scroll end");
+		}); 
+
+		$.bind(myScroller, 'scrollstart',function()
+		{
+		console.log("scroll start");
+		}); 
 		   $.bind(myScroller,"refresh-trigger",function(){
 				this.setRefreshContent("New content");
 		   });
@@ -1789,7 +1892,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	This is some content<br><br>
 	This is some content<br><br>
 
-	<div class="drawer_handle" style="z-index:;height:30px;width:100%;background:orange;position:absolute;bottom:0px;text-align:center;line-height:30px;font-size:14px;color:black;background:white">PULL DOWN</div>
+	<div class="drawer_handle" style="height:30px;width:100%;background:orange;position:absolute;bottom:0px;text-align:center;line-height:30px;font-size:14px;color:black;background:white">PULL DOWN</div>
 	</div>
 
 	<div style="position:absolute;bottom:15px;width:100%;z-index:101">
@@ -1949,6 +2052,37 @@ oldElem=document.getElementsByTagName("link")[0];
 
 	</div>
 
+	<div class="panel" title="touch events" id="touchevents">
+	<script>
+	$(document).ready(function(){
+		$("#taptest").bind("tap",function(){
+			alert("I was tapped");
+		})
+		$("#singletaptest").bind("singleTap",function(){
+			alert("I was single tapped");
+		})
+		$("#longtaptest").bind("longTap",function(){
+			alert("I was a long tap");
+		})
+		$("#doubletaptest").bind("doubleTap",function(){
+			alert("I was a double tap");
+		})
+		$("#swipetest").bind("swipe",function(){
+			alert("I was a swiped");
+		})
+	});
+	</script>
+		<h2>Touch Events</h2>
+
+		<ul>
+			<li><a id='taptest' href="javascript:;">Tap Test</a></li>
+			<li><a id='longtaptest' href="javascript:;">Long Tap Test</a></li>
+			<li><a id='singletaptest' href="javascript:;">Single Tap Test</a></li>
+			<li><a id='doubletaptest' href="javascript:;">Double Tap Test</a></li>
+			<li><a id='swipetest' href="javascript:;">Swipe Test</a></li>
+		</ul>
+	</div>
+
 
 
 
@@ -1978,14 +2112,14 @@ oldElem=document.getElementsByTagName("link")[0];
 </footer>	
 
 <header id="testheader">
-    <a id="backButton" onclick="$.ui.goBack()" class='button' style='left:0px;left:auto;overflow:hidden'>Go Back</a>
+    <a id="backButton"  class='button' style='left:0px;left:auto;overflow:hidden'>Go Back</a>
     <h1>Custom Header</h1>
 </header>
 <!-- ------------------------------------------ -->
 <nav>
    <div class='title'>Home</div>
    <ul>
-      <li class="icon home mini"><a href="#jqm">Selectors</a></li>
+      <li ><a href="#jqm" class="icon home mini">Selectors</a></li>
    </ul>
    <div class='title'>UI</div>
      <ul>
@@ -2005,15 +2139,7 @@ oldElem=document.getElementsByTagName("link")[0];
 	   <li> <a href="javascript:;" onclick="$.ui.toggleSideMenu()"  >Toggle Side</a></li>
 	   <li> <a href="javascript:;" onclick="$.ui.toggleNavMenu()"  >Toggle Footer</a></li>
 	  </ul>
-      <div class="title">Themes</div>
-      <ul>
-        <li><a href="javascript:;" onclick="setActiveStyleSheet('default')">Default</a></li>
-        <li><a href="javascript:;" onclick="setActiveStyleSheet('carbon')">Carbon</a></li>
-        <li><a href="javascript:;" onclick="setActiveStyleSheet('eco')">Eco</a></li>
-        <li><a href="javascript:;" onclick="setActiveStyleSheet('frosty')">Frosty</a></li>
-        <li><a href="javascript:;" onclick="setActiveStyleSheet('slate')">Slate</a></li>
-        <li><a href="javascript:;" onclick="setActiveStyleSheet('volcano')">Volcano</a></li>
-      </ul>
+	  
 </nav>
 <nav id="menu_jqmobi">
    <div class='title'>Selectors</div>
@@ -2056,5 +2182,6 @@ oldElem=document.getElementsByTagName("link")[0];
    </ul>
 </nav>
 </div>
+
 </body>
 </html>

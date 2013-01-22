@@ -1,44 +1,55 @@
-1.11 Release (Maintenance)
+1.2 
 
-There are CSS file fixes from the 1.1 release, so please update your css files.
+There are CSS file fixes from the 1.11 release to support Win8.  If you do not want to support Win8, old CSS files will work fine.  
+
+We have depricated the custom stylesheets.  Slate will be the only one provided.  You can use the style builder now and we have options that are close matches to the old stylesheets
+
+
+Enhancements
+
+jq.mobi.js
+
+added $().eq, $().is, $().index functions and unit tests
+
+added wrappers for "click keydown keyup keypress submit load resize change select error" event bindings 
+   $().click(fn) -  will create a click listener
+   $().click() - will trigger a click event
+   
+
+$.os.ie - detect W8/WP8 devices
+
+$().vendorCss() - Get/Set CSS properties with vendor specific prefixes.
+	$obj.vendorCss("Transform","translate3d(0,0,0)";
+	$obj.css("WebkitTransform","translate3d(0,0,0)";
+
+
+$.feat.cssPrefix - cross browser vendor prefix ("Webkit","Moz","O","MS","") - use for css3
+
+$.feat.cssTransformStart - detects support for 2d or 3d transforms
+$.feat.cssTransformEnd - detects support for 2d or 3d transforms 
+   e.g  $obj.css($.feat.cssPrefix+"Transform",$.feat.cssTransformStart+"0,0"+$.feat.cssTransformEnd);
+        $obj.css("WebkitTransform","translate3d(0,0,0)";
+
+
+$.getCssMatrix(ele) - returns a matrix with the CSS3 values.  If the browser provides a native implementation (webkit) we use that, otherwise it's a basic matrix
+  - use this instead of new WebkitMatrix()
+
+added _shimNodes - performance improvements to query selector.  instead of calling [].slice.call to convert nodelist to array and then sort, we sort the node list
+
+
+"-webkit-" specific styles have been removed in the js code.  All style references in javascript use $.feat.cssPrefix now.
+
+Native scrolling is available on WP8 and Android 4.1+ devices
+
 
 
 Fixes
 
-jq.mobi.js
+Fix actionsheet positioning at start
 
- -Added .prop() and .removeProp() for accessing properties on an object
-- Changed $.feat.nativeTouchScroll detection
-- $.trigger now passes in object for scope of "this"
-- $.unbind allows you to remove all when no function handler is passed
+Provide a fix for IE10 dispatching events to random elements - There's a bug in IE10 when an anchor's href is set to "javascript:;"
 
-plugins/jq.scroller.js
+Fix routing of clicks in IE10 and Chrome
 
-- friendlier setup for native scrolling on divs (applies correct css properties to the divs)
-- Fixed requirement of jq.touchlayer.js
-- Fixed pull to refresh using native scrolling (no longer triggers on every pull)
-- added scroller.setRefreshContent() function to change the text in pull to refresh
-- changed js scroller touch move to only show opacity first time
 
-plugins/jq.touchLayer.js
-- fixed input jumping on iOS when using "next" or "previous" on keyboard
-
-ui/src/jq.ui.js
-
-- added setBackButtonVisibility that looks for #backButton, instead of static element (which can be lost for custom headers)
-- fixed popstate issue on Chrome on iOS and links not triggered by jqUi
-- fixed issue when loading panels via Ajax and specifying the id on the panel (could not navigate to them anymore)
-- addDivAndScroll now has a fourth parameter "container"
-- addDivAndScroll now again looks for "scrolling='no'" attribute
-- addDivAndScroll removes custom data attributes on cloned div for js scrolling
-- fixed "that is not defined" in parseScriptTags
-- loadContent now looks for data-crc attribute when loading via Ajax to see if a panel was added, data-persist-ajax was set to true and trying to load it via ID
-- loadContent now passes in an empty anchor if none is found for loadAjax
-- modal div is now prepended to jqUi div so query selector finds those elements first
-- fixed loading default panel in launch
-- checkAnchorClick fix - now handles customClickHandler again.
-- checkAnchorClick fix - allow tel: links to work (needed for UIWebView)
-
-plugins/jq.touchLayer.js
-- fixed double click issue (add back detection to see if second click actually moved)
 

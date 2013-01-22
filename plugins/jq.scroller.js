@@ -38,7 +38,7 @@
 
 	function bindTouchLayer() {
 		//use a single bind for all scrollers
-		if(jq.os.android && !jq.os.chrome) {
+		if(jq.os.android && !jq.os.chrome&&jq.os.webkit) {
 			var androidFixOn = false;
 			//connect to touchLayer to detect editMode
 			$.bind($.touchLayer, 'pre-enter-edit', function(focusEl) {
@@ -63,10 +63,8 @@
 		boundTouchLayer = true;
 	}
 	var scroller = (function() {
-		if(!window.WebKitCSSMatrix) return;
-		var allows3D = 'm11' in new WebKitCSSMatrix();
-		var translateOpen = allows3D ? "3d(" : "(";
-		var translateClose = allows3D ? ",0)" : ")";
+        var translateOpen =$.feat.cssTransformStart;
+        var translateClose = $.feat.cssTransformEnd;
 		var jsScroller, nativeScroller;
 
 		//initialize and js/native mode selector
@@ -74,7 +72,7 @@
 
 
 				if(!boundTouchLayer && $.touchLayer && $.isObject($.touchLayer)) bindTouchLayer()
-				else $.touchLayer = {};
+				else if(!($.touchLayer && $.isObject($.touchLayer))) $.touchLayer = {};
 
 				if(typeof elID == "string" || elID instanceof String) {
 					var el = document.getElementById(elID);
@@ -85,13 +83,21 @@
 					alert("Could not find element for scroller " + elID);
 					return;
 				}
-				if(opts.useJsScroll) return new jsScroller(el, opts);
+				if(jq.os.desktop)
+					return new scrollerCore(el,opts);
+				else if(opts.useJsScroll) return new jsScroller(el, opts);
 				return new nativeScroller(el, opts);
 
 			};
 
 		//parent abstract class (common functionality)
-		var scrollerCore = function() {};
+		var scrollerCore = function(el,opts) {
+			this.el=el;
+			this.jqEl = $(this.el);
+			for(j in opts) {
+				this[j] = opts[j];
+			}
+		};
 		scrollerCore.prototype = {
 			//core default properties
 			refresh: false,
@@ -119,6 +125,37 @@
 			infiniteEndCheck: false,
 			infiniteTriggered: false,
 			scrollSkip: false,
+			scrollTopInterval:null,
+			scrollTo:function(params){
+				this.el.scrollTop=Math.abs(params.y);
+				this.el.scrollLeft=Math.abs(params.x);
+			},
+            enable:function(){},
+            disable:function(){},
+            hideScrollbars:function(){},
+            addPullToRefresh:function(){},
+            /**
+              * We do step animations for 'native' - iOS is acceptable and desktop browsers are fine
+              * instead of css3
+              */
+            scrollToTop:function(time){
+                var time=parseInt(time);
+                if(time==0||isNaN(time))
+            	   return this.el.scrollTop=0;
+                else {
+                    var singleTick=10;
+                   	var distPerTick=(this.el.scrollHeight-this.el.scrollTop)/Math.ceil(time/singleTick);
+                    var self=this;
+                   	self.scrollTopInterval=window.setInterval(function(){
+                        self.el.scrollTop-=distPerTick;
+                        if(self.el.scrollTop<=0)
+                            clearInterval(self.scrollTopInterval);
+                    },singleTick);
+                }
+            },
+            scrollToBottom:function(){
+            	this.el.scrollTop=this.el.scrollHeight;
+            },
 
 			//methods
 			init: function(el, opts) {
@@ -149,6 +186,7 @@
 				if(!this.scrollingLocked) {
 					switch(e.type) {
 					case 'touchstart':
+                        clearInterval(this.scrollTopInterval);
 						this.preventHideRefresh = !this.refreshRunning; // if it's not running why prevent it xD
 						this.moved = false;
 						this.onTouchStart(e);
@@ -342,9 +380,11 @@
 			//unlock overflow
 			this.el.style.overflow = 'auto';
 			//set current scroll
+
+			
 			if(!firstExecution) this.adjustScroll();
 			//set events
-			if(this.refresh || this.infinite) this.el.addEventListener('touchstart', this, false);
+			if(this.refresh || this.infinite&&!jq.os.desktop) this.el.addEventListener('touchstart', this, false);
 			this.el.addEventListener('scroll', this, false)
 		}
 		nativeScroller.prototype.disable = function(destroy) {
@@ -366,6 +406,10 @@
 			if(!leaveRefresh) this.refresh = true;
 			if(this.refresh && this.refresh == true) {
 				this.coreAddPullToRefresh(el);
+                this.refreshContainer.style.position="absolute";
+                this.refreshContainer.style.top="-60px";
+                this.refreshContainer.style.height="60px";
+                this.refreshContainer.style.display="block";
 			}
 		}
 		nativeScroller.prototype.onTouchStart = function(e) {
@@ -376,17 +420,13 @@
 
 				this.el.addEventListener('touchmove', this, false);
 				this.dY = e.touches[0].pageY;
-				if(this.refresh && this.dY == 0) {
-					this.refreshContainer.style.display = "block";
-					this.refreshHeight = this.refreshContainer.firstChild.clientHeight;
-					this.scrollTo({
-						y: this.refreshHeight,
-						x: this.scrollLeft
-					});
-					this.refreshContainer.style.height = this.refreshHeight + 'px';
+				if(this.refresh && this.dY <0) {
+					this.showRefresh();
 
 				}
 			}
+			$.trigger(this,"scrollstart",[this.el]);
+			$.trigger($.touchLayer,"scrollstart",[this.el]);
 		}
 		nativeScroller.prototype.onTouchMove = function(e) {
 
@@ -401,32 +441,34 @@
 
 
 			//check for trigger
-			if(!this.refreshTriggered && this.refresh && (this.el.scrollTop) < 0) {
-				this.refreshContainer.style.display = "block";
-				this.refreshContainer.style.height = this.refreshHeight + 'px';
-				this.refreshTriggered = true;
-				console.log("Triggering refresh-trigger");
-				$.trigger(this, 'refresh-trigger');
-				this.scrollTo({
-					y: this.refreshHeight,
-					x: this.scrollLeft
-				});
+			if(this.refresh && (this.el.scrollTop) < 0) {
+				this.showRefresh();
 				//check for cancel
 			} else if(this.refreshTriggered && this.refresh && (this.el.scrollTop > this.refreshHeight)) {
 				this.refreshTriggered = false;
 				if(this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
-				this.refreshContainer.style.display = "none";
+				this.hideRefresh(false);
 				$.trigger(this, 'refresh-cancel');
 			}
 
 			this.cY = newcY;
-			e.stopPropagation();
 		}
+        nativeScroller.prototype.showRefresh=function(){
+            if(!this.refreshTriggered){
+                this.refreshTriggered = true;
+                $.trigger(this, 'refresh-trigger');
+            }
+        }
 		nativeScroller.prototype.onTouchEnd = function(e) {
 
-			var triggered = this.el.scrollTop <= 0;
+			var triggered = this.el.scrollTop <= -(this.refreshHeight);
 
 			this.fireRefreshRelease(triggered, true);
+            if(triggered){
+                //lock in place
+                this.refreshContainer.style.position="relative";
+                this.refreshContainer.style.top="0px";
+            }
 
 			this.dY = this.cY = 0;
 			this.el.removeEventListener('touchmove', this, false);
@@ -438,23 +480,45 @@
 				this.infiniteEndCheck = true;
 			}
 			this.touchEndFired = true;
-			//e.stopPropagation();
+			//pollyfil for scroll end since webkit doesn't give any events during the "flick"
+            var max=200;
+            var self=this;
+            var currPos={
+                top:this.el.scrollTop,
+                left:this.el.scrollLeft
+            };
+            var counter=0;
+            self.nativePolling=setInterval(function(){
+                counter++;
+                if(counter>=max){
+                    clearInterval(self.nativePolling);
+                    return;
+                }
+                if(self.el.scrollTop!=currPos.top||self.el.scrollLeft!=currPos.left){
+                    clearInterval(self.nativePolling);
+                    $.trigger($.touchLayer, 'scrollend', [self.el]); //notify touchLayer of this elements scrollend
+                    $.trigger(self,"scrollend",[self.el]);
+                    //self.doScroll(e);
+                }
+
+            },20);
 		}
 		nativeScroller.prototype.hideRefresh = function(animate) {
 
 			if(this.preventHideRefresh) return;
 
 			var that = this;
-			var endAnimationCb = function(canceled) {
-					if(!canceled) { //not sure if this should be the correct logic....
-						that.el.style.webkitTransform = "none";
-						that.el.style.webkitTransitionProperty = "none";
-						that.el.scrollTop = 0;
+			var endAnimationCb = function(canceled){
+					if(!canceled){	//not sure if this should be the correct logic....
+						that.el.style[$.feat.cssPrefix+"Transform"]="none";
+						that.el.style[$.feat.cssPrefix+"TransitionProperty"]="none";
+						that.el.scrollTop=0;
 						that.logPos(that.el.scrollLeft, 0);
 					}
-					that.refreshContainer.style.height = '0';
-					that.refreshContainer.style.display = "none";
+					that.refreshContainer.style.top = "-60px";
+					that.refreshContainer.style.position="absolute";
 					that.dY = that.cY = 0;
+					$.trigger(that,"refresh-finish");
 				};
 
 			if(animate === false || !that.jqEl.css3Animate) {
@@ -467,7 +531,6 @@
 					complete: endAnimationCb
 				});
 			}
-			console.log("killing refresh flag");
 			this.refreshTriggered = false;
 			//this.el.addEventListener('touchend', this, false);
 		}
@@ -515,19 +578,29 @@
 			//console.log("Scrolling stopped");
 		}
 		nativeScroller.prototype.logPos = function(x, y) {
-			this.loggedPcentX = this.divide(x, (this.el.scrollWidth - this.el.clientWidth));
-			this.loggedPcentY = this.divide(y, (this.el.scrollHeight - this.el.clientHeight));
+
+
+			this.loggedPcentX = this.divide(x, (this.el.scrollWidth));
+			this.loggedPcentY = this.divide(y, (this.el.scrollHeight ));
 			this.scrollLeft = x;
 			this.scrollTop = y;
-			//console.log('pcent '+this.loggedPcentY+':'+(y/(this.el.scrollHeight-this.el.clientHeight)));
+
+			if(isNaN(this.loggedPcentX))
+				this.loggedPcentX=0;
+			if(isNaN(this.loggedPcentY))
+				this.loggedPcentY=0;
+
+			//console.log('pcent '+this.loggedPcentY+':'+this.loggedPcentX);
 		}
 		nativeScroller.prototype.adjustScroll = function() {
-			this.jqEl.css('overflow', 'hidden');
-			this.el.scrollLeft = this.loggedPcentX * (this.el.scrollWidth - this.el.scrollWidth);
-			this.el.scrollTop = this.loggedPcentY * (this.el.scrollHeight - this.el.scrollHeight);
+			//this.jqEl.css('overflow', 'hidden');
+			this.adjustScrollOverflowProxy_();
+			
+			this.el.scrollLeft = this.loggedPcentX * (this.el.scrollWidth);
+			this.el.scrollTop = this.loggedPcentY * (this.el.scrollHeight );
 			this.logPos(this.el.scrollLeft, this.el.scrollTop);
-			$.asap(this.adjustScrollOverflowProxy_);
-			//console.log(this.loggedPcentY+'--'+this.el.scrollTop);
+			
+//			$.asap();
 		}
 
 
@@ -568,7 +641,8 @@
 			scrollDiv.style.position = 'absolute';
 			scrollDiv.style.width = width + "px";
 			scrollDiv.style.height = height + "px";
-			scrollDiv.style.webkitBorderRadius = "2px";
+			scrollDiv.style[$.feat.cssPrefix+'BorderRadius'] = "2px";
+			scrollDiv.style.borderRadius = "2px";
 			scrollDiv.style.opacity = 0;
 			scrollDiv.className = 'scrollBar';
 			scrollDiv.style.background = "black";
@@ -578,6 +652,8 @@
 			if(this.eventsActive) return;
 			this.eventsActive = true;
 			if(!firstExecution) this.adjustScroll();
+            else
+                this.scrollerMoveCSS({x:0,y:0},0);
 			//add listeners
 			this.container.addEventListener('touchstart', this, false);
 			this.container.addEventListener('touchmove', this, false);
@@ -615,11 +691,11 @@
 		jsScroller.prototype.hideScrollbars = function() {
 			if(this.hscrollBar) {
 				this.hscrollBar.style.opacity = 0
-				this.hscrollBar.style.webkitTransitionDuration = "0ms";
+				this.hscrollBar.style[$.feat.cssPrefix+'TransitionDuration'] = "0ms";
 			}
 			if(this.vscrollBar) {
 				this.vscrollBar.style.opacity = 0
-				this.vscrollBar.style.webkitTransitionDuration = "0ms";
+				this.vscrollBar.style[$.feat.cssPrefix+'TransitionDuration']  = "0ms";
 			}
 		}
 
@@ -646,10 +722,7 @@
 				clearTimeout(this.scrollingFinishCB);
 				this.scrollingFinishCB = null;
 			}
-			if(this.doScrollInterval) {
-				clearInterval(this.doScrollInterval);
-				this.doScrollInterval = null;
-			}
+			
 
 			//disable if locked
 			if(event.touches.length != 1 || this.boolScrollLock) return;
@@ -727,31 +800,32 @@
 			scrollInfo.y = scrollInfo.top;
 
 			//vertical scroll bar
-			if(this.setVScrollBar(scrollInfo, 0, 0)) {
-				if(this.container.clientWidth > window.innerWidth) this.vscrollBar.style.left = (window.innerWidth - numOnly(this.vscrollBar.style.width) * 3) + "px";
-				else this.vscrollBar.style.right = "0px";
-				this.vscrollBar.style.webkitTransition = '';
+			if(this.setVScrollBar(scrollInfo, 0, 0)){
+	            if (this.container.clientWidth > window.innerWidth)
+	                this.vscrollBar.style.left = (window.innerWidth - numOnly(this.vscrollBar.style.width) * 3) + "px";
+	            else
+	                this.vscrollBar.style.right = "0px";
+	            this.vscrollBar.style[$.feat.cssPrefix+"Transition"] = '';
 				// this.vscrollBar.style.opacity = 1;
 			}
 
 			//horizontal scroll
-			if(this.setHScrollBar(scrollInfo, 0, 0)) {
-				if(this.container.clientHeight > window.innerHeight) this.hscrollBar.style.top = (window.innerHeight - numOnly(this.hscrollBar.style.height)) + "px";
-				else this.hscrollBar.style.bottom = numOnly(this.hscrollBar.style.height);
-				this.hscrollBar.style.webkitTransition = '';
+			if(this.setHScrollBar(scrollInfo, 0, 0)){
+                if (this.container.clientHeight > window.innerHeight)
+                    this.hscrollBar.style.top = (window.innerHeight - numOnly(this.hscrollBar.style.height)) + "px";
+                else
+                    this.hscrollBar.style.bottom = numOnly(this.hscrollBar.style.height);
+                this.hscrollBar.style[$.feat.cssPrefix+"Transition"] = ''; 
 				// this.hscrollBar.style.opacity = 1;
 			}
 
 			//save scrollInfo
 			this.lastScrollInfo = scrollInfo;
+			this.hasMoved=true;
 
-			//just in case...
-			if(this.doScrollInterval) window.clearInterval(this.doScrollInterval);
-			this.doScrollInterval = null;
-			var that = this;
-			this.doScrollInterval = window.setInterval(function() {
-				that.doScroll();
-			}, this.refreshRate);
+			this.scrollerMoveCSS(this.lastScrollInfo, 0);
+			$.trigger(this,"scrollstart");
+
 		}
 		jsScroller.prototype.getCSSMatrix = function(el) {
 			if(this.androidFormsMode) {
@@ -766,12 +840,8 @@
 				};
 			} else {
 				//regular transform
-				var str = window.getComputedStyle(el).webkitTransform; //fix for BB transform 'none'
-				if(str == 'none') return {
-					f: 0,
-					e: 0
-				};
-				var obj = new WebKitCSSMatrix(str);
+
+				var obj = $.getCssMatrix(el);
 				return obj;
 			}
 		}
@@ -819,6 +889,7 @@
 		}
 
 		jsScroller.prototype.onTouchMove = function(event) {
+
 			if(this.currentScrollingObject == null) return;
 			//event.preventDefault();
 			var scrollInfo = this.calculateMovement(event);
@@ -845,6 +916,7 @@
 
 
 			this.saveEventInfo(event);
+			this.doScroll();
 
 		}
 
@@ -989,10 +1061,14 @@
 		}
 
 		jsScroller.prototype.hideRefresh = function(animate) {
+			var that=this;
 			if(this.preventHideRefresh) return;
 			this.scrollerMoveCSS({
 				x: 0,
-				y: 0
+				y: 0,
+				complete:function(){
+					$.trigger(that,"refresh-finish");
+				}
 			}, HIDE_REFRESH_TIME);
 			this.refreshTriggered = false;
 		}
@@ -1031,8 +1107,6 @@
 
 		jsScroller.prototype.onTouchEnd = function(event) {
 
-			window.clearInterval(this.doScrollInterval);
-			this.doScrollInterval = null;
 
 			if(this.currentScrollingObject == null || !this.moved) return;
 			//event.preventDefault();
@@ -1092,6 +1166,7 @@
 			this.scrollingFinishCB = setTimeout(function() {
 				that.hideScrollbars();
 				$.trigger($.touchLayer, 'scrollend', [that.el]); //notify touchLayer of this elements scrollend
+				$.trigger(that,"scrollend",[that.el]);
 				that.isScrolling = false;
 				that.elementInfo = null; //reset elementInfo when idle
 				if(that.infinite) $.trigger(that, "infinite-scroll-end");
@@ -1108,9 +1183,9 @@
 			this.refresh = false;
 			this.androidFormsMode = true;
 			//set new css rules
-			this.el.style.webkitTransform = "none";
-			this.el.style.webkitTransition = "none";
-			this.el.style.webkitPerspective = "none";
+			this.el.style[$.feat.cssPrefix+"Transform"] = "none";
+			this.el.style[$.feat.cssPrefix+"Transition"] = "none";
+			this.el.style[$.feat.cssPrefix+"Perspective"] = "none";
 
 			//set position
 			this.scrollerMoveCSS({
@@ -1119,20 +1194,20 @@
 			}, 0);
 
 			//container
-			this.container.style.webkitPerspective = "none";
-			this.container.style.webkitBackfaceVisibility = "visible";
+			this.container.style[$.feat.cssPrefix+"Perspective"] = "none";
+			this.container.style[$.feat.cssPrefix+"BackfaceVisibility"] = "visible";
 			//scrollbars
-			if(this.vscrollBar) {
-				this.vscrollBar.style.webkitTransform = "none";
-				this.vscrollBar.style.webkitTransition = "none";
-				this.vscrollBar.style.webkitPerspective = "none";
-				this.vscrollBar.style.webkitBackfaceVisibility = "visible";
+			if(this.vscrollBar){
+				this.vscrollBar.style[$.feat.cssPrefix+"Transform"] = "none";
+				this.vscrollBar.style[$.feat.cssPrefix+"Transition"] = "none";
+				this.vscrollBar.style[$.feat.cssPrefix+"Perspective"] = "none";
+				this.vscrollBar.style[$.feat.cssPrefix+"BackfaceVisibility"] = "visible";
 			}
-			if(this.hscrollBar) {
-				this.hscrollBar.style.webkitTransform = "none";
-				this.hscrollBar.style.webkitTransition = "none";
-				this.hscrollBar.style.webkitPerspective = "none";
-				this.hscrollBar.style.webkitBackfaceVisibility = "visible";
+			if(this.hscrollBar){
+				this.hscrollBar.style[$.feat.cssPrefix+"Transform"] = "none";
+				this.hscrollBar.style[$.feat.cssPrefix+"Transition"] = "none";
+				this.hscrollBar.style[$.feat.cssPrefix+"Perspective"] = "none";
+				this.hscrollBar.style[$.feat.cssPrefix+"BackfaceVisibility"] = "visible";
 			}
 
 		}
@@ -1144,26 +1219,26 @@
 			this.refresh = this.refreshSafeKeep;
 			this.androidFormsMode = false;
 			//set new css rules
-			this.el.style.webkitPerspective = 1000;
+			this.el.style[$.feat.cssPrefix+"Perspective"] = 1000;
 			this.el.style.marginTop = 0;
 			this.el.style.marginLeft = 0;
-			this.el.style.webkitTransition = '0ms linear'; //reactivate transitions
+			this.el.style[$.feat.cssPrefix+"Transition"] = '0ms linear';	//reactivate transitions
 			//set position
 			this.scrollerMoveCSS({
 				x: numOnly(cssMatrix.e),
 				y: numOnly(cssMatrix.f)
 			}, 0);
 			//container
-			this.container.style.webkitPerspective = 1000;
-			this.container.style.webkitBackfaceVisibility = "hidden";
+			this.container.style[$.feat.cssPrefix+"Perspective"] = 1000;
+			this.container.style[$.feat.cssPrefix+"BackfaceVisibility"] = "hidden";
 			//scrollbars
-			if(this.vscrollBar) {
-				this.vscrollBar.style.webkitPerspective = 1000;
-				this.vscrollBar.style.webkitBackfaceVisibility = "hidden";
+			if(this.vscrollBar){
+				this.vscrollBar.style[$.feat.cssPrefix+"Perspective"] = 1000;
+				this.vscrollBar.style[$.feat.cssPrefix+"BackfaceVisibility"] = "hidden";
 			}
-			if(this.hscrollBar) {
-				this.hscrollBar.style.webkitPerspective = 1000;
-				this.hscrollBar.style.webkitBackfaceVisibility = "hidden";
+			if(this.hscrollBar){
+				this.hscrollBar.style[$.feat.cssPrefix+"Perspective"] = 1000;
+				this.hscrollBar.style[$.feat.cssPrefix+"BackfaceVisibility"] = "hidden";
 			}
 
 		}
@@ -1182,9 +1257,10 @@
 						this.el.style.marginTop = Math.round(distanceToMove.y) + "px";
 						this.el.style.marginLeft = Math.round(distanceToMove.x) + "px";
 					} else {
-						this.el.style.webkitTransform = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
-						this.el.style.webkitTransitionDuration = time + "ms";
-						this.el.style.webkitTransitionTimingFunction = timingFunction;
+
+			            this.el.style[$.feat.cssPrefix+"Transform"] = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
+			            this.el.style[$.feat.cssPrefix+"TransitionDuration"]= time + "ms";
+			            this.el.style[$.feat.cssPrefix+"TransitionTimingFunction"] = timingFunction;
 					}
 				}
 				// Position should be updated even when the scroller is disabled so we log the change
@@ -1218,9 +1294,9 @@
 					el.style.marginTop = Math.round(distanceToMove.y) + "px";
 					el.style.marginLeft = Math.round(distanceToMove.x) + "px";
 				} else {
-					el.style.webkitTransform = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
-					el.style.webkitTransitionDuration = time + "ms";
-					el.style.webkitTransitionTimingFunction = timingFunction;
+		            el.style[$.feat.cssPrefix+"Transform"] = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
+		            el.style[$.feat.cssPrefix+"TransitionDuration"]= time + "ms";
+		            el.style[$.feat.cssPrefix+"TransitionTimingFunction"] = timingFunction;
 				}
 			}
 		}
@@ -1243,10 +1319,9 @@
 				x: 0
 			}, time);
 		}
-
-		//debug JS scrolling
-		//jsScroller = $.debug.type(jsScroller, 'jsScroller');
-		//return main function
+		jsScroller.prototype.scrollToTop=function(time){
+			this.scrollTo({x:0,y:0},time);
+		}
 		return scroller;
 	})();
 })(jq);

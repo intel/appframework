@@ -4,6 +4,7 @@
 
 
 ;(function ($) {
+	
 	var cancelClickMove=false;
 	var preventAll = function(e) 
     {
@@ -24,10 +25,8 @@
 	        preventAll(originalEvent);
 	    }
     
-	    var touchevt = document.createEvent("MouseEvent");
-
+	    var touchevt = document.createEvent("Event");
 	    touchevt.initEvent(type, true, true);
-	    touchevt.initMouseEvent(type, true, true, window, originalEvent.detail, originalEvent.screenX, originalEvent.screenY, originalEvent.clientX, originalEvent.clientY, originalEvent.ctrlKey, originalEvent.shiftKey, originalEvent.altKey, originalEvent.metaKey, originalEvent.button, originalEvent.relatedTarget);    
 		if(type!='touchend'){
 		    touchevt.touches = new Array();
 		    touchevt.touches[0] = new Object();
@@ -39,23 +38,15 @@
 		    touchevt.targetTouches = touchevt.touches;  //for jqtouch
 		}
 		//target
+	    touchevt.target = theTarget;
 		
 		touchevt.mouseToTouch = true;
-		if($.os.ie) {
-		//handle inline event handlers for target and parents (for bubbling)
-			var elem = originalEvent.target;
-			while(elem!=null) {
-				if(elem.hasAttribute("on"+type)) {
-					eval(elem.getAttribute("on"+type));
-				}
-				elem = elem.parentElement;
-			}
-		}
 	    theTarget.dispatchEvent(touchevt);
 	}
 	
     var mouseDown = false,
 		lastTarget = null,firstMove=false;
+
 
 	if(!window.navigator.msPointerEnabled){
 

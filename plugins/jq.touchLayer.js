@@ -19,14 +19,16 @@
 //orientationchange-reshape - resize event due to an orientationchange action
 //reshape - window.resize/window.scroll event (ignores onfocus "shaking") - general reshape notice
 (function() {
+
 	//singleton
 	$.touchLayer = function(el) {
+	//	if(jq.os.desktop||!jq.os.webkit) return;
 		$.touchLayer = new touchLayer(el);
 		return $.touchLayer;
 	};
 	//configuration stuff
 	var inputElements = ['input', 'select', 'textarea'];
-	var autoBlurInputTypes = ['button', 'radio', 'checkbox', 'range'];
+	var autoBlurInputTypes = ['button', 'radio', 'checkbox', 'range','date'];
 	var requiresJSFocus = $.os.ios; //devices which require .focus() on dynamic click events
 	var verySensitiveTouch = $.os.blackberry; //devices which have a very sensitive touch and touchmove is easily fired even on simple taps
 	var inputElementRequiresNativeTap = $.os.blackberry || ($.os.android && !$.os.chrome); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
@@ -36,6 +38,12 @@
 	var requirePanning = $.os.ios; //devices which require panning feature
 	var addressBarError = 0.97; //max 3% error in position
 	var maxHideTries = 2; //HideAdressBar does not retry more than 2 times (3 overall)
+	var skipTouchEnd=false; //Fix iOS bug with alerts/confirms
+	function getTime(){
+		var d = new Date();
+		var n = d.getTime();
+		return n;
+	}
 	var touchLayer = function(el) {
 			this.clearTouchVars();
 			el.addEventListener('touchstart', this, false);
@@ -72,9 +80,13 @@
 			}, true);
 			//js scrollers self binding
 			$.bind(this, 'scrollstart', function(el) {
+				that.isScrolling=true;
+				that.scrollingEl_=el;
 				that.fireEvent('UIEvents', 'scrollstart', el, false, false);
 			});
 			$.bind(this, 'scrollend', function(el) {
+				that.isScrolling=false;
+
 				that.fireEvent('UIEvents', 'scrollend', el, false, false);
 			});
 			//fix layer positioning
@@ -233,7 +245,7 @@
 			var tag = e.target && e.target.tagName != undefined ? e.target.tagName.toLowerCase() : '';
 
 			//this.log("click on "+tag);
-			if(inputElements.indexOf(tag) !== -1 && (!this.isFocused_ || !e.target.isSameNode(this.focusedElement))) {
+			if(inputElements.indexOf(tag) !== -1 && (!this.isFocused_ || !e.target==(this.focusedElement))) {
 				var type = e.target && e.target.type != undefined ? e.target.type.toLowerCase() : '';
 				var autoBlur = autoBlurInputTypes.indexOf(type) !== -1;
 
@@ -305,6 +317,7 @@
 		},
 		onBlur: function(e) {
 			if(jq.os.android && e.target == window) return; //ignore window blurs
+	
 			this.isFocused_ = false;
 			//just in case...
 			if(this.focusedElement) this.focusedElement.removeEventListener('blur', this, false);
@@ -331,7 +344,7 @@
 		},
 		onScroll: function(e) {
 			//this.log("document scroll detected "+document.body.scrollTop);
-			if(!this.allowDocumentScroll_ && !this.isPanning_ && e.target.isSameNode(document)) {
+			if(!this.allowDocumentScroll_ && !this.isPanning_ && e.target==(document)) {
 				this.allowDocumentScroll_ = true;
 				if(this.wasPanning_) {
 					this.wasPanning_ = false;
@@ -391,17 +404,14 @@
 					this.requiresNativeTap = true;
 				}
 			}
+			else if(e.target&&e.target.tagName!==undefined&&e.target.tagName.toLowerCase()=="input"&&e.target.type=="range"){
+                this.requiresNativeTap=true;
+            }
 
-			////this.log("Touchstart: "+
-			//	(this.isFocused_?"focused ":"")+
-			//	(this.isPanning_?"panning ":"")+
-			//	(this.requiresNativeTap?"nativeTap ":"")+
-			//	(this.isScrolling?"scrolling ":"")+
-			//	(this.allowDocumentScroll_?"allowDocumentScroll_ ":"")
-			//);
 			//prevent default if possible
-			if(!this.isScrolling && !this.isPanning_ && !this.requiresNativeTap) {
-				e.preventDefault();
+			if(!this.isPanning_ && !this.requiresNativeTap) {
+                if((this.isScrolling && !$.feat.nativeTouchScroll)||(!this.isScrolling))
+					e.preventDefault();
 				//demand vertical scroll (don't let it pan the page)
 			} else if(this.isScrollingVertical_) {
 				this.demandVerticalScroll();
@@ -476,7 +486,7 @@
 
 			}
 			//check recursive up to top element
-			var isTarget = el.isSameNode(parentTarget);
+			var isTarget = el==(parentTarget);
 			if(!isTarget && el.parentNode) this.checkDOMTree(el.parentNode, parentTarget);
 		},
 		//scroll finish detectors
@@ -503,40 +513,36 @@
 			}
 			//native scroll (for scrollend)
 			if(this.isScrolling) {
+
 				if(!wasMoving) {
 					//this.log("scrollstart");
 					this.fireEvent('UIEvents', 'scrollstart', this.scrollingEl_, false, false);
 				}
-				if(this.isScrollingVertical_) {
+				//if(this.isScrollingVertical_) {
 					this.speedY = (this.lastY - e.touches[0].pageY) / (e.timeStamp - this.lastTimestamp);
 					this.lastY = e.touches[0].pageY;
+					this.lastX = e.touches[0].pageX;
 					this.lastTimestamp = e.timeStamp;
-				}
+				//}
 			}
 			//non-native scroll devices
-			if(!this.isScrolling && (!$.os.blackberry10 || !this.requiresNativeTap)) {
+
+			if((!$.os.blackberry10 && !this.requiresNativeTap)) {
 				//legacy stuff for old browsers
-				e.preventDefault();
-				////this.log("TouchMove (preventDefault): "+
-				//	(this.isFocused_?"focused ":"")+
-				//	(this.isPanning_?"panning ":"")+
-				//	(this.requiresNativeTap?"nativeTap ":"")+
-				//	(this.isScrolling?"scrolling ":"")+
-				//	(this.moved?"moved ":"")
-				//);
+				if(!this.isScrolling ||!$.feat.nativeTouchScroll)
+					e.preventDefault();
 				return;
 			}
-
-			////this.log("TouchMove: "+
-			//	(this.isFocused_?"focused ":"")+
-			//	(this.isPanning_?"panning ":"")+
-			//	(this.requiresNativeTap?"nativeTap ":"")+
-			//	(this.isScrolling?"scrolling ":"")+
-			//	(this.moved?"moved ":"")
-			//);
 		},
 
 		onTouchEnd: function(e) {
+			if($.os.ios){
+				if(skipTouchEnd==e.changedTouches[0].identifier){
+					e.preventDefault();
+					return false;
+				}
+				skipTouchEnd=e.changedTouches[0].identifier;
+			}
 			//double check moved for sensitive devices
 			var itMoved = this.moved;
 			if(verySensitiveTouch) {
@@ -562,8 +568,7 @@
 				if(!this.blockClicks && !this.blockPossibleClick_) {
 					var theTarget = e.target;
 					if(theTarget.nodeType == 3) theTarget = theTarget.parentNode;
-
-					this.fireEvent('MouseEvents', 'click', theTarget, true, e.mouseToTouch);
+					this.fireEvent('Event', 'click', theTarget, true, e.mouseToTouch,e.changedTouches[0]);
 					this.lastTouchStartX=this.dX;
 					this.lastTouchStartY=this.dY;
 				}
@@ -587,18 +592,6 @@
 					if(!this.isFocused_) $.trigger(this, 'cancel-enter-edit', [e.target]);
 				}
 			}
-
-
-
-			////this.log("TouchEnd: "+
-			//	(this.isFocused_?"focused ":"")+
-			//	(this.isPanning_?"panning ":"")+
-			//	(this.requiresNativeTap?"nativeTap ":"")+
-			//	(this.isScrolling?"scrolling ":"")+
-			//	(itMoved?"moved ":"")
-			//);
-
-			//clear up vars
 			this.clearTouchVars();
 		},
 
@@ -613,24 +606,21 @@
 			this.blockPossibleClick_ = false;
 		},
 
-		fireEvent: function(eventType, eventName, target, bubbles, mouseToTouch) {
+		fireEvent: function(eventType, eventName, target, bubbles, mouseToTouch,data) {
 			//this.log("Firing event "+eventName);
 			//create the event and set the options
 			var theEvent = document.createEvent(eventType);
 			theEvent.initEvent(eventName, bubbles, true);
 			theEvent.target = target;
+            if(data){
+                $.each(data,function(key,val){
+                    theEvent[key]=val;
+                });
+            }
 			//jq.DesktopBrowsers flag
 			if(mouseToTouch) theEvent.mouseToTouch = true;
 			target.dispatchEvent(theEvent);
 		}
-
-		// ,
-		// logInfo:function(prefix){
-		// 	this.log(prefix+": {window:(ih"+window.innerHeight+"|oh"+window.outerHeight+"|s"+document.body.scrollTop+"|y"+window.pageYOffset+"}");
-		// },
-		// log : function(str){
-		// 	$.debug.log(str);
-		// }
 	};
 
 })();
