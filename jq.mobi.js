@@ -379,9 +379,13 @@ if (!window.jq || typeof (jq) !== "function") {
             * @title $().map(function)
             */
             map: function(fn) {
-                return $.map(this, function(el, i) {
-                    return fn.call(el, i, el);
-                });
+                var value, values = [], i;
+                for (i = 0; i < this.length; i++) {
+                    value = fn(i,this[i]);
+                    if (value !== undefined)
+                        values.push(value);
+                }
+                return $([values]);
             },
             /**
             * Iterates through all elements and applys a callback function
