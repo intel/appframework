@@ -3099,10 +3099,12 @@ if (!HTMLElement.prototype.unwatch) {
             AppMobi = {}, AppMobi.webRoot = "";
 
         //click back event
-        window.addEventListener("popstate", function() {
+         window.addEventListener("popstate", function() {
             var id = $.ui.getPanelId(document.location.hash);
             //make sure we allow hash changes outside jqUi
-            if (!$.ui.historyCache[id.replace("#", "")])
+            if(id=="")
+                return;
+            if(document.querySelectorAll(id+".panel").length===0)
                 return;
             if (id != "#" + $.ui.activeDiv.id)
                 that.goBack();
@@ -3132,7 +3134,6 @@ if (!HTMLElement.prototype.unwatch) {
         backButton: "",
         remotePages: {},
         history: [],
-        historyCache: {},
         homeDiv: "",
         screenWidth: "",
         content: "",
@@ -3383,7 +3384,6 @@ if (!HTMLElement.prototype.unwatch) {
                     newUrl: startPath + '#' + newPage + hashExtras,
                     oldURL: startPath + previousPage
                 });
-                this.historyCache[newPage] = 1;
             } catch (e) {
             }
         },
@@ -4758,8 +4758,7 @@ if (!HTMLElement.prototype.unwatch) {
                 return;
             }
             
-            
-            
+
             if (theTarget.href.indexOf("tel:") === 0)
                 return false;
 
@@ -4821,7 +4820,7 @@ if (!HTMLElement.prototype.unwatch) {
 
 
 //The following functions are utilitiy functions for jqUi within appMobi.
-//TODO: consider taking all appMobi constraints from jQUI into this code
+
 (function() {
     document.addEventListener("appMobi.device.ready", function() { //in AppMobi, we need to undo the height stuff since it causes issues.
         setTimeout(function() {

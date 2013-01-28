@@ -51,10 +51,12 @@
             AppMobi = {}, AppMobi.webRoot = "";
 
         //click back event
-        window.addEventListener("popstate", function() {
+         window.addEventListener("popstate", function() {
             var id = $.ui.getPanelId(document.location.hash);
             //make sure we allow hash changes outside jqUi
-            if (!$.ui.historyCache[id.replace("#", "")])
+            if(id=="")
+                return;
+            if(document.querySelectorAll(id+".panel").length===0)
                 return;
             if (id != "#" + $.ui.activeDiv.id)
                 that.goBack();
@@ -84,7 +86,6 @@
         backButton: "",
         remotePages: {},
         history: [],
-        historyCache: {},
         homeDiv: "",
         screenWidth: "",
         content: "",
@@ -335,7 +336,6 @@
                     newUrl: startPath + '#' + newPage + hashExtras,
                     oldURL: startPath + previousPage
                 });
-                this.historyCache[newPage] = 1;
             } catch (e) {
             }
         },
