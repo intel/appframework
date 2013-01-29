@@ -217,6 +217,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		background: @color-bg;
 		overflow-y:auto;
 		overflow-x:hidden;
+		-webkit-perspective: 1000;
 	} 
 	.panel > * {
 	    -webkit-backface-visibility: hidden;
@@ -901,6 +902,7 @@ input, textarea { -webkit-user-select: text; } /* Allow text selection for input
 		left:0;
 		opacity:0;
 		-webkit-appearance: none;
+		display:none;
 	} /* Blocks rendering of the native radio controls. */
 		
 	input.jq-ui-slider + label { 
