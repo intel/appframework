@@ -11,8 +11,10 @@ color:inherit;font-weight:normal !important;font-family:'IcoMoon';
 padding:5px;
 font-size: 28px;
 text-align: center;
-vertical-align:middle;
-line-height:auto;
+
+line-height:14px;
+position:relative;
+top:3px;
 }
 .icon.mini:before{font-size:20px !important;height:16px !important;width:16px !important;line-height:16px !important;}
 .icon.big:before{font-size:40px !important;height:32px !important;width:32px !important;line-height:32px !important;}
