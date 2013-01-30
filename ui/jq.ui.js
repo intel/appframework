@@ -3911,6 +3911,7 @@ if (!HTMLElement.prototype.unwatch) {
             if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") == "no") {
                 hasScroll = false;
                 jsScroll = false;
+                tmp.removeAttribute("js-scrolling");
             }
             
             if (!jsScroll) {
@@ -4527,7 +4528,7 @@ if (!HTMLElement.prototype.unwatch) {
                 if (el.parentNode && el.parentNode.id != "content") {
 
                     el.parentNode.removeChild(el);
-                    var id = el.id;
+                    id = el.id;
                     if (tmp.getAttribute("selected"))
                         this.firstDiv = jq("#" + id).get(0);
                     this.addDivAndScroll(tmp);
@@ -4535,7 +4536,7 @@ if (!HTMLElement.prototype.unwatch) {
                 } else if (!el.parsedContent) {
                     el.parsedContent = 1;
                     el.parentNode.removeChild(el);
-                    var id = el.id;
+                    id = el.id;
                     if (tmp.getAttribute("selected"))
                         this.firstDiv = jq("#" + id).get(0);
                     this.addDivAndScroll(tmp);
