@@ -970,6 +970,12 @@
                     that.updateNavbarElements(that.defaultFooter);
                 that.customFooter = false;
             }
+            if (hasHeader && hasHeader.toLowerCase() == "none") {
+                that.toggleHeaderMenu(false);
+            } else {
+                that.toggleHeaderMenu(true);
+            }
+
             if (hasHeader && that.customHeader != hasHeader) {
                 that.customHeader = hasHeader;
                 that.updateHeaderElements(jq("#" + hasHeader).children());

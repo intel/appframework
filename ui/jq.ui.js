@@ -1928,12 +1928,9 @@
 
                 	markup.css($.feat.cssPrefix+"Transform", "translate"+$.feat.cssTransformStart+"0,0px"+$.feat.cssTransformEnd);
                 	setTimeout(function(){
-                        try{
 		                markup.remove();
 		                markup=null;
 		                theEl.style.overflow = "none";
-                        }
-                        catch(e){}
 	                },500);
                 },10);            
             }
@@ -4018,6 +4015,12 @@ if (!HTMLElement.prototype.unwatch) {
                     that.updateNavbarElements(that.defaultFooter);
                 that.customFooter = false;
             }
+            if (hasHeader && hasHeader.toLowerCase() == "none") {
+                that.toggleHeaderMenu(false);
+            } else {
+                that.toggleHeaderMenu(true);
+            }
+
             if (hasHeader && that.customHeader != hasHeader) {
                 that.customHeader = hasHeader;
                 that.updateHeaderElements(jq("#" + hasHeader).children());
