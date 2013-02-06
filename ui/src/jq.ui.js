@@ -291,15 +291,15 @@
             if (this.history.length > 0) {
                 var that = this;
                 var tmpEl = this.history.pop();
-                $.asap(
+                //$.asap(
                 
-                function() {
+                //function() {
                     that.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
                     that.transitionType = tmpEl.transition;
                     //document.location.hash=tmpEl.target;
                     that.updateHash(tmpEl.target);
                 //for Android 4.0.x, we must touchLayer.hideAdressBar()
-                });
+            //    });
             }
         },
         /**
@@ -930,12 +930,12 @@
          */
         scrollToTop: function(id) {
             if (this.scrollingDivs[id]) {
-                this.scrollingDivs[id].scrollToTop();
+                this.scrollingDivs[id].scrollToTop("300ms");
             }
         },
         scrollToBottom: function(id) {
             if (this.scrollingDivs[id]) {
-                this.scrollingDivs[id].scrollToBottom();
+                this.scrollingDivs[id].scrollToBottom("300ms");
             }
         },
 
@@ -1781,13 +1781,14 @@
 //The following functions are utilitiy functions for jqUi within appMobi.
 
 (function() {
-    document.addEventListener("appMobi.device.ready", function() { //in AppMobi, we need to undo the height stuff since it causes issues.
+    $(document).one("appMobi.device.ready", function() { //in AppMobi, we need to undo the height stuff since it causes issues.
         setTimeout(function() {
             document.getElementById('jQUi').style.height = "100%";
             document.body.style.height = "100%";
             document.documentElement.style.minHeight = window.innerHeight;
         }, 300);
-        this.removeEventListener("appMobi.device.ready", arguments.callee);
+        $.ui.ready(function(){
+            $.ui.blockPageScroll();
+        })
     });
-
 })();
