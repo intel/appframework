@@ -584,10 +584,6 @@
             nb.html("");
             for (var i = 0; i < elems.length; i++) {
                 var node = elems[i].cloneNode(true);
-                if (elems[i].oldhash) {
-                    node.href = elems[i].oldhref;
-                    node.onclick = elems[i].oldonclick;
-                }
                 nb.append(node);
             }
             var tmpAnchors = jq("#navbar a");
@@ -647,10 +643,6 @@
                 nb.append(tmp);
                 for (var i = 0; i < elems.length; i++) {
                     var node = elems[i].cloneNode(true);
-                    if (elems[i].oldhash) {
-                        node.href = elems[i].oldhref;
-                        node.onclick = elems[i].oldonclick;
-                    }
                     nb.append(node);
                 }
             }
