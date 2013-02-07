@@ -1659,7 +1659,9 @@ if (!window.jq || typeof (jq) !== "function") {
                     }, settings.timeout);
                 xhr.send(settings.data);
             } catch (e) {
+            	// General errors (e.g. access denied) should also be sent to the error callback
                 console.log(e);
+            	settings.error.call(context, xhr, 'error', e);
             }
             return xhr;
         };
