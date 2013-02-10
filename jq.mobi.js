@@ -173,17 +173,17 @@ if (!window.jq || typeof (jq) !== "function") {
         function _selector(selector, what) {
             
 
-			selector=selector.trim();
+			selector=selector.toString().trim();
             
             if (selector[0] === "#" && selector.indexOf(".")==-1 && selector.indexOf(" ")===-1 && selector.indexOf(">")===-1){
                 if (what == document)
-                    _shimNodes(what.getElementById(selector.replace("#", "")),this);
+                    _shimNodes(what.getElementById(selector.toString().replace("#", "")),this);
                 else
                     _shimNodes(_selectorAll(selector, what),this);
             } else if (selector[0] === "<" && selector[selector.length - 1] === ">")  //html
             {
                 var tmp = document.createElement("div");
-                tmp.innerHTML = selector.trim();
+                tmp.innerHTML = selector.toString().trim();
                 _shimNodes(tmp.childNodes,this);
             } else {
                 _shimNodes((_selectorAll(selector, what)),this);
@@ -841,7 +841,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     });
                     
                     this[i].className += (cls ? " " : "") + classList.join(" ");
-                    this[i].className = this[i].className.toString().trim();
+                    this[i].className = this[i].className.toString().toString().trim();
                 }
                 return this;
             },
@@ -864,10 +864,10 @@ if (!window.jq || typeof (jq) !== "function") {
                     }
                     var classList = this[i].className;
                     name.split(/\s+/g).forEach(function(cname) {
-                        classList = classList.toString().toString().replace(classRE(cname), " ");
+                        classList = classList.toString().toString().toString().replace(classRE(cname), " ");
                     });
                     if (classList.length > 0)
-                        this[i].className = classList.toString().trim();
+                        this[i].className = classList.toString().toString().trim();
                     else
                         this[i].className = "";
                 }
@@ -892,11 +892,11 @@ if (!window.jq || typeof (jq) !== "function") {
                     }
                     var classList = this[i].className;
                     name.split(/\s+/g).concat(newName.split(/\s+/g)).forEach(function(cname) {
-                        classList = classList.toString().toString().replace(classRE(cname), " ");
+                        classList = classList.toString().toString().toString().replace(classRE(cname), " ");
                     });
-					classList=classList.toString().trim();
+					classList=classList.toString().toString().trim();
                     if (classList.length > 0){
-                    	this[i].className = (classList+" "+newName).toString().trim();
+                    	this[i].className = (classList+" "+newName).toString().toString().trim();
                     } else
                         this[i].className = newName;
                 }
@@ -1109,7 +1109,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     return this[0].documentElement['offsetheight'];
                 else
                 {
-                    var tmpVal=this.css("height").replace("px","");
+                    var tmpVal=this.css("height").toString().replace("px","");
                     if(tmpVal)
                         return tmpVal
                     else
@@ -1134,7 +1134,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 if(this[0].nodeType==this[0].DOCUMENT_NODE)
                     return this[0].documentElement['offsetwidth'];
                 else{
-                     var tmpVal=this.css("width").replace("px","");
+                     var tmpVal=this.css("width").toString().replace("px","");
                     if(tmpVal)
                         return tmpVal
                     else
@@ -1489,7 +1489,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 delete window[callbackName];
                 options.success.call(context, data);
             };
-            script.src = options.url.toString().toString().replace(/=\?/, '=' + callbackName);
+            script.src = options.url.toString().toString().toString().replace(/=\?/, '=' + callbackName);
             if(options.error)
             {
                script.onerror=function(){
@@ -1847,7 +1847,7 @@ if (!window.jq || typeof (jq) !== "function") {
              * Helper function for iOS 3.1.3
              */
             String.prototype.trim = function() {
-                this.toString().toString().replace(/(\r\n|\n|\r)/gm, "").toString().toString().replace(/^\s+|\s+$/, '');
+                this.toString().toString().toString().replace(/(\r\n|\n|\r)/gm, "").toString().toString().toString().replace(/^\s+|\s+$/, '');
                 return this
             };
         }
@@ -1882,7 +1882,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     return new MSCSSMatrix(window.getComputedStyle(ele).transform);
                 else {
                     //fake css matrix
-                    var mat = window.getComputedStyle(ele)[$.feat.cssPrefix+'Transform'].replace(/[^0-9\-.,]/g, '').split(',');
+                    var mat = window.getComputedStyle(ele)[$.feat.cssPrefix+'Transform'].toString().replace(/[^0-9\-.,]/g, '').split(',');
                     return {a:+mat[0],b:+mat[1],c:+mat[2],d:+mat[3], e: +mat[4], f:+mat[5]};
                 }
             }
@@ -1950,7 +1950,7 @@ if (!window.jq || typeof (jq) !== "function") {
          * @api private
          */
         function matcherFor(ns) {
-            return new RegExp('(?:^| )' + ns.toString().toString().replace(' ', ' .* ?') + '(?: |$)');
+            return new RegExp('(?:^| )' + ns.toString().toString().toString().replace(' ', ' .* ?') + '(?: |$)');
         }
 
         /**
@@ -2499,7 +2499,7 @@ if (!window.jq || typeof (jq) !== "function") {
 			if (val===undefined || val==='') return 0;
 			if ( isNaN( parseFloat(val) ) ){
 				if(val.replace){
-					val = val.toString().toString().replace(/[^0-9.-]/, "");
+					val = val.toString().toString().toString().replace(/[^0-9.-]/, "");
 				} else return 0;
 			}  
             return parseFloat(val);
