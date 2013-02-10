@@ -841,7 +841,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     });
                     
                     this[i].className += (cls ? " " : "") + classList.join(" ");
-                    this[i].className = this[i].className.toString().toString().trim();
+                    this[i].className = this[i].className.toString().trim();
                 }
                 return this;
             },
@@ -864,10 +864,10 @@ if (!window.jq || typeof (jq) !== "function") {
                     }
                     var classList = this[i].className;
                     name.split(/\s+/g).forEach(function(cname) {
-                        classList = classList.toString().toString().toString().replace(classRE(cname), " ");
+                        classList = classList.toString().replace(classRE(cname), " ");
                     });
                     if (classList.length > 0)
-                        this[i].className = classList.toString().toString().trim();
+                        this[i].className = classList.toString().trim();
                     else
                         this[i].className = "";
                 }
@@ -892,11 +892,11 @@ if (!window.jq || typeof (jq) !== "function") {
                     }
                     var classList = this[i].className;
                     name.split(/\s+/g).concat(newName.split(/\s+/g)).forEach(function(cname) {
-                        classList = classList.toString().toString().toString().replace(classRE(cname), " ");
+                        classList = classList.toString().replace(classRE(cname), " ");
                     });
-					classList=classList.toString().toString().trim();
+					classList=classList.toString().trim();
                     if (classList.length > 0){
-                    	this[i].className = (classList+" "+newName).toString().toString().trim();
+                    	this[i].className = (classList+" "+newName).toString().trim();
                     } else
                         this[i].className = newName;
                 }
@@ -1127,7 +1127,7 @@ if (!window.jq || typeof (jq) !== "function") {
             width:function(){
                 if (this.length === 0)
                     return this;
-                 if(val==undefined)
+                 if(typeof val != 'undefined')
                     return this.css("width",val);
                 if(this[0]==this[0].window)
                     return window.innerWidth;
@@ -1489,7 +1489,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 delete window[callbackName];
                 options.success.call(context, data);
             };
-            script.src = options.url.toString().toString().toString().replace(/=\?/, '=' + callbackName);
+            script.src = options.url.toString().replace(/=\?/, '=' + callbackName);
             if(options.error)
             {
                script.onerror=function(){
@@ -1847,7 +1847,7 @@ if (!window.jq || typeof (jq) !== "function") {
              * Helper function for iOS 3.1.3
              */
             String.prototype.trim = function() {
-                this.toString().toString().toString().replace(/(\r\n|\n|\r)/gm, "").toString().toString().toString().replace(/^\s+|\s+$/, '');
+                this.toString().replace(/(\r\n|\n|\r)/gm, "").toString().replace(/^\s+|\s+$/, '');
                 return this
             };
         }
@@ -1950,7 +1950,7 @@ if (!window.jq || typeof (jq) !== "function") {
          * @api private
          */
         function matcherFor(ns) {
-            return new RegExp('(?:^| )' + ns.toString().toString().toString().replace(' ', ' .* ?') + '(?: |$)');
+            return new RegExp('(?:^| )' + ns.toString().replace(' ', ' .* ?') + '(?: |$)');
         }
 
         /**
@@ -2499,7 +2499,7 @@ if (!window.jq || typeof (jq) !== "function") {
 			if (val===undefined || val==='') return 0;
 			if ( isNaN( parseFloat(val) ) ){
 				if(val.replace){
-					val = val.toString().toString().toString().replace(/[^0-9.-]/, "");
+					val = val.toString().replace(/[^0-9.-]/, "");
 				} else return 0;
 			}  
             return parseFloat(val);
