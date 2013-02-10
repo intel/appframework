@@ -202,7 +202,8 @@
                 try {
                     var cssMatrix=$.getCssMatrix(this.el);
                     var endPos = this.vertical ? numOnly(cssMatrix.f) : numOnly(cssMatrix.e);
-                    if (endPos > 0) {
+                    
+                    if (1==2&&endPos > 0) {
                         this.moveCSS3(this.el, {
                             x: 0,
                             y: 0
@@ -217,21 +218,25 @@
                         } else if ((endPos > this.cssMoveStart && totalMoved < 97)) {
                             currInd--; // move left/up
                         }
+                        var toMove=currInd;
+                        //Checks for infinite - moves to placeholders
                         if (currInd > (this.childrenCount - 1)) {
-                            currInd = this.childrenCount - 1;
+                            currInd = 0;
+                            toMove=this.childrenCount;
                         }
                         if (currInd < 0) {
-                            currInd = 0;
+                            currInd = this.childrenCount-1;
+                            toMove=-1;
                         }
                         var movePos = {
                             x: 0,
                             y: 0
                         };
                         if (this.vertical) {
-                            movePos.y = (currInd * this.myDivHeight * -1);
+                            movePos.y = (toMove * this.myDivHeight * -1);
                         } 
                         else {
-                            movePos.x = (currInd * this.myDivWidth * -1);
+                            movePos.x = (toMove * this.myDivWidth * -1);
                         }
                         
                         this.moveCSS3(this.el, movePos, "150");
@@ -243,6 +248,14 @@
                         if (this.carouselIndex != currInd)
                             runFinal = true;
                         this.carouselIndex = currInd;
+                        
+                        //This is for the infinite ends - will move to the correct position after animation
+                        if(toMove!=currInd){
+                            var that=this;
+                            window.setTimeout(function(){
+                                that.onMoveIndex(currInd,"1ms");
+                            },155);
+                        }
                     }
                 } catch (e) {
                     console.log(e);
@@ -322,19 +335,32 @@
                 var childrenCounter = 0;
                 var that = this;
                 var el = this.el;
+                $(el).children().find(".prevBuffer").remove();
+                $(el).children().find(".nextBuffer").remove();
                 n = el.childNodes[0];
                 var widthParam;
                 var heightParam = "100%";
                 var elems = [];
+
                 for (; n; n = n.nextSibling) {
                     if (n.nodeType === 1) {
                         elems.push(n);
                         childrenCounter++;
                     }
                 }
+                //Let's put the buffers at the start/end
+                
+                var prep=$(elems[elems.length-1]).clone().get(0);
+                $(el).prepend(prep);
+                var tmp=$(elems[0]).clone().get(0);
+                $(el).append(tmp);
+                elems.push(tmp);
+                elems.unshift(prep);
+                
                 var param = (100 / childrenCounter) + "%";
                 this.childrenCount = childrenCounter;
-                widthParam = parseFloat(100 / this.childrenCount) + "%";
+                widthParam = parseFloat(100 / childrenCounter) + "%";
+                
                 for (var i = 0; i < elems.length; i++) {
                     if (this.horizontal) {
                         elems[i].style.width = widthParam;
@@ -347,6 +373,10 @@
                         elems[i].style.display = "block";
                     }
                 }
+                //Clone the first and put it at the end
+                tmp.style.position="absolute";
+                prep.style.position="absolute";
+
                 this.moveCSS3(el, {
                     x: 0,
                     y: 0
@@ -355,11 +385,15 @@
                     el.style.width = Math.ceil((this.childrenCount) * 100) + "%";
                     el.style.height = "100%";
                     el.style['min-height'] = "100%"
+                    prep.style.left="-"+widthParam;
+                    tmp.style.left="100%";
                 } 
                 else {
                     el.style.width = "100%";
                     el.style.height = Math.ceil((this.childrenCount) * 100) + "%";
                     el.style['min-height'] = Math.ceil((this.childrenCount) * 100) + "%";
+                    prep.style.top="-"+widthParam;
+                    tmp.style.top="100%";
                 }
                 // Create the paging dots
                 if (this.pagingDiv) {
@@ -400,7 +434,7 @@
                     this.pagingDiv.style.height = "25px";
                 }
                 this.onMoveIndex(this.carouselIndex);
-            
+                
             }
         
         };

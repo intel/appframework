@@ -355,7 +355,6 @@
 			//connect to touchLayer to detect editMode
 			$.bind($.touchLayer, 'pre-enter-edit', function(focusEl) {
 				if(!androidFixOn) {
-					//console.log("deploying forms scroll android fix"); // @debug
 					androidFixOn = true;
 					//activate on scroller
 					for(el in cache)
@@ -364,7 +363,6 @@
 			});
 			$.bind($.touchLayer, ['cancel-enter-edit', 'exit-edit'], function(focusEl) {
 				if(androidFixOn) {
-					//console.log("removing forms scroll android fix"); // @debug
 					androidFixOn = false;
 					//dehactivate on scroller
 					for(el in cache)
@@ -438,9 +436,39 @@
 			infiniteTriggered: false,
 			scrollSkip: false,
 			scrollTopInterval:null,
-			scrollTo:function(params){
-				this.el.scrollTop=Math.abs(params.y);
-				this.el.scrollLeft=Math.abs(params.x);
+			scrollLeftInterval:null,
+			_scrollTo:function(params,time){
+				var time=parseInt(time);
+                if(time==0||isNaN(time))
+                {
+					this.el.scrollTop=Math.abs(params.y);
+					this.el.scrollLeft=Math.abs(params.x);
+					return;
+				}
+                var singleTick=10;
+               	var distPerTick=(this.el.scrollTop-params.y)/Math.ceil(time/singleTick);
+               	var distLPerTick=(this.el.scrollLeft-params.x)/Math.ceil(time/singleTick);
+                var self=this;
+                var toRunY=Math.ceil(this.el.scrollTop-params.y)/distPerTick;
+                var toRunX=Math.ceil(this.el.scrollLeft-params.x)/distPerTick;
+                var xRun=yRun=0;
+               	self.scrollTopInterval=window.setInterval(function(){
+                    self.el.scrollTop-=distPerTick;
+                    yRun++;
+                	if(yRun>=toRunY){
+                		self.el.scrollTop=params.y;
+                		clearInterval(self.scrollTopInterval);
+                	}
+                },singleTick);
+
+                self.scrollLeftInterval=window.setInterval(function(){
+                    self.el.scrollLeft-=distLPerTick;
+                    xRun++;
+                    if(xRun>=toRunX){
+                		self.el.scrollLeft=params.x;
+                		clearInterval(self.scrollLeftInterval);
+                	}
+                },singleTick);
 			},
             enable:function(){},
             disable:function(){},
@@ -450,23 +478,17 @@
               * We do step animations for 'native' - iOS is acceptable and desktop browsers are fine
               * instead of css3
               */
-            scrollToTop:function(time){
-                var time=parseInt(time);
-                if(time==0||isNaN(time))
-            	   return this.el.scrollTop=0;
-                else {
-                    var singleTick=10;
-                   	var distPerTick=(this.el.scrollHeight-this.el.scrollTop)/Math.ceil(time/singleTick);
-                    var self=this;
-                   	self.scrollTopInterval=window.setInterval(function(){
-                        self.el.scrollTop-=distPerTick;
-                        if(self.el.scrollTop<=0)
-                            clearInterval(self.scrollTopInterval);
-                    },singleTick);
-                }
+            _scrollToTop:function(time){
+                this._scrollTo({x:0,y:0},time);
             },
-            scrollToBottom:function(){
-            	this.el.scrollTop=this.el.scrollHeight;
+            _scrollToBottom:function(time){
+            	this._scrollTo({x:0,y:this.el.scrollHeight-this.el.offsetHeight},time);
+            },
+            scrollToBottom:function(time){
+            	return this._scrollToBottom(time);
+            },
+            scrollToTop:function(time){
+            	return this._scrollToTop(time);
             },
 
 			//methods
@@ -670,6 +692,7 @@
 		}
 		nativeScroller.prototype = new scrollerCore();
 		jsScroller.prototype = new scrollerCore();
+		
 
 
 
@@ -847,18 +870,21 @@
 			//this.el.addEventListener('touchend', this, false);
 		}
 		nativeScroller.prototype.hideScrollbars = function() {}
-		nativeScroller.prototype.scrollTo = function(pos) {
-			this.el.scrollTop = -(pos.y);
-			this.el.scrollLeft = -(pos.x);
-			this.logPos(this.el.scrollLeft, this.el.scrollTop);
+		nativeScroller.prototype.scrollTo = function(pos,time) {
+			this.logPos(pos.x, pos.y);
+			pos.x*=-1;
+			pos.y*=-1;
+			return this._scrollTo(pos,time);
 		}
-		nativeScroller.prototype.scrollBy = function(pos) {
-			this.el.scrollTop += pos.y;
-			this.el.scrollLeft += pos.x;
+		nativeScroller.prototype.scrollBy = function(pos,time) {
+			pos.x+=this.el.scrollLeft;
+			pos.y+=this.el.scrollTop;
 			this.logPos(this.el.scrollLeft, this.el.scrollTop);
+			return this._scrollTo(pos,time);
 		}
-		nativeScroller.prototype.scrollToBottom = function() {
-			this.el.scrollTop = this.el.scrollHeight;
+		nativeScroller.prototype.scrollToBottom = function(time) {
+			//this.el.scrollTop = this.el.scrollHeight;
+			this._scrollToBottom(time);
 			this.logPos(this.el.scrollLeft, this.el.scrollTop);
 		}
 		nativeScroller.prototype.onScroll = function(e) {
@@ -880,14 +906,12 @@
 			}
 
 
-
 			var that = this;
 			if(this.infinite && this.infiniteEndCheck && this.infiniteTriggered) {
 
 				this.infiniteEndCheck = false;
 				$.trigger(that, "infinite-scroll-end");
 			}
-			//console.log("Scrolling stopped");
 		}
 		nativeScroller.prototype.logPos = function(x, y) {
 
@@ -902,17 +926,13 @@
 			if(isNaN(this.loggedPcentY))
 				this.loggedPcentY=0;
 
-			//console.log('pcent '+this.loggedPcentY+':'+this.loggedPcentX);
 		}
 		nativeScroller.prototype.adjustScroll = function() {
-			//this.jqEl.css('overflow', 'hidden');
 			this.adjustScrollOverflowProxy_();
 			
 			this.el.scrollLeft = this.loggedPcentX * (this.el.scrollWidth);
 			this.el.scrollTop = this.loggedPcentY * (this.el.scrollHeight );
 			this.logPos(this.el.scrollLeft, this.el.scrollTop);
-			
-//			$.asap();
 		}
 
 
@@ -975,7 +995,6 @@
 		jsScroller.prototype.adjustScroll = function() {
 			//set top/left
 			var size = this.getViewportSize();
-			//console.log('adjust '+this.loggedPcentY+':'+(this.el.clientHeight-size.h));
 			this.scrollerMoveCSS({
 				x: Math.round(this.loggedPcentX * (this.el.clientWidth - size.w)),
 				y: Math.round(this.loggedPcentY * (this.el.clientHeight - size.h))
@@ -985,7 +1004,6 @@
 			if(!this.eventsActive) return;
 			//log top/left
 			var cssMatrix = this.getCSSMatrix(this.el);
-			//console.log('disable');
 			this.logPos((numOnly(cssMatrix.e) - numOnly(this.container.scrollLeft)), (numOnly(cssMatrix.f) - numOnly(this.container.scrollTop)));
 			//remove event listeners
 			this.container.removeEventListener('touchstart', this, false);
@@ -1560,7 +1578,7 @@
 		jsScroller.prototype.scrollerMoveCSS = function(distanceToMove, time, timingFunction) {
 			if(!time) time = 0;
 			if(!timingFunction) timingFunction = "linear";
-
+			time=numOnly(time);
 			if(this.el && this.el.style) {
 
 				//do not touch the DOM if disabled
@@ -1576,7 +1594,6 @@
 					}
 				}
 				// Position should be updated even when the scroller is disabled so we log the change
-				//console.log('scrollmove #'+this.container.id)
 				this.logPos(distanceToMove.x, distanceToMove.y);
 			}
 		}
@@ -1595,7 +1612,6 @@
 			this.loggedPcentY = this.divide(y, (this.el.clientHeight - size.h));
 			this.scrollTop = y;
 			this.scrollLeft = x;
-			//console.log('logged '+this.loggedPcentY+' '+y+':'+(this.el.clientHeight - size.h));
 		}
 		jsScroller.prototype.scrollbarMoveCSS = function(el, distanceToMove, time, timingFunction) {
 			if(!time) time = 0;
@@ -1928,12 +1944,9 @@
 
                 	markup.css($.feat.cssPrefix+"Transform", "translate"+$.feat.cssTransformStart+"0,0px"+$.feat.cssTransformEnd);
                 	setTimeout(function(){
-                        try{
 		                markup.remove();
 		                markup=null;
 		                theEl.style.overflow = "none";
-                        }
-                        catch(e){}
 	                },500);
                 },10);            
             }
@@ -3099,10 +3112,12 @@ if (!HTMLElement.prototype.unwatch) {
             AppMobi = {}, AppMobi.webRoot = "";
 
         //click back event
-        window.addEventListener("popstate", function() {
+         window.addEventListener("popstate", function() {
             var id = $.ui.getPanelId(document.location.hash);
             //make sure we allow hash changes outside jqUi
-            if (!$.ui.historyCache[id.replace("#", "")])
+            if(id=="")
+                return;
+            if(document.querySelectorAll(id+".panel").length===0)
                 return;
             if (id != "#" + $.ui.activeDiv.id)
                 that.goBack();
@@ -3132,7 +3147,6 @@ if (!HTMLElement.prototype.unwatch) {
         backButton: "",
         remotePages: {},
         history: [],
-        historyCache: {},
         homeDiv: "",
         screenWidth: "",
         content: "",
@@ -3338,15 +3352,15 @@ if (!HTMLElement.prototype.unwatch) {
             if (this.history.length > 0) {
                 var that = this;
                 var tmpEl = this.history.pop();
-                $.asap(
+                //$.asap(
                 
-                function() {
+                //function() {
                     that.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
                     that.transitionType = tmpEl.transition;
                     //document.location.hash=tmpEl.target;
                     that.updateHash(tmpEl.target);
                 //for Android 4.0.x, we must touchLayer.hideAdressBar()
-                });
+            //    });
             }
         },
         /**
@@ -3383,7 +3397,6 @@ if (!HTMLElement.prototype.unwatch) {
                     newUrl: startPath + '#' + newPage + hashExtras,
                     oldURL: startPath + previousPage
                 });
-                this.historyCache[newPage] = 1;
             } catch (e) {
             }
         },
@@ -3911,6 +3924,7 @@ if (!HTMLElement.prototype.unwatch) {
             if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") == "no") {
                 hasScroll = false;
                 jsScroll = false;
+                tmp.removeAttribute("js-scrolling");
             }
             
             if (!jsScroll) {
@@ -3977,12 +3991,12 @@ if (!HTMLElement.prototype.unwatch) {
          */
         scrollToTop: function(id) {
             if (this.scrollingDivs[id]) {
-                this.scrollingDivs[id].scrollToTop();
+                this.scrollingDivs[id].scrollToTop("300ms");
             }
         },
         scrollToBottom: function(id) {
             if (this.scrollingDivs[id]) {
-                this.scrollingDivs[id].scrollToBottom();
+                this.scrollingDivs[id].scrollToBottom("300ms");
             }
         },
 
@@ -4017,6 +4031,12 @@ if (!HTMLElement.prototype.unwatch) {
                     that.updateNavbarElements(that.defaultFooter);
                 that.customFooter = false;
             }
+            if (hasHeader && hasHeader.toLowerCase() == "none") {
+                that.toggleHeaderMenu(false);
+            } else {
+                that.toggleHeaderMenu(true);
+            }
+
             if (hasHeader && that.customHeader != hasHeader) {
                 that.customHeader = hasHeader;
                 that.updateHeaderElements(jq("#" + hasHeader).children());
@@ -4527,7 +4547,7 @@ if (!HTMLElement.prototype.unwatch) {
                 if (el.parentNode && el.parentNode.id != "content") {
 
                     el.parentNode.removeChild(el);
-                    var id = el.id;
+                    id = el.id;
                     if (tmp.getAttribute("selected"))
                         this.firstDiv = jq("#" + id).get(0);
                     this.addDivAndScroll(tmp);
@@ -4535,7 +4555,7 @@ if (!HTMLElement.prototype.unwatch) {
                 } else if (!el.parsedContent) {
                     el.parsedContent = 1;
                     el.parentNode.removeChild(el);
-                    var id = el.id;
+                    id = el.id;
                     if (tmp.getAttribute("selected"))
                         this.firstDiv = jq("#" + id).get(0);
                     this.addDivAndScroll(tmp);
@@ -4758,8 +4778,7 @@ if (!HTMLElement.prototype.unwatch) {
                 return;
             }
             
-            
-            
+
             if (theTarget.href.indexOf("tel:") === 0)
                 return false;
 
@@ -4821,17 +4840,18 @@ if (!HTMLElement.prototype.unwatch) {
 
 
 //The following functions are utilitiy functions for jqUi within appMobi.
-//TODO: consider taking all appMobi constraints from jQUI into this code
+
 (function() {
-    document.addEventListener("appMobi.device.ready", function() { //in AppMobi, we need to undo the height stuff since it causes issues.
+    $(document).one("appMobi.device.ready", function() { //in AppMobi, we need to undo the height stuff since it causes issues.
         setTimeout(function() {
             document.getElementById('jQUi').style.height = "100%";
             document.body.style.height = "100%";
             document.documentElement.style.minHeight = window.innerHeight;
         }, 300);
-        this.removeEventListener("appMobi.device.ready", arguments.callee);
+        $.ui.ready(function(){
+            $.ui.blockPageScroll();
+        })
     });
-
 })();
 (function($ui){
     

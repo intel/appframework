@@ -25,7 +25,7 @@ test("map",function(){
    });
    res=elems.join(",");
    
-   var mapRes=$("div").map(function(){return this.id}).get().join(",");
+   var mapRes=$("div").map(function(ind,el){return el.id}).get().join(",");
    equals(res,mapRes,"Testing map function by joining ids of $(div)");
 
 });
@@ -39,7 +39,7 @@ test("each",function(){
    });
    res=elems.join(",");
    
-   var mapRes=$("div").map(function(){return this.id}).get().join(",");
+   var mapRes=$("div").map(function(ind,el){return el.id}).get().join(",");
    equals(res,mapRes,"Testing map function by joining ids of $(div)");
 
 });

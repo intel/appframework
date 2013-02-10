@@ -51,10 +51,12 @@
             AppMobi = {}, AppMobi.webRoot = "";
 
         //click back event
-        window.addEventListener("popstate", function() {
+         window.addEventListener("popstate", function() {
             var id = $.ui.getPanelId(document.location.hash);
             //make sure we allow hash changes outside jqUi
-            if (!$.ui.historyCache[id.replace("#", "")])
+            if(id=="")
+                return;
+            if(document.querySelectorAll(id+".panel").length===0)
                 return;
             if (id != "#" + $.ui.activeDiv.id)
                 that.goBack();
@@ -84,7 +86,6 @@
         backButton: "",
         remotePages: {},
         history: [],
-        historyCache: {},
         homeDiv: "",
         screenWidth: "",
         content: "",
@@ -290,15 +291,15 @@
             if (this.history.length > 0) {
                 var that = this;
                 var tmpEl = this.history.pop();
-                $.asap(
+                //$.asap(
                 
-                function() {
+                //function() {
                     that.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
                     that.transitionType = tmpEl.transition;
                     //document.location.hash=tmpEl.target;
                     that.updateHash(tmpEl.target);
                 //for Android 4.0.x, we must touchLayer.hideAdressBar()
-                });
+            //    });
             }
         },
         /**
@@ -335,7 +336,6 @@
                     newUrl: startPath + '#' + newPage + hashExtras,
                     oldURL: startPath + previousPage
                 });
-                this.historyCache[newPage] = 1;
             } catch (e) {
             }
         },
@@ -584,10 +584,6 @@
             nb.html("");
             for (var i = 0; i < elems.length; i++) {
                 var node = elems[i].cloneNode(true);
-                if (elems[i].oldhash) {
-                    node.href = elems[i].oldhref;
-                    node.onclick = elems[i].oldonclick;
-                }
                 nb.append(node);
             }
             var tmpAnchors = jq("#navbar a");
@@ -647,10 +643,6 @@
                 nb.append(tmp);
                 for (var i = 0; i < elems.length; i++) {
                     var node = elems[i].cloneNode(true);
-                    if (elems[i].oldhash) {
-                        node.href = elems[i].oldhref;
-                        node.onclick = elems[i].oldonclick;
-                    }
                     nb.append(node);
                 }
             }
@@ -863,6 +855,7 @@
             if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") == "no") {
                 hasScroll = false;
                 jsScroll = false;
+                tmp.removeAttribute("js-scrolling");
             }
             
             if (!jsScroll) {
@@ -929,12 +922,12 @@
          */
         scrollToTop: function(id) {
             if (this.scrollingDivs[id]) {
-                this.scrollingDivs[id].scrollToTop();
+                this.scrollingDivs[id].scrollToTop("300ms");
             }
         },
         scrollToBottom: function(id) {
             if (this.scrollingDivs[id]) {
-                this.scrollingDivs[id].scrollToBottom();
+                this.scrollingDivs[id].scrollToBottom("300ms");
             }
         },
 
@@ -969,6 +962,12 @@
                     that.updateNavbarElements(that.defaultFooter);
                 that.customFooter = false;
             }
+            if (hasHeader && hasHeader.toLowerCase() == "none") {
+                that.toggleHeaderMenu(false);
+            } else {
+                that.toggleHeaderMenu(true);
+            }
+
             if (hasHeader && that.customHeader != hasHeader) {
                 that.customHeader = hasHeader;
                 that.updateHeaderElements(jq("#" + hasHeader).children());
@@ -1479,7 +1478,7 @@
                 if (el.parentNode && el.parentNode.id != "content") {
 
                     el.parentNode.removeChild(el);
-                    var id = el.id;
+                    id = el.id;
                     if (tmp.getAttribute("selected"))
                         this.firstDiv = jq("#" + id).get(0);
                     this.addDivAndScroll(tmp);
@@ -1487,7 +1486,7 @@
                 } else if (!el.parsedContent) {
                     el.parsedContent = 1;
                     el.parentNode.removeChild(el);
-                    var id = el.id;
+                    id = el.id;
                     if (tmp.getAttribute("selected"))
                         this.firstDiv = jq("#" + id).get(0);
                     this.addDivAndScroll(tmp);
@@ -1774,13 +1773,14 @@
 //The following functions are utilitiy functions for jqUi within appMobi.
 
 (function() {
-    document.addEventListener("appMobi.device.ready", function() { //in AppMobi, we need to undo the height stuff since it causes issues.
+    $(document).one("appMobi.device.ready", function() { //in AppMobi, we need to undo the height stuff since it causes issues.
         setTimeout(function() {
             document.getElementById('jQUi').style.height = "100%";
             document.body.style.height = "100%";
             document.documentElement.style.minHeight = window.innerHeight;
         }, 300);
-        this.removeEventListener("appMobi.device.ready", arguments.callee);
+        $.ui.ready(function(){
+            $.ui.blockPageScroll();
+        })
     });
-
 })();

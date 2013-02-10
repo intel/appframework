@@ -173,8 +173,9 @@ if (!window.jq || typeof (jq) !== "function") {
         function _selector(selector, what) {
             
 
-			selector=selector.toString().trim();
-            if (selector[0] === "#" && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
+			selector=selector.trim();
+            
+            if (selector[0] === "#" && selector.indexOf(".")==-1 && selector.indexOf(" ")===-1 && selector.indexOf(">")===-1){
                 if (what == document)
                     _shimNodes(what.getElementById(selector.replace("#", "")),this);
                 else
@@ -379,9 +380,13 @@ if (!window.jq || typeof (jq) !== "function") {
             * @title $().map(function)
             */
             map: function(fn) {
-                return $.map(this, function(el, i) {
-                    return fn.call(el, i, el);
-                });
+                var value, values = [], i;
+                for (i = 0; i < this.length; i++) {
+                    value = fn(i,this[i]);
+                    if (value !== undefined)
+                        values.push(value);
+                }
+                return $([values]);
             },
             /**
             * Iterates through all elements and applys a callback function
@@ -1654,7 +1659,9 @@ if (!window.jq || typeof (jq) !== "function") {
                     }, settings.timeout);
                 xhr.send(settings.data);
             } catch (e) {
+            	// General errors (e.g. access denied) should also be sent to the error callback
                 console.log(e);
+            	settings.error.call(context, xhr, 'error', e);
             }
             return xhr;
         };

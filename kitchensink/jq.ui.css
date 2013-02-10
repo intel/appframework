@@ -243,8 +243,6 @@ background:#333;
 	display:none;
     position:absolute; top:0px; left:0px;
 	background:rgba(19,29,38,1);
-    margin-top:10px;
-    margin-bottom:10px;
 	overflow-y:auto;
 	overflow-x:hidden;
 	-webkit-overflow-scrolling:touch;
