@@ -1459,7 +1459,7 @@ if (!window.jq || typeof (jq) !== "function") {
             complete: empty,
             context: undefined,
             timeout: 0,
-            crossDomain: null
+            crossDomain:null
         };
         /**
         * Execute a jsonP call, allowing cross domain scripting
@@ -1590,6 +1590,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (/=\?/.test(settings.url)) {
                     return $.jsonP(settings);
                 }
+                
                 if (settings.crossDomain === null) settings.crossDomain = /^([\w-]+:)?\/\/([^\/]+)/.test(settings.url) &&
                     RegExp.$2 != window.location.host;
                 
