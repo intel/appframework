@@ -1127,7 +1127,7 @@ if (!window.jq || typeof (jq) !== "function") {
             width:function(){
                 if (this.length === 0)
                     return this;
-                 if(val==undefined)
+                 if(val!=undefined)
                     return this.css("width",val);
                 if(this[0]==this[0].window)
                     return window.innerWidth;
