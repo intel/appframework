@@ -1022,7 +1022,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (this.length == 0)
                     return this;
                 target = $(target).get(0);
-                if (!target || target.length == 0)
+                if (!target)
                     return this;
                 for (var i = 0; i < this.length; i++) 
                 {
