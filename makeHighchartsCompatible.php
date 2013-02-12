@@ -5,7 +5,8 @@
     $replaceArray = array(
 	'jq.mobi.js' => array(
 	    '.replace(' => '.toString().replace(',   // Fixes "Uncaught TypeError: Object #<SVGAnimatedString> has no method 'replace'"
-	    '.trim(' => '.toString().trim('   // Fixes "Uncaught TypeError: Object #<SVGAnimatedString> has no method 'replace'"
+	    '.trim(' => '.toString().trim(',   // Fixes "Uncaught TypeError: Object #<SVGAnimatedString> has no method 'replace'"
+		'.toString().toString()' => '.toString()'
 	),
 	'ui/jq.ui.js' => array(
 	    '$' => 'jq',
