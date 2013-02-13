@@ -22,6 +22,7 @@
             touch = {};
         }
     }
+    var longTapTimer;
     $(document).ready(function() {
         var prevEl;
         $(document.body).bind('touchstart', function(e) {
@@ -36,7 +37,7 @@
             if (delta > 0 && delta <= 250)
                 touch.isDoubleTap = true;
             touch.last = now;
-            setTimeout(longTap, longTapDelay);
+           longTapTimer=setTimeout(longTap, longTapDelay);
             if (!touch.el.data("ignore-pressed"))
                 touch.el.addClass("selected");
             if(prevEl&&!prevEl.data("ignore-pressed"))
@@ -45,6 +46,7 @@
         }).bind('touchmove', function(e) {
             touch.x2 = e.touches[0].pageX;
             touch.y2 = e.touches[0].pageY;
+            clearTimeout(longTapTimer);
         }).bind('touchend', function(e) {
 
             if (!touch.el)
@@ -74,6 +76,7 @@
             if(touch.el&& !touch.el.data("ignore-pressed"))
                 touch.el.removeClass("selected");
             touch = {};
+            cleaRtimeout(longTapTimer);
 
         });
     });
