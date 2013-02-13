@@ -441,8 +441,8 @@
 				var time=parseInt(time);
                 if(time==0||isNaN(time))
                 {
-					this.el.scrollTop=Math.abs(params.y);
-					this.el.scrollLeft=Math.abs(params.x);
+				this.el.scrollTop=Math.abs(params.y);
+				this.el.scrollLeft=Math.abs(params.x);
 					return;
 				}
                 var singleTick=10;
@@ -692,7 +692,7 @@
 		}
 		nativeScroller.prototype = new scrollerCore();
 		jsScroller.prototype = new scrollerCore();
-		
+
 
 
 
@@ -787,6 +787,7 @@
 			}
 
 			this.cY = newcY;
+			e.stopPropagation();
 		}
         nativeScroller.prototype.showRefresh=function(){
             if(!this.refreshTriggered){
@@ -2370,6 +2371,7 @@ if (!HTMLElement.prototype.unwatch) {
             touch = {};
         }
     }
+    var longTapTimer;
     $(document).ready(function() {
         var prevEl;
         $(document.body).bind('touchstart', function(e) {
@@ -2384,7 +2386,7 @@ if (!HTMLElement.prototype.unwatch) {
             if (delta > 0 && delta <= 250)
                 touch.isDoubleTap = true;
             touch.last = now;
-            setTimeout(longTap, longTapDelay);
+           longTapTimer=setTimeout(longTap, longTapDelay);
             if (!touch.el.data("ignore-pressed"))
                 touch.el.addClass("selected");
             if(prevEl&&!prevEl.data("ignore-pressed"))
@@ -2393,6 +2395,7 @@ if (!HTMLElement.prototype.unwatch) {
         }).bind('touchmove', function(e) {
             touch.x2 = e.touches[0].pageX;
             touch.y2 = e.touches[0].pageY;
+            clearTimeout(longTapTimer);
         }).bind('touchend', function(e) {
 
             if (!touch.el)
@@ -2422,6 +2425,7 @@ if (!HTMLElement.prototype.unwatch) {
             if(touch.el&& !touch.el.data("ignore-pressed"))
                 touch.el.removeClass("selected");
             touch = {};
+            cleaRtimeout(longTapTimer);
 
         });
     });
@@ -3645,10 +3649,6 @@ if (!HTMLElement.prototype.unwatch) {
             nb.html("");
             for (var i = 0; i < elems.length; i++) {
                 var node = elems[i].cloneNode(true);
-                if (elems[i].oldhash) {
-                    node.href = elems[i].oldhref;
-                    node.onclick = elems[i].oldonclick;
-                }
                 nb.append(node);
             }
             var tmpAnchors = jq("#navbar a");
@@ -3708,10 +3708,6 @@ if (!HTMLElement.prototype.unwatch) {
                 nb.append(tmp);
                 for (var i = 0; i < elems.length; i++) {
                     var node = elems[i].cloneNode(true);
-                    if (elems[i].oldhash) {
-                        node.href = elems[i].oldhref;
-                        node.onclick = elems[i].oldonclick;
-                    }
                     nb.append(node);
                 }
             }
