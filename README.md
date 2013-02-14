@@ -6,9 +6,9 @@ It is comprised of three parts.
 
 1) jqMobi  - query selector library
 
-2) jqUi - UI/UX library for mobile applications in a webkit browser.  Please see the Kitchen Sink folder for a demo
+2) jqUi - UI/UX library for mobile applications in a webkit browser or W8/WP8.  Please see the Kitchen Sink folder for a demo
 
-3) jqPlugins - plugins for mobile applications in a webkit browser.
+3) jqPlugins - plugins for mobile applications in a webkit browser or W8/WP8.
 
 
 # About jqMobi
@@ -165,3 +165,7 @@ Please go to http://www.jqmobi.com and report any bugs with the following
 # License
 
 jqMobi is is licensed under the terms of the MIT License, see the included license.txt file.
+
+jqMobi uses code from the following software:
+1) Zepto.js - Thomas Fuchs (MIT X11 License)
+2) qUnit - jQuery Foundation (MIT X11 License)
