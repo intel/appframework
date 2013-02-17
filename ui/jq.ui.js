@@ -3868,21 +3868,22 @@ if (!HTMLElement.prototype.unwatch) {
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
             el = typeof (el) !== "string" ? el : el.indexOf("#") == -1 ? "#" + el : el;
             var myEl = jq(el).get(0);
+            var newDiv;            
             if (!myEl) {
-                var newDiv = document.createElement("div");
-                newDiv.innerHTML = content;
-                if ($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0)
-                    newDiv = $(newDiv).children('.panel').get();
-                
-                if (!newDiv.title && title)
-                    newDiv.title = title;
-                var newId = (newDiv.id) ? newDiv.id : el.replace("#",""); //figure out the new id - either the id from the loaded div.panel or the crc32 hash
-                newDiv.id = newId;
-                if (newDiv.id != el)
-                    newDiv.setAttribute("data-crc", el.replace("#",""));
+                newDiv = document.createElement("div");
             } else {
                 newDiv = myEl;
             }
+            newDiv.innerHTML = content;
+            if ($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0)
+                newDiv = $(newDiv).children('.panel').get();
+            
+            if (!newDiv.title && title)
+                newDiv.title = title;
+            var newId = (newDiv.id) ? newDiv.id : el.replace("#",""); //figure out the new id - either the id from the loaded div.panel or the crc32 hash
+            newDiv.id = newId;
+            if (newDiv.id != el.replace("#",""))
+                newDiv.setAttribute("data-crc", el.replace("#",""));
             newDiv.className = "panel";
             var that = this;
             
