@@ -3884,10 +3884,9 @@ if (!HTMLElement.prototype.unwatch) {
                 newDiv = myEl;
             }
             newDiv.className = "panel";
-            var that = this;
-            
+            newId=newDiv.id;
+            this.addDivAndScroll(newDiv, refresh, refreshFunc);
             myEl = null;
-            that.addDivAndScroll(newDiv, refresh, refreshFunc);
             newDiv = null;
             return newId;
         },
