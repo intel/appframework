@@ -123,7 +123,7 @@
             okToMove: false,
             // handle the moving function
             touchStart: function(e) {
-            	this.okToMove = false;
+                this.okToMove = false;
                 this.myDivWidth = numOnly(this.container.clientWidth);
                 this.myDivHeight = numOnly(this.container.clientHeight);
                 this.lockMove=false;
@@ -194,7 +194,7 @@
                 var totalMoved = this.vertical ? ((this.dy % this.myDivHeight) / this.myDivHeight * 100) * -1 : ((this.dx % this.myDivWidth) / this.myDivWidth * 100) * -1; // get a percentage of movement.
       
                 if (!this.okToMove)
-                	this.okToMove = this.glue ? totalMoved > this.glue  && totalMoved < (100 - this.glue) : true;
+                    this.okToMove = this.glue ? totalMoved > this.glue  && totalMoved < (100 - this.glue) : true;
                 	
                 if  (this.okToMove && movePos)
                    this.moveCSS3(this.el, movePos);
