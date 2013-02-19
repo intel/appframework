@@ -194,7 +194,7 @@
                 var totalMoved = this.vertical ? ((this.dy % this.myDivHeight) / this.myDivHeight * 100) * -1 : ((this.dx % this.myDivWidth) / this.myDivWidth * 100) * -1; // get a percentage of movement.
       
                 if (!this.okToMove)
-                    this.okToMove = this.glue ? totalMoved > this.glue  && totalMoved < (100 - this.glue) : true;
+                    this.okToMove = this.glue ? Math.abs(totalMoved) > this.glue  && Math.abs(totalMoved) < (100 - this.glue) : true;
                 	
                 if  (this.okToMove && movePos)
                    this.moveCSS3(this.el, movePos);
@@ -438,8 +438,14 @@
                         pagingEl = null;
                         spacerEl = null;
                     }
-                    this.pagingDiv.style.width = (this.childrenCount) * 50 + "px";
-                    this.pagingDiv.style.height = "25px";
+                    if(this.horizontal){
+                        this.pagingDiv.style.width = (this.childrenCount) * 50 + "px";
+                        this.pagingDiv.style.height = "25px";
+                    }
+                    else {
+                        this.pagingDiv.style.height = (this.childrenCount) * 50 + "px";
+                        this.pagingDiv.style.width = "25px";
+                    }
                 }
                 this.onMoveIndex(this.carouselIndex);
                 
