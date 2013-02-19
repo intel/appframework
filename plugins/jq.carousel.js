@@ -189,7 +189,7 @@
                 }
                 
                 var totalMoved = this.vertical ? ((this.dy % this.myDivHeight) / this.myDivHeight * 100) * -1 : ((this.dx % this.myDivWidth) / this.myDivWidth * 100) * -1; // get a percentage of movement.
-                if(movePos)
+                if(totalMoved > 3 && totalMoved < 97 && movePos)
                     this.moveCSS3(this.el, movePos);
             },
             touchEnd: function(e) {
@@ -416,7 +416,7 @@
                      
                         spacerEl.style.width = "20px";
                         if(this.horizontal){
-                            spacerEl.style.cssFloat = "left";
+                            spacerEl.style.display = "inline-block";
                             spacerEl.innerHTML = "&nbsp;";
                         }
                         else{
