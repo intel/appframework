@@ -51,11 +51,12 @@
         
                  
                 var that = this;
-                jq(this.container).bind('destroy', function(){
+                jq(this.container).bind('destroy', function(e){
                     var id = that.container.jqmCarouselId;
                     //window event need to be cleaned up manually, remaining binds are automatically killed in the dom cleanup process
                    window.removeEventListener("orientationchange", that.orientationHandler, false);
                    if(cache[id]) delete cache[id];
+                   e.stopPropagation();
                 });
                 
                 this.pagingDiv = this.pagingDiv ? document.getElementById(this.pagingDiv) : null;
@@ -121,6 +122,7 @@
             pagingFunction: null,
             lockMove:false,
             okToMove: false,
+       
             // handle the moving function
             touchStart: function(e) {
                 this.okToMove = false;
@@ -193,17 +195,23 @@
                 
                 var totalMoved = this.vertical ? ((this.dy % this.myDivHeight) / this.myDivHeight * 100) * -1 : ((this.dx % this.myDivWidth) / this.myDivWidth * 100) * -1; // get a percentage of movement.
       
-                if (!this.okToMove)
+                if (!this.okToMove) {
+                    oldStateOkToMove= this.okToMove;
                     this.okToMove = this.glue ? Math.abs(totalMoved) > this.glue  && Math.abs(totalMoved) < (100 - this.glue) : true;
+                    if (this.okToMove && !oldStateOkToMove) {
+                    	$.trigger(this,"movestart",[this.el]);
+                    }
+                }
                 	
-                if  (this.okToMove && movePos)
+                if  (this.okToMove && movePos) 
                    this.moveCSS3(this.el, movePos);
-                
+                   
             },
             touchEnd: function(e) {
                 if (!this.movingElement) {
                     return;
                 }
+                $.trigger(this,"movestop",[this.el]);
                 // e.preventDefault();
                 // e.stopPropagation();
                 var runFinal = false;
