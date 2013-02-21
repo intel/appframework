@@ -2425,7 +2425,7 @@ if (!HTMLElement.prototype.unwatch) {
             if(touch.el&& !touch.el.data("ignore-pressed"))
                 touch.el.removeClass("selected");
             touch = {};
-            cleaRtimeout(longTapTimer);
+            clearTimeout(longTapTimer);
 
         });
     });
