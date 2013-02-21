@@ -122,8 +122,7 @@
             pagingFunction: null,
             lockMove:false,
             okToMove: false,
-            callbackOnMoveStart: false,
-            callbackOnMoveStop: false,
+       
             // handle the moving function
             touchStart: function(e) {
                 this.okToMove = false;
@@ -199,8 +198,8 @@
                 if (!this.okToMove) {
                     oldStateOkToMove= this.okToMove;
                     this.okToMove = this.glue ? Math.abs(totalMoved) > this.glue  && Math.abs(totalMoved) < (100 - this.glue) : true;
-                    if (this.okToMove && !oldStateOkToMove &&  this.callbackOnMoveStart) {
-                 	   this.callbackOnMoveStart();
+                    if (this.okToMove && !oldStateOkToMove) {
+                    	$.trigger(this,"movestart",[this.el]);
                     }
                 }
                 	
@@ -212,9 +211,7 @@
                 if (!this.movingElement) {
                     return;
                 }
-                if (this.callbackOnMoveStop) {
-              	   this.callbackOnMoveStop();
-                 }
+                $.trigger(this,"movestop",[this.el]);
                 // e.preventDefault();
                 // e.stopPropagation();
                 var runFinal = false;
