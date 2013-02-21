@@ -2372,7 +2372,7 @@ if (!HTMLElement.prototype.unwatch) {
         }
     }
     var longTapTimer;
-    $(document).ready(function() {
+    jq(document).ready(function() {
         var prevEl;
         jq(document.body).bind('touchstart', function(e) {
             if(!e.touches||e.touches.length==0) return;
