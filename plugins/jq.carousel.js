@@ -54,8 +54,8 @@
                 jq(this.container).bind('destroy', function(){
                     var id = that.container.jqmCarouselId;
                     //window event need to be cleaned up manually, remaining binds are automatically killed in the dom cleanup process
-                    window.removeEventListener("orientationchange", that.orientationHandler, false);
-                    if(cache[id]) delete cache[id];
+                   window.removeEventListener("orientationchange", that.orientationHandler, false);
+                   if(cache[id]) delete cache[id];
                 });
                 
                 this.pagingDiv = this.pagingDiv ? document.getElementById(this.pagingDiv) : null;
@@ -104,6 +104,7 @@
             startY: 0,
             dx: 0,
             dy: 0,
+            glue: false,
             myDivWidth: 0,
             myDivHeight: 0,
             cssMoveStart: 0,
@@ -119,8 +120,10 @@
             pagingCssNameSelected: "carousel_paging_selected",
             pagingFunction: null,
             lockMove:false,
+            okToMove: false,
             // handle the moving function
             touchStart: function(e) {
+                this.okToMove = false;
                 this.myDivWidth = numOnly(this.container.clientWidth);
                 this.myDivHeight = numOnly(this.container.clientHeight);
                 this.lockMove=false;
@@ -189,8 +192,13 @@
                 }
                 
                 var totalMoved = this.vertical ? ((this.dy % this.myDivHeight) / this.myDivHeight * 100) * -1 : ((this.dx % this.myDivWidth) / this.myDivWidth * 100) * -1; // get a percentage of movement.
-                if(movePos)
-                    this.moveCSS3(this.el, movePos);
+      
+                if (!this.okToMove)
+                    this.okToMove = this.glue ? Math.abs(totalMoved) > this.glue  && Math.abs(totalMoved) < (100 - this.glue) : true;
+                	
+                if  (this.okToMove && movePos)
+                   this.moveCSS3(this.el, movePos);
+                
             },
             touchEnd: function(e) {
                 if (!this.movingElement) {
@@ -416,7 +424,7 @@
                      
                         spacerEl.style.width = "20px";
                         if(this.horizontal){
-                            spacerEl.style.cssFloat = "left";
+                            spacerEl.style.display = "inline-block";
                             spacerEl.innerHTML = "&nbsp;";
                         }
                         else{
@@ -430,8 +438,14 @@
                         pagingEl = null;
                         spacerEl = null;
                     }
-                    this.pagingDiv.style.width = (this.childrenCount) * 50 + "px";
-                    this.pagingDiv.style.height = "25px";
+                    if(this.horizontal){
+                        this.pagingDiv.style.width = (this.childrenCount) * 50 + "px";
+                        this.pagingDiv.style.height = "25px";
+                    }
+                    else {
+                        this.pagingDiv.style.height = (this.childrenCount) * 50 + "px";
+                        this.pagingDiv.style.width = "25px";
+                    }
                 }
                 this.onMoveIndex(this.carouselIndex);
                 

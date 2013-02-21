@@ -1124,7 +1124,7 @@ if (!window.jq || typeof (jq) !== "function") {
              * @return {string} width
              * @title $().width()
              */
-            width:function(){
+            width:function(val){
                 if (this.length === 0)
                     return this;
                  if(typeof val != 'undefined')

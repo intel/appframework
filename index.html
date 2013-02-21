@@ -1591,7 +1591,7 @@ oldElem=document.getElementsByTagName("link")[0];
 			background: #ccc;
 			width: 10px;
 			height: 10px;
-			float: left;
+			display:inline-block;
 		}
 
 		.carousel_paging2_selected {
@@ -1600,7 +1600,7 @@ oldElem=document.getElementsByTagName("link")[0];
 			background: #000;
 			width: 10px;
 			height: 10px;
-			float: left;
+			display:inline-block;
 		}
 
 		.spacer {
@@ -1626,13 +1626,14 @@ oldElem=document.getElementsByTagName("link")[0];
 					pagingCssName: "carousel_paging2",
 					pagingCssNameSelected: "carousel_paging2_selected",
 					vertical:true,
-					horizontal:false
+					horizontal:false,
+					glue:5 //Needs to move 5% before it starts dragging
 				});
 			}
 			window.addEventListener("load", init_carousel, false);
 		
 		</script>
-			<div id="carousel_dots" style="text-align: center; margin:auto; clear: both; position: relative; top: 40%; z-index: 200">
+			<div id="carousel_dots" style="text-align: center; margin:auto;  display : table; clear: both; position: relative; top: 40%; z-index: 200">
 			</div>
 			<div id="carousel" style="display:block;height:50%;width:100%;">
 					<div style="background: yellow;">
@@ -1647,7 +1648,7 @@ oldElem=document.getElementsByTagName("link")[0];
 			
 			<div id="carousel2" style="display:block;height:50%;width:100%;">
 					<div style="background: yellow;">
-						<span style='color:black'>I'm a vertical carousel</span>
+						<span style='color:black'>I'm a vertical carousel.  I'm using the "glue" property, so you must move me atleast 5% before I start dragging</span>
 						</div>
 					<div style="background: green;"></div>
 					<div style="background: blue;"></div>

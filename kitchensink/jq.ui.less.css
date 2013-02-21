@@ -297,11 +297,11 @@ textarea {
   -webkit-box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.4);
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.4);
 }
-#jQUi #header > * {
+#jQUi #header  * {
   position: relative;
   z-index: 2;
 }
-#jQUi #header > h1 {
+#jQUi #header  h1 {
   position: absolute;
   overflow: hidden;
   width: 100%;
@@ -438,6 +438,10 @@ textarea {
 #jQUi nav {
   display: none;
 }
+/* Show the active header/footer/navs */
+#jQUi #navbar footer, #jQUi #menu nav, #jQUi #header header {display:block;}
+
+
 #jQUi .hasMenu {
   position: absolute !important;
   left: 0px !important;

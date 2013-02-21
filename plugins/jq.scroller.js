@@ -475,6 +475,7 @@
 			}
 
 			this.cY = newcY;
+			e.stopPropagation();
 		}
         nativeScroller.prototype.showRefresh=function(){
             if(!this.refreshTriggered){
