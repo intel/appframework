@@ -52,8 +52,11 @@
 
         //click back event
          window.addEventListener("popstate", function() {
+            
             var id = $.ui.getPanelId(document.location.hash);
             //make sure we allow hash changes outside jqUi
+            if(id==""&&$.ui.history.length===1) //Fix going back to first panel and an empty hash
+                id=$.ui.firstDiv.id;
             if(id=="")
                 return;
             if(document.querySelectorAll(id+".panel").length===0)
@@ -61,7 +64,6 @@
             if (id != "#" + $.ui.activeDiv.id)
                 that.goBack();
         }, false);
-
         /**
          * Helper function to setup the transition objects
          * Custom transitions can be added via $.ui.availableTransitions
