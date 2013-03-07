@@ -1,6 +1,6 @@
 /**
  * jq.web.actionsheet - a actionsheet for html5 mobile apps
- * Copyright 2012 - AppMobi 
+ * Copyright 2012 - Intel 
  */
 (function($) {
     $.fn["actionsheet"] = function(opts) {

@@ -1,6 +1,6 @@
 /**
  * $().swipe - a library to detect swipe events for jqMobi apps
- * Copyright 2011 - AppMobi 
+ * Copyright 2011 - Intel 
  * Executes a callback function and passes in the direction return
  * @string (left,right,up,down)
  */ 

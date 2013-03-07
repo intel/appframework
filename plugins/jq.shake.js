@@ -1,6 +1,6 @@
 /**
  * jq.web.shake - a library to detect shake events for AppMobi Apps 
- & Copyright 2011 - AppMobi
+ * @copyright 2011 - Intel
  */
 (function ($) {
     $['shake'] = function (callback, threshold) {

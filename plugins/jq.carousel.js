@@ -1,6 +1,6 @@
 /**
  * jq.web.carousel - a carousel library for html5 mobile apps
- * @copyright AppMobi 2011 - AppMobi
+ * @copyright 2011 - Intel
  * 
  */
 (function($) {

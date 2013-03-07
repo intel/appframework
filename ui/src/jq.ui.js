@@ -1,7 +1,7 @@
  /**
  * jq.ui - A User Interface library for creating jqMobi applications
  *
- * @copyright 2011
+ * @copyright 2011 Intel
  * @author AppMobi
  */
 (function($) {

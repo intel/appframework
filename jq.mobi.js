@@ -6,6 +6,7 @@
 
 * MIT License
 * @author AppMobi
+* @copyright Intel
 * @api private
 */
 if (!window.jq || typeof (jq) !== "function") {

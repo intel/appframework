@@ -1,7 +1,7 @@
 /**
  * $.alphaTable - a list table for jqMobi apps
  * 
- * @copyright AppMobi 2011 - AppMobi
+ * @copyright 2011 - Intel
  * 
  */ (function ($) {
     $.fn["alphatable"] = function (scroller, opts) {

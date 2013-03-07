@@ -2,9 +2,6 @@
 
 jqUi is a UI/UX framework for building jqMobi mobile apps targeted at the Webkit browser.
 
-# About
-
-We've had a lot of requests for a UI framework.  There are a numerous mobile frameworks, but cross platform performance is not the best.  Some work great on iOS, but lack performance on Android.  We wanted to create a lightweight framework that is simple for users.  We do not want you to be writing crazy HTML, JavaScript, or CSS.  
 
 # Demo
 

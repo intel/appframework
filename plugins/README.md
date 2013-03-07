@@ -4,16 +4,13 @@ jqPlugins are plugins to use with jqMobi
 
 # About
 
-At AppMobi, we use our own tools to build apps and these libraries came out of our internal needs.  Two libraries require AppMobi to use, while the rest can be used for AppMobi and general mobile web development.
 
 jq.web.min.js contains a minified version of functions that can be used for mobile web development.
 
 
 The sources are in the src/ folder.  For demos please see the kitchensink app.
 
-# Mobile Web Libaries (jq.min.js)
-These libraries can be used in AppMobi or general mobile web development.
-
+# Mobile Web Libaries (jq.web.min.js)
 
 jq.8tiles
 

@@ -533,6 +533,7 @@
 					e.preventDefault();
 				return;
 			}
+			e.stopPropagation();
 		},
 
 		onTouchEnd: function(e) {

@@ -1,6 +1,6 @@
 /**
  * jq.web.drawer - a drawer for html5 mobile apps
- * Copyright 2011 - AppMobi 
+ * Copyright 2011 - Intel 
  */ (function ($) {
     $.fn["drawer"] = function (opts) {
         var tmp;

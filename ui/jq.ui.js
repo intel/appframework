@@ -683,7 +683,7 @@
 			var $el = $(el);
 			if(opts.noParent !== true) {
 				var oldParent = $el.parent();
-				$el.css('height', oldParent.height());
+				$el.css('height', oldParent.height()+"px");
 				$el.parent().parent().append($el);
 				oldParent.remove();
 			}
@@ -1860,7 +1860,7 @@
 })(jq);
 /**
  * jq.web.actionsheet - a actionsheet for html5 mobile apps
- * Copyright 2012 - AppMobi 
+ * Copyright 2012 - Intel 
  */
 (function($) {
     $.fn["actionsheet"] = function(opts) {
@@ -1958,7 +1958,7 @@
 
 /*
  * jq.web.passwordBox - password box replacement for html5 mobile apps on android due to a bug with CSS3 translate3d
- * @copyright 2011 - AppMobi
+ * @copyright 2011 - Intel
  */
 (function ($) {
     $["passwordBox"] = function () {
@@ -2011,8 +2011,8 @@
     };
 })(jq);
 /*
- * Copyright: AppMobi
- * Description:  This script will replace all drop downs with friendly select controls.  Users can still interact
+ * @copyright: 2011 Intel
+ * @description:  This script will replace all drop downs with friendly select controls.  Users can still interact
  * with the old drop down box as normal with javascript, and this will be reflected
  
  */
@@ -2972,6 +2972,7 @@ if (!HTMLElement.prototype.unwatch) {
 					e.preventDefault();
 				return;
 			}
+			e.stopPropagation();
 		},
 
 		onTouchEnd: function(e) {
@@ -3066,7 +3067,7 @@ if (!HTMLElement.prototype.unwatch) {
  /**
  * jq.ui - A User Interface library for creating jqMobi applications
  *
- * @copyright 2011
+ * @copyright 2011 Intel
  * @author AppMobi
  */
 (function($) {

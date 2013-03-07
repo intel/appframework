@@ -1,6 +1,6 @@
 /*
  * jq.web.passwordBox - password box replacement for html5 mobile apps on android due to a bug with CSS3 translate3d
- * @copyright 2011 - AppMobi
+ * @copyright 2011 - Intel
  */
 (function ($) {
     $["passwordBox"] = function () {
