@@ -683,7 +683,9 @@
 			var $el = $(el);
 			if(opts.noParent !== true) {
 				var oldParent = $el.parent();
-				$el.css('height', oldParent.height()+"px");
+				var oldHeight=oldParent.height();
+				oldHeight+=oldHeight.indexOf("%")==-1?"px":"";
+				$el.css('height', oldHeight);
 				$el.parent().parent().append($el);
 				oldParent.remove();
 			}
