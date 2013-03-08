@@ -2107,7 +2107,8 @@ if (!window.jq || typeof (jq) !== "function") {
             stopPropagation: 'isPropagationStopped'
         };
         /**
-         * Creates a proxy function for event handlers
+         * Creates a proxy function for event handlers. 
+		 * As "some" browsers dont support event.stopPropagation this call is bypassed if it cant be found on the event object.
          * @param {String} event
          * @return {Function} proxy
          * @api private
@@ -2118,8 +2119,13 @@ if (!window.jq || typeof (jq) !== "function") {
             }, event);
             $.each(eventMethods, function(name, predicate) {
                 proxy[name] = function() {
-                    this[predicate] = returnTrue;
-                    return event[name].apply(event, arguments);
+                    this[predicate] = returnTrue;					
+					if (name == "stopImmediatePropagation" || name == "stopPropagation"){
+						event.cancelBubble = true;
+						if(!event[name])
+							return;
+					}
+					return event[name].apply(event, arguments);
                 };
                 proxy[predicate] = returnFalse;
             })
