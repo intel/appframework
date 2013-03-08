@@ -20,7 +20,7 @@ if (!window.jq || typeof (jq) !== "function") {
         var undefined, document = window.document, 
         emptyArray = [], 
         slice = emptyArray.slice, 
-        classCache = [], 
+        classCache = {}, 
         eventHandlers = [], 
         _eventID = 1, 
         jsonPHandlers = [], 
