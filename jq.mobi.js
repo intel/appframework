@@ -27,8 +27,7 @@ if (!window.jq || typeof (jq) !== "function") {
         _jsonPID = 1,
         fragementRE=/^\s*<(\w+)[^>]*>/,
         _attrCache={},
-        _propCache={},
-        obj2str = Object.prototype.toString;
+        _propCache={};
         
         
         /**
@@ -313,7 +312,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @title $.isArray(param)
         */
         $.isArray = function(obj) {
-            return obj2str.call(obj) === '[object Array]'; 
+            return obj instanceof Array && obj['push'] != undefined; //ios 3.1.3 doesn't have Array.isArray
         };
 
         /**
@@ -328,7 +327,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @title $.isFunction(param)
         */
         $.isFunction = function(obj) {
-            return obj2str.call(obj) === '[object Function]'; // typeof a RegExp will returns "function" in Nitro/V8
+            return typeof obj === "function" && !(obj instanceof RegExp);
         };
         /**
         * Checks to see if the parameter is a object
@@ -342,7 +341,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @title $.isObject(param)
         */
         $.isObject = function(obj) {
-            return obj2str.call(obj) === '[object Object]';
+            return typeof obj === "object";
         };
 
         /**
