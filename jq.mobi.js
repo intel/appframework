@@ -327,7 +327,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @title $.isFunction(param)
         */
         $.isFunction = function(obj) {
-            return typeof obj === "function";
+            return typeof obj === "function" && !(obj instanceof RegExp);
         };
         /**
         * Checks to see if the parameter is a object
