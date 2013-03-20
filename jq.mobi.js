@@ -1110,12 +1110,10 @@ if (!window.jq || typeof (jq) !== "function") {
                     return this[0].documentElement['offsetheight'];
                 else{
                     var tmpVal=this.css("height").replace("px","");
-                    if (tmpVal){
-                        var intVal = parseInt(tmpVal);
-                        if (intVal != NaN)
-                            return intVal;
-                    }
-					return this.offset().height;
+                    if(tmpVal)
+                        return tmpVal
+                    else
+                        return this.offset().height;
                 }
             },
             /**
@@ -1137,12 +1135,10 @@ if (!window.jq || typeof (jq) !== "function") {
                     return this[0].documentElement['offsetwidth'];
                 else{
                     var tmpVal=this.css("width").replace("px","");
-					if (tmpVal){
-                        var intVal = parseInt(tmpVal);
-                        if (intVal != NaN)
-                            return intVal;
-                    }
-					return this.offset().width;
+					if(tmpVal)
+                        return tmpVal
+                    else
+					   return this.offset().width;
                 }
             },
             /**
