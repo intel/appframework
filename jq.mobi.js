@@ -1108,13 +1108,14 @@ if (!window.jq || typeof (jq) !== "function") {
                     return window.innerHeight;
                 if(this[0].nodeType==this[0].DOCUMENT_NODE)
                     return this[0].documentElement['offsetheight'];
-                else
-                {
+                else{
                     var tmpVal=this.css("height").replace("px","");
-                    if(tmpVal)
-                        return tmpVal
-                    else
-                        return this.offset().height;
+                    if (tmpVal){
+                        var intVal = parseInt(tmpVal);
+                        if (intVal != NaN)
+                            return intVal;
+                    }
+					return this.offset().height;
                 }
             },
             /**
@@ -1135,11 +1136,13 @@ if (!window.jq || typeof (jq) !== "function") {
                 if(this[0].nodeType==this[0].DOCUMENT_NODE)
                     return this[0].documentElement['offsetwidth'];
                 else{
-                     var tmpVal=this.css("width").replace("px","");
-                    if(tmpVal)
-                        return tmpVal
-                    else
-                        return this.offset().width;
+                    var tmpVal=this.css("width").replace("px","");
+					if (tmpVal){
+                        var intVal = parseInt(tmpVal);
+                        if (intVal != NaN)
+                            return intVal;
+                    }
+					return this.offset().width;
                 }
             },
             /**
