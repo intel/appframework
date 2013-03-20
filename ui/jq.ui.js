@@ -588,7 +588,7 @@
 					this.removeEvents();
 				}
 			},
-			scrollToItem: function(el, where) { //TODO: add functionality for x position
+			scrollToItem: function(el, where, time) { //TODO: add functionality for x position
 				if(!$.is$(el)) el = $(el);
 
 				if(where == 'bottom') {
@@ -608,7 +608,7 @@
 				this.scrollBy({
 					y: newTop,
 					x: 0
-				}, 0);
+				}, time);
 			},
 			setPaddings: function(top, bottom) {
 				var el = $(this.el);
