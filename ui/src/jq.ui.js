@@ -1774,7 +1774,7 @@
 
 //The following functions are utilitiy functions for jqUi within appMobi.
 
-(function() {
+(function($) {
     $(document).one("appMobi.device.ready", function() { //in AppMobi, we need to undo the height stuff since it causes issues.
         setTimeout(function() {
             document.getElementById('jQUi').style.height = "100%";
@@ -1785,4 +1785,4 @@
             $.ui.blockPageScroll();
         })
     });
-})();
+})(jq);

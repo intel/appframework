@@ -81,4 +81,4 @@
             }
         }
         $ui.availableTransitions.flip = flipTransition;
-})($.ui);
+})(jq.ui);

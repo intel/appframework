@@ -63,4 +63,4 @@
             }
         }
         $ui.availableTransitions.down = slideDownTransition;
-})($.ui);
+})(jq.ui);
