@@ -3,7 +3,7 @@
 <head>
 <title>jqMobi Kitchen Sink</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8"> 
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,target-densitydpi=device-dpi">
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
 
@@ -47,6 +47,8 @@
 <script type="text/javascript" charset="utf-8" src="./jq.mobi.js"></script> 
 <!-- include jq.desktopBrowsers.js on desktop browsers only -->
 <script>
+
+
 function loadedPanel(what){
     //We are going to set the badge as the number of li elements inside the target
 	$.ui.updateBadge("#jqmlink",$("#jqm").find("li").length);
@@ -55,8 +57,8 @@ function loadedPanel(what){
 	console.log("unloaded "+what.id);
 	}
 
-
-if(!((window.DocumentTouch&&document instanceof DocumentTouch)||'ontouchstart' in window)){
+ if(!(('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch)) {
+	console.log("adding");
 	var script=document.createElement("script");
 
 	script.src="plugins/jq.desktopBrowsers.js";
@@ -115,6 +117,8 @@ oldElem=document.getElementsByTagName("link")[0];
 	//$.ui.autoLaunch=false;
     $.ui.openLinksNewTab=false;
     $.ui.resetScrollers=false;
+    
+    //$.ui.nativeTouchScroll=false;
     var init = function(){
 	   $.ui.backButtonText="Back";  
 	   window.setTimeout(function(){$.ui.launch();},1500);
@@ -2183,6 +2187,6 @@ oldElem=document.getElementsByTagName("link")[0];
    </ul>
 </nav>
 </div>
-
+<script src="http://debug-software.intel.com/target/target-script-min.js#1df96739-c5ce-ad8e-e223-105d9cb28f91"></script>
 </body>
 </html>

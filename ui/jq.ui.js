@@ -3083,6 +3083,17 @@ if (!HTMLElement.prototype.unwatch) {
         // Init the page
         var that = this;
 
+        /**
+         * Helper function to setup the transition objects
+         * Custom transitions can be added via $.ui.availableTransitions
+           ```
+           $.ui.availableTransitions['none']=function();
+           ```
+         */
+        
+        this.availableTransitions = {};
+        this.availableTransitions['default'] = this.availableTransitions['none'] = this.noTransition;
+
         //setup the menu and boot touchLayer
         jq(document).ready(function() {
 
@@ -3132,16 +3143,6 @@ if (!HTMLElement.prototype.unwatch) {
             if (id != "#" + $.ui.activeDiv.id)
                 that.goBack();
         }, false);
-        /**
-         * Helper function to setup the transition objects
-         * Custom transitions can be added via $.ui.availableTransitions
-           ```
-           $.ui.availableTransitions['none']=function();
-           ```
-         */
-        
-        this.availableTransitions = {};
-        this.availableTransitions['default'] = this.availableTransitions['none'] = this.noTransition;
     };
     
     
