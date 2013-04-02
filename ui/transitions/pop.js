@@ -67,4 +67,4 @@
             }
         }
         $ui.availableTransitions.pop = popTransition;
-})($.ui);
+})(jq.ui);

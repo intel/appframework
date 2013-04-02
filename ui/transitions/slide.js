@@ -56,4 +56,4 @@
         }
         $ui.availableTransitions.slide = slideTransition;
         $ui.availableTransitions['default'] = slideTransition;
-})($.ui);
+})(jq.ui);
