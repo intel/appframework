@@ -2459,7 +2459,7 @@ if (!HTMLElement.prototype.unwatch) {
 //Other
 //orientationchange-reshape - resize event due to an orientationchange action
 //reshape - window.resize/window.scroll event (ignores onfocus "shaking") - general reshape notice
-(function() {
+(function($) {
 
 	//singleton
 	$.touchLayer = function(el) {
@@ -3065,7 +3065,7 @@ if (!HTMLElement.prototype.unwatch) {
 		}
 	};
 
-})();
+})(jq);
  /**
  * jq.ui - A User Interface library for creating jqMobi applications
  *
@@ -4842,7 +4842,7 @@ if (!HTMLElement.prototype.unwatch) {
 
 //The following functions are utilitiy functions for jqUi within appMobi.
 
-(function() {
+(function($) {
     $(document).one("appMobi.device.ready", function() { //in AppMobi, we need to undo the height stuff since it causes issues.
         setTimeout(function() {
             document.getElementById('jQUi').style.height = "100%";
@@ -4853,7 +4853,7 @@ if (!HTMLElement.prototype.unwatch) {
             $.ui.blockPageScroll();
         })
     });
-})();
+})(jq);
 (function($ui){
     
         function fadeTransition (oldDiv, currDiv, back) {
@@ -4919,7 +4919,7 @@ if (!HTMLElement.prototype.unwatch) {
             }
         }
         $ui.availableTransitions.fade = fadeTransition;
-})($.ui);
+})(jq.ui);
 (function($ui){
     
         function flipTransition (oldDiv, currDiv, back) {
@@ -5003,7 +5003,7 @@ if (!HTMLElement.prototype.unwatch) {
             }
         }
         $ui.availableTransitions.flip = flipTransition;
-})($.ui);
+})(jq.ui);
 (function($ui){
         
          function popTransition(oldDiv, currDiv, back) {
@@ -5073,7 +5073,7 @@ if (!HTMLElement.prototype.unwatch) {
             }
         }
         $ui.availableTransitions.pop = popTransition;
-})($.ui);
+})(jq.ui);
 (function($ui){
     
         /**
@@ -5131,7 +5131,7 @@ if (!HTMLElement.prototype.unwatch) {
         }
         $ui.availableTransitions.slide = slideTransition;
         $ui.availableTransitions['default'] = slideTransition;
-})($.ui);
+})(jq.ui);
 (function($ui){
     
         function slideDownTransition (oldDiv, currDiv, back) {
@@ -5197,7 +5197,7 @@ if (!HTMLElement.prototype.unwatch) {
             }
         }
         $ui.availableTransitions.down = slideDownTransition;
-})($.ui);
+})(jq.ui);
 
 (function($ui){
     
@@ -5254,5 +5254,5 @@ if (!HTMLElement.prototype.unwatch) {
             }
         }
         $ui.availableTransitions.up = slideUpTransition;
-})($.ui);
+})(jq.ui);
 

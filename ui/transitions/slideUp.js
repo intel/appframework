@@ -54,4 +54,4 @@
             }
         }
         $ui.availableTransitions.up = slideUpTransition;
-})($.ui);
+})(jq.ui);

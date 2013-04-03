@@ -63,7 +63,7 @@
             }
         }
         $ui.availableTransitions.fade = fadeTransition;
-})($.ui);
+})(jq.ui);
 (function($ui){
     
         function flipTransition (oldDiv, currDiv, back) {
@@ -147,7 +147,7 @@
             }
         }
         $ui.availableTransitions.flip = flipTransition;
-})($.ui);
+})(jq.ui);
 (function($ui){
         
          function popTransition(oldDiv, currDiv, back) {
@@ -217,7 +217,7 @@
             }
         }
         $ui.availableTransitions.pop = popTransition;
-})($.ui);
+})(jq.ui);
 (function($ui){
     
         /**
@@ -275,7 +275,7 @@
         }
         $ui.availableTransitions.slide = slideTransition;
         $ui.availableTransitions['default'] = slideTransition;
-})($.ui);
+})(jq.ui);
 (function($ui){
     
         function slideDownTransition (oldDiv, currDiv, back) {
@@ -341,7 +341,7 @@
             }
         }
         $ui.availableTransitions.down = slideDownTransition;
-})($.ui);
+})(jq.ui);
 
 (function($ui){
     
@@ -398,4 +398,4 @@
             }
         }
         $ui.availableTransitions.up = slideUpTransition;
-})($.ui);
+})(jq.ui);

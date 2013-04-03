@@ -63,4 +63,4 @@
             }
         }
         $ui.availableTransitions.fade = fadeTransition;
-})($.ui);
+})(jq.ui);
