@@ -180,10 +180,12 @@
                     //get the duration
                     var duration = style[$.feat.cssPrefix+"TransitionDuration"];
                     var timeNum = numOnly(duration);
+                    options["time"]=timeNum;
                     if(duration.indexOf("ms")!==-1){
-                        var scale = 'ms';
+                        scale = 'ms';
                     } else {
-                        var scale = 's';
+                        options["time"]*=1000;
+                        scale = 's';
                     }
                 }
                 

@@ -180,10 +180,12 @@
                     //get the duration
                     var duration = style[$.feat.cssPrefix+"TransitionDuration"];
                     var timeNum = numOnly(duration);
+                    options["time"]=timeNum;
                     if(duration.indexOf("ms")!==-1){
-                        var scale = 'ms';
+                        scale = 'ms';
                     } else {
-                        var scale = 's';
+                        options["time"]*=1000;
+                        scale = 's';
                     }
                 }
                 
@@ -2459,7 +2461,7 @@ if (!HTMLElement.prototype.unwatch) {
 //Other
 //orientationchange-reshape - resize event due to an orientationchange action
 //reshape - window.resize/window.scroll event (ignores onfocus "shaking") - general reshape notice
-(function() {
+(function($) {
 
 	//singleton
 	$.touchLayer = function(el) {
@@ -3065,7 +3067,7 @@ if (!HTMLElement.prototype.unwatch) {
 		}
 	};
 
-})();
+})(jq);
  /**
  * jq.ui - A User Interface library for creating jqMobi applications
  *
