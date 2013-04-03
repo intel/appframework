@@ -2459,7 +2459,7 @@ if (!HTMLElement.prototype.unwatch) {
 //Other
 //orientationchange-reshape - resize event due to an orientationchange action
 //reshape - window.resize/window.scroll event (ignores onfocus "shaking") - general reshape notice
-(function($) {
+(function() {
 
 	//singleton
 	$.touchLayer = function(el) {
@@ -2974,7 +2974,7 @@ if (!HTMLElement.prototype.unwatch) {
 					e.preventDefault();
 				return;
 			}
-			e.stopPropagation();
+			//e.stopPropagation();
 		},
 
 		onTouchEnd: function(e) {
@@ -3065,7 +3065,7 @@ if (!HTMLElement.prototype.unwatch) {
 		}
 	};
 
-})(jq);
+})();
  /**
  * jq.ui - A User Interface library for creating jqMobi applications
  *

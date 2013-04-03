@@ -18,7 +18,7 @@
 //Other
 //orientationchange-reshape - resize event due to an orientationchange action
 //reshape - window.resize/window.scroll event (ignores onfocus "shaking") - general reshape notice
-(function() {
+(function($) {
 
 	//singleton
 	$.touchLayer = function(el) {
@@ -533,7 +533,7 @@
 					e.preventDefault();
 				return;
 			}
-			e.stopPropagation();
+			//e.stopPropagation();
 		},
 
 		onTouchEnd: function(e) {
@@ -624,4 +624,4 @@
 		}
 	};
 
-})();
+})(jq);
