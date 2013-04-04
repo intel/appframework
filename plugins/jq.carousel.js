@@ -351,8 +351,8 @@
                 var childrenCounter = 0;
                 var that = this;
                 var el = this.el;
-                $(el).children().find(".prevBuffer").remove();
-                $(el).children().find(".nextBuffer").remove();
+                $(el).find(".prevBuffer").remove();
+                $(el).find(".nextBuffer").remove();
                 n = el.childNodes[0];
                 var widthParam;
                 var heightParam = "100%";
@@ -367,8 +367,10 @@
                 //Let's put the buffers at the start/end
                 
                 var prep=$(elems[elems.length-1]).clone().get(0);
+                prep.className="prevBuffer";
                 $(el).prepend(prep);
                 var tmp=$(elems[0]).clone().get(0);
+                tmp.className="nextBuffer";
                 $(el).append(tmp);
                 elems.push(tmp);
                 elems.unshift(prep);
