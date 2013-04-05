@@ -305,8 +305,9 @@ To use jq.selectBox you must do the following
     ``` js
     $.selectBox.getOldSelects("selectTest");
     ```
-getOldSelects takes in the id of the element you want to search for select tags in.  Ideally, you would call it on all the divs that have select boxes in it. 
-There are issues with Google Maps, and other libraries, that inject their own select boxes into the DOM.
+
+	getOldSelects takes in the id of the element you want to search for select tags in.  Ideally, you would call it on all the divs that have select boxes in it. 
+	There are issues with Google Maps, and other libraries, that inject their own select boxes into the DOM.
   
 3. Header Text
 
@@ -324,7 +325,7 @@ There are issues with Google Maps, and other libraries, that inject their own se
 
 4. Select Box Styles
 
-To theme this, you can override the inline styles using css.  Please make sure you mark each entry with !important
+	To theme this, you can override the inline styles using css.  Please make sure you mark each entry with !important
 
 	``` css
 	/* This is a sample design for 768x1024 apps (iPad) */
@@ -364,9 +365,9 @@ To theme this, you can override the inline styles using css.  Please make sure y
 
 5. Disabling it
 
-If you don't want the selectBox-Plugin at all (i.e. in cases when it's ensured and tested that nothing in the 
-app layout triggers [the android 2 bug that leads to native dropdowns not showing at all](https://github.com/scottjehl/Device-Bugs/issues/3)), 
-you can do so by setting `$.ui.selectBox = false` in your jqUi App.
+	If you don't want the selectBox-Plugin at all (i.e. in cases when it's ensured and tested that nothing in the 
+	app layout triggers [the android 2 bug that leads to native dropdowns not showing at all](https://github.com/scottjehl/Device-Bugs/issues/3)), 
+	you can do so by setting `$.ui.selectBox = false` in your jqUi App.
 
 
 # jq.passwordBox
