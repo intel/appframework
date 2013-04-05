@@ -317,9 +317,14 @@ To use jq.selectBox you must do the following
 	Examples:
 	
     ``` html
-    <span><select id="myid" name="myname" title="Please select a number"><option>1</option></select></span>	// Will display "Please select a number" in the header section  
-    <span><select id="myid" name="myname"><option>1</option></select></span>								// Will display "myname" in the header section  
-    <span><select id="myid"><option>1</option></select></span>								// Will display "myid" as fallback in the header section  
+    // Will display "Please select a number" in the header section  
+    <span><select id="myid" name="myname" title="Please select a number"><option>1</option></select></span>
+    
+    // Will display "myname" in the header section  
+    <span><select id="myid" name="myname"><option>1</option></select></span>
+    
+    // Will display "myid" as fallback in the header section      
+    <span><select id="myid"><option>1</option></select></span>
     ```
 
 4. Select Box Styles  
