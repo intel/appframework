@@ -218,7 +218,7 @@
 
 			var el = document.getElementById(elID);
 			if (!el)
-				return
+				return;
 
 			if (!el.getAttribute("multiple")) {
 				el.selectedIndex = value;
