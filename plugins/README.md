@@ -296,15 +296,15 @@ To use jq.selectBox you must do the following
 
 1. Make sure your current select boxes are wrapped in a span tag
 
-``` html
-<span><select id="myid"><option>1</option></select></span>
-```
+    ``` html
+    <span><select id="myid"><option>1</option></select></span>
+    ```
 
 2. On the document.load or appMobi.device.ready listener, you must create an object, then call getOldSelects on the elements (div/spans/document) you want.
 
-``` js
-$.selectBox.getOldSelects("selectTest");
-```
+    ``` js
+    $.selectBox.getOldSelects("selectTest");
+    ```
 
 getOldSelects takes in the id of the element you want to search for select tags in.  Ideally, you would call it on all the divs that have select boxes in it.  There are issues with Google Maps, and other libraries, that inject their own select boxes into the DOM.
   
@@ -316,51 +316,51 @@ NB: Disabling the title is done via CSS (see section below).
 
 Examples:
 
-``` js
-<span><select id="myid" name="myname" title="Please select a number"><option>1</option></select></span>	// Will display "Please select a number" in the header section  
-<span><select id="myid" name="myname"><option>1</option></select></span>								// Will display "myname" in the header section  
-<span><select id="myid"><option>1</option></select></span>								// Will display "myid" as fallback in the header section  
-```
+    ``` html
+    <span><select id="myid" name="myname" title="Please select a number"><option>1</option></select></span>	// Will display "Please select a number" in the header section  
+    <span><select id="myid" name="myname"><option>1</option></select></span>								// Will display "myname" in the header section  
+    <span><select id="myid"><option>1</option></select></span>								// Will display "myid" as fallback in the header section  
+    ```
 
 4. Select Box Styles
 
 To theme this, you can override the inline styles using css.  Please make sure you mark each entry with !important
 
-``` css
-This is a sample design for 768x1024 apps (iPad)
+	``` css
+	/* This is a sample design for 768x1024 apps (iPad) */
 
-#jqmobiSelectBoxContainer {
-/* Black bar at the top where the "Done" button is */
-height:430px !important;
-font-size:36pt !important;
-}
-#jqmobiSelectBoxFix {
-/* The container that holds the scrolling content/*
-height:350px !important;
-}
+	#jqmobiSelectBoxContainer {
+		/* Black bar at the top where the "Done" button is */
+		height: 430px !important;
+		font-size: 36pt !important;
+	}
+	#jqmobiSelectBoxFix {
+		/* The container that holds the scrolling content */
+		height: 350px !important;
+	}
 
-.jqmobiSelectRow {
-height:60px !important;
-/* The gray gradient background for each row */
-}
-.jqmobiSelectRowFound {
-/* The black gradient background for the selected/found row */
-height:60px !important;
-}
-.jqmobiSelectRowButtonFound{
-/* The gray gradient button/checkbox on the found row*/
-height:30px !important;
-width:30px !important;
-}
-.jqmobiSelectRowButton{
-/* The white button/checkbox on each row*/
-height:30px !important;
-width:30px !important;
-}
-.jqmobiSelectRowText{
-/* The text/label for each row*/
-}
-```
+	.jqmobiSelectRow {
+		height: 60px !important;
+		/* The gray gradient background for each row */
+	}
+	.jqmobiSelectRowFound {
+		/* The black gradient background for the selected/found row */
+		height: 60px !important;
+	}
+	.jqmobiSelectRowButtonFound {
+		/* The gray gradient button/checkbox on the found row */
+		height: 30px !important;
+		width: 30px !important;
+	}
+	.jqmobiSelectRowButton {
+		/* The white button/checkbox on each row */
+		height: 30px !important;
+		width: 30px !important;
+	}
+	.jqmobiSelectRowText {
+		/* The text/label for each row */
+	}
+	```
 
 5. Disabling it
 
