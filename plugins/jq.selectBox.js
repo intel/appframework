@@ -122,11 +122,16 @@
 			if (!el || !el.options || el.options.length == 0)
 				return;
 
-			var headerText = el.attributes.title.value || el.name || elID,
+			var defaultHeaderText = elID,
+				headerText = '',
 				foundInd = 0;
+			
+			headerText = el.attributes.title || el.name;
+			if (typeof headerText === 'object')
+				headerText = headerText.value;
 
 			document.getElementById("jqmobiSelectBoxScroll").innerHTML = "";
-			document.getElementById("jqmobiSelectBoxHeaderTitle").innerHTML = (headerText.length > 0 ? headerText : elID);
+			document.getElementById("jqmobiSelectBoxHeaderTitle").innerHTML = (headerText.length > 0 ? headerText : defaultHeaderText);
 
 			for (var j = 0; j < el.options.length; j++) {
 				el.options[j].watch("selected", function(prop, oldValue, newValue) {
