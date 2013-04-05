@@ -1578,8 +1578,9 @@
                         that.loadContent(defaultHash, true, false, 'none'); //load the active page as a newTab with no transition
                     } else {
                         previousTarget = "#" + that.firstDiv.id;
-                        that.loadContentData(that.firstDiv); //load the info off the first panel
                         that.parsePanelFunctions(that.firstDiv);
+                        that.loadContentData(that.firstDiv); //load the info off the first panel
+                        
                         
                         that.firstDiv.style.display = "block";
                         $("#header #backButton").css("visibility", "hidden");
@@ -1785,4 +1786,20 @@
             $.ui.blockPageScroll();
         })
     });
+    //Right now there is a bug where iOS will not scroll a div, even though it's enabled.  This turns scrolling back on with orientation changes
+    if($.feat.nativeTouchScroll){
+        document.addEventListener("orientationchange",function(e){
+            if($.ui.scrollingDivs[$.ui.activeDiv.id])
+            {
+                var tmpscroller=$.ui.scrollingDivs[$.ui.activeDiv.id];
+                if(tmpscroller.el.scrollTop==0)
+                {
+                    tmpscroller.disable();
+                    setTimeout(function(){
+                        tmpscroller.enable();
+                    },300);
+                }
+            }
+        });
+    }
 })(jq);

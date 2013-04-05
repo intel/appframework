@@ -114,7 +114,7 @@ oldElem=document.getElementsByTagName("link")[0];
 <script type="text/javascript">
     /* This function runs once the page is loaded, but appMobi is not yet active */
 	var webRoot="./kitchensink/";
-	//$.ui.autoLaunch=false;
+	$.ui.autoLaunch=false;
     $.ui.openLinksNewTab=false;
     $.ui.resetScrollers=false;
     
@@ -170,7 +170,7 @@ oldElem=document.getElementsByTagName("link")[0];
     </div>
 
 <div id="content">
-	<div title='Welcome' id="main" class="panel" selected="true" data-load="loadedPanel" data-unload="unloadedPanel" data-tab="navbar_home">
+	<div title='Welcome' id="main" class="panel" selected="true" data-load="loadedPanel" data-unload="unloadedPanel" data-tab="navbar_home" data-header="testheader">
 	<h2 class='expanded' onclick='showHide(this,"main_info");'>Welcome</h2>
 		<p id='main_info'>Welcome to the kitchen sink demo for jqMobi.  Here you will find samples of how to use the jqMobi libraries.  Please select an option from below.</p>
 		<ul>
