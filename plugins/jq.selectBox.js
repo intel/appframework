@@ -113,17 +113,21 @@
         },
         initDropDown: function(elID) {
             
-            var that = this;
-            var el = document.getElementById(elID);
+            var that = this,
+				el = document.getElementById(elID);
+			
             if (el.disabled)
                 return;
+			
             if (!el || !el.options || el.options.length == 0)
                 return;
-            var htmlTemplate = "";
-            var foundInd = 0;
+			
+            var htmlTemplate = "",
+				headerText = el.attributes.title.value || el.name || elID,
+				foundInd = 0;
+			
             document.getElementById("jqmobiSelectBoxScroll").innerHTML = "";
-            
-            document.getElementById("jqmobiSelectBoxHeaderTitle").innerHTML = (el.name != undefined && el.name != "undefined" && el.name != "" ? el.name : elID);
+            document.getElementById("jqmobiSelectBoxHeaderTitle").innerHTML = (headerText.length > 0 ? headerText : elID);
             
             for (var j = 0; j < el.options.length; j++) {
                 var currInd = j;
