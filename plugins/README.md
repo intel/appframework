@@ -305,17 +305,16 @@ To use jq.selectBox you must do the following
     ``` js
     $.selectBox.getOldSelects("selectTest");
     ```
-
-getOldSelects takes in the id of the element you want to search for select tags in.  Ideally, you would call it on all the divs that have select boxes in it.  There are issues with Google Maps, and other libraries, that inject their own select boxes into the DOM.
+getOldSelects takes in the id of the element you want to search for select tags in.  Ideally, you would call it on all the divs that have select boxes in it. 
+There are issues with Google Maps, and other libraries, that inject their own select boxes into the DOM.
   
-3. Header Text
+3. Header Text  
 
 You may specify a `title`-Attribute on the select-tag, which will be rendered in the header section of the picker popup. 
 If it is not set, the value of the name attribute will be displayed, if that is also not set, the default fallback is the element ID. 
 NB: Disabling the title is done via CSS (see section below).
 
 Examples:
-
     ``` html
     <span><select id="myid" name="myname" title="Please select a number"><option>1</option></select></span>	// Will display "Please select a number" in the header section  
     <span><select id="myid" name="myname"><option>1</option></select></span>								// Will display "myname" in the header section  
