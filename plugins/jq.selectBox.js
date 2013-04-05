@@ -122,15 +122,13 @@
             if (!el || !el.options || el.options.length == 0)
                 return;
 			
-            var htmlTemplate = "",
-				headerText = el.attributes.title.value || el.name || elID,
+            var headerText = el.attributes.title.value || el.name || elID,
 				foundInd = 0;
 			
             document.getElementById("jqmobiSelectBoxScroll").innerHTML = "";
             document.getElementById("jqmobiSelectBoxHeaderTitle").innerHTML = (headerText.length > 0 ? headerText : elID);
             
             for (var j = 0; j < el.options.length; j++) {
-                var currInd = j;
                 el.options[j].watch( "selected", function(prop, oldValue, newValue) {
                     if (newValue == true) {
                         that.updateMaskValue(this.parentNode.id, this.text, this.value);
@@ -138,23 +136,26 @@
                     }
                     return newValue;
                 });
-                var checked = (el.options[j].selected) ? true : false;
-                var button = "";
-                var div = document.createElement("div");
-                div.className = "jqmobiSelectRow";
-               // div.id = foundID;
-                div.style.cssText = ";line-height:40px;font-size:14px;padding-left:10px;height:40px;width:100%;position:relative;width:100%;border-bottom:1px solid black;background:white;";
-                var anchor = document.createElement("a");
-                anchor.href = "javascript:;";
+                var checked = (el.options[j].selected) ? true : false,
+					div = document.createElement("div"),
+					anchor = document.createElement("a"),
+					span = document.createElement("span"),
+					rad = document.createElement("button");
+				
+                div.className = "jqmobiSelectRow";               
+                div.style.cssText = "line-height:40px;font-size:14px;padding-left:10px;height:40px;width:100%;position:relative;width:100%;border-bottom:1px solid black;background:white;";
                 div.tmpValue = j;
                 div.onclick = function(e) {
                     that.setDropDownValue(elID, this.tmpValue,this);
                 };
+				
+                anchor.href = "javascript:;";
                 anchor.style.cssText = "text-decoration:none;color:black;";
                 anchor.innerHTML = el.options[j].text;
-                var span = document.createElement("span");
+                anchor.className = "jqmobiSelectRowText";
+				
                 span.style.cssText = "float:right;margin-right:20px;margin-top:-2px";
-                var rad = document.createElement("button");
+				
                 if (checked) {
                     rad.style.cssText = "background: #000;padding: 0px 0px;border-radius:15px;border:3px solid black;";
                     rad.className = "jqmobiSelectRowButtonFound";
@@ -164,10 +165,8 @@
                 }
                 rad.style.width = "20px";
                 rad.style.height = "20px";
-                
                 rad.checked = checked;
                 
-                anchor.className = "jqmobiSelectRowText";
                 span.appendChild(rad);
                 div.appendChild(anchor);
                 div.appendChild(span);
