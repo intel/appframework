@@ -154,7 +154,6 @@
 					that.setDropDownValue(elID, this.tmpValue, this);
 				};
 
-				anchor.href = "javascript:;";
 				anchor.style.cssText = "text-decoration:none;color:black;";
 				anchor.innerHTML = el.options[j].text;
 				anchor.className = "jqmobiSelectRowText";
