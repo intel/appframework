@@ -296,55 +296,80 @@ To use jq.selectBox you must do the following
 
 1. Make sure your current select boxes are wrapped in a span tag
 
-``` html
-<span><select id="myid"><option>1</option></select></span>
-```
+    ``` html
+    <span><select id="myid"><option>1</option></select></span>
+    ```
 
 2. On the document.load or appMobi.device.ready listener, you must create an object, then call getOldSelects on the elements (div/spans/document) you want.
 
-``` js
-$.selectBox.getOldSelects("selectTest");
-```
+    ``` js
+    $.selectBox.getOldSelects("selectTest");
+    ```
 
-getOldSelects takes in the id of the element you want to search for select tags in.  Ideally, you would call it on all the divs that have select boxes in it.  There are issues with Google Maps, and other libraries, that inject their own select boxes into the DOM.
+	getOldSelects takes in the id of the element you want to search for select tags in.  Ideally, you would call it on all the divs that have select boxes in it. 
+	There are issues with Google Maps, and other libraries, that inject their own select boxes into the DOM.
+  
+3. Header Text  
+	You may specify a `title`-Attribute on the select-tag, which will be rendered in the header section of the picker popup.
+	If it is not set, the value of the name attribute will be displayed, if that is also not set, the default fallback is the element ID.
+	NB: Disabling the title is done via CSS (see section below).
 
-To theme this, you can override the inline styles using css.  Please make sure you mark each entry with !important
+	Examples:
+	
+    ``` html
+    // Will display "Please select a number" in the header section  
+    <span><select id="myid" name="myname" title="Please select a number"><option>1</option></select></span>
+    
+    // Will display "myname" in the header section  
+    <span><select id="myid" name="myname"><option>1</option></select></span>
+    
+    // Will display "myid" as fallback in the header section      
+    <span><select id="myid"><option>1</option></select></span>
+    ```
 
-``` css
-This is a sample design for 768x1024 apps (iPad)
+4. Select Box Styles  
+	To theme this, you can override the inline styles using css.  Please make sure you mark each entry with !important
 
-#jqmobiSelectBoxContainer {
-/* Black bar at the top where the "Done" button is */
-height:430px !important;
-font-size:36pt !important;
-}
-#jqmobiSelectBoxFix {
-/* The container that holds the scrolling content/*
-height:350px !important;
-}
+	``` css
+	/* This is a sample design for 768x1024 apps (iPad) */
 
-.jqmobiSelectRow {
-height:60px !important;
-/* The gray gradient background for each row */
-}
-.jqmobiSelectRowFound {
-/* The black gradient background for the selected/found row */
-height:60px !important;
-}
-.jqmobiSelectRowButtonFound{
-/* The gray gradient button/checkbox on the found row*/
-height:30px !important;
-width:30px !important;
-}
-.jqmobiSelectRowButton{
-/* The white button/checkbox on each row*/
-height:30px !important;
-width:30px !important;
-}
-.jqmobiSelectRowText{
-/* The text/label for each row*/
-}
-```
+	#jqmobiSelectBoxContainer {
+		/* Black bar at the top where the "Done" button is */
+		height: 430px !important;
+		font-size: 36pt !important;
+	}
+	#jqmobiSelectBoxFix {
+		/* The container that holds the scrolling content */
+		height: 350px !important;
+	}
+
+	.jqmobiSelectRow {
+		height: 60px !important;
+		/* The gray gradient background for each row */
+	}
+	.jqmobiSelectRowFound {
+		/* The black gradient background for the selected/found row */
+		height: 60px !important;
+	}
+	.jqmobiSelectRowButtonFound {
+		/* The gray gradient button/checkbox on the found row */
+		height: 30px !important;
+		width: 30px !important;
+	}
+	.jqmobiSelectRowButton {
+		/* The white button/checkbox on each row */
+		height: 30px !important;
+		width: 30px !important;
+	}
+	.jqmobiSelectRowText {
+		/* The text/label for each row */
+	}
+	```
+
+5. Disabling it  
+	If you don't want the selectBox-Plugin at all (i.e. in cases when it's ensured and tested that nothing in the 
+	app layout triggers [the android 2 bug that leads to native dropdowns not showing at all](https://github.com/scottjehl/Device-Bugs/issues/3)), 
+	you can do so by setting `$.ui.selectBox = false` in your jqUi App.
 
 
 # jq.passwordBox
