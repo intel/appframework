@@ -4509,7 +4509,8 @@ if (!HTMLElement.prototype.unwatch) {
             this.header.innerHTML = '<a id="backButton"  href="javascript:;"></a> <h1 id="pageTitle"></h1>' + header.innerHTML;
             this.backButton = $("#header #backButton").get(0);
             this.backButton.className = "button";
-            jq(document).on("click", "#header #backButton", function() {
+            jq(document).on("click", "#header #backButton", function(e) {
+                e.preventDefault();
                 that.goBack();
             });
             this.backButton.style.visibility = "hidden";
