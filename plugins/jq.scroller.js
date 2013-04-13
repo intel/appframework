@@ -8,7 +8,7 @@
 	var objId = function(obj) {
 			if(!obj.jqmScrollerId) obj.jqmScrollerId = $.uuid();
 			return obj.jqmScrollerId;
-		}
+		};
 	$.fn["scroller"] = function(opts) {
 		var tmp, id;
 		for(var i = 0; i < this.length; i++) {
@@ -39,7 +39,7 @@
 	function bindTouchLayer() {
 		//use a single bind for all scrollers
 		if(jq.os.android && !jq.os.chrome&&jq.os.webkit) {
-			var androidFixOn = false;
+			var androidFixOn = false, el;
 			//connect to touchLayer to detect editMode
 			$.bind($.touchLayer, 'pre-enter-edit', function(focusEl) {
 				if(!androidFixOn) {
@@ -184,11 +184,11 @@
 				this.el = el;
 				this.jqEl = $(this.el);
 				this.defaultProperties();
+				//assign self destruct
+				var that = this, j;
 				for(j in opts) {
 					this[j] = opts[j];
 				}
-				//assign self destruct
-				var that = this;
 				var orientationChangeProxy = function() {
 						//no need to readjust if disabled...
 						if(that.eventsActive) that.adjustScroll();
@@ -847,7 +847,6 @@
 				};
 			} else {
 				//regular transform
-
 				var obj = $.getCssMatrix(el);
 				return obj;
 			}
@@ -1079,7 +1078,7 @@
 				}
 			}, HIDE_REFRESH_TIME);
 			this.refreshTriggered = false;
-		}
+		};
 
 		jsScroller.prototype.setMomentum = function(scrollInfo) {
 			var deceleration = 0.0012;
@@ -1110,11 +1109,9 @@
 				scrollInfo.absSpeedX = Math.abs(scrollInfo.speedX);
 				if(scrollInfo.absSpeedX < deceleration * 100 || scrollInfo.absDeltaX < 5) scrollInfo.deltaX = scrollInfo.absDeltaX = scrollInfo.duration = scrollInfo.speedX = scrollInfo.absSpeedX = 0;
 			} else scrollInfo.duration = 0;
-		}
-
+		};
 
 		jsScroller.prototype.onTouchEnd = function(event) {
-
 
 			if(this.currentScrollingObject == null || !this.moved) return;
 			//event.preventDefault();
@@ -1166,7 +1163,7 @@
 					$.trigger(this, "infinite-scroll");
 				}
 			}
-		}
+		};
 
 		//finish callback
 		jsScroller.prototype.setFinishCalback = function(duration) {
@@ -1179,7 +1176,7 @@
 				that.elementInfo = null; //reset elementInfo when idle
 				if(that.infinite) $.trigger(that, "infinite-scroll-end");
 			}, duration);
-		}
+		};
 
 		//Android Forms Fix
 		jsScroller.prototype.startFormsMode = function() {
@@ -1217,8 +1214,8 @@
 				this.hscrollBar.style[$.feat.cssPrefix+"Perspective"] = "none";
 				this.hscrollBar.style[$.feat.cssPrefix+"BackfaceVisibility"] = "visible";
 			}
-
-		}
+		};
+		
 		jsScroller.prototype.stopFormsMode = function() {
 			if(this.blockFormsFix) return;
 			//get prev values
@@ -1248,10 +1245,7 @@
 				this.hscrollBar.style[$.feat.cssPrefix+"Perspective"] = 1000;
 				this.hscrollBar.style[$.feat.cssPrefix+"BackfaceVisibility"] = "hidden";
 			}
-
-		}
-
-
+		};
 
 		jsScroller.prototype.scrollerMoveCSS = function(distanceToMove, time, timingFunction) {
 			if(!time) time = 0;
@@ -1274,7 +1268,8 @@
 				// Position should be updated even when the scroller is disabled so we log the change
 				this.logPos(distanceToMove.x, distanceToMove.y);
 			}
-		}
+		};
+		
 		jsScroller.prototype.logPos = function(x, y) {
 
 			if(!this.elementInfo) {
@@ -1290,7 +1285,8 @@
 			this.loggedPcentY = this.divide(y, (this.el.clientHeight - size.h));
 			this.scrollTop = y;
 			this.scrollLeft = x;
-		}
+		};
+		
 		jsScroller.prototype.scrollbarMoveCSS = function(el, distanceToMove, time, timingFunction) {
 			if(!time) time = 0;
 			if(!timingFunction) timingFunction = "linear";
@@ -1305,11 +1301,13 @@
 		            el.style[$.feat.cssPrefix+"TransitionTimingFunction"] = timingFunction;
 				}
 			}
-		}
+		};
+		
 		jsScroller.prototype.scrollTo = function(pos, time) {
 			if(!time) time = 0;
 			this.scrollerMoveCSS(pos, time);
-		}
+		};
+		
 		jsScroller.prototype.scrollBy = function(pos, time) {
 			var cssMatrix = this.getCSSMatrix(this.el);
 			var startTop = numOnly(cssMatrix.f);
@@ -1318,16 +1316,20 @@
 				y: startTop - pos.y,
 				x: startLeft - pos.x
 			}, time);
-		}
+		};
+		
 		jsScroller.prototype.scrollToBottom = function(time) {
 			this.scrollTo({
 				y: -1 * (this.el.clientHeight - this.container.clientHeight),
 				x: 0
 			}, time);
-		}
+		};
+		
 		jsScroller.prototype.scrollToTop=function(time){
 			this.scrollTo({x:0,y:0},time);
-		}
+		};
+		
 		return scroller;
+		
 	})();
 })(jq);
