@@ -324,7 +324,7 @@
 	var objId = function(obj) {
 			if(!obj.jqmScrollerId) obj.jqmScrollerId = $.uuid();
 			return obj.jqmScrollerId;
-	};
+		};
 	$.fn["scroller"] = function(opts) {
 		var tmp, id;
 		for(var i = 0; i < this.length; i++) {
@@ -355,7 +355,7 @@
 	function bindTouchLayer() {
 		//use a single bind for all scrollers
 		if(jq.os.android && !jq.os.chrome&&jq.os.webkit) {
-			var androidFixOn = false;
+			var androidFixOn = false, el;
 			//connect to touchLayer to detect editMode
 			$.bind($.touchLayer, 'pre-enter-edit', function(focusEl) {
 				if(!androidFixOn) {
@@ -383,6 +383,7 @@
 
 		//initialize and js/native mode selector
 		var scroller = function(elID, opts) {
+
 
 				if(!boundTouchLayer && $.touchLayer && $.isObject($.touchLayer)) bindTouchLayer()
 				else if(!($.touchLayer && $.isObject($.touchLayer))) $.touchLayer = {};
@@ -496,14 +497,14 @@
 
 			//methods
 			init: function(el, opts) {
-				var that = this, j;
 				this.el = el;
 				this.jqEl = $(this.el);
 				this.defaultProperties();
+				//assign self destruct
+				var that = this, j;
 				for(j in opts) {
 					this[j] = opts[j];
 				}
-				//assign self destruct
 				var orientationChangeProxy = function() {
 						//no need to readjust if disabled...
 						if(that.eventsActive) that.adjustScroll();
@@ -560,6 +561,12 @@
 				$(this.el).prepend(this.refreshContainer.append(el, 'top'));
 				this.refreshContainer = this.refreshContainer[0];
 			},
+			/**
+			 * 
+			 * @param {Boolean} triggered
+			 * @param {Boolean} allowHide [unused]
+			 * @returns {undefined}
+			 */
 			fireRefreshRelease: function(triggered, allowHide) {
 				if(!this.refresh || !triggered) return;
 
@@ -569,7 +576,7 @@
 				if(autoCancel) {
 					var that = this;
 					if(this.refreshHangTimeout > 0) this.refreshCancelCB = setTimeout(function() {
-						that.hideRefresh()
+						that.hideRefresh();
 					}, this.refreshHangTimeout);
 				}
 			},
@@ -695,15 +702,12 @@
 			this.container = this.el;
 			$el.css("-webkit-overflow-scrolling", "touch");
 		};
+		
 		nativeScroller.prototype = new scrollerCore();
 		jsScroller.prototype = new scrollerCore();
 
-
-
-
 		///Native scroller
 		nativeScroller.prototype.defaultProperties = function() {
-
 			this.refreshContainer = null;
 			this.dY = this.cY = 0;
 			this.cancelPropagation = false;
@@ -712,8 +716,8 @@
 			var that = this;
 			this.adjustScrollOverflowProxy_ = function() {
 				that.jqEl.css('overflow', 'auto');
-			}
-		}
+			};
+		};
 		nativeScroller.prototype.enable = function(firstExecution) {
 			if(this.eventsActive) return;
 			this.eventsActive = true;
@@ -776,9 +780,6 @@
 				this.el.addEventListener('touchend', this, false);
 				this.moved = true;
 			}
-
-			var difY = newcY - this.cY;
-
 
 			//check for trigger
 			if(this.refresh && (this.el.scrollTop) < 0) {
@@ -875,7 +876,7 @@
 			this.refreshTriggered = false;
 			//this.el.addEventListener('touchend', this, false);
 		};
-		nativeScroller.prototype.hideScrollbars = function() {}
+		nativeScroller.prototype.hideScrollbars = function() {};
 		nativeScroller.prototype.scrollTo = function(pos,time) {
 			this.logPos(pos.x, pos.y);
 			pos.x*=-1;
@@ -911,7 +912,6 @@
 				}
 			}
 
-
 			var that = this;
 			if(this.infinite && this.infiniteEndCheck && this.infiniteTriggered) {
 
@@ -920,7 +920,6 @@
 			}
 		};
 		nativeScroller.prototype.logPos = function(x, y) {
-
 
 			this.loggedPcentX = this.divide(x, (this.el.scrollWidth));
 			this.loggedPcentY = this.divide(y, (this.el.scrollHeight ));
@@ -932,16 +931,14 @@
 			if(isNaN(this.loggedPcentY))
 				this.loggedPcentY=0;
 
-		}
+		};
 		nativeScroller.prototype.adjustScroll = function() {
 			this.adjustScrollOverflowProxy_();
 			
 			this.el.scrollLeft = this.loggedPcentX * (this.el.scrollWidth);
 			this.el.scrollTop = this.loggedPcentY * (this.el.scrollHeight );
 			this.logPos(this.el.scrollLeft, this.el.scrollTop);
-		}
-
-
+		};
 
 		//JS scroller
 		jsScroller.prototype.defaultProperties = function() {
@@ -971,8 +968,7 @@
 			this.scrollingFinishCB = null;
 			this.loggedPcentY = 0;
 			this.loggedPcentX = 0;
-
-		}
+		};
 
 		function createScrollBar(width, height) {
 			var scrollDiv = document.createElement("div");
@@ -985,7 +981,7 @@
 			scrollDiv.className = 'scrollBar';
 			scrollDiv.style.background = "black";
 			return scrollDiv;
-		}
+		};
 		jsScroller.prototype.enable = function(firstExecution) {
 			if(this.eventsActive) return;
 			this.eventsActive = true;
@@ -997,7 +993,7 @@
 			this.container.addEventListener('touchmove', this, false);
 			this.container.addEventListener('touchend', this, false);
 
-		}
+		};
 		jsScroller.prototype.adjustScroll = function() {
 			//set top/left
 			var size = this.getViewportSize();
@@ -1005,7 +1001,7 @@
 				x: Math.round(this.loggedPcentX * (this.el.clientWidth - size.w)),
 				y: Math.round(this.loggedPcentY * (this.el.clientHeight - size.h))
 			}, 0);
-		}
+		};
 		jsScroller.prototype.disable = function() {
 			if(!this.eventsActive) return;
 			//log top/left
@@ -1016,14 +1012,14 @@
 			this.container.removeEventListener('touchmove', this, false);
 			this.container.removeEventListener('touchend', this, false);
 			this.eventsActive = false;
-		}
+		};
 		jsScroller.prototype.addPullToRefresh = function(el, leaveRefresh) {
 			if(!leaveRefresh) this.refresh = true;
 			if(this.refresh && this.refresh == true) {
 				this.coreAddPullToRefresh(el);
 				this.el.style.overflow = 'visible';
 			}
-		}
+		};
 		jsScroller.prototype.hideScrollbars = function() {
 			if(this.hscrollBar) {
 				this.hscrollBar.style.opacity = 0
@@ -1033,7 +1029,7 @@
 				this.vscrollBar.style.opacity = 0
 				this.vscrollBar.style[$.feat.cssPrefix+'TransitionDuration']  = "0ms";
 			}
-		}
+		};
 
 		jsScroller.prototype.getViewportSize = function() {
 			var style = window.getComputedStyle(this.container);
@@ -1042,7 +1038,7 @@
 				h: (this.container.clientHeight > window.innerHeight ? window.innerHeight : this.container.clientHeight - numOnly(style.paddingTop) - numOnly(style.paddingBottom)),
 				w: (this.container.clientWidth > window.innerWidth ? window.innerWidth : this.container.clientWidth - numOnly(style.paddingLeft) - numOnly(style.paddingRight))
 			};
-		}
+		};
 
 		jsScroller.prototype.onTouchStart = function(event) {
 
@@ -1058,7 +1054,6 @@
 				clearTimeout(this.scrollingFinishCB);
 				this.scrollingFinishCB = null;
 			}
-			
 
 			//disable if locked
 			if(event.touches.length != 1 || this.boolScrollLock) return;
@@ -1069,7 +1064,6 @@
 				if(tagname == "select" || tagname == "input" || tagname == "button") // stuff we need to allow
 				// access to legit calls
 				return;
-
 			}
 
 			//default variables
@@ -1161,8 +1155,7 @@
 
 			this.scrollerMoveCSS(this.lastScrollInfo, 0);
 			$.trigger(this,"scrollstart");
-
-		}
+		};
 		jsScroller.prototype.getCSSMatrix = function(el) {
 			if(this.androidFormsMode) {
 				//absolute mode
@@ -1176,25 +1169,24 @@
 				};
 			} else {
 				//regular transform
-
 				var obj = $.getCssMatrix(el);
 				return obj;
 			}
-		}
+		};
 		jsScroller.prototype.saveEventInfo = function(event) {
 			this.lastEventInfo = {
 				pageX: event.touches[0].pageX,
 				pageY: event.touches[0].pageY,
 				time: event.timeStamp
-			}
-		}
+			};
+		};
 		jsScroller.prototype.saveFirstEventInfo = function(event) {
 			this.firstEventInfo = {
 				pageX: event.touches[0].pageX,
 				pageY: event.touches[0].pageY,
 				time: event.timeStamp
-			}
-		}
+			};
+		};
 		jsScroller.prototype.setVScrollBar = function(scrollInfo, time, timingFunction) {
 			if(!this.elementInfo.requiresVScrollBar) return false;
 			var newHeight = (parseFloat(this.elementInfo.bottomMargin / this.elementInfo.divHeight) * this.elementInfo.bottomMargin) + "px";
@@ -1207,7 +1199,7 @@
 				y: pos
 			}, time, timingFunction);
 			return true;
-		}
+		};
 		jsScroller.prototype.setHScrollBar = function(scrollInfo, time, timingFunction) {
 			if(!this.elementInfo.requiresHScrollBar) return false;
 			var newWidth = (parseFloat(this.elementInfo.rightMargin / this.elementInfo.divWidth) * this.elementInfo.rightMargin) + "px";
@@ -1222,7 +1214,7 @@
 				y: 0
 			}, time, timingFunction);
 			return true;
-		}
+		};
 
 		jsScroller.prototype.onTouchMove = function(event) {
 
@@ -1250,11 +1242,9 @@
 				if(this.refresh) this.refreshContainer.style.overflow = 'hidden';
 			}
 
-
 			this.saveEventInfo(event);
 			this.doScroll();
-
-		}
+		};
 
 		jsScroller.prototype.doScroll = function() {
 
@@ -1319,8 +1309,7 @@
 					$.trigger(this, "infinite-scroll");
 				}
 			}
-
-		}
+		};
 
 		jsScroller.prototype.calculateMovement = function(event, last) {
 			//default variables
@@ -1354,12 +1343,13 @@
 			scrollInfo.duration = time - prevEventInfo.time;
 
 			return scrollInfo;
-		}
+		};
 
 		jsScroller.prototype.calculateTarget = function(scrollInfo) {
 			scrollInfo.y = this.lastScrollInfo.y + scrollInfo.deltaY;
 			scrollInfo.x = this.lastScrollInfo.x + scrollInfo.deltaX;
-		}
+		};
+		
 		jsScroller.prototype.checkYboundary = function(scrollInfo) {
 			var minTop = this.container.clientHeight / 2;
 			var maxTop = this.elementInfo.maxTop + minTop;
@@ -1368,7 +1358,8 @@
 			else if(-scrollInfo.y > maxTop) scrollInfo.y = -maxTop;
 			else return;
 			this.recalculateDeltaY(scrollInfo);
-		}
+		};
+		
 		jsScroller.prototype.checkXboundary = function(scrollInfo) {
 			//x boundaries
 			if(scrollInfo.x > 0) scrollInfo.x = 0;
@@ -1376,26 +1367,32 @@
 			else return;
 
 			this.recalculateDeltaY(scrollInfo);
-		}
+		};
+		
 		jsScroller.prototype.recalculateDeltaY = function(scrollInfo) {
 			//recalculate delta
 			var oldAbsDeltaY = Math.abs(scrollInfo.deltaY);
 			scrollInfo.deltaY = scrollInfo.y - scrollInfo.top;
-			newAbsDeltaY = Math.abs(scrollInfo.deltaY);
+			var newAbsDeltaY = Math.abs(scrollInfo.deltaY);
 			//recalculate duration at same speed
 			scrollInfo.duration = scrollInfo.duration * newAbsDeltaY / oldAbsDeltaY;
 
-		}
+		};
+		
 		jsScroller.prototype.recalculateDeltaX = function(scrollInfo) {
 			//recalculate delta
 			var oldAbsDeltaX = Math.abs(scrollInfo.deltaX);
 			scrollInfo.deltaX = scrollInfo.x - scrollInfo.left;
-			newAbsDeltaX = Math.abs(scrollInfo.deltaX);
+			var newAbsDeltaX = Math.abs(scrollInfo.deltaX);
 			//recalculate duration at same speed
 			scrollInfo.duration = scrollInfo.duration * newAbsDeltaX / oldAbsDeltaX;
 
-		}
+		};
 
+		/**
+		 * @param {type} animate [unused]
+		 * @returns {undefined}
+		 */
 		jsScroller.prototype.hideRefresh = function(animate) {
 			var that=this;
 			if(this.preventHideRefresh) return;
@@ -1407,7 +1404,7 @@
 				}
 			}, HIDE_REFRESH_TIME);
 			this.refreshTriggered = false;
-		}
+		};
 
 		jsScroller.prototype.setMomentum = function(scrollInfo) {
 			var deceleration = 0.0012;
@@ -1438,11 +1435,9 @@
 				scrollInfo.absSpeedX = Math.abs(scrollInfo.speedX);
 				if(scrollInfo.absSpeedX < deceleration * 100 || scrollInfo.absDeltaX < 5) scrollInfo.deltaX = scrollInfo.absDeltaX = scrollInfo.duration = scrollInfo.speedX = scrollInfo.absSpeedX = 0;
 			} else scrollInfo.duration = 0;
-		}
-
+		};
 
 		jsScroller.prototype.onTouchEnd = function(event) {
-
 
 			if(this.currentScrollingObject == null || !this.moved) return;
 			//event.preventDefault();
@@ -1494,7 +1489,7 @@
 					$.trigger(this, "infinite-scroll");
 				}
 			}
-		}
+		};
 
 		//finish callback
 		jsScroller.prototype.setFinishCalback = function(duration) {
@@ -1507,7 +1502,7 @@
 				that.elementInfo = null; //reset elementInfo when idle
 				if(that.infinite) $.trigger(that, "infinite-scroll-end");
 			}, duration);
-		}
+		};
 
 		//Android Forms Fix
 		jsScroller.prototype.startFormsMode = function() {
@@ -1545,8 +1540,8 @@
 				this.hscrollBar.style[$.feat.cssPrefix+"Perspective"] = "none";
 				this.hscrollBar.style[$.feat.cssPrefix+"BackfaceVisibility"] = "visible";
 			}
-
-		}
+		};
+		
 		jsScroller.prototype.stopFormsMode = function() {
 			if(this.blockFormsFix) return;
 			//get prev values
@@ -1576,10 +1571,7 @@
 				this.hscrollBar.style[$.feat.cssPrefix+"Perspective"] = 1000;
 				this.hscrollBar.style[$.feat.cssPrefix+"BackfaceVisibility"] = "hidden";
 			}
-
-		}
-
-
+		};
 
 		jsScroller.prototype.scrollerMoveCSS = function(distanceToMove, time, timingFunction) {
 			if(!time) time = 0;
@@ -1602,7 +1594,8 @@
 				// Position should be updated even when the scroller is disabled so we log the change
 				this.logPos(distanceToMove.x, distanceToMove.y);
 			}
-		}
+		};
+		
 		jsScroller.prototype.logPos = function(x, y) {
 
 			if(!this.elementInfo) {
@@ -1618,7 +1611,8 @@
 			this.loggedPcentY = this.divide(y, (this.el.clientHeight - size.h));
 			this.scrollTop = y;
 			this.scrollLeft = x;
-		}
+		};
+		
 		jsScroller.prototype.scrollbarMoveCSS = function(el, distanceToMove, time, timingFunction) {
 			if(!time) time = 0;
 			if(!timingFunction) timingFunction = "linear";
@@ -1633,11 +1627,13 @@
 		            el.style[$.feat.cssPrefix+"TransitionTimingFunction"] = timingFunction;
 				}
 			}
-		}
+		};
+		
 		jsScroller.prototype.scrollTo = function(pos, time) {
 			if(!time) time = 0;
 			this.scrollerMoveCSS(pos, time);
-		}
+		};
+		
 		jsScroller.prototype.scrollBy = function(pos, time) {
 			var cssMatrix = this.getCSSMatrix(this.el);
 			var startTop = numOnly(cssMatrix.f);
@@ -1646,19 +1642,24 @@
 				y: startTop - pos.y,
 				x: startLeft - pos.x
 			}, time);
-		}
+		};
+		
 		jsScroller.prototype.scrollToBottom = function(time) {
 			this.scrollTo({
 				y: -1 * (this.el.clientHeight - this.container.clientHeight),
 				x: 0
 			}, time);
-		}
+		};
+		
 		jsScroller.prototype.scrollToTop=function(time){
 			this.scrollTo({x:0,y:0},time);
-		}
+		};
+		
 		return scroller;
+		
 	})();
 })(jq);
+
 /**
  * jq.popup - a popup/alert library for html5 mobile apps
  * @copyright Indiepath 2011 - Tim Fisher
@@ -3079,7 +3080,7 @@
 	};
 
 })(jq);
- /**
+  /**
  * jq.ui - A User Interface library for creating jqMobi applications
  *
  * @copyright 2011 Intel
@@ -3237,7 +3238,7 @@
                         handler: function () { alert("goodbye"); }
                     }]");
            ```
-         * @param {String,Array} links
+         * @param {String,Array} opts links
          * @title $.ui.actionsheet()
          */
         actionsheet: function(opts) {
@@ -3258,7 +3259,7 @@
                       });
            $.ui.popup('Hi there');
            ```
-         * @param {Object|String} options
+         * @param {Object|String} opts options
          * @title $.ui.popup(opts)
          */
         popup: function(opts) {
@@ -3337,7 +3338,7 @@
            ```
            $.ui.ready(function(){console.log('jqUi is ready');});
            ```
-         * @param {Function} function to execute
+         * @param {Function} param function to execute
          * @title $.ui.ready
          */
         ready: function(param) {
@@ -3354,7 +3355,7 @@
            ```
            $.ui.setBackButtonStyle('newClass');
            ```
-         * @param {String} new class name
+         * @param {String} className new class name
          * @title $.ui.setBackButtonStyle(class)
          */
         setBackButtonStyle: function(className) {
@@ -3393,17 +3394,22 @@
          */
         clearHistory: function() {
             this.history = [];
-            this.setBackButtonVisibility(false)
+            this.setBackButtonVisibility(false);
         },
 
-        /**
-         * PushHistory
-           ```
-           $.ui.pushHistory(previousPage, newPage, transition, hashExtras)
-           ```
-           
-         * @title $.ui.pushHistory()
-         */
+		/**
+		 * 
+		 * PushHistory
+		   ```
+		   $.ui.pushHistory(previousPage, newPage, transition, hashExtras)
+		   ```
+		 * @title $.ui.pushHistory()
+		 * @param {String} previousPage Hash-Tag of the previous page / panel 
+		 * @param {String} newPage Hash-Tag of the new page / panel 
+		 * @param {String} transition Transition animation to use 
+		 * @param {String} hashExtras Optional string to append to the Hashed URL
+		 * @returns {undefined}
+		 */
         pushHistory: function(previousPage, newPage, transition, hashExtras) {
             //push into local history
             this.history.push({
@@ -3420,7 +3426,6 @@
             } catch (e) {
             }
         },
-
 
         /**
          * Updates the current window hash
@@ -3518,7 +3523,6 @@
             } else if (force === undefined || (force !== undefined && force === true)) {
                 jq("#navbar").show();
                 jq("#content").css("bottom", jq("#navbar").css("height"));
-            
             }
         },
         /**
@@ -3618,7 +3622,6 @@
         * @title $.ui.disableSideMenu();
         */
         disableSideMenu: function() {
-            var that = this;
             var els = jq("#content, #menu, #header, #navbar");
             if (this.isSideMenuOn()) {
                 this.toggleSideMenu(false, function(canceled) {
@@ -3636,7 +3639,6 @@
         * @title $.ui.enableSideMenu();
         */
         enableSideMenu: function() {
-            var that = this;
             var els = jq("#content, #menu, #header, #navbar");
             els.addClass("hasMenu");
         },
@@ -3676,7 +3678,7 @@
            ```
            $.ui.updateHeaderElements(elements);
            ```
-         * @param {String|Object} Elements
+         * @param {String|Object} elems Elements
          * @title $.ui.updateHeaderElement(Elements)
          */
         updateHeaderElements: function(elems) {
@@ -3696,7 +3698,7 @@
            ```
            $.ui.updateSideMenu(elements);
            ```
-         * @param {String|Object} Elements
+         * @param {String|Object} elems Elements
          * @title $.ui.updateSideMenu(Elements)
          */
         updateSideMenu: function(elems) {
@@ -3737,7 +3739,7 @@
            $.ui.setTitle("new title");
            ```
            
-         * @param {String} value
+         * @param {String} val Title to display
          * @title $.ui.setTitle(value)
          */
         setTitle: function(val) {
@@ -3749,7 +3751,7 @@
            $.ui.setBackButtonText("GO...");
            ```
            
-         * @param {String} value
+         * @param {String} text Button text to display
          * @title $.ui.setBackButtonText(value)
          */
         setBackButtonText: function(text) {
@@ -3760,6 +3762,7 @@
         },
         /**
          * Toggle visibility of the back button
+		 * @param {Boolean} show 
          */
         setBackButtonVisibility: function(show) {
             if (!show)
@@ -3781,21 +3784,21 @@
             if (!text)
                 text = "Loading Content";
             jq("#jQui_mask>h1").html(text);
-            jq("#jQui_mask").show()
+            jq("#jQui_mask").show();
         },
         /**
          * Hide the loading mask
          * @title $.ui.hideMask();
          */
         hideMask: function() {
-            jq("#jQui_mask").hide()
+            jq("#jQui_mask").hide();
         },
         /**
          * Load a content panel in a modal window.  We set the innerHTML so event binding will not work.
            ```
            $.ui.showModal("#myDiv");
            ```
-         * @param {String|Object} panel to show
+         * @param {String|Object} id panel to show
          * @title $.ui.showModal();
          */
         showModal: function(id) {
@@ -3826,7 +3829,7 @@
          */
         hideModal: function() {
             $("#modalContainer").html("", true);
-            jq("#jQui_modal").hide()
+            jq("#jQui_modal").hide();
             
             this.scrollingDivs['modal_container'].disable();
 
@@ -3844,8 +3847,8 @@
            ```
            $.ui.updateContentDiv("#myDiv","This is the new content");
            ```
-         * @param {String,Object} panel
-         * @param {String} html to update with
+         * @param {String,Object} id Panel id
+         * @param {String} content Html to update with
          * @title $.ui.updateContentDiv(id,content);
          */
         updateContentDiv: function(id, content) {
@@ -3858,8 +3861,6 @@
             newDiv.innerHTML = content;
             if ($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0)
                 newDiv = $(newDiv).children('.panel').get();
-            
-            
             
             if (el.getAttribute("js-scrolling") && el.getAttribute("js-scrolling").toLowerCase() == "yes") {
                 $.cleanUpContent(el.childNodes[0], false, true);
@@ -3876,9 +3877,11 @@
            ```
            $.ui.addContentDiv("myDiv","This is the new content","Title");
            ```
-         * @param {String|Object} Element to add
-         * @param {String} Content
+         * @param {String|Object} el Element to add
+         * @param {String} content Content
          * @param {String} title
+		 * @param {Boolean} refresh
+		 * @param {function} refreshFunc
          * @title $.ui.addContentDiv(id,content,title);
          */
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
@@ -3911,7 +3914,10 @@
            ```
            $.ui.addDivAndScroll(object);
            ```
-         * @param {Object} Element
+         * @param {Object} tmp Element
+		 * @param {Boolean} refreshPull
+		 * @param {Function} refreshFunc
+		 * @param {Object} container
          * @title $.ui.addDivAndScroll(element);
          * @api private
          */
@@ -3919,7 +3925,7 @@
             var jsScroll = false;
             var overflowStyle = tmp.style.overflow;
             var hasScroll = overflowStyle != 'hidden' && overflowStyle != 'visible';
-            
+			
             container = container || this.content;
             //sets up scroll when required and not supported
             if (!$.feat.nativeTouchScroll && hasScroll)
@@ -3929,8 +3935,6 @@
                 jsScroll = true;
                 hasScroll = true;
             }
-            
-            
             
             if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") == "no") {
                 hasScroll = false;
@@ -3945,7 +3949,6 @@
             } else {
                 //WE need to clone the div so we keep events
                 var scrollEl = tmp.cloneNode(false);
-                
                 
                 tmp.title = null;
                 tmp.id = null;
@@ -4017,8 +4020,8 @@
            ```
            $.ui.parsePanelFunctions(currentDiv,oldDiv);
            ```
-         * @param {Object} current div
-         * @param {Object} old div
+         * @param {Object} what div
+         * @param {Object} oldDiv
          * @title $.ui.parsePanelFunctions(currentDiv,oldDiv);
          * @api private
          */
@@ -4112,6 +4115,7 @@
         },
         /**
          * Helper function that parses a contents html for any script tags and either adds them or executes the code
+		 * @param {Object} div The HTML / element to parse
          * @api private
          */
         parseScriptTags: function(div) {
@@ -4126,9 +4130,10 @@
            $.ui.loadContent("#main",false,false,"up");
            ```
          * @param {String} target
-         * @param {Boolean} newtab (resets history)
-         * @param {Boolean} go back (initiate the back click)
+         * @param {Boolean} newtab If true, reset history
+         * @param {Boolean} back Initiate the back click
          * @param {String} transition
+		 * @param {Object} anchor (optional)
          * @title $.ui.loadContent(target,newTab,goBack,transition);
          * @api public
          */
@@ -4137,7 +4142,7 @@
             if (this.doingTransition) {
                 var that = this;
                 this.loadContentQueue.push([target, newTab, back, transition, anchor]);
-                return;
+                return
             }
             if (target.length === 0)
                 return;
@@ -4181,8 +4186,8 @@
            $.ui.loadDiv("#main",false,false,"up");
            ```
          * @param {String} target
-         * @param {Boolean} newTab If true, resets history
-         * @param {Boolean} back go back (initiate the back click)
+         * @param {Boolean} newTab If true, reset history
+         * @param {Boolean} back Initiate the back click
          * @param {String} transition
          * @title $.ui.loadDiv(target,newTab,goBack,transition);
          * @api private
@@ -4233,7 +4238,6 @@
                 this.pushHistory(previousTarget, what.id, transition, hashLink);
             }
             
-            
             previousTarget = '#' + what.id + hashLink;
             
             this.doingTransition = true;
@@ -4262,9 +4266,9 @@
            $.ui.loadContentData("#main",false,false,"up");
            ```
          * @param {String} target
-         * @param {Boolean} newTab If true, resets history
-         * @param {Boolean} go back (initiate the back click)
-         * @param {String} transition
+         * @param {Boolean} newTab if true, reset history
+         * @param {Boolean} back Initiate the back click
+         * @param {String} transition	[unused]
          * @title $.ui.loadDiv(target,newTab,goBack,transition);
          * @api private
          */
@@ -4311,10 +4315,10 @@
            $.ui.loadDiv("page.html",false,false,"up");
            ```
          * @param {String} target
-         * @param {Boolean} newTab true resets history
-         * @param {Boolean} back go back (initiate the back click)
+         * @param {Boolean} newTab Reset history
+         * @param {Boolean} back Initiate the back click
          * @param {String} transition
-		 * @param {HTMLElement} anchor 
+		 * @param {Object} anchor
          * @title $.ui.loadDiv(target,newTab,goBack,transition);
          * @api private
          */
@@ -4340,7 +4344,7 @@
                     } else if (anchor.getAttribute("data-persist-ajax") || that.isAjaxApp) {
                         
                         var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
-                        refreshFunction = refresh ? 
+                        var refreshFunction = refresh ? 
                         function() {
                             anchor.refresh = true;
                             that.loadContent(target, newTab, back, transition, anchor);
@@ -4388,6 +4392,10 @@
             $.ui.runTransition(transition,oldDiv,currDiv,back)
             ```
          * @api private
+		 * @param {String} transition 
+		 * @param {Object} oldDiv
+		 * @param {Object} currWhat
+		 * @param {Boolean} back
          * @title $.ui.runTransition(transition,oldDiv,currDiv,back)
          */
         runTransition: function(transition, oldDiv, currWhat, back) {
@@ -4419,13 +4427,12 @@
             this.content = jq("#content").get(0);
             this.header = jq("#header").get(0);
             this.menu = jq("#menu").get(0);
-            
+			
             //set anchor click handler for UI
             this.viewportContainer[0].addEventListener('click', function(e) {
                 var theTarget = e.target;
                 checkAnchorClick(e, theTarget);
             }, false);
-
 
             //enter-edit scroll paddings fix
             //focus scroll adjust fix
@@ -4711,6 +4718,9 @@
         },
         /**
          * This is the default transition.  It simply shows the new panel and hides the old
+		 * @param {Object} oldDiv 
+		 * @param {Object} currDiv 
+		 * @param {Boolean} back	[unused]
          */
         noTransition: function(oldDiv, currDiv, back) {
             currDiv.style.display = "block";
@@ -4728,7 +4738,8 @@
         /**
          * This must be called at the end of every transition to hide the old div and reset the doingTransition variable
          *
-         * @param {Object} Div that transitioned out
+         * @param {Object} oldDiv Div that transitioned out
+         * @param {Object} currDiv 
          * @title $.ui.finishTransition(oldDiv)
          */
         finishTransition: function(oldDiv, currDiv) {
@@ -4744,7 +4755,7 @@
         /**
          * This must be called at the end of every transition to remove all transforms and transitions attached to the inView object (performance + native scroll)
          *
-         * @param {Object} Div that transitioned out
+         * @param {Object} inViewDiv Div that transitioned out
          * @title $.ui.finishTransition(oldDiv)
          */
         clearAnimations: function(inViewDiv) {
@@ -4759,9 +4770,8 @@
     };
 
 
-    //lookup for a clicked anchor recursively and fire UI own actions when applicable 
+    // lookup for a clicked anchor recursively and fire UI own actions when applicable 
     var checkAnchorClick = function(e, theTarget) {
-        
         
         if (theTarget == (jQUi)) {
             return;
@@ -4782,7 +4792,6 @@
             if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1 || theTarget.getAttribute("data-ignore")) {
                 return;
             }
-            
 
             if (theTarget.href.indexOf("tel:") === 0)
                 return false;
@@ -4801,7 +4810,6 @@
             }
 
             /* IE 10 fixes*/
-
             var href = theTarget.href,
             prefix = location.protocol + "//" + location.hostname+":"+location.port;
             if (href.indexOf(prefix) === 0) {
@@ -4820,7 +4828,7 @@
             jq.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
             return;
         }
-    }
+    };
     
     var table = "00000000 77073096 EE0E612C 990951BA 076DC419 706AF48F E963A535 9E6495A3 0EDB8832 79DCB8A4 E0D5E91E 97D2D988 09B64C2B 7EB17CBD E7B82D07 90BF1D91 1DB71064 6AB020F2 F3B97148 84BE41DE 1ADAD47D 6DDDE4EB F4D4B551 83D385C7 136C9856 646BA8C0 FD62F97A 8A65C9EC 14015C4F 63066CD9 FA0F3D63 8D080DF5 3B6E20C8 4C69105E D56041E4 A2677172 3C03E4D1 4B04D447 D20D85FD A50AB56B 35B5A8FA 42B2986C DBBBC9D6 ACBCF940 32D86CE3 45DF5C75 DCD60DCF ABD13D59 26D930AC 51DE003A C8D75180 BFD06116 21B4F4B5 56B3C423 CFBA9599 B8BDA50F 2802B89E 5F058808 C60CD9B2 B10BE924 2F6F7C87 58684C11 C1611DAB B6662D3D 76DC4190 01DB7106 98D220BC EFD5102A 71B18589 06B6B51F 9FBFE4A5 E8B8D433 7807C9A2 0F00F934 9609A88E E10E9818 7F6A0DBB 086D3D2D 91646C97 E6635C01 6B6B51F4 1C6C6162 856530D8 F262004E 6C0695ED 1B01A57B 8208F4C1 F50FC457 65B0D9C6 12B7E950 8BBEB8EA FCB9887C 62DD1DDF 15DA2D49 8CD37CF3 FBD44C65 4DB26158 3AB551CE A3BC0074 D4BB30E2 4ADFA541 3DD895D7 A4D1C46D D3D6F4FB 4369E96A 346ED9FC AD678846 DA60B8D0 44042D73 33031DE5 AA0A4C5F DD0D7CC9 5005713C 270241AA BE0B1010 C90C2086 5768B525 206F85B3 B966D409 CE61E49F 5EDEF90E 29D9C998 B0D09822 C7D7A8B4 59B33D17 2EB40D81 B7BD5C3B C0BA6CAD EDB88320 9ABFB3B6 03B6E20C 74B1D29A EAD54739 9DD277AF 04DB2615 73DC1683 E3630B12 94643B84 0D6D6A3E 7A6A5AA8 E40ECF0B 9309FF9D 0A00AE27 7D079EB1 F00F9344 8708A3D2 1E01F268 6906C2FE F762575D 806567CB 196C3671 6E6B06E7 FED41B76 89D32BE0 10DA7A5A 67DD4ACC F9B9DF6F 8EBEEFF9 17B7BE43 60B08ED5 D6D6A3E8 A1D1937E 38D8C2C4 4FDFF252 D1BB67F1 A6BC5767 3FB506DD 48B2364B D80D2BDA AF0A1B4C 36034AF6 41047A60 DF60EFC3 A867DF55 316E8EEF 4669BE79 CB61B38C BC66831A 256FD2A0 5268E236 CC0C7795 BB0B4703 220216B9 5505262F C5BA3BBE B2BD0B28 2BB45A92 5CB36A04 C2D7FFA7 B5D0CF31 2CD99E8B 5BDEAE1D 9B64C2B0 EC63F226 756AA39C 026D930A 9C0906A9 EB0E363F 72076785 05005713 95BF4A82 E2B87A14 7BB12BAE 0CB61B38 92D28E9B E5D5BE0D 7CDCEFB7 0BDBDF21 86D3D2D4 F1D4E242 68DDB3F8 1FDA836E 81BE16CD F6B9265B 6FB077E1 18B74777 88085AE6 FF0F6A70 66063BCA 11010B5C 8F659EFF F862AE69 616BFFD3 166CCF45 A00AE278 D70DD2EE 4E048354 3903B3C2 A7672661 D06016F7 4969474D 3E6E77DB AED16A4A D9D65ADC 40DF0B66 37D83BF0 A9BCAE53 DEBB9EC5 47B2CF7F 30B5FFE9 BDBDF21C CABAC28A 53B39330 24B4A3A6 BAD03605 CDD70693 54DE5729 23D967BF B3667A2E C4614AB8 5D681B02 2A6F2B94 B40BBE37 C30C8EA1 5A05DF1B 2D02EF8D"; /* Number */
     var crc32 = function( /* String */str,  /* Number */crc) {
@@ -4837,12 +4845,41 @@
         return crc ^ (-1);
     };
     
-    
     $.ui = new ui;
 
 })(jq);
 
 
+//The following functions are utilitiy functions for jqUi within appMobi.
+
+(function($) {
+    $(document).one("appMobi.device.ready", function() { //in AppMobi, we need to undo the height stuff since it causes issues.
+        setTimeout(function() {
+            document.getElementById('jQUi').style.height = "100%";
+            document.body.style.height = "100%";
+            document.documentElement.style.minHeight = window.innerHeight;
+        }, 300);
+        $.ui.ready(function(){
+            $.ui.blockPageScroll();
+        })
+    });
+    //Right now there is a bug where iOS will not scroll a div, even though it's enabled.  This turns scrolling back on with orientation changes
+    if($.feat.nativeTouchScroll){
+        document.addEventListener("orientationchange",function(e){
+            if($.ui.scrollingDivs[$.ui.activeDiv.id])
+            {
+                var tmpscroller=$.ui.scrollingDivs[$.ui.activeDiv.id];
+                if(tmpscroller.el.scrollTop==0)
+                {
+                    tmpscroller.disable();
+                    setTimeout(function(){
+                        tmpscroller.enable();
+                    },300);
+                }
+            }
+        });
+    }
+})(jq);
 
 //The following functions are utilitiy functions for jqUi within appMobi.
 
