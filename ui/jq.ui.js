@@ -496,6 +496,7 @@
 
 			//methods
 			init: function(el, opts) {
+				var that = this, j;
 				this.el = el;
 				this.jqEl = $(this.el);
 				this.defaultProperties();
@@ -503,11 +504,10 @@
 					this[j] = opts[j];
 				}
 				//assign self destruct
-				var that = this;
 				var orientationChangeProxy = function() {
 						//no need to readjust if disabled...
 						if(that.eventsActive) that.adjustScroll();
-					}
+					};
 				this.jqEl.bind('destroy', function() {
 					that.disable(true); //with destroy notice
 					var id = that.el.jqmScrollerId;
