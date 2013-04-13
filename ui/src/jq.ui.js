@@ -1186,7 +1186,7 @@
          * @param {String} target
          * @param {Boolean} newTab if true, reset history
          * @param {Boolean} back Initiate the back click
-         * @param {String} transition
+         * @param {String} transition	[unused]
          * @title $.ui.loadDiv(target,newTab,goBack,transition);
          * @api private
          */
