@@ -1262,7 +1262,7 @@
                     } else if (anchor.getAttribute("data-persist-ajax") || that.isAjaxApp) {
                         
                         var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
-                        refreshFunction = refresh ? 
+                        var refreshFunction = refresh ? 
                         function() {
                             anchor.refresh = true;
                             that.loadContent(target, newTab, back, transition, anchor);
