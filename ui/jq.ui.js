@@ -1,10 +1,11 @@
 (function ($) {
     var cache = [];
-    var objId=function(obj){
+    var objId = function(obj){
         if(!obj.jqmCSS3AnimateId) obj.jqmCSS3AnimateId=$.uuid();
         return obj.jqmCSS3AnimateId;
-    }
-    var getEl=function(elID){
+    };
+	
+    var getEl = function(elID){
         if (typeof elID == "string" || elID instanceof String) {
             return document.getElementById(elID);
         } else if($.is$(elID)){
@@ -12,8 +13,9 @@
         } else {
             return elID;
         }
-    }
-    var getCSS3Animate=function(obj, options){
+    };
+	
+    var getCSS3Animate = function(obj, options){
         var tmp, id, el = getEl(obj);
         //first one
         id = objId(el);
@@ -25,7 +27,8 @@
             cache[id] = tmp;
         }
         return tmp;
-    }
+    };
+	
     $.fn["css3Animate"] = function (opts) {
         //keep old callback system - backwards compatibility - should be deprecated in future versions
         if(!opts.complete && opts.callback) opts.complete = opts.callback;
@@ -40,10 +43,9 @@
         return tmp;
     };
     
-
     $["css3AnimateQueue"] = function () {
         return new css3Animate.queue();
-    }
+    };
 
     //if (!window.WebKitCSSMatrix) return;
     var translateOpen =$.feat.cssTransformStart;
@@ -277,7 +279,7 @@
                 opts.failure = callbacks.failure;
                 return this;
             }
-        }
+        };
         
         return css3Animate;
     })();
@@ -308,7 +310,7 @@
             shift: function () {
                 return this.elements.shift();
             }
-        }
+        };
     };
 })(jq);
 
@@ -322,7 +324,7 @@
 	var objId = function(obj) {
 			if(!obj.jqmScrollerId) obj.jqmScrollerId = $.uuid();
 			return obj.jqmScrollerId;
-		}
+	};
 	$.fn["scroller"] = function(opts) {
 		var tmp, id;
 		for(var i = 0; i < this.length; i++) {
@@ -381,7 +383,6 @@
 
 		//initialize and js/native mode selector
 		var scroller = function(elID, opts) {
-
 
 				if(!boundTouchLayer && $.touchLayer && $.isObject($.touchLayer)) bindTouchLayer()
 				else if(!($.touchLayer && $.isObject($.touchLayer))) $.touchLayer = {};
@@ -3086,8 +3087,6 @@
  */
 (function($) {
     
-    
-    var hasLaunched = false;
     var startPath = window.location.pathname;
     var defaultHash = window.location.hash;
     var previousTarget = defaultHash;
@@ -3190,7 +3189,6 @@
         launchCompleted: false,
         activeDiv: "",
         customClickHandler: "",
-        activeDiv: "",
         menuAnimation: null,
         togglingSideMenu: false,
         autoBoot: function() {
@@ -3271,7 +3269,7 @@
          *This will throw up a mask and block the UI
          ```
          $.ui.blockUI(.9)
-         ````
+         ```
          * @param {Float} opacity
          * @title $.ui.blockUI(opacity)
          */
@@ -3282,7 +3280,7 @@
          *This will remove the UI mask
          ```
          $.ui.unblockUI()
-         ````
+         ```
          * @title $.ui.unblockUI()
          */
         unblockUI: function() {
@@ -3986,7 +3984,7 @@
                 if (refreshFunc)
                     $.bind(this.scrollingDivs[scrollEl.id], 'refresh-release', function(trigger) {
                         if (trigger)
-                            refreshFunc()
+                            refreshFunc();
                     });
             }
             
@@ -4096,8 +4094,6 @@
                 this.customMenu = false;
             }
             
-            
-            
             if (oldDiv) {
                 fnc = oldDiv.getAttribute("data-unload");
                 if (typeof fnc == "string" && window[fnc]) {
@@ -4141,13 +4137,12 @@
             if (this.doingTransition) {
                 var that = this;
                 this.loadContentQueue.push([target, newTab, back, transition, anchor]);
-                return
+                return;
             }
             if (target.length === 0)
                 return;
             
             what = null;
-            var that = this;
             var loadAjax = true;
             anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
             if (target.indexOf("#") == -1) {
@@ -4186,8 +4181,8 @@
            $.ui.loadDiv("#main",false,false,"up");
            ```
          * @param {String} target
-         * @param {Boolean} newtab (resets history)
-         * @param {Boolean} go back (initiate the back click)
+         * @param {Boolean} newTab If true, resets history
+         * @param {Boolean} back go back (initiate the back click)
          * @param {String} transition
          * @title $.ui.loadDiv(target,newTab,goBack,transition);
          * @api private
@@ -4228,9 +4223,6 @@
                 return this.showModal(what.id);
             }
                         
-            
-          
-            
             if (oldDiv == currWhat) //prevent it from going to itself
                 return;
             
@@ -4243,7 +4235,6 @@
             
             
             previousTarget = '#' + what.id + hashLink;
-            
             
             this.doingTransition = true;
 
@@ -4271,7 +4262,7 @@
            $.ui.loadContentData("#main",false,false,"up");
            ```
          * @param {String} target
-         * @param {Boolean} newtab (resets history)
+         * @param {Boolean} newTab If true, resets history
          * @param {Boolean} go back (initiate the back click)
          * @param {String} transition
          * @title $.ui.loadDiv(target,newTab,goBack,transition);
@@ -4320,9 +4311,10 @@
            $.ui.loadDiv("page.html",false,false,"up");
            ```
          * @param {String} target
-         * @param {Boolean} newtab (resets history)
-         * @param {Boolean} go back (initiate the back click)
+         * @param {Boolean} newTab true resets history
+         * @param {Boolean} back go back (initiate the back click)
          * @param {String} transition
+		 * @param {HTMLElement} anchor 
          * @title $.ui.loadDiv(target,newTab,goBack,transition);
          * @api private
          */
@@ -4425,11 +4417,9 @@
             this.viewportContainer = jq("#jQUi");
             this.navbar = jq("#navbar").get(0);
             this.content = jq("#content").get(0);
-            ;
             this.header = jq("#header").get(0);
-            ;
             this.menu = jq("#menu").get(0);
-            ;
+            
             //set anchor click handler for UI
             this.viewportContainer[0].addEventListener('click', function(e) {
                 var theTarget = e.target;
