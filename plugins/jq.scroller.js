@@ -139,7 +139,7 @@
                 var self=this;
                 var toRunY=Math.ceil(this.el.scrollTop-params.y)/distPerTick;
                 var toRunX=Math.ceil(this.el.scrollLeft-params.x)/distPerTick;
-                var xRun=yRun=0;
+                var xRun=0, yRun=0;
                	self.scrollTopInterval=window.setInterval(function(){
                     self.el.scrollTop-=distPerTick;
                     yRun++;
@@ -192,7 +192,7 @@
 				var orientationChangeProxy = function() {
 						//no need to readjust if disabled...
 						if(that.eventsActive) that.adjustScroll();
-					}
+					};
 				this.jqEl.bind('destroy', function() {
 					that.disable(true); //with destroy notice
 					var id = that.el.jqmScrollerId;
@@ -254,7 +254,7 @@
 				if(autoCancel) {
 					var that = this;
 					if(this.refreshHangTimeout > 0) this.refreshCancelCB = setTimeout(function() {
-						that.hideRefresh()
+						that.hideRefresh();
 					}, this.refreshHangTimeout);
 				}
 			},
@@ -322,7 +322,7 @@
 				this.infiniteTriggered = false;
 				this.scrollSkip = true;
 			}
-		}
+		};
 
 		//extend to jsScroller and nativeScroller (constructs)
 		jsScroller = function(el, opts) {
@@ -379,16 +379,13 @@
 			}
 			this.container = this.el;
 			$el.css("-webkit-overflow-scrolling", "touch");
-		}
+		};
+		
 		nativeScroller.prototype = new scrollerCore();
 		jsScroller.prototype = new scrollerCore();
 
-
-
-
 		///Native scroller
 		nativeScroller.prototype.defaultProperties = function() {
-
 			this.refreshContainer = null;
 			this.dY = this.cY = 0;
 			this.cancelPropagation = false;
@@ -397,8 +394,8 @@
 			var that = this;
 			this.adjustScrollOverflowProxy_ = function() {
 				that.jqEl.css('overflow', 'auto');
-			}
-		}
+			};
+		};
 		nativeScroller.prototype.enable = function(firstExecution) {
 			if(this.eventsActive) return;
 			this.eventsActive = true;
@@ -411,7 +408,7 @@
 			//set events
 			if(this.refresh || this.infinite&&!jq.os.desktop) this.el.addEventListener('touchstart', this, false);
 			this.el.addEventListener('scroll', this, false)
-		}
+		};
 		nativeScroller.prototype.disable = function(destroy) {
 			if(!this.eventsActive) return;
 			//log current scroll
@@ -424,7 +421,7 @@
 			this.el.removeEventListener('touchend', this, false);
 			this.el.removeEventListener('scroll', this, false);
 			this.eventsActive = false;
-		}
+		};
 		nativeScroller.prototype.addPullToRefresh = function(el, leaveRefresh) {
 			this.el.removeEventListener('touchstart', this, false);
 			this.el.addEventListener('touchstart', this, false);
@@ -436,7 +433,7 @@
                 this.refreshContainer.style.height="60px";
                 this.refreshContainer.style.display="block";
 			}
-		}
+		};
 		nativeScroller.prototype.onTouchStart = function(e) {
 
 			if(this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
@@ -452,7 +449,7 @@
 			}
 			$.trigger(this,"scrollstart",[this.el]);
 			$.trigger($.touchLayer,"scrollstart",[this.el]);
-		}
+		};
 		nativeScroller.prototype.onTouchMove = function(e) {
 
 			var newcY = e.touches[0].pageY - this.dY;
@@ -461,9 +458,6 @@
 				this.el.addEventListener('touchend', this, false);
 				this.moved = true;
 			}
-
-			var difY = newcY - this.cY;
-
 
 			//check for trigger
 			if(this.refresh && (this.el.scrollTop) < 0) {
@@ -478,7 +472,7 @@
 
 			this.cY = newcY;
 			e.stopPropagation();
-		}
+		};
         nativeScroller.prototype.showRefresh=function(){
             if(!this.refreshTriggered){
                 this.refreshTriggered = true;
