@@ -1066,7 +1066,6 @@
                 return;
             
             what = null;
-            var that = this;
             var loadAjax = true;
             anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
             if (target.indexOf("#") == -1) {
@@ -1105,8 +1104,8 @@
            $.ui.loadDiv("#main",false,false,"up");
            ```
          * @param {String} target
-         * @param {Boolean} newtab (resets history)
-         * @param {Boolean} go back (initiate the back click)
+         * @param {Boolean} newTab If true, reset history
+         * @param {Boolean} back Initiate the back click
          * @param {String} transition
          * @title $.ui.loadDiv(target,newTab,goBack,transition);
          * @api private
@@ -1147,9 +1146,6 @@
                 return this.showModal(what.id);
             }
                         
-            
-          
-            
             if (oldDiv == currWhat) //prevent it from going to itself
                 return;
             
@@ -1160,9 +1156,7 @@
                 this.pushHistory(previousTarget, what.id, transition, hashLink);
             }
             
-            
             previousTarget = '#' + what.id + hashLink;
-            
             
             this.doingTransition = true;
 
