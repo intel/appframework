@@ -108,7 +108,6 @@
         launchCompleted: false,
         activeDiv: "",
         customClickHandler: "",
-        activeDiv: "",
         menuAnimation: null,
         togglingSideMenu: false,
         autoBoot: function() {
