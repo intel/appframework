@@ -540,7 +540,6 @@
         * @title $.ui.disableSideMenu();
         */
         disableSideMenu: function() {
-            var that = this;
             var els = jq("#content, #menu, #header, #navbar");
             if (this.isSideMenuOn()) {
                 this.toggleSideMenu(false, function(canceled) {
@@ -558,7 +557,6 @@
         * @title $.ui.enableSideMenu();
         */
         enableSideMenu: function() {
-            var that = this;
             var els = jq("#content, #menu, #header, #navbar");
             els.addClass("hasMenu");
         },
@@ -598,7 +596,7 @@
            ```
            $.ui.updateHeaderElements(elements);
            ```
-         * @param {String|Object} Elements
+         * @param {String|Object} elems Elements
          * @title $.ui.updateHeaderElement(Elements)
          */
         updateHeaderElements: function(elems) {
@@ -618,7 +616,7 @@
            ```
            $.ui.updateSideMenu(elements);
            ```
-         * @param {String|Object} Elements
+         * @param {String|Object} elems Elements
          * @title $.ui.updateSideMenu(Elements)
          */
         updateSideMenu: function(elems) {
@@ -659,7 +657,7 @@
            $.ui.setTitle("new title");
            ```
            
-         * @param {String} value
+         * @param {String} val Title to display
          * @title $.ui.setTitle(value)
          */
         setTitle: function(val) {
@@ -671,7 +669,7 @@
            $.ui.setBackButtonText("GO...");
            ```
            
-         * @param {String} value
+         * @param {String} text Button text to display
          * @title $.ui.setBackButtonText(value)
          */
         setBackButtonText: function(text) {
@@ -682,6 +680,7 @@
         },
         /**
          * Toggle visibility of the back button
+		 * @param {Boolean} show 
          */
         setBackButtonVisibility: function(show) {
             if (!show)
@@ -703,21 +702,21 @@
             if (!text)
                 text = "Loading Content";
             jq("#jQui_mask>h1").html(text);
-            jq("#jQui_mask").show()
+            jq("#jQui_mask").show();
         },
         /**
          * Hide the loading mask
          * @title $.ui.hideMask();
          */
         hideMask: function() {
-            jq("#jQui_mask").hide()
+            jq("#jQui_mask").hide();
         },
         /**
          * Load a content panel in a modal window.  We set the innerHTML so event binding will not work.
            ```
            $.ui.showModal("#myDiv");
            ```
-         * @param {String|Object} panel to show
+         * @param {String|Object} id panel to show
          * @title $.ui.showModal();
          */
         showModal: function(id) {
@@ -748,7 +747,7 @@
          */
         hideModal: function() {
             $("#modalContainer").html("", true);
-            jq("#jQui_modal").hide()
+            jq("#jQui_modal").hide();
             
             this.scrollingDivs['modal_container'].disable();
 
@@ -766,8 +765,8 @@
            ```
            $.ui.updateContentDiv("#myDiv","This is the new content");
            ```
-         * @param {String,Object} panel
-         * @param {String} html to update with
+         * @param {String,Object} id Panel id
+         * @param {String} content Html to update with
          * @title $.ui.updateContentDiv(id,content);
          */
         updateContentDiv: function(id, content) {
@@ -780,8 +779,6 @@
             newDiv.innerHTML = content;
             if ($(newDiv).children('.panel') && $(newDiv).children('.panel').length > 0)
                 newDiv = $(newDiv).children('.panel').get();
-            
-            
             
             if (el.getAttribute("js-scrolling") && el.getAttribute("js-scrolling").toLowerCase() == "yes") {
                 $.cleanUpContent(el.childNodes[0], false, true);
@@ -798,9 +795,11 @@
            ```
            $.ui.addContentDiv("myDiv","This is the new content","Title");
            ```
-         * @param {String|Object} Element to add
-         * @param {String} Content
+         * @param {String|Object} el Element to add
+         * @param {String} content Content
          * @param {String} title
+		 * @param {Boolean} refresh
+		 * @param {function} refreshFunc
          * @title $.ui.addContentDiv(id,content,title);
          */
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
@@ -833,7 +832,10 @@
            ```
            $.ui.addDivAndScroll(object);
            ```
-         * @param {Object} Element
+         * @param {Object} tmp Element
+		 * @param {Boolean} refreshPull
+		 * @param {Function} refreshFunc
+		 * @param {Object} container
          * @title $.ui.addDivAndScroll(element);
          * @api private
          */
@@ -841,7 +843,7 @@
             var jsScroll = false;
             var overflowStyle = tmp.style.overflow;
             var hasScroll = overflowStyle != 'hidden' && overflowStyle != 'visible';
-            
+			
             container = container || this.content;
             //sets up scroll when required and not supported
             if (!$.feat.nativeTouchScroll && hasScroll)
@@ -851,8 +853,6 @@
                 jsScroll = true;
                 hasScroll = true;
             }
-            
-            
             
             if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") == "no") {
                 hasScroll = false;
@@ -867,7 +867,6 @@
             } else {
                 //WE need to clone the div so we keep events
                 var scrollEl = tmp.cloneNode(false);
-                
                 
                 tmp.title = null;
                 tmp.id = null;
@@ -906,7 +905,7 @@
                 if (refreshFunc)
                     $.bind(this.scrollingDivs[scrollEl.id], 'refresh-release', function(trigger) {
                         if (trigger)
-                            refreshFunc()
+                            refreshFunc();
                     });
             }
             
@@ -939,8 +938,8 @@
            ```
            $.ui.parsePanelFunctions(currentDiv,oldDiv);
            ```
-         * @param {Object} current div
-         * @param {Object} old div
+         * @param {Object} what div
+         * @param {Object} oldDiv
          * @title $.ui.parsePanelFunctions(currentDiv,oldDiv);
          * @api private
          */
@@ -1016,8 +1015,6 @@
                 this.customMenu = false;
             }
             
-            
-            
             if (oldDiv) {
                 fnc = oldDiv.getAttribute("data-unload");
                 if (typeof fnc == "string" && window[fnc]) {
@@ -1036,6 +1033,7 @@
         },
         /**
          * Helper function that parses a contents html for any script tags and either adds them or executes the code
+		 * @param {Object} div The HTML / element to parse
          * @api private
          */
         parseScriptTags: function(div) {
@@ -1050,9 +1048,10 @@
            $.ui.loadContent("#main",false,false,"up");
            ```
          * @param {String} target
-         * @param {Boolean} newtab (resets history)
-         * @param {Boolean} go back (initiate the back click)
+         * @param {Boolean} newtab If true, reset history
+         * @param {Boolean} back Initiate the back click
          * @param {String} transition
+		 * @param {Object} anchor (optional)
          * @title $.ui.loadContent(target,newTab,goBack,transition);
          * @api public
          */
