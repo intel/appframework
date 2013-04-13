@@ -156,7 +156,7 @@
                         handler: function () { alert("goodbye"); }
                     }]");
            ```
-         * @param {String,Array} links
+         * @param {String,Array} opts links
          * @title $.ui.actionsheet()
          */
         actionsheet: function(opts) {
@@ -177,7 +177,7 @@
                       });
            $.ui.popup('Hi there');
            ```
-         * @param {Object|String} options
+         * @param {Object|String} opts options
          * @title $.ui.popup(opts)
          */
         popup: function(opts) {
@@ -188,7 +188,7 @@
          *This will throw up a mask and block the UI
          ```
          $.ui.blockUI(.9)
-         ````
+         ```
          * @param {Float} opacity
          * @title $.ui.blockUI(opacity)
          */
@@ -199,7 +199,7 @@
          *This will remove the UI mask
          ```
          $.ui.unblockUI()
-         ````
+         ```
          * @title $.ui.unblockUI()
          */
         unblockUI: function() {
@@ -256,7 +256,7 @@
            ```
            $.ui.ready(function(){console.log('jqUi is ready');});
            ```
-         * @param {Function} function to execute
+         * @param {Function} param function to execute
          * @title $.ui.ready
          */
         ready: function(param) {
@@ -273,7 +273,7 @@
            ```
            $.ui.setBackButtonStyle('newClass');
            ```
-         * @param {String} new class name
+         * @param {String} className new class name
          * @title $.ui.setBackButtonStyle(class)
          */
         setBackButtonStyle: function(className) {
@@ -312,17 +312,22 @@
          */
         clearHistory: function() {
             this.history = [];
-            this.setBackButtonVisibility(false)
+            this.setBackButtonVisibility(false);
         },
 
-        /**
-         * PushHistory
-           ```
-           $.ui.pushHistory(previousPage, newPage, transition, hashExtras)
-           ```
-           
-         * @title $.ui.pushHistory()
-         */
+		/**
+		 * 
+		 * PushHistory
+		   ```
+		   $.ui.pushHistory(previousPage, newPage, transition, hashExtras)
+		   ```
+		 * @title $.ui.pushHistory()
+		 * @param {String} previousPage Hash-Tag of the previous page / panel 
+		 * @param {String} newPage Hash-Tag of the new page / panel 
+		 * @param {String} transition Transition animation to use 
+		 * @param {String} hashExtras Optional string to append to the Hashed URL
+		 * @returns {undefined}
+		 */
         pushHistory: function(previousPage, newPage, transition, hashExtras) {
             //push into local history
             this.history.push({
@@ -339,7 +344,6 @@
             } catch (e) {
             }
         },
-
 
         /**
          * Updates the current window hash
@@ -437,7 +441,6 @@
             } else if (force === undefined || (force !== undefined && force === true)) {
                 jq("#navbar").show();
                 jq("#content").css("bottom", jq("#navbar").css("height"));
-            
             }
         },
         /**
