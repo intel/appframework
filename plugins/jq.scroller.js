@@ -245,6 +245,12 @@
 				$(this.el).prepend(this.refreshContainer.append(el, 'top'));
 				this.refreshContainer = this.refreshContainer[0];
 			},
+			/**
+			 * 
+			 * @param {Boolean} triggered
+			 * @param {Boolean} allowHide [unused]
+			 * @returns {undefined}
+			 */
 			fireRefreshRelease: function(triggered, allowHide) {
 				if(!this.refresh || !triggered) return;
 
@@ -554,7 +560,7 @@
 			this.refreshTriggered = false;
 			//this.el.addEventListener('touchend', this, false);
 		};
-		nativeScroller.prototype.hideScrollbars = function() {}
+		nativeScroller.prototype.hideScrollbars = function() {};
 		nativeScroller.prototype.scrollTo = function(pos,time) {
 			this.logPos(pos.x, pos.y);
 			pos.x*=-1;
@@ -1067,6 +1073,10 @@
 
 		};
 
+		/**
+		 * @param {type} animate [unused]
+		 * @returns {undefined}
+		 */
 		jsScroller.prototype.hideRefresh = function(animate) {
 			var that=this;
 			if(this.preventHideRefresh) return;
