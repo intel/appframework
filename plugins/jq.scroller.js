@@ -478,7 +478,7 @@
                 this.refreshTriggered = true;
                 $.trigger(this, 'refresh-trigger');
             }
-        }
+        };
 		nativeScroller.prototype.onTouchEnd = function(e) {
 
 			var triggered = this.el.scrollTop <= -(this.refreshHeight);
@@ -522,7 +522,7 @@
                 }
 
             },20);
-		}
+		};
 		nativeScroller.prototype.hideRefresh = function(animate) {
 
 			if(this.preventHideRefresh) return;
@@ -553,25 +553,25 @@
 			}
 			this.refreshTriggered = false;
 			//this.el.addEventListener('touchend', this, false);
-		}
+		};
 		nativeScroller.prototype.hideScrollbars = function() {}
 		nativeScroller.prototype.scrollTo = function(pos,time) {
 			this.logPos(pos.x, pos.y);
 			pos.x*=-1;
 			pos.y*=-1;
 			return this._scrollTo(pos,time);
-		}
+		};
 		nativeScroller.prototype.scrollBy = function(pos,time) {
 			pos.x+=this.el.scrollLeft;
 			pos.y+=this.el.scrollTop;
 			this.logPos(this.el.scrollLeft, this.el.scrollTop);
 			return this._scrollTo(pos,time);
-		}
+		};
 		nativeScroller.prototype.scrollToBottom = function(time) {
 			//this.el.scrollTop = this.el.scrollHeight;
 			this._scrollToBottom(time);
 			this.logPos(this.el.scrollLeft, this.el.scrollTop);
-		}
+		};
 		nativeScroller.prototype.onScroll = function(e) {
 			if(this.infinite && this.touchEndFired) {
 				this.touchEndFired = false;
@@ -590,16 +590,14 @@
 				}
 			}
 
-
 			var that = this;
 			if(this.infinite && this.infiniteEndCheck && this.infiniteTriggered) {
 
 				this.infiniteEndCheck = false;
 				$.trigger(that, "infinite-scroll-end");
 			}
-		}
+		};
 		nativeScroller.prototype.logPos = function(x, y) {
-
 
 			this.loggedPcentX = this.divide(x, (this.el.scrollWidth));
 			this.loggedPcentY = this.divide(y, (this.el.scrollHeight ));
@@ -611,16 +609,14 @@
 			if(isNaN(this.loggedPcentY))
 				this.loggedPcentY=0;
 
-		}
+		};
 		nativeScroller.prototype.adjustScroll = function() {
 			this.adjustScrollOverflowProxy_();
 			
 			this.el.scrollLeft = this.loggedPcentX * (this.el.scrollWidth);
 			this.el.scrollTop = this.loggedPcentY * (this.el.scrollHeight );
 			this.logPos(this.el.scrollLeft, this.el.scrollTop);
-		}
-
-
+		};
 
 		//JS scroller
 		jsScroller.prototype.defaultProperties = function() {
@@ -650,8 +646,7 @@
 			this.scrollingFinishCB = null;
 			this.loggedPcentY = 0;
 			this.loggedPcentX = 0;
-
-		}
+		};
 
 		function createScrollBar(width, height) {
 			var scrollDiv = document.createElement("div");
@@ -664,7 +659,7 @@
 			scrollDiv.className = 'scrollBar';
 			scrollDiv.style.background = "black";
 			return scrollDiv;
-		}
+		};
 		jsScroller.prototype.enable = function(firstExecution) {
 			if(this.eventsActive) return;
 			this.eventsActive = true;
@@ -676,7 +671,7 @@
 			this.container.addEventListener('touchmove', this, false);
 			this.container.addEventListener('touchend', this, false);
 
-		}
+		};
 		jsScroller.prototype.adjustScroll = function() {
 			//set top/left
 			var size = this.getViewportSize();
@@ -684,7 +679,7 @@
 				x: Math.round(this.loggedPcentX * (this.el.clientWidth - size.w)),
 				y: Math.round(this.loggedPcentY * (this.el.clientHeight - size.h))
 			}, 0);
-		}
+		};
 		jsScroller.prototype.disable = function() {
 			if(!this.eventsActive) return;
 			//log top/left
@@ -695,14 +690,14 @@
 			this.container.removeEventListener('touchmove', this, false);
 			this.container.removeEventListener('touchend', this, false);
 			this.eventsActive = false;
-		}
+		};
 		jsScroller.prototype.addPullToRefresh = function(el, leaveRefresh) {
 			if(!leaveRefresh) this.refresh = true;
 			if(this.refresh && this.refresh == true) {
 				this.coreAddPullToRefresh(el);
 				this.el.style.overflow = 'visible';
 			}
-		}
+		};
 		jsScroller.prototype.hideScrollbars = function() {
 			if(this.hscrollBar) {
 				this.hscrollBar.style.opacity = 0
@@ -712,7 +707,7 @@
 				this.vscrollBar.style.opacity = 0
 				this.vscrollBar.style[$.feat.cssPrefix+'TransitionDuration']  = "0ms";
 			}
-		}
+		};
 
 		jsScroller.prototype.getViewportSize = function() {
 			var style = window.getComputedStyle(this.container);
@@ -721,7 +716,7 @@
 				h: (this.container.clientHeight > window.innerHeight ? window.innerHeight : this.container.clientHeight - numOnly(style.paddingTop) - numOnly(style.paddingBottom)),
 				w: (this.container.clientWidth > window.innerWidth ? window.innerWidth : this.container.clientWidth - numOnly(style.paddingLeft) - numOnly(style.paddingRight))
 			};
-		}
+		};
 
 		jsScroller.prototype.onTouchStart = function(event) {
 
@@ -737,7 +732,6 @@
 				clearTimeout(this.scrollingFinishCB);
 				this.scrollingFinishCB = null;
 			}
-			
 
 			//disable if locked
 			if(event.touches.length != 1 || this.boolScrollLock) return;
@@ -748,7 +742,6 @@
 				if(tagname == "select" || tagname == "input" || tagname == "button") // stuff we need to allow
 				// access to legit calls
 				return;
-
 			}
 
 			//default variables
@@ -840,8 +833,7 @@
 
 			this.scrollerMoveCSS(this.lastScrollInfo, 0);
 			$.trigger(this,"scrollstart");
-
-		}
+		};
 		jsScroller.prototype.getCSSMatrix = function(el) {
 			if(this.androidFormsMode) {
 				//absolute mode
@@ -859,21 +851,21 @@
 				var obj = $.getCssMatrix(el);
 				return obj;
 			}
-		}
+		};
 		jsScroller.prototype.saveEventInfo = function(event) {
 			this.lastEventInfo = {
 				pageX: event.touches[0].pageX,
 				pageY: event.touches[0].pageY,
 				time: event.timeStamp
-			}
-		}
+			};
+		};
 		jsScroller.prototype.saveFirstEventInfo = function(event) {
 			this.firstEventInfo = {
 				pageX: event.touches[0].pageX,
 				pageY: event.touches[0].pageY,
 				time: event.timeStamp
-			}
-		}
+			};
+		};
 		jsScroller.prototype.setVScrollBar = function(scrollInfo, time, timingFunction) {
 			if(!this.elementInfo.requiresVScrollBar) return false;
 			var newHeight = (parseFloat(this.elementInfo.bottomMargin / this.elementInfo.divHeight) * this.elementInfo.bottomMargin) + "px";
@@ -886,7 +878,7 @@
 				y: pos
 			}, time, timingFunction);
 			return true;
-		}
+		};
 		jsScroller.prototype.setHScrollBar = function(scrollInfo, time, timingFunction) {
 			if(!this.elementInfo.requiresHScrollBar) return false;
 			var newWidth = (parseFloat(this.elementInfo.rightMargin / this.elementInfo.divWidth) * this.elementInfo.rightMargin) + "px";
@@ -901,7 +893,7 @@
 				y: 0
 			}, time, timingFunction);
 			return true;
-		}
+		};
 
 		jsScroller.prototype.onTouchMove = function(event) {
 
@@ -929,11 +921,9 @@
 				if(this.refresh) this.refreshContainer.style.overflow = 'hidden';
 			}
 
-
 			this.saveEventInfo(event);
 			this.doScroll();
-
-		}
+		};
 
 		jsScroller.prototype.doScroll = function() {
 
@@ -998,8 +988,7 @@
 					$.trigger(this, "infinite-scroll");
 				}
 			}
-
-		}
+		};
 
 		jsScroller.prototype.calculateMovement = function(event, last) {
 			//default variables
@@ -1033,12 +1022,13 @@
 			scrollInfo.duration = time - prevEventInfo.time;
 
 			return scrollInfo;
-		}
+		};
 
 		jsScroller.prototype.calculateTarget = function(scrollInfo) {
 			scrollInfo.y = this.lastScrollInfo.y + scrollInfo.deltaY;
 			scrollInfo.x = this.lastScrollInfo.x + scrollInfo.deltaX;
-		}
+		};
+		
 		jsScroller.prototype.checkYboundary = function(scrollInfo) {
 			var minTop = this.container.clientHeight / 2;
 			var maxTop = this.elementInfo.maxTop + minTop;
@@ -1047,7 +1037,8 @@
 			else if(-scrollInfo.y > maxTop) scrollInfo.y = -maxTop;
 			else return;
 			this.recalculateDeltaY(scrollInfo);
-		}
+		};
+		
 		jsScroller.prototype.checkXboundary = function(scrollInfo) {
 			//x boundaries
 			if(scrollInfo.x > 0) scrollInfo.x = 0;
@@ -1055,25 +1046,27 @@
 			else return;
 
 			this.recalculateDeltaY(scrollInfo);
-		}
+		};
+		
 		jsScroller.prototype.recalculateDeltaY = function(scrollInfo) {
 			//recalculate delta
 			var oldAbsDeltaY = Math.abs(scrollInfo.deltaY);
 			scrollInfo.deltaY = scrollInfo.y - scrollInfo.top;
-			newAbsDeltaY = Math.abs(scrollInfo.deltaY);
+			var newAbsDeltaY = Math.abs(scrollInfo.deltaY);
 			//recalculate duration at same speed
 			scrollInfo.duration = scrollInfo.duration * newAbsDeltaY / oldAbsDeltaY;
 
-		}
+		};
+		
 		jsScroller.prototype.recalculateDeltaX = function(scrollInfo) {
 			//recalculate delta
 			var oldAbsDeltaX = Math.abs(scrollInfo.deltaX);
 			scrollInfo.deltaX = scrollInfo.x - scrollInfo.left;
-			newAbsDeltaX = Math.abs(scrollInfo.deltaX);
+			var newAbsDeltaX = Math.abs(scrollInfo.deltaX);
 			//recalculate duration at same speed
 			scrollInfo.duration = scrollInfo.duration * newAbsDeltaX / oldAbsDeltaX;
 
-		}
+		};
 
 		jsScroller.prototype.hideRefresh = function(animate) {
 			var that=this;
