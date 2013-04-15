@@ -65,9 +65,9 @@
        $('.tool_tip').slideToggle('300ms');
        ```
      *
-     * @param {String} animation time
-     * @param {Function} [callback]
-     * @param {String} css3 easing method
+     * @param {String} duration animation time (e.g. "100ms")
+     * @param {Function} callback [callback]
+     * @param {String} easing css3 easing method
      * @title $().slideToggle(time,callback,easing);
      */
     $.fn.slideToggle = function (duration, callback, easing) {
@@ -75,12 +75,13 @@
             time: duration ? duration : "500ms",
             callback: callback ? callback : null,
             easing: easing ? easing : "linear"
-        }
+        };
+		
         for (var i = 0; i < this.length; i++) {
             var hideshow = this.css("display", null, this[i]);
             var expand = false;
             var elem = $(this[i]);
-            if (hideshow == "none") {
+            if (hideshow === "none") {
                 elem.show();
                 expand = true;
             }
@@ -90,15 +91,16 @@
                 opts['height'] = height;
             } else {
                 opts['height'] = "0px";
-                var oldCB = callback;
+                var originalCallback = callback;
                 callback = function () {
                     elem.hide();
                     var cbOpts = {
+						callback: originalCallback,
                         height: height,
                         time: "0ms"
-                    }
+                    };
                     elem.css3Animate(cbOpts);
-                }
+                };
             }
             if (callback) opts['callback'] = callback;
             window.setTimeout(function () {
@@ -106,5 +108,5 @@
             }, 1);
         }
         return this;
-    }
+    };
 })(jq);
