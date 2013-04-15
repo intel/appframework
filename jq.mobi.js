@@ -1451,7 +1451,7 @@ if (!window.jq || typeof (jq) !== "function") {
         
         function empty() {
         }
-        var ajaxSettings = {
+        $.ajaxSettings = {
             type: 'GET',
             beforeSend: empty,
             success: empty,
@@ -1536,9 +1536,9 @@ if (!window.jq || typeof (jq) !== "function") {
             try {
 				
                 var settings = opts || {};
-                for (var key in ajaxSettings) {
+                for (var key in $.ajaxSettings) {
                     if (typeof(settings[key]) == 'undefined')
-                        settings[key] = ajaxSettings[key];
+                        settings[key] = $.ajaxSettings[key];
                 }
                 
                 if (!settings.url)
