@@ -78,7 +78,7 @@ You can pass in an HTML string and it will create the object for you.
 var myDiv=$("<div id='foo'>") //Creates a div object and returns it
 ```
 
-# jqMobi API functions - Please see http://http://app-framework-software.intel.com/api for all functions
+# jqMobi API functions - Please see http://app-framework-software.intel.com/api for all functions
 
 
 # jqMobi Ajax calls
