@@ -2401,8 +2401,8 @@ if (!window.jq || typeof (jq) !== "function") {
            $.cleanUpContent(node,itself,kill)
            ```
          * @param {HTMLNode} node
-         * @param {Bool} kill itself
-         * @param {kill} Kill nodes
+         * @param {Bool} itself Also remove the node itself from the DOM
+         * @param {Bool} kill Will fire a 'destroy' event on the node 
          * @title $.cleanUpContent(node,itself,kill)
          */
         $.cleanUpContent = function(node, itself, kill){
