@@ -17,19 +17,19 @@ if (!window.jq || typeof (jq) !== "function") {
      * @api private
      */
     var jq = (function(window) {
-        var undefined, document = window.document, 
-        emptyArray = [], 
-        slice = emptyArray.slice, 
-        classCache = {}, 
-        eventHandlers = [], 
-        _eventID = 1, 
-        jsonPHandlers = [], 
+        var undefined, document = window.document,
+        emptyArray = [],
+        slice = emptyArray.slice,
+        classCache = {},
+        eventHandlers = [],
+        _eventID = 1,
+        jsonPHandlers = [],
         _jsonPID = 1,
         fragementRE=/^\s*<(\w+)[^>]*>/,
         _attrCache={},
         _propCache={};
-        
-        
+
+
         /**
          * internal function to use domfragments for insertion
          *
@@ -43,20 +43,20 @@ if (!window.jq || typeof (jq) !== "function") {
                     frag.insertBefore(jqm[j],frag.firstChild);
                 }
                 container.insertBefore(frag,container.firstChild);
-            
+
             }
             else {
-            
+
                 for(var j=0;j<jqm.length;j++)
                     frag.appendChild(jqm[j]);
                 container.appendChild(frag);
             }
             frag=null;
         }
-                
-            
-                    
-        
+
+
+
+
 
         /**
          * Internal function to test if a class name fits in a regular expression
@@ -96,7 +96,7 @@ if (!window.jq || typeof (jq) !== "function") {
             var elems = [];
             if (nodes == undefined)
                 return elems;
-            
+
             for (; nodes; nodes = nodes.nextSibling) {
                 if (nodes.nodeType == 1 && nodes !== element) {
                     elems.push(nodes);
@@ -140,13 +140,13 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (what instanceof $jqm) {
                     return what.find(toSelect);
                 }
-            
+
             } else {
                 what = document;
             }
-            
+
             return this.selector(toSelect, what);
-            
+
         };
 
         /**
@@ -172,16 +172,17 @@ if (!window.jq || typeof (jq) !== "function") {
  			}
  		};
         function _selector(selector, what) {
-            
+
 
 			selector=selector.trim();
-            
+
             if (selector[0] === "#" && selector.indexOf(".")==-1 && selector.indexOf(" ")===-1 && selector.indexOf(">")===-1){
                 if (what == document)
                     _shimNodes(what.getElementById(selector.replace("#", "")),this);
                 else
                     _shimNodes(_selectorAll(selector, what),this);
-            } else if (selector[0] === "<" && selector[selector.length - 1] === ">")  //html
+            }
+            else if ((selector[0] === "<" && selector[selector.length - 1] === ">")||(selector.indexOf("<")!==-1&&selector.indexOf(">")!==-1)) //html
             {
                 var tmp = document.createElement("div");
                 tmp.innerHTML = selector.trim();
@@ -191,7 +192,7 @@ if (!window.jq || typeof (jq) !== "function") {
             }
             return this;
         }
-		
+
         function _shimNodes(nodes,obj){
             if(!nodes)
                 return;
@@ -224,7 +225,7 @@ if (!window.jq || typeof (jq) !== "function") {
         * @title $.map(elements,callback)
         */
         $.map = function(elements, callback) {
-            var value, values = [], 
+            var value, values = [],
             i, key;
             if ($.isArray(elements))
                 for (i = 0; i < elements.length; i++) {
@@ -368,7 +369,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     return $();
                 params.oldElement = this;
                 return params;
-            
+
             },
             /**
             * This is a wrapper to $.map on the selected elements
@@ -415,7 +416,7 @@ if (!window.jq || typeof (jq) !== "function") {
             * @return {Object} a jqMobi object
             * @title $().ready(function)
             */
-            
+
             ready: function(callback) {
                 if (document.readyState === "complete" || document.readyState === "loaded"||(!$.os.ie&&document.readyState==="interactive")) //IE10 fires interactive too early
                     callback();
@@ -443,7 +444,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 var tmpElems;
                 for (var i = 0; i < this.length; i++) {
                     tmpElems = ($(sel, this[i]));
-                    
+
                     for (var j = 0; j < tmpElems.length; j++) {
                         elems.push(tmpElems[j]);
                     }
@@ -669,7 +670,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             attr: function(attr, value) {
                 if (this.length === 0)
-                    return (value === undefined) ? undefined : this;            
+                    return (value === undefined) ? undefined : this;
                 if (value === undefined && !$.isObject(attr)) {
                     var val = (this[0].jqmCacheId&&_attrCache[this[0].jqmCacheId][attr])?(this[0].jqmCacheId&&_attrCache[this[0].jqmCacheId][attr]):this[0].getAttribute(attr);
                     return val;
@@ -682,10 +683,10 @@ if (!window.jq || typeof (jq) !== "function") {
                     }
                     else if($.isArray(value)||$.isObject(value)||$.isFunction(value))
                     {
-                        
+
                         if(!this[i].jqmCacheId)
                             this[i].jqmCacheId=$.uuid();
-                        
+
                         if(!_attrCache[this[i].jqmCacheId])
                             _attrCache[this[i].jqmCacheId]={}
                         _attrCache[this[i].jqmCacheId][attr]=value;
@@ -740,7 +741,7 @@ if (!window.jq || typeof (jq) !== "function") {
             */
             prop: function(prop, value) {
                 if (this.length === 0)
-                    return (value === undefined) ? undefined : this;          
+                    return (value === undefined) ? undefined : this;
                 if (value === undefined && !$.isObject(prop)) {
                     var res;
                     var val = (this[0].jqmCacheId&&_propCache[this[0].jqmCacheId][prop])?(this[0].jqmCacheId&&_propCache[this[0].jqmCacheId][prop]):!(res=this[0][prop])&&prop in this[0]?this[0][prop]:res;
@@ -754,10 +755,10 @@ if (!window.jq || typeof (jq) !== "function") {
                     }
                     else if($.isArray(value)||$.isObject(value)||$.isFunction(value))
                     {
-                        
+
                         if(!this[i].jqmCacheId)
                             this[i].jqmCacheId=$.uuid();
-                        
+
                         if(!_propCache[this[i].jqmCacheId])
                             _propCache[this[i].jqmCacheId]={}
                         _propCache[this[i].jqmCacheId][prop]=value;
@@ -840,7 +841,7 @@ if (!window.jq || typeof (jq) !== "function") {
                         if (!that.hasClass(cname, that[i]))
                             classList.push(cname);
                     });
-                    
+
                     this[i].className += (cls ? " " : "") + classList.join(" ");
                     this[i].className = this[i].className.trim();
                 }
@@ -943,8 +944,8 @@ if (!window.jq || typeof (jq) !== "function") {
                 if ($.isArray(element) || $.isObject(element))
                     element = $(element);
                 var i;
-                
-                
+
+
                 for (i = 0; i < this.length; i++) {
                     if (element.length && typeof element != "string") {
                         element = $(element);
@@ -1015,7 +1016,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 ```
                 $().insertBefore(jq("#target"));
                 ```
-             
+
              * @param {String|Object} Target
              * @title $().insertBefore(target);
              */
@@ -1025,7 +1026,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 target = $(target).get(0);
                 if (!target)
                     return this;
-                for (var i = 0; i < this.length; i++) 
+                for (var i = 0; i < this.length; i++)
                 {
                     after ? target.parentNode.insertBefore(this[i], target.nextSibling) : target.parentNode.insertBefore(this[i], target);
                 }
@@ -1197,7 +1198,7 @@ if (!window.jq || typeof (jq) !== "function") {
             * @title $().children(selector)
             */
             children: function(selector) {
-                
+
                 if (this.length == 0)
                     return this;
                 var elems = [];
@@ -1205,7 +1206,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     elems = elems.concat(siblings(this[i].firstChild));
                 }
                 return this.setupOld($((elems)).filter(selector));
-            
+
             },
             /**
             * Returns the siblings of the element based off the selector
@@ -1245,9 +1246,9 @@ if (!window.jq || typeof (jq) !== "function") {
             closest: function(selector, context) {
                 if (this.length == 0)
                     return this;
-                var elems = [], 
+                var elems = [],
                 cur = this[0];
-                
+
                 var start = $(selector, context);
                 if (start.length == 0)
                     return $();
@@ -1255,7 +1256,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     cur = cur !== context && cur !== document && cur.parentNode;
                 }
                 return $(cur);
-            
+
             },
             /**
             * Filters elements based off the selector
@@ -1272,7 +1273,7 @@ if (!window.jq || typeof (jq) !== "function") {
             filter: function(selector) {
                 if (this.length == 0)
                     return this;
-                
+
                 if (selector == undefined)
                     return this;
                 var elems = [];
@@ -1355,7 +1356,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 for (var i = 0; i < this.length; i++) {
                     elems.push(this[i].cloneNode(deep));
                 }
-                
+
                 return $(elems);
             },
             /**
@@ -1382,11 +1383,11 @@ if (!window.jq || typeof (jq) !== "function") {
                 if (this.length == 0)
                     return "";
                 var params = [];
-                for (var i = 0; i < this.length; i++) 
+                for (var i = 0; i < this.length; i++)
                 {
                     this.slice.call(this[i].elements).forEach(function(elem) {
                         var type = elem.getAttribute("type");
-                        if (elem.nodeName.toLowerCase() != "fieldset" && !elem.disabled && type != "submit" 
+                        if (elem.nodeName.toLowerCase() != "fieldset" && !elem.disabled && type != "submit"
                         && type != "reset" && type != "button" && ((type != "radio" && type != "checkbox") || elem.checked))
                         {
 
@@ -1448,7 +1449,7 @@ if (!window.jq || typeof (jq) !== "function") {
 
 
         /* AJAX functions */
-        
+
         function empty() {
         }
         $.ajaxSettings = {
@@ -1475,7 +1476,7 @@ if (!window.jq || typeof (jq) !== "function") {
         */
         $.jsonP = function(options) {
             var callbackName = 'jsonp_callback' + (++_jsonPID);
-            var abortTimeout = "", 
+            var abortTimeout = "",
             context;
             var script = document.createElement("script");
             var abort = function() {
@@ -1534,23 +1535,23 @@ if (!window.jq || typeof (jq) !== "function") {
         $.ajax = function(opts) {
             var xhr;
             try {
-				
+
                 var settings = opts || {};
                 for (var key in $.ajaxSettings) {
                     if (typeof(settings[key]) == 'undefined')
                         settings[key] = $.ajaxSettings[key];
                 }
-                
+
                 if (!settings.url)
                     settings.url = window.location;
                 if (!settings.contentType)
                     settings.contentType = "application/x-www-form-urlencoded";
                 if (!settings.headers)
                     settings.headers = {};
-               
+
                 if(!('async' in settings)||settings.async!==false)
                     settings.async=true;
-                
+
                 if (!settings.dataType)
                     settings.dataType = "text/html";
                 else {
@@ -1586,23 +1587,23 @@ if (!window.jq || typeof (jq) !== "function") {
                     else
                         settings.url += "&" + settings.data;
                 }
-                
+
                 if (/=\?/.test(settings.url)) {
                     return $.jsonP(settings);
                 }
                 if (settings.crossDomain === null) settings.crossDomain = /^([\w-]+:)?\/\/([^\/]+)/.test(settings.url) &&
                     RegExp.$2 != window.location.host;
-                
+
                 if(!settings.crossDomain)
                     settings.headers = $.extend({'X-Requested-With': 'XMLHttpRequest'}, settings.headers);
                 var abortTimeout;
                 var context = settings.context;
                 var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
-				
+
 				//ok, we are really using xhr
 				xhr = new window.XMLHttpRequest();
-				
-				
+
+
                 xhr.onreadystatechange = function() {
                     var mime = settings.dataType;
                     if (xhr.readyState === 4) {
@@ -1617,7 +1618,7 @@ if (!window.jq || typeof (jq) !== "function") {
                                 }
                             } else if (mime === 'application/xml, text/xml') {
                                 result = xhr.responseXML;
-                            } 
+                            }
                             else if(mime=="text/html"){
                                 result=xhr.responseText;
                                 $.parseJS(result);
@@ -1641,7 +1642,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 };
                 xhr.open(settings.type, settings.url, settings.async);
 				if (settings.withCredentials) xhr.withCredentials = true;
-                
+
                 if (settings.contentType)
                     settings.headers['Content-Type'] = settings.contentType;
                 for (var name in settings.headers)
@@ -1650,7 +1651,7 @@ if (!window.jq || typeof (jq) !== "function") {
                     xhr.abort();
                     return false;
                 }
-                
+
                 if (settings.timeout > 0)
                     abortTimeout = setTimeout(function() {
                         xhr.onreadystatechange = empty;
@@ -1665,8 +1666,8 @@ if (!window.jq || typeof (jq) !== "function") {
             }
             return xhr;
         };
-        
-        
+
+
         /**
         * Shorthand call to an Ajax GET request
             ```
@@ -1753,13 +1754,13 @@ if (!window.jq || typeof (jq) !== "function") {
             var str = [];
             if (obj instanceof $jqm) {
                 obj.each(function() {
-                    var k = prefix ? prefix + "[]" : this.id, 
+                    var k = prefix ? prefix + "[]" : this.id,
                     v = this.value;
                     str.push((k) + "=" + encodeURIComponent(v));
                 });
             } else {
                 for (var p in obj) {
-                    var k = prefix ? prefix + "[" + p + "]" : p, 
+                    var k = prefix ? prefix + "[" + p + "]" : p,
                     v = obj[p];
                     str.push($.isObject(v) ? $.param(v, k) : (k) + "=" + encodeURIComponent(v));
                 }
@@ -1851,7 +1852,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 return this
             };
         }
-        
+
         /**
          * Utility function to create a psuedo GUID
            ```
@@ -1891,7 +1892,7 @@ if (!window.jq || typeof (jq) !== "function") {
             }
         }
 
-        
+
         /**
          Zepto.js events
          @api private
@@ -1899,7 +1900,7 @@ if (!window.jq || typeof (jq) !== "function") {
 
         //The following is modified from Zepto.js / events.js
         //We've removed depricated jQuery events like .live and allow anonymous functions to be removed
-        var handlers = {}, 
+        var handlers = {},
         _jqmid = 1;
         /**
          * Gets or sets the expando property on a javascript element
@@ -1981,10 +1982,10 @@ if (!window.jq || typeof (jq) !== "function") {
          * @api private
          */
         function add(element, events, fn, selector, getDelegate) {
-            var id = jqmid(element), 
+            var id = jqmid(element),
             set = (handlers[id] || (handlers[id] = []));
             eachEvent(events, fn, function(event, fn) {
-                var delegate = getDelegate && getDelegate(fn, event), 
+                var delegate = getDelegate && getDelegate(fn, event),
                 callback = delegate || fn;
                 var proxyfn = function(event) {
                     var result = callback.apply(element, [event].concat(event.data));
@@ -2015,7 +2016,7 @@ if (!window.jq || typeof (jq) !== "function") {
          * @api private
          */
         function remove(element, events, fn, selector) {
-            
+
             var id = jqmid(element);
             eachEvent(events || '', fn, function(event, fn) {
                 findHandlers(element, event, fn, selector).forEach(function(handler) {
@@ -2024,7 +2025,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 });
             });
         }
-        
+
         $.event = {
             add: add,
             remove: remove
@@ -2088,25 +2089,25 @@ if (!window.jq || typeof (jq) !== "function") {
                 });
             });
         };
-        
+
          /**
          * internal variables
          * @api private
          */
-        
+
         var returnTrue = function() {
             return true
-        }, 
+        },
         returnFalse = function() {
             return false
-        }, 
+        },
         eventMethods = {
             preventDefault: 'isDefaultPrevented',
             stopImmediatePropagation: 'isImmediatePropagationStopped',
             stopPropagation: 'isPropagationStopped'
         };
         /**
-         * Creates a proxy function for event handlers. 
+         * Creates a proxy function for event handlers.
 		 * As "some" browsers dont support event.stopPropagation this call is bypassed if it cant be found on the event object.
          * @param {String} event
          * @return {Function} proxy
@@ -2118,7 +2119,7 @@ if (!window.jq || typeof (jq) !== "function") {
             }, event);
             $.each(eventMethods, function(name, predicate) {
                 proxy[name] = function() {
-                    this[predicate] = returnTrue;					
+                    this[predicate] = returnTrue;
 					if (name == "stopImmediatePropagation" || name == "stopPropagation"){
 						event.cancelBubble = true;
 						if(!event[name])
@@ -2244,9 +2245,9 @@ if (!window.jq || typeof (jq) !== "function") {
          * @return {event} a custom event that can then be dispatched
          * @title $.Event(type,props);
          */
-        
+
         $.Event = function(type, props) {
-            var event = document.createEvent('Events'), 
+            var event = document.createEvent('Events'),
             bubbles = true;
             if (props)
                 for (var name in props)
@@ -2254,10 +2255,10 @@ if (!window.jq || typeof (jq) !== "function") {
             event.initEvent(type, bubbles, true, null, null, null, null, null, null, null, null, null, null, null, null);
             return event;
         };
-		
+
         /* The following are for events on objects */
 		/**
-         * Bind an event to an object instead of a DOM Node 
+         * Bind an event to an object instead of a DOM Node
            ```
            $.bind(this,'event',function(){});
            ```
@@ -2276,7 +2277,7 @@ if (!window.jq || typeof (jq) !== "function") {
 		};
 
         /**
-         * Trigger an event to an object instead of a DOM Node 
+         * Trigger an event to an object instead of a DOM Node
            ```
            $.trigger(this,'event',arguments);
            ```
@@ -2294,14 +2295,14 @@ if (!window.jq || typeof (jq) !== "function") {
 				if(obj.__events[ev[i]]){
 					var evts = obj.__events[ev[i]];
 					for(var j = 0; j<evts.length; j++)
-						if($.isFunction(evts[j]) && evts[j].apply(obj, args)===false) 
+						if($.isFunction(evts[j]) && evts[j].apply(obj, args)===false)
 							ret = false;
 				}
 			}
 			return ret;
 		};
         /**
-         * Unbind an event to an object instead of a DOM Node 
+         * Unbind an event to an object instead of a DOM Node
            ```
            $.unbind(this,'event',function(){});
            ```
@@ -2327,24 +2328,24 @@ if (!window.jq || typeof (jq) !== "function") {
 				}
 			}
 		};
-		
-        
+
+
         /**
          * Creates a proxy function so you can change the 'this' context in the function
 		 * Update: now also allows multiple argument call or for you to pass your own arguments
          ```
             var newObj={foo:bar}
             $("#main").bind("click",$.proxy(function(evt){console.log(this)},newObj);
-			
-			or 
-			
+
+			or
+
 			( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj) )('foo', 'bar');
-			
-			or 
-			
+
+			or
+
 			( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj, ['foo', 'bar']) )();
          ```
-         
+
          * @param {Function} Callback
          * @param {Object} Context
          * @title $.proxy(callback,context);
@@ -2356,7 +2357,7 @@ if (!window.jq || typeof (jq) !== "function") {
             }
 		}
 
-      
+
          /**
          * Removes listeners on a div and its children recursively
             ```
@@ -2386,13 +2387,13 @@ if (!window.jq || typeof (jq) !== "function") {
             if(children && children.length > 0)
                 for(var child in children)
                     cleanUpContent(children[child], kill);
-			
+
 			cleanUpNode(node, kill);
 		}
 		var cleanUpAsap = function(els, kill){
         	for(var i=0;i<els.length;i++){
             	cleanUpContent(els[i], kill);
-            }	
+            }
 		}
 
         /**
@@ -2417,7 +2418,7 @@ if (!window.jq || typeof (jq) !== "function") {
 			//cleanUp this node
 			if(itself) cleanUpNode(node, kill);
         }
-		
+
         // Like setTimeout(fn, 0); but much faster
 		var timeouts = [];
 		var contexts = [];
@@ -2436,7 +2437,7 @@ if (!window.jq || typeof (jq) !== "function") {
             timeouts.push(fn);
 			contexts.push(context?context:{});
 			params.push(args?args:[]);
-			//post a message to ourselves so we know we have to execute a function from the stack 
+			//post a message to ourselves so we know we have to execute a function from the stack
             window.postMessage("jqm-asap", "*");
         }
 		window.addEventListener("message", function(event) {
@@ -2466,7 +2467,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 div=elem;
             }
             var scripts = div.getElementsByTagName("script");
-            div = null;            
+            div = null;
             for (var i = 0; i < scripts.length; i++) {
                 if (scripts[i].src.length > 0 && !remoteJSPages[scripts[i].src]) {
                     var doc = document.createElement("script");
@@ -2480,7 +2481,7 @@ if (!window.jq || typeof (jq) !== "function") {
                 }
             }
         };
-		
+
 
         /**
         //custom events since people want to do $().click instead of $().bind("click")
@@ -2507,7 +2508,7 @@ if (!window.jq || typeof (jq) !== "function") {
 				if(val.replace){
 					val = val.replace(/[^0-9.-]/, "");
 				} else return 0;
-			}  
+			}
             return parseFloat(val);
         }
     }
