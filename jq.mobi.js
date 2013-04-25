@@ -2282,14 +2282,14 @@ if (!window.jq || typeof (jq) !== "function") {
            ```
          * @param {Object} object
          * @param {String} event name
-         * @param {Array} arguments
+         * @param {Array|Object} arguments
          * @title $.trigger(object,event,argments);
          */
 		$.trigger = function(obj, ev, args){
 			var ret = true;
 			if(!obj.__events) return ret;
 			if(!$.isArray(ev)) ev = [ev];
-			if(!$.isArray(args)) args = [];
+			if(!$.isArray(args)) args = [args];
 			for(var i=0; i<ev.length; i++){
 				if(obj.__events[ev[i]]){
 					var evts = obj.__events[ev[i]];
