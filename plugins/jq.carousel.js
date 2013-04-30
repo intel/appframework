@@ -1,7 +1,7 @@
 /**
  * jq.web.carousel - a carousel library for html5 mobile apps
  * @copyright 2011 - Intel
- * 
+ *
  */
 (function($) {
     var cache = [];
@@ -23,11 +23,11 @@
         }
         return this.length == 1 ? tmp : this;
     };
-    
+
     var carousel = (function() {
         var translateOpen =$.feat.cssTransformStart;
         var translateClose = $.feat.cssTransformEnd;
-        
+
         var carousel = function(containerEl, opts) {
             if (typeof containerEl === "string" || containerEl instanceof String) {
                 this.container = document.getElementById(containerEl);
@@ -45,11 +45,11 @@
                     }
                 }
             } else {
-                
+
                 return new carousel(containerEl, opts);
             }
-        
-                 
+
+
                 var that = this;
                 jq(this.container).bind('destroy', function(e){
                     var id = that.container.jqmCarouselId;
@@ -58,7 +58,7 @@
                    if(cache[id]) delete cache[id];
                    e.stopPropagation();
                 });
-                
+
                 this.pagingDiv = this.pagingDiv ? document.getElementById(this.pagingDiv) : null;
 
 
@@ -67,7 +67,7 @@
                 if (this.vertical) {
                     this.horizontal = false;
                 }
-                
+
                 var el = document.createElement("div");
                 this.container.appendChild(el);
                 var $el=$(el);
@@ -84,11 +84,11 @@
                 if (this.horizontal) {
                     el.style.display = "block";
                     el.style['float']="left";
-                } 
+                }
                 else {
                     el.style.display = "block";
                 }
-                
+
                 this.el = el;
                 this.refreshItems();
                 var jqEl = jq(el);
@@ -97,9 +97,9 @@
                 jqEl.bind('touchstart', function(e) {that.touchStart(e);});
                 this.orientationHandler = function() {that.onMoveIndex(that.carouselIndex,0);};
                 window.addEventListener("orientationchange", this.orientationHandler, false);
-           
+
         };
-        
+
         carousel.prototype = {
             startX: 0,
             startY: 0,
@@ -122,7 +122,7 @@
             pagingFunction: null,
             lockMove:false,
             okToMove: false,
-       
+
             // handle the moving function
             touchStart: function(e) {
                 this.okToMove = false;
@@ -137,7 +137,7 @@
                     }
                 }
                 if (e.touches.length === 1) {
-                    
+
                     this.movingElement = true;
                     this.startY = e.touches[0].pageY;
                     this.startX = e.touches[0].pageX;
@@ -164,24 +164,23 @@
                 if (e.touches.length > 1) {
                     return this.touchEnd(e);
                 }
-                
+
                 var rawDelta = {
                     x: e.touches[0].pageX - this.startX,
                     y: e.touches[0].pageY - this.startY
                 };
-                
+
                 if (this.vertical) {
                     var movePos = { x: 0, y: 0 };
                     this.dy = e.touches[0].pageY - this.startY;
-                    
+
                     this.dy += this.cssMoveStart;
                     movePos.y = this.dy;
 
                     e.preventDefault();
                     //e.stopPropagation();
                 } else {
-                    if (!this.lockMove&&isHorizontalSwipe(rawDelta.x, rawDelta.y)) {
-                         
+                    if ((!this.lockMove&&isHorizontalSwipe(rawDelta.x, rawDelta.y))||Math.abs(this.dx)>5) {
                         var movePos = {x: 0,y: 0};
                         this.dx = e.touches[0].pageX - this.startX;
                         this.dx += this.cssMoveStart;
@@ -192,9 +191,9 @@
                     else
                        return this.lockMove=true;
                 }
-                
+
                 var totalMoved = this.vertical ? ((this.dy % this.myDivHeight) / this.myDivHeight * 100) * -1 : ((this.dx % this.myDivWidth) / this.myDivWidth * 100) * -1; // get a percentage of movement.
-      
+
                 if (!this.okToMove) {
                     oldStateOkToMove= this.okToMove;
                     this.okToMove = this.glue ? Math.abs(totalMoved) > this.glue  && Math.abs(totalMoved) < (100 - this.glue) : true;
@@ -202,10 +201,10 @@
                     	$.trigger(this,"movestart",[this.el]);
                     }
                 }
-                	
-                if  (this.okToMove && movePos) 
+
+                if  (this.okToMove && movePos)
                    this.moveCSS3(this.el, movePos);
-                   
+
             },
             touchEnd: function(e) {
                 if (!this.movingElement) {
@@ -218,7 +217,7 @@
                 try {
                     var cssMatrix=$.getCssMatrix(this.el);
                     var endPos = this.vertical ? numOnly(cssMatrix.f) : numOnly(cssMatrix.e);
-                    
+
                     if (1==2&&endPos > 0) {
                         this.moveCSS3(this.el, {
                             x: 0,
@@ -250,13 +249,13 @@
                         };
                         if (this.vertical) {
                             movePos.y = (toMove * this.myDivHeight * -1);
-                        } 
+                        }
                         else {
                             movePos.x = (toMove * this.myDivWidth * -1);
                         }
-                        
+
                         this.moveCSS3(this.el, movePos, "150");
-                        
+
                         if (this.pagingDiv && this.carouselIndex !== currInd) {
                             document.getElementById(this.container.id + "_" + this.carouselIndex).className = this.pagingCssName;
                             document.getElementById(this.container.id + "_" + currInd).className = this.pagingCssNameSelected;
@@ -264,7 +263,7 @@
                         if (this.carouselIndex != currInd)
                             runFinal = true;
                         this.carouselIndex = currInd;
-                        
+
                         //This is for the infinite ends - will move to the correct position after animation
                         if(toMove!=currInd){
                             var that=this;
@@ -285,7 +284,7 @@
                     this.pagingFunction(this.carouselIndex);
             },
             onMoveIndex: function(newInd,transitionTime) {
-                
+
                 this.myDivWidth = numOnly(this.container.clientWidth);
                 this.myDivHeight = numOnly(this.container.clientHeight);
                 var runFinal = false;
@@ -294,7 +293,7 @@
                         document.getElementById(this.container.id + "_" + this.carouselIndex).className = this.pagingCssName;
 
                     var newTime = Math.abs(newInd - this.carouselIndex);
-                    
+
                     var ind = newInd;
                     if (ind < 0)
                         ind = 0;
@@ -307,11 +306,11 @@
                     };
                     if (this.vertical) {
                         movePos.y = (ind * this.myDivHeight * -1);
-                    } 
+                    }
                     else {
                         movePos.x = (ind * this.myDivWidth * -1);
                     }
-                    
+
                     var time =transitionTime?transitionTime: 50 + parseInt((newTime * 20));
                     this.moveCSS3(this.el, movePos, time);
                     if (this.carouselIndex != ind)
@@ -321,11 +320,11 @@
                         var tmpEl = document.getElementById(this.container.id + "_" + this.carouselIndex);
                         if(tmpEl) tmpEl.className = this.pagingCssNameSelected;
                     }
-               
+
                 if (runFinal && this.pagingFunction && typeof this.pagingFunction == "function")
                     this.pagingFunction(currInd);
             },
-            
+
             moveCSS3: function(el, distanceToMove, time, timingFunction) {
                 if (!time)
                     time = 0;
@@ -339,10 +338,10 @@
                 el.style[$.feat.cssPrefix+"TransformStyle"] = "preserve-3d";
                 el.style[$.feat.cssPrefix+"TransitionTimingFunction"] = timingFunction;
             },
-            
+
             addItem: function(el) {
                 if (el && el.nodeType) {
-                    
+
                     this.container.childNodes[0].appendChild(el);
                     this.refreshItems();
                 }
@@ -365,7 +364,7 @@
                     }
                 }
                 //Let's put the buffers at the start/end
-                
+
                 var prep=$(elems[elems.length-1]).clone().get(0);
                 prep.className="prevBuffer";
                 $(el).prepend(prep);
@@ -374,17 +373,17 @@
                 $(el).append(tmp);
                 elems.push(tmp);
                 elems.unshift(prep);
-                
+
                 var param = (100 / childrenCounter) + "%";
                 this.childrenCount = childrenCounter;
                 widthParam = parseFloat(100 / childrenCounter) + "%";
-                
+
                 for (var i = 0; i < elems.length; i++) {
                     if (this.horizontal) {
                         elems[i].style.width = widthParam;
                         elems[i].style.height = "100%";
                         elems[i].style['float']="left";
-                    } 
+                    }
                     else {
                         elems[i].style.height = widthParam;
                         elems[i].style.width = "100%";
@@ -405,7 +404,7 @@
                     el.style['min-height'] = "100%"
                     prep.style.left="-"+widthParam;
                     tmp.style.left="100%";
-                } 
+                }
                 else {
                     el.style.width = "100%";
                     el.style.height = Math.ceil((this.childrenCount) * 100) + "%";
@@ -417,13 +416,13 @@
                 if (this.pagingDiv) {
                     this.pagingDiv.innerHTML = ""
                     for (i = 0; i < this.childrenCount; i++) {
-                        
+
                         var pagingEl = document.createElement("div");
                         pagingEl.id = this.container.id + "_" + i;
                         pagingEl.pageId = i;
                         if (i !== this.carouselIndex) {
                             pagingEl.className = this.pagingCssName;
-                        } 
+                        }
                         else {
                             pagingEl.className = this.pagingCssNameSelected;
                         }
@@ -431,7 +430,7 @@
                             that.onMoveIndex(this.pageId);
                         };
                         var spacerEl = document.createElement("div");
-                     
+
                         spacerEl.style.width = "20px";
                         if(this.horizontal){
                             spacerEl.style.display = "inline-block";
@@ -441,7 +440,7 @@
                            spacerEl.innerHTML="&nbsp;";
                            spacerEl.style.display="block";
                         }
-                        
+
                         this.pagingDiv.appendChild(pagingEl);
                         if (i + 1 < (this.childrenCount))
                             this.pagingDiv.appendChild(spacerEl);
@@ -458,23 +457,23 @@
                     }
                 }
                 this.onMoveIndex(this.carouselIndex);
-                
+
             }
-        
+
         };
         return carousel;
     })();
-    
+
     function isHorizontalSwipe(xAxis, yAxis) {
                 var X = xAxis;
                 var Y = yAxis;
                 var Z = Math.round(Math.sqrt(Math.pow(X,2)+Math.pow(Y,2))); //the distance - rounded - in pixels
-                var r = Math.atan2(Y,X); //angle in radians 
+                var r = Math.atan2(Y,X); //angle in radians
                 var swipeAngle = Math.round(r*180/Math.PI); //angle in degrees
                 if ( swipeAngle < 0 ) { swipeAngle =  360 - Math.abs(swipeAngle); } // for negative degree values
                 if (((swipeAngle <= 215) && (swipeAngle >= 155)) || ((swipeAngle <= 45) && (swipeAngle >= 0)) || ((swipeAngle <= 360) && (swipeAngle >= 315))) // horizontal angles with threshold
                 {return true; }
                 else {return false}
     }
-    
+
 })(jq);
