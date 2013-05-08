@@ -440,6 +440,8 @@
 		nativeScroller.prototype.onTouchStart = function(e) {
 			if(this.el.scrollTop===0)
                 this.el.scrollTop=1;
+            if(this.el.scrollTop===(this.el.scrollHeight - this.el.clientHeight))
+                this.el.scrollTop-=1;
 			if(this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
 			//get refresh ready
 			if(this.refresh || this.infinite) {
