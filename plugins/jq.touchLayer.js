@@ -1,8 +1,8 @@
 //TouchLayer contributed by Carlos Ouro @ Badoo
-//un-authoritive layer between touches and actions on the DOM 
+//un-authoritive layer between touches and actions on the DOM
 //(un-authoritive: listeners do not require useCapture)
-//handles overlooking JS and native scrolling, panning, 
-//no delay on click, edit mode focus, preventing defaults, resizing content, 
+//handles overlooking JS and native scrolling, panning,
+//no delay on click, edit mode focus, preventing defaults, resizing content,
 //enter/exit edit mode (keyboard on screen), prevent clicks on momentum, etc
 //It can be used independently in other apps but it is required by jqUi
 //Object Events
@@ -196,7 +196,9 @@
 			} else if(jq.os.android) {
 				//on some phones its immediate
 				window.scrollTo(1, 1);
-				this.layer.style.height = this.isFocused_ ? (window.innerHeight) + "px" : (window.outerHeight / window.devicePixelRatio) + 'px';
+				//this.layer.style.height = this.isFocused_ ? (window.innerHeight) + "px" : (window.outerHeight / window.devicePixelRatio) + 'px';
+     			this.layer.style.height = this.isFocused_||window.innerHeight>window.outerHeight ? (window.innerHeight) + "px" : ((window.outerHeight) / window.devicePixelRatio)+ 'px';
+
 				//sometimes android devices are stubborn
 				that = this;
 				//re-test in a bit (some androids (SII, Nexus S, etc) fail to resize on first try)
@@ -317,7 +319,7 @@
 		},
 		onBlur: function(e) {
 			if(jq.os.android && e.target == window) return; //ignore window blurs
-	
+
 			this.isFocused_ = false;
 			//just in case...
 			if(this.focusedElement) this.focusedElement.removeEventListener('blur', this, false);
@@ -378,7 +380,7 @@
 					else this.blockPossibleClick_ = true;
 					//check if event was already set
 				} else if(this.scrollTimeoutEl_) {
-					//trigger 
+					//trigger
 					this.scrollEnded(true);
 					this.blockPossibleClick_ = true;
 				}
@@ -389,7 +391,7 @@
 			// We allow forcing native tap in android devices (required in special cases)
 			var forceNativeTap = (jq.os.android && e && e.target && e.target.getAttribute && e.target.getAttribute("data-touchlayer") == "ignore");
 
-			//if on edit mode, allow all native touches 
+			//if on edit mode, allow all native touches
 			//(BB10 must still be prevented, always clicks even after move)
 			if(forceNativeTap || (this.isFocused_ && !$.os.blackberry10)) {
 				this.requiresNativeTap = true;
