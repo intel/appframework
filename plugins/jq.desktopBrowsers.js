@@ -82,7 +82,7 @@
 	    {
 	        if (!mouseDown) return;
 	        if(firstMove) return firstMove=false
-	        redirectMouseToTouch("touchmove", e);
+	        redirectMouseToTouch("touchmove", e,lastTarget);
 	    	e.preventDefault();
 
 	    	cancelClickMove=true;
@@ -116,7 +116,7 @@
 
 	        if (!mouseDown) return;
 	        if(firstMove) return firstMove=false
-	        redirectMouseToTouch("touchmove", e);
+	        redirectMouseToTouch("touchmove", e,lastTarget);
 	    	e.preventDefault();
 	    	//e.stopPropagation();
 
