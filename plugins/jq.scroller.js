@@ -499,7 +499,7 @@
 			var triggered = this.el.scrollTop <= -(this.refreshHeight);
 
 			this.fireRefreshRelease(triggered, true);
-            if(triggered){
+            if(triggered && this.refreshContainer){
                 //lock in place
                 this.refreshContainer.style.position="relative";
                 this.refreshContainer.style.top="0px";
