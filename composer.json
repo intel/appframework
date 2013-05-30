@@ -1,0 +1,11 @@
+{
+    "name": "intel/appframework",
+    "description": "is a Javascript framework targeted at HTML5 browsers with a blazingly fast query selector library that supports W3C queries.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ian Maffett",
+            "email": "ian.maffett@intel.com"
+        }
+    ]
+}
