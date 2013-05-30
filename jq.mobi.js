@@ -561,7 +561,7 @@ if (!window.jq || typeof (jq) !== "function") {
             empty: function() {
                 for (var i = 0; i < this.length; i++) {
                     $.cleanUpContent(this[i], false, true);
-                    this[i].innerHTML = '';
+                    this[i].textContent = '';
                 }
                 return this;
             },
