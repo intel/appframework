@@ -1,0 +1,8 @@
+$.jsonP makes a jsonP request for you.  This allows you to make requests across different domains.
+
+To learn more about jsonP, go <a href="http://json-p.org/" target="_blank" data-ignore="true">here</a>
+
+
+```js
+$.jsonP(url:"URL", success:function(data){console.log('data')}, timeout:"1000", error:function(){} ) - makes a jsonP call for cross domain scripting
+```

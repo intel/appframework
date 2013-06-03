@@ -1,0 +1,72 @@
+
+/**********************************************************
+.list > LI
+**********************************************************/
+/* The unordered list/list item classes are the basis of the secondary navigation used in af.Mobi: the stacked, listed menu system. */
+
+.list {
+	margin:0px;
+	padding:0px;
+	margin-bottom: 10px;
+	list-style: none;
+	background-color: #fff;
+	box-sizing:border-box;
+	-webkit-box-sizing:border-box;
+	font-weight:bold;
+}
+
+.list li {
+	display:block;
+	list-style:none;
+	position: relative;
+	padding: 20px 20px 20px 10px;
+	border-bottom:1px solid #ccc;
+}
+.list li:first-child { border-top: 1px solid #ccc; }
+
+.list > li > a {
+	display:block;
+	position: relative;
+	display: block;
+	color: inherit;
+	margin: -20px -20px -20px -10px;
+	text-decoration: none;
+	padding: 20px 20px 20px 10px;
+}
+
+.list a .af-badge {
+	position:absolute;
+	right:30px;	top:48%;
+	margin-top:-10px;
+}
+.list > li > a:after {
+	content:">";
+	position:absolute;
+	top:50%; right:8px;
+	margin-top:-10px;
+	font-weight:bold !important;
+	text-shadow:0 1px black;
+}
+
+.list .divider {
+	position: relative;
+	top: -1px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	font-size: 12px;
+	font-weight: bold;
+	line-height: 18px;
+	background-color: #f8f8f8;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	box-shadow: inset 0 1px 1px rgba(255, 255, 255, .4);
+	padding-right:60px;
+}
+
+.list.inset {
+	border: 1px solid #ccc;
+	border-radius: 6px;
+	margin:10px;
+}
+.list.inset li:first-child { border-top:none; }
+.list.inset li:last-child {	border-bottom:none; }

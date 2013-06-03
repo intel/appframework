@@ -1,0 +1,1556 @@
+[
+  {
+    "tags": [
+      {
+        "type": "copyright",
+        "string": "2011 Intel"
+      },
+      {
+        "type": "author",
+        "string": "AppMobi"
+      },
+      {
+        "type": "version",
+        "string": "2.0"
+      }
+    ],
+    "description": {
+      "full": "<p>appframework.ui - A User Interface library for App Framework applications</p>",
+      "summary": "<p>appframework.ui - A User Interface library for App Framework applications</p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "(function ($) {\n    \"use strict\";\n\n    var hasLaunched = false;\n    var startPath = window.location.pathname;\n    var defaultHash = window.location.hash;\n    var previousTarget = defaultHash;\n    var ui = function () {\n        // Init the page\n        var that = this;"
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>Helper function to setup the transition objects<br />Custom transitions can be added via $.ui.availableTransitions<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.availableTransitions['none']=function();<br />           </pre></div></p>",
+      "summary": "<p>Helper function to setup the transition objects<br />Custom transitions can be added via $.ui.availableTransitions<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.availableTransitions['none']=function();<br />           </pre></div></p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "this.availableTransitions = {};\n        this.availableTransitions['default'] = this.availableTransitions.none= this.noTransition;\n        //setup the menu and boot touchLayer\n        $(document).ready(function () {\n            //boot touchLayer\n            //create afui element if it still does not exist\n            var afui = document.getElementById(\"afui\");\n            if (afui === null) {\n                afui = document.createElement(\"div\");\n                afui.id = \"afui\";\n                var body = document.body;\n                while (body.firstChild) {\n                    afui.appendChild(body.firstChild);\n                }\n                $(document.body).prepend(afui);\n            }\n            if ($.os.supportsTouch) $.touchLayer(afui);\n            setupCustomTheme();\n\n        });\n\n        function checkNodeInserted(i){\n            if(i.target.id===\"afui\")\n                document.removeEventListener(\"DOMNodeInserted\",arguments.callee);\n        }\n\n        if($(\"#afui\").length===1){\n            setupCustomTheme();\n        }\n        else {\n            document.addEventListener(\"DOMNodeInserted\",checkNodeInserted,false);\n        }\n\n\n\n        if (\"AppMobi\" in window) $(document).one(\"appMobi.device.ready\", function () {\n            that.autoBoot();\n        });\n        else if (document.readyState == \"complete\" || document.readyState == \"loaded\") {\n            this.autoBoot();\n        } else $(document).ready(function () {\n            that.autoBoot();\n\n        }, false);\n\n        if (!(\"AppMobi\" in window)) window.AppMobi = {}, window.AppMobi.webRoot = \"\";\n\n        //click back event\n        window.addEventListener(\"popstate\", function () {\n\n            var id = that.getPanelId(document.location.hash);\n            var hashChecker = document.location.href.replace(document.location.origin + \"/\", \"\");\n            //make sure we allow hash changes outside afui\n            if (hashChecker == \"#\") return;\n            if (id === \"\" && that.history.length === 1) //Fix going back to first panel and an empty hash\n            id = \"#\" + that.firstDiv.id;\n            if (id === \"\") return;\n            if (af(id).filter(\".panel\").length === 0) return;\n            if (id != \"#\" + that.activeDiv.id) that.goBack();\n        }, false);\n\n        function setupCustomTheme(){\n\n             if(that.useOSThemes){\n                if ($.os.android) $(\"#afui\").addClass(\"android\");\n                else if ($.os.ie) {\n                    $(\"#afui\").addClass(\"win8\");\n                    $(\"head\").append($.create(\"script\",{src:\"plugins/af.8tiles.js\"}));\n                }\n                else if($.os.blackberry) {\n                    $(\"#afui\").addClass(\"bb\");\n                    that.backButtonText=\"Back\";\n                }\n            }\n\n        }\n    };\n\n\n    ui.prototype = {\n        transitionTime: \"230ms\",\n        showLoading: true,\n        loadContentQueue: [],\n        isIntel: false,\n        titlebar: \"\",\n        navbar: \"\",\n        header: \"\",\n        viewportContainer: \"\",\n        remotePages: {},\n        history: [],\n        homeDiv: \"\",\n        screenWidth: \"\",\n        content: \"\",\n        modalWindow: \"\",\n        customFooter: false,\n        defaultFooter: \"\",\n        defaultHeader: null,\n        customMenu: false,\n        defaultMenu: \"\",\n        _readyFunc: null,\n        doingTransition: false,\n        passwordBox: $.passwordBox ? new $.passwordBox() : false,\n        selectBox: $.selectBox ? $.selectBox : false,\n        ajaxUrl: \"\",\n        transitionType: \"slide\",\n        scrollingDivs: [],\n        firstDiv: \"\",\n        hasLaunched: false,\n        launchCompleted: false,\n        activeDiv: \"\",\n        customClickHandler: \"\",\n        menuAnimation: null,\n        togglingSideMenu: false,\n        sideMenuWidth:\"200px\",\n        trimBackButtonText:true,\n        useOSThemes:true,\n        autoBoot: function () {\n            this.hasLaunched = true;\n            if (this.autoLaunch) {\n                this.launch();\n            }\n        },\n        css3animate: function (el, opts) {\n            el = $(el);\n            return el.css3Animate(opts);\n        },",
+    "ctx": {
+      "type": "property",
+      "receiver": "this",
+      "name": "availableTransitions",
+      "value": "{}",
+      "string": "this.availableTransitions"
+    }
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.setSideMenuWidth"
+      }
+    ],
+    "description": {
+      "full": "<p>This changes the side menu width</p>\n\n<div class=\"highlight\"><pre lang=\"\">           $.ui.setSideMenuWidth('300px');\n           </pre></div>",
+      "summary": "<p>This changes the side menu width</p>\n\n<div class=\"highlight\"><pre lang=\"\">           $.ui.setSideMenuWidth('300px');\n           </pre></div>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "setSideMenuWidth:function(width){\n            this.sideMenuWidth=width;\n            //override the css style\n            width=width+\"\";\n            width=width.replace(\"px\",\"\")+\"px\";\n            $(\"head\").find(\"#styleWidth\").remove();\n            $(\"head\").append(\"<style id='styleWidth'>#afui #menu {width:\"+width+\" }</style>\");\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.disableNativeScrolling"
+      }
+    ],
+    "description": {
+      "full": "<p>this will disable native scrolling on iOS</p>\n\n<pre><code>     &lt;div class=\"highlight\"&gt;&lt;pre lang=\"\"&gt;         $.ui.disableNativeScrolling);\n     &lt;/pre&gt;&lt;/div&gt;\n</code></pre>",
+      "summary": "<p>this will disable native scrolling on iOS</p>",
+      "body": "<pre><code>     &lt;div class=\"highlight\"&gt;&lt;pre lang=\"\"&gt;         $.ui.disableNativeScrolling);\n     &lt;/pre&gt;&lt;/div&gt;\n</code></pre>"
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "disableNativeScrolling: function () {\n            $.feat.nativeTouchScroll = false;\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.manageHistory"
+      }
+    ],
+    "description": {
+      "full": "<p>This is a boolean when set to true, we manage history and update the hash<br />          <div class=\"highlight\"><pre lang=\"\">          $.ui.manageHistory=false;//Don't manage for apps using Backbone<br />          </pre></div></p>",
+      "summary": "<p>This is a boolean when set to true, we manage history and update the hash<br />          <div class=\"highlight\"><pre lang=\"\">          $.ui.manageHistory=false;//Don't manage for apps using Backbone<br />          </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "manageHistory: true,"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.loadDefaultHash"
+      }
+    ],
+    "description": {
+      "full": "<p>this is a boolean when set to true (default) it will load that panel when the app is started<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.loadDefaultHash=false; //Never load the page from the hash when the app is started<br />           $.ui.loadDefaultHash=true; //Default<br />           </pre></div></p>",
+      "summary": "<p>this is a boolean when set to true (default) it will load that panel when the app is started<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.loadDefaultHash=false; //Never load the page from the hash when the app is started<br />           $.ui.loadDefaultHash=true; //Default<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "loadDefaultHash: true,"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.useAjaxCacheBuster"
+      }
+    ],
+    "description": {
+      "full": "<p>This is a boolean that when set to true will add \"&amp;cache=<em>rand</em>\" to any ajax loaded link<br />           The default is false<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.useAjaxCacheBuster=true;<br />           </pre></div></p>",
+      "summary": "<p>This is a boolean that when set to true will add \"&amp;cache=<em>rand</em>\" to any ajax loaded link<br />           The default is false<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.useAjaxCacheBuster=true;<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "useAjaxCacheBuster: false,"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String",
+          "Array"
+        ],
+        "name": "links",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.actionsheet()"
+      }
+    ],
+    "description": {
+      "full": "<p>This is a shorthand call to the $.actionsheet plugin.  We wire it to the afui div automatically<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.actionsheet(\"<a href='javascript:;' class='button'>Settings</a> <a href='javascript:;' class='button red'>Logout</a>\")<br />           $.ui.actionsheet(\"[{<br />                        text: 'back',<br />                        cssClasses: 'red',<br />                        handler: function () { $.ui.goBack(); ; }<br />                    }, {<br />                        text: 'show alert 5',<br />                        cssClasses: 'blue',<br />                        handler: function () { alert(\"hi\"); }<br />                    }, {<br />                        text: 'show alert 6',<br />                        cssClasses: '',<br />                        handler: function () { alert(\"goodbye\"); }<br />                    }]\");<br />           </pre></div></p>",
+      "summary": "<p>This is a shorthand call to the $.actionsheet plugin.  We wire it to the afui div automatically<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.actionsheet(\"<a href='javascript:;' class='button'>Settings</a> <a href='javascript:;' class='button red'>Logout</a>\")<br />           $.ui.actionsheet(\"[{<br />                        text: 'back',<br />                        cssClasses: 'red',<br />                        handler: function () { $.ui.goBack(); ; }<br />                    }, {<br />                        text: 'show alert 5',<br />                        cssClasses: 'blue',<br />                        handler: function () { alert(\"hi\"); }<br />                    }, {<br />                        text: 'show alert 6',<br />                        cssClasses: '',<br />                        handler: function () { alert(\"goodbye\"); }<br />                    }]\");<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "actionsheet: function (opts) {\n            return $.query(\"#afui\").actionsheet(opts);\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object",
+          "String"
+        ],
+        "name": "options",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.popup(opts)"
+      }
+    ],
+    "description": {
+      "full": "<p>This is a wrapper to $.popup.js plugin.  If you pass in a text string, it acts like an alert box and just gives a message<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.popup(opts);<br />           $.ui.popup( {<br />                        title:\"Alert! Alert!\",<br />                        message:\"This is a test of the emergency alert system!! Don't PANIC!\",<br />                        cancelText:\"Cancel me\",<br />                        cancelCallback: function(){console.log(\"cancelled\");},<br />                        doneText:\"I'm done!\",<br />                        doneCallback: function(){console.log(\"Done for!\");},<br />                        cancelOnly:false<br />                      });<br />           $.ui.popup('Hi there');<br />           </pre></div></p>",
+      "summary": "<p>This is a wrapper to $.popup.js plugin.  If you pass in a text string, it acts like an alert box and just gives a message<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.popup(opts);<br />           $.ui.popup( {<br />                        title:\"Alert! Alert!\",<br />                        message:\"This is a test of the emergency alert system!! Don't PANIC!\",<br />                        cancelText:\"Cancel me\",<br />                        cancelCallback: function(){console.log(\"cancelled\");},<br />                        doneText:\"I'm done!\",<br />                        doneCallback: function(){console.log(\"Done for!\");},<br />                        cancelOnly:false<br />                      });<br />           $.ui.popup('Hi there');<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "popup: function (opts) {\n            return $.query(\"#afui\").popup(opts);\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Float"
+        ],
+        "name": "opacity",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.blockUI(opacity)"
+      }
+    ],
+    "description": {
+      "full": "<p>This will throw up a mask and block the UI<br />         <div class=\"highlight\"><pre lang=\"\">         $.ui.blockUI(.9)<br />         </pre></div>`</p>",
+      "summary": "<p>This will throw up a mask and block the UI<br />         <div class=\"highlight\"><pre lang=\"\">         $.ui.blockUI(.9)<br />         </pre></div>`</p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "blockUI: function (opacity) {\n            $.blockUI(opacity);\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.unblockUI()"
+      }
+    ],
+    "description": {
+      "full": "<p>This will remove the UI mask<br />         <div class=\"highlight\"><pre lang=\"\">         $.ui.unblockUI()<br />         </pre></div>`</p>",
+      "summary": "<p>This will remove the UI mask<br />         <div class=\"highlight\"><pre lang=\"\">         $.ui.unblockUI()<br />         </pre></div>`</p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "unblockUI: function () {\n            $.unblockUI();\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.removeFooterMenu"
+      }
+    ],
+    "description": {
+      "full": "<p>Will remove the bottom nav bar menu from your application<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.removeFooterMenu();<br />           </pre></div></p>",
+      "summary": "<p>Will remove the bottom nav bar menu from your application<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.removeFooterMenu();<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "removeFooterMenu: function () {\n            $.query(\"#navbar\").hide();\n            $.query(\"#content\").css(\"bottom\", \"0px\");\n            this.showNavMenu = false;\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "api",
+        "visibility": "private"
+      },
+      {
+        "type": "title",
+        "string": "$.ui.showNavMenu"
+      }
+    ],
+    "description": {
+      "full": "<p>Boolean if you want to show the bottom nav menu.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.showNavMenu = false;<br />           </pre></div></p>",
+      "summary": "<p>Boolean if you want to show the bottom nav menu.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.showNavMenu = false;<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": true,
+    "ignore": false,
+    "code": "showNavMenu: true,"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.autoLaunch"
+      }
+    ],
+    "description": {
+      "full": "<p>Boolean if you want to auto launch afui<br />           ```<br />           $.ui.autoLaunch = false; //</p>",
+      "summary": "<p>Boolean if you want to auto launch afui<br />           ```<br />           $.ui.autoLaunch = false; //</p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "autoLaunch: true,"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.showBackButton"
+      }
+    ],
+    "description": {
+      "full": "<p>Boolean if you want to show the back button<br />           ```<br />           $.ui.showBackButton = false; //</p>",
+      "summary": "<p>Boolean if you want to show the back button<br />           ```<br />           $.ui.showBackButton = false; //</p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "showBackbutton: true,"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.backButtonText"
+      }
+    ],
+    "description": {
+      "full": "<p>Override the back button text<br />            <div class=\"highlight\"><pre lang=\"\">            $.ui.backButtonText=\"Back\"<br />            </pre></div></p>",
+      "summary": "<p>Override the back button text<br />            <div class=\"highlight\"><pre lang=\"\">            $.ui.backButtonText=\"Back\"<br />            </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "backButtonText: \"\","
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.resetScrollers"
+      }
+    ],
+    "description": {
+      "full": "<p>Boolean if you want to reset the scroller position when navigating panels.  Default is true<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.resetScrollers=false; //Do not reset the scrollers when switching panels<br />           </pre></div></p>",
+      "summary": "<p>Boolean if you want to reset the scroller position when navigating panels.  Default is true<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.resetScrollers=false; //Do not reset the scrollers when switching panels<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "resetScrollers: true,"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Function"
+        ],
+        "name": "function",
+        "description": "to execute"
+      },
+      {
+        "type": "title",
+        "string": "$.ui.ready"
+      }
+    ],
+    "description": {
+      "full": "<p>function to fire when afui is ready and completed launch<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.ready(function(){console.log('afui is ready');});<br />           </pre></div></p>",
+      "summary": "<p>function to fire when afui is ready and completed launch<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.ready(function(){console.log('afui is ready');});<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "ready: function (param) {\n\n            if (this.launchCompleted) param();\n            else {\n                $(document).bind(\"afui:ready\", function (e) {\n                    param();\n                }, false);\n            }\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "new",
+        "description": "class name"
+      },
+      {
+        "type": "title",
+        "string": "$.ui.setBackButtonStyle(class)"
+      }
+    ],
+    "description": {
+      "full": "<p>Override the back button class name<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.setBackButtonStyle('newClass');<br />           </pre></div></p>",
+      "summary": "<p>Override the back button class name<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.setBackButtonStyle('newClass');<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "setBackButtonStyle: function (className) {\n            $.query(\"#backButton\").replaceClass(null, className);\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.goBack()"
+      }
+    ],
+    "description": {
+      "full": "<p>Initiate a back transition<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.goBack()<br />           </pre></div></p>",
+      "summary": "<p>Initiate a back transition<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.goBack()<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "goBack: function () {\n            if (this.history.length > 0) {\n                var that = this;\n                var tmpEl = this.history.pop();\n                that.loadContent(tmpEl.target + \"\", 0, 1, tmpEl.transition);\n                that.transitionType = tmpEl.transition;\n                that.updateHash(tmpEl.target);\n            }\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.clearHistory()"
+      }
+    ],
+    "description": {
+      "full": "<p>Clear the history queue<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.clearHistory()<br />           </pre></div></p>",
+      "summary": "<p>Clear the history queue<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.clearHistory()<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "clearHistory: function () {\n            this.history = [];\n            this.setBackButtonVisibility(false);\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "api",
+        "visibility": "private"
+      },
+      {
+        "type": "title",
+        "string": "$.ui.pushHistory()"
+      }
+    ],
+    "description": {
+      "full": "<p>PushHistory<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.pushHistory(previousPage, newPage, transition, hashExtras)<br />           </pre></div></p>",
+      "summary": "<p>PushHistory<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.pushHistory(previousPage, newPage, transition, hashExtras)<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": true,
+    "ignore": false,
+    "code": "pushHistory: function (previousPage, newPage, transition, hashExtras) {\n            //push into local history\n\n            this.history.push({\n                target: previousPage,\n                transition: transition\n            });\n            //push into the browser history\n            try {\n                if (!this.manageHistory) return;\n                window.history.pushState(newPage, newPage, startPath + '#' + newPage + hashExtras);\n                $(window).trigger(\"hashchange\", null, {\n                    newUrl: startPath + '#' + newPage + hashExtras,\n                    oldURL: startPath + previousPage\n                });\n            } catch (e) {}\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "newHash",
+        "description": "New Hash value"
+      },
+      {
+        "type": "title",
+        "string": "$.ui.updateHash(newHash)"
+      },
+      {
+        "type": "api",
+        "visibility": "private"
+      }
+    ],
+    "description": {
+      "full": "<p>Updates the current window hash</p>",
+      "summary": "<p>Updates the current window hash</p>",
+      "body": ""
+    },
+    "isPrivate": true,
+    "ignore": false,
+    "code": "updateHash: function (newHash) {\n            if (!this.manageHistory) return;\n            newHash = newHash.indexOf('#') == -1 ? '#' + newHash : newHash; //force having the # in the begginning as a standard\n            previousTarget = newHash;\n\n            var previousHash = window.location.hash;\n            var panelName = this.getPanelId(newHash).substring(1); //remove the #\n            try {\n                window.history.replaceState(panelName, panelName, startPath + newHash);\n                $(window).trigger(\"hashchange\", null, {\n                    newUrl: startPath + newHash,\n                    oldUrl: startPath + previousHash\n                });\n            } catch (e) {}\n        },"
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>ets the panel name from an hash</p>",
+      "summary": "<p>ets the panel name from an hash</p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "getPanelId: function (hash) {\n            var firstSlash = hash.indexOf('/');\n            return firstSlash == -1 ? hash : hash.substring(0, firstSlash);\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "target",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "Value",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "[position]",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
+          "String",
+          "Object"
+        ],
+        "name": "[color",
+        "description": "or CSS hash]"
+      },
+      {
+        "type": "title",
+        "string": "$.ui.updateBadge(target,value,[position],[color])"
+      }
+    ],
+    "description": {
+      "full": "<p>Update a badge on the selected target.  Position can be<br />            bl = bottom left<br />            tl = top left<br />            br = bottom right<br />            tr = top right (default)<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.updateBadge('#mydiv','3','bl','green');<br />           </pre></div></p>",
+      "summary": "<p>Update a badge on the selected target.  Position can be<br />            bl = bottom left<br />            tl = top left<br />            br = bottom right<br />            tr = top right (default)<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.updateBadge('#mydiv','3','bl','green');<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "updateBadge: function (target, value, position, color) {\n            if (position === undefined) position = \"\";\n\n            var $target = $(target);\n            var badge = $target.find(\"span.af-badge\");\n\n            if (badge.length === 0) {\n                if ($target.css(\"position\") != \"absolute\") $target.css(\"position\", \"relative\");\n                badge = $.create(\"span\", {\n                    className: \"af-badge \" + position,\n                    html: value\n                });\n                $target.append(badge);\n            } else badge.html(value);\n            badge.removeClass(\"tl bl br tr\");\n            badge.addClass(position);\n            if(color===undefined)\n                color=\"red\";\n            if ($.isObject(color)) {\n                badge.css(color);\n            } else if (color) {\n                badge.css(\"background\", color);\n            }\n            badge.data(\"ignore-pressed\", \"true\");\n\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "target",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.removeBadge(target)"
+      }
+    ],
+    "description": {
+      "full": "<p>Removes a badge from the selected target.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.removeBadge('#mydiv');<br />           </pre></div></p>",
+      "summary": "<p>Removes a badge from the selected target.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.removeBadge('#mydiv');<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "removeBadge: function (target) {\n            $(target).find(\"span.af-badge\").remove();\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Boolean"
+        ],
+        "name": "[force]",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.toggleNavMenu([force])"
+      }
+    ],
+    "description": {
+      "full": "<p>Toggles the bottom nav nav menu.  Force is a boolean to force show or hide.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.toggleNavMenu();//toggle it<br />           $.ui.toggleNavMenu(true); //force show it<br />           </pre></div></p>",
+      "summary": "<p>Toggles the bottom nav nav menu.  Force is a boolean to force show or hide.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.toggleNavMenu();//toggle it<br />           $.ui.toggleNavMenu(true); //force show it<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "toggleNavMenu: function (force) {\n            if (!this.showNavMenu) return;\n            if ($.query(\"#navbar\").css(\"display\") != \"none\" && ((force !== undefined && force !== true) || force === undefined)) {\n                $.query(\"#content\").css(\"bottom\", \"0px\");\n                $.query(\"#navbar\").hide();\n            } else if (force === undefined || (force !== undefined && force === true)) {\n                $.query(\"#navbar\").show();\n                $.query(\"#content\").css(\"bottom\", $.query(\"#navbar\").css(\"height\"));\n\n            }\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Boolean"
+        ],
+        "name": "[force]",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.toggleHeaderMenu([force])"
+      }
+    ],
+    "description": {
+      "full": "<p>Toggles the top header menu.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.toggleHeaderMenu();//toggle it<br />           </pre></div></p>",
+      "summary": "<p>Toggles the top header menu.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.toggleHeaderMenu();//toggle it<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "toggleHeaderMenu: function (force) {\n            if ($.query(\"#header\").css(\"display\") != \"none\" && ((force !== undefined && force !== true) || force === undefined)) {\n                $.query(\"#content\").css(\"top\", \"0px\");\n                $.query(\"#header\").hide();\n            } else if (force === undefined || (force !== undefined && force === true)) {\n                $.query(\"#header\").show();\n                $.query(\"#content\").css(\"top\", $.query(\"#header\").css(\"height\"));\n            }\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Boolean"
+        ],
+        "name": "[force]",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.toggleSideMenu([force])"
+      }
+    ],
+    "description": {
+      "full": "<p>Toggles the side menu.  Force is a boolean to force show or hide.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.toggleSideMenu();//toggle it<br />           </pre></div></p>",
+      "summary": "<p>Toggles the side menu.  Force is a boolean to force show or hide.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.toggleSideMenu();//toggle it<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "toggleSideMenu: function (force, callback) {\n            if (!this.isSideMenuEnabled() || this.togglingSideMenu) return;\n\n            var that = this;\n            var menu = $.query(\"#menu\");\n            var els = $.query(\"#content,  #header, #navbar\");\n\n            if (force === 2 || (menu.css(\"display\") !== \"block\" && ((force !== undefined && force !== false) || force === undefined))) {\n                this.togglingSideMenu = true;\n                menu.show();\n                that.css3animate(els, {\n                    x: that.sideMenuWidth,\n                    time: $.ui.transitionTime,\n                    complete: function (canceled) {\n                        that.togglingSideMenu = false;\n                        els.vendorCss(\"Transition\", \"\");\n                        if (callback) callback(canceled);\n                    }\n                });\n\n            } else if (force === undefined || (force !== undefined && force === false)) {\n                this.togglingSideMenu = true;\n                that.css3animate(els, {\n                    x: \"0px\",\n                    time: $.ui.transitionTime,\n                    complete: function (canceled) {\n                       // els.removeClass(\"on\");\n                        els.vendorCss(\"Transition\", \"\");\n                        els.vendorCss(\"Transform\", \"\");\n                        that.togglingSideMenu = false;\n                        if (callback) callback(canceled);\n                        menu.hide();\n                    }\n                });\n            }\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.disableSideMenu();"
+      }
+    ],
+    "description": {
+      "full": "<p>Disables the side menu<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.disableSideMenu();<br />           </pre></div></p>",
+      "summary": "<p>Disables the side menu<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.disableSideMenu();<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "disableSideMenu: function () {\n            var that = this;\n            var els = $.query(\"#content, #menu, #header, #navbar\");\n            if (this.isSideMenuOn()) {\n                this.toggleSideMenu(false, function (canceled) {\n                    if (!canceled) els.removeClass(\"hasMenu\");\n                });\n            } else els.removeClass(\"hasMenu\");\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.enableSideMenu();"
+      }
+    ],
+    "description": {
+      "full": "<p>Enables the side menu if it has been disabled<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.enableSideMenu();<br />           </pre></div></p>",
+      "summary": "<p>Enables the side menu if it has been disabled<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.enableSideMenu();<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "enableSideMenu: function () {\n            $.query(\"#content, #menu, #header, #navbar\").addClass(\"hasMenu\");\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "api",
+        "visibility": "private"
+      }
+    ],
+    "description": {
+      "full": "<p>@title $.ui.enableSideMenu();</p>",
+      "summary": "<p>@title $.ui.enableSideMenu();</p>",
+      "body": ""
+    },
+    "isPrivate": true,
+    "ignore": false,
+    "code": "isSideMenuEnabled: function () {\n            return $.query(\"#content\").hasClass(\"hasMenu\");\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "api",
+        "visibility": "private"
+      }
+    ],
+    "description": {
+      "full": "<p>@title $.ui.enableSideMenu();</p>",
+      "summary": "<p>@title $.ui.enableSideMenu();</p>",
+      "body": ""
+    },
+    "isPrivate": true,
+    "ignore": false,
+    "code": "isSideMenuOn: function () {\n            var menu = $.query('#menu').computedStyle('display') == \"block\";\n            return this.isSideMenuEnabled() && menu;\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "api",
+        "visibility": "private"
+      }
+    ],
+    "description": {
+      "full": "<p>Reference to the default footer</p>",
+      "summary": "<p>Reference to the default footer</p>",
+      "body": ""
+    },
+    "isPrivate": true,
+    "ignore": false,
+    "code": "prevFooter: null,"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String",
+          "Object"
+        ],
+        "name": "Elements",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.updateNavbarElements(Elements)"
+      }
+    ],
+    "description": {
+      "full": "<p>Updates the elements in the navbar<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.updateNavbarElements(elements);<br />           </pre></div></p>",
+      "summary": "<p>Updates the elements in the navbar<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.updateNavbarElements(elements);<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "updateNavbarElements: function (elems) {\n            if (this.prevFooter) {\n                if (this.prevFooter.data(\"parent\")) this.prevFooter.appendTo(\"#\" + this.prevFooter.data(\"parent\"));\n                else this.prevFooter.appendTo(\"#afui\");\n            }\n            if (!$.is$(elems)) //inline footer\n            {\n                elems = $.query(\"#\" + elems);\n            }\n            $.query(\"#navbar\").append(elems);\n            this.prevFooter = elems;\n            var tmpAnchors = $.query(\"#navbar a\");\n            if (tmpAnchors.length > 0) {\n                tmpAnchors.data(\"ignore-pressed\", \"true\").data(\"resetHistory\", \"true\");\n                var width = parseFloat(100 / tmpAnchors.length);\n                tmpAnchors.css(\"width\", width + \"%\");\n            }\n            var nodes = $.query(\"#navbar footer\").get(0).childNodes;\n            for (var i = 0; i < nodes.length; i++) {\n                if (nodes[i].nodeType === 3) {\n                    nodes[i].parentNode.removeChild(nodes[i]);\n                }\n            }\n\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "api",
+        "visibility": "private"
+      }
+    ],
+    "description": {
+      "full": "<p>Reference to the previous header</p>",
+      "summary": "<p>Reference to the previous header</p>",
+      "body": ""
+    },
+    "isPrivate": true,
+    "ignore": false,
+    "code": "prevHeader: null,"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String",
+          "Object"
+        ],
+        "name": "Elements",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.updateHeaderElements(Elements)"
+      }
+    ],
+    "description": {
+      "full": "<p>Updates the elements in the header<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.updateHeaderElements(elements);<br />           </pre></div></p>",
+      "summary": "<p>Updates the elements in the header<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.updateHeaderElements(elements);<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "updateHeaderElements: function (elems,goBack) {\n            var that = this;\n            if (this.prevHeader) {\n                //Let's slide them out\n                if (!$.is$(elems)) //inline footer\n                {\n                    elems = $.query(\"#\" + elems);\n                }\n\n                $.query(\"#header\").append(elems);\n                var from=goBack?\"100px\":\"-100px\";\n                var to=goBack?\"-100px\":\"100px\";\n                that.css3animate(elems,{\n                    x:to,\n                    opacity:0.3,\n                    time:\"0\"\n                });\n                that.css3animate(that.prevHeader, {\n                    x: from,\n                    y: 0,\n                    opacity: 0.3,\n                    time: that.transitionTime,\n                    delay:numOnly(that.transitionTime)/5+\"ms\",\n                    complete: function () {\n                        if (that.prevHeader.data(\"parent\")) that.prevHeader.appendTo(\"#\" + that.prevHeader.data(\"parent\"));\n                        else that.prevHeader.appendTo(\"#afui\");\n                        that.css3animate(that.prevHeader, {\n                            x: to,\n                            opacity: 1\n                        });\n                        that.prevHeader = elems;\n                    }\n                });\n                that.css3animate(elems, {\n                    x: \"0px\",\n                    opacity: 1,\n                    time: that.transitionTime\n                });\n\n\n            } else {\n                if (!$.is$(elems)) //inline footer\n                {\n                    elems = $.query(\"#\" + elems);\n                }\n                $.query(\"#header\").append(elems);\n                this.prevHeader = elems;\n            }\n        },"
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>@api private<br />Kept for backwards compatibility</p>",
+      "summary": "<p>@api private<br />Kept for backwards compatibility</p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "updateSideMenu:function(elems){\n            return this.updateSideMenuElements(elems);\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String",
+          "Object"
+        ],
+        "name": "Elements",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.updateSideMenuElements(Elements)"
+      }
+    ],
+    "description": {
+      "full": "<p>Updates the elements in the side menu<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.updateSideMenuElements(elements);<br />           </pre></div></p>",
+      "summary": "<p>Updates the elements in the side menu<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.updateSideMenuElements(elements);<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "updateSideMenuElements: function (elems) {\n            var that = this;\n            if (elems === undefined || elems === null) return;\n            var nb = $.query(\"#menu_scroller\");\n\n            if (this.prevMenu) {\n                this.prevMenu.insertBefore(\"#afui #menu\");\n                this.prevMenu = null;\n            }\n\n            if (!$.is$(elems)) elems = $.query(\"#\" + elems);\n\n            nb.html('');\n            nb.append(elems);\n            this.prevMenu = elems;\n            //Move the scroller to the top and hide it\n            this.scrollingDivs.menu_scroller.hideScrollbars();\n            this.scrollingDivs.menu_scroller.scrollToTop();\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "value",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.setTitle(value)"
+      }
+    ],
+    "description": {
+      "full": "<p>Set the title of the current panel<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.setTitle(\"new title\");<br />           </pre></div></p>",
+      "summary": "<p>Set the title of the current panel<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.setTitle(\"new title\");<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "setTitle: function (val) {\n            $.query(\"#header #pageTitle\").html(val);\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "value",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.setBackButtonText(value)"
+      }
+    ],
+    "description": {
+      "full": "<p>Override the text for the back button<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.setBackButtonText(\"GO...\");<br />           </pre></div></p>",
+      "summary": "<p>Override the text for the back button<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.setBackButtonText(\"GO...\");<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "setBackButtonText: function (text) {\n            if(this.trimBackButtonText)\n                text=text.substring(0,5)+\"...\";\n            if (this.backButtonText.length > 0) $.query(\"#header #backButton\").html(this.backButtonText);\n            else $.query(\"#header #backButton\").html(text);\n        },"
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>Toggle visibility of the back button</p>",
+      "summary": "<p>Toggle visibility of the back button</p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "setBackButtonVisibility: function (show) {\n            if (!show) $.query(\"#header #backButton\").css(\"visibility\", \"hidden\");\n            else $.query(\"#header #backButton\").css(\"visibility\", \"visible\");\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "[text]",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.showMask(text);"
+      }
+    ],
+    "description": {
+      "full": "<p>Show the loading mask<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.showMask()<br />           $.ui.showMask(;Doing work')<br />           </pre></div></p>",
+      "summary": "<p>Show the loading mask<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.showMask()<br />           $.ui.showMask(;Doing work')<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "showMask: function (text) {\n            if (!text) text = \"Loading Content\";\n            $.query(\"#afui_mask>h1\").html(text);\n            $.query(\"#afui_mask\").show();\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.hideMask();"
+      }
+    ],
+    "description": {
+      "full": "<p>Hide the loading mask</p>",
+      "summary": "<p>Hide the loading mask</p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "hideMask: function () {\n            $.query(\"#afui_mask\").hide();\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String",
+          "Object"
+        ],
+        "name": "panel",
+        "description": "to show"
+      },
+      {
+        "type": "title",
+        "string": "$.ui.showModal();"
+      }
+    ],
+    "description": {
+      "full": "<p>Load a content panel in a modal window.  We set the innerHTML so event binding will not work.  Please use the data-load or panelloaded events to setup any event binding<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.showModal(\"#myDiv\");<br />           </pre></div></p>",
+      "summary": "<p>Load a content panel in a modal window.  We set the innerHTML so event binding will not work.  Please use the data-load or panelloaded events to setup any event binding<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.showModal(\"#myDiv\");<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "showModal: function (id) {\n            var that = this;\n            if(typeof(id)===\"string\")\n                id = \"#\" + id.replace(\"#\", \"\");\n            try {\n                if ($.query(id)) {\n                    $.query(\"#modalContainer\").html($.feat.nativeTouchScroll ? $.query(id).html() : $.query(id).get(0).childNodes[0].innerHTML + '', true);\n                    $.query('#modalContainer').append(\"<a onclick='$.ui.hideModal();' class='closebutton modalbutton'></a>\");\n                    this.modalWindow.style.opacity=0.1\n                    this.modalWindow.style.display = \"block\";\n                    setTimeout(function(){\n                        that.modalWindow.style.opacity=1;                        \n                    });\n\n                    this.scrollingDivs.modal_container.enable(that.resetScrollers);\n                    this.scrollToTop('modal');\n                    $.query(\"#modalContainer\").data(\"panel\", id);\n\n                }\n            } catch (e) {\n                console.log(\"Error with modal - \" + e, this.modalWindow);\n            }\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.hideModal();"
+      }
+    ],
+    "description": {
+      "full": "<p>Hide the modal window and remove the content.  We remove any event listeners on the contents.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.hideModal(\"\");<br />           </pre></div></p>",
+      "summary": "<p>Hide the modal window and remove the content.  We remove any event listeners on the contents.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.hideModal(\"\");<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "hideModal: function () {\n            var self=this;\n            $.query(\"#modalContainer\").html(\"\", true);\n            this.modalWindow.style.opacity=0.1;\n            setTimeout(function(){\n                self.modalWindow.style.display=\"none\";\n            },250);\n\n            this.scrollingDivs.modal_container.disable();\n\n            var tmp = $.query($.query(\"#modalContainer\").data(\"panel\"));\n            var fnc = tmp.data(\"unload\");\n            if (typeof fnc == \"string\" && window[fnc]) {\n                window[fnc](tmp.get(0));\n            }\n            tmp.trigger(\"unloadpanel\");\n\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String",
+          "Object"
+        ],
+        "name": "panel",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "html",
+        "description": "to update with"
+      },
+      {
+        "type": "title",
+        "string": "$.ui.updatePanel(id,content);"
+      }
+    ],
+    "description": {
+      "full": "<p>Update the HTML in a content panel<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.updatePanel(\"#myDiv\",\"This is the new content\");<br />           </pre></div></p>",
+      "summary": "<p>Update the HTML in a content panel<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.updatePanel(\"#myDiv\",\"This is the new content\");<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "updatePanel: function (id, content) {\n            id = \"#\" + id.replace(\"#\", \"\");\n            var el = $.query(id).get(0);\n            if (!el) return;\n\n            var newDiv = $.create(\"div\", {\n                html: content\n            });\n            if (newDiv.children('.panel') && newDiv.children('.panel').length > 0) newDiv = newDiv.children('.panel').get();\n            else newDiv = newDiv.get(0);\n\n\n            if (el.getAttribute(\"js-scrolling\") && (el.getAttribute(\"js-scrolling\").toLowerCase() == \"yes\"||el.getAttribute(\"js-scrolling\").toLowerCase() == \"true\")) {\n                $.cleanUpContent(el.childNodes[0], false, true);\n                $(el.childNodes[0]).html(content);\n            } else {\n                $.cleanUpContent(el, false, true);\n                $(el).html(content);\n            }\n            if (newDiv.title) el.title = newDiv.title;\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String",
+          "Object"
+        ],
+        "name": "panel",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "html",
+        "description": "to update with"
+      },
+      {
+        "type": "title",
+        "string": "$.ui.updateContentDiv(id,content);"
+      }
+    ],
+    "description": {
+      "full": "<p>Same as $.ui.updatePanel.  kept for backwards compatibility<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.updateContentDiv(\"#myDiv\",\"This is the new content\");<br />           </pre></div></p>",
+      "summary": "<p>Same as $.ui.updatePanel.  kept for backwards compatibility<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.updateContentDiv(\"#myDiv\",\"This is the new content\");<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "updateContentDiv: function (id, content) {\n            return this.updatePanel(id,content);\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String",
+          "Object"
+        ],
+        "name": "Element",
+        "description": "to add"
+      },
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "Content",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "title",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.addContentDiv(id,content,title);"
+      }
+    ],
+    "description": {
+      "full": "<p>Dynamically create a new panel on the fly.  It wires events, creates the scroller, applies Android fixes, etc.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.addContentDiv(\"myDiv\",\"This is the new content\",\"Title\");<br />           </pre></div></p>",
+      "summary": "<p>Dynamically create a new panel on the fly.  It wires events, creates the scroller, applies Android fixes, etc.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.addContentDiv(\"myDiv\",\"This is the new content\",\"Title\");<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "addContentDiv: function (el, content, title, refresh, refreshFunc) {\n            el = typeof (el) !== \"string\" ? el : el.indexOf(\"#\") == -1 ? \"#\" + el : el;\n            var myEl = $.query(el).get(0);\n            var newDiv, newId;\n            if (!myEl) {\n                newDiv = $.create(\"div\", {\n                    html: content\n                });\n                if (newDiv.children('.panel') && newDiv.children('.panel').length > 0) newDiv = newDiv.children('.panel').get();\n                else newDiv = newDiv.get(0);\n\n                if (!newDiv.title && title) newDiv.title = title;\n                newId = (newDiv.id) ? newDiv.id : el.replace(\"#\", \"\"); //figure out the new id - either the id from the loaded div.panel or the crc32 hash\n                newDiv.id = newId;\n                if (newDiv.id != el) newDiv.setAttribute(\"data-crc\", el.replace(\"#\", \"\"));\n            } else {\n                newDiv = myEl;\n            }\n            newDiv.className = \"panel\";\n            newId = newDiv.id;\n            this.addDivAndScroll(newDiv, refresh, refreshFunc);\n            myEl = null;\n            newDiv = null;\n            return newId;\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "Element",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.addDivAndScroll(element);"
+      },
+      {
+        "type": "api",
+        "visibility": "private"
+      }
+    ],
+    "description": {
+      "full": "<p>Takes a div and sets up scrolling for it..<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.addDivAndScroll(object);<br />           </pre></div></p>",
+      "summary": "<p>Takes a div and sets up scrolling for it..<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.addDivAndScroll(object);<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": true,
+    "ignore": false,
+    "code": "addDivAndScroll: function (tmp, refreshPull, refreshFunc, container) {\n            var jsScroll = false,\n                scrollEl;\n            var overflowStyle = tmp.style.overflow;\n            var hasScroll = overflowStyle != 'hidden' && overflowStyle != 'visible';\n\n            container = container || this.content;\n            //sets up scroll when required and not supported\n            if (!$.feat.nativeTouchScroll && hasScroll) tmp.setAttribute(\"js-scrolling\", \"true\");\n\n            if (tmp.getAttribute(\"js-scrolling\") && (tmp.getAttribute(\"js-scrolling\").toLowerCase() == \"yes\"||tmp.getAttribute(\"js-scrolling\").toLowerCase() == \"true\")) {\n                jsScroll = true;\n                hasScroll = true;\n            }\n\n\n\n            if (tmp.getAttribute(\"scrolling\") && tmp.getAttribute(\"scrolling\") == \"no\") {\n                hasScroll = false;\n                jsScroll = false;\n                tmp.removeAttribute(\"js-scrolling\");\n            }\n\n            if (!jsScroll) {\n                container.appendChild(tmp);\n                scrollEl = tmp;\n                tmp.style['-webkit-overflow-scrolling'] = \"none\";\n            } else {\n                //WE need to clone the div so we keep events\n                scrollEl = tmp.cloneNode(false);\n\n\n                tmp.title = null;\n                tmp.id = null;\n                var $tmp = $(tmp);\n                $tmp.removeAttr(\"data-footer data-nav data-header selected data-load data-unload data-tab data-crc\");\n\n                $tmp.replaceClass(\"panel\", \"afScrollPanel\");\n\n                scrollEl.appendChild(tmp);\n\n                container.appendChild(scrollEl);\n\n                if (this.selectBox !== false) this.selectBox.getOldSelects(scrollEl.id);\n                if (this.passwordBox !== false) this.passwordBox.getOldPasswords(scrollEl.id);\n\n            }\n\n            if (hasScroll) {\n                this.scrollingDivs[scrollEl.id] = ($(tmp).scroller({\n                    scrollBars: true,\n                    verticalScroll: true,\n                    horizontalScroll: false,\n                    vScrollCSS: \"afScrollbar\",\n                    refresh: refreshPull,\n                    useJsScroll: jsScroll,\n                    noParent: !jsScroll,\n                    autoEnable: false //dont enable the events unnecessarilly\n                }));\n                //backwards compatibility\n                if (refreshFunc) $.bind(this.scrollingDivs[scrollEl.id], 'refresh-release', function (trigger) {\n                    if (trigger) refreshFunc();\n                });\n            }\n\n            tmp = null;\n            scrollEl = null;\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "id",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
+          "string"
+        ],
+        "name": "Time",
+        "description": "to scroll"
+      },
+      {
+        "type": "title",
+        "string": "$.ui.scrollToTop(id);"
+      }
+    ],
+    "description": {
+      "full": "<p>Scrolls a panel to the top<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.scrollToTop(id);<br />           </pre></div></p>",
+      "summary": "<p>Scrolls a panel to the top<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.scrollToTop(id);<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "scrollToTop: function (id,time) {\n            time=time||\"300ms\";\n            id=id.replace(\"#\",\"\");\n            if (this.scrollingDivs[id]) {\n                this.scrollingDivs[id].scrollToTop(time);\n            }\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "id",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
+          "string"
+        ],
+        "name": "Time",
+        "description": "to scroll"
+      },
+      {
+        "type": "title",
+        "string": "$.ui.scrollToBottom(id);"
+      }
+    ],
+    "description": {
+      "full": "<p>Scrolls a panel to the bottom<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.scrollToBottom(id,time);<br />           </pre></div></p>",
+      "summary": "<p>Scrolls a panel to the bottom<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.scrollToBottom(id,time);<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "scrollToBottom: function (id,time) {\n            id=id.replace(\"#\",\"\");\n            if (this.scrollingDivs[id]) {\n                this.scrollingDivs[id].scrollToBottom(time);\n            }\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "current",
+        "description": "div"
+      },
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "old",
+        "description": "div"
+      },
+      {
+        "type": "title",
+        "string": "$.ui.parsePanelFunctions(currentDiv,oldDiv);"
+      },
+      {
+        "type": "api",
+        "visibility": "private"
+      }
+    ],
+    "description": {
+      "full": "<p>This is used when a transition fires to do helper events.  We check to see if we need to change the nav menus, footer, and fire<br />the load/onload functions for panels<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.parsePanelFunctions(currentDiv,oldDiv);<br />           </pre></div></p>",
+      "summary": "<p>This is used when a transition fires to do helper events.  We check to see if we need to change the nav menus, footer, and fire<br />the load/onload functions for panels<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.parsePanelFunctions(currentDiv,oldDiv);<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": true,
+    "ignore": false,
+    "code": "parsePanelFunctions: function (what, oldDiv,goBack) {\n            //check for custom footer\n            var that = this;\n            var hasFooter = what.getAttribute(\"data-footer\");\n            var hasHeader = what.getAttribute(\"data-header\");\n\n            //$asap removed since animations are fixed in css3animate\n            if (hasFooter && hasFooter.toLowerCase() == \"none\") {\n                that.toggleNavMenu(false);\n            } else {\n                that.toggleNavMenu(true);\n            }\n            if (hasFooter && that.customFooter != hasFooter) {\n                that.customFooter = hasFooter;\n                that.updateNavbarElements(hasFooter);\n            } else if (hasFooter != that.customFooter) {\n                if (that.customFooter) that.updateNavbarElements(that.defaultFooter);\n                that.customFooter = false;\n            }\n            if (hasHeader && hasHeader.toLowerCase() == \"none\") {\n                that.toggleHeaderMenu(false);\n            } else {\n                that.toggleHeaderMenu(true);\n            }\n\n            if (hasHeader && that.customHeader != hasHeader) {\n                that.customHeader = hasHeader;\n                that.updateHeaderElements(hasHeader,goBack);\n            } else if (hasHeader != that.customHeader) {\n                if (that.customHeader) {\n                    that.updateHeaderElements(that.defaultHeader,goBack);\n                    that.setTitle(that.activeDiv.title);\n                }\n                that.customHeader = false;\n            }\n            if (what.getAttribute(\"data-tab\")) { //Allow the dev to force the footer menu\n                $.query(\"#navbar a\").removeClass(\"pressed\");\n                $.query(\"#\" + what.getAttribute(\"data-tab\")).addClass(\"pressed\");\n            }\n\n            //Load inline footers\n            var inlineFooters = $(what).find(\"footer\");\n            if (inlineFooters.length > 0) {\n                that.customFooter = what.id;\n                inlineFooters.data(\"parent\", what.id);\n                that.updateNavbarElements(inlineFooters);\n            }\n            //load inline headers\n            var inlineHeader = $(what).find(\"header\");\n\n\n            if (inlineHeader.length > 0) {\n                that.customHeader = what.id;\n                inlineHeader.data(\"parent\", what.id);\n                that.updateHeaderElements(inlineHeader,goBack);\n            }\n            //check if the panel has a footer\n            if (what.getAttribute(\"data-tab\")) { //Allow the dev to force the footer menu\n                $.query(\"#navbar a\").removeClass(\"pressed\");\n                $.query(\"#navbar #\" + what.getAttribute(\"data-tab\")).addClass(\"pressed\");\n            }\n\n            var hasMenu = what.getAttribute(\"data-nav\");\n            if (hasMenu && this.customMenu != hasMenu) {\n                this.customMenu = hasMenu;\n                this.updateSideMenuElements(hasMenu);\n            } else if (hasMenu != this.customMenu) {\n                if (this.customMenu) {\n                    this.updateSideMenuElements(this.defaultMenu);\n                }\n                this.customMenu = false;\n            }\n\n\n\n            if (oldDiv) {\n                fnc = oldDiv.getAttribute(\"data-unload\");\n                if (typeof fnc == \"string\" && window[fnc]) {\n                    window[fnc](oldDiv);\n                }\n                $(oldDiv).trigger(\"unloadpanel\");\n            }\n            var fnc = what.getAttribute(\"data-load\");\n            if (typeof fnc == \"string\" && window[fnc]) {\n                window[fnc](what);\n            }\n            $(what).trigger(\"loadpanel\");\n            if (this.isSideMenuOn()) {\n                var that=this;\n                if(that.isWin8){\n                    that.toggleSideMenu(false);\n                    return;\n                }\n                $(\"#menu\").width(window.innerWidth);\n\n                $(\".hasMenu\").css3Animate({\n                    x:(window.innerWidth+100),\n                    time:that.transitionTime,\n                    complete:function(){\n                        $(\"#menu\").width(that.sideMenuWidth);\n                        that.toggleSideMenu(false);\n\n                    }\n                });\n            }\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "api",
+        "visibility": "private"
+      }
+    ],
+    "description": {
+      "full": "<p>Helper function that parses a contents html for any script tags and either adds them or executes the code</p>",
+      "summary": "<p>Helper function that parses a contents html for any script tags and either adds them or executes the code</p>",
+      "body": ""
+    },
+    "isPrivate": true,
+    "ignore": false,
+    "code": "parseScriptTags: function (div) {\n            if (!div) return;\n            $.parseJS(div);\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "target",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
+          "Boolean"
+        ],
+        "name": "newtab",
+        "description": "(resets history)"
+      },
+      {
+        "type": "param",
+        "types": [
+          "Boolean"
+        ],
+        "name": "go",
+        "description": "back (initiate the back click)"
+      },
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "transition",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.loadContent(target,newTab,goBack,transition);"
+      },
+      {
+        "type": "api",
+        "visibility": "public"
+      }
+    ],
+    "description": {
+      "full": "<p>This is called to initiate a transition or load content via ajax.<br />We can pass in a hash+id or URL and then we parse the panel for additional functions<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.loadContent(\"#main\",false,false,\"up\");<br />           </pre></div></p>",
+      "summary": "<p>This is called to initiate a transition or load content via ajax.<br />We can pass in a hash+id or URL and then we parse the panel for additional functions<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.loadContent(\"#main\",false,false,\"up\");<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "loadContent: function (target, newTab, back, transition, anchor) {\n\n            if (this.doingTransition) {\n                var that = this;\n                this.loadContentQueue.push([target, newTab, back, transition, anchor]);\n                return;\n            }\n            if (target.length === 0) return;\n\n            var what = null;\n            var loadAjax = true;\n            anchor = anchor || document.createElement(\"a\"); //Hack to allow passing in no anchor\n            if (target.indexOf(\"#\") == -1) {\n                var urlHash = \"url\" + crc32(target); //Ajax urls\n                var crcCheck = $.query(\"div.panel[data-crc='\" + urlHash + \"']\");\n                if ($.query(\"#\" + target).length > 0) {\n                    loadAjax = false;\n                } else if (crcCheck.length > 0) {\n                    loadAjax = false;\n                    if (anchor.getAttribute(\"data-refresh-ajax\") === 'true' || (anchor.refresh && anchor.refresh === true || this.isAjaxApp)) {\n                        loadAjax = true;\n                    } else {\n                        target = \"#\" + crcCheck.get(0).id;\n                    }\n                } else if ($.query(\"#\" + urlHash).length > 0) {\n\n                    //ajax div already exists.  Let's see if we should be refreshing it.\n                    loadAjax = false;\n                    if (anchor.getAttribute(\"data-refresh-ajax\") === 'true' || (anchor.refresh && anchor.refresh === true || this.isAjaxApp)) {\n                        loadAjax = true;\n                    } else target = \"#\" + urlHash;\n                }\n            }\n            if (target.indexOf(\"#\") == -1 && loadAjax) {\n                this.loadAjax(target, newTab, back, transition, anchor);\n            } else {\n                this.loadDiv(target, newTab, back, transition);\n            }\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "target",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
+          "Boolean"
+        ],
+        "name": "newtab",
+        "description": "(resets history)"
+      },
+      {
+        "type": "param",
+        "types": [
+          "Boolean"
+        ],
+        "name": "go",
+        "description": "back (initiate the back click)"
+      },
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "transition",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.loadDiv(target,newTab,goBack,transition);"
+      },
+      {
+        "type": "api",
+        "visibility": "private"
+      }
+    ],
+    "description": {
+      "full": "<p>This is called internally by loadContent.  Here we are loading a div instead of an Ajax link<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.loadDiv(\"#main\",false,false,\"up\");<br />           </pre></div></p>",
+      "summary": "<p>This is called internally by loadContent.  Here we are loading a div instead of an Ajax link<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.loadDiv(\"#main\",false,false,\"up\");<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": true,
+    "ignore": false,
+    "code": "loadDiv: function (target, newTab, back, transition) {\n            // load a div\n            var that = this;\n            var what = target.replace(\"#\", \"\");\n\n            var slashIndex = what.indexOf('/');\n            var hashLink = \"\";\n            if (slashIndex != -1) {\n                // Ignore everything after the slash for loading\n                hashLink = what.substr(slashIndex);\n                what = what.substr(0, slashIndex);\n            }\n\n            what = $.query(\"#\" + what).get(0);\n\n            if (!what) return console.log(\"Target: \" + target + \" was not found\");\n            if (what == this.activeDiv && !back) {\n                //toggle the menu if applicable\n                if (this.isSideMenuOn()) this.toggleSideMenu(false);\n                return;\n            }\n            this.transitionType = transition;\n            var oldDiv = this.activeDiv;\n            var currWhat = what;\n\n            if (what.getAttribute(\"data-modal\") == \"true\" || what.getAttribute(\"modal\") == \"true\") {\n                var fnc = what.getAttribute(\"data-load\");\n                if (typeof fnc == \"string\" && window[fnc]) {\n                    window[fnc](what);\n                }\n                $(what).trigger(\"loadpanel\");\n                return this.showModal(what.id);\n            }\n\n\n\n            if (oldDiv == currWhat) //prevent it from going to itself\n            return;\n\n            if (newTab) {\n                this.clearHistory();\n                this.pushHistory(\"#\" + this.firstDiv.id, what.id, transition, hashLink);\n            } else if (!back) {\n                this.pushHistory(previousTarget, what.id, transition, hashLink);\n            }\n\n\n            previousTarget = '#' + what.id + hashLink;\n\n\n            this.doingTransition = true;\n\n            oldDiv.style.display = \"block\";\n            currWhat.style.display = \"block\";\n\n            this.runTransition(transition, oldDiv, currWhat, back);\n\n\n            //Let's check if it has a function to run to update the data\n            this.parsePanelFunctions(what, oldDiv,back);\n            //Need to call after parsePanelFunctions, since new headers can override\n            this.loadContentData(what, newTab, back, transition);\n            setTimeout(function () {\n                if (that.scrollingDivs[oldDiv.id]) {\n                    that.scrollingDivs[oldDiv.id].disable();\n                }\n            }, (that.transitionTime)+50);\n\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "target",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
+          "Boolean"
+        ],
+        "name": "newtab",
+        "description": "(resets history)"
+      },
+      {
+        "type": "param",
+        "types": [
+          "Boolean"
+        ],
+        "name": "go",
+        "description": "back (initiate the back click)"
+      },
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "transition",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.loadDiv(target,newTab,goBack,transition);"
+      },
+      {
+        "type": "api",
+        "visibility": "private"
+      }
+    ],
+    "description": {
+      "full": "<p>This is called internally by loadDiv.  This sets up the back button in the header and scroller for the panel<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.loadContentData(\"#main\",false,false,\"up\");<br />           </pre></div></p>",
+      "summary": "<p>This is called internally by loadDiv.  This sets up the back button in the header and scroller for the panel<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.loadContentData(\"#main\",false,false,\"up\");<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": true,
+    "ignore": false,
+    "code": "loadContentData: function (what, newTab, back, transition) {\n            var prevId, el, val, slashIndex;\n            if (back) {\n                if (this.history.length > 0) {\n                    val = this.history[this.history.length - 1];\n                    slashIndex = val.target.indexOf('/');\n                    if (slashIndex != -1) {\n                        prevId = val.target.substr(0, slashIndex);\n                    } else prevId = val.target;\n                    el = $.query(prevId).get(0);\n                    //make sure panel is there\n                    if (el) this.setBackButtonText(el.title);\n                    else this.setBackButtonText(\"Back\");\n                }\n            } else if (this.activeDiv.title) this.setBackButtonText(this.activeDiv.title);\n            else this.setBackButtonText(\"Back\");\n            if (what.title) {\n                this.setTitle(what.title);\n            }\n            if (newTab) {\n                this.setBackButtonText(this.firstDiv.title);\n            }\n\n            if (this.history.length === 0) {\n                this.setBackButtonVisibility(false);\n                this.history = [];\n            } else if (this.showBackbutton) this.setBackButtonVisibility(true);\n            this.activeDiv = what;\n            if (this.scrollingDivs[this.activeDiv.id]) {\n                this.scrollingDivs[this.activeDiv.id].enable(this.resetScrollers);\n            }\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "target",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
+          "Boolean"
+        ],
+        "name": "newtab",
+        "description": "(resets history)"
+      },
+      {
+        "type": "param",
+        "types": [
+          "Boolean"
+        ],
+        "name": "go",
+        "description": "back (initiate the back click)"
+      },
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "transition",
+        "description": ""
+      },
+      {
+        "type": "title",
+        "string": "$.ui.loadDiv(target,newTab,goBack,transition);"
+      },
+      {
+        "type": "api",
+        "visibility": "private"
+      }
+    ],
+    "description": {
+      "full": "<p>This is called internally by loadContent.  Here we are using Ajax to fetch the data<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.loadDiv(\"page.html\",false,false,\"up\");<br />           </pre></div></p>",
+      "summary": "<p>This is called internally by loadContent.  Here we are using Ajax to fetch the data<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.loadDiv(\"page.html\",false,false,\"up\");<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": true,
+    "ignore": false,
+    "code": "loadAjax: function (target, newTab, back, transition, anchor) {\n            // XML Request\n            if (this.activeDiv.id == \"afui_ajax\" && target == this.ajaxUrl) return;\n            var urlHash = \"url\" + crc32(target); //Ajax urls\n            var that = this;\n            if (target.indexOf(\"http\") == -1) target = AppMobi.webRoot + target;\n            var xmlhttp = new XMLHttpRequest();\n            if(anchor&&typeof(\"anchor\")!==\"object\")\n            {\n                anchor=document.createElement(\"a\");\n                anchor.setAttribute(\"data-persist-ajax\",true);\n            }\n\n            anchor=anchor||document.createElement(\"a\");\n            xmlhttp.onreadystatechange = function () {\n                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {\n                    this.doingTransition = false;\n                    var refreshFunction;\n                    var doReturn = false;\n                    var retainDiv = $.query(\"#\" + urlHash);\n                    //Here we check to see if we are retaining the div, if so update it\n                    if (retainDiv.length > 0) {\n                        that.updatePanel(urlHash, xmlhttp.responseText);\n                        retainDiv.get(0).title = anchor.title ? anchor.title : target;\n                    } else if (anchor.getAttribute(\"data-persist-ajax\") || that.isAjaxApp) {\n\n                        var refresh = (anchor.getAttribute(\"data-pull-scroller\") === 'true') ? true : false;\n                        refreshFunction = refresh ? function () {\n                            anchor.refresh = true;\n                            that.loadContent(target, newTab, back, transition, anchor);\n                            anchor.refresh = false;\n                        } : null;\n                        //that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);\n                        var contents=$(xmlhttp.responseText);\n                        if(contents.hasClass(\"panel\"))\n                            contents=contents.get(0).innerHTML;\n                        else\n                            contents=contents.html();\n                        if($(\"#\"+urlHash).length>0){\n                            that.updatePanel(\"#\"+urlHash,contents);\n                        }\n                        else if($(\"div.panel[data-crc='\"+urlHash+\"']\").length>0){\n                            that.updatePanel($(\"div.panel[data-crc='\"+urlHash+\"']\").get(0).id,contents);\n                             urlHash=$(\"div.panel[data-crc='\"+urlHash+\"']\").get(0).id;\n                        }\n                        else\n                            urlHash = that.addContentDiv(urlHash, xmlhttp.responseText, anchor.title ? anchor.title : target, refresh, refreshFunction);\n                    } else {\n                        that.updatePanel(\"afui_ajax\", xmlhttp.responseText);\n                        $.query(\"#afui_ajax\").get(0).title = anchor.title ? anchor.title : target;\n                        that.loadContent(\"#afui_ajax\", newTab, back);\n                        doReturn = true;\n                    }\n                    //Let's load the content now.\n                    //We need to check for any script tags and handle them\n                    var div = document.createElement(\"div\");\n                    $(div).html(xmlhttp.responseText);\n                    that.parseScriptTags(div);\n\n                    if (doReturn) {\n                        if (that.showLoading) that.hideMask();\n                        return;\n                    }\n\n                    that.loadContent(\"#\" + urlHash);\n                    if (that.showLoading) that.hideMask();\n                    return null;\n                }\n            };\n            this.ajaxUrl = target;\n            var newtarget = this.useAjaxCacheBuster ? target + (target.split('?')[1] ? '&' : '?') + \"cache=\" + Math.random() * 10000000000000000 : target;\n            xmlhttp.open(\"GET\", newtarget, true);\n            xmlhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');\n            xmlhttp.send();\n            // show Ajax Mask\n            if (this.showLoading) this.showMask();\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "api",
+        "visibility": "private"
+      },
+      {
+        "type": "title",
+        "string": "$.ui.runTransition(transition,oldDiv,currDiv,back)"
+      }
+    ],
+    "description": {
+      "full": "<p>This executes the transition for the panel<br />            <div class=\"highlight\"><pre lang=\"\">            $.ui.runTransition(transition,oldDiv,currDiv,back)<br />            </pre></div></p>",
+      "summary": "<p>This executes the transition for the panel<br />            <div class=\"highlight\"><pre lang=\"\">            $.ui.runTransition(transition,oldDiv,currDiv,back)<br />            </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": true,
+    "ignore": false,
+    "code": "runTransition: function (transition, oldDiv, currWhat, back) {\n            if (!this.availableTransitions[transition]) transition = 'default';\n            this.availableTransitions[transition].call(this, oldDiv, currWhat, back);\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.launch();"
+      }
+    ],
+    "description": {
+      "full": "<p>This is callled when you want to launch afui.  If autoLaunch is set to true, it gets called on DOMContentLoaded.<br />If autoLaunch is set to false, you can manually invoke it.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.autoLaunch=false;<br />           $.ui.launch();<br />           </pre></div></p>",
+      "summary": "<p>This is callled when you want to launch afui.  If autoLaunch is set to true, it gets called on DOMContentLoaded.<br />If autoLaunch is set to false, you can manually invoke it.<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.autoLaunch=false;<br />           $.ui.launch();<br />           </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "launch: function () {\n\n            if (this.hasLaunched === false || this.launchCompleted) {\n                this.hasLaunched = true;\n                return;\n            }\n\n            var that = this;\n            this.isIntel = (window.AppMobi && typeof (AppMobi) == \"object\" && AppMobi.app !== undefined) ? true : false;\n            this.viewportContainer = af.query(\"#afui\");\n            this.navbar = af.query(\"#navbar\").get(0);\n            this.content = af.query(\"#content\").get(0);\n            this.header = af.query(\"#header\").get(0);\n            this.menu = af.query(\"#menu\").get(0);\n            //set anchor click handler for UI\n            this.viewportContainer.on(\"click\", \"a\", function (e) {\n                checkAnchorClick(e, e.currentTarget);\n            });\n\n\n            //enter-edit scroll paddings fix\n            //focus scroll adjust fix\n            var enterEditEl = null;\n\n            //on enter-edit keep a reference of the actioned element\n            $.bind($.touchLayer, 'enter-edit', function (el) {\n                enterEditEl = el;\n            });\n            //enter-edit-reshape panel padding and scroll adjust\n            $.bind($.touchLayer, 'enter-edit-reshape', function () {\n                //onReshape UI fixes\n                //check if focused element is within active panel\n                var jQel = $(enterEditEl);\n                var jQactive = jQel.closest(that.activeDiv);\n                if (jQactive && jQactive.size() > 0) {\n                    if ($.os.ios || $.os.chrome) {\n                        var paddingTop, paddingBottom;\n                        if (document.body.scrollTop) {\n                            paddingTop = document.body.scrollTop - jQactive.offset().top;\n                        } else {\n                            paddingTop = 0;\n                        }\n                        //not exact, can be a little above the actual value\n                        //but we haven't found an accurate way to measure it and this is the best so far\n                        paddingBottom = jQactive.offset().bottom - jQel.offset().bottom;\n                        that.scrollingDivs[that.activeDiv.id].setPaddings(paddingTop, paddingBottom);\n\n                    } else if ($.os.android || $.os.blackberry) {\n                        var elPos = jQel.offset();\n                        var containerPos = jQactive.offset();\n                        if (elPos.bottom > containerPos.bottom && elPos.height < containerPos.height) {\n                            //apply fix\n                            that.scrollingDivs[that.activeDiv.id].scrollToItem(jQel, 'bottom');\n                        }\n                    }\n                }\n            });\n            if ($.os.ios) {\n                $.bind($.touchLayer, 'exit-edit-reshape', function () {\n                    that.scrollingDivs[that.activeDiv.id].setPaddings(0, 0);\n                });\n            }\n\n\n            //elements setup\n            if (!this.navbar) {\n                this.navbar = $.create(\"div\", {\n                    id: \"navbar\"\n                }).hide().get(0);\n                this.viewportContainer.append(this.navbar);\n            }\n            if (!this.header) {\n                this.header = $.create(\"div\", {\n                    id: \"header\"\n                }).get(0);\n                this.viewportContainer.prepend(this.header);\n            }\n            if (!this.menu) {\n                this.menu = $.create(\"div\", {\n                    id: \"menu\",\n                    html: '<div id=\"menu_scroller\"></div>'\n                }).get(0);\n                this.viewportContainer.append(this.menu);\n                this.menu.style.overflow = \"hidden\";\n                this.scrollingDivs.menu_scroller = $.query(\"#menu_scroller\").scroller({\n                    scrollBars: true,\n                    verticalScroll: true,\n                    vScrollCSS: \"afScrollbar\",\n                    useJsScroll: !$.feat.nativeTouchScroll,\n                    noParent: $.feat.nativeTouchScroll,\n                    autoEnable:true\n                });\n                if ($.feat.nativeTouchScroll) $.query(\"#menu_scroller\").css(\"height\", \"100%\");\n            }\n\n            if (!this.content) {\n                this.content = $.create(\"div\", {\n                    id: \"content\"\n                }).get(0);\n                this.viewportContainer.append(this.content);\n            }\n\n            //insert backbutton (should optionally be left to developer..)\n            $(this.header).html('<a id=\"backButton\" class=\"button\"></a> <h1 id=\"pageTitle\"></h1>' + header.innerHTML);\n            this.backButton = $.query(\"#header #backButton\").css(\"visibility\", \"hidden\");\n            $(document).on(\"click\", \"#header #backButton\", function (e) {\n                e.preventDefault();\n                that.goBack();\n            });\n\n            //page title (should optionally be left to developer..)\n            this.titleBar = $.query(\"#header #pageTitle\").get(0);\n\n            //setup ajax mask\n            this.addContentDiv(\"afui_ajax\", \"\");\n            var maskDiv = $.create(\"div\", {\n                id: \"afui_mask\",\n                className: \"ui-loader\",\n                html: \"<span class='ui-icon ui-icon-loading spin'></span><h1>Loading Content</h1>\"\n            }).css({\n                'z-index': 20000,\n                display: \"none\"\n            });\n            document.body.appendChild(maskDiv.get(0));\n            //setup modalDiv\n            var modalDiv = $.create(\"div\", {\n                id: \"afui_modal\"\n            }).get(0);\n            modalDiv.appendChild($.create(\"div\", {\n                id: 'modalContainer'\n            }).get());\n            this.viewportContainer.append(modalDiv);\n            this.scrollingDivs.modal_container = $.query(\"#modalContainer\").scroller({\n                scrollBars: true,\n                vertical: true,\n                vScrollCSS: \"afScrollbar\",\n                noParent: true\n            });\n            this.modalWindow = modalDiv;\n            //get first div, defer\n            var defer = {};\n            var contentDivs = this.viewportContainer.get().querySelectorAll(\".panel\");\n            for (var i = 0; i < contentDivs.length; i++) {\n                var el = contentDivs[i];\n                var tmp = el;\n                var id;\n                var prevSibling = el.previousSibling;\n                if (el.parentNode && el.parentNode.id != \"content\") {\n\n                    el.parentNode.removeChild(el);\n                    id = el.id;\n                    if (tmp.getAttribute(\"selected\")) this.firstDiv = $.query(\"#\" + id).get(0);\n                    this.addDivAndScroll(tmp);\n                    $.query(\"#\" + id).insertAfter(prevSibling);\n                } else if (!el.parsedContent) {\n                    el.parsedContent = 1;\n                    el.parentNode.removeChild(el);\n                    id = el.id;\n                    if (tmp.getAttribute(\"selected\")) this.firstDiv = $.query(\"#\" + id).get(0);\n                    this.addDivAndScroll(tmp);\n                    $.query(\"#\" + id).insertAfter(prevSibling);\n                }\n                if (el.getAttribute(\"data-defer\")) {\n                    defer[id] = el.getAttribute(\"data-defer\");\n                }\n                if (!this.firstDiv) this.firstDiv = $.query(\"#\" + id).get(0);\n\n                el = null;\n            }\n            contentDivs = null;\n            var loadingDefer = false;\n            var toLoad = Object.keys(defer).length;\n            if (toLoad > 0) {\n                loadingDefer = true;\n                var loaded = 0;\n                for (var j in defer) {\n                    (function (j) {\n                        $.ajax({\n                            url: AppMobi.webRoot + defer[j],\n                            success: function (data) {\n                                if (data.length === 0) return;\n                                that.updatePanel(j, data);\n                                that.parseScriptTags($.query(\"#\" + j).get());\n                                loaded++;\n                                if (loaded >= toLoad) {\n                                    $(document).trigger(\"defer:loaded\");\n                                    loadingDefer = false;\n\n                                }\n                            },\n                            error: function (msg) {\n                                //still trigger the file as being loaded to not block $.ui.ready\n                                console.log(\"Error with deferred load \" + AppMobi.webRoot + defer[j]);\n                                loaded++;\n                                if (loaded >= toLoad) {\n                                    $(document).trigger(\"defer:loaded\");\n                                    loadingDefer = false;\n                                }\n                            }\n                        });\n                    })(j);\n                }\n            }\n            if (this.firstDiv) {\n                this.activeDiv = this.firstDiv;\n                if (this.scrollingDivs[this.activeDiv.id]) {\n                    this.scrollingDivs[this.activeDiv.id].enable();\n                }\n\n                var loadFirstDiv = function () {\n\n\n                    $.query(\"#navbar\").append($.create(\"footer\", {\n                        id: 'defaultNav'\n                    }).append($.query(\"#navbar\").children()));\n                    that.defaultFooter = \"defaultNav\";\n                    that.prevFooter = $.query(\"#defaultNav\");\n                    that.updateNavbarElements(that.prevFooter);\n                    //setup initial menu\n                    var firstMenu = $.query(\"nav\").get(0);\n                    if (firstMenu) {\n                        that.defaultMenu = $(firstMenu);\n                        that.updateSideMenuElements(that.defaultMenu);\n                        that.prevMenu = that.defaultMenu;\n                    }\n                    //get default header\n                    that.defaultHeader = \"defaultHeader\";\n                    $.query(\"#header\").append($.create(\"header\", {\n                        id: 'defaultHeader'\n                    }).append($.query(\"#header\").children()));\n                    that.prevHeader = $.query(\"#defaultHeader\");\n\n                    //\n                    $.query(\"#navbar\").on(\"click\", \"a\", function (e) {\n                        $.query(\"#navbar a\").not(e.currentTarget).removeClass(\"pressed\");\n                        $(e.currentTarget).addClass(\"pressed\");\n                    });\n\n                    //update the width\n                    var footerLinks = $.query(\"#navbar a\");\n                    if (footerLinks.length > 0) {\n                        footerLinks.css(\"width\", (100 / footerLinks.length) + \"%\");\n                    }\n\n                    //There is a bug in chrome with @media queries where the header was not getting repainted\n                    if ($.query(\"nav\").length > 0) {\n                        $.query(\"#afui #header\").addClass(\"hasMenu\");\n                        $.query(\"#afui #content\").addClass(\"hasMenu\");\n                        $.query(\"#afui #navbar\").addClass(\"hasMenu\");\n                    }\n                    //go to activeDiv\n                    var firstPanelId = that.getPanelId(defaultHash);\n                    //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path\n                    if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId != (\"#\" + that.firstDiv.id) && $.query(firstPanelId).length > 0) {\n                        that.loadContent(defaultHash, true, false, 'none'); //load the active page as a newTab with no transition\n\n                    } else {\n                        previousTarget = \"#\" + that.firstDiv.id;\n\n                        that.firstDiv.style.display = \"block\";\n                        //Let's check if it has a function to run to update the data\n                        that.parsePanelFunctions(that.firstDiv);\n                        //Need to call after parsePanelFunctions, since new headers can override\n                        that.loadContentData(that.firstDiv);\n\n                        $.query(\"#header #backButton\").css(\"visibility\", \"hidden\");\n                        if (that.firstDiv.getAttribute(\"data-modal\") == \"true\" || that.firstDiv.getAttribute(\"modal\") == \"true\") {\n                            that.showModal(that.firstDiv.id);\n                        }\n                    }\n\n                    that.launchCompleted = true;\n                    //trigger ui ready\n                    $(document).trigger(\"afui:ready\");\n                    $.query(\"#afui #splashscreen\").remove();\n                };\n                if (loadingDefer) {\n                    $(document).one(\"defer:loaded\", loadFirstDiv);\n                } else loadFirstDiv();\n            }\n            $.bind(that, \"content-loaded\", function () {\n                if (that.loadContentQueue.length > 0) {\n                    var tmp = that.loadContentQueue.splice(0, 1)[0];\n                    that.loadContent(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4]);\n                }\n            });\n            if (window.navigator.standalone) {\n                this.blockPageScroll();\n            }\n            this.topClickScroll();\n\n        },"
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>This simulates the click and scroll to top of browsers</p>",
+      "summary": "<p>This simulates the click and scroll to top of browsers</p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "topClickScroll: function () {\n            var that = this;\n            document.getElementById(\"header\").addEventListener(\"click\", function (e) {\n                if (e.clientY <= 15 && e.target.nodeName.toLowerCase() == \"h1\") //hack - the title spans the whole width of the header\n                that.scrollingDivs[that.activeDiv.id].scrollToTop(\"100\");\n            });\n\n        },"
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>This blocks the page from scrolling/panning.  Usefull for native apps</p>",
+      "summary": "<p>This blocks the page from scrolling/panning.  Usefull for native apps</p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "blockPageScroll: function () {\n            $.query(\"#afui #header\").bind(\"touchmove\", function (e) {\n                e.preventDefault();\n            });\n        },"
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>This is the default transition.  It simply shows the new panel and hides the old</p>",
+      "summary": "<p>This is the default transition.  It simply shows the new panel and hides the old</p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "noTransition: function (oldDiv, currDiv, back) {\n            currDiv.style.display = \"block\";\n            oldDiv.style.display = \"block\";\n            var that = this;\n            that.clearAnimations(currDiv);\n            that.css3animate(oldDiv, {\n                x: \"0%\",\n                y: 0\n            });\n            that.finishTransition(oldDiv);\n            currDiv.style.zIndex = 2;\n            oldDiv.style.zIndex = 1;\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "Div",
+        "description": "that transitioned out"
+      },
+      {
+        "type": "title",
+        "string": "$.ui.finishTransition(oldDiv)"
+      }
+    ],
+    "description": {
+      "full": "<p>This must be called at the end of every transition to hide the old div and reset the doingTransition variable</p>",
+      "summary": "<p>This must be called at the end of every transition to hide the old div and reset the doingTransition variable</p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "finishTransition: function (oldDiv, currDiv) {\n            oldDiv.style.display = 'none';\n            this.doingTransition = false;\n            if (currDiv) this.clearAnimations(currDiv);\n            if (oldDiv) this.clearAnimations(oldDiv);\n            $.trigger(this, \"content-loaded\");\n        },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "Object"
+        ],
+        "name": "Div",
+        "description": "that transitioned out"
+      },
+      {
+        "type": "title",
+        "string": "$.ui.finishTransition(oldDiv)"
+      }
+    ],
+    "description": {
+      "full": "<p>This must be called at the end of every transition to remove all transforms and transitions attached to the inView object (performance + native scroll)</p>",
+      "summary": "<p>This must be called at the end of every transition to remove all transforms and transitions attached to the inView object (performance + native scroll)</p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "clearAnimations: function (inViewDiv) {\n            inViewDiv.style[$.feat.cssPrefix + 'Transform'] = \"none\";\n            inViewDiv.style[$.feat.cssPrefix + 'Transition'] = \"none\";\n        }"
+  },
+  {
+    "tags": [
+      {
+        "type": "api",
+        "visibility": "private"
+      }
+    ],
+    "description": {
+      "full": "<p>END</p>",
+      "summary": "<p>END</p>",
+      "body": ""
+    },
+    "isPrivate": true,
+    "ignore": false,
+    "code": "};\n\n\n    //lookup for a clicked anchor recursively and fire UI own actions when applicable\n    var checkAnchorClick = function (e, theTarget) {\n\n        if (theTarget == (afui)) {\n            return;\n        }\n\n        //this technique fails when considerable content exists inside anchor, should be recursive ?\n        if (theTarget.tagName.toLowerCase() != \"a\" && theTarget.parentNode) return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)\n        //anchors\n        if (theTarget.tagName !== \"undefined\" && theTarget.tagName.toLowerCase() == \"a\") {\n\n            var custom = (typeof $.ui.customClickHandler == \"function\") ? $.ui.customClickHandler : false;\n            if (custom !== false) {\n                if ($.ui.customClickHandler(theTarget)) return e.preventDefault();\n\n            }\n            if (theTarget.href.toLowerCase().indexOf(\"javascript:\") !== -1 || theTarget.getAttribute(\"data-ignore\")) {\n                return;\n            }\n\n\n            if (theTarget.href.indexOf(\"tel:\") === 0) return false;\n\n            //external links\n            if (theTarget.hash.indexOf(\"#\") === -1 && theTarget.target.length > 0) {\n                if (theTarget.href.toLowerCase().indexOf(\"javascript:\") !== 0) {\n                    if ($.ui.isIntel) {\n                        e.preventDefault();\n                        AppMobi.device.launchExternal(theTarget.href);\n                    } else if (!$.os.desktop) {\n                        e.target.target = \"_blank\";\n                    }\n                }\n                return;\n            }"
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>IE 10 fixes</p>",
+      "summary": "<p>IE 10 fixes</p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "var href = theTarget.href,\n                prefix = location.protocol + \"//\" + location.hostname + \":\" + location.port+location.pathname;\n            if (href.indexOf(prefix) === 0) {\n                href = href.substring(prefix.length);\n            }\n            //empty links\n            if (href == \"#\" || (href.indexOf(\"#\") === href.length - 1) || (href.length === 0 && theTarget.hash.length === 0)) return;\n\n            //internal links\n            e.preventDefault();\n            var mytransition = theTarget.getAttribute(\"data-transition\");\n            var resetHistory = theTarget.getAttribute(\"data-resetHistory\");\n            resetHistory = resetHistory && resetHistory.toLowerCase() == \"true\" ? true : false;\n            href = theTarget.hash.length > 0 ? theTarget.hash : href;\n            $.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);\n            return;\n        }\n    };\n\n    var table = \"00000000 77073096 EE0E612C 990951BA 076DC419 706AF48F E963A535 9E6495A3 0EDB8832 79DCB8A4 E0D5E91E 97D2D988 09B64C2B 7EB17CBD E7B82D07 90BF1D91 1DB71064 6AB020F2 F3B97148 84BE41DE 1ADAD47D 6DDDE4EB F4D4B551 83D385C7 136C9856 646BA8C0 FD62F97A 8A65C9EC 14015C4F 63066CD9 FA0F3D63 8D080DF5 3B6E20C8 4C69105E D56041E4 A2677172 3C03E4D1 4B04D447 D20D85FD A50AB56B 35B5A8FA 42B2986C DBBBC9D6 ACBCF940 32D86CE3 45DF5C75 DCD60DCF ABD13D59 26D930AC 51DE003A C8D75180 BFD06116 21B4F4B5 56B3C423 CFBA9599 B8BDA50F 2802B89E 5F058808 C60CD9B2 B10BE924 2F6F7C87 58684C11 C1611DAB B6662D3D 76DC4190 01DB7106 98D220BC EFD5102A 71B18589 06B6B51F 9FBFE4A5 E8B8D433 7807C9A2 0F00F934 9609A88E E10E9818 7F6A0DBB 086D3D2D 91646C97 E6635C01 6B6B51F4 1C6C6162 856530D8 F262004E 6C0695ED 1B01A57B 8208F4C1 F50FC457 65B0D9C6 12B7E950 8BBEB8EA FCB9887C 62DD1DDF 15DA2D49 8CD37CF3 FBD44C65 4DB26158 3AB551CE A3BC0074 D4BB30E2 4ADFA541 3DD895D7 A4D1C46D D3D6F4FB 4369E96A 346ED9FC AD678846 DA60B8D0 44042D73 33031DE5 AA0A4C5F DD0D7CC9 5005713C 270241AA BE0B1010 C90C2086 5768B525 206F85B3 B966D409 CE61E49F 5EDEF90E 29D9C998 B0D09822 C7D7A8B4 59B33D17 2EB40D81 B7BD5C3B C0BA6CAD EDB88320 9ABFB3B6 03B6E20C 74B1D29A EAD54739 9DD277AF 04DB2615 73DC1683 E3630B12 94643B84 0D6D6A3E 7A6A5AA8 E40ECF0B 9309FF9D 0A00AE27 7D079EB1 F00F9344 8708A3D2 1E01F268 6906C2FE F762575D 806567CB 196C3671 6E6B06E7 FED41B76 89D32BE0 10DA7A5A 67DD4ACC F9B9DF6F 8EBEEFF9 17B7BE43 60B08ED5 D6D6A3E8 A1D1937E 38D8C2C4 4FDFF252 D1BB67F1 A6BC5767 3FB506DD 48B2364B D80D2BDA AF0A1B4C 36034AF6 41047A60 DF60EFC3 A867DF55 316E8EEF 4669BE79 CB61B38C BC66831A 256FD2A0 5268E236 CC0C7795 BB0B4703 220216B9 5505262F C5BA3BBE B2BD0B28 2BB45A92 5CB36A04 C2D7FFA7 B5D0CF31 2CD99E8B 5BDEAE1D 9B64C2B0 EC63F226 756AA39C 026D930A 9C0906A9 EB0E363F 72076785 05005713 95BF4A82 E2B87A14 7BB12BAE 0CB61B38 92D28E9B E5D5BE0D 7CDCEFB7 0BDBDF21 86D3D2D4 F1D4E242 68DDB3F8 1FDA836E 81BE16CD F6B9265B 6FB077E1 18B74777 88085AE6 FF0F6A70 66063BCA 11010B5C 8F659EFF F862AE69 616BFFD3 166CCF45 A00AE278 D70DD2EE 4E048354 3903B3C2 A7672661 D06016F7 4969474D 3E6E77DB AED16A4A D9D65ADC 40DF0B66 37D83BF0 A9BCAE53 DEBB9EC5 47B2CF7F 30B5FFE9 BDBDF21C CABAC28A 53B39330 24B4A3A6 BAD03605 CDD70693 54DE5729 23D967BF B3667A2E C4614AB8 5D681B02 2A6F2B94 B40BBE37 C30C8EA1 5A05DF1B 2D02EF8D\";",
+    "ctx": {
+      "type": "declaration",
+      "name": "href",
+      "value": "theTarget.href,",
+      "string": "href"
+    }
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>Number</p>",
+      "summary": "<p>Number</p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "var crc32 = function (",
+    "ctx": {
+      "type": "function",
+      "name": "crc32",
+      "string": "crc32()"
+    }
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>String</p>",
+      "summary": "<p>String</p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "str,"
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>Number</p>",
+      "summary": "<p>Number</p>",
+      "body": ""
+    },
+    "ignore": false,
+    "code": "crc) {\n        if (crc === undefined) crc = 0;\n        var n = 0; //a number between 0 and 255\n        var x = 0; //an hex number\n        crc = crc ^ (-1);\n        for (var i = 0, iTop = str.length; i < iTop; i++) {\n            n = (crc ^ str.charCodeAt(i)) & 0xFF;\n            x = \"0x\" + table.substr(n * 9, 8);\n            crc = (crc >>> 8) ^ x;\n        }\n        return crc ^ (-1);\n    };\n\n\n    $.ui = new ui();\n\n})(af);\n\n\n\n//The following functions are utilitiy functions for afui within appMobi.\n\n(function () {\n    $(document).one(\"appMobi.device.ready\", function () { //in AppMobi, we need to undo the height stuff since it causes issues.\n        setTimeout(function () {\n            document.getElementById('afui').style.height = \"100%\";\n            document.body.style.height = \"100%\";\n            document.documentElement.style.minHeight = window.innerHeight;\n        }, 300);\n        $.ui.ready(function () {\n            $.ui.blockPageScroll();\n        });\n    });\n    //Fix an ios bug where scrolling will not work with rotation\n    if ($.feat.nativeTouchScroll) {\n        document.addEventListener(\"orientationchange\", function (e) {\n            if ($.ui.scrollingDivs[$.ui.activeDiv.id]) {\n                var tmpscroller = $.ui.scrollingDivs[$.ui.activeDiv.id];\n                if (tmpscroller.el.scrollTop === 0) {\n                    tmpscroller.disable();\n                    setTimeout(function () {\n                        tmpscroller.enable();\n                    }, 300);\n                }\n            }\n        });\n    }\n})();"
+  }
+]

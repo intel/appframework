@@ -1,0 +1,535 @@
+/**********************************************************
+	GENERAL UI ELEMENTS
+**********************************************************/
+
+* {
+	-webkit-user-select:none; /* Prevent copy paste for all elements except text fields */
+	-webkit-tap-highlight-color:rgba(255, 255, 255, 0); /* set highlight color for user interaction */
+	-ms-touch-action:none;
+	-webkit-touch-callout: none; /* prevent the popup menu on any links*/
+	margin:0;
+	padding:0;
+	-webkit-box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	box-sizing:border-box;
+}
+
+input,textarea { -webkit-user-select:text; } /* allow users to select text that appears in input fields */
+
+img { border:none; } /* Remove default borders for images */
+
+body {
+	overflow-x:hidden;
+	-webkit-text-size-adjust:none;
+	font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;
+	color:#000;
+	font-size:14px;
+	display:-webkit-box;
+	background: #CBD2D8;
+    /* We want to layout our first container vertically */
+    -webkit-box-orient: vertical;
+    /* we want our child elements to stretch to fit the container */
+	-webkit-box-align:stretch;
+} /* General styles that apply to elements not contained within other classes and styles */
+
+p {
+	display:block;
+	margin:6px 0;
+
+	font-size:14px;
+	line-height:20px;
+	color:inherit
+}
+
+#afui_modal {
+    -webkit-backface-visibility: hidden;
+	z-index:9999 !important;
+	width:100%;
+	height:100%;
+	display:none;
+	position:absolute; top:0;
+	overflow:hidden;
+	background:rgba(29,29,28,1) !important;
+	-webkit-perspective: 1000;
+	color:white;
+	
+}
+
+#modalContainer { width:100%; }
+#modalContainer > * {
+	-webkit-backface-visibility: hidden;
+	-webkit-perspective: 1000;
+}
+
+.afmScrollbar { background:white !important; } /* Sets the color of the scrollbar */
+.afmScrollPanel { width:100%; min-height:100%;overflow:hidden;/*hack to auto expand height with floats*/ }
+
+#afui {
+	position:absolute;
+	width:100%;
+	top:0;
+	bottom:0;
+	overflow:hidden;
+}
+
+#afui > #splashscreen {
+	position:absolute;
+	top:0;bottom:0;
+	width:100%;
+	left:0;
+	min-height:100%;
+	background:rgba(29,29,28,1) !important;
+	color:white !important;
+	font-size:30px;
+	text-align:center;
+	z-index:9999;
+	display:block;
+	margin-left: auto !important; margin-right: auto !important;
+	padding-top:80px !important;
+}
+
+
+/**********************************************************
+	header
+**********************************************************/
+#afui > #header {
+	overflow: hidden;
+	display:block;
+	z-index:250;
+	-webkit-box-sizing:border-box; box-sizing:border-box;
+	height:44px;
+    left:0; right:0;
+	background-color:#889BB3;
+	background-image:-ms-linear-gradient(top, #B3BECD 0%, #889BB3 50%, #6E84A2 51%);
+	background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0, #B3BECD), color-stop(.5, #889BB3), color-stop(.51, #6E84A2));
+	background-image:-webkit-linear-gradient(top, #B3BECD 0%, #889BB3 50%, #6E84A2 51%);
+	background-image:linear-gradient(to bottom, #B3BECD 0%, #889BB3 50%, #6E84A2 51%);
+	border: 1px solid;
+	border-color:#CCD2DA transparent #2D3033 transparent;
+} /* This is masthead bar that appears at the top of the UI */
+
+#header * {
+	position:relative;
+	z-index:2;
+}
+
+#header h1 {
+	position:absolute;
+	overflow:hidden;
+	width:100%;
+    z-index:1;
+    text-align:center;
+	height:44px;
+	font-size:18px;
+	font-weight:bold;
+
+	color:#fff;
+	padding:10px 0;
+	text-shadow:rgba(0,0,0,0.8) 0 -1px 0;
+	text-align:center;
+	text-overflow:ellipsis;
+	white-space:nowrap;
+} /* This is text that appears in the header at the top of the screen */
+
+
+/**********************************************************
+	CONTENT AREA
+**********************************************************/
+#content {
+	z-index:180;
+	display:block;
+	position:absolute;
+	top:44px;
+	bottom:49px;
+	left:0;right:0;
+	overflow:hidden;
+} /* Accounts for positioning of the content area, which is everything below the header and above the navbar. */
+
+.panel {
+	z-index:180;
+	width:100%;
+	height:100%;
+	display:none;
+    position:absolute; top:0; left:0;
+	overflow-y:auto;
+	overflow-x:hidden;
+	-webkit-overflow-scrolling:touch;
+	-webkit-backface-visibility: hidden;
+	-webkit-perspective: 1000;
+	background:#e7e7e7;
+	padding:10px;
+	padding-top:0px;
+} /* This class is applied to the divs that contain the various "views" or pages of the app. */
+
+.panel > * {
+	-webkit-backface-visibility: hidden;
+	-webkit-perspective: 1000;
+}
+
+
+/**********************************************************
+	Navbar
+**********************************************************/
+/* Nav bar appears locked to the bottom of the screen. It is the primary navigation. can contain text or graphical navigation */
+#navbar {
+	position:absolute;
+	bottom:0;
+	z-index:1000;
+	height:49px;
+	background-color:#000;
+	background-image:-ms-linear-gradient(top, #222 0%, #111 50%, #000 51%);
+	background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0, #222), color-stop(0.5, #111), color-stop(.51, #000));
+	background-image:-webkit-linear-gradient(top, #222 0%, #111 50%, #000 51%);
+	background-image:linear-gradient(to bottom, #222 0%, #111 50%, #000 51%);
+	box-shadow:0 1px 0 #555 inset;
+	display:block;
+	left:0;
+	right:0;
+	padding:0 3px;
+	border-top:1px solid #000;
+}
+
+#navbar a {
+	-webkit-box-sizing:border-box;
+	box-sizing: border-box;
+	top: 3px;
+	height: 43px;
+	overflow: hidden;
+	font-size:12px;
+	font-weight:normal;
+	text-decoration: none;
+	color: #fff;
+	text-align: center;
+	display: inline-block;
+	width: 25%;
+	-webkit-backface-visibility: hidden;
+	-webkit-perspective: 1000;
+	line-height: 67px;
+	position: relative;
+	margin: 0;
+}
+
+#navbar .af-badge {
+	right:auto;
+	margin-left:-16px;
+}
+
+#navbar .icon:before {
+	position:absolute;
+	top:2px;
+	left:0;
+	font-size: 25px;
+	margin:auto;
+	width: 100%;
+}
+
+#navbar a.pressed {
+	background:rgba(255, 255, 255, 0.13);
+	border-radius:6px;
+}
+
+#navbar .icon.pressed:before {
+	color:#3a9de2;
+}
+
+/* Custom footers - always hidden */
+#afui footer, #afui header, #afui nav {	display:none; }
+
+/* Show the active header/footer/navs */
+#afui #navbar footer, #afui #menu nav, #afui #header header {display:block;}
+
+#afui > #menu {
+	z-index:1;
+	width:200px;
+	bottom:0;
+	height:100%;
+	display:none;
+	position:absolute; top:0; left:0;
+	background:#000;
+	color:#fff;
+}
+#menu_scroller {
+	padding-bottom:10px;
+	overflow-y:auto;
+	overflow-x:hidden;
+	-webkit-backface-visibility: hidden;
+	-webkit-overflow-scrolling:touch;
+}
+
+#menu_scroller > * {
+	-webkit-backface-visibility: hidden;
+	-webkit-perspective: 1000;
+}
+
+#menu .list li, #menu .list .divider, #menu .list li:first-child, #menu  .list li:last-child {
+
+	font-weight:bold;
+	font-size:1em;
+	line-height:1em;
+	border-color:#101012;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+
+}
+#menu .list > li > a {
+	color:#ccc;
+	margin-left:6px;
+	font-weight: normal;
+}
+
+#menu .list, #menu .list .divider {	background:inherit; }
+
+#menu .list .divider {
+	background:#333;
+	color:#fff;
+	font-weight:bold;
+    font-size:1em;
+    line-height:1em;
+    padding:6px;
+	top:0px;
+	border:none;
+	-webkit-box-shadow:none; box-shadow: none;
+}
+
+#menu .afMenuClose {
+	position:absolute;
+	z-index:2;
+	float:right;
+	top:2px;
+	right:2px;
+}
+
+#menu .list > li > a:after { margin-top: -8px; }
+
+/* End side menu css */
+
+
+.splashscreen {
+	background:rgba(29,29,28,1) !important;
+	padding-left:40px;
+	padding-top:30px !important;
+	min-height:100%;
+}
+
+h2 {
+	display:block;
+	height:34px;
+	font-weight: bold;
+	font-size:18px;
+	color:#000;
+	padding:6px 0;
+	margin-bottom:8px;
+} /* Header class used for non-navigable header bars (h1 is reserved for the header) */
+
+.collapsed:after {
+	float:right;
+	content:'';
+	border-left:5px solid transparent;
+	border-right:5px solid transparent;
+	border-top:6px solid #000;
+	display:block;
+	position:absolute;
+	top:14px;right:14px;
+}
+.collapsed:before {
+	float:right;
+	content:'';
+	color:transparent;
+	background:transparent;
+	width:14px; height:14px;
+	display:block;
+	border:2px solid #000;
+	border-radius:3px;
+	position:absolute;
+	top:8px;right:10px;
+}
+.expanded:after {
+	float:right;content:'';
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-bottom: 6px solid #000;
+	display:block;
+	position:absolute;
+	top:13px;right:14px;
+}
+.expanded:before {
+	float:right;
+	content:'';
+	color:transparent;
+	background:transparent;
+	width:14px; height:14px;
+	display:block;
+	border:2px solid #000;
+	border-radius:3px;
+	position:absolute;
+	top:8px;right:10px;
+}
+
+
+/**********************************************************
+	UI
+**********************************************************/
+.ui-icon {
+	background: 						#666;
+	background: 						rgba(0,0,0,.4);
+	background-repeat: no-repeat;
+	border-radius: 						9px;
+}
+
+.ui-loader { display: none; position: absolute; opacity: .85; z-index: 100; left: 50%; width: 200px; margin-left: -100px; margin-top: -35px; padding: 10px 30px; background: #666;background:rgba(0,0,0,.4);border-radius:9px;}
+.ui-loader.heavy {opacity:1;}
+.ui-loader h1 { font-size: 15px; text-align: center; }
+.ui-loader .ui-icon { position: static; display: block; opacity: .9; margin: 0 auto; width: 35px; height: 35px; background-color: transparent; }
+
+.spin  {
+	-webkit-transform: rotate(360deg);
+	-webkit-animation-name: spin;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-iteration-count:  infinite;
+}
+@-webkit-keyframes spin {
+	from {-webkit-transform: rotate(0deg);}
+  	to {-webkit-transform: rotate(360deg);}
+}
+
+.ui-icon-loading {
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjBAMAAADs965qAAAAA3NCSVQICAjb4U/gAAAAMFBMVEX////x8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHvvEhiAAAAEHRSTlMAESIzRFVmd4iZqrvM3e7/dpUBFQAAAAlwSFlzAAAK6wAACusBgosNWgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAEaSURBVCiRY2AgATCapaUqoIiIzN5z5syZJiQRltW7gUJ3705C6OraDRG6GwATkli1evdusNBTuKJVq3c4MjBX3733DqqMfdWqFWDbau+9ewIRspy5KgHMYL737g1EX+fMaVAjbN+9KwDLzZxZAHPMu3cXwEbNnAl397p3YDslOmD6GBjs/v8AURodzXAh3v+/QZRHRyNciPP/f4hQA1yIHVMICtzLC9CFzMuL0IXEy0vQhdjK0+BsRqgv0tIMYEKCggJgmbS0QJgiQUEIwy0tVQCmCCokmhYaCFMElWMKDQ01BIkoKcKEGFRDQ1yMlISUgEIwe5iAQi7GxkpKSjBFwMh2cXEGCSkiOVcFLIQswsAgZGxshCpCBgAA0FNYp5zwDegAAAAASUVORK5CYII=);
+	width: 40px;
+	height: 40px;
+	border-radius: 20px;
+	background-size: 35px 35px;
+}
+
+.ui-corner-all { border-radius:.6em; }
+
+#afui_mask { position:absolute;top:45%;z-index:999999; }
+
+.hasMenu{
+	position:absolute;
+	left:0;
+}
+
+.menuButton {
+	position:relative;
+	top:2px; right:-8px;
+	height:36px; width:36px;
+}
+
+.menuButton:after {
+border-bottom: 9px double white;
+border-top: 3px solid white;
+top: 9px;
+left: 3px;
+content: "";
+height: 3px;
+position: absolute;
+width: 15px;
+}
+.hasMenu.on {
+	-webkit-transform:translate3d(200px,0,0);
+	transform:translate(200px,0);
+}
+
+@media handheld, only screen and (min-width: 768px) {
+	#afui > #navbar.hasMenu, #afui > #header.hasMenu, #afui > #content.hasMenu  {
+		position:absolute;
+		left:256px;
+		-webkit-transition: transform 0ms;
+	    -webkit-transform:translate3d(0,0,0) !important;
+	    transition:transform 0ms;
+	    transform:translate(0,0,0) !important;
+	}
+	#badgephone { display:none !important; }
+	#badgetablet { display:inline-block !important;	}
+	.afMenuClose { display:none !important;	}
+
+	#afui > #header.hasMenu~nav~#menu {
+		z-index:200 !important;
+		width:256px !important;
+		bottom:0;
+		height:100% !important;
+		display:block !important;
+		position:absolute !important; top:0;
+		left:0;
+		-webkit-transform:translate3d(0px,0px,0px) !important;
+		-webkit-transition:none !important;
+		transform:translate(0px,0px) !important;
+		transition:none !important;
+	}
+	.menuButton { display:none;	}
+}
+
+#backButton {
+	display:block;
+	position:absolute;
+	top:5px; left:5px;
+	text-overflow:ellipsis;
+	font-size:12px;
+	padding:7px !important;
+	color:#fff;
+	text-shadow:0 -1px 0 #333;
+	background-color:#476999;
+	border:1px solid;
+	border-color:#375073 #375073 #375073 transparent;
+	height:32px;
+	border-radius:5px;
+	box-shadow:0 1px 0 #9CABC0;
+	margin:0 0 0 15px !important;
+	padding-left:4px !important;
+} /* Sets up positioning of the back button which appears in the header */
+
+#backButton::after {
+	z-index:-1;
+	content:'';
+	position:absolute;
+	width:24px; height:24px;
+	background-color:#476999;
+  	top:2px; left:-11px;
+    border-radius:5px;
+    border:1px solid;
+	border-color:transparent transparent #9CABC0 transparent;
+    box-shadow:1px -1px 0 #375073 inset;
+    -ms-transform:rotate(45deg); -moz-transform:rotate(45deg); -webkit-transform:rotate(45deg); transform:rotate(45deg);
+}
+
+.modalbutton {
+	position:absolute;
+	top:0;
+	right:5px;
+	height:32px;
+	width:58px;
+	line-height:32px;
+	z-index:9999;
+}
+
+.closebutton  {
+	position:absolute;
+	top:6px; right:6px;
+	display:block;
+	height:24px ;
+	width:24px ;
+	border-radius:12px;
+	border:1px solid #666;
+	background:#fff;
+	color:#333;
+	font-weight: bold;
+	font-size:21px;
+	line-height:18px;
+	text-align:center;
+	text-decoration:none;
+}
+.closebutton:before { content:'x'; }
+.closebutton.selected,.closebutton.modalButton.selected {
+	color:#fff;
+	background:#333;
+}
+
+
+.panel > .list, .panel > .afScrollPanel > .list {
+	margin:0px -10px;
+}
+
+
+.panel > .list.inset, .panel > .afScrollPanel > .list.inset {
+	margin:0px;
+}

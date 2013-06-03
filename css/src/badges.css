@@ -1,0 +1,20 @@
+.af-badge {
+	position:absolute;
+	top:2px; right:2px;
+	display:inline-block;
+	min-width:20px;	max-width:90%; height:20px;
+	padding:0 3px;
+	background-color:red;
+	border-radius:20px;
+	border:2px solid #fff;
+	box-shadow:0 1px 2px #555;
+	font:bold 12px/18px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	color:#fff;
+	text-overflow:ellipsis;
+	text-align:center;
+	text-shadow:0 -1px 0 rgba(64,0,0,.6);
+}
+
+.af-badge.br { bottom:2px; right:2px; top:auto; left:auto; }
+.af-badge.bl { bottom:2px; left:2px; top:auto; right:auto; }
+.af-badge.tl { top:2px; left:2px; right:auto; bottom:auto; }

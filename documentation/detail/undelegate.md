@@ -1,0 +1,1 @@
+$().undelegate() is provided for backwards compatibility only.  You should use $().off instead.

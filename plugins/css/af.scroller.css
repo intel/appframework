@@ -1,0 +1,10 @@
+/** This can be your default scrollbar class.  You must use !important to override the default inline styles */
+.scrollBar { 
+   position:absolute !important;
+   width:5px !important;
+   height:20px !important;
+   border-radius:2px !important;
+   border:1px soldid black !important;
+   background:black !important;
+   opacity:0 !important;
+}
