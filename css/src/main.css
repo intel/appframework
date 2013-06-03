@@ -443,7 +443,7 @@ width: 15px;
 	#badgetablet { display:inline-block !important;	}
 	.afMenuClose { display:none !important;	}
 
-	#afui > #header.hasMenu~nav~#menu {
+	#afui > #menu.tabletMenu {
 		z-index:200 !important;
 		width:256px !important;
 		bottom:0;

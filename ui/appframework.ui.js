@@ -3704,12 +3704,13 @@
         */
         disableSideMenu: function () {
             var that = this;
-            var els = $.query("#content, #menu, #header, #navbar");
+            var els = $.query("#content, #header, #navbar");
             if (this.isSideMenuOn()) {
                 this.toggleSideMenu(false, function (canceled) {
                     if (!canceled) els.removeClass("hasMenu");
                 });
             } else els.removeClass("hasMenu");
+            $.query("#menu").removeClass("tabletMenu");
         },
         /**
          * Enables the side menu if it has been disabled
@@ -3719,7 +3720,8 @@
         * @title $.ui.enableSideMenu();
         */
         enableSideMenu: function () {
-            $.query("#content, #menu, #header, #navbar").addClass("hasMenu");
+            $.query("#content, #header, #navbar").addClass("hasMenu");
+            $.query("#menu").addClass("tabletMenu");
         },
         /**
          *
@@ -4831,6 +4833,7 @@
                         $.query("#afui #header").addClass("hasMenu");
                         $.query("#afui #content").addClass("hasMenu");
                         $.query("#afui #navbar").addClass("hasMenu");
+                        $.query("#afui #menu").addClass("tabletMenu");
                     }
                     //go to activeDiv
                     var firstPanelId = that.getPanelId(defaultHash);
