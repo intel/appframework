@@ -1068,6 +1068,7 @@
             //$asap removed since animations are fixed in css3animate
             if (hasFooter && hasFooter.toLowerCase() == "none") {
                 that.toggleNavMenu(false);
+                hasFooter = false;
             } else {
                 that.toggleNavMenu(true);
             }
