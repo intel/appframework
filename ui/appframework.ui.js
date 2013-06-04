@@ -2567,12 +2567,14 @@
 			$.bind(this, 'scrollstart', function(el) {
 				that.isScrolling=true;
 				that.scrollingEl_=el;
-				that.scrollerIsScrolling=true;
+				if(!$.feat.nativeTouchScroll)
+					that.scrollerIsScrolling=true;
 				that.fireEvent('UIEvents', 'scrollstart', el, false, false);
 			});
 			$.bind(this, 'scrollend', function(el) {
 				that.isScrolling=false;
-				that.scrollerIsScrolling=false;
+				if(!$.feat.nativeTouchScroll)
+					that.scrollerIsScrolling=false;
 				that.fireEvent('UIEvents', 'scrollend', el, false, false);
 			});
 			//fix layer positioning
