@@ -140,6 +140,7 @@
         sideMenuWidth:"200px",
         trimBackButtonText:true,
         useOSThemes:true,
+        lockPageBounce:false,
         autoBoot: function () {
             this.hasLaunched = true;
             if (this.autoLaunch) {
@@ -1004,6 +1005,7 @@
                     refresh: refreshPull,
                     useJsScroll: jsScroll,
                     noParent: !jsScroll,
+                    lockBounce:this.lockPageBounce,
                     autoEnable: false //dont enable the events unnecessarilly
                 }));
                 //backwards compatibility
@@ -1551,7 +1553,8 @@
                     vScrollCSS: "afScrollbar",
                     useJsScroll: !$.feat.nativeTouchScroll,
                     noParent: $.feat.nativeTouchScroll,
-                    autoEnable:true
+                    autoEnable:true,
+                    lockBounce:this.lockPageBounce
                 });
                 if ($.feat.nativeTouchScroll) $.query("#menu_scroller").css("height", "100%");
             }
@@ -1599,7 +1602,8 @@
                 scrollBars: true,
                 vertical: true,
                 vScrollCSS: "afScrollbar",
-                noParent: true
+                noParent: true,
+                lockBounce:this.lockPageBounce
             });
             this.modalWindow = modalDiv;
             //get first div, defer

@@ -120,6 +120,7 @@
             scrollTopInterval: null,
             scrollLeftInterval: null,
             bubbles:true,
+            lockBounce:false,
             _scrollTo: function (params, time) {
                 time = parseInt(time, 10);
                 if (time === 0 || isNaN(time)) {
@@ -1048,6 +1049,16 @@
                     if (absChangeX < 1) changeX = positiveOverflow ? 1 : -1;
                     this.lastScrollInfo.x = baseTop + changeX;
                 }
+            }
+            if(this.lockBounce){
+                if(this.lastScrollInfo.x>0)
+                    this.lastScrollInfo.x=0;
+                else if(this.lastScrollInfo.x*-1>this.elementInfo.maxLeft)
+                    this.lastScrollInfo.x=this.elementInfo.maxLeft*-1;
+                if(this.lastScrollInfo.y>0)
+                    this.lastScrollInfo.y=0;
+                else if(this.lastScrollInfo.y*-1>this.elementInfo.maxTop)
+                    this.lastScrollInfo.y=this.elementInfo.maxTop*-1;
             }
 
             //move
