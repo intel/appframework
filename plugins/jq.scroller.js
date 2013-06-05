@@ -204,7 +204,7 @@
 				$.bind($.touchLayer, 'orientationchange-reshape', orientationChangeProxy);
 			},
 			needsFormsFix: function(focusEl) {
-				return this.useJsScroll && this.isEnabled() && this.el.style.display != "none" && $(focusEl).closest(this.jqEl).size() > 0;
+				return this.useJsScroll && this.isEnabled() && this.el.style.display !== "none" && $(focusEl).closest(this.jqEl).size() > 0;
 			},
 			handleEvent: function(e) {
 				if(!this.scrollingLocked) {
@@ -256,7 +256,7 @@
 				if(autoCancel) {
 					var that = this;
 					if(this.refreshHangTimeout > 0) this.refreshCancelCB = setTimeout(function() {
-						that.hideRefresh()
+						that.hideRefresh();
 					}, this.refreshHangTimeout);
 				}
 			},
@@ -281,7 +281,7 @@
 			scrollToItem: function(el, where, time) { //TODO: add functionality for x position
 				if(!$.is$(el)) el = $(el);
 
-				if(where == 'bottom') {
+				if(where === 'bottom') {
 					var itemPos = el.offset();
 					var newTop = itemPos.top - this.jqEl.offset().bottom + itemPos.height;
 					newTop += 4; //add a small space
@@ -335,7 +335,7 @@
 			this.container.jqmScrollerId = el.jqmScrollerId;
 			this.jqEl = $(this.container);
 
-			if(this.container.style.overflow != 'hidden') this.container.style.overflow = 'hidden';
+			if(this.container.style.overflow !== 'hidden') this.container.style.overflow = 'hidden';
 
 			this.addPullToRefresh(null, true);
 			if(this.autoEnable) this.enable(true);
@@ -469,7 +469,6 @@
 			var newcY = e.touches[0].pageY - this.dY;
             if(this.el.clientHeight==this.el.scrollHeight){
                 e.preventDefault();
-
             }
 
             if (!this.moved) {
@@ -478,7 +477,6 @@
             }
 
             var difY = newcY - this.cY;
-
 
             //check for trigger
             if (this.refresh && (this.el.scrollTop) < 0) {
@@ -737,11 +735,11 @@
 		
 		jsScroller.prototype.hideScrollbars = function() {
 			if(this.hscrollBar) {
-				this.hscrollBar.style.opacity = 0
+				this.hscrollBar.style.opacity = 0;
 				this.hscrollBar.style[$.feat.cssPrefix+'TransitionDuration'] = "0ms";
 			}
 			if(this.vscrollBar) {
-				this.vscrollBar.style.opacity = 0
+				this.vscrollBar.style.opacity = 0;
 				this.vscrollBar.style[$.feat.cssPrefix+'TransitionDuration']  = "0ms";
 			}
 		};
@@ -776,7 +774,7 @@
 			// Allow interaction to legit calls, like select boxes, etc.
 			if(event.touches[0].target && event.touches[0].target.type != undefined) {
 				var tagname = event.touches[0].target.tagName.toLowerCase();
-				if(tagname == "select" || tagname == "input" || tagname == "button") // stuff we need to allow
+				if(tagname === "select" || tagname === "input" || tagname === "button") // stuff we need to allow
 				// access to legit calls
 				return;
 
