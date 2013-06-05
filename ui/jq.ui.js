@@ -48,7 +48,7 @@
     var translateOpen =$.feat.cssTransformStart;
     var translateClose = $.feat.cssTransformEnd;
     var transitionEnd=$.feat.cssPrefix.replace(/-/g,"")+"TransitionEnd";
-    transitionEnd=($.os.fennec||$.feat.cssPrefix==""||$.os.ie)?"transitionend":transitionEnd;
+    transitionEnd=($.os.fennec || $.feat.cssPrefix=="" || $.os.ie)?"transitionend":transitionEnd;
 
     transitionEnd=transitionEnd.replace(transitionEnd.charAt(0),transitionEnd.charAt(0).toLowerCase());
     
@@ -188,7 +188,7 @@
                 }
                 
                 //finish asap
-                if(timeNum==0 || (scale=='ms' && timeNum<5) || style.display=='none'){
+                if(timeNum==0 || (scale=='ms' && timeNum<5) || style.display === 'none'){
                     //the duration is nearly 0 or the element is not displayed, finish immediatly
                     $.asap($.proxy(this.finishAnimation, this, [false]));
                     //this.finishAnimation();
@@ -275,7 +275,7 @@
                 opts.failure = callbacks.failure;
                 return this;
             }
-        }
+        };
         
         return css3Animate;
     })();
@@ -1072,7 +1072,7 @@
 			// Allow interaction to legit calls, like select boxes, etc.
 			if(event.touches[0].target && event.touches[0].target.type != undefined) {
 				var tagname = event.touches[0].target.tagName.toLowerCase();
-				if(tagname == "select" || tagname == "input" || tagname == "button") // stuff we need to allow
+				if(tagname === "select" || tagname === "input" || tagname === "button") // stuff we need to allow
 				// access to legit calls
 				return;
 
@@ -2050,7 +2050,7 @@
 				(function(theSel) {
 					var fakeInput = document.createElement("div");
 					var theSelStyle = window.getComputedStyle(theSel);
-					var width = theSelStyle.width == 'intrinsic' ? '100%' : theSelStyle.width;
+					var width = theSelStyle.width === 'intrinsic' ? '100%' : theSelStyle.width;
 					var selWidth = parseInt(width) > 0 ? width : '100px';
 					var selHeight = parseInt(theSel.style.height) > 0 ? theSel.style.height : (parseInt(theSelStyle.height) ? theSelStyle.height : '20px');
 					fakeInput.style.width = selWidth;
@@ -2849,7 +2849,7 @@
 
 
 			// We allow forcing native tap in android devices (required in special cases)
-			var forceNativeTap = (jq.os.android && e && e.target && e.target.getAttribute && e.target.getAttribute("data-touchlayer") == "ignore");
+			var forceNativeTap = (jq.os.android && e && e.target && e.target.getAttribute && e.target.getAttribute("data-touchlayer") === "ignore");
 
 			//if on edit mode, allow all native touches
 			//(BB10 must still be prevented, always clicks even after move)
@@ -2866,7 +2866,7 @@
 					this.requiresNativeTap = true;
 				}
 			}
-			else if(e.target&&e.target.tagName!==undefined&&e.target.tagName.toLowerCase()=="input"&&e.target.type=="range"){
+			else if(e.target&&e.target.tagName!==undefined&&e.target.tagName.toLowerCase()==="input"&&e.target.type==="range"){
                 this.requiresNativeTap=true;
             }
 
@@ -3139,7 +3139,7 @@
                 that.autoBoot();
                 this.removeEventListener("appMobi.device.ready", arguments.callee);
             }, false);
-        else if (document.readyState == "complete" || document.readyState == "loaded") {
+        else if (document.readyState === "complete" || document.readyState === "loaded") {
             this.autoBoot();
         } else
             document.addEventListener("DOMContentLoaded", function() {
@@ -3872,7 +3872,7 @@
             
             
             
-            if (el.getAttribute("js-scrolling") && el.getAttribute("js-scrolling").toLowerCase() == "yes") {
+            if (el.getAttribute("js-scrolling") && el.getAttribute("js-scrolling").toLowerCase() === "yes") {
                 $.cleanUpContent(el.childNodes[0], false, true);
                 el.childNodes[0].innerHTML = content;
             } else {
@@ -3929,21 +3929,21 @@
         addDivAndScroll: function(tmp, refreshPull, refreshFunc, container) {
             var jsScroll = false;
             var overflowStyle = tmp.style.overflow;
-            var hasScroll = overflowStyle != 'hidden' && overflowStyle != 'visible';
+            var hasScroll = overflowStyle !== 'hidden' && overflowStyle !== 'visible';
             
             container = container || this.content;
             //sets up scroll when required and not supported
             if (!$.feat.nativeTouchScroll && hasScroll)
                 tmp.setAttribute("js-scrolling", "yes");
             
-            if (tmp.getAttribute("js-scrolling") && tmp.getAttribute("js-scrolling").toLowerCase() == "yes") {
+            if (tmp.getAttribute("js-scrolling") && tmp.getAttribute("js-scrolling").toLowerCase() === "yes") {
                 jsScroll = true;
                 hasScroll = true;
             }
             
             
             
-            if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") == "no") {
+            if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") === "no") {
                 hasScroll = false;
                 jsScroll = false;
                 tmp.removeAttribute("js-scrolling");
@@ -4040,7 +4040,7 @@
             var hasHeader = what.getAttribute("data-header");
 
             //$asap removed since animations are fixed in css3animate
-            if (hasFooter && hasFooter.toLowerCase() == "none") {
+            if (hasFooter && hasFooter.toLowerCase() === "none") {
                 that.toggleNavMenu(false);
             } else {
                 that.toggleNavMenu(true);
@@ -4053,7 +4053,7 @@
                     that.updateNavbarElements(that.defaultFooter);
                 that.customFooter = false;
             }
-            if (hasHeader && hasHeader.toLowerCase() == "none") {
+            if (hasHeader && hasHeader.toLowerCase() === "none") {
                 that.toggleHeaderMenu(false);
             } else {
                 that.toggleHeaderMenu(true);
@@ -4337,7 +4337,7 @@
          */
         loadAjax: function(target, newTab, back, transition, anchor) {
             // XML Request
-            if (this.activeDiv.id == "jQui_ajax" && target == this.ajaxUrl)
+            if (this.activeDiv.id === "jQui_ajax" && target == this.ajaxUrl)
                 return;
             var urlHash = "url" + crc32(target); //Ajax urls
             var that = this;
@@ -4715,7 +4715,7 @@
          */
         topClickScroll:function(){
              document.getElementById("header").addEventListener("click",function(e){
-                if(e.clientY<=15&&e.target.nodeName.toLowerCase()=="h1") //hack - the title spans the whole width of the header
+                if(e.clientY <= 15 && e.target.nodeName.toLowerCase() === "h1") //hack - the title spans the whole width of the header
                     $.ui.scrollingDivs[$.ui.activeDiv.id].scrollToTop("100");
             });
         
@@ -4790,7 +4790,7 @@
         if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
             return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
         //anchors
-        if (theTarget.tagName !== "undefined" && theTarget.tagName.toLowerCase() == "a") {
+        if (theTarget.tagName !== "undefined" && theTarget.tagName.toLowerCase() === "a") {
             
             var custom = (typeof jq.ui.customClickHandler === "function") ? jq.ui.customClickHandler : false;
             if (custom !== false) {
@@ -4827,14 +4827,14 @@
                 href = href.substring(prefix.length+1);
             }
             //empty links
-            if (href == "#" ||(href.indexOf("#") === href.length-1)|| (href.length == 0 && theTarget.hash.length == 0))
+            if (href === "#" ||(href.indexOf("#") === href.length-1)|| (href.length == 0 && theTarget.hash.length == 0))
                 return;
 
             //internal links
             e.preventDefault();
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
-            resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
+            resetHistory = resetHistory && resetHistory.toLowerCase() === "true" ? true : false;
             var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
             jq.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
             return;
