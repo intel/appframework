@@ -3,7 +3,7 @@
     var objId=function(obj){
         if(!obj.jqmCSS3AnimateId) obj.jqmCSS3AnimateId=$.uuid();
         return obj.jqmCSS3AnimateId;
-    }
+    };
     var getEl=function(elID){
         if (typeof elID === "string" || elID instanceof String) {
             return document.getElementById(elID);
@@ -12,7 +12,7 @@
         } else {
             return elID;
         }
-    }
+    };
     var getCSS3Animate=function(obj, options){
         var tmp, id, el = getEl(obj);
         //first one
@@ -25,7 +25,7 @@
             cache[id] = tmp;
         }
         return tmp;
-    }
+    };
     $.fn["css3Animate"] = function (opts) {
         //keep old callback system - backwards compatibility - should be deprecated in future versions
         if(!opts.complete && opts.callback) opts.complete = opts.callback;
@@ -39,11 +39,10 @@
         }
         return tmp;
     };
-    
 
     $["css3AnimateQueue"] = function () {
         return new css3Animate.queue();
-    }
+    };
 
     //if (!window.WebKitCSSMatrix) return;
     var translateOpen =$.feat.cssTransformStart;
@@ -124,8 +123,8 @@
                     if (!options["timingFunction"]) options["timingFunction"] = "linear";
 
                     //check for percent or numbers
-                    if (typeof (options.x) === "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x) + "px";
-                    if (typeof (options.y) === "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y) + "px";
+                    if (typeof (options.x) === "number" || (options.x.indexOf("%") === -1 && options.x.toLowerCase().indexOf("px") === -1 && options.x.toLowerCase().indexOf("deg") === -1)) options.x = parseInt(options.x) + "px";
+                    if (typeof (options.y) === "number" || (options.y.indexOf("%") === -1 && options.y.toLowerCase().indexOf("px") === -1 && options.y.toLowerCase().indexOf("deg") === -1)) options.y = parseInt(options.y) + "px";
                     
                     var trans= "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ")";
                     if(!$.os.opera)
@@ -148,10 +147,10 @@
                     }
                     this.el.style[$.feat.cssPrefix+"TransitionProperty"] = "all";
                 
-                    if((""+options["time"]).indexOf("s")===-1) {
+                    if((""+options["time"]).indexOf("s") === -1) {
                         var scale = 'ms';
                         var time = options["time"]+scale;
-                    } else if(options["time"].indexOf("ms")!==-1){
+                    } else if(options["time"].indexOf("ms") !== -1) {
                         var scale = 'ms';
                         var time = options["time"];
                     } else {
@@ -162,7 +161,6 @@
                     this.el.style[$.feat.cssPrefix+"TransitionDuration"] = time;
                     this.el.style[$.feat.cssPrefix+"TransitionTimingFunction"] = options["timingFunction"];
                     this.el.style[$.feat.cssPrefix+"TransformOrigin"] = options.origin;
-
                 }
 
                 //add callback to the stack
@@ -181,7 +179,7 @@
                     var duration = style[$.feat.cssPrefix+"TransitionDuration"];
                     var timeNum = numOnly(duration);
                     options["time"]=timeNum;
-                    if(duration.indexOf("ms")!==-1){
+                    if(duration.indexOf("ms") !== -1) {
                         scale = 'ms';
                     } else {
                         options["time"]*=1000;
@@ -3442,7 +3440,7 @@
          * @title $.ui.updateHash(newHash)
          */
         updateHash: function(newHash) {
-            newHash = newHash.indexOf('#') == -1 ? '#' + newHash : newHash; //force having the # in the begginning as a standard
+            newHash = newHash.indexOf('#') === -1 ? '#' + newHash : newHash; //force having the # in the begginning as a standard
             previousTarget = newHash;
             
             var previousHash = window.location.hash;
@@ -3459,7 +3457,7 @@
         /*gets the panel name from an hash*/
         getPanelId: function(hash) {
             var firstSlash = hash.indexOf('/');
-            return firstSlash == -1 ? hash : hash.substring(0, firstSlash);
+            return firstSlash === -1 ? hash : hash.substring(0, firstSlash);
         },
 
         /**
@@ -3895,7 +3893,7 @@
          * @title $.ui.addContentDiv(id,content,title);
          */
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
-            el = typeof (el) !== "string" ? el : el.indexOf("#") == -1 ? "#" + el : el;
+            el = typeof (el) !== "string" ? el : el.indexOf("#") === -1 ? "#" + el : el;
             var myEl = jq(el).get(0);
             if (!myEl) {
                 var newDiv = document.createElement("div");
@@ -4161,7 +4159,7 @@
             var that = this;
             var loadAjax = true;
             anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
-            if (target.indexOf("#") == -1) {
+            if (target.indexOf("#") === -1) {
                 var urlHash = "url" + crc32(target); //Ajax urls
                 var crcCheck = jq("div.panel[data-crc='" + urlHash + "']");
                 if (jq("#" + target).length > 0) {
@@ -4185,7 +4183,7 @@
                         target = "#" + urlHash;
                 }
             }
-            if (target.indexOf("#") == -1 && loadAjax) {
+            if (target.indexOf("#") === -1 && loadAjax) {
                 this.loadAjax(target, newTab, back, transition, anchor);
             } else {
                 this.loadDiv(target, newTab, back, transition);
@@ -4210,7 +4208,7 @@
             
             var slashIndex = what.indexOf('/');
             var hashLink = "";
-            if (slashIndex != -1) {
+            if (slashIndex !== -1) {
                 // Ignore everything after the slash for loading
                 hashLink = what.substr(slashIndex);
                 what = what.substr(0, slashIndex);
@@ -4293,7 +4291,7 @@
                 if (this.history.length > 0) {
                     var val = this.history[this.history.length - 1];
                     var slashIndex = val.target.indexOf('/');
-                    if (slashIndex != -1) {
+                    if (slashIndex !== -1) {
                         var prevId = val.target.substr(0, slashIndex);
                     } else
                         var prevId = val.target;
@@ -4343,7 +4341,7 @@
                 return;
             var urlHash = "url" + crc32(target); //Ajax urls
             var that = this;
-            if (target.indexOf("http") == -1)
+            if (target.indexOf("http") === -1)
                 target = AppMobi.webRoot + target;
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
@@ -4829,7 +4827,7 @@
                 href = href.substring(prefix.length+1);
             }
             //empty links
-            if (href == "#" ||(href.indexOf("#")===href.length-1)|| (href.length == 0 && theTarget.hash.length == 0))
+            if (href == "#" ||(href.indexOf("#") === href.length-1)|| (href.length == 0 && theTarget.hash.length == 0))
                 return;
 
             //internal links
