@@ -336,7 +336,7 @@
 				tmp = cache[id];
 			}
 		}
-		return this.length == 1 ? tmp : this;
+		return this.length === 1 ? tmp : this;
 	};
 	var boundTouchLayer = false;
 
@@ -1734,7 +1734,7 @@
                 this.autoCloseDone=opts.autoCloseDone!==undefined?opts.autoCloseDone:true;
                 
                 queue.push(this);
-                if (queue.length == 1)
+                if (queue.length === 1)
                     this.show();
             } catch (e) {
                 console.log("error adding popup " + e);
@@ -1879,7 +1879,7 @@
         for (var i = 0; i < this.length; i++) {
             tmp = new actionsheet(this[i], opts);
         }
-        return this.length == 1 ? tmp : this;
+        return this.length === 1 ? tmp : this;
     };
     var actionsheet = (function() {
         var actionsheet = function(elID, opts) {
@@ -2396,9 +2396,9 @@
     $(document).ready(function() {
         var prevEl;
         $(document.body).bind('touchstart', function(e) {
-            if(!e.touches||e.touches.length==0) return;
+            if(!e.touches||e.touches.length == 0) return;
             var now = Date.now(), delta = now - (touch.last || now);
-            if(!e.touches||e.touches.length==0) return;
+            if(!e.touches||e.touches.length == 0) return;
             touch.el = $(parentIfText(e.touches[0].target));
             touchTimeout && clearTimeout(touchTimeout);
             touch.x1 =  e.touches[0].pageX;
@@ -3155,11 +3155,11 @@
             
             var id = $.ui.getPanelId(document.location.hash);
             //make sure we allow hash changes outside jqUi
-            if(id==""&&$.ui.history.length===1) //Fix going back to first panel and an empty hash
+            if(id==""&&$.ui.history.length === 1) //Fix going back to first panel and an empty hash
                 id="#"+$.ui.firstDiv.id;
             if(id=="")
                 return;
-            if(document.querySelectorAll(id+".panel").length===0)
+            if(document.querySelectorAll(id+".panel").length === 0)
                 return;
             if (id != "#" + $.ui.activeDiv.id)
                 that.goBack();
