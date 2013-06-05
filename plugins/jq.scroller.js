@@ -8,7 +8,8 @@
 	var objId = function(obj) {
 			if(!obj.jqmScrollerId) obj.jqmScrollerId = $.uuid();
 			return obj.jqmScrollerId;
-		}
+	};
+	
 	$.fn["scroller"] = function(opts) {
 		var tmp, id;
 		for(var i = 0; i < this.length; i++) {
@@ -26,6 +27,7 @@
 		}
 		return this.length == 1 ? tmp : this;
 	};
+	
 	var boundTouchLayer = false;
 
 	function checkConsistency(id) {
@@ -69,7 +71,7 @@
 		var scroller = function(elID, opts) {
 
 
-				if(!boundTouchLayer && $.touchLayer && $.isObject($.touchLayer)) bindTouchLayer()
+				if(!boundTouchLayer && $.touchLayer && $.isObject($.touchLayer)) bindTouchLayer();
 				else if(!($.touchLayer && $.isObject($.touchLayer))) $.touchLayer = {};
 
 				if(typeof elID == "string" || elID instanceof String) {
@@ -166,7 +168,7 @@
               * We do step animations for 'native' - iOS is acceptable and desktop browsers are fine
               * instead of css3
               */
-            _scrollToTop:function(time){
+            _scrollToTop:function(time) {
                 this._scrollTo({x:0,y:0},time);
             },
             _scrollToBottom:function(time){
@@ -192,7 +194,7 @@
 				var orientationChangeProxy = function() {
 						//no need to readjust if disabled...
 						if(that.eventsActive) that.adjustScroll();
-					}
+				};
 				this.jqEl.bind('destroy', function() {
 					that.disable(true); //with destroy notice
 					var id = that.el.jqmScrollerId;
@@ -322,7 +324,7 @@
 				this.infiniteTriggered = false;
 				this.scrollSkip = true;
 			}
-		}
+		};
 
 		//extend to jsScroller and nativeScroller (constructs)
 		jsScroller = function(el, opts) {
@@ -381,11 +383,9 @@
 
             //if(opts.autoEnable)
             this.enable();
-		}
+		};
 		nativeScroller.prototype = new scrollerCore();
 		jsScroller.prototype = new scrollerCore();
-
-
 
 
 		///Native scroller
@@ -399,8 +399,9 @@
 			var that = this;
 			this.adjustScrollOverflowProxy_ = function() {
 				that.jqEl.css('overflow', 'auto');
-			}
-		}
+			};
+		};
+		
 		nativeScroller.prototype.enable = function(firstExecution) {
 			if(this.eventsActive) return;
 			this.eventsActive = true;
@@ -413,7 +414,8 @@
 			//set events
 			this.el.addEventListener('touchstart', this, false);
 			this.el.addEventListener('scroll', this, false)
-		}
+		};
+		
 		nativeScroller.prototype.disable = function(destroy) {
 			if(!this.eventsActive) return;
 			//log current scroll
@@ -426,7 +428,8 @@
 			this.el.removeEventListener('touchend', this, false);
 			this.el.removeEventListener('scroll', this, false);
 			this.eventsActive = false;
-		}
+		};
+		
 		nativeScroller.prototype.addPullToRefresh = function(el, leaveRefresh) {
 			this.el.removeEventListener('touchstart', this, false);
 			this.el.addEventListener('touchstart', this, false);
@@ -438,7 +441,8 @@
                 this.refreshContainer.style.height="60px";
                 this.refreshContainer.style.display="block";
 			}
-		}
+		};
+		
 		nativeScroller.prototype.onTouchStart = function(e) {
 			if(this.el.scrollTop===0)
                 this.el.scrollTop=1;
@@ -458,7 +462,8 @@
 			}
 			$.trigger(this,"scrollstart",[this.el]);
 			$.trigger($.touchLayer,"scrollstart",[this.el]);
-		}
+		};
+		
 		nativeScroller.prototype.onTouchMove = function(e) {
 
 			var newcY = e.touches[0].pageY - this.dY;
@@ -487,13 +492,15 @@
             }
 
             this.cY = newcY;
-		}
+		};
+		
         nativeScroller.prototype.showRefresh=function(){
             if(!this.refreshTriggered){
                 this.refreshTriggered = true;
                 $.trigger(this, 'refresh-trigger');
             }
-        }
+        };
+		
 		nativeScroller.prototype.onTouchEnd = function(e) {
 
 			var triggered = this.el.scrollTop <= -(this.refreshHeight);
@@ -537,7 +544,8 @@
                 }
 
             },20);
-		}
+		};
+		
 		nativeScroller.prototype.hideRefresh = function(animate) {
 
 			if(this.preventHideRefresh) return;
@@ -568,25 +576,29 @@
 			}
 			this.refreshTriggered = false;
 			//this.el.addEventListener('touchend', this, false);
-		}
+		};
+		
 		nativeScroller.prototype.hideScrollbars = function() {}
 		nativeScroller.prototype.scrollTo = function(pos,time) {
 			this.logPos(pos.x, pos.y);
 			pos.x*=-1;
 			pos.y*=-1;
 			return this._scrollTo(pos,time);
-		}
+		};
+		
 		nativeScroller.prototype.scrollBy = function(pos,time) {
 			pos.x+=this.el.scrollLeft;
 			pos.y+=this.el.scrollTop;
 			this.logPos(this.el.scrollLeft, this.el.scrollTop);
 			return this._scrollTo(pos,time);
-		}
+		};
+		
 		nativeScroller.prototype.scrollToBottom = function(time) {
 			//this.el.scrollTop = this.el.scrollHeight;
 			this._scrollToBottom(time);
 			this.logPos(this.el.scrollLeft, this.el.scrollTop);
-		}
+		};
+		
 		nativeScroller.prototype.onScroll = function(e) {
 			if(this.infinite && this.touchEndFired) {
 				this.touchEndFired = false;
@@ -612,7 +624,8 @@
 				this.infiniteEndCheck = false;
 				$.trigger(that, "infinite-scroll-end");
 			}
-		}
+		};
+		
 		nativeScroller.prototype.logPos = function(x, y) {
 
 
@@ -626,16 +639,15 @@
 			if(isNaN(this.loggedPcentY))
 				this.loggedPcentY=0;
 
-		}
+		};
+		
 		nativeScroller.prototype.adjustScroll = function() {
 			this.adjustScrollOverflowProxy_();
 
 			this.el.scrollLeft = this.loggedPcentX * (this.el.scrollWidth);
 			this.el.scrollTop = this.loggedPcentY * (this.el.scrollHeight );
 			this.logPos(this.el.scrollLeft, this.el.scrollTop);
-		}
-
-
+		};
 
 		//JS scroller
 		jsScroller.prototype.defaultProperties = function() {
@@ -666,7 +678,7 @@
 			this.loggedPcentY = 0;
 			this.loggedPcentX = 0;
 
-		}
+		};
 
 		function createScrollBar(width, height) {
 			var scrollDiv = document.createElement("div");
@@ -680,6 +692,7 @@
 			scrollDiv.style.background = "black";
 			return scrollDiv;
 		}
+		
 		jsScroller.prototype.enable = function(firstExecution) {
 			if(this.eventsActive) return;
 			this.eventsActive = true;
@@ -691,7 +704,8 @@
 			this.container.addEventListener('touchmove', this, false);
 			this.container.addEventListener('touchend', this, false);
 
-		}
+		};
+		
 		jsScroller.prototype.adjustScroll = function() {
 			//set top/left
 			var size = this.getViewportSize();
@@ -699,7 +713,8 @@
 				x: Math.round(this.loggedPcentX * (this.el.clientWidth - size.w)),
 				y: Math.round(this.loggedPcentY * (this.el.clientHeight - size.h))
 			}, 0);
-		}
+		};
+		
 		jsScroller.prototype.disable = function() {
 			if(!this.eventsActive) return;
 			//log top/left
@@ -710,14 +725,16 @@
 			this.container.removeEventListener('touchmove', this, false);
 			this.container.removeEventListener('touchend', this, false);
 			this.eventsActive = false;
-		}
+		};
+		
 		jsScroller.prototype.addPullToRefresh = function(el, leaveRefresh) {
 			if(!leaveRefresh) this.refresh = true;
 			if(this.refresh && this.refresh == true) {
 				this.coreAddPullToRefresh(el);
 				this.el.style.overflow = 'visible';
 			}
-		}
+		};
+		
 		jsScroller.prototype.hideScrollbars = function() {
 			if(this.hscrollBar) {
 				this.hscrollBar.style.opacity = 0
@@ -727,7 +744,7 @@
 				this.vscrollBar.style.opacity = 0
 				this.vscrollBar.style[$.feat.cssPrefix+'TransitionDuration']  = "0ms";
 			}
-		}
+		};
 
 		jsScroller.prototype.getViewportSize = function() {
 			var style = window.getComputedStyle(this.container);
@@ -736,7 +753,7 @@
 				h: (this.container.clientHeight > window.innerHeight ? window.innerHeight : this.container.clientHeight - numOnly(style.paddingTop) - numOnly(style.paddingBottom)),
 				w: (this.container.clientWidth > window.innerWidth ? window.innerWidth : this.container.clientWidth - numOnly(style.paddingLeft) - numOnly(style.paddingRight))
 			};
-		}
+		};
 
 		jsScroller.prototype.onTouchStart = function(event) {
 
@@ -752,7 +769,6 @@
 				clearTimeout(this.scrollingFinishCB);
 				this.scrollingFinishCB = null;
 			}
-
 
 			//disable if locked
 			if(event.touches.length != 1 || this.boolScrollLock) return;
@@ -855,8 +871,8 @@
 
 			this.scrollerMoveCSS(this.lastScrollInfo, 0);
 			$.trigger(this,"scrollstart");
-
-		}
+		};
+		
 		jsScroller.prototype.getCSSMatrix = function(el) {
 			if(this.androidFormsMode) {
 				//absolute mode
@@ -874,21 +890,24 @@
 				var obj = $.getCssMatrix(el);
 				return obj;
 			}
-		}
+		};
+		
 		jsScroller.prototype.saveEventInfo = function(event) {
 			this.lastEventInfo = {
 				pageX: event.touches[0].pageX,
 				pageY: event.touches[0].pageY,
 				time: event.timeStamp
-			}
-		}
+			};
+		};
+		
 		jsScroller.prototype.saveFirstEventInfo = function(event) {
 			this.firstEventInfo = {
 				pageX: event.touches[0].pageX,
 				pageY: event.touches[0].pageY,
 				time: event.timeStamp
-			}
-		}
+			};
+		};
+		
 		jsScroller.prototype.setVScrollBar = function(scrollInfo, time, timingFunction) {
 			if(!this.elementInfo.requiresVScrollBar) return false;
 			var newHeight = (parseFloat(this.elementInfo.bottomMargin / this.elementInfo.divHeight) * this.elementInfo.bottomMargin) + "px";
@@ -901,7 +920,8 @@
 				y: pos
 			}, time, timingFunction);
 			return true;
-		}
+		};
+		
 		jsScroller.prototype.setHScrollBar = function(scrollInfo, time, timingFunction) {
 			if(!this.elementInfo.requiresHScrollBar) return false;
 			var newWidth = (parseFloat(this.elementInfo.rightMargin / this.elementInfo.divWidth) * this.elementInfo.rightMargin) + "px";
@@ -916,7 +936,7 @@
 				y: 0
 			}, time, timingFunction);
 			return true;
-		}
+		};
 
 		jsScroller.prototype.onTouchMove = function(event) {
 
@@ -944,11 +964,9 @@
 				if(this.refresh) this.refreshContainer.style.overflow = 'hidden';
 			}
 
-
 			this.saveEventInfo(event);
 			this.doScroll();
-
-		}
+		};
 
 		jsScroller.prototype.doScroll = function() {
 
@@ -1013,8 +1031,7 @@
 					$.trigger(this, "infinite-scroll");
 				}
 			}
-
-		}
+		};
 
 		jsScroller.prototype.calculateMovement = function(event, last) {
 			//default variables
@@ -1048,12 +1065,13 @@
 			scrollInfo.duration = time - prevEventInfo.time;
 
 			return scrollInfo;
-		}
+		};
 
 		jsScroller.prototype.calculateTarget = function(scrollInfo) {
 			scrollInfo.y = this.lastScrollInfo.y + scrollInfo.deltaY;
 			scrollInfo.x = this.lastScrollInfo.x + scrollInfo.deltaX;
-		}
+		};
+		
 		jsScroller.prototype.checkYboundary = function(scrollInfo) {
 			var minTop = this.container.clientHeight / 2;
 			var maxTop = this.elementInfo.maxTop + minTop;
@@ -1062,7 +1080,8 @@
 			else if(-scrollInfo.y > maxTop) scrollInfo.y = -maxTop;
 			else return;
 			this.recalculateDeltaY(scrollInfo);
-		}
+		};
+		
 		jsScroller.prototype.checkXboundary = function(scrollInfo) {
 			//x boundaries
 			if(scrollInfo.x > 0) scrollInfo.x = 0;
@@ -1070,7 +1089,8 @@
 			else return;
 
 			this.recalculateDeltaY(scrollInfo);
-		}
+		};
+		
 		jsScroller.prototype.recalculateDeltaY = function(scrollInfo) {
 			//recalculate delta
 			var oldAbsDeltaY = Math.abs(scrollInfo.deltaY);
@@ -1079,7 +1099,8 @@
 			//recalculate duration at same speed
 			scrollInfo.duration = scrollInfo.duration * newAbsDeltaY / oldAbsDeltaY;
 
-		}
+		};
+		
 		jsScroller.prototype.recalculateDeltaX = function(scrollInfo) {
 			//recalculate delta
 			var oldAbsDeltaX = Math.abs(scrollInfo.deltaX);
@@ -1087,8 +1108,7 @@
 			newAbsDeltaX = Math.abs(scrollInfo.deltaX);
 			//recalculate duration at same speed
 			scrollInfo.duration = scrollInfo.duration * newAbsDeltaX / oldAbsDeltaX;
-
-		}
+		};
 
 		jsScroller.prototype.hideRefresh = function(animate) {
 			var that=this;
@@ -1101,7 +1121,7 @@
 				}
 			}, HIDE_REFRESH_TIME);
 			this.refreshTriggered = false;
-		}
+		};
 
 		jsScroller.prototype.setMomentum = function(scrollInfo) {
 			var deceleration = 0.0012;
@@ -1132,11 +1152,9 @@
 				scrollInfo.absSpeedX = Math.abs(scrollInfo.speedX);
 				if(scrollInfo.absSpeedX < deceleration * 100 || scrollInfo.absDeltaX < 5) scrollInfo.deltaX = scrollInfo.absDeltaX = scrollInfo.duration = scrollInfo.speedX = scrollInfo.absSpeedX = 0;
 			} else scrollInfo.duration = 0;
-		}
-
+		};
 
 		jsScroller.prototype.onTouchEnd = function(event) {
-
 
 			if(this.currentScrollingObject == null || !this.moved) return;
 			//event.preventDefault();
@@ -1188,7 +1206,7 @@
 					$.trigger(this, "infinite-scroll");
 				}
 			}
-		}
+		};
 
 		//finish callback
 		jsScroller.prototype.setFinishCalback = function(duration) {
@@ -1201,7 +1219,7 @@
 				that.elementInfo = null; //reset elementInfo when idle
 				if(that.infinite) $.trigger(that, "infinite-scroll-end");
 			}, duration);
-		}
+		};
 
 		//Android Forms Fix
 		jsScroller.prototype.startFormsMode = function() {
@@ -1239,8 +1257,8 @@
 				this.hscrollBar.style[$.feat.cssPrefix+"Perspective"] = "none";
 				this.hscrollBar.style[$.feat.cssPrefix+"BackfaceVisibility"] = "visible";
 			}
-
-		}
+		};
+		
 		jsScroller.prototype.stopFormsMode = function() {
 			if(this.blockFormsFix) return;
 			//get prev values
@@ -1270,10 +1288,7 @@
 				this.hscrollBar.style[$.feat.cssPrefix+"Perspective"] = 1000;
 				this.hscrollBar.style[$.feat.cssPrefix+"BackfaceVisibility"] = "hidden";
 			}
-
-		}
-
-
+		};
 
 		jsScroller.prototype.scrollerMoveCSS = function(distanceToMove, time, timingFunction) {
 			if(!time) time = 0;
@@ -1296,7 +1311,8 @@
 				// Position should be updated even when the scroller is disabled so we log the change
 				this.logPos(distanceToMove.x, distanceToMove.y);
 			}
-		}
+		};
+		
 		jsScroller.prototype.logPos = function(x, y) {
 
 			if(!this.elementInfo) {
@@ -1312,7 +1328,8 @@
 			this.loggedPcentY = this.divide(y, (this.el.clientHeight - size.h));
 			this.scrollTop = y;
 			this.scrollLeft = x;
-		}
+		};
+		
 		jsScroller.prototype.scrollbarMoveCSS = function(el, distanceToMove, time, timingFunction) {
 			if(!time) time = 0;
 			if(!timingFunction) timingFunction = "linear";
@@ -1327,11 +1344,13 @@
 		            el.style[$.feat.cssPrefix+"TransitionTimingFunction"] = timingFunction;
 				}
 			}
-		}
+		};
+		
 		jsScroller.prototype.scrollTo = function(pos, time) {
 			if(!time) time = 0;
 			this.scrollerMoveCSS(pos, time);
-		}
+		};
+		
 		jsScroller.prototype.scrollBy = function(pos, time) {
 			var cssMatrix = this.getCSSMatrix(this.el);
 			var startTop = numOnly(cssMatrix.f);
@@ -1340,16 +1359,19 @@
 				y: startTop - pos.y,
 				x: startLeft - pos.x
 			}, time);
-		}
+		};
+		
 		jsScroller.prototype.scrollToBottom = function(time) {
 			this.scrollTo({
 				y: -1 * (this.el.clientHeight - this.container.clientHeight),
 				x: 0
 			}, time);
-		}
+		};
+		
 		jsScroller.prototype.scrollToTop=function(time){
 			this.scrollTo({x:0,y:0},time);
-		}
+		};
+		
 		return scroller;
 	})();
 })(jq);
