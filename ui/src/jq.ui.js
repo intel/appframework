@@ -82,7 +82,7 @@
         showLoading: true,
         loadContentQueue: [],
         isAppMobi: false,
-        titlebar: "",
+        titleBar: "",
         navbar: "",
         header: "",
         viewportContainer: "",
