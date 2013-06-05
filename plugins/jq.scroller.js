@@ -128,8 +128,8 @@
 			scrollTopInterval:null,
 			scrollLeftInterval:null,
 			_scrollTo:function(params,time){
-				var time=parseInt(time);
-                if(time==0||isNaN(time))
+				var time = parseInt(time);
+                if(time === 0 || isNaN(time))
                 {
 				this.el.scrollTop=Math.abs(params.y);
 				this.el.scrollLeft=Math.abs(params.x);
@@ -413,7 +413,7 @@
 			if(!firstExecution) this.adjustScroll();
 			//set events
 			this.el.addEventListener('touchstart', this, false);
-			this.el.addEventListener('scroll', this, false)
+			this.el.addEventListener('scroll', this, false);
 		};
 		
 		nativeScroller.prototype.disable = function(destroy) {
@@ -536,7 +536,7 @@
                     clearInterval(self.nativePolling);
                     return;
                 }
-                if(self.el.scrollTop!=currPos.top||self.el.scrollLeft!=currPos.left){
+                if(self.el.scrollTop != currPos.top || self.el.scrollLeft != currPos.left) {
                     clearInterval(self.nativePolling);
                     $.trigger($.touchLayer, 'scrollend', [self.el]); //notify touchLayer of this elements scrollend
                     $.trigger(self,"scrollend",[self.el]);
@@ -578,7 +578,7 @@
 			//this.el.addEventListener('touchend', this, false);
 		};
 		
-		nativeScroller.prototype.hideScrollbars = function() {}
+		nativeScroller.prototype.hideScrollbars = function() {};
 		nativeScroller.prototype.scrollTo = function(pos,time) {
 			this.logPos(pos.x, pos.y);
 			pos.x*=-1;
@@ -1321,7 +1321,7 @@
 				var size = {
 					h: this.elementInfo.bottomMargin,
 					w: this.elementInfo.rightMargin
-				}
+				};
 			}
 
 			this.loggedPcentX = this.divide(x, (this.el.clientWidth - size.w));
