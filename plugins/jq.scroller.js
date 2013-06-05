@@ -25,7 +25,7 @@
 				tmp = cache[id];
 			}
 		}
-		return this.length == 1 ? tmp : this;
+		return this.length === 1 ? tmp : this;
 	};
 	
 	var boundTouchLayer = false;
@@ -771,7 +771,7 @@
 			}
 
 			//disable if locked
-			if(event.touches.length != 1 || this.boolScrollLock) return;
+			if(event.touches.length !== 1 || this.boolScrollLock) return;
 
 			// Allow interaction to legit calls, like select boxes, etc.
 			if(event.touches[0].target && event.touches[0].target.type != undefined) {
