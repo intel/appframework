@@ -124,8 +124,8 @@
                     if (!options["timingFunction"]) options["timingFunction"] = "linear";
 
                     //check for percent or numbers
-                    if (typeof (options.x) === "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x) + "px";
-                    if (typeof (options.y) === "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y) + "px";
+                    if (typeof (options.x) === "number" || (options.x.indexOf("%") === -1 && options.x.toLowerCase().indexOf("px") === -1 && options.x.toLowerCase().indexOf("deg") === -1)) options.x = parseInt(options.x) + "px";
+                    if (typeof (options.y) === "number" || (options.y.indexOf("%") === -1 && options.y.toLowerCase().indexOf("px") === -1 && options.y.toLowerCase().indexOf("deg") === -1)) options.y = parseInt(options.y) + "px";
                     
                     var trans= "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ")";
                     if(!$.os.opera)
@@ -148,10 +148,10 @@
                     }
                     this.el.style[$.feat.cssPrefix+"TransitionProperty"] = "all";
                 
-                    if((""+options["time"]).indexOf("s")===-1) {
+                    if((""+options["time"]).indexOf("s") === -1) {
                         var scale = 'ms';
                         var time = options["time"]+scale;
-                    } else if(options["time"].indexOf("ms")!==-1){
+                    } else if(options["time"].indexOf("ms") !== -1){
                         var scale = 'ms';
                         var time = options["time"];
                     } else {
@@ -181,7 +181,7 @@
                     var duration = style[$.feat.cssPrefix+"TransitionDuration"];
                     var timeNum = numOnly(duration);
                     options["time"]=timeNum;
-                    if(duration.indexOf("ms")!==-1){
+                    if(duration.indexOf("ms") !== -1){
                         scale = 'ms';
                     } else {
                         options["time"]*=1000;
