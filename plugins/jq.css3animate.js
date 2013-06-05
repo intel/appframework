@@ -3,7 +3,8 @@
     var objId=function(obj){
         if(!obj.jqmCSS3AnimateId) obj.jqmCSS3AnimateId=$.uuid();
         return obj.jqmCSS3AnimateId;
-    }
+    };
+	
     var getEl=function(elID){
         if (typeof elID === "string" || elID instanceof String) {
             return document.getElementById(elID);
@@ -12,7 +13,8 @@
         } else {
             return elID;
         }
-    }
+    };
+	
     var getCSS3Animate=function(obj, options){
         var tmp, id, el = getEl(obj);
         //first one
@@ -25,7 +27,8 @@
             cache[id] = tmp;
         }
         return tmp;
-    }
+    };
+	
     $.fn["css3Animate"] = function (opts) {
         //keep old callback system - backwards compatibility - should be deprecated in future versions
         if(!opts.complete && opts.callback) opts.complete = opts.callback;
@@ -43,15 +46,14 @@
 
     $["css3AnimateQueue"] = function () {
         return new css3Animate.queue();
-    }
+    };
 
     //if (!window.WebKitCSSMatrix) return;
-    var translateOpen =$.feat.cssTransformStart;
+    var translateOpen = $.feat.cssTransformStart;
     var translateClose = $.feat.cssTransformEnd;
-    var transitionEnd=$.feat.cssPrefix.replace(/-/g,"")+"TransitionEnd";
-    transitionEnd=($.os.fennec||$.feat.cssPrefix==""||$.os.ie)?"transitionend":transitionEnd;
-
-    transitionEnd=transitionEnd.replace(transitionEnd.charAt(0),transitionEnd.charAt(0).toLowerCase());
+    var transitionEnd = $.feat.cssPrefix.replace(/-/g,"")+"TransitionEnd";
+    transitionEnd = ($.os.fennec || $.feat.cssPrefix == "" || $.os.ie) ? "transitionend" : transitionEnd;
+    transitionEnd = transitionEnd.replace(transitionEnd.charAt(0),transitionEnd.charAt(0).toLowerCase());
     
     var css3Animate = (function () {
         
@@ -77,6 +79,7 @@
                 if(cache[id]) delete cache[id];
             });
         };
+		
         css3Animate.prototype = {
             animate:function(options){
                 
@@ -102,7 +105,7 @@
                 } else {
                     //property by property
                     var timeNum = numOnly(options["time"]);
-                    if(timeNum==0) options["time"]=0;
+                    if (timeNum == 0) options["time"]=0;
                 
                     if (!options["y"]) options["y"] = 0;
                     if (!options["x"]) options["x"] = 0;
@@ -190,7 +193,7 @@
                 }
                 
                 //finish asap
-                if(timeNum==0 || (scale=='ms' && timeNum<5) || style.display=='none'){
+                if(timeNum==0 || (scale=='ms' && timeNum<5) || style.display === 'none') {
                     //the duration is nearly 0 or the element is not displayed, finish immediatly
                     $.asap($.proxy(this.finishAnimation, this, [false]));
                     //this.finishAnimation();
@@ -206,9 +209,7 @@
                     };         
                     that.timeout=setTimeout(this.activeEvent, numOnly(options["time"]) + 50);         
                     this.el.addEventListener(transitionEnd, this.activeEvent, false);
-
                 }
-                
             },
             addCallbackHook:function(callback){
                 if(callback) this.callbacksStack.push(callback);
@@ -277,7 +278,7 @@
                 opts.failure = callbacks.failure;
                 return this;
             }
-        }
+        };
         
         return css3Animate;
     })();
@@ -308,6 +309,6 @@
             shift: function () {
                 return this.elements.shift();
             }
-        }
+        };
     };
 })(jq);
