@@ -5,7 +5,7 @@
         return obj.jqmCSS3AnimateId;
     }
     var getEl=function(elID){
-        if (typeof elID == "string" || elID instanceof String) {
+        if (typeof elID === "string" || elID instanceof String) {
             return document.getElementById(elID);
         } else if($.is$(elID)){
             return elID[0];
@@ -124,8 +124,8 @@
                     if (!options["timingFunction"]) options["timingFunction"] = "linear";
 
                     //check for percent or numbers
-                    if (typeof (options.x) == "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x) + "px";
-                    if (typeof (options.y) == "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y) + "px";
+                    if (typeof (options.x) === "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x) + "px";
+                    if (typeof (options.y) === "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y) + "px";
                     
                     var trans= "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ")";
                     if(!$.os.opera)
@@ -243,10 +243,10 @@
                     var success = callbacks[i]['success'];
                     var failure = callbacks[i]['failure'];
                     //fire callbacks
-                    if(complete && typeof (complete) == "function") complete(canceled);
+                    if(complete && typeof (complete) === "function") complete(canceled);
                     //success/failure
-                    if(canceled && failure && typeof (failure) == "function") failure();
-                    else if(success && typeof (success) == "function") success();
+                    if(canceled && failure && typeof (failure) === "function") failure();
+                    else if(success && typeof (success) === "function") success();
                 }
             },
             cancel:function(){
@@ -294,7 +294,7 @@
             run: function () {
                 var that = this;
                 if (this.elements.length == 0) return;
-                if (typeof (this.elements[0]) == "function") {
+                if (typeof (this.elements[0]) === "function") {
                     var func = this.shift();
                     func();
                 }
@@ -386,7 +386,7 @@
 				if(!boundTouchLayer && $.touchLayer && $.isObject($.touchLayer)) bindTouchLayer()
 				else if(!($.touchLayer && $.isObject($.touchLayer))) $.touchLayer = {};
 
-				if(typeof elID == "string" || elID instanceof String) {
+				if(typeof elID === "string" || elID instanceof String) {
 					var el = document.getElementById(elID);
 				} else {
 					var el = elID;
@@ -1885,7 +1885,7 @@
     };
     var actionsheet = (function() {
         var actionsheet = function(elID, opts) {
-            if (typeof elID == "string" || elID instanceof String) {
+            if (typeof elID === "string" || elID instanceof String) {
                 this.el = document.getElementById(elID);
             } else {
                 this.el = elID;
@@ -1896,7 +1896,7 @@
             }
             
             if (this instanceof actionsheet) {
-                if(typeof(opts)=="object"){
+                if(typeof(opts) === "object") {
                 for (j in opts) {
                     this[j] = opts[j];
                 }
@@ -1910,9 +1910,9 @@
                 var markStart = '<div id="jq_actionsheet"><div style="width:100%">';
                 var markEnd = '</div></div>';
                 var markup;
-                if (typeof opts == "string") {
+                if (typeof opts === "string") {
                     markup = $(markStart + opts +"<a href='javascript:;' class='cancel'>Cancel</a>"+markEnd);
-                } else if (typeof opts == "object") {
+                } else if (typeof opts === "object") {
                     markup = $(markStart + markEnd);
                     var container = $(markup.children().get());
                     opts.push({text:"Cancel",cssClasses:"cancel"});
@@ -2237,7 +2237,7 @@
 			var el2 = document.getElementById(elID);
 			if (el)
 				el.innerHTML = value;
-			if (typeof (el2.onchange) == "function")
+			if (typeof (el2.onchange) === "function")
 				el2.onchange(val2);
 			el = null;
 			el2 = null;
@@ -3673,7 +3673,7 @@
             var nb = jq("#navbar");
             if (elems === undefined || elems == null)
                 return;
-            if (typeof (elems) == "string")
+            if (typeof (elems) === "string")
                 return nb.html(elems, true), null;
             nb.html("");
             for (var i = 0; i < elems.length; i++) {
@@ -3696,7 +3696,7 @@
             var nb = jq("#header");
             if (elems === undefined || elems == null)
                 return;
-            if (typeof (elems) == "string")
+            if (typeof (elems) === "string")
                 return nb.html(elems, true), null;
             nb.html("");
             for (var i = 0; i < elems.length; i++) {
@@ -3719,7 +3719,7 @@
             
             if (elems === undefined || elems == null)
                 return;
-            if (typeof (elems) == "string") {
+            if (typeof (elems) === "string") {
                 nb.html(elems, true)
             } 
             else {
@@ -3845,7 +3845,7 @@
 
             var tmp=$($("#modalContainer").data("panel"));
             var fnc = tmp.data("unload");
-            if (typeof fnc == "string" && window[fnc]) {
+            if (typeof fnc === "string" && window[fnc]) {
                 window[fnc](tmp.get(0));
             }
             tmp.trigger("unloadpanel");
@@ -4111,13 +4111,13 @@
             
             if (oldDiv) {
                 fnc = oldDiv.getAttribute("data-unload");
-                if (typeof fnc == "string" && window[fnc]) {
+                if (typeof fnc === "string" && window[fnc]) {
                     window[fnc](oldDiv);
                 }
                 $(oldDiv).trigger("unloadpanel");
             }
             var fnc = what.getAttribute("data-load");
-            if (typeof fnc == "string" && window[fnc]) {
+            if (typeof fnc === "string" && window[fnc]) {
                 window[fnc](what);
             }
             $(what).trigger("loadpanel");
@@ -4232,7 +4232,7 @@
             
             if (what.getAttribute("data-modal") == "true" || what.getAttribute("modal") == "true") {
                 var fnc = what.getAttribute("data-load");
-                if (typeof fnc == "string" && window[fnc]) {
+                if (typeof fnc === "string" && window[fnc]) {
                     window[fnc](what);
                 }
                 $(what).trigger("loadpanel");
@@ -4432,7 +4432,7 @@
             }
             
             var that = this;
-            this.isAppMobi = (window.AppMobi && typeof (AppMobi) == "object" && AppMobi.app !== undefined) ? true : false;
+            this.isAppMobi = (window.AppMobi && typeof (AppMobi) === "object" && AppMobi.app !== undefined) ? true : false;
             this.viewportContainer = jq("#jQUi");
             this.navbar = jq("#navbar").get(0);
             this.content = jq("#content").get(0);
@@ -4794,7 +4794,7 @@
         //anchors
         if (theTarget.tagName !== "undefined" && theTarget.tagName.toLowerCase() == "a") {
             
-            var custom = (typeof jq.ui.customClickHandler == "function") ? jq.ui.customClickHandler : false;
+            var custom = (typeof jq.ui.customClickHandler === "function") ? jq.ui.customClickHandler : false;
             if (custom !== false) {
                 if(jq.ui.customClickHandler(theTarget))
                    return e.preventDefault();
