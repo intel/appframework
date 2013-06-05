@@ -74,7 +74,7 @@
 				if(!boundTouchLayer && $.touchLayer && $.isObject($.touchLayer)) bindTouchLayer();
 				else if(!($.touchLayer && $.isObject($.touchLayer))) $.touchLayer = {};
 
-				if(typeof elID == "string" || elID instanceof String) {
+				if(typeof elID === "string" || elID instanceof String) {
 					var el = document.getElementById(elID);
 				} else {
 					var el = elID;
