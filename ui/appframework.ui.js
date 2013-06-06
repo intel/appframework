@@ -4663,12 +4663,6 @@
 
 
             //elements setup
-            if (!this.navbar) {
-                this.navbar = $.create("div", {
-                    id: "navbar"
-                }).hide().get(0);
-                this.viewportContainer.append(this.navbar);
-            }
             if (!this.header) {
                 this.header = $.create("div", {
                     id: "header"
@@ -4699,6 +4693,14 @@
                     id: "content"
                 }).get(0);
                 this.viewportContainer.append(this.content);
+            }
+
+            if (!this.navbar) {
+                this.navbar = $.create("div", {
+                    id: "navbar"
+                }).hide().get(0);
+                $.query("#content").css("bottom", "0px");
+                this.viewportContainer.append(this.navbar);
             }
 
             //insert backbutton (should optionally be left to developer..)
