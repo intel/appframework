@@ -3,16 +3,16 @@
     var objId=function(obj){
         if(!obj.jqmCSS3AnimateId) obj.jqmCSS3AnimateId=$.uuid();
         return obj.jqmCSS3AnimateId;
-    }
+    };
     var getEl=function(elID){
-        if (typeof elID == "string" || elID instanceof String) {
+        if (typeof elID === "string" || elID instanceof String) {
             return document.getElementById(elID);
         } else if($.is$(elID)){
             return elID[0];
         } else {
             return elID;
         }
-    }
+    };
     var getCSS3Animate=function(obj, options){
         var tmp, id, el = getEl(obj);
         //first one
@@ -25,7 +25,7 @@
             cache[id] = tmp;
         }
         return tmp;
-    }
+    };
     $.fn["css3Animate"] = function (opts) {
         //keep old callback system - backwards compatibility - should be deprecated in future versions
         if(!opts.complete && opts.callback) opts.complete = opts.callback;
@@ -39,17 +39,16 @@
         }
         return tmp;
     };
-    
 
     $["css3AnimateQueue"] = function () {
         return new css3Animate.queue();
-    }
+    };
 
     //if (!window.WebKitCSSMatrix) return;
     var translateOpen =$.feat.cssTransformStart;
     var translateClose = $.feat.cssTransformEnd;
     var transitionEnd=$.feat.cssPrefix.replace(/-/g,"")+"TransitionEnd";
-    transitionEnd=($.os.fennec||$.feat.cssPrefix==""||$.os.ie)?"transitionend":transitionEnd;
+    transitionEnd=($.os.fennec || $.feat.cssPrefix=="" || $.os.ie)?"transitionend":transitionEnd;
 
     transitionEnd=transitionEnd.replace(transitionEnd.charAt(0),transitionEnd.charAt(0).toLowerCase());
     
@@ -124,8 +123,8 @@
                     if (!options["timingFunction"]) options["timingFunction"] = "linear";
 
                     //check for percent or numbers
-                    if (typeof (options.x) == "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x) + "px";
-                    if (typeof (options.y) == "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y) + "px";
+                    if (typeof (options.x) === "number" || (options.x.indexOf("%") === -1 && options.x.toLowerCase().indexOf("px") === -1 && options.x.toLowerCase().indexOf("deg") === -1)) options.x = parseInt(options.x) + "px";
+                    if (typeof (options.y) === "number" || (options.y.indexOf("%") === -1 && options.y.toLowerCase().indexOf("px") === -1 && options.y.toLowerCase().indexOf("deg") === -1)) options.y = parseInt(options.y) + "px";
                     
                     var trans= "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ")";
                     if(!$.os.opera)
@@ -148,10 +147,10 @@
                     }
                     this.el.style[$.feat.cssPrefix+"TransitionProperty"] = "all";
                 
-                    if((""+options["time"]).indexOf("s")===-1) {
+                    if((""+options["time"]).indexOf("s") === -1) {
                         var scale = 'ms';
                         var time = options["time"]+scale;
-                    } else if(options["time"].indexOf("ms")!==-1){
+                    } else if(options["time"].indexOf("ms") !== -1) {
                         var scale = 'ms';
                         var time = options["time"];
                     } else {
@@ -162,7 +161,6 @@
                     this.el.style[$.feat.cssPrefix+"TransitionDuration"] = time;
                     this.el.style[$.feat.cssPrefix+"TransitionTimingFunction"] = options["timingFunction"];
                     this.el.style[$.feat.cssPrefix+"TransformOrigin"] = options.origin;
-
                 }
 
                 //add callback to the stack
@@ -181,7 +179,7 @@
                     var duration = style[$.feat.cssPrefix+"TransitionDuration"];
                     var timeNum = numOnly(duration);
                     options["time"]=timeNum;
-                    if(duration.indexOf("ms")!==-1){
+                    if(duration.indexOf("ms") !== -1) {
                         scale = 'ms';
                     } else {
                         options["time"]*=1000;
@@ -190,7 +188,7 @@
                 }
                 
                 //finish asap
-                if(timeNum==0 || (scale=='ms' && timeNum<5) || style.display=='none'){
+                if(timeNum==0 || (scale=='ms' && timeNum<5) || style.display === 'none'){
                     //the duration is nearly 0 or the element is not displayed, finish immediatly
                     $.asap($.proxy(this.finishAnimation, this, [false]));
                     //this.finishAnimation();
@@ -243,10 +241,10 @@
                     var success = callbacks[i]['success'];
                     var failure = callbacks[i]['failure'];
                     //fire callbacks
-                    if(complete && typeof (complete) == "function") complete(canceled);
+                    if(complete && typeof (complete) === "function") complete(canceled);
                     //success/failure
-                    if(canceled && failure && typeof (failure) == "function") failure();
-                    else if(success && typeof (success) == "function") success();
+                    if(canceled && failure && typeof (failure) === "function") failure();
+                    else if(success && typeof (success) === "function") success();
                 }
             },
             cancel:function(){
@@ -277,7 +275,7 @@
                 opts.failure = callbacks.failure;
                 return this;
             }
-        }
+        };
         
         return css3Animate;
     })();
@@ -294,7 +292,7 @@
             run: function () {
                 var that = this;
                 if (this.elements.length == 0) return;
-                if (typeof (this.elements[0]) == "function") {
+                if (typeof (this.elements[0]) === "function") {
                     var func = this.shift();
                     func();
                 }
@@ -338,7 +336,7 @@
 				tmp = cache[id];
 			}
 		}
-		return this.length == 1 ? tmp : this;
+		return this.length === 1 ? tmp : this;
 	};
 	var boundTouchLayer = false;
 
@@ -386,7 +384,7 @@
 				if(!boundTouchLayer && $.touchLayer && $.isObject($.touchLayer)) bindTouchLayer()
 				else if(!($.touchLayer && $.isObject($.touchLayer))) $.touchLayer = {};
 
-				if(typeof elID == "string" || elID instanceof String) {
+				if(typeof elID === "string" || elID instanceof String) {
 					var el = document.getElementById(elID);
 				} else {
 					var el = elID;
@@ -1074,7 +1072,7 @@
 			// Allow interaction to legit calls, like select boxes, etc.
 			if(event.touches[0].target && event.touches[0].target.type != undefined) {
 				var tagname = event.touches[0].target.tagName.toLowerCase();
-				if(tagname == "select" || tagname == "input" || tagname == "button") // stuff we need to allow
+				if(tagname === "select" || tagname === "input" || tagname === "button") // stuff we need to allow
 				// access to legit calls
 				return;
 
@@ -1736,7 +1734,7 @@
                 this.autoCloseDone=opts.autoCloseDone!==undefined?opts.autoCloseDone:true;
                 
                 queue.push(this);
-                if (queue.length == 1)
+                if (queue.length === 1)
                     this.show();
             } catch (e) {
                 console.log("error adding popup " + e);
@@ -1881,11 +1879,11 @@
         for (var i = 0; i < this.length; i++) {
             tmp = new actionsheet(this[i], opts);
         }
-        return this.length == 1 ? tmp : this;
+        return this.length === 1 ? tmp : this;
     };
     var actionsheet = (function() {
         var actionsheet = function(elID, opts) {
-            if (typeof elID == "string" || elID instanceof String) {
+            if (typeof elID === "string" || elID instanceof String) {
                 this.el = document.getElementById(elID);
             } else {
                 this.el = elID;
@@ -1896,7 +1894,7 @@
             }
             
             if (this instanceof actionsheet) {
-                if(typeof(opts)=="object"){
+                if(typeof(opts) === "object") {
                 for (j in opts) {
                     this[j] = opts[j];
                 }
@@ -1910,9 +1908,9 @@
                 var markStart = '<div id="jq_actionsheet"><div style="width:100%">';
                 var markEnd = '</div></div>';
                 var markup;
-                if (typeof opts == "string") {
+                if (typeof opts === "string") {
                     markup = $(markStart + opts +"<a href='javascript:;' class='cancel'>Cancel</a>"+markEnd);
-                } else if (typeof opts == "object") {
+                } else if (typeof opts === "object") {
                     markup = $(markStart + markEnd);
                     var container = $(markup.children().get());
                     opts.push({text:"Cancel",cssClasses:"cancel"});
@@ -2052,7 +2050,7 @@
 				(function(theSel) {
 					var fakeInput = document.createElement("div");
 					var theSelStyle = window.getComputedStyle(theSel);
-					var width = theSelStyle.width == 'intrinsic' ? '100%' : theSelStyle.width;
+					var width = theSelStyle.width === 'intrinsic' ? '100%' : theSelStyle.width;
 					var selWidth = parseInt(width) > 0 ? width : '100px';
 					var selHeight = parseInt(theSel.style.height) > 0 ? theSel.style.height : (parseInt(theSelStyle.height) ? theSelStyle.height : '20px');
 					fakeInput.style.width = selWidth;
@@ -2237,7 +2235,7 @@
 			var el2 = document.getElementById(elID);
 			if (el)
 				el.innerHTML = value;
-			if (typeof (el2.onchange) == "function")
+			if (typeof (el2.onchange) === "function")
 				el2.onchange(val2);
 			el = null;
 			el2 = null;
@@ -2398,9 +2396,9 @@
     $(document).ready(function() {
         var prevEl;
         $(document.body).bind('touchstart', function(e) {
-            if(!e.touches||e.touches.length==0) return;
+            if(!e.touches||e.touches.length == 0) return;
             var now = Date.now(), delta = now - (touch.last || now);
-            if(!e.touches||e.touches.length==0) return;
+            if(!e.touches||e.touches.length == 0) return;
             touch.el = $(parentIfText(e.touches[0].target));
             touchTimeout && clearTimeout(touchTimeout);
             touch.x1 =  e.touches[0].pageX;
@@ -2851,7 +2849,7 @@
 
 
 			// We allow forcing native tap in android devices (required in special cases)
-			var forceNativeTap = (jq.os.android && e && e.target && e.target.getAttribute && e.target.getAttribute("data-touchlayer") == "ignore");
+			var forceNativeTap = (jq.os.android && e && e.target && e.target.getAttribute && e.target.getAttribute("data-touchlayer") === "ignore");
 
 			//if on edit mode, allow all native touches
 			//(BB10 must still be prevented, always clicks even after move)
@@ -2868,7 +2866,7 @@
 					this.requiresNativeTap = true;
 				}
 			}
-			else if(e.target&&e.target.tagName!==undefined&&e.target.tagName.toLowerCase()=="input"&&e.target.type=="range"){
+			else if(e.target&&e.target.tagName!==undefined&&e.target.tagName.toLowerCase()==="input"&&e.target.type==="range"){
                 this.requiresNativeTap=true;
             }
 
@@ -3141,7 +3139,7 @@
                 that.autoBoot();
                 this.removeEventListener("appMobi.device.ready", arguments.callee);
             }, false);
-        else if (document.readyState == "complete" || document.readyState == "loaded") {
+        else if (document.readyState === "complete" || document.readyState === "loaded") {
             this.autoBoot();
         } else
             document.addEventListener("DOMContentLoaded", function() {
@@ -3157,11 +3155,11 @@
             
             var id = $.ui.getPanelId(document.location.hash);
             //make sure we allow hash changes outside jqUi
-            if(id==""&&$.ui.history.length===1) //Fix going back to first panel and an empty hash
+            if(id==""&&$.ui.history.length === 1) //Fix going back to first panel and an empty hash
                 id="#"+$.ui.firstDiv.id;
             if(id=="")
                 return;
-            if(document.querySelectorAll(id+".panel").length===0)
+            if(document.querySelectorAll(id+".panel").length === 0)
                 return;
             if (id != "#" + $.ui.activeDiv.id)
                 that.goBack();
@@ -3442,7 +3440,7 @@
          * @title $.ui.updateHash(newHash)
          */
         updateHash: function(newHash) {
-            newHash = newHash.indexOf('#') == -1 ? '#' + newHash : newHash; //force having the # in the begginning as a standard
+            newHash = newHash.indexOf('#') === -1 ? '#' + newHash : newHash; //force having the # in the begginning as a standard
             previousTarget = newHash;
             
             var previousHash = window.location.hash;
@@ -3459,7 +3457,7 @@
         /*gets the panel name from an hash*/
         getPanelId: function(hash) {
             var firstSlash = hash.indexOf('/');
-            return firstSlash == -1 ? hash : hash.substring(0, firstSlash);
+            return firstSlash === -1 ? hash : hash.substring(0, firstSlash);
         },
 
         /**
@@ -3673,7 +3671,7 @@
             var nb = jq("#navbar");
             if (elems === undefined || elems == null)
                 return;
-            if (typeof (elems) == "string")
+            if (typeof (elems) === "string")
                 return nb.html(elems, true), null;
             nb.html("");
             for (var i = 0; i < elems.length; i++) {
@@ -3696,7 +3694,7 @@
             var nb = jq("#header");
             if (elems === undefined || elems == null)
                 return;
-            if (typeof (elems) == "string")
+            if (typeof (elems) === "string")
                 return nb.html(elems, true), null;
             nb.html("");
             for (var i = 0; i < elems.length; i++) {
@@ -3719,7 +3717,7 @@
             
             if (elems === undefined || elems == null)
                 return;
-            if (typeof (elems) == "string") {
+            if (typeof (elems) === "string") {
                 nb.html(elems, true)
             } 
             else {
@@ -3845,7 +3843,7 @@
 
             var tmp=$($("#modalContainer").data("panel"));
             var fnc = tmp.data("unload");
-            if (typeof fnc == "string" && window[fnc]) {
+            if (typeof fnc === "string" && window[fnc]) {
                 window[fnc](tmp.get(0));
             }
             tmp.trigger("unloadpanel");
@@ -3874,7 +3872,7 @@
             
             
             
-            if (el.getAttribute("js-scrolling") && el.getAttribute("js-scrolling").toLowerCase() == "yes") {
+            if (el.getAttribute("js-scrolling") && el.getAttribute("js-scrolling").toLowerCase() === "yes") {
                 $.cleanUpContent(el.childNodes[0], false, true);
                 el.childNodes[0].innerHTML = content;
             } else {
@@ -3895,7 +3893,7 @@
          * @title $.ui.addContentDiv(id,content,title);
          */
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
-            el = typeof (el) !== "string" ? el : el.indexOf("#") == -1 ? "#" + el : el;
+            el = typeof (el) !== "string" ? el : el.indexOf("#") === -1 ? "#" + el : el;
             var myEl = jq(el).get(0);
             if (!myEl) {
                 var newDiv = document.createElement("div");
@@ -3931,21 +3929,21 @@
         addDivAndScroll: function(tmp, refreshPull, refreshFunc, container) {
             var jsScroll = false;
             var overflowStyle = tmp.style.overflow;
-            var hasScroll = overflowStyle != 'hidden' && overflowStyle != 'visible';
+            var hasScroll = overflowStyle !== 'hidden' && overflowStyle !== 'visible';
             
             container = container || this.content;
             //sets up scroll when required and not supported
             if (!$.feat.nativeTouchScroll && hasScroll)
                 tmp.setAttribute("js-scrolling", "yes");
             
-            if (tmp.getAttribute("js-scrolling") && tmp.getAttribute("js-scrolling").toLowerCase() == "yes") {
+            if (tmp.getAttribute("js-scrolling") && tmp.getAttribute("js-scrolling").toLowerCase() === "yes") {
                 jsScroll = true;
                 hasScroll = true;
             }
             
             
             
-            if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") == "no") {
+            if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") === "no") {
                 hasScroll = false;
                 jsScroll = false;
                 tmp.removeAttribute("js-scrolling");
@@ -4042,7 +4040,7 @@
             var hasHeader = what.getAttribute("data-header");
 
             //$asap removed since animations are fixed in css3animate
-            if (hasFooter && hasFooter.toLowerCase() == "none") {
+            if (hasFooter && hasFooter.toLowerCase() === "none") {
                 that.toggleNavMenu(false);
             } else {
                 that.toggleNavMenu(true);
@@ -4055,7 +4053,7 @@
                     that.updateNavbarElements(that.defaultFooter);
                 that.customFooter = false;
             }
-            if (hasHeader && hasHeader.toLowerCase() == "none") {
+            if (hasHeader && hasHeader.toLowerCase() === "none") {
                 that.toggleHeaderMenu(false);
             } else {
                 that.toggleHeaderMenu(true);
@@ -4111,13 +4109,13 @@
             
             if (oldDiv) {
                 fnc = oldDiv.getAttribute("data-unload");
-                if (typeof fnc == "string" && window[fnc]) {
+                if (typeof fnc === "string" && window[fnc]) {
                     window[fnc](oldDiv);
                 }
                 $(oldDiv).trigger("unloadpanel");
             }
             var fnc = what.getAttribute("data-load");
-            if (typeof fnc == "string" && window[fnc]) {
+            if (typeof fnc === "string" && window[fnc]) {
                 window[fnc](what);
             }
             $(what).trigger("loadpanel");
@@ -4161,7 +4159,7 @@
             var that = this;
             var loadAjax = true;
             anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
-            if (target.indexOf("#") == -1) {
+            if (target.indexOf("#") === -1) {
                 var urlHash = "url" + crc32(target); //Ajax urls
                 var crcCheck = jq("div.panel[data-crc='" + urlHash + "']");
                 if (jq("#" + target).length > 0) {
@@ -4185,7 +4183,7 @@
                         target = "#" + urlHash;
                 }
             }
-            if (target.indexOf("#") == -1 && loadAjax) {
+            if (target.indexOf("#") === -1 && loadAjax) {
                 this.loadAjax(target, newTab, back, transition, anchor);
             } else {
                 this.loadDiv(target, newTab, back, transition);
@@ -4210,7 +4208,7 @@
             
             var slashIndex = what.indexOf('/');
             var hashLink = "";
-            if (slashIndex != -1) {
+            if (slashIndex !== -1) {
                 // Ignore everything after the slash for loading
                 hashLink = what.substr(slashIndex);
                 what = what.substr(0, slashIndex);
@@ -4232,7 +4230,7 @@
             
             if (what.getAttribute("data-modal") == "true" || what.getAttribute("modal") == "true") {
                 var fnc = what.getAttribute("data-load");
-                if (typeof fnc == "string" && window[fnc]) {
+                if (typeof fnc === "string" && window[fnc]) {
                     window[fnc](what);
                 }
                 $(what).trigger("loadpanel");
@@ -4293,7 +4291,7 @@
                 if (this.history.length > 0) {
                     var val = this.history[this.history.length - 1];
                     var slashIndex = val.target.indexOf('/');
-                    if (slashIndex != -1) {
+                    if (slashIndex !== -1) {
                         var prevId = val.target.substr(0, slashIndex);
                     } else
                         var prevId = val.target;
@@ -4339,11 +4337,11 @@
          */
         loadAjax: function(target, newTab, back, transition, anchor) {
             // XML Request
-            if (this.activeDiv.id == "jQui_ajax" && target == this.ajaxUrl)
+            if (this.activeDiv.id === "jQui_ajax" && target == this.ajaxUrl)
                 return;
             var urlHash = "url" + crc32(target); //Ajax urls
             var that = this;
-            if (target.indexOf("http") == -1)
+            if (target.indexOf("http") === -1)
                 target = AppMobi.webRoot + target;
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function() {
@@ -4432,7 +4430,7 @@
             }
             
             var that = this;
-            this.isAppMobi = (window.AppMobi && typeof (AppMobi) == "object" && AppMobi.app !== undefined) ? true : false;
+            this.isAppMobi = (window.AppMobi && typeof (AppMobi) === "object" && AppMobi.app !== undefined) ? true : false;
             this.viewportContainer = jq("#jQUi");
             this.navbar = jq("#navbar").get(0);
             this.content = jq("#content").get(0);
@@ -4717,7 +4715,7 @@
          */
         topClickScroll:function(){
              document.getElementById("header").addEventListener("click",function(e){
-                if(e.clientY<=15&&e.target.nodeName.toLowerCase()=="h1") //hack - the title spans the whole width of the header
+                if(e.clientY <= 15 && e.target.nodeName.toLowerCase() === "h1") //hack - the title spans the whole width of the header
                     $.ui.scrollingDivs[$.ui.activeDiv.id].scrollToTop("100");
             });
         
@@ -4792,9 +4790,9 @@
         if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode)
             return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
         //anchors
-        if (theTarget.tagName !== "undefined" && theTarget.tagName.toLowerCase() == "a") {
+        if (theTarget.tagName !== "undefined" && theTarget.tagName.toLowerCase() === "a") {
             
-            var custom = (typeof jq.ui.customClickHandler == "function") ? jq.ui.customClickHandler : false;
+            var custom = (typeof jq.ui.customClickHandler === "function") ? jq.ui.customClickHandler : false;
             if (custom !== false) {
                 if(jq.ui.customClickHandler(theTarget))
                    return e.preventDefault();
@@ -4829,14 +4827,14 @@
                 href = href.substring(prefix.length+1);
             }
             //empty links
-            if (href == "#" ||(href.indexOf("#")===href.length-1)|| (href.length == 0 && theTarget.hash.length == 0))
+            if (href === "#" ||(href.indexOf("#") === href.length-1)|| (href.length == 0 && theTarget.hash.length == 0))
                 return;
 
             //internal links
             e.preventDefault();
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
-            resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
+            resetHistory = resetHistory && resetHistory.toLowerCase() === "true" ? true : false;
             var href = theTarget.hash.length > 0 ? theTarget.hash : theTarget.href;
             jq.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
             return;
