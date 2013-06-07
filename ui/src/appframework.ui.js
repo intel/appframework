@@ -140,6 +140,7 @@
         trimBackButtonText: true,
         useOSThemes: true,
         lockPageBounce: false,
+        animateHeaders: true,
         autoBoot: function() {
             this.hasLaunched = true;
             if (this.autoLaunch) {
@@ -649,7 +650,10 @@
                 var width = parseFloat(100 / tmpAnchors.length);
                 tmpAnchors.css("width", width + "%");
             }
-            var nodes = $.query("#navbar footer").get(0).childNodes;
+            var nodes = $.query("#navbar footer");
+            if (nodes.length === 0) return;
+            nodes = nodes.get(0).childNodes;
+
             for (var i = 0; i < nodes.length; i++) {
                 if (nodes[i].nodeType === 3) {
                     nodes[i].parentNode.removeChild(nodes[i]);
@@ -672,20 +676,28 @@
          */
         updateHeaderElements: function(elems, goBack) {
             var that = this;
+            if (!$.is$(elems)) //inline footer
+            {
+                elems = $.query("#" + elems);
+            }
+            if (elems == this.prevHeader) return;
             if (this.prevHeader) {
                 //Let's slide them out
-                if (!$.is$(elems)) //inline footer
-                {
-                    elems = $.query("#" + elems);
+                $.query("#header").append(elems);
+                //Do not animate - sometimes they act funky
+                if (!$.ui.animateHeaders) {
+                    if (that.prevHeader.data("parent")) that.prevHeader.appendTo("#" + that.prevHeader.data("parent"));
+                    else that.prevHeader.appendTo("#afui");
+                    that.prevHeader = elems;
+                    return;
                 }
 
-                $.query("#header").append(elems);
                 var from = goBack ? "100px" : "-100px";
                 var to = goBack ? "-100px" : "100px";
                 that.css3animate(elems, {
                     x: to,
                     opacity: 0.3,
-                    time: "0"
+                    time: "1ms"
                 });
                 that.css3animate(that.prevHeader, {
                     x: from,
@@ -698,7 +710,8 @@
                         else that.prevHeader.appendTo("#afui");
                         that.css3animate(that.prevHeader, {
                             x: to,
-                            opacity: 1
+                            opacity: 1,
+                            time: "1ms"
                         });
                         that.prevHeader = elems;
                     }
@@ -711,10 +724,6 @@
 
 
             } else {
-                if (!$.is$(elems)) //inline footer
-                {
-                    elems = $.query("#" + elems);
-                }
                 $.query("#header").append(elems);
                 this.prevHeader = elems;
             }

@@ -1,27 +1,26 @@
 /**
  * af.css3animate - a css3 animation library that supports chaning/callbacks
  * Copyright 2012 - Intel
- */
-(function ($) {
+ */ (function($) {
     var cache = [];
-    var objId=function(obj){
-        if(!obj.afCSS3AnimateId) obj.afCSS3AnimateId=$.uuid();
+    var objId = function(obj) {
+        if (!obj.afCSS3AnimateId) obj.afCSS3AnimateId = $.uuid();
         return obj.afCSS3AnimateId;
     };
-    var getEl=function(elID){
+    var getEl = function(elID) {
         if (typeof elID == "string" || elID instanceof String) {
             return document.getElementById(elID);
-        } else if($.is$(elID)){
+        } else if ($.is$(elID)) {
             return elID[0];
         } else {
             return elID;
         }
     };
-    var getCSS3Animate=function(obj, options){
+    var getCSS3Animate = function(obj, options) {
         var tmp, id, el = getEl(obj);
         //first one
         id = objId(el);
-        if(cache[id]){
+        if (cache[id]) {
             cache[id].animate(options);
             tmp = cache[id];
         } else {
@@ -30,14 +29,14 @@
         }
         return tmp;
     };
-    $.fn["css3Animate"] = function (opts) {
+    $.fn["css3Animate"] = function(opts) {
         //keep old callback system - backwards compatibility - should be deprecated in future versions
-        if(!opts.complete && opts.callback) opts.complete = opts.callback;
+        if (!opts.complete && opts.callback) opts.complete = opts.callback;
         //first on
         var tmp = getCSS3Animate(this[0], opts);
-        opts.complete=null;
-        opts.sucess=null;
-        opts.failure=null;
+        opts.complete = null;
+        opts.sucess = null;
+        opts.failure = null;
         for (var i = 1; i < this.length; i++) {
             tmp.link(this[i], opts);
         }
@@ -45,20 +44,20 @@
     };
 
 
-    $["css3AnimateQueue"] = function () {
+    $["css3AnimateQueue"] = function() {
         return new css3Animate.queue();
     };
-    var translateOpen =$.feat.cssTransformStart;
+    var translateOpen = $.feat.cssTransformStart;
     var translateClose = $.feat.cssTransformEnd;
-    var transitionEnd=$.feat.cssPrefix.replace(/-/g,"")+"TransitionEnd";
-    transitionEnd=($.os.fennec||$.feat.cssPrefix===""||$.os.ie)?"transitionend":transitionEnd;
+    var transitionEnd = $.feat.cssPrefix.replace(/-/g, "") + "TransitionEnd";
+    transitionEnd = ($.os.fennec || $.feat.cssPrefix === "" || $.os.ie) ? "transitionend" : transitionEnd;
 
-    transitionEnd=transitionEnd.replace(transitionEnd.charAt(0),transitionEnd.charAt(0).toLowerCase());
+    transitionEnd = transitionEnd.replace(transitionEnd.charAt(0), transitionEnd.charAt(0).toLowerCase());
 
-    var css3Animate = (function () {
+    var css3Animate = (function() {
 
-        var css3Animate = function (elID, options) {
-            if(!(this instanceof css3Animate)) return new css3Animate(elID, options);
+        var css3Animate = function(elID, options) {
+            if (!(this instanceof css3Animate)) return new css3Animate(elID, options);
 
             //start doing stuff
             this.callbacksStack = [];
@@ -73,17 +72,17 @@
             this.animate(options);
 
             var that = this;
-            af(this.el).bind('destroy', function(){
+            af(this.el).bind('destroy', function() {
                 var id = that.el.afCSS3AnimateId;
                 that.callbacksStack = [];
-                if(cache[id]) delete cache[id];
+                if (cache[id]) delete cache[id];
             });
         };
         css3Animate.prototype = {
-            animate:function(options){
+            animate: function(options) {
 
                 //cancel current active animation on this object
-                if(this.isActive) this.cancel();
+                if (this.isActive) this.cancel();
                 this.isActive = true;
 
                 if (!options) {
@@ -91,12 +90,12 @@
                     return;
                 }
 
-                var classMode = !!options["addClass"];
-                var scale,time;
+                var classMode = !! options["addClass"];
+                var scale, time;
                 var timeNum = numOnly(options["time"]);
-                if(classMode){
+                if (classMode) {
                     //class defines properties being changed
-                    if(options["removeClass"]){
+                    if (options["removeClass"]) {
                         af(this.el).replaceClass(options["removeClass"], options["addClass"]);
                     } else {
                         af(this.el).addClass(options["addClass"]);
@@ -105,7 +104,7 @@
                 } else {
                     //property by property
 
-                    if(timeNum===0) options["time"]=0;
+                    if (timeNum === 0) options["time"] = 0;
 
                     if (!options["y"]) options["y"] = 0;
                     if (!options["x"]) options["x"] = 0;
@@ -127,19 +126,19 @@
                     if (!options["timingFunction"]) options["timingFunction"] = "linear";
 
                     //check for percent or numbers
-                    if (typeof (options.x) == "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x,10) + "px";
-                    if (typeof (options.y) == "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y,10) + "px";
+                    if (typeof(options.x) == "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x, 10) + "px";
+                    if (typeof(options.y) == "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y, 10) + "px";
 
-                    var trans= "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ")";
-                    if(!$.os.opera)
-                        trans+=" rotateY(" + options.rotateY + ")";
-                    trans+=" skew(" + options.skewX + "," + options.skewY + ")";
-                    this.el.style[$.feat.cssPrefix+"Transform"]=trans;
-                    this.el.style[$.feat.cssPrefix+"BackfaceVisibility"] = "hidden";
-                    var properties = $.feat.cssPrefix+"Transform";
-                    if (options["opacity"]!==undefined) {
+                    var trans = "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ")";
+                    if (!$.os.opera)
+                        trans += " rotateY(" + options.rotateY + ")";
+                    trans += " skew(" + options.skewX + "," + options.skewY + ")";
+                    this.el.style[$.feat.cssPrefix + "Transform"] = trans;
+                    this.el.style[$.feat.cssPrefix + "BackfaceVisibility"] = "hidden";
+                    var properties = $.feat.cssPrefix + "Transform";
+                    if (options["opacity"] !== undefined) {
                         this.el.style.opacity = options["opacity"];
-                        properties+=", opacity";
+                        properties += ", opacity";
                     }
                     if (options["width"]) {
                         this.el.style.width = options["width"];
@@ -149,54 +148,55 @@
                         this.el.style.height = options["height"];
                         properties = "all";
                     }
-                    this.el.style[$.feat.cssPrefix+"TransitionProperty"] = "all";
+                    this.el.style[$.feat.cssPrefix + "TransitionProperty"] = "all";
 
-                    if((""+options["time"]).indexOf("s")===-1) {
+                    if (("" + options["time"]).indexOf("s") === -1) {
                         scale = 'ms';
-                        time = options["time"]+scale;
-                    } else if(options["time"].indexOf("ms")!==-1){
+                        time = options["time"] + scale;
+                    } else if (options["time"].indexOf("ms") !== -1) {
                         scale = 'ms';
                         time = options["time"];
                     } else {
                         scale = 's';
-                        time = options["time"]+scale;
+                        time = options["time"] + scale;
                     }
-                    if(options.delay){
-                        this.el.style[$.feat.cssPrefix+"TransitionDelay"] = options.delay;
+                    if (options.delay) {
+                        this.el.style[$.feat.cssPrefix + "TransitionDelay"] = options.delay;
                     }
 
-                    this.el.style[$.feat.cssPrefix+"TransitionDuration"] = time;
-                    this.el.style[$.feat.cssPrefix+"TransitionTimingFunction"] = options["timingFunction"];
-                    this.el.style[$.feat.cssPrefix+"TransformOrigin"] = options.origin;
+                    this.el.style[$.feat.cssPrefix + "TransitionDuration"] = time;
+                    this.el.style[$.feat.cssPrefix + "TransitionTimingFunction"] = options["timingFunction"];
+                    this.el.style[$.feat.cssPrefix + "TransformOrigin"] = options.origin;
 
                 }
 
                 //add callback to the stack
 
                 this.callbacksStack.push({
-                    complete : options["complete"],
-                    success : options["success"],
-                    failure : options["failure"]
+                    complete: options["complete"],
+                    success: options["success"],
+                    failure: options["failure"]
                 });
                 this.countStack++;
 
-                var that = this,duration;
+                var that = this,
+                    duration;
                 var style = window.getComputedStyle(this.el);
-                if(classMode){
+                if (classMode) {
                     //get the duration
-                    duration = style[$.feat.cssPrefix+"TransitionDuration"];
+                    duration = style[$.feat.cssPrefix + "TransitionDuration"];
                     timeNum = numOnly(duration);
-                    options["time"]=timeNum;
-                    if(duration.indexOf("ms")!==-1){
+                    options["time"] = timeNum;
+                    if (duration.indexOf("ms") !== -1) {
                         scale = 'ms';
                     } else {
                         scale = 's';
-                        options["time"]*=1000;
+                        options["time"] *= 1000;
                     }
                 }
 
                 //finish asap
-                if(timeNum===0 || (scale=='ms' && timeNum<5) || style.display=='none'){
+                if (timeNum === 0 || (scale == 'ms' && timeNum < 5) || style.display == 'none') {
                     //the duration is nearly 0 or the element is not displayed, finish immediatly
                     $.asap($.proxy(this.finishAnimation, this, [false]));
                     //this.finishAnimation();
@@ -204,35 +204,35 @@
                 } else {
                     //setup the event normally
 
-                    this.activeEvent = function(event){
+                    this.activeEvent = function(event) {
                         clearTimeout(that.timeout);
                         that.finishAnimation(event);
                         that.el.removeEventListener(transitionEnd, that.activeEvent, false);
                     };
-                    that.timeout=setTimeout(this.activeEvent, numOnly(options["time"]) + 50);
+                    that.timeout = setTimeout(this.activeEvent, numOnly(options["time"]) + 50);
                     this.el.addEventListener(transitionEnd, this.activeEvent, false);
 
                 }
 
             },
-            addCallbackHook:function(callback){
-                if(callback) this.callbacksStack.push(callback);
+            addCallbackHook: function(callback) {
+                if (callback) this.callbacksStack.push(callback);
                 this.countStack++;
                 return this.linkFinishedProxy_;
             },
-            linkFinished:function(canceled){
-                if(canceled) this.cancel();
+            linkFinished: function(canceled) {
+                if (canceled) this.cancel();
                 else this.finishAnimation();
             },
-            finishAnimation: function (event) {
-                if(event&&event.preventDefault) event.preventDefault();
-                if(!this.isActive) return;
+            finishAnimation: function(event) {
+                if (event && event.preventDefault) event.preventDefault();
+                if (!this.isActive) return;
 
                 this.countStack--;
 
-                if(this.countStack===0) this.fireCallbacks(false);
+                if (this.countStack === 0) this.fireCallbacks(false);
             },
-            fireCallbacks:function(canceled){
+            fireCallbacks: function(canceled) {
                 this.clearEvents();
 
                 //keep callbacks after cleanup
@@ -243,34 +243,38 @@
                 this.cleanup();
 
                 //fire all callbacks
-                for(var i=0; i<callbacks.length; i++) {
+                for (var i = 0; i < callbacks.length; i++) {
                     var complete = callbacks[i]['complete'];
                     var success = callbacks[i]['success'];
                     var failure = callbacks[i]['failure'];
                     //fire callbacks
-                    if(complete && typeof (complete) == "function") complete(canceled);
+                    if (complete && typeof(complete) == "function") complete(canceled);
                     //success/failure
-                    if(canceled && failure && typeof (failure) == "function") failure();
-                    else if(success && typeof (success) == "function") success();
+                    if (canceled && failure && typeof(failure) == "function") failure();
+                    else if (success && typeof(success) == "function") success();
                 }
             },
-            cancel:function(){
-                if(!this.isActive) return;
+            cancel: function() {
+                if (!this.isActive) return;
                 this.fireCallbacks(true); //fire failure callbacks
             },
-            cleanup:function(){
-                this.callbacksStack=[];
+            cleanup: function() {
+                this.callbacksStack = [];
                 this.isActive = false;
                 this.countStack = 0;
             },
-            clearEvents:function(){
-                if(this.activeEvent) {
+            clearEvents: function() {
+                if (this.activeEvent) {
                     this.el.removeEventListener(transitionEnd, this.activeEvent, false);
                 }
                 this.activeEvent = null;
             },
-            link: function (elID, opts) {
-                var callbacks = {complete:opts.complete,success:opts.success,failure:opts.failure};
+            link: function(elID, opts) {
+                var callbacks = {
+                    complete: opts.complete,
+                    success: opts.success,
+                    failure: opts.failure
+                };
                 opts.complete = this.addCallbackHook(callbacks);
                 opts.success = null;
                 opts.failure = null;
@@ -287,36 +291,35 @@
         return css3Animate;
     })();
 
-    css3Animate.queue = function () {
+    css3Animate.queue = function() {
         return {
             elements: [],
-            push: function (el) {
+            push: function(el) {
                 this.elements.push(el);
             },
-            pop: function () {
+            pop: function() {
                 return this.elements.pop();
             },
-            run: function () {
+            run: function() {
                 var that = this;
                 if (this.elements.length === 0) return;
-                if (typeof (this.elements[0]) == "function") {
+                if (typeof(this.elements[0]) == "function") {
                     var func = this.shift();
                     func();
                 }
                 if (this.elements.length === 0) return;
                 var params = this.shift();
-                if (this.elements.length > 0) params.complete = function (canceled) {
-                    if(!canceled) that.run();
+                if (this.elements.length > 0) params.complete = function(canceled) {
+                        if (!canceled) that.run();
                 };
                 css3Animate(document.getElementById(params.id), params);
             },
-            shift: function () {
+            shift: function() {
                 return this.elements.shift();
             }
         };
     };
 })(af);
-
 /**
  * af.scroller 
  * created by appMobi with modifications by Carlos Ouro @ Badoo and Intel
@@ -3275,6 +3278,7 @@
         trimBackButtonText: true,
         useOSThemes: true,
         lockPageBounce: false,
+        animateHeaders: true,
         autoBoot: function() {
             this.hasLaunched = true;
             if (this.autoLaunch) {
@@ -3784,7 +3788,10 @@
                 var width = parseFloat(100 / tmpAnchors.length);
                 tmpAnchors.css("width", width + "%");
             }
-            var nodes = $.query("#navbar footer").get(0).childNodes;
+            var nodes = $.query("#navbar footer");
+            if (nodes.length === 0) return;
+            nodes = nodes.get(0).childNodes;
+
             for (var i = 0; i < nodes.length; i++) {
                 if (nodes[i].nodeType === 3) {
                     nodes[i].parentNode.removeChild(nodes[i]);
@@ -3807,20 +3814,28 @@
          */
         updateHeaderElements: function(elems, goBack) {
             var that = this;
+            if (!$.is$(elems)) //inline footer
+            {
+                elems = $.query("#" + elems);
+            }
+            if (elems == this.prevHeader) return;
             if (this.prevHeader) {
                 //Let's slide them out
-                if (!$.is$(elems)) //inline footer
-                {
-                    elems = $.query("#" + elems);
+                $.query("#header").append(elems);
+                //Do not animate - sometimes they act funky
+                if (!$.ui.animateHeaders) {
+                    if (that.prevHeader.data("parent")) that.prevHeader.appendTo("#" + that.prevHeader.data("parent"));
+                    else that.prevHeader.appendTo("#afui");
+                    that.prevHeader = elems;
+                    return;
                 }
 
-                $.query("#header").append(elems);
                 var from = goBack ? "100px" : "-100px";
                 var to = goBack ? "-100px" : "100px";
                 that.css3animate(elems, {
                     x: to,
                     opacity: 0.3,
-                    time: "0"
+                    time: "1ms"
                 });
                 that.css3animate(that.prevHeader, {
                     x: from,
@@ -3833,7 +3848,8 @@
                         else that.prevHeader.appendTo("#afui");
                         that.css3animate(that.prevHeader, {
                             x: to,
-                            opacity: 1
+                            opacity: 1,
+                            time: "1ms"
                         });
                         that.prevHeader = elems;
                     }
@@ -3846,10 +3862,6 @@
 
 
             } else {
-                if (!$.is$(elems)) //inline footer
-                {
-                    elems = $.query("#" + elems);
-                }
                 $.query("#header").append(elems);
                 this.prevHeader = elems;
             }
