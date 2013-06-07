@@ -185,8 +185,6 @@ input.toggle+label {
     border: 1px solid #ccc;
     left: 33%;
     float: none;
-    transition: background 110ms linear;
-    -webkit-transition: background 110ms linear;
 }
 input.toggle:checked+label { background: #1eb0e9;line-height:-1em; }
 input.toggle+label > span {

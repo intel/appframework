@@ -797,8 +797,6 @@ input.toggle+label {
     border: 1px solid #ccc;
     left: 33%;
     float: none;
-    transition: background 110ms linear;
-    -webkit-transition: background 110ms linear;
 }
 input.toggle:checked+label { background: #1eb0e9;line-height:-1em; }
 input.toggle+label > span {
@@ -1444,6 +1442,11 @@ color:inherit;
 	color:inherit;
 	text-shadow:none;
 	box-shadow: inset 0 1px 0 rgba(255,255,255,.4);
+}
+
+#afui.android.light .button {
+  background:#D1D1D1;
+  border-color:#D1D1D1;
 }
 
 #afui.android .button.pressed {

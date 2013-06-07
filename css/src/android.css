@@ -150,6 +150,11 @@
 	box-shadow: inset 0 1px 0 rgba(255,255,255,.4);
 }
 
+#afui.android.light .button {
+  background:#D1D1D1;
+  border-color:#D1D1D1;
+}
+
 #afui.android .button.pressed {
 	background:#33B5E5;
 	border-color:#33B5E5;
