@@ -209,6 +209,6 @@ input.toggle:checked+label > span {
 
 .formGroupHead {
     font:bold 18px 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color:#000;
+    color:inherit;
     margin:16px 0 8px;
 }
