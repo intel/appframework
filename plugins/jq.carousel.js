@@ -322,7 +322,7 @@
                     }
 
                 if (runFinal && this.pagingFunction && typeof this.pagingFunction == "function")
-                    this.pagingFunction(currInd);
+                    this.pagingFunction(ind);
             },
 
             moveCSS3: function(el, distanceToMove, time, timingFunction) {
