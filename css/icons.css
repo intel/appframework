@@ -16,7 +16,7 @@
 	color:inherit;
 	position:relative;
 	font-size:1em;
-	left:-3px; top:2px;
+	left:0px; top:2px;
 }
 li .icon:before {
 	position:relative;

@@ -208,7 +208,8 @@ input.toggle:checked+label > span {
 }
 
 .formGroupHead {
-    font:bold 18px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size:18px;
+    font-weight:bold;
     color:inherit;
     margin:16px 0 8px;
 }
