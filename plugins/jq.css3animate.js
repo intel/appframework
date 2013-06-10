@@ -3,16 +3,18 @@
     var objId=function(obj){
         if(!obj.jqmCSS3AnimateId) obj.jqmCSS3AnimateId=$.uuid();
         return obj.jqmCSS3AnimateId;
-    }
+    };
+	
     var getEl=function(elID){
-        if (typeof elID == "string" || elID instanceof String) {
+        if (typeof elID === "string" || elID instanceof String) {
             return document.getElementById(elID);
         } else if($.is$(elID)){
             return elID[0];
         } else {
             return elID;
         }
-    }
+    };
+	
     var getCSS3Animate=function(obj, options){
         var tmp, id, el = getEl(obj);
         //first one
@@ -25,7 +27,8 @@
             cache[id] = tmp;
         }
         return tmp;
-    }
+    };
+	
     $.fn["css3Animate"] = function (opts) {
         //keep old callback system - backwards compatibility - should be deprecated in future versions
         if(!opts.complete && opts.callback) opts.complete = opts.callback;
@@ -43,15 +46,14 @@
 
     $["css3AnimateQueue"] = function () {
         return new css3Animate.queue();
-    }
+    };
 
     //if (!window.WebKitCSSMatrix) return;
-    var translateOpen =$.feat.cssTransformStart;
+    var translateOpen = $.feat.cssTransformStart;
     var translateClose = $.feat.cssTransformEnd;
-    var transitionEnd=$.feat.cssPrefix.replace(/-/g,"")+"TransitionEnd";
-    transitionEnd=($.os.fennec||$.feat.cssPrefix==""||$.os.ie)?"transitionend":transitionEnd;
-
-    transitionEnd=transitionEnd.replace(transitionEnd.charAt(0),transitionEnd.charAt(0).toLowerCase());
+    var transitionEnd = $.feat.cssPrefix.replace(/-/g,"")+"TransitionEnd";
+    transitionEnd = ($.os.fennec || $.feat.cssPrefix == "" || $.os.ie) ? "transitionend" : transitionEnd;
+    transitionEnd = transitionEnd.replace(transitionEnd.charAt(0),transitionEnd.charAt(0).toLowerCase());
     
     var css3Animate = (function () {
         
@@ -77,6 +79,7 @@
                 if(cache[id]) delete cache[id];
             });
         };
+		
         css3Animate.prototype = {
             animate:function(options){
                 
@@ -102,7 +105,7 @@
                 } else {
                     //property by property
                     var timeNum = numOnly(options["time"]);
-                    if(timeNum==0) options["time"]=0;
+                    if (timeNum == 0) options["time"]=0;
                 
                     if (!options["y"]) options["y"] = 0;
                     if (!options["x"]) options["x"] = 0;
@@ -124,8 +127,8 @@
                     if (!options["timingFunction"]) options["timingFunction"] = "linear";
 
                     //check for percent or numbers
-                    if (typeof (options.x) == "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x) + "px";
-                    if (typeof (options.y) == "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y) + "px";
+                    if (typeof (options.x) === "number" || (options.x.indexOf("%") === -1 && options.x.toLowerCase().indexOf("px") === -1 && options.x.toLowerCase().indexOf("deg") === -1)) options.x = parseInt(options.x) + "px";
+                    if (typeof (options.y) === "number" || (options.y.indexOf("%") === -1 && options.y.toLowerCase().indexOf("px") === -1 && options.y.toLowerCase().indexOf("deg") === -1)) options.y = parseInt(options.y) + "px";
                     
                     var trans= "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ")";
                     if(!$.os.opera)
@@ -148,10 +151,10 @@
                     }
                     this.el.style[$.feat.cssPrefix+"TransitionProperty"] = "all";
                 
-                    if((""+options["time"]).indexOf("s")===-1) {
+                    if((""+options["time"]).indexOf("s") === -1) {
                         var scale = 'ms';
                         var time = options["time"]+scale;
-                    } else if(options["time"].indexOf("ms")!==-1){
+                    } else if(options["time"].indexOf("ms") !== -1){
                         var scale = 'ms';
                         var time = options["time"];
                     } else {
@@ -181,7 +184,7 @@
                     var duration = style[$.feat.cssPrefix+"TransitionDuration"];
                     var timeNum = numOnly(duration);
                     options["time"]=timeNum;
-                    if(duration.indexOf("ms")!==-1){
+                    if(duration.indexOf("ms") !== -1){
                         scale = 'ms';
                     } else {
                         options["time"]*=1000;
@@ -190,7 +193,7 @@
                 }
                 
                 //finish asap
-                if(timeNum==0 || (scale=='ms' && timeNum<5) || style.display=='none'){
+                if(timeNum==0 || (scale=='ms' && timeNum<5) || style.display === 'none') {
                     //the duration is nearly 0 or the element is not displayed, finish immediatly
                     $.asap($.proxy(this.finishAnimation, this, [false]));
                     //this.finishAnimation();
@@ -206,9 +209,7 @@
                     };         
                     that.timeout=setTimeout(this.activeEvent, numOnly(options["time"]) + 50);         
                     this.el.addEventListener(transitionEnd, this.activeEvent, false);
-
                 }
-                
             },
             addCallbackHook:function(callback){
                 if(callback) this.callbacksStack.push(callback);
@@ -243,10 +244,10 @@
                     var success = callbacks[i]['success'];
                     var failure = callbacks[i]['failure'];
                     //fire callbacks
-                    if(complete && typeof (complete) == "function") complete(canceled);
+                    if(complete && typeof (complete) === "function") complete(canceled);
                     //success/failure
-                    if(canceled && failure && typeof (failure) == "function") failure();
-                    else if(success && typeof (success) == "function") success();
+                    if(canceled && failure && typeof (failure) === "function") failure();
+                    else if(success && typeof (success) === "function") success();
                 }
             },
             cancel:function(){
@@ -277,7 +278,7 @@
                 opts.failure = callbacks.failure;
                 return this;
             }
-        }
+        };
         
         return css3Animate;
     })();
@@ -294,7 +295,7 @@
             run: function () {
                 var that = this;
                 if (this.elements.length == 0) return;
-                if (typeof (this.elements[0]) == "function") {
+                if (typeof (this.elements[0]) === "function") {
                     var func = this.shift();
                     func();
                 }
@@ -308,6 +309,6 @@
             shift: function () {
                 return this.elements.shift();
             }
-        }
+        };
     };
 })(jq);
