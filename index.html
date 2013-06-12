@@ -8,25 +8,28 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+            
 
         <link rel="stylesheet" type="text/css" href="css/icons.css" />
-       <!-- <link rel="stylesheet" type="text/css" href="css/af.ui.css" title="default" />
-      <!--  <link rel="stylesheet" type="text/css" href="kitchensink/af.ui.css" title="default" />-->
+     <link rel="stylesheet" type="text/css" href="css/af.ui.css" title="default" />
+       <!-- 
+
    <link rel="stylesheet" type="text/css" href="css/src/main.css"  />
       <link rel="stylesheet" type="text/css" href="css/src/android.css"  />
       <link rel="stylesheet" type="text/css" href="css/src/win8.css"  />
       <link rel="stylesheet" type="text/css" href="css/src/bb.css"  />
+      <link rel="stylesheet" type="text/css" href="css/src/ios7.css"  />
       <link rel="stylesheet" type="text/css" href="css/src/badges.css"  />
       <link rel="stylesheet" type="text/css" href="css/src/buttons.css"  />
       <link rel="stylesheet" type="text/css" href="css/src/lists.css"  />
       <link rel="stylesheet" type="text/css" href="css/src/forms.css"  />
       <link rel="stylesheet" type="text/css" href="css/src/grid.css"  />
 
-
       <link rel="stylesheet" type="text/css" href="plugins/css/af.actionsheet.css"  />
       <link rel="stylesheet" type="text/css" href="plugins/css/af.popup.css"  />
-      <link rel="stylesheet" type="text/css" href="plugins/css/af.selectBox.css"  />
+      link rel="stylesheet" type="text/css" href="plugins/css/af.selectBox.css"  />
 
+-->
         <!-- uncomment for AppMobi apps <script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/appmobi.js"></script>
 <script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/xhr.js"></script>
 -->
@@ -39,6 +42,7 @@
                 $.ui.updateBadge("#aflink", $("#af").find("li").length);
             }
 
+
             function unloadedPanel(what) {
                 console.log("unloaded " + what.id);
             }
@@ -47,10 +51,6 @@
                 var script = document.createElement("script");
                 script.src = "plugins/af.desktopBrowsers.js";
                 var tag = $("head").append(script);
-                if (!$.os.ie) {
-                    //	$.os.desktop=true;
-                    //	$.feat.nativeTouchScroll=true;
-                }
             }
             var search=document.location.search.toLowerCase().replace("?","");
             if(search=="android") //Android fix has too many buggy issues on iOS - can't preview with $.os.android
@@ -63,6 +63,9 @@
                 $.os.ie=true;
             else if(search=="bb")
                 $.os.blackberry=true;
+            else if(search=="ios7")
+                $.os.ios7=true;
+            
         </script>
         <script type="text/javascript" charset="utf-8" src="./plugins/af.actionsheet.js"></script>
          <script type="text/javascript" charset="utf-8" src="./plugins/af.css3animate.js"></script>
@@ -79,6 +82,7 @@
 
         <script type="text/javascript">
             /* This function runs once the page is loaded, but appMobi is not yet active */
+            //$.ui.animateHeaders=false;
             var webRoot = "./";
             // $.os.android=true;
             $.ui.autoLaunch = false;
@@ -167,7 +171,7 @@
 </head>
 
     <body>
-        <div id="afui">
+        <div id="afui" class="">
             <!-- this is the splashscreen you see. -->
             <div id="splashscreen" class='ui-loader heavy'>
                 App Framework
@@ -203,8 +207,8 @@
                         <li>
                             <a href="index.html?bb" data-ignore="true">BB10 theme</a>
                         </li>
-                        <li>
-                            <a href="#foobar" data-ignore="true">Test hash</a>
+                       <li>
+                            <a href="index.html?ios7" data-ignore="true">ios7</a>
                         </li>
 
                     </ul>
@@ -331,8 +335,6 @@
                             <a  onClick="$.ui.scrollToTop('af')">Go To Top</a>
                         </li>
                     </ul>
-                    <br/>
-                    <br/>
                     <footer>
                         <a href="#main" id='navbar_home' class='icon home'>Home <span class='af-badge lr'>12</span>
                         </a>
@@ -2004,7 +2006,7 @@ The parent id for this div is "content". Let's verify it.
                                 text: 'back',
                                 cssClasses: 'red',
                                 handler: function () {
-                                    $.ui.goBack();;
+                                    $.ui.goBack();
                                 }
                             }, {
                                 text: 'show alert 5',
@@ -2104,10 +2106,11 @@ The parent id for this div is "content". Let's verify it.
             </div>
             <!-- ------------------------------------------ -->
             <!-- navbar -->
-            <!-- navbar -->
+            
             <div id="navbar" style='margin: 0;float:left;'>
                 <a href="#main" id='navbar_home' class='icon home'>home <span class='af-badge lr'>3</span></a><a href="#af" id='navbar_js' class="icon target">selectors</a><a href="#afuidemo" id='navbar_ui' class="icon picture">ui</a><a href="#afweb" id='navbar_plugins' class="icon key">plugins</a>
             </div>
+        
             <footer id='footerui'>
                 <a href="#main" id='navbar_home' class='icon home'>Home <span class='af-badge lr'>6</span></a>
                 <a href="#aftransitions" id='navbar_js' class="icon stack">Trans</a>
@@ -2279,5 +2282,4 @@ The parent id for this div is "content". Let's verify it.
         </div>
 
     </body>
-
 </html>
