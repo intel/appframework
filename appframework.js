@@ -1829,6 +1829,9 @@ if (!window.af || typeof(af) !== "function") {
                 });
             } else {
                 for (var p in obj) {
+
+                    if ($.isFunction(obj[p]))
+                        continue;
                     var k = prefix ? prefix + "[" + p + "]" : p,
                         v = obj[p];
                     str.push($.isObject(v) ? $.param(v, k) : (k) + "=" + encodeURIComponent(v));
@@ -1893,6 +1896,7 @@ if (!window.af || typeof(af) !== "function") {
             $.os.androidICS = $.os.android && userAgent.match(/(Android)\s4/) ? true : false;
             $.os.ipad = userAgent.match(/(iPad).*OS\s([\d_]+)/) ? true : false;
             $.os.iphone = !$.os.ipad && userAgent.match(/(iPhone\sOS)\s([\d_]+)/) ? true : false;
+            $.os.ios7 = userAgent.match(/(iPhone\sOS)\s([7_]+)/) ? true : false;
             $.os.webos = userAgent.match(/(webOS|hpwOS)[\s\/]([\d.]+)/) ? true : false;
             $.os.touchpad = $.os.webos && userAgent.match(/TouchPad/) ? true : false;
             $.os.ios = $.os.ipad || $.os.iphone;
@@ -1941,7 +1945,7 @@ if (!window.af || typeof(af) !== "function") {
            @returns matrix with postion
            */
         $.getCssMatrix = function(ele) {
-            if (typeof(ele) === $afm) ele = ele.get(0);
+            if ($.is$(ele)) ele = ele.get(0);
             if (ele == nundefined) return window.WebKitCSSMatrix || window.MSCSSMatrix || {
                     a: 0,
                     b: 0,
