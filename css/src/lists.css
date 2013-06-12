@@ -39,13 +39,22 @@
 	right:30px;	top:48%;
 	margin-top:-10px;
 }
-.list > li > a:after {
-	content:">";
+
+
+.list > li > a:after{
 	position:absolute;
-	top:50%; right:8px;
-	margin-top:-10px;
-	font-weight:bold !important;
-	text-shadow:0 1px black;
+	right:8px;
+	font-family: 'chevron';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	content: "\f054";
+	top:50%;
+	margin-top:-0.5em;
 }
 
 .list .divider {

@@ -45,8 +45,10 @@
         });
 
         function checkNodeInserted(i) {
-            if (i.target.id === "afui")
+            if (i.target.id === "afui") {
+                setupCustomTheme();
                 document.removeEventListener("DOMNodeInserted", arguments.callee);
+            }
         }
 
         if ($("#afui").length === 1) {
@@ -95,7 +97,8 @@
                 } else if ($.os.blackberry) {
                     $("#afui").addClass("bb");
                     that.backButtonText = "Back";
-                }
+                } else if ($.os.ios7)
+                    $("#afui").addClass("ios7");
             }
 
         }
@@ -544,8 +547,8 @@
             var menu = $.query("#menu");
             var els = $.query("#content,  #header, #navbar");
             time = time || this.transitionTime;
-
-            if (force === 2 || (menu.css("display") !== "block" && ((force !== undefined && force !== false) || force === undefined))) {
+            var open = parseInt($.getCssMatrix($("#content")).e) > 1 ? true : false;
+            if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
                 this.togglingSideMenu = true;
                 menu.show();
                 that.css3animate(els, {
@@ -616,7 +619,8 @@
          * @api private
          */
         isSideMenuOn: function() {
-            var menu = $.query('#menu').computedStyle('display') == "block";
+
+            var menu = parseInt($.getCssMatrix($("#content")).e) > 1 ? true : false;
             return this.isSideMenuEnabled() && menu;
         },
 

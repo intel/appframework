@@ -112,53 +112,53 @@
 
 
 .button.gray {
-	background:#999 !important;
+	background:#999;
 	border-color:#666;
 }
 
 .button.yellow {
-	background-color:#F1C222 !important;
+	background-color:#F1C222;
 	border-color:#999;
 }
 
 .button.red {
-	color:#fff !important;
+	color:#fff;
 	text-shadow:0 -1px 0 #666;
-	background:#B20000 !important;
+	background:#B20000;
 	border-color:#666;
 }
 
 .button.green {
 	color:#fff;
 	text-shadow:0 -1px 0 #666;
-	background:#009C0C !important;
+	background:#009C0C;
 	border-color:#666;
 }
 
 .button.orange {
 	color:#fff !important;
 	text-shadow:0 -1px 0 #666;
-	background-color:#FF8000 !important;
+	background-color:#FF8000;
 	border-color:#666;
 }
 
 .button.black {
-	color:#fff !important;
+	color:#fff;
 	text-shadow:none;
-	background:#000 !important;
+	background:#000;
 	border-color:#666;
 }
 
 .button.slate {
-	color:#fff !important;
+	color:#fff;
 	text-shadow:0 -1px 0 #000;
-	background:#171F28 !important;
+	background:#171F28;
 	border-color:#666;
 }
 
 #header .button {
 	font-size:12px;
-	padding:7px !important;
+	padding:7px ;
 	height:32px;
 	margin-top:5px;
 }

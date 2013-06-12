@@ -244,7 +244,7 @@ p {
 	width:200px;
 	bottom:0;
 	height:100%;
-	display:none;
+	display:block !important;
 	position:absolute; top:0; left:0;
 	background:#000;
 	color:#fff;
@@ -535,6 +535,35 @@ width: 15px;
 	margin:0px;
 }
 
+/* Chevrons */
+@font-face {
+	font-family: 'chevron';
+	src: url(data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAAQAAA0AAAAABZgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABGRlRNAAABMAAAABoAAAAcZ/T02kdERUYAAAFMAAAAHwAAACAAMgAGT1MvMgAAAWwAAABHAAAAVj7i2r5jbWFwAAABtAAAAEMAAAFS8BX0J2dhc3AAAAH4AAAACAAAAAj//wADZ2x5ZgAAAgAAAABsAAAAbMHrMoZoZWFkAAACbAAAADAAAAA2/JaSB2hoZWEAAAKcAAAAHgAAACQDav/GaG10eAAAArwAAAATAAAAFAN1AB1sb2NhAAAC0AAAAAwAAAAMAA4ANm1heHAAAALcAAAAHQAAACAASAAbbmFtZQAAAvwAAADdAAABhigr581wb3N0AAAD3AAAACIAAAA8nFVDO3icY2BgYGQAgjO2i86D6LO3V7LCaABOtwcoAAB4nGNgZGBg4ANiCQYQYGJgZGBmYAGSLGAeAwAEkAA5AHicY2BkVGCcwMDKwMGozGjJwMBgB6WvM4gxFDMwMDGwMjPAgQCCyRCQ5prC4PCB4UMIY8P/AwwajA0MDg0MDIwgOQBg6QqyAHicY2BgYGaAYBkGRgYQ8AHyGMF8FgYDIM0BhEwgiQ8MH0L+/0dmCTDzb4DqAgNGNgY4lxGkh4kBFTAyDHsAAFhbChsAAAAAAf//AAIAAQAA/8ABwAGAAAIAABEBIQHA/kABgP5AAAAAAAEAHf/tARMBcwAXAAAlFA8BBiIvASY1ND8BJyY1ND8BNjIfARYBEwmkCRoJFAkJenoJCRQIHAikCbANCqMJCRMKDQ0JenkKDQ0JEwoKowl4nGNgZGBgAOLcX7xy8fw2Xxm4GQ8ARRjO3l7JiqD/H2A8wNgA5HIwMIFEAUPwC7d4nGNgZGBgbPh/gEGD8QADwz8HIAkUQQGsAIQZBTAAAHicYzzAAAFTIRSjAoMsABVQAZUAAAAAAAAAAAAADgA2eJxjYGRgYGBlkGAA0QwMTEDMCGY7gPkMAAUvAGQAAAB4nHWOTWoCQRBG3+hoCIbgKmTZkE02M3RPwIUHmAO4cC/SjII40P7gSbLKEbL0GB4gR8gx/JzUJgsbin68rqqvgSc+ybidjAfGxj3xu3GfN07Gufy38YARF+Oh/K86s/xR5rmbunFP/Grcp8Yb5/JfxgNeOBsP5X9YsiJyJNGyheUqHlMrmMk2HNiw0Buz2Bw2C0Hd9e27O6kj4qgoleaYqv7v+3NBrwUTVSUKfGhNu93XbWqiq0rvps5yRcEXk6LyQU33/jaXTexYW0bo8pnHtFtrRyj93dkrAWI51wAAAHicY2BiwA9YgZiRgYmRiZGZvTQv083AwABCm5oAACfXBG0AAA==) format('woff'),
+		 url(data:application/x-font-ttf;charset=utf-8;base64,AAEAAAANAIAAAwBQRkZUTWf09NoAAAV8AAAAHEdERUYAMgAGAAAFXAAAACBPUy8yPuLavgAAAVgAAABWY21hcPAV9CcAAAHEAAABUmdhc3D//wADAAAFVAAAAAhnbHlmwesyhgAAAyQAAABsaGVhZPyWkgcAAADcAAAANmhoZWEDav/GAAABFAAAACRobXR4A3UAHQAAAbAAAAAUbG9jYQAOADYAAAMYAAAADG1heHAASAAbAAABOAAAACBuYW1lKCvnzQAAA5AAAAGGcG9zdJxVQzsAAAUYAAAAPAABAAAAAQAAbfoNHl8PPPUACwHAAAAAAM3bqQUAAAAAzdupBQAA/8ABwAGAAAAACAACAAAAAAAAAAEAAAGA/8AAKAHAAAD+QAHAAAEAAAAAAAAAAAAAAAAAAAAFAAEAAAAFABgAAQAAAAAAAgAAAAEAAQAAAEAAAAAAAAAAAQEgAZAABQAIASMBOQAAAD4BIwE5AAAA1wAWAHMAAAIABQMAAAAAAAAAAAAAEAAAAAAAAAAAAAAAUGZFZABA8ADwVAGA/8AAKAGAAECAAAABAAAAAAAAAcAAAAAAAAAAlQAAAAAAAAEgAB0AAAADAAAAAwAAABwAAQAAAAAATAADAAEAAAAcAAQAMAAAAAgACAACAAAAAPAA8FT//wAAAADwAPBU//8AABADD7AAAQAAAAAAAAAAAAABBgAAAQAAAAAAAAABAgAAAAIAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgA2AAEAAP/AAcABgAACAAARASEBwP5AAYD+QAAAAAABAB3/7QETAXMAFwAAJRQPAQYiLwEmNTQ/AScmNTQ/ATYyHwEWARMJpAkaCRQJCXp6CQkUCBwIpAmwDQqjCQkTCg0NCXp5Cg0NCRMKCqMJAAAADACWAAEAAAAAAAEABwAQAAEAAAAAAAIABwAoAAEAAAAAAAMAIwB4AAEAAAAAAAQABwCsAAEAAAAAAAUACwDMAAEAAAAAAAYABwDoAAMAAQQJAAEADgAAAAMAAQQJAAIADgAYAAMAAQQJAAMARgAwAAMAAQQJAAQADgCcAAMAAQQJAAUAFgC0AAMAAQQJAAYADgDYAGMAaABlAHYAcgBvAG4AAGNoZXZyb24AAFIAZQBnAHUAbABhAHIAAFJlZ3VsYXIAAEYAbwBuAHQARgBvAHIAZwBlACAAMgAuADAAIAA6ACAAYwBoAGUAdgByAG8AbgAgADoAIAAxADAALQA2AC0AMgAwADEAMwAARm9udEZvcmdlIDIuMCA6IGNoZXZyb24gOiAxMC02LTIwMTMAAGMAaABlAHYAcgBvAG4AAGNoZXZyb24AAFYAZQByAHMAaQBvAG4AIAAxAC4AMAAAVmVyc2lvbiAxLjAAAGMAaABlAHYAcgBvAG4AAGNoZXZyb24AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAAAQACAQIBAwd1bmlGMDAwB3VuaUYwNTQAAAAB//8AAgABAAAADgAAABgAAAAAAAIAAQADAAQAAQAEAAAAAgAAAAAAAQAAAADMPaLPAAAAAM3bqQUAAAAAzdupBQ==) format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+*/
+.chevron {
+	font-family: 'chevron';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+}
+.chevron:before {
+	content: "\f054";
+}
+
+.chevron.left {
+	-webkit-transform:rotate(180deg);
+	transform:rotate(180deg);
+}
+
 /*src/lists.css*/
 
 /**********************************************************
@@ -577,13 +606,22 @@ width: 15px;
 	right:30px;	top:48%;
 	margin-top:-10px;
 }
-.list > li > a:after {
-	content:">";
+
+
+.list > li > a:after{
 	position:absolute;
-	top:50%; right:8px;
-	margin-top:-10px;
-	font-weight:bold !important;
-	text-shadow:0 1px black;
+	right:8px;
+	font-family: 'chevron';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	content: "\f054";
+	top:50%;
+	margin-top:-0.5em;
 }
 
 .list .divider {
@@ -942,53 +980,53 @@ input.toggle:checked+label > span {
 
 
 .button.gray {
-	background:#999 !important;
+	background:#999;
 	border-color:#666;
 }
 
 .button.yellow {
-	background-color:#F1C222 !important;
+	background-color:#F1C222;
 	border-color:#999;
 }
 
 .button.red {
-	color:#fff !important;
+	color:#fff;
 	text-shadow:0 -1px 0 #666;
-	background:#B20000 !important;
+	background:#B20000;
 	border-color:#666;
 }
 
 .button.green {
 	color:#fff;
 	text-shadow:0 -1px 0 #666;
-	background:#009C0C !important;
+	background:#009C0C;
 	border-color:#666;
 }
 
 .button.orange {
 	color:#fff !important;
 	text-shadow:0 -1px 0 #666;
-	background-color:#FF8000 !important;
+	background-color:#FF8000;
 	border-color:#666;
 }
 
 .button.black {
-	color:#fff !important;
+	color:#fff;
 	text-shadow:none;
-	background:#000 !important;
+	background:#000;
 	border-color:#666;
 }
 
 .button.slate {
-	color:#fff !important;
+	color:#fff;
 	text-shadow:0 -1px 0 #000;
-	background:#171F28 !important;
+	background:#171F28;
 	border-color:#666;
 }
 
 #header .button {
 	font-size:12px;
-	padding:7px !important;
+	padding:7px ;
 	height:32px;
 	margin-top:5px;
 }
@@ -1007,7 +1045,10 @@ input.toggle:checked+label > span {
 	border-radius:20px;
 	border:2px solid #fff;
 	box-shadow:0 1px 2px #555;
-	font:bold 12px/18px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size:12px;
+	line-height:19px;
+	font-weight:bold;
+	
 	color:#fff;
 	text-overflow:ellipsis;
 	text-align:center;
@@ -1082,11 +1123,10 @@ width:100%;
     padding:0px .25em;
     border:1px solid rgba(0,0,0,.8);
     text-overflow:ellipsis; 
-    -webkit-border-radius:.75em; border-radius:.75em;
-    border-radius:.75em; border-radius:.75em;
+    border-radius:.75em;
     background-image:-webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,.4)), to(rgba(255,255,255,0)), color-stop(.5,rgba(255,255,255,.1)), color-stop(.5,rgba(255,255,255,0)));
     background-image:-webkit-linear-gradient(top, rgba(255,255,255,.5) 0%, rgba(255,255,255,.2) 50%, rgba(255,255,255,0) 50%);
-    -webkit-box-shadow:0px 1px 1px rgba(255,255,255,0.7); box-shadow:0px 1px 1px rgba(255,255,255,0.7);
+     box-shadow:0px 1px 1px rgba(255,255,255,0.7);
     display:block;
     color:white;
     text-align:center;
@@ -1920,18 +1960,15 @@ border-color:#009CE1 transparent #004E92 transparent;
     width:50px;
     padding:0 !important;
     margin:0 !important;
+
 }
 
 #afui.bb #backButton::before {
     z-index: -1;
-    font-size:24px;
-    content: '<';
+    font-size:22px;
     position: absolute;
-    font-weight:bold;
-    background-color: transparent;
     top: -15px;
     left: 15px;
-    margin:auto;
     text-align: center;
     border-radius: none;
     border: none;
@@ -1939,6 +1976,22 @@ border-color:#009CE1 transparent #004E92 transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
+
+    font-family: 'chevron';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content: "\f054";
+    top:1px;
+    -webkit-transform:rotate(180deg);
+    transform:rotate(180deg);
+    background-color: transparent;
+    
+
 }
 
 #afui.bb #backButton::after {
@@ -2028,6 +2081,380 @@ color: white;
 
 #afui.bb .panel {
     background:#fff;
+}
+
+/*src/ios7.css*/
+/** iOS 7 theme */
+
+/** Blue color color:rgba(82,155,234,255); */
+
+/* border rgba(158,158,158,255) */
+
+#afui.ios7 {
+     font-family:'HelveticaNeue', 'Helvetica Neue',Helvetica, Arial, sans-serif;
+}
+
+
+
+#afui.ios7 #header {
+    background:rgba(249,249,249,0.9);
+    color:inherit;
+    border:none;
+    border-bottom:1px solid rgba(158,158,158,255);
+}
+
+#afui.ios7 #header h1 {
+    color:inherit;
+    text-shadow:none;
+}
+
+#afui.ios7 #content {
+    top:0px !important;
+    bottom:0px !important;
+    padding-top:44px;
+    padding-bottom:49px;
+}
+#afui.ios7 .panel {
+    background:rgba(238,238,238,255);
+    padding-top:44px;
+    padding-bottom:49px;
+
+}
+
+#afui.ios7 #navbar {
+    background:rgba(249,249,249,0.95);
+    color:black;
+    border-top:1px solid rgba(158,158,158,255);
+    box-shadow:none;
+}
+
+#afui.ios7 #navbar a {
+    color:rgba(96,96,96,255);
+}
+
+#afui.ios7 #menubadge:after {
+    border-color:rgba(82,155,234,255);
+}
+
+#afui.ios7 .list {
+    font-weight:normal;
+}
+
+#afui.ios7 > #menu {
+    background:rgba(238,238,238,255);
+     color:black;
+}
+
+#afui.ios7 #menu .list li,#afui.ios7 #menu .list .divider,#afui.ios7 #menu .list li:first-child,#afui.ios7 #menu .list li:last-child {
+    border-color:rgb(215,215,215);
+    font-weight:normal;
+}
+
+#afui.ios7 #menu .list .divider {
+    background:rgba(238,238,238,255);
+    color:inherit;
+    font-size: 1em;
+border-bottom:1px solid rgb(215,215,215);
+color:black;
+
+}
+
+#afui.ios7 #menu .list a {
+    color:black;
+}
+
+
+#afui.ios7 #menu .list {
+    background:white;
+    font-weight: normal;
+    color:black;
+}
+
+#afui.ios7 .list > li > a:after{
+    color:rgba(217,217,217,255);
+}
+
+
+#afui.ios7 #backButton {
+    background:rgba(249,249,249,1);
+    color:rgba(82,155,234,255);
+    display: block;
+    position: absolute;
+    line-height:44px;
+
+    left: 25px;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    padding: none;
+    text-shadow: none;
+    background-color: transparent;
+    border:none;
+    border-color:none;
+    height: 44px;
+    top:0;
+    border-radius: none;
+    box-shadow:none;
+    margin: 0;
+    padding-left: 0;
+    text-align: center;
+    width:50px;
+    padding:0 !important;
+    margin:0 !important;
+
+}
+
+#afui.ios7 #backButton::before {
+    z-index: -1;
+    font-size:22px;
+    position: absolute;
+    top: 10px;
+    left: -20px;
+    text-align: center;
+    border-radius: none;
+    border: none;
+    border-color: none;
+    box-shadow: none;
+    -webkit-transform: none;
+    transform: none;
+
+    font-family: 'chevron';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content: "\f054";
+    -webkit-transform:rotate(180deg);
+    transform:rotate(180deg);
+    background-color: transparent;
+    
+
+}
+
+#afui.ios7 #backButton::after {
+    content: '';
+    width:0;
+    height:0;
+    border:none;
+}
+
+
+#afui.ios7 .button {
+    box-shadow:none;
+    border:none;
+    color:rgba(82,155,234,255);
+    text-shadow:none;
+}
+
+#afui.ios7 .button-grouped * {
+    border-right: 1px solid rgba(82,155,234,255);
+    border-bottom: 1px solid rgba(82,155,234,255);
+    border-top: 1px solid rgba(82,155,234,255);
+
+}
+#afui.ios7 .button-grouped >  .button:first-child {
+    border-left: 1px solid rgba(82,155,234,255);
+}
+#afui.ios7  .button-grouped >.button:last-child {
+    
+}
+
+#afui.ios7 .button-grouped.vertical * {
+    border-left: 1px solid rgba(82,155,234,255);
+    border-right: 1px solid rgba(82,155,234,255);
+    border-top: 1px solid rgba(82,155,234,255);
+}
+
+#afui.ios7  .button-grouped.vertical > .button:first-child {
+    border-left: 1px solid rgba(82,155,234,255);
+    
+}
+#afui.ios7 .button-grouped.vertical >  .button:last-child {
+
+    border-bottom:1px solid rgba(82,155,234,255);
+}
+
+#afui.ios7 .button-grouped .button.pressed {
+    color:white;
+    background:rgba(82,155,234,255);
+}
+
+#afui.ios7 .afPopup {
+    display: block;
+    border:1px solid rgba(158,158,158,255);
+    padding:0;
+    text-align: center;
+    
+    position: absolute;
+    z-index: 1000000;
+    top: 50%;
+    
+    color:inherit;
+    background:rgba(249,249,249,1);
+    align:center;
+}
+
+#afui.ios7 .afPopup .button {
+    border: none;
+    width: 50%;
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+    border-top:1px solid rgba(158,158,158,255);
+    color:rgba(82,155,234,255);
+    padding:12px 0;
+}
+
+#afui.ios7 .button.pressed {
+    font-weight:bold;
+}
+
+
+#afui.ios7 .afPopup a:not(:first-of-type) {
+
+    border-left:1px solid rgba(158,158,158,255);
+}
+
+#afui.ios7 #af_actionsheet {
+    background:white;
+    color:black;
+    padding-left:0;
+    padding-right:0;
+}
+
+#afui.ios7    #af_actionsheet a{
+    background-image:none;
+    
+    text-shadow:none;
+    box-shadow:none;
+    font-weight:normal;
+    border-radius:none;
+    border:none;
+    -webkit-box-shadow:none;
+    color:rgba(82,155,234,255);
+    background:white;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+#afui.ios7    #af_actionsheet a:not(:last-of-type){
+    border-bottom:1px solid rgba(82,155,234,255);
+}
+
+#afui.ios7 #navbar a.pressed,#navbar .icon.pressed:before  {
+    color:rgba(82,155,234,255);
+}
+
+
+#afui.ios7 .button.previous {
+
+    border:none;
+}
+#afui.ios7 .button.next {
+    border:none;   
+}
+
+
+#afui.ios7 .button.previous::after {
+    color:rgba(82,155,234,255);
+    z-index: -1;
+    font-size:22px;
+    position: absolute;
+    top: 2px;
+    left: -25px;
+    text-align: center;
+    border-radius: none;
+    border: none;
+    border-color: none;
+    box-shadow: none;
+    -webkit-transform: none;
+    transform: none;
+
+    font-family: 'chevron';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content: "\f054";
+    -webkit-transform:rotate(180deg);
+    transform:rotate(180deg);
+    background-color: transparent;
+}
+#afui.ios7 .button.next::after {
+   color:rgba(82,155,234,255);
+
+    z-index: -1;
+    font-size:22px;
+    position: absolute;
+    top: 6px;
+    right: -25px;
+    text-align: center;
+    border-radius: none;
+    border: none;
+    border-color: none;
+    box-shadow: none;
+    -webkit-transform: none;
+    transform: none;
+
+    font-family: 'chevron';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content: "\f054";
+    
+    background-color: transparent;
+}
+
+
+#afui.ios7 .button.gray {
+    color:#999;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.yellow {
+    color-color:#F1C222;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.red {
+    color:#b20000;
+    background-color:transparent;
+    
+}
+
+#afui.ios7 .button.green {
+    color:#009C0C;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.orange {
+    color:#FF8000;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.black {
+    color:black;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.slate {
+    color:#171F28;
+    background-color:transparent;    
+}
+
+#afui.ios7 .af-badge {
+    border:none;
+    box-shadow:none;
+    font-size:12px;
 }
 
 
