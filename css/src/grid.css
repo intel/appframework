@@ -1,34 +1,33 @@
-.grid {
-width:100%;
+
+#afui .grid {
+  width: 100%;
 }
-
-.col2,.col3,.col1-3,.col2-3 {
-    float:none;
-    width:100%;
+#afui .col2,
+#afui .col3,
+#afui .col1-3,
+#afui .col2-3 {
+  float: none;
+  width: 100%;
 }
-
-.grid:after {
-    content:'';
-    clear:both;
+#afui .grid:after {
+  content: '';
+  clear: both;
 }
-
-@media handheld, only screen and (min-width: 768px){
-    .col2 {
-        width:50%;
-        float:left;
-    }
-
-    .col3 {
-        width:33.3%;
-        float:left;
-    }
-
-    .col1-3 {
-        width:33.3%;
-        float:left;
-    }
-    .col2-3 {
-        width:66.6%;
-        float:left;
-    }
+@media handheld, only screen and (min-width: 768px) {
+  #afui .col2 {
+    width: 50%;
+    float: left;
+  }
+  #afui .col3 {
+    width: 33.3%;
+    float: left;
+  }
+  #afui .col1-3 {
+    width: 33.3%;
+    float: left;
+  }
+  #afui .col2-3 {
+    width: 66.6%;
+    float: left;
+  }
 }

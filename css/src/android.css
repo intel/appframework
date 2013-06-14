@@ -34,7 +34,7 @@
  	top:0px !important;
  	background:inherit;
  	border-bottom:2px solid #33B5E5;
-
+    border-top:none;
     padding:0;
  }
 
@@ -120,8 +120,14 @@
 }
 
 #afui.android > #menu {
+    border-right:none;
 	color:inherit;
 	background:inherit;
+}
+
+#afui.android #menu .list li {
+    box-shadow:none;
+    border-color:#ccc;
 }
 
 #afui.android #menu .list .divider {

@@ -56,7 +56,7 @@
   margin:0px;
   border:none;
   position:absolute;
-  left:-200px;
+  left:-185px;
   -webkit-font-smoothing: antialiased;
 }
 #afui.win8 #backButton:after {
@@ -76,8 +76,7 @@
 
 #afui.win8 > #header h1 {
 	text-align: left;
-	margin-left:45px;
-    color:inherit;
+  color:inherit;
 }
 
 #afui.win8 > #header{
@@ -92,6 +91,7 @@
  	text-align: center;
  	height:65px;
  	background:rgba(33,32,33,.9);
+  border-top:none;
  }
  #afui.win8.light > #navbar{
     background:#F2F2F2;
@@ -148,7 +148,7 @@
 
  }
 
- #afui.win8 .list .divider {
+ #afui.win8 .list .divider,  #afui.win8 #menu.tabletMenu .list .divider  {
  	background:#00ABA9;
  	padding:14px;
     display:inline;
@@ -156,6 +156,7 @@
  	font-weight:bold;
  	border-top:none;
  	border-bottom:none;
+  color:inherit;
  }
 
  #afui.win8 .list li {
@@ -224,6 +225,7 @@
 }
 
 #afui.win8 > #menu {
+  border-right:none;
 	color:inherit;
 	background:inherit;
 }

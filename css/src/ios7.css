@@ -34,6 +34,7 @@
     padding-bottom:49px;
 
 }
+#afui.ios7 .panel h2 { color:inherit;}
 
 #afui.ios7 #navbar {
     background:rgba(249,249,249,0.95);
@@ -46,6 +47,11 @@
     color:rgba(96,96,96,255);
 }
 
+#afui.ios7 #navbar a.pressed {
+    border-radius:0;    
+    background:transparent;
+}
+
 #afui.ios7 #menubadge:after {
     border-color:rgba(82,155,234,255);
 }
@@ -55,6 +61,7 @@
 }
 
 #afui.ios7 > #menu {
+    border-right:none;
     background:rgba(238,238,238,255);
      color:black;
 }
@@ -62,6 +69,7 @@
 #afui.ios7 #menu .list li,#afui.ios7 #menu .list .divider,#afui.ios7 #menu .list li:first-child,#afui.ios7 #menu .list li:last-child {
     border-color:rgb(215,215,215);
     font-weight:normal;
+    box-shadow:none;
 }
 
 #afui.ios7 #menu .list .divider {
@@ -88,6 +96,9 @@ color:black;
     color:rgba(217,217,217,255);
 }
 
+#afui.ios7 .button {
+    background-color:transparent;
+}
 
 #afui.ios7 #backButton {
     background:rgba(249,249,249,1);

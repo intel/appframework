@@ -140,6 +140,7 @@ color: white;
 }
 
 #afui.bb #menu {
+    border-right:none;
     background: #fff;
     color: #000;
 }
