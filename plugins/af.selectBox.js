@@ -4,11 +4,10 @@
  * with the old drop down box as normal with javascript, and this will be reflected
  */
 (function($) {
-    function updateOption(prop, oldValue, newValue)
-    {
+    function updateOption(prop, oldValue, newValue) {
         if (newValue === true) {
-            if(!this.getAttribute("multiple"))
-            $.selectBox.updateMaskValue(this.parentNode.id, this.text, this.value);
+            if (!this.getAttribute("multiple"))
+                $.selectBox.updateMaskValue(this.parentNode.id, this.text, this.value);
             this.parentNode.value = this.value;
         }
         return newValue;
@@ -17,20 +16,21 @@
     function updateIndex(prop, oldValue, newValue) {
         if (this.options[newValue]) {
             if (!this.getAttribute("multiple"))
-                $.selectBox.updateMaskValue(this.linker, this.options[newValue].text, this.options[newValue].value);
+                $.selectBox.updateMaskValue(this.linker, this.options[newValue].value, this.options[newValue].text);
             this.value = this.options[newValue].value;
         }
         return newValue;
     }
-    function destroy(e){
-        var el=e.target;
+
+    function destroy(e) {
+        var el = e.target;
         $(el.linker).remove();
         delete el.linker;
         e.stopPropagation();
     }
     $['selectBox'] = {
         scroller: null,
-        currLinker:null,
+        currLinker: null,
         getOldSelects: function(elID) {
             if (!$.os.android || $.os.androidICS) return;
             if (!$.fn['scroller']) {
@@ -55,14 +55,14 @@
                 el.linker = fixer.get(0);
                 fixer.insertAfter(sels[i]);
 
-                el.watch("selectedIndex",updateIndex);
+                el.watch("selectedIndex", updateIndex);
                 for (var j = 0; j < el.options.length; j++) {
                     var currInd = j;
-                    el.options[j].watch("selected",updateOption);
-                    if(el.options[j].selected)
+                    el.options[j].watch("selected", updateOption);
+                    if (el.options[j].selected)
                         fixer.html(el.options[j].text);
                 }
-                $(el).one("destroy",destroy);
+                $(el).one("destroy", destroy);
             }
             that.createHtml();
         },
@@ -85,19 +85,19 @@
             var $list = $scr.find("ul");
             for (var j = 0; j < el.options.length; j++) {
                 var currInd = j;
-                el.options[j].watch("selected",updateOption);
+                el.options[j].watch("selected", updateOption);
                 var checked = (el.options[j].selected) ? "selected" : "";
                 if (checked) foundInd = j + 1;
-                var row=$.create("li", {
+                var row = $.create("li", {
                     html: el.options[j].text,
                     className: checked
                 });
-                row.data("ind",j);
+                row.data("ind", j);
                 $list.append(row);
             }
             $("#afSelectBoxContainer").show();
             try {
-                if (foundInd > 0&&el.getAttribute("multiple")!="multiple") {
+                if (foundInd > 0 && el.getAttribute("multiple") != "multiple") {
                     var scrollToPos = 0;
                     var scrollThreshold = numOnly($list.find("li").computedStyle("height"));
                     var theHeight = numOnly($("#afSelectBoxContainer").computedStyle("height"));
@@ -111,8 +111,8 @@
                 console.log("error init dropdown" + e);
             }
 
-            var selClose=$("#afSelectClose").css("display")=="block"?numOnly($("#afSelectClose").height()):0;
-            $("#afSelectWrapper").height((numOnly($("#afSelectBoxContainer").height())-selClose)+"px");
+            var selClose = $("#afSelectClose").css("display") == "block" ? numOnly($("#afSelectClose").height()) : 0;
+            $("#afSelectWrapper").height((numOnly($("#afSelectBoxContainer").height()) - selClose) + "px");
 
         },
         updateMaskValue: function(linker, value, val2) {
@@ -122,13 +122,13 @@
         setDropDownValue: function(el, value) {
 
             if (!el) return;
-            var $el=$(el);
+            var $el = $(el);
 
-            value=parseInt(value,10);
+            value = parseInt(value, 10);
             if (!el.getAttribute("multiple")) {
                 el.selectedIndex = value;
-                $el.find("option").prop("selected",false);
-                $el.find("option:nth-child(" + (value + 1) + ")").prop("selected",true);
+                $el.find("option").prop("selected", false);
+                $el.find("option:nth-child(" + (value + 1) + ")").prop("selected", true);
                 this.scroller.scrollTo({
                     x: 0,
                     y: 0
@@ -137,14 +137,14 @@
             } else {
                 //multi select
 
-               // var myEl = $el.find("option:nth-child(" + (value + 1) + ")").get(0);
-                var myList=$("#afSelectBoxfix li:nth-child(" + (value+1 ) + ")");
+                // var myEl = $el.find("option:nth-child(" + (value + 1) + ")").get(0);
+                var myList = $("#afSelectBoxfix li:nth-child(" + (value + 1) + ")");
                 if (myList.hasClass("selected")) {
                     myList.removeClass("selected");
-                  //  myEl.selected = false;
+                    //  myEl.selected = false;
                 } else {
                     myList.addClass("selected");
-                  //  myEl.selected = true;
+                    //  myEl.selected = true;
                 }
             }
             $(el).trigger("change");
@@ -161,11 +161,11 @@
             }
             $(document).ready(function() {
                 $(document).on("click", ".afFakeSelect", function(e) {
-                    if(this.linker.disabled)
+                    if (this.linker.disabled)
                         return;
-                    that.currLinker=this;
+                    that.currLinker = this;
 
-                    if(this.linker.getAttribute("multiple")=="multiple")
+                    if (this.linker.getAttribute("multiple") == "multiple")
                         $("#afSelectClose").show();
                     else
                         $("#afSelectClose").hide();
@@ -177,12 +177,14 @@
                 var modalDiv = $.create("div", {
                     id: "afSelectBoxfix"
                 });
-                var modalWrapper=$.create("div",{id:"afSelectWrapper"});
-                modalWrapper.css("position","relative");
+                var modalWrapper = $.create("div", {
+                    id: "afSelectWrapper"
+                });
+                modalWrapper.css("position", "relative");
                 modalWrapper.append(modalDiv);
-                var closeDiv=$.create("div", {
-                    id:"afSelectClose",
-                    html:"<a id='afSelectDone'>Done</a> <a id='afSelectCancel'>Cancel</a>"
+                var closeDiv = $.create("div", {
+                    id: "afSelectClose",
+                    html: "<a id='afSelectDone'>Done</a> <a id='afSelectCancel'>Cancel</a>"
                 });
 
 
@@ -197,23 +199,22 @@
                     vScrollCSS: "jqselectscrollBarV"
                 });
 
-                $("#afSelectBoxfix").on("click","li",function(e){
-                    var $el=$(e.target);
-                    that.setDropDownValue(that.currLinker.linker,$el.data("ind"));
+                $("#afSelectBoxfix").on("click", "li", function(e) {
+                    var $el = $(e.target);
+                    that.setDropDownValue(that.currLinker.linker, $el.data("ind"));
                 });
-                $("#afSelectBoxContainer").on("click","a",function(e){
-                    if(e.target.id=="afSelectCancel")
+                $("#afSelectBoxContainer").on("click", "a", function(e) {
+                    if (e.target.id == "afSelectCancel")
                         return that.hideDropDown();
-                    var $sel=$(that.currLinker.linker);
-                    $sel.find("option").prop("selected",false);
+                    var $sel = $(that.currLinker.linker);
+                    $sel.find("option").prop("selected", false);
 
-                    $("#afSelectBoxfix li").each(function(el){
-                        var $el=$(this);
-                        if($el.hasClass("selected"))
-                        {
-                            var ind=parseInt($el.data("ind"),10);
-                            $sel.find("option:nth-child(" + (ind + 1) + ")").prop("selected",true);
-                            that.currLinker.innerHTML=$el.html();
+                    $("#afSelectBoxfix li").each(function(el) {
+                        var $el = $(this);
+                        if ($el.hasClass("selected")) {
+                            var ind = parseInt($el.data("ind"), 10);
+                            $sel.find("option:nth-child(" + (ind + 1) + ")").prop("selected", true);
+                            that.currLinker.innerHTML = $el.html();
                         }
                     });
 
