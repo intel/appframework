@@ -59,16 +59,19 @@
   left:-185px;
   -webkit-font-smoothing: antialiased;
 }
-#afui.win8 #backButton:after {
-  width:0;
-  height:0;
-}
+
+
 #afui.win8 #backButton::before {
   content: "\e000";
   font-size:30px;
   position:absolute;
-  top:3px;
-  right:-210px;
+  top:10px;
+  right:-225px;
+  left:auto;
+  color:white;
+  font-family:inherit;
+  -webkit-transform:none;
+  transform:none;
 }
 
 
@@ -259,9 +262,7 @@ margin-left:10px;
 	border-color:#00ABA9;
 }
 
-#afui.win8 .button::after {
-	right:-26px;
-}
+
 
 
 
