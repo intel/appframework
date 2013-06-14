@@ -99,6 +99,8 @@
                     that.backButtonText = "Back";
                 } else if ($.os.ios7)
                     $("#afui").addClass("ios7");
+                else if ($.os.ios)
+                    $("#afui").addClass("ios");
             }
 
         }
@@ -168,7 +170,7 @@
             width = width + "";
             width = width.replace("px", "") + "px";
             $("head").find("#styleWidth").remove();
-            $("head").append("<style id='styleWidth'>#afui #menu {width:" + width + " }</style>");
+            $("head").append("<style id='styleWidth'>#afui #menu {width:" + width + "  !important}</style>");
         },
 
         /**
@@ -547,7 +549,8 @@
             var menu = $.query("#menu");
             var els = $.query("#content,  #header, #navbar");
             time = time || this.transitionTime;
-            var open = parseInt($.getCssMatrix($("#content")).e) > 1 ? true : false;
+            var open = this.isSideMenuOn();
+
             if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
                 this.togglingSideMenu = true;
                 menu.show();
@@ -1159,11 +1162,8 @@
             $(what).trigger("loadpanel");
             if (this.isSideMenuOn()) {
                 var that = this;
-                if (that.isWin8) {
-                    that.toggleSideMenu(false);
-                    return;
-                }
-                $("#menu").width(window.innerWidth);
+                that.toggleSideMenu(false);
+                /* $("#menu").width(window.innerWidth);
 
                 $(".hasMenu").css3Animate({
                     x: (window.innerWidth + 100),
@@ -1174,6 +1174,7 @@
 
                     }
                 });
+                */
             }
         },
         /**
@@ -1354,10 +1355,11 @@
                 }
             }
 
-
+            $("#header #menubadge").css("float", "right");
             if (this.history.length === 0) {
                 this.setBackButtonVisibility(false);
                 this.history = [];
+                $("#header #menubadge").css("float", "left");
             } else if (this.showBackbutton) this.setBackButtonVisibility(true);
             this.activeDiv = what;
             if (this.scrollingDivs[this.activeDiv.id]) {

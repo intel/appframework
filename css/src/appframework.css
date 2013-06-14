@@ -1,0 +1,310 @@
+/* blue #0190d6
+
+ */
+
+#afui {
+    background:white;
+    color:#6D6A6A;
+}
+
+
+#afui > #header{
+    background:#0088D1;
+    border:none;
+    border-bottom:1px solid #0088D1;
+ }
+
+#afui  #header h1 {
+    text-shadow:none;
+    width:45%;
+}
+ #afui #backButton {
+    background:rgba(249,249,249,1);
+    color:#fff;
+    display: block;
+    position: absolute;
+    line-height:44px;
+
+    left: 25px;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    padding: none;
+    text-shadow: none;
+    background-color: transparent;
+    border:none;
+    border-color:none;
+    height: 44px;
+    top:0;
+    border-radius: none;
+    box-shadow:none;
+    margin: 0;
+    padding-left: 0;
+    text-align: center;
+    width:50px;
+    padding:0 !important;
+    margin:0 !important;
+
+}
+
+#afui #backButton::before {
+    z-index: -1;
+    font-size:22px;
+    position: absolute;
+    top: 10px;
+    left: -20px;
+    text-align: center;
+    border-radius: none;
+    border: none;
+    border-color: none;
+    box-shadow: none;
+    -webkit-transform: none;
+    transform: none;
+
+    font-family: 'chevron';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content: "\f054";
+    -webkit-transform:rotate(180deg);
+    transform:rotate(180deg);
+    background-color: transparent;
+    
+
+}
+
+
+ #afui > #navbar {
+     background:#0088D1;
+    border:none;
+    border-top:1px solid #0088D1;
+    box-shadow:none;
+}
+
+#afui #navbar a {
+ 
+}
+ #afui #navbar a.pressed {
+    border-radius:0;    
+    background:#00AEEF;
+ }
+
+
+#afui #navbar .icon.pressed:before {
+    color:inherit;
+}
+
+
+#afui .af-badge {
+    border:none;
+}
+
+ #afui .list {
+    background:inherit;
+    color:inherit;
+    border-color:#303030;
+    font-weight:normal;
+ }
+
+ #afui .af-badge {
+    box-shadow:none;
+ }
+
+ #afui .list .divider { color:black; }
+
+#afui .panel {
+    color:inherit;
+    background:white;
+}
+ #afui .panel h2 { color:#0088D1;}
+
+
+#afui .collapsed:after {border-top: 6px solid;}
+#afui .collapsed:before {border:2px solid;}
+#afui .expanded:after {border-bottom: 6px solid;}
+#afui .expanded:before {border:2px solid;}
+
+#afui .collapsed:before,#afui .expanded:before {
+    border-color: inherit;
+}
+#afui .collapsed:after,
+#afui .expanded:after{
+    border-top-color:inherit;
+    border-top-color:inherit;
+}
+
+#afui select, #afui textarea, #afui input[type="text"],
+#afui input[type=search], #afui input[type="password"],
+#afui input[type="datetime"], #afui input[type="datetime-local"],
+#afui input[type="date"], #afui input[type="month"],
+#afui input[type="time"], #afui input[type="week"],
+#afui input[type="number"], #afui input[type="email"],
+#afui input[type="url"], #afui input[type="tel"],
+#afui input[type="color"], #afui .input-group {
+    background:inherit;
+    color:inherit;
+}
+
+#afui input.toggle+label:after { color:inherit; }
+
+#afui input.toggle+label { border-radius:0; }
+
+#afui input.toggle+label > span {
+    border-radius:0;
+    top:0;
+    width:27px;
+    height:23px;
+}
+
+#afui label { color:inherit; }
+
+#afui input[type="radio"]:checked+label:before,#afui input[type="checkbox"]:checked+label:before {
+    background: #33B5E5;
+}
+
+#afui > #menu.tabletMenu {
+    color:white;
+    background:#00AEEF;
+    border-right:1px solid #006BA4;
+}
+
+#afui #menu .list li,#afui #menu .list .divider,#afui #menu .list li:last-child {
+    border-color: #4CC6F4;
+    
+}
+
+#afui #menu .list .divider {
+    background:#0088D1;
+    color:inherit;
+    font-size: 1em;
+    
+}
+
+#afui #menu .list > li > a {
+    background:inherit;
+    color:inherit;
+    font-size: 1em;
+}
+
+#afui #menu .list {
+    font-weight: normal;
+}
+
+#afui .button {
+    border-radius:0;
+    text-shadow:none !important;
+    
+}
+
+.list > li > a:after{
+    color:#0088D1;
+}
+
+
+#afui .button.pressed {
+   
+}
+
+#afui .button.previous {
+
+    border:none;
+}
+#afui .button.next {
+    border:none;   
+}
+
+
+#afui .button.previous::after {
+    color:black;
+    z-index: -1;
+    font-size:22px;
+    position: absolute;
+    top: 2px;
+    left: -25px;
+    text-align: center;
+    border-radius: none;
+    border: none;
+    border-color: none;
+    box-shadow: none;
+    -webkit-transform: none;
+    transform: none;
+
+    font-family: 'chevron';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content: "\f054";
+    -webkit-transform:rotate(180deg);
+    transform:rotate(180deg);
+    background-color: transparent;
+}
+#afui .button.next::after {
+   color:black;
+
+    z-index: -1;
+    font-size:22px;
+    position: absolute;
+    top: 6px;
+    right: -25px;
+    text-align: center;
+    border-radius: none;
+    border: none;
+    border-color: none;
+    box-shadow: none;
+    -webkit-transform: none;
+    transform: none;
+
+    font-family: 'chevron';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content: "\f054";
+    
+    background-color: transparent;
+}
+
+
+
+#afui .afPopup {
+    display: block;
+    width: 100%;
+    float:left;
+    border: solid 1px #33B5E5;
+    left:0px !important;
+    padding: 10px;
+    opacity: 1;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    position: absolute;
+    z-index: 1000000;
+    top: 50%;
+    margin: 0px auto;
+    background:inherit;
+    color:inherit;
+    padding:30px;
+}
+
+#afui #af_actionsheet {
+    background:#0190d6;
+    color:inherit;
+}
+
+#afui    #af_actionsheet a{
+    border-radius:0;
+    -webkit-border-radius:0;
+    color:black;
+    background:white;
+    border:none;
+    text-shadow:none;
+}

@@ -8,17 +8,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
-            
-
-        <link rel="stylesheet" type="text/css" href="css/icons.css" />
+        <link rel="stylesheet" type="text/css" href="css/icons.css" />    
+ 
+       <!--   
      <link rel="stylesheet" type="text/css" href="css/af.ui.css" title="default" />
-       <!-- 
-
-   <link rel="stylesheet" type="text/css" href="css/src/main.css"  />
+  -->
+      <link rel="stylesheet" type="text/css" href="css/src/main.css"  />
+      <link rel="stylesheet" type="text/css" href="css/src/appframework.css"  />
       <link rel="stylesheet" type="text/css" href="css/src/android.css"  />
       <link rel="stylesheet" type="text/css" href="css/src/win8.css"  />
       <link rel="stylesheet" type="text/css" href="css/src/bb.css"  />
+      <link rel="stylesheet" type="text/css" href="css/src/ios.css"  />
       <link rel="stylesheet" type="text/css" href="css/src/ios7.css"  />
+
       <link rel="stylesheet" type="text/css" href="css/src/badges.css"  />
       <link rel="stylesheet" type="text/css" href="css/src/buttons.css"  />
       <link rel="stylesheet" type="text/css" href="css/src/lists.css"  />
@@ -27,9 +29,8 @@
 
       <link rel="stylesheet" type="text/css" href="plugins/css/af.actionsheet.css"  />
       <link rel="stylesheet" type="text/css" href="plugins/css/af.popup.css"  />
-      link rel="stylesheet" type="text/css" href="plugins/css/af.selectBox.css"  />
+      <link rel="stylesheet" type="text/css" href="plugins/css/af.selectBox.css"  />
 
--->
         <!-- uncomment for AppMobi apps <script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/appmobi.js"></script>
 <script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/xhr.js"></script>
 -->
@@ -52,20 +53,8 @@
                 script.src = "plugins/af.desktopBrowsers.js";
                 var tag = $("head").append(script);
             }
-            var search=document.location.search.toLowerCase().replace("?","");
-            if(search=="android") //Android fix has too many buggy issues on iOS - can't preview with $.os.android
-            {
-                $(document).ready(function(){
-                    $("#afui").addClass("android");
-                });
-            }
-            else if(search=="win8")
-                $.os.ie=true;
-            else if(search=="bb")
-                $.os.blackberry=true;
-            else if(search=="ios7")
-                $.os.ios7=true;
-            
+           
+          
         </script>
         <script type="text/javascript" charset="utf-8" src="./plugins/af.actionsheet.js"></script>
          <script type="text/javascript" charset="utf-8" src="./plugins/af.css3animate.js"></script>
@@ -83,18 +72,28 @@
         <script type="text/javascript">
             /* This function runs once the page is loaded, but appMobi is not yet active */
             //$.ui.animateHeaders=false;
+             var search=document.location.search.toLowerCase().replace("?","");
+            if(search) //Android fix has too many buggy issues on iOS - can't preview with $.os.android
+            {
+                if(search=="win8")
+                    $.os.ie=true;
+                $.ui.ready(function(){
+                    $("#afui").get().className=search;
+                });
+            }
+            
             var webRoot = "./";
             // $.os.android=true;
             $.ui.autoLaunch = false;
             $.ui.openLinksNewTab = false;
             //$.ui.resetScrollers=false;
+            
 
             $(document).ready(function(){
-                    $.ui.setSideMenuWidth($("#afui").width()-50);
                    $.ui.launch();
 
             });
-
+            
             /* This code is used to run as soon as appMobi activates */
             var onDeviceReady = function () {
                 AppMobi.device.setRotateOrientation("portrait");
@@ -132,28 +131,8 @@
                     });
                 });
             }
-
-
         </script>
         <style>
-
-.hideButton {
-    display:block;
-    position:relative;
-    padding:6px 16px;
-    display:inline-block;
-    margin:8px 6px;
-    font:bold 12px 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color:#fff;
-    text-align:center;
-    text-shadow:0 -1px 0 #333;
-    background-color:#444;
-    border:1px solid #333;
-    box-shadow:0 -1px 0 #777 inset;
-    border-radius:6px;
-}
-.hideButton.pressed { background:#555; }
-
            .samplecode {
                 background: #ccc;
                 color: #000;
@@ -181,7 +160,7 @@
 
             </div>
             <div id="header">
-                <a id='menubadge' onclick='af.ui.toggleSideMenu()' style='float:right;' class='menuButton'></a>
+                <a id='menubadge' onclick='af.ui.toggleSideMenu()' class='menuButton'></a>
             </div>
             <div id="content">
                 <div title='Welcome' id="main" class="panel" selected="true" data-load="loadedPanel" data-unload="unloadedPanel" data-tab="navbar_home">
@@ -196,7 +175,10 @@
                             <a href="#afuidemo">App Framework UI</a>
                         </li>
                         <li>
-                            <a href="index.html" data-ignore="true">Default (iOS) theme</a>
+                            <a href="index.html" data-ignore="true">App Framework theme</a>
+                        </li>
+                         <li>
+                            <a href="index.html?ios" data-ignore="true">iOS theme</a>
                         </li>
                         <li>
                             <a href="index.html?android" data-ignore="true">Android theme</a>
@@ -1112,7 +1094,7 @@ The parent id for this div is "content". Let's verify it.
             <div class="input-group">
                 <label>Gender</label><input id="aaaa" type="radio" name="test" value="1"><label for="aaaa">Male</label>
                 <input id="bbbb" type="radio" name="test" value="2"><label for="bbbb">Female</label>
-                <input id="cccc" type="radio" name="test" value="3"><label for="cccc">N/A adsfasdfafdlaksfla jfla flajf lasjflajfd alsjfla sjflaskjf lajf alskjf alsfj salfkjsa lfkaj</label>
+                <input id="cccc" type="radio" name="test" value="3"><label for="cccc">N/A </label>
                 <br style="clear:both">
                 <input type="submit" class="button" value="Submit" style='float:right;'>
             </div>
@@ -1122,7 +1104,7 @@ The parent id for this div is "content". Let's verify it.
             <div class="input-group">
                 <label>Gender</label><input id="aaaaa" type="checkbox" name="test2" value="1"><label for="aaaaa">Male</label>
                 <input id="bbbbb" type="checkbox" name="test2" value="2"><label for="bbbbb">Female</label>
-                <input id="ccccc" type="checkbox" name="test2" value="3"><label for="ccccc">N/A adsfasdfafdlaksfla jfla flajf lasjflajfd alsjfla sjflaskjf lajf alskjf alsfj salfkjsa lfkaj</label>
+                <input id="ccccc" type="checkbox" name="test2" value="3"><label for="ccccc">N/A </label>
                 <br style="clear:both">
                 <input type="submit" class="button" value="Submit" style='float:right;'>
             </div>
@@ -2130,7 +2112,6 @@ The parent id for this div is "content". Let's verify it.
             </header>
             <!-- ------------------------------------------ -->
             <nav>
-                <div onclick="$.ui.toggleSideMenu(false)" class="hideButton">Hide</div>
                 <ul class="list">
                     <li class="divider" class="icon home">Home</li>
                     <li>
