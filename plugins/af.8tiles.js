@@ -1,8 +1,8 @@
 /**
  * af.8tiles - Provides a WP8 theme and handles showing the menu
  * Copyright 2012 - Intel
- */
-;(function($) {
+ */;
+(function($) {
 	"use strict";
 
 	if (!$) {
@@ -10,9 +10,11 @@
 	}
 
 	function wire8Tiles() {
-		$.ui.isWin8=true;
-		if(!$.os.ie) return;
+		$.ui.isWin8 = true;
+		if (!$.os.ie) return;
+
 		$.ui.ready(function() {
+
 			if ($.ui.slideSideMenu) $.ui.slideSideMenu = false;
 			//we need to make sure the menu button shows up in the bottom navbar
 			$.query("#afui #navbar footer").append("<a id='metroMenu' onclick='$.ui.toggleSideMenu()'>•••</a>");
@@ -30,14 +32,20 @@
 			};
 
 			var oldToggle = $.ui.toggleSideMenu;
+			$.ui.isSideMenuOn = function() {
+
+				var menu = parseInt($.getCssMatrix($("#navbar")).f) < 0 ? true : false;
+				return this.isSideMenuEnabled() && menu;
+			};
 			$.ui.toggleSideMenu = function(force, callback) {
 				if (!this.isSideMenuEnabled() || this.togglingSideMenu) return;
 				this.togglingSideMenu = true;
 				var that = this;
 				var menu = $.query("#menu");
 				var els = $.query("#navbar");
+				var open = this.isSideMenuOn();
 
-				if (force === 2 || (menu.css("display") !== "block" && ((force !== undefined && force !== false) || force === undefined))) {
+				if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
 					menu.show();
 
 					that.css3animate(els, {
