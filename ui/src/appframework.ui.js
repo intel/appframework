@@ -5,7 +5,6 @@
  * @author AppMobi
  * @version 2.0
  */ (function($) {
-    "use strict";
 
     var hasLaunched = false;
     var startPath = window.location.pathname;
