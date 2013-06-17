@@ -2540,9 +2540,11 @@ if (!window.af || typeof(af) !== "function") {
             if (!node) return;
             //cleanup children
             var children = node.childNodes;
-            if (children && children.length > 0)
-                for (var child in children)
-                    cleanUpContent(children[child], kill);
+            if (children && children.length > 0) {
+                for (var i; i < children.length; i++) {
+                    cleanUpContent(children[i], kill);
+                }
+            }
 
             cleanUpNode(node, kill);
         }
