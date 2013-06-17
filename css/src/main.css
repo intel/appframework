@@ -302,15 +302,6 @@ body {
 }
 
 
-#afui #menu .afMenuClose {
-	position:absolute;
-	z-index:2;
-	float:right;
-	top:2px;
-	right:2px;
-}
-
-
 #afui #menu .list > li > a:after { margin-top: -8px; }
 
 /* End side menu css */

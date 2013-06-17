@@ -7,7 +7,6 @@
 @bodyBG:#fff;
 @bodyColor:#53575E;
 
-/*@menuBG:#00AEEF;*/
 @menuBG:#00AEEF;
 @menuColor:#fff;
 
@@ -51,8 +50,8 @@ body {
     top:0;
     bottom:0;
     overflow:hidden;
-    background:white; /*@background*/
-    color:#53575E; /*@fontcolor*/
+    background:@bodyBG; /*@background*/
+    color:@bodyColor; /*@fontcolor*/
 
 
     input,textarea { -webkit-user-select:text; -moz-user-select:-moz-text;-moz-user-select:text;} /* allow users to select text that appears in input fields */
@@ -207,6 +206,8 @@ body {
         bottom:49px;
         left:0;right:0;
         overflow:hidden;
+        background:inherit;
+        color:inherit;
     } 
 
 
@@ -224,7 +225,7 @@ body {
         padding:10px;
         padding-top:0px;
         color:inherit;
-        background:white;
+        background:inherit;
     } 
 
 
@@ -310,7 +311,7 @@ body {
         position:absolute; top:0; left:0;
         color:@menuColor;
         background:@menuBG;
-        border-right:1px solid #006BA4;
+        border-right:1px solid darken(@menuBG,30%);
     }
 
     #menu_scroller {
