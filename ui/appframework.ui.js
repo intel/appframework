@@ -2132,7 +2132,8 @@
  * @copyright: 2011 Intel
  * @description:  This script will replace all drop downs with friendly select controls.  Users can still interact
  * with the old drop down box as normal with javascript, and this will be reflected
- */ (function($) {
+ */
+(function($) {
     function updateOption(prop, oldValue, newValue) {
         if (newValue === true) {
             if (!this.getAttribute("multiple"))
@@ -3191,14 +3192,14 @@
         function checkNodeInserted(i) {
             if (i.target.id === "afui") {
                 setupCustomTheme();
-                document.removeEventListener("DOMNodeInserted", arguments.callee);
+                $(document).unbind("DOMNodeInserted", checkNodeInserted);
             }
         }
 
         if ($("#afui").length === 1) {
             setupCustomTheme();
         } else {
-            document.addEventListener("DOMNodeInserted", checkNodeInserted, false);
+            $(document).bind("DOMNodeInserted", checkNodeInserted);
         }
 
 

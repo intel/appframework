@@ -73,8 +73,13 @@
             /* This function runs once the page is loaded, but appMobi is not yet active */
             //$.ui.animateHeaders=false;
              var search=document.location.search.toLowerCase().replace("?","");
+             //if(!search)
+                //$.os.useOSThemes=false;
+                
             if(search) //Android fix has too many buggy issues on iOS - can't preview with $.os.android
             {
+
+               $.os.useOSThemes=true;
                 if(search=="win8")
                     $.os.ie=true;
                 $.ui.ready(function(){
