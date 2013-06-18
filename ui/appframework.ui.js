@@ -1912,6 +1912,7 @@
                 $el.find("footer").show();
                 setTimeout(function(){
                     $el.removeClass('hidden');
+                    self.onShow(self);
                 },50);
             },
 
@@ -2435,9 +2436,9 @@
                 touch.isDoubleTap = true;
             touch.last = now;
            longTapTimer=setTimeout(longTap, longTapDelay);
-            if (!touch.el.data("ignore-pressed"))
+            if ($.ui.useAutoPressed && !touch.el.data("ignore-pressed"))
                 touch.el.addClass("pressed");
-            if(prevEl&&!prevEl.data("ignore-pressed"))
+            if(prevEl && $.ui.useAutoPressed && !prevEl.data("ignore-pressed"))
                 prevEl.removeClass("pressed");
             prevEl=touch.el;
         }).bind('touchmove', function(e) {
@@ -2451,7 +2452,7 @@
                 e=e.originalEvent;
             if (!touch.el)
                 return;
-            if (!touch.el.data("ignore-pressed"))
+            if ($.ui.useAutoPressed && !touch.el.data("ignore-pressed"))
                 touch.el.removeClass("pressed");
             if (touch.isDoubleTap) {
                 touch.el.trigger('doubleTap');
@@ -2473,7 +2474,7 @@
                 }, 250);
             }
         }).bind('touchcancel', function() {
-            if(touch.el&& !touch.el.data("ignore-pressed"))
+            if(touch.el && $.ui.useAutoPressed && !touch.el.data("ignore-pressed"))
                 touch.el.removeClass("pressed");
             touch = {};
             clearTimeout(longTapTimer);
@@ -3204,9 +3205,11 @@
 
 
 
-        if ("AppMobi" in window) $(document).one("appMobi.device.ready", function() {
+        if ("AppMobi" in window){ 
+            document.addEventListener("appMobi.device.ready", function() {
                 that.autoBoot();
             });
+        }
         else if (document.readyState == "complete" || document.readyState == "loaded") {
             this.autoBoot();
         } else $(document).ready(function() {
@@ -3291,6 +3294,7 @@
         useOSThemes: true,
         lockPageBounce: false,
         animateHeaders: true,
+        useAutoPressed: true,
         autoBoot: function() {
             this.hasLaunched = true;
             if (this.autoLaunch) {
