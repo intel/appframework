@@ -146,6 +146,7 @@
         useOSThemes: true,
         lockPageBounce: false,
         animateHeaders: true,
+        useAutoPressed: true,
         autoBoot: function() {
             this.hasLaunched = true;
             if (this.autoLaunch) {
