@@ -138,6 +138,7 @@
                 $el.find("footer").show();
                 setTimeout(function(){
                     $el.removeClass('hidden');
+                    self.onShow(self);
                 },50);
             },
 
