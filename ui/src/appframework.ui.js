@@ -59,9 +59,11 @@
 
 
 
-        if ("AppMobi" in window) $(document).one("appMobi.device.ready", function() {
+        if ("AppMobi" in window){ 
+            document.addEventListener("appMobi.device.ready", function() {
                 that.autoBoot();
             });
+        }
         else if (document.readyState == "complete" || document.readyState == "loaded") {
             this.autoBoot();
         } else $(document).ready(function() {
