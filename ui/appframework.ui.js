@@ -3655,12 +3655,13 @@
          */
         toggleNavMenu: function(force) {
             if (!this.showNavMenu) return;
-            if ($.query("#navbar").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
-                $.query("#content").css("bottom", "0px");
+            if ((force!==undefined&&force===false)||($.query("#navbar").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined))) {                
+                $.query("#content").get(0).style.setProperty("bottom","0px","important");
                 $.query("#navbar").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
                 $.query("#navbar").show();
-                $.query("#content").css("bottom", $.query("#navbar").css("height"));
+                $.query("#content").get(0).style.removeProperty("bottom");
+
 
             }
         },
@@ -3673,12 +3674,14 @@
          * @title $.ui.toggleHeaderMenu([force])
          */
         toggleHeaderMenu: function(force) {
-            if ($.query("#header").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
-                $.query("#content").css("top", "0px");
+            if ((force!==undefined&&force===false)||($.query("#header").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined))) {
+                //$.query("#content").css("top", "0px");
+        
+                $.query("#content").get(0).style.setProperty("top","0px","important");
                 $.query("#header").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
                 $.query("#header").show();
-                $.query("#content").css("top", $.query("#header").css("height"));
+                $.query("#content").get(0).style.removeProperty("top");
             }
         },
         /**
