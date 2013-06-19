@@ -3295,6 +3295,7 @@
         lockPageBounce: false,
         animateHeaders: true,
         useAutoPressed: true,
+        _currentHeaderID:"defaultHeader",
         autoBoot: function() {
             this.hasLaunched = true;
             if (this.autoLaunch) {
@@ -3837,6 +3838,7 @@
                 elems = $.query("#" + elems);
             }
             if (elems == this.prevHeader) return;
+            this._currentHeaderID=elems.prop("id");
             if (this.prevHeader) {
                 //Let's slide them out
                 $.query("#header").append(elems);
@@ -3850,6 +3852,7 @@
 
                 var from = goBack ? "100px" : "-100px";
                 var to = goBack ? "-100px" : "100px";
+                that.prevHeader.addClass("ignore");
                 that.css3animate(elems, {
                     x: to,
                     opacity: 0.3,
@@ -3864,6 +3867,7 @@
                     complete: function() {
                         if (that.prevHeader.data("parent")) that.prevHeader.appendTo("#" + that.prevHeader.data("parent"));
                         else that.prevHeader.appendTo("#afui");
+                        that.prevHeader.removeClass("ignore");
                         that.css3animate(that.prevHeader, {
                             x: to,
                             opacity: 1,
@@ -3928,7 +3932,8 @@
          * @title $.ui.setTitle(value)
          */
         setTitle: function(val) {
-            $.query("#header #pageTitle").html(val);
+            if(this._currentHeaderID!=="defaultHeader") return;
+            $.query("#header header:not(.ignore)  #pageTitle").html(val);
         },
         /**
          * Override the text for the back button
@@ -3940,10 +3945,11 @@
          * @title $.ui.setBackButtonText(value)
          */
         setBackButtonText: function(text) {
+            if(this._currentHeaderID!=="defaultHeader") return;
             if (this.trimBackButtonText)
                 text = text.substring(0, 5) + "...";
-            if (this.backButtonText.length > 0) $.query("#header #backButton").html(this.backButtonText);
-            else $.query("#header #backButton").html(text);
+            if (this.backButtonText.length > 0) $.query("#header header:not(.ignore) #backButton").html(this.backButtonText);
+            else $.query("#header header:not(.ignore)  #backButton").html(text);
         },
         /**
          * Toggle visibility of the back button
@@ -4257,7 +4263,7 @@
             } else if (hasHeader != that.customHeader) {
                 if (that.customHeader) {
                     that.updateHeaderElements(that.defaultHeader, goBack);
-                    that.setTitle(that.activeDiv.title);
+                    //that.setTitle(that.activeDiv.title);
                 }
                 that.customHeader = false;
             }
