@@ -16,12 +16,12 @@
     ],
     "description": {
       "full": "<p>App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.<br />Since most mobile devices (Android, iOS, webOS) use a WebKit browser, you only need to target one browser.<br />We are able to increase the speed greatly by removing support for legacy desktop browsers and taking advantage of browser features, like native JSON parsing and querySelectorAll</p>\n\n<p>MIT License</p>",
-      "summary": "<p>App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.<br />Since most mobile devices (Android, iOS, webOS) use a WebKit browser, you only need to target one browser.<br />We are able to increase the speed greatly by removing support for legacy desktop browsers and taking advantage of browser features, like native JSON parsing and querySelectorAll</p>",
-      "body": "<p>MIT License</p>"
+      "summary": "<p>App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.<br />Since most mobile devices (Android, iOS, webOS) use a WebKit browser, you only need to target one browser.<br />We are able to increase the speed greatly by removing support for legacy desktop browsers and taking advantage of browser features, like native JSON parsing and querySelectorAll</p>\n\n<p>MIT License</p>",
+      "body": ""
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "if (!window.af || typeof (af) !== \"function\") {"
+    "code": "if (!window.af || typeof(af) !== \"function\") {"
   },
   {
     "tags": [
@@ -41,11 +41,11 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "var af = (function (window) {\n        \"use strict\";\n        var nundefined, document = window.document,\n            emptyArray = [],\n            slice = emptyArray.slice,\n            classCache = {},\n            eventHandlers = [],\n            _eventID = 1,\n            jsonPHandlers = [],\n            _jsonPID = 1,\n            fragementRE = /^\\s*<(\\w+)[^>]*>/,\n            classSelectorRE = /^\\.([\\w-]+)$/,\n            tagSelectorRE = /^[\\w-]+$/,\n            _attrCache = {},\n            _propCache = {},\n            cssNumber = {\n                \"columncount\": true,\n                \"fontweight\": true,\n                \"lineheight\": true,\n                \"column-count\": true,\n                \"font-weight\": true,\n                \"line-height\": true,\n                \"opacity\": true,\n                \"orphans\": true,\n                \"widows\": true,\n                \"zIndex\": true,\n                \"z-index\": true,\n                \"zoom\": true\n            },\n            isWin8=(typeof(MSApp)===\"object\");",
+    "code": "var af = (function(window) {\n        \"use strict\";\n        var nundefined, document = window.document,\n            emptyArray = [],\n            slice = emptyArray.slice,\n            classCache = {},\n            eventHandlers = [],\n            _eventID = 1,\n            jsonPHandlers = [],\n            _jsonPID = 1,\n            fragementRE = /^\\s*<(\\w+)[^>]*>/,\n            classSelectorRE = /^\\.([\\w-]+)$/,\n            tagSelectorRE = /^[\\w-]+$/,\n            _attrCache = {},\n            _propCache = {},\n            cssNumber = {\n                \"columncount\": true,\n                \"fontweight\": true,\n                \"lineheight\": true,\n                \"column-count\": true,\n                \"font-weight\": true,\n                \"line-height\": true,\n                \"opacity\": true,\n                \"orphans\": true,\n                \"widows\": true,\n                \"zIndex\": true,\n                \"z-index\": true,\n                \"zoom\": true\n            },\n            isWin8 = (typeof(MSApp) === \"object\");",
     "ctx": {
       "type": "declaration",
       "name": "af",
-      "value": "(function (window) {",
+      "value": "(function(window) {",
       "string": "af"
     }
   },
@@ -63,7 +63,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "function _addPx(prop, val) {\n            return (typeof (val) === \"number\") && !cssNumber[prop.toLowerCase()] ? val + \"px\" : val;\n        }",
+    "code": "function _addPx(prop, val) {\n            return (typeof(val) === \"number\") && !cssNumber[prop.toLowerCase()] ? val + \"px\" : val;\n        }",
     "ctx": {
       "type": "function",
       "name": "_addPx",
@@ -200,7 +200,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "function siblings(nodes, element) {\n            var elems = [];\n            if (nodes ==nundefined)\n                return elems;\n\n            for (; nodes; nodes = nodes.nextSibling) {\n                if (nodes.nodeType == 1 && nodes !== element) {\n                    elems.push(nodes);\n                }\n            }\n            return elems;\n        }",
+    "code": "function siblings(nodes, element) {\n            var elems = [];\n            if (nodes == nundefined)\n                return elems;\n\n            for (; nodes; nodes = nodes.nextSibling) {\n                if (nodes.nodeType == 1 && nodes !== element) {\n                    elems.push(nodes);\n                }\n            }\n            return elems;\n        }",
     "ctx": {
       "type": "function",
       "name": "siblings",
@@ -238,7 +238,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "var $afm = function (toSelect, what) {\n            this.length = 0;\n            if (!toSelect) {\n                return this;\n            } else if (toSelect instanceof $afm && what ==nundefined) {\n                return toSelect;\n            } else if (af.isFunction(toSelect)) {\n                return af(document).ready(toSelect);\n            } else if (af.isArray(toSelect) && toSelect.length != nundefined) { //Passing in an array or object\n                for (var i = 0; i < toSelect.length; i++)\n                    this[this.length++] = toSelect[i];\n                return this;\n            } else if (af.isObject(toSelect) && af.isObject(what)) { //var tmp=$(\"span\");  $(\"p\").find(tmp);\n                if (toSelect.length ==nundefined) {\n                    if (toSelect.parentNode == what)\n                        this[this.length++] = toSelect;\n                } else {\n                    for (var j = 0; j < toSelect.length; j++)\n                        if (toSelect[j].parentNode == what)\n                            this[this.length++] = toSelect[j];\n                }\n                return this;\n            } else if (af.isObject(toSelect) && what ==nundefined) { //Single object\n                this[this.length++] = toSelect;\n                return this;\n            } else if (what !==nundefined) {\n                if (what instanceof $afm) {\n                    return what.find(toSelect);\n                }\n\n            } else {\n                what = document;\n            }\n\n            return this.selector(toSelect, what);\n\n        };"
+    "code": "var $afm = function(toSelect, what) {\n            this.length = 0;\n            if (!toSelect) {\n                return this;\n            } else if (toSelect instanceof $afm && what == nundefined) {\n                return toSelect;\n            } else if (af.isFunction(toSelect)) {\n                return af(document).ready(toSelect);\n            } else if (af.isArray(toSelect) && toSelect.length != nundefined) { //Passing in an array or object\n                for (var i = 0; i < toSelect.length; i++)\n                    this[this.length++] = toSelect[i];\n                return this;\n            } else if (af.isObject(toSelect) && af.isObject(what)) { //var tmp=$(\"span\");  $(\"p\").find(tmp);\n                if (toSelect.length == nundefined) {\n                    if (toSelect.parentNode == what)\n                        this[this.length++] = toSelect;\n                } else {\n                    for (var j = 0; j < toSelect.length; j++)\n                        if (toSelect[j].parentNode == what)\n                            this[this.length++] = toSelect[j];\n                }\n                return this;\n            } else if (af.isObject(toSelect) && what == nundefined) { //Single object\n                this[this.length++] = toSelect;\n                return this;\n            } else if (what !== nundefined) {\n                if (what instanceof $afm) {\n                    return what.find(toSelect);\n                }\n\n            } else {\n                what = document;\n            }\n\n            return this.selector(toSelect, what);\n\n        };"
   },
   {
     "tags": [
@@ -271,7 +271,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "var $ = function (selector, what) {\n            return new $afm(selector, what);\n        };"
+    "code": "var $ = function(selector, what) {\n            return new $afm(selector, what);\n        };"
   },
   {
     "tags": [
@@ -287,7 +287,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "function _selectorAll(selector, what) {\n            try {\n                return  what.querySelectorAll(selector);",
+    "code": "function _selectorAll(selector, what) {\n            try {\n                return what.querySelectorAll(selector);",
     "ctx": {
       "type": "function",
       "name": "_selectorAll",
@@ -336,7 +336,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "function _selector(selector, what) {\n\n\n            selector = selector.trim();\n\n            if (selector[0] === \"#\" && selector.indexOf(\".\") == -1 && selector.indexOf(\" \") === -1 && selector.indexOf(\">\") === -1) {\n                if (what == document)\n                    _shimNodes(what.getElementById(selector.replace(\"#\", \"\")), this);\n                else\n                    _shimNodes(_selectorAll(selector, what), this);\n            }\n            else if ((selector[0] === \"<\" && selector[selector.length - 1] === \">\")||(selector.indexOf(\"<\")!==-1&&selector.indexOf(\">\")!==-1)) //html\n\n            {\n                var tmp = document.createElement(\"div\");\n                if(isWin8)\n                {\n                    MSApp.execUnsafeLocalFunction(function(){\n                        tmp.innerHTML=selector.trim();\n                    });\n                }\n                else\n                    tmp.innerHTML = selector.trim();\n                _shimNodes(tmp.childNodes, this);\n            } else {\n                _shimNodes((_selectorAll(selector, what)), this);\n            }\n            return this;\n        }\n\n        function _shimNodes(nodes, obj) {\n            if (!nodes)\n                return;\n            if (nodes.nodeType){\n                obj[obj.length++] = nodes;\n                return;\n            }\n            for (var i = 0, iz = nodes.length; i < iz; i++)\n                obj[obj.length++] = nodes[i];\n        }",
+    "code": "function _selector(selector, what) {\n\n\n            selector = selector.trim();\n\n            if (selector[0] === \"#\" && selector.indexOf(\".\") == -1 && selector.indexOf(\" \") === -1 && selector.indexOf(\">\") === -1) {\n                if (what == document)\n                    _shimNodes(what.getElementById(selector.replace(\"#\", \"\")), this);\n                else\n                    _shimNodes(_selectorAll(selector, what), this);\n            } else if ((selector[0] === \"<\" && selector[selector.length - 1] === \">\") || (selector.indexOf(\"<\") !== -1 && selector.indexOf(\">\") !== -1)) //html\n\n            {\n                var tmp = document.createElement(\"div\");\n                if (isWin8) {\n                    MSApp.execUnsafeLocalFunction(function() {\n                        tmp.innerHTML = selector.trim();\n                    });\n                } else\n                    tmp.innerHTML = selector.trim();\n                _shimNodes(tmp.childNodes, this);\n            } else {\n                _shimNodes((_selectorAll(selector, what)), this);\n            }\n            return this;\n        }\n\n        function _shimNodes(nodes, obj) {\n            if (!nodes)\n                return;\n            if (nodes.nodeType) {\n                obj[obj.length++] = nodes;\n                return;\n            }\n            for (var i = 0, iz = nodes.length; i < iz; i++)\n                obj[obj.length++] = nodes[i];\n        }",
     "ctx": {
       "type": "function",
       "name": "_selector",
@@ -372,7 +372,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.is$ = function (obj) {\n            return obj instanceof $afm;\n        };"
+    "code": "$.is$ = function(obj) {\n            return obj instanceof $afm;\n        };"
   },
   {
     "tags": [
@@ -412,7 +412,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.map = function (elements, callback) {\n            var value, values = [],\n                i, key;\n            if ($.isArray(elements))\n                for (i = 0; i < elements.length; i++) {\n                    value = callback(elements[i], i);\n                    if (value !==nundefined)\n                        values.push(value);\n                } else if ($.isObject(elements))\n                for (key in elements) {\n                    if (!elements.hasOwnProperty(key))\n                        continue;\n                    value = callback(elements[key], key);\n                    if (value !==nundefined)\n                        values.push(value);\n                }\n            return af([values]);\n        };"
+    "code": "$.map = function(elements, callback) {\n            var value, values = [],\n                i, key;\n            if ($.isArray(elements))\n                for (i = 0; i < elements.length; i++) {\n                    value = callback(elements[i], i);\n                    if (value !== nundefined)\n                        values.push(value);\n            } else if ($.isObject(elements))\n                for (key in elements) {\n                    if (!elements.hasOwnProperty(key))\n                        continue;\n                    value = callback(elements[key], key);\n                    if (value !== nundefined)\n                        values.push(value);\n            }\n            return af([values]);\n        };"
   },
   {
     "tags": [
@@ -452,7 +452,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.each = function (elements, callback) {\n            var i, key;\n            if ($.isArray(elements))\n                for (i = 0; i < elements.length; i++) {\n                    if (callback(i, elements[i]) === false)\n                        return elements;\n                } else if ($.isObject(elements))\n                for (key in elements) {\n                    if (!elements.hasOwnProperty(key))\n                        continue;\n                    if (callback(key, elements[key]) === false)\n                        return elements;\n                }\n            return elements;\n        };"
+    "code": "$.each = function(elements, callback) {\n            var i, key;\n            if ($.isArray(elements))\n                for (i = 0; i < elements.length; i++) {\n                    if (callback(i, elements[i]) === false)\n                        return elements;\n            } else if ($.isObject(elements))\n                for (key in elements) {\n                    if (!elements.hasOwnProperty(key))\n                        continue;\n                    if (callback(key, elements[key]) === false)\n                        return elements;\n            }\n            return elements;\n        };"
   },
   {
     "tags": [
@@ -491,7 +491,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.extend = function (target) {\n            if (target ==nundefined)\n                target = this;\n            if (arguments.length === 1) {\n                for (var key in target)\n                    this[key] = target[key];\n                return this;\n            } else {\n                slice.call(arguments, 1).forEach(function (source) {\n                    for (var key in source)\n                        target[key] = source[key];\n                });\n            }\n            return target;\n        };"
+    "code": "$.extend = function(target) {\n            if (target == nundefined)\n                target = this;\n            if (arguments.length === 1) {\n                for (var key in target)\n                    this[key] = target[key];\n                return this;\n            } else {\n                slice.call(arguments, 1).forEach(function(source) {\n                    for (var key in source)\n                        target[key] = source[key];\n                });\n            }\n            return target;\n        };"
   },
   {
     "tags": [
@@ -526,7 +526,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.isArray = function (obj) {\n            return obj instanceof Array && obj.push != nundefined; //ios 3.1.3 doesn't have Array.isArray\n        };"
+    "code": "$.isArray = function(obj) {\n            return obj instanceof Array && obj.push != nundefined; //ios 3.1.3 doesn't have Array.isArray\n        };"
   },
   {
     "tags": [
@@ -557,7 +557,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.isFunction = function (obj) {\n            return typeof obj === \"function\" && !(obj instanceof RegExp);\n        };"
+    "code": "$.isFunction = function(obj) {\n            return typeof obj === \"function\" && !(obj instanceof RegExp);\n        };"
   },
   {
     "tags": [
@@ -588,7 +588,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.isObject = function (obj) {\n            return typeof obj === \"object\";\n        };"
+    "code": "$.isObject = function(obj) {\n            return typeof obj === \"object\";\n        };"
   },
   {
     "tags": [],
@@ -629,7 +629,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "setupOld: function (params) {\n                if (params ==nundefined)\n                    return $();\n                params.oldElement = this;\n                return params;\n\n            },"
+    "code": "setupOld: function(params) {\n                if (params == nundefined)\n                    return $();\n                params.oldElement = this;\n                return params;\n\n            },"
   },
   {
     "tags": [
@@ -660,7 +660,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "map: function (fn) {\n                var value, values = [],\n                    i;\n                for (i = 0; i < this.length; i++) {\n                    value = fn(i, this[i]);\n                    if (value !==nundefined)\n                        values.push(value);\n                }\n                return $([values]);\n            },"
+    "code": "map: function(fn) {\n                var value, values = [],\n                    i;\n                for (i = 0; i < this.length; i++) {\n                    value = fn(i, this[i]);\n                    if (value !== nundefined)\n                        values.push(value);\n                }\n                return $([values]);\n            },"
   },
   {
     "tags": [
@@ -691,7 +691,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "each: function (callback) {\n                this.forEach(function (el, idx) {\n                    callback.call(el, idx, el);\n                });\n                return this;\n            },"
+    "code": "each: function(callback) {\n                this.forEach(function(el, idx) {\n                    callback.call(el, idx, el);\n                });\n                return this;\n            },"
   },
   {
     "tags": [
@@ -722,7 +722,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "ready: function (callback) {\n                if (document.readyState === \"complete\" || document.readyState === \"loaded\" || (!$.os.ie && document.readyState === \"interactive\")) //IE10 fires interactive too early\n                    callback();\n                else\n                    document.addEventListener(\"DOMContentLoaded\", callback, false);\n                return this;\n            },"
+    "code": "ready: function(callback) {\n                if (document.readyState === \"complete\" || document.readyState === \"loaded\" || (!$.os.ie && document.readyState === \"interactive\")) //IE10 fires interactive too early\n                    callback();\n                else\n                    document.addEventListener(\"DOMContentLoaded\", callback, false);\n                return this;\n            },"
   },
   {
     "tags": [
@@ -755,7 +755,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "find: function (sel) {\n                if (this.length === 0)\n                    return this;\n                var elems = [];\n                var tmpElems;\n                for (var i = 0; i < this.length; i++) {\n                    tmpElems = ($(sel, this[i]));\n\n                    for (var j = 0; j < tmpElems.length; j++) {\n                        elems.push(tmpElems[j]);\n                    }\n                }\n                return $(unique(elems));\n            },"
+    "code": "find: function(sel) {\n                if (this.length === 0)\n                    return this;\n                var elems = [];\n                var tmpElems;\n                for (var i = 0; i < this.length; i++) {\n                    tmpElems = ($(sel, this[i]));\n\n                    for (var j = 0; j < tmpElems.length; j++) {\n                        elems.push(tmpElems[j]);\n                    }\n                }\n                return $(unique(elems));\n            },"
   },
   {
     "tags": [
@@ -794,7 +794,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "html: function (html, cleanup) {\n                if (this.length === 0)\n                    return this;\n                if (html ===nundefined)\n                    return this[0].innerHTML;\n\n                for (var i = 0; i < this.length; i++) {\n                    if (cleanup !== false)\n                        $.cleanUpContent(this[i], false, true);\n                    if(isWin8)\n                    {\n                        MSApp.execUnsafeLocalFunction(function(){\n                            this[i].innerHTML=html;\n                        });\n                    }\n                    else\n                        this[i].innerHTML = html;\n                }\n                return this;\n            },"
+    "code": "html: function(html, cleanup) {\n                if (this.length === 0)\n                    return this;\n                if (html === nundefined)\n                    return this[0].innerHTML;\n\n                for (var i = 0; i < this.length; i++) {\n                    if (cleanup !== false)\n                        $.cleanUpContent(this[i], false, true);\n                    if (isWin8) {\n                        MSApp.execUnsafeLocalFunction(function() {\n                            this[i].innerHTML = html;\n                        });\n                    } else\n                        this[i].innerHTML = html;\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -825,7 +825,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "text: function (text) {\n                if (this.length === 0)\n                    return this;\n                if (text ===nundefined)\n                    return this[0].textContent;\n                for (var i = 0; i < this.length; i++) {\n                    this[i].textContent = text;\n                }\n                return this;\n            },"
+    "code": "text: function(text) {\n                if (this.length === 0)\n                    return this;\n                if (text === nundefined)\n                    return this[0].textContent;\n                for (var i = 0; i < this.length; i++) {\n                    this[i].textContent = text;\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -864,7 +864,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "css: function (attribute, value, obj) {\n                var toAct = obj != nundefined ? obj : this[0];\n                if (this.length === 0)\n                    return this;\n                if (value ==nundefined && typeof (attribute) === \"string\") {\n                    var styles = window.getComputedStyle(toAct);\n                    return toAct.style[attribute] ? toAct.style[attribute] : window.getComputedStyle(toAct)[attribute];\n                }\n                for (var i = 0; i < this.length; i++) {\n                    if ($.isObject(attribute)) {\n                        for (var j in attribute) {\n                            this[i].style[j] = _addPx(j, attribute[j]);\n                        }\n                    } else {\n                        this[i].style[attribute] = _addPx(attribute, value);\n                    }\n                }\n                return this;\n            },"
+    "code": "css: function(attribute, value, obj) {\n                var toAct = obj != nundefined ? obj : this[0];\n                if (this.length === 0)\n                    return this;\n                if (value == nundefined && typeof(attribute) === \"string\") {\n                    var styles = window.getComputedStyle(toAct);\n                    return toAct.style[attribute] ? toAct.style[attribute] : window.getComputedStyle(toAct)[attribute];\n                }\n                for (var i = 0; i < this.length; i++) {\n                    if ($.isObject(attribute)) {\n                        for (var j in attribute) {\n                            this[i].style[j] = _addPx(j, attribute[j]);\n                        }\n                    } else {\n                        this[i].style[attribute] = _addPx(attribute, value);\n                    }\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -903,7 +903,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "vendorCss: function (attribute, value, obj) {\n                return this.css($.feat.cssPrefix + attribute, value, obj);\n            },"
+    "code": "vendorCss: function(attribute, value, obj) {\n                return this.css($.feat.cssPrefix + attribute, value, obj);\n            },"
   },
   {
     "tags": [
@@ -934,7 +934,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "cssTranslate: function (val) {\n                return this.vendorCss(\"Transform\", \"translate\" + $.feat.cssTransformStart + val + $.feat.cssTransformEnd);\n            },"
+    "code": "cssTranslate: function(val) {\n                return this.vendorCss(\"Transform\", \"translate\" + $.feat.cssTransformStart + val + $.feat.cssTransformEnd);\n            },"
   },
   {
     "tags": [
@@ -968,7 +968,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "computedStyle:function(val){\n                if(this.length===0||val==nundefined) return;\n                return window.getComputedStyle(this[0],'')[val];\n            },"
+    "code": "computedStyle: function(val) {\n                if (this.length === 0 || val == nundefined) return;\n                return window.getComputedStyle(this[0], '')[val];\n            },"
   },
   {
     "tags": [
@@ -991,7 +991,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "empty: function () {\n                for (var i = 0; i < this.length; i++) {\n                    $.cleanUpContent(this[i], false, true);\n                    this[i].innerHTML = '';\n                }\n                return this;\n            },"
+    "code": "empty: function() {\n                for (var i = 0; i < this.length; i++) {\n                    $.cleanUpContent(this[i], false, true);\n                    this[i].textContent = '';\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1014,7 +1014,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "hide: function () {\n                if (this.length === 0)\n                    return this;\n                for (var i = 0; i < this.length; i++) {\n                    if (this.css(\"display\", null, this[i]) != \"none\") {\n                        this[i].setAttribute(\"afmOldStyle\", this.css(\"display\", null, this[i]));\n                        this[i].style.display = \"none\";\n                    }\n                }\n                return this;\n            },"
+    "code": "hide: function() {\n                if (this.length === 0)\n                    return this;\n                for (var i = 0; i < this.length; i++) {\n                    if (this.css(\"display\", null, this[i]) != \"none\") {\n                        this[i].setAttribute(\"afmOldStyle\", this.css(\"display\", null, this[i]));\n                        this[i].style.display = \"none\";\n                    }\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1037,7 +1037,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "show: function () {\n                if (this.length === 0)\n                    return this;\n                for (var i = 0; i < this.length; i++) {\n                    if (this.css(\"display\", null, this[i]) == \"none\") {\n                        this[i].style.display = this[i].getAttribute(\"afmOldStyle\") ? this[i].getAttribute(\"afmOldStyle\") : 'block';\n                        this[i].removeAttribute(\"afmOldStyle\");\n                    }\n                }\n                return this;\n            },"
+    "code": "show: function() {\n                if (this.length === 0)\n                    return this;\n                for (var i = 0; i < this.length; i++) {\n                    if (this.css(\"display\", null, this[i]) == \"none\") {\n                        this[i].style.display = this[i].getAttribute(\"afmOldStyle\") ? this[i].getAttribute(\"afmOldStyle\") : 'block';\n                        this[i].removeAttribute(\"afmOldStyle\");\n                    }\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1068,7 +1068,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "toggle: function (show) {\n                var show2 = show === true ? true : false;\n                for (var i = 0; i < this.length; i++) {\n                    if (window.getComputedStyle(this[i])['display'] !== \"none\" || (show !=nundefined && show2 === false)) {\n                        this[i].setAttribute(\"afmOldStyle\", this[i].style.display);\n                        this[i].style.display = \"none\";\n                    } else {\n                        this[i].style.display = this[i].getAttribute(\"afmOldStyle\") != nundefined ? this[i].getAttribute(\"afmOldStyle\") : 'block';\n                        this[i].removeAttribute(\"afmOldStyle\");\n                    }\n                }\n                return this;\n            },"
+    "code": "toggle: function(show) {\n                var show2 = show === true ? true : false;\n                for (var i = 0; i < this.length; i++) {\n                    if (window.getComputedStyle(this[i])['display'] !== \"none\" || (show != nundefined && show2 === false)) {\n                        this[i].setAttribute(\"afmOldStyle\", this[i].style.display);\n                        this[i].style.display = \"none\";\n                    } else {\n                        this[i].style.display = this[i].getAttribute(\"afmOldStyle\") != nundefined ? this[i].getAttribute(\"afmOldStyle\") : 'block';\n                        this[i].removeAttribute(\"afmOldStyle\");\n                    }\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1100,7 +1100,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "val: function (value) {\n                if (this.length === 0)\n                    return (value ===nundefined) ? undefined : this;\n                if (value ==nundefined)\n                    return this[0].value;\n                for (var i = 0; i < this.length; i++) {\n                    this[i].value = value;\n                }\n                return this;\n            },"
+    "code": "val: function(value) {\n                if (this.length === 0)\n                    return (value === nundefined) ? undefined : this;\n                if (value == nundefined)\n                    return this[0].value;\n                for (var i = 0; i < this.length; i++) {\n                    this[i].value = value;\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1146,7 +1146,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "attr: function (attr, value) {\n                if (this.length === 0)\n                    return (value ===nundefined) ? undefined : this;\n                if (value ===nundefined && !$.isObject(attr)) {\n                    var val = (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) ? (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) : this[0].getAttribute(attr);\n                    return val;\n                }\n                for (var i = 0; i < this.length; i++) {\n                    if ($.isObject(attr)) {\n                        for (var key in attr) {\n                            $(this[i]).attr(key, attr[key]);\n                        }\n                    } else if ($.isArray(value) || $.isObject(value) || $.isFunction(value)) {\n\n                        if (!this[i].afmCacheId)\n                            this[i].afmCacheId = $.uuid();\n\n                        if (!_attrCache[this[i].afmCacheId])\n                            _attrCache[this[i].afmCacheId] = {};\n                        _attrCache[this[i].afmCacheId][attr] = value;\n                    } else if (value ===null && value != nundefined) {\n                        this[i].removeAttribute(attr);\n                        if (this[i].afmCacheId && _attrCache[this[i].afmCacheId][attr])\n                            delete _attrCache[this[i].afmCacheId][attr];\n                    } else {\n                        this[i].setAttribute(attr, value);\n                    }\n                }\n                return this;\n            },"
+    "code": "attr: function(attr, value) {\n                if (this.length === 0)\n                    return (value === nundefined) ? undefined : this;\n                if (value === nundefined && !$.isObject(attr)) {\n                    var val = (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) ? (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) : this[0].getAttribute(attr);\n                    return val;\n                }\n                for (var i = 0; i < this.length; i++) {\n                    if ($.isObject(attr)) {\n                        for (var key in attr) {\n                            $(this[i]).attr(key, attr[key]);\n                        }\n                    } else if ($.isArray(value) || $.isObject(value) || $.isFunction(value)) {\n\n                        if (!this[i].afmCacheId)\n                            this[i].afmCacheId = $.uuid();\n\n                        if (!_attrCache[this[i].afmCacheId])\n                            _attrCache[this[i].afmCacheId] = {};\n                        _attrCache[this[i].afmCacheId][attr] = value;\n                    } else if (value === null && value != nundefined) {\n                        this[i].removeAttribute(attr);\n                        if (this[i].afmCacheId && _attrCache[this[i].afmCacheId][attr])\n                            delete _attrCache[this[i].afmCacheId][attr];\n                    } else {\n                        this[i].setAttribute(attr, value);\n                    }\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1177,7 +1177,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "removeAttr: function (attr) {\n                var that = this;\n                for (var i = 0; i < this.length; i++) {\n                    attr.split(/\\s+/g).forEach(function (param) {\n                        that[i].removeAttribute(param);\n                        if (that[i].afmCacheId && _attrCache[that[i].afmCacheId][attr])\n                            delete _attrCache[that[i].afmCacheId][attr];\n                    });\n                }\n                return this;\n            },"
+    "code": "removeAttr: function(attr) {\n                var that = this;\n                for (var i = 0; i < this.length; i++) {\n                    attr.split(/\\s+/g).forEach(function(param) {\n                        that[i].removeAttribute(param);\n                        if (that[i].afmCacheId && _attrCache[that[i].afmCacheId][attr])\n                            delete _attrCache[that[i].afmCacheId][attr];\n                    });\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1223,7 +1223,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "prop: function (prop, value) {\n                if (this.length === 0)\n                    return (value ===nundefined) ? undefined : this;\n                if (value ===nundefined && !$.isObject(prop)) {\n                    var res;\n                    var val = (this[0].afmCacheId && _propCache[this[0].afmCacheId][prop]) ? (this[0].afmCacheId && _propCache[this[0].afmCacheId][prop]) : !(res = this[0][prop]) && prop in this[0] ? this[0][prop] : res;\n                    return val;\n                }\n                for (var i = 0; i < this.length; i++) {\n                    if ($.isObject(prop)) {\n                        for (var key in prop) {\n                            $(this[i]).prop(key, prop[key]);\n                        }\n                    } else if ($.isArray(value) || $.isObject(value) || $.isFunction(value)) {\n\n                        if (!this[i].afmCacheId)\n                            this[i].afmCacheId = $.uuid();\n\n                        if (!_propCache[this[i].afmCacheId])\n                            _propCache[this[i].afmCacheId] = {};\n                        _propCache[this[i].afmCacheId][prop] = value;\n                    } else if (value === null && value !==undefined) {\n                        $(this[i]).removeProp(prop);\n                    } else {\n                        this[i][prop] = value;\n                    }\n                }\n                return this;\n            },"
+    "code": "prop: function(prop, value) {\n                if (this.length === 0)\n                    return (value === nundefined) ? undefined : this;\n                if (value === nundefined && !$.isObject(prop)) {\n                    var res;\n                    var val = (this[0].afmCacheId && _propCache[this[0].afmCacheId][prop]) ? (this[0].afmCacheId && _propCache[this[0].afmCacheId][prop]) : !(res = this[0][prop]) && prop in this[0] ? this[0][prop] : res;\n                    return val;\n                }\n                for (var i = 0; i < this.length; i++) {\n                    if ($.isObject(prop)) {\n                        for (var key in prop) {\n                            $(this[i]).prop(key, prop[key]);\n                        }\n                    } else if ($.isArray(value) || $.isObject(value) || $.isFunction(value)) {\n\n                        if (!this[i].afmCacheId)\n                            this[i].afmCacheId = $.uuid();\n\n                        if (!_propCache[this[i].afmCacheId])\n                            _propCache[this[i].afmCacheId] = {};\n                        _propCache[this[i].afmCacheId][prop] = value;\n                    } else if (value === null && value !== undefined) {\n                        $(this[i]).removeProp(prop);\n                    } else {\n                        this[i][prop] = value;\n                    }\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1254,7 +1254,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "removeProp: function (prop) {\n                var that = this;\n                for (var i = 0; i < this.length; i++) {\n                    prop.split(/\\s+/g).forEach(function (param) {\n                        if (that[i][param])\n                            that[i][param]=undefined;\n                        if (that[i].afmCacheId && _propCache[that[i].afmCacheId][prop]) {\n                            delete _propCache[that[i].afmCacheId][prop];\n                        }\n                    });\n                }\n                return this;\n            },"
+    "code": "removeProp: function(prop) {\n                var that = this;\n                for (var i = 0; i < this.length; i++) {\n                    prop.split(/\\s+/g).forEach(function(param) {\n                        if (that[i][param])\n                            that[i][param] = undefined;\n                        if (that[i].afmCacheId && _propCache[that[i].afmCacheId][prop]) {\n                            delete _propCache[that[i].afmCacheId][prop];\n                        }\n                    });\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1287,7 +1287,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "remove: function (selector) {\n                var elems = $(this).filter(selector);\n                if (elems ==nundefined)\n                    return this;\n                for (var i = 0; i < elems.length; i++) {\n                    $.cleanUpContent(elems[i], true, true);\n                    elems[i].parentNode.removeChild(elems[i]);\n                }\n                return this;\n            },"
+    "code": "remove: function(selector) {\n                var elems = $(this).filter(selector);\n                if (elems == nundefined)\n                    return this;\n                for (var i = 0; i < elems.length; i++) {\n                    $.cleanUpContent(elems[i], true, true);\n                    elems[i].parentNode.removeChild(elems[i]);\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1318,7 +1318,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "addClass: function (name) {\n                if(name==nundefined) return this;\n                for (var i = 0; i < this.length; i++) {\n                    var cls = this[i].className;\n                    var classList = [];\n                    var that = this;\n                    name.split(/\\s+/g).forEach(function (cname) {\n                        if (!that.hasClass(cname, that[i]))\n                            classList.push(cname);\n                    });\n\n                    this[i].className += (cls ? \" \" : \"\") + classList.join(\" \");\n                    this[i].className = this[i].className.trim();\n                }\n                return this;\n            },"
+    "code": "addClass: function(name) {\n                if (name == nundefined) return this;\n                for (var i = 0; i < this.length; i++) {\n                    var cls = this[i].className;\n                    var classList = [];\n                    var that = this;\n                    name.split(/\\s+/g).forEach(function(cname) {\n                        if (!that.hasClass(cname, that[i]))\n                            classList.push(cname);\n                    });\n\n                    this[i].className += (cls ? \" \" : \"\") + classList.join(\" \");\n                    this[i].className = this[i].className.trim();\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1349,7 +1349,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "removeClass: function (name) {\n                if(name==nundefined) return this;\n                for (var i = 0; i < this.length; i++) {\n                    if (name ==nundefined) {\n                        this[i].className = '';\n                        return this;\n                    }\n                    var classList = this[i].className;\n                    name.split(/\\s+/g).forEach(function (cname) {\n                        classList = classList.replace(classRE(cname), \" \");\n                    });\n                    if (classList.length > 0)\n                        this[i].className = classList.trim();\n                    else\n                        this[i].className = \"\";\n                }\n                return this;\n            },"
+    "code": "removeClass: function(name) {\n                if (name == nundefined) return this;\n                for (var i = 0; i < this.length; i++) {\n                    if (name == nundefined) {\n                        this[i].className = '';\n                        return this;\n                    }\n                    var classList = this[i].className;\n                    name.split(/\\s+/g).forEach(function(cname) {\n                        classList = classList.replace(classRE(cname), \" \");\n                    });\n                    if (classList.length > 0)\n                        this[i].className = classList.trim();\n                    else\n                        this[i].className = \"\";\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1388,7 +1388,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "replaceClass: function (name, newName) {\n                if(name==nundefined||newName==nundefined) return this;\n                for (var i = 0; i < this.length; i++) {\n                    if (name ==nundefined) {\n                        this[i].className = newName;\n                        continue;\n                    }\n                    var classList = this[i].className;\n                    name.split(/\\s+/g).concat(newName.split(/\\s+/g)).forEach(function (cname) {\n                        classList = classList.replace(classRE(cname), \" \");\n                    });\n                    classList = classList.trim();\n                    if (classList.length > 0) {\n                        this[i].className = (classList + \" \" + newName).trim();\n                    } else\n                        this[i].className = newName;\n                }\n                return this;\n            },"
+    "code": "replaceClass: function(name, newName) {\n                if (name == nundefined || newName == nundefined) return this;\n                for (var i = 0; i < this.length; i++) {\n                    if (name == nundefined) {\n                        this[i].className = newName;\n                        continue;\n                    }\n                    var classList = this[i].className;\n                    name.split(/\\s+/g).concat(newName.split(/\\s+/g)).forEach(function(cname) {\n                        classList = classList.replace(classRE(cname), \" \");\n                    });\n                    classList = classList.trim();\n                    if (classList.length > 0) {\n                        this[i].className = (classList + \" \" + newName).trim();\n                    } else\n                        this[i].className = newName;\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1427,7 +1427,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "hasClass: function (name, element) {\n                if (this.length === 0)\n                    return false;\n                if (!element)\n                    element = this[0];\n                return classRE(name).test(element.className);\n            },"
+    "code": "hasClass: function(name, element) {\n                if (this.length === 0)\n                    return false;\n                if (!element)\n                    element = this[0];\n                return classRE(name).test(element.className);\n            },"
   },
   {
     "tags": [
@@ -1467,7 +1467,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "append: function (element, insert) {\n                if (element && element.length != nundefined && element.length === 0)\n                    return this;\n                if ($.isArray(element) || $.isObject(element))\n                    element = $(element);\n                var i;\n\n\n                for (i = 0; i < this.length; i++) {\n                    if (element.length && typeof element != \"string\") {\n                        element = $(element);\n                        _insertFragments(element, this[i], insert);\n                    } else {\n                        var obj = fragementRE.test(element) ? $(element) : undefined;\n                        if (obj ==nundefined || obj.length === 0) {\n                            obj = document.createTextNode(element);\n                        }\n                        if (obj.nodeName != nundefined && obj.nodeName.toLowerCase() == \"script\" && (!obj.type || obj.type.toLowerCase() === 'text/javascript')) {\n                            window['eval'](obj.innerHTML);\n                        } else if (obj instanceof $afm) {\n                            _insertFragments(obj, this[i], insert);\n                        } else {\n                            insert != nundefined ? this[i].insertBefore(obj, this[i].firstChild) : this[i].appendChild(obj);\n                        }\n                    }\n                }\n                return this;\n            },"
+    "code": "append: function(element, insert) {\n                if (element && element.length != nundefined && element.length === 0)\n                    return this;\n                if ($.isArray(element) || $.isObject(element))\n                    element = $(element);\n                var i;\n\n\n                for (i = 0; i < this.length; i++) {\n                    if (element.length && typeof element != \"string\") {\n                        element = $(element);\n                        _insertFragments(element, this[i], insert);\n                    } else {\n                        var obj = fragementRE.test(element) ? $(element) : undefined;\n                        if (obj == nundefined || obj.length === 0) {\n                            obj = document.createTextNode(element);\n                        }\n                        if (obj.nodeName != nundefined && obj.nodeName.toLowerCase() == \"script\" && (!obj.type || obj.type.toLowerCase() === 'text/javascript')) {\n                            window['eval'](obj.innerHTML);\n                        } else if (obj instanceof $afm) {\n                            _insertFragments(obj, this[i], insert);\n                        } else {\n                            insert != nundefined ? this[i].insertBefore(obj, this[i].firstChild) : this[i].appendChild(obj);\n                        }\n                    }\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1500,7 +1500,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "appendTo: function (selector, insert) {\n                var tmp = $(selector);\n                tmp.append(this);\n                return this;\n            },"
+    "code": "appendTo: function(selector, insert) {\n                var tmp = $(selector);\n                tmp.append(this);\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1525,7 +1525,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "prependTo: function (selector) {\n                var tmp = $(selector);\n                tmp.append(this, true);\n                return this;\n            },"
+    "code": "prependTo: function(selector) {\n                var tmp = $(selector);\n                tmp.append(this, true);\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1557,7 +1557,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "prepend: function (element) {\n                return this.append(element, 1);\n            },"
+    "code": "prepend: function(element) {\n                return this.append(element, 1);\n            },"
   },
   {
     "tags": [
@@ -1582,7 +1582,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "insertBefore: function (target, after) {\n                if (this.length === 0)\n                    return this;\n                target = $(target).get(0);\n                if (!target)\n                    return this;\n                for (var i = 0; i < this.length; i++) {\n                    after ? target.parentNode.insertBefore(this[i], target.nextSibling) : target.parentNode.insertBefore(this[i], target);\n                }\n                return this;\n            },"
+    "code": "insertBefore: function(target, after) {\n                if (this.length === 0)\n                    return this;\n                target = $(target).get(0);\n                if (!target)\n                    return this;\n                for (var i = 0; i < this.length; i++) {\n                    after ? target.parentNode.insertBefore(this[i], target.nextSibling) : target.parentNode.insertBefore(this[i], target);\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1607,7 +1607,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "insertAfter: function (target) {\n                this.insertBefore(target, true);\n            },"
+    "code": "insertAfter: function(target) {\n                this.insertBefore(target, true);\n            },"
   },
   {
     "tags": [
@@ -1638,7 +1638,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "get: function (index) {\n                index = index ==nundefined ? 0 : index;\n                if (index < 0)\n                    index += this.length;\n                return (this[index]) ? this[index] : undefined;\n            },"
+    "code": "get: function(index) {\n                index = index == nundefined ? 0 : index;\n                if (index < 0)\n                    index += this.length;\n                return (this[index]) ? this[index] : undefined;\n            },"
   },
   {
     "tags": [
@@ -1661,7 +1661,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "offset: function () {\n                var obj;\n                if (this.length === 0)\n                    return this;\n                if (this[0] == window)\n                    return {\n                        left: 0,\n                        top: 0,\n                        right: 0,\n                        bottom: 0,\n                        width: window.innerWidth,\n                        height: window.innerHeight\n                    };\n                else\n                    obj = this[0].getBoundingClientRect();\n                return {\n                    left: obj.left + window.pageXOffset,\n                    top: obj.top + window.pageYOffset,\n                    right: obj.right + window.pageXOffset,\n                    bottom: obj.bottom + window.pageYOffset,\n                    width: obj.right - obj.left,\n                    height: obj.bottom - obj.top\n                };\n            },"
+    "code": "offset: function() {\n                var obj;\n                if (this.length === 0)\n                    return this;\n                if (this[0] == window)\n                    return {\n                        left: 0,\n                        top: 0,\n                        right: 0,\n                        bottom: 0,\n                        width: window.innerWidth,\n                        height: window.innerHeight\n                };\n                else\n                    obj = this[0].getBoundingClientRect();\n                return {\n                    left: obj.left + window.pageXOffset,\n                    top: obj.top + window.pageYOffset,\n                    right: obj.right + window.pageXOffset,\n                    bottom: obj.bottom + window.pageYOffset,\n                    width: obj.right - obj.left,\n                    height: obj.bottom - obj.top\n                };\n            },"
   },
   {
     "tags": [
@@ -1684,7 +1684,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "height: function (val) {\n                if (this.length === 0)\n                    return this;\n                if (val != nundefined)\n                    return this.css(\"height\", val);\n                if (this[0] == this[0].window)\n                    return window.innerHeight;\n                if (this[0].nodeType == this[0].DOCUMENT_NODE)\n                    return this[0].documentElement.offsetheight;\n                else {\n                    var tmpVal = this.css(\"height\").replace(\"px\", \"\");\n                    if (tmpVal)\n                        return tmpVal;\n                    else\n                        return this.offset().height;\n                }\n            },"
+    "code": "height: function(val) {\n                if (this.length === 0)\n                    return this;\n                if (val != nundefined)\n                    return this.css(\"height\", val);\n                if (this[0] == this[0].window)\n                    return window.innerHeight;\n                if (this[0].nodeType == this[0].DOCUMENT_NODE)\n                    return this[0].documentElement.offsetheight;\n                else {\n                    var tmpVal = this.css(\"height\").replace(\"px\", \"\");\n                    if (tmpVal)\n                        return tmpVal;\n                    else\n                        return this.offset().height;\n                }\n            },"
   },
   {
     "tags": [
@@ -1707,7 +1707,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "width: function (val) {\n                if (this.length === 0)\n                    return this;\n                if (val != nundefined)\n                    return this.css(\"width\", val);\n                if (this[0] == this[0].window)\n                    return window.innerWidth;\n                if (this[0].nodeType == this[0].DOCUMENT_NODE)\n                    return this[0].documentElement.offsetwidth;\n                else {\n                    var tmpVal = this.css(\"width\").replace(\"px\", \"\");\n                    if (tmpVal)\n                        return tmpVal;\n                    else\n                        return this.offset().width;\n                }\n            },"
+    "code": "width: function(val) {\n                if (this.length === 0)\n                    return this;\n                if (val != nundefined)\n                    return this.css(\"width\", val);\n                if (this[0] == this[0].window)\n                    return window.innerWidth;\n                if (this[0].nodeType == this[0].DOCUMENT_NODE)\n                    return this[0].documentElement.offsetwidth;\n                else {\n                    var tmpVal = this.css(\"width\").replace(\"px\", \"\");\n                    if (tmpVal)\n                        return tmpVal;\n                    else\n                        return this.offset().width;\n                }\n            },"
   },
   {
     "tags": [
@@ -1740,7 +1740,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "parent: function (selector, recursive) {\n                if (this.length === 0)\n                    return this;\n                var elems = [];\n                for (var i = 0; i < this.length; i++) {\n                    var tmp = this[i];\n                    while (tmp.parentNode && tmp.parentNode != document) {\n                        elems.push(tmp.parentNode);\n                        if (tmp.parentNode)\n                            tmp = tmp.parentNode;\n                        if (!recursive)\n                            break;\n                    }\n                }\n                return this.setupOld($(unique(elems)).filter(selector));\n            },"
+    "code": "parent: function(selector, recursive) {\n                if (this.length === 0)\n                    return this;\n                var elems = [];\n                for (var i = 0; i < this.length; i++) {\n                    var tmp = this[i];\n                    while (tmp.parentNode && tmp.parentNode != document) {\n                        elems.push(tmp.parentNode);\n                        if (tmp.parentNode)\n                            tmp = tmp.parentNode;\n                        if (!recursive)\n                            break;\n                    }\n                }\n                return this.setupOld($(unique(elems)).filter(selector));\n            },"
   },
   {
     "tags": [
@@ -1773,7 +1773,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "parents: function (selector) {\n                return this.parent(selector, true);\n            },"
+    "code": "parents: function(selector) {\n                return this.parent(selector, true);\n            },"
   },
   {
     "tags": [
@@ -1806,7 +1806,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "children: function (selector) {\n\n                if (this.length === 0)\n                    return this;\n                var elems = [];\n                for (var i = 0; i < this.length; i++) {\n                    elems = elems.concat(siblings(this[i].firstChild));\n                }\n                return this.setupOld($((elems)).filter(selector));\n\n            },"
+    "code": "children: function(selector) {\n\n                if (this.length === 0)\n                    return this;\n                var elems = [];\n                for (var i = 0; i < this.length; i++) {\n                    elems = elems.concat(siblings(this[i].firstChild));\n                }\n                return this.setupOld($((elems)).filter(selector));\n\n            },"
   },
   {
     "tags": [
@@ -1839,7 +1839,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "siblings: function (selector) {\n                if (this.length === 0)\n                    return this;\n                var elems = [];\n                for (var i = 0; i < this.length; i++) {\n                    if (this[i].parentNode)\n                        elems = elems.concat(siblings(this[i].parentNode.firstChild, this[i]));\n                }\n                return this.setupOld($(elems).filter(selector));\n            },"
+    "code": "siblings: function(selector) {\n                if (this.length === 0)\n                    return this;\n                var elems = [];\n                for (var i = 0; i < this.length; i++) {\n                    if (this[i].parentNode)\n                        elems = elems.concat(siblings(this[i].parentNode.firstChild, this[i]));\n                }\n                return this.setupOld($(elems).filter(selector));\n            },"
   },
   {
     "tags": [
@@ -1880,7 +1880,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "closest: function (selector, context) {\n                if (this.length === 0)\n                    return this;\n                var elems = [],\n                    cur = this[0];\n\n                var start = $(selector, context);\n                if (start.length === 0)\n                    return $();\n                while (cur && start.indexOf(cur) == -1) {\n                    cur = cur !== context && cur !== document && cur.parentNode;\n                }\n                return $(cur);\n\n            },"
+    "code": "closest: function(selector, context) {\n                if (this.length === 0)\n                    return this;\n                var elems = [],\n                    cur = this[0];\n\n                var start = $(selector, context);\n                if (start.length === 0)\n                    return $();\n                while (cur && start.indexOf(cur) == -1) {\n                    cur = cur !== context && cur !== document && cur.parentNode;\n                }\n                return $(cur);\n\n            },"
   },
   {
     "tags": [
@@ -1913,7 +1913,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "filter: function (selector) {\n                if (this.length === 0)\n                    return this;\n\n                if (selector ==nundefined)\n                    return this;\n                var elems = [];\n                for (var i = 0; i < this.length; i++) {\n                    var val = this[i];\n                    if (val.parentNode && $(selector, val.parentNode).indexOf(val) >= 0)\n                        elems.push(val);\n                }\n                return this.setupOld($(unique(elems)));\n            },"
+    "code": "filter: function(selector) {\n                if (this.length === 0)\n                    return this;\n\n                if (selector == nundefined)\n                    return this;\n                var elems = [];\n                for (var i = 0; i < this.length; i++) {\n                    var val = this[i];\n                    if (val.parentNode && $(selector, val.parentNode).indexOf(val) >= 0)\n                        elems.push(val);\n                }\n                return this.setupOld($(unique(elems)));\n            },"
   },
   {
     "tags": [
@@ -1946,7 +1946,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "not: function (selector) {\n                if (this.length === 0)\n                    return this;\n                var elems = [];\n                for (var i = 0; i < this.length; i++) {\n                    var val = this[i];\n                    if (val.parentNode && $(selector, val.parentNode).indexOf(val) == -1)\n                        elems.push(val);\n                }\n                return this.setupOld($(unique(elems)));\n            },"
+    "code": "not: function(selector) {\n                if (this.length === 0)\n                    return this;\n                var elems = [];\n                for (var i = 0; i < this.length; i++) {\n                    var val = this[i];\n                    if (val.parentNode && $(selector, val.parentNode).indexOf(val) == -1)\n                        elems.push(val);\n                }\n                return this.setupOld($(unique(elems)));\n            },"
   },
   {
     "tags": [
@@ -1988,7 +1988,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "data: function (key, value) {\n                return this.attr('data-' + key, value);\n            },"
+    "code": "data: function(key, value) {\n                return this.attr('data-' + key, value);\n            },"
   },
   {
     "tags": [
@@ -2011,7 +2011,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "end: function () {\n                return this.oldElement != nundefined ? this.oldElement : $();\n            },"
+    "code": "end: function() {\n                return this.oldElement != nundefined ? this.oldElement : $();\n            },"
   },
   {
     "tags": [
@@ -2042,7 +2042,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "clone: function (deep) {\n                deep = deep === false ? false : true;\n                if (this.length === 0)\n                    return this;\n                var elems = [];\n                for (var i = 0; i < this.length; i++) {\n                    elems.push(this[i].cloneNode(deep));\n                }\n\n                return $(elems);\n            },"
+    "code": "clone: function(deep) {\n                deep = deep === false ? false : true;\n                if (this.length === 0)\n                    return this;\n                var elems = [];\n                for (var i = 0; i < this.length; i++) {\n                    elems.push(this[i].cloneNode(deep));\n                }\n\n                return $(elems);\n            },"
   },
   {
     "tags": [
@@ -2065,7 +2065,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "size: function () {\n                return this.length;\n            },"
+    "code": "size: function() {\n                return this.length;\n            },"
   },
   {
     "tags": [
@@ -2088,7 +2088,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "serialize: function () {\n                if (this.length === 0)\n                    return \"\";\n                var params = [];\n                for (var i = 0; i < this.length; i++) {\n                    this.slice.call(this[i].elements).forEach(function (elem) {\n                        var type = elem.getAttribute(\"type\");\n                        if (elem.nodeName.toLowerCase() != \"fieldset\" && !elem.disabled && type != \"submit\" && type != \"reset\" && type != \"button\" && ((type != \"radio\" && type != \"checkbox\") || elem.checked)) {\n\n                            if (elem.getAttribute(\"name\")) {\n                                if (elem.type == \"select-multiple\") {\n                                    for (var j = 0; j < elem.options.length; j++) {\n                                        if (elem.options[j].selected)\n                                            params.push(elem.getAttribute(\"name\") + \"=\" + encodeURIComponent(elem.options[j].value));\n                                    }\n                                } else\n                                    params.push(elem.getAttribute(\"name\") + \"=\" + encodeURIComponent(elem.value));\n                            }\n                        }\n                    });\n                }\n                return params.join(\"&\");\n            },"
+    "code": "serialize: function() {\n                if (this.length === 0)\n                    return \"\";\n                var params = [];\n                for (var i = 0; i < this.length; i++) {\n                    this.slice.call(this[i].elements).forEach(function(elem) {\n                        var type = elem.getAttribute(\"type\");\n                        if (elem.nodeName.toLowerCase() != \"fieldset\" && !elem.disabled && type != \"submit\" && type != \"reset\" && type != \"button\" && ((type != \"radio\" && type != \"checkbox\") || elem.checked)) {\n\n                            if (elem.getAttribute(\"name\")) {\n                                if (elem.type == \"select-multiple\") {\n                                    for (var j = 0; j < elem.options.length; j++) {\n                                        if (elem.options[j].selected)\n                                            params.push(elem.getAttribute(\"name\") + \"=\" + encodeURIComponent(elem.options[j].value));\n                                    }\n                                } else\n                                    params.push(elem.getAttribute(\"name\") + \"=\" + encodeURIComponent(elem.value));\n                            }\n                        }\n                    });\n                }\n                return params.join(\"&\");\n            },"
   },
   {
     "tags": [],
@@ -2128,7 +2128,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "eq: function (ind) {\n                return $(this.get(ind));\n            },"
+    "code": "eq: function(ind) {\n                return $(this.get(ind));\n            },"
   },
   {
     "tags": [
@@ -2160,7 +2160,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "index: function (elem) {\n                return elem ? this.indexOf($(elem)[0]) : this.parent().children().indexOf(this[0]);\n            },"
+    "code": "index: function(elem) {\n                return elem ? this.indexOf($(elem)[0]) : this.parent().children().indexOf(this[0]);\n            },"
   },
   {
     "tags": [
@@ -2183,7 +2183,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "is: function (selector) {\n                return !!selector && this.filter(selector).length > 0;\n            }\n\n        };"
+    "code": "is: function(selector) {\n                return !!selector && this.filter(selector).length > 0;\n            }\n\n        };"
   },
   {
     "tags": [],
@@ -2222,7 +2222,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.jsonP = function (options) {\n            if(isWin8){\n                options.type=\"get\";\n                options.dataType=null;\n                return $.get(options);\n            }\n            var callbackName = 'jsonp_callback' + (++_jsonPID);\n            var abortTimeout = \"\",\n                context;\n            var script = document.createElement(\"script\");\n            var abort = function () {\n                $(script).remove();\n                if (window[callbackName])\n                    window[callbackName] = empty;\n            };\n            window[callbackName] = function (data) {\n                clearTimeout(abortTimeout);\n                $(script).remove();\n                delete window[callbackName];\n                options.success.call(context, data);\n            };\n            script.src = options.url.replace(/=\\?/, '=' + callbackName);\n            if (options.error) {\n                script.onerror = function () {\n                    clearTimeout(abortTimeout);\n                    options.error.call(context, \"\", 'error');\n                };\n            }\n            $('head').append(script);\n            if (options.timeout > 0)\n                abortTimeout = setTimeout(function () {\n                    options.error.call(context, \"\", 'timeout');\n                }, options.timeout);\n            return {};\n        };"
+    "code": "$.jsonP = function(options) {\n            if (isWin8) {\n                options.type = \"get\";\n                options.dataType = null;\n                return $.get(options);\n            }\n            var callbackName = 'jsonp_callback' + (++_jsonPID);\n            var abortTimeout = \"\",\n                context;\n            var script = document.createElement(\"script\");\n            var abort = function() {\n                $(script).remove();\n                if (window[callbackName])\n                    window[callbackName] = empty;\n            };\n            window[callbackName] = function(data) {\n                clearTimeout(abortTimeout);\n                $(script).remove();\n                delete window[callbackName];\n                options.success.call(context, data);\n            };\n            script.src = options.url.replace(/=\\?/, '=' + callbackName);\n            if (options.error) {\n                script.onerror = function() {\n                    clearTimeout(abortTimeout);\n                    options.error.call(context, \"\", 'error');\n                };\n            }\n            $('head').append(script);\n            if (options.timeout > 0)\n                abortTimeout = setTimeout(function() {\n                    options.error.call(context, \"\", 'timeout');\n                }, options.timeout);\n            return {};\n        };"
   },
   {
     "tags": [
@@ -2246,7 +2246,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.ajax = function (opts) {\n            var xhr;\n            try {\n\n                var settings = opts || {};\n                for (var key in $.ajaxSettings) {\n                    if (typeof (settings[key]) == 'undefined')\n                        settings[key] = $.ajaxSettings[key];\n                }\n\n                if (!settings.url)\n                    settings.url = window.location;\n                if (!settings.contentType)\n                    settings.contentType = \"application/x-www-form-urlencoded\";\n                if (!settings.headers)\n                    settings.headers = {};\n\n                if (!('async' in settings) || settings.async !== false)\n                    settings.async = true;\n\n                if (!settings.dataType)\n                    settings.dataType = \"text/html\";\n                else {\n                    switch (settings.dataType) {\n                        case \"script\":\n                            settings.dataType = 'text/javascript, application/javascript';\n                            break;\n                        case \"json\":\n                            settings.dataType = 'application/json';\n                            break;\n                        case \"xml\":\n                            settings.dataType = 'application/xml, text/xml';\n                            break;\n                        case \"html\":\n                            settings.dataType = 'text/html';\n                            break;\n                        case \"text\":\n                            settings.dataType = 'text/plain';\n                            break;\n                        default:\n                            settings.dataType = \"text/html\";\n                            break;\n                        case \"jsonp\":\n                            return $.jsonP(opts);\n                    }\n                }\n                if ($.isObject(settings.data))\n                    settings.data = $.param(settings.data);\n                if (settings.type.toLowerCase() === \"get\" && settings.data) {\n                    if (settings.url.indexOf(\"?\") === -1)\n                        settings.url += \"?\" + settings.data;\n                    else\n                        settings.url += \"&\" + settings.data;\n                }\n\n                if (/=\\?/.test(settings.url)) {\n                    return $.jsonP(settings);\n                }\n                if (settings.crossDomain === null) settings.crossDomain = /^([\\w-]+:)?\\/\\/([^\\/]+)/.test(settings.url) &&\n                        RegExp.$2 != window.location.host;\n\n                if (!settings.crossDomain)\n                    settings.headers = $.extend({\n                        'X-Requested-With': 'XMLHttpRequest'\n                    }, settings.headers);\n                var abortTimeout;\n                var context = settings.context;\n                var protocol = /^([\\w-]+:)\\/\\//.test(settings.url) ? RegExp.$1 : window.location.protocol;\n\n                //ok, we are really using xhr\n                xhr = new window.XMLHttpRequest();\n\n\n                xhr.onreadystatechange = function () {\n                    var mime = settings.dataType;\n                    if (xhr.readyState === 4) {\n                        clearTimeout(abortTimeout);\n                        var result, error = false;\n                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0 && protocol == 'file:') {\n                            if (mime === 'application/json' && !(/^\\s*$/.test(xhr.responseText))) {\n                                try {\n                                    result = JSON.parse(xhr.responseText);\n                                } catch (e) {\n                                    error = e;\n                                }\n                            } else if (mime === 'application/xml, text/xml') {\n                                result = xhr.responseXML;\n                            } else if (mime == \"text/html\") {\n                                result = xhr.responseText;\n                                $.parseJS(result);\n                            } else\n                                result = xhr.responseText;\n                            //If we're looking at a local file, we assume that no response sent back means there was an error\n                            if (xhr.status === 0 && result.length === 0)\n                                error = true;\n                            if (error)\n                                settings.error.call(context, xhr, 'parsererror', error);\n                            else {\n                                settings.success.call(context, result, 'success', xhr);\n                            }\n                        } else {\n                            error = true;\n                            settings.error.call(context, xhr, 'error');\n                        }\n                        settings.complete.call(context, xhr, error ? 'error' : 'success');\n                    }\n                };\n                xhr.open(settings.type, settings.url, settings.async);\n                if (settings.withCredentials) xhr.withCredentials = true;\n\n                if (settings.contentType)\n                    settings.headers['Content-Type'] = settings.contentType;\n                for (var name in settings.headers)\n                    xhr.setRequestHeader(name, settings.headers[name]);\n                if (settings.beforeSend.call(context, xhr, settings) === false) {\n                    xhr.abort();\n                    return false;\n                }\n\n                if (settings.timeout > 0)\n                    abortTimeout = setTimeout(function () {\n                        xhr.onreadystatechange = empty;\n                        xhr.abort();\n                        settings.error.call(context, xhr, 'timeout');\n                    }, settings.timeout);\n                xhr.send(settings.data);\n            } catch (e) {\n                // General errors (e.g. access denied) should also be sent to the error callback\n                console.log(e);\n                settings.error.call(context, xhr, 'error', e);\n            }\n            return xhr;\n        };"
+    "code": "$.ajax = function(opts) {\n            var xhr;\n            try {\n\n                var settings = opts || {};\n                for (var key in $.ajaxSettings) {\n                    if (typeof(settings[key]) == 'undefined')\n                        settings[key] = $.ajaxSettings[key];\n                }\n\n                if (!settings.url)\n                    settings.url = window.location;\n                if (!settings.contentType)\n                    settings.contentType = \"application/x-www-form-urlencoded\";\n                if (!settings.headers)\n                    settings.headers = {};\n\n                if (!('async' in settings) || settings.async !== false)\n                    settings.async = true;\n\n                if (!settings.dataType)\n                    settings.dataType = \"text/html\";\n                else {\n                    switch (settings.dataType) {\n                        case \"script\":\n                            settings.dataType = 'text/javascript, application/javascript';\n                            break;\n                        case \"json\":\n                            settings.dataType = 'application/json';\n                            break;\n                        case \"xml\":\n                            settings.dataType = 'application/xml, text/xml';\n                            break;\n                        case \"html\":\n                            settings.dataType = 'text/html';\n                            break;\n                        case \"text\":\n                            settings.dataType = 'text/plain';\n                            break;\n                        default:\n                            settings.dataType = \"text/html\";\n                            break;\n                        case \"jsonp\":\n                            return $.jsonP(opts);\n                    }\n                }\n                if ($.isObject(settings.data))\n                    settings.data = $.param(settings.data);\n                if (settings.type.toLowerCase() === \"get\" && settings.data) {\n                    if (settings.url.indexOf(\"?\") === -1)\n                        settings.url += \"?\" + settings.data;\n                    else\n                        settings.url += \"&\" + settings.data;\n                }\n\n                if (/=\\?/.test(settings.url)) {\n                    return $.jsonP(settings);\n                }\n                if (settings.crossDomain === null) settings.crossDomain = /^([\\w-]+:)?\\/\\/([^\\/]+)/.test(settings.url) &&\n                        RegExp.$2 != window.location.host;\n\n                if (!settings.crossDomain)\n                    settings.headers = $.extend({\n                        'X-Requested-With': 'XMLHttpRequest'\n                    }, settings.headers);\n                var abortTimeout;\n                var context = settings.context;\n                var protocol = /^([\\w-]+:)\\/\\//.test(settings.url) ? RegExp.$1 : window.location.protocol;\n\n                //ok, we are really using xhr\n                xhr = new window.XMLHttpRequest();\n\n\n                xhr.onreadystatechange = function() {\n                    var mime = settings.dataType;\n                    if (xhr.readyState === 4) {\n                        clearTimeout(abortTimeout);\n                        var result, error = false;\n                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0 && protocol == 'file:') {\n                            if (mime === 'application/json' && !(/^\\s*$/.test(xhr.responseText))) {\n                                try {\n                                    result = JSON.parse(xhr.responseText);\n                                } catch (e) {\n                                    error = e;\n                                }\n                            } else if (mime === 'application/xml, text/xml') {\n                                result = xhr.responseXML;\n                            } else if (mime == \"text/html\") {\n                                result = xhr.responseText;\n                                $.parseJS(result);\n                            } else\n                                result = xhr.responseText;\n                            //If we're looking at a local file, we assume that no response sent back means there was an error\n                            if (xhr.status === 0 && result.length === 0)\n                                error = true;\n                            if (error)\n                                settings.error.call(context, xhr, 'parsererror', error);\n                            else {\n                                settings.success.call(context, result, 'success', xhr);\n                            }\n                        } else {\n                            error = true;\n                            settings.error.call(context, xhr, 'error');\n                        }\n                        settings.complete.call(context, xhr, error ? 'error' : 'success');\n                    }\n                };\n                xhr.open(settings.type, settings.url, settings.async);\n                if (settings.withCredentials) xhr.withCredentials = true;\n\n                if (settings.contentType)\n                    settings.headers['Content-Type'] = settings.contentType;\n                for (var name in settings.headers)\n                    xhr.setRequestHeader(name, settings.headers[name]);\n                if (settings.beforeSend.call(context, xhr, settings) === false) {\n                    xhr.abort();\n                    return false;\n                }\n\n                if (settings.timeout > 0)\n                    abortTimeout = setTimeout(function() {\n                        xhr.onreadystatechange = empty;\n                        xhr.abort();\n                        settings.error.call(context, xhr, 'timeout');\n                    }, settings.timeout);\n                xhr.send(settings.data);\n            } catch (e) {\n                // General errors (e.g. access denied) should also be sent to the error callback\n                console.log(e);\n                settings.error.call(context, xhr, 'error', e);\n            }\n            return xhr;\n        };"
   },
   {
     "tags": [
@@ -2278,7 +2278,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.get = function (url, success) {\n            return this.ajax({\n                url: url,\n                success: success\n            });\n        };"
+    "code": "$.get = function(url, success) {\n            return this.ajax({\n                url: url,\n                success: success\n            });\n        };"
   },
   {
     "tags": [
@@ -2326,7 +2326,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.post = function (url, data, success, dataType) {\n            if (typeof (data) === \"function\") {\n                success = data;\n                data = {};\n            }\n            if (dataType ===nundefined)\n                dataType = \"html\";\n            return this.ajax({\n                url: url,\n                type: \"POST\",\n                data: data,\n                dataType: dataType,\n                success: success\n            });\n        };"
+    "code": "$.post = function(url, data, success, dataType) {\n            if (typeof(data) === \"function\") {\n                success = data;\n                data = {};\n            }\n            if (dataType === nundefined)\n                dataType = \"html\";\n            return this.ajax({\n                url: url,\n                type: \"POST\",\n                data: data,\n                dataType: dataType,\n                success: success\n            });\n        };"
   },
   {
     "tags": [
@@ -2366,7 +2366,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.getJSON = function (url, data, success) {\n            if (typeof (data) === \"function\") {\n                success = data;\n                data = {};\n            }\n            return this.ajax({\n                url: url,\n                data: data,\n                success: success,\n                dataType: \"json\"\n            });\n        };"
+    "code": "$.getJSON = function(url, data, success) {\n            if (typeof(data) === \"function\") {\n                success = data;\n                data = {};\n            }\n            return this.ajax({\n                url: url,\n                data: data,\n                success: success,\n                dataType: \"json\"\n            });\n        };"
   },
   {
     "tags": [
@@ -2405,7 +2405,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.param = function (obj, prefix) {\n            var str = [];\n            if (obj instanceof $afm) {\n                obj.each(function () {\n                    var k = prefix ? prefix + \"[\"+this.id+\"]\" : this.id,\n                        v = this.value;\n                    str.push((k) + \"=\" + encodeURIComponent(v));\n                });\n            } else {\n                for (var p in obj) {\n                    var k = prefix ? prefix + \"[\" + p + \"]\" : p,\n                        v = obj[p];\n                    str.push($.isObject(v) ? $.param(v, k) : (k) + \"=\" + encodeURIComponent(v));\n                }\n            }\n            return str.join(\"&\");\n        };"
+    "code": "$.param = function(obj, prefix) {\n            var str = [];\n            if (obj instanceof $afm) {\n                obj.each(function() {\n                    var k = prefix ? prefix + \"[\" + this.id + \"]\" : this.id,\n                        v = this.value;\n                    str.push((k) + \"=\" + encodeURIComponent(v));\n                });\n            } else {\n                for (var p in obj) {\n\n                    if ($.isFunction(obj[p]))\n                        continue;\n                    var k = prefix ? prefix + \"[\" + p + \"]\" : p,\n                        v = obj[p];\n                    str.push($.isObject(v) ? $.param(v, k) : (k) + \"=\" + encodeURIComponent(v));\n                }\n            }\n            return str.join(\"&\");\n        };"
   },
   {
     "tags": [
@@ -2432,7 +2432,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.parseJSON = function (string) {\n            return JSON.parse(string);\n        };"
+    "code": "$.parseJSON = function(string) {\n            return JSON.parse(string);\n        };"
   },
   {
     "tags": [
@@ -2463,7 +2463,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.parseXML = function (string) {\n            if(isWin8){\n                MSApp.execUnsafeLocalFunction(function(){\n                        return (new DOMParser()).parseFromString(string, \"text/xml\");\n                });\n            }\n            else\n                return (new DOMParser()).parseFromString(string, \"text/xml\");\n        };"
+    "code": "$.parseXML = function(string) {\n            if (isWin8) {\n                MSApp.execUnsafeLocalFunction(function() {\n                    return (new DOMParser()).parseFromString(string, \"text/xml\");\n                });\n            } else\n                return (new DOMParser()).parseFromString(string, \"text/xml\");\n        };"
   },
   {
     "tags": [
@@ -2479,7 +2479,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "function detectUA($, userAgent) {\n            $.os = {};\n            $.os.webkit = userAgent.match(/WebKit\\/([\\d.]+)/) ? true : false;\n            $.os.android = userAgent.match(/(Android)\\s+([\\d.]+)/) || userAgent.match(/Silk-Accelerated/) ? true : false;\n            $.os.androidICS = $.os.android && userAgent.match(/(Android)\\s4/) ? true : false;\n            $.os.ipad = userAgent.match(/(iPad).*OS\\s([\\d_]+)/) ? true : false;\n            $.os.iphone = !$.os.ipad && userAgent.match(/(iPhone\\sOS)\\s([\\d_]+)/) ? true : false;\n            $.os.webos = userAgent.match(/(webOS|hpwOS)[\\s\\/]([\\d.]+)/) ? true : false;\n            $.os.touchpad = $.os.webos && userAgent.match(/TouchPad/) ? true : false;\n            $.os.ios = $.os.ipad || $.os.iphone;\n            $.os.playbook = userAgent.match(/PlayBook/) ? true : false;\n            $.os.blackberry = $.os.playbook || userAgent.match(/BlackBerry/) ? true : false;\n            $.os.blackberry10 = $.os.blackberry && userAgent.match(/Safari\\/536/) ? true : false;\n            $.os.chrome = userAgent.match(/Chrome/) ? true : false;\n            $.os.opera = userAgent.match(/Opera/) ? true : false;\n            $.os.fennec = userAgent.match(/fennec/i) ? true : userAgent.match(/Firefox/) ? true : false;\n            $.os.ie = userAgent.match(/MSIE 10.0/i) ? true : false;\n            $.os.ieTouch = $.os.ie && userAgent.toLowerCase().match(/touch/i) ? true : false;\n            $.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || 'ontouchstart' in window);\n            //features\n            $.feat = {};\n            var head = document.documentElement.getElementsByTagName(\"head\")[0];\n            $.feat.nativeTouchScroll = typeof (head.style[\"-webkit-overflow-scrolling\"]) !== \"undefined\" && $.os.ios;\n            $.feat.cssPrefix = $.os.webkit ? \"Webkit\" : $.os.fennec ? \"Moz\" : $.os.ie ? \"ms\" : $.os.opera ? \"O\" : \"\";\n            $.feat.cssTransformStart = !$.os.opera ? \"3d(\" : \"(\";\n            $.feat.cssTransformEnd = !$.os.opera ? \",0)\" : \")\";\n            if ($.os.android && !$.os.webkit)\n                $.os.android = false;\n        }\n\n        detectUA($, navigator.userAgent);\n        $.__detectUA = detectUA; //needed for unit tests",
+    "code": "function detectUA($, userAgent) {\n            $.os = {};\n            $.os.webkit = userAgent.match(/WebKit\\/([\\d.]+)/) ? true : false;\n            $.os.android = userAgent.match(/(Android)\\s+([\\d.]+)/) || userAgent.match(/Silk-Accelerated/) ? true : false;\n            $.os.androidICS = $.os.android && userAgent.match(/(Android)\\s4/) ? true : false;\n            $.os.ipad = userAgent.match(/(iPad).*OS\\s([\\d_]+)/) ? true : false;\n            $.os.iphone = !$.os.ipad && userAgent.match(/(iPhone\\sOS)\\s([\\d_]+)/) ? true : false;\n            $.os.ios7 = userAgent.match(/(iPhone\\sOS)\\s([7_]+)/) ? true : false;\n            $.os.webos = userAgent.match(/(webOS|hpwOS)[\\s\\/]([\\d.]+)/) ? true : false;\n            $.os.touchpad = $.os.webos && userAgent.match(/TouchPad/) ? true : false;\n            $.os.ios = $.os.ipad || $.os.iphone;\n            $.os.playbook = userAgent.match(/PlayBook/) ? true : false;\n            $.os.blackberry = $.os.playbook || userAgent.match(/BlackBerry/) ? true : false;\n            $.os.blackberry10 = $.os.blackberry && userAgent.match(/Safari\\/536/) ? true : false;\n            $.os.chrome = userAgent.match(/Chrome/) ? true : false;\n            $.os.opera = userAgent.match(/Opera/) ? true : false;\n            $.os.fennec = userAgent.match(/fennec/i) ? true : userAgent.match(/Firefox/) ? true : false;\n            $.os.ie = userAgent.match(/MSIE 10.0/i) ? true : false;\n            $.os.ieTouch = $.os.ie && userAgent.toLowerCase().match(/touch/i) ? true : false;\n            $.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || 'ontouchstart' in window);\n            //features\n            $.feat = {};\n            var head = document.documentElement.getElementsByTagName(\"head\")[0];\n            $.feat.nativeTouchScroll = typeof(head.style[\"-webkit-overflow-scrolling\"]) !== \"undefined\" && $.os.ios;\n            $.feat.cssPrefix = $.os.webkit ? \"Webkit\" : $.os.fennec ? \"Moz\" : $.os.ie ? \"ms\" : $.os.opera ? \"O\" : \"\";\n            $.feat.cssTransformStart = !$.os.opera ? \"3d(\" : \"(\";\n            $.feat.cssTransformEnd = !$.os.opera ? \",0)\" : \")\";\n            if ($.os.android && !$.os.webkit)\n                $.os.android = false;\n        }\n\n        detectUA($, navigator.userAgent);\n        $.__detectUA = detectUA; //needed for unit tests",
     "ctx": {
       "type": "function",
       "name": "detectUA",
@@ -2500,7 +2500,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.uuid = function () {\n            var S4 = function () {\n                return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);\n            };\n            return (S4() + S4() + \"-\" + S4() + \"-\" + S4() + \"-\" + S4() + \"-\" + S4() + S4() + S4());\n        };"
+    "code": "$.uuid = function() {\n            var S4 = function() {\n                return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);\n            };\n            return (S4() + S4() + \"-\" + S4() + \"-\" + S4() + \"-\" + S4() + \"-\" + S4() + S4() + S4());\n        };"
   },
   {
     "tags": [],
@@ -2510,7 +2510,7 @@
       "body": ""
     },
     "ignore": false,
-    "code": "$.getCssMatrix = function (ele) {\n            if(typeof(ele)===$afm) ele=ele.get(0);\n            if (ele ==nundefined) return window.WebKitCSSMatrix || window.MSCSSMatrix || {\n                    a: 0,\n                    b: 0,\n                    c: 0,\n                    d: 0,\n                    e: 0,\n                    f: 0\n            };\n            try {\n                if (window.WebKitCSSMatrix)\n                    return new WebKitCSSMatrix(window.getComputedStyle(ele).webkitTransform);\n                else if (window.MSCSSMatrix)\n                    return new MSCSSMatrix(window.getComputedStyle(ele).transform);\n                else {\n                    //fake css matrix\n                    var mat = window.getComputedStyle(ele)[$.feat.cssPrefix + 'Transform'].replace(/[^0-9\\-.,]/g, '').split(',');\n                    return {\n                        a: +mat[0],\n                        b: +mat[1],\n                        c: +mat[2],\n                        d: +mat[3],\n                        e: +mat[4],\n                        f: +mat[5]\n                    };\n                }\n            } catch (e) {\n                return {\n                    a: 0,\n                    b: 0,\n                    c: 0,\n                    d: 0,\n                    e: 0,\n                    f: 0\n                };\n            }\n        };"
+    "code": "$.getCssMatrix = function(ele) {\n            if ($.is$(ele)) ele = ele.get(0);\n            if (ele == nundefined) return window.WebKitCSSMatrix || window.MSCSSMatrix || {\n                    a: 0,\n                    b: 0,\n                    c: 0,\n                    d: 0,\n                    e: 0,\n                    f: 0\n            };\n            try {\n                if (window.WebKitCSSMatrix)\n                    return new WebKitCSSMatrix(window.getComputedStyle(ele).webkitTransform);\n                else if (window.MSCSSMatrix)\n                    return new MSCSSMatrix(window.getComputedStyle(ele).transform);\n                else {\n                    //fake css matrix\n                    var mat = window.getComputedStyle(ele)[$.feat.cssPrefix + 'Transform'].replace(/[^0-9\\-.,]/g, '').split(',');\n                    return {\n                        a: +mat[0],\n                        b: +mat[1],\n                        c: +mat[2],\n                        d: +mat[3],\n                        e: +mat[4],\n                        f: +mat[5]\n                    };\n                }\n            } catch (e) {\n                return {\n                    a: 0,\n                    b: 0,\n                    c: 0,\n                    d: 0,\n                    e: 0,\n                    f: 0\n                };\n            }\n        };"
   },
   {
     "tags": [
@@ -2549,7 +2549,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.create = function (type, props) {\n            var elem;\n            var f = new $afm();\n            if (props || type[0] !== \"<\") {\n                if (props.html)\n                    props.innerHTML = props.html, delete props.html;\n\n                elem = document.createElement(type);\n                for (var j in props) {\n                    elem[j] = props[j];\n                }\n                f[f.length++] = elem;\n            } else {\n                elem = document.createElement(\"div\");\n                if(isWin8)\n                {\n                    MSApp.execUnsafeLocalFunction(function(){\n                        elem.innerHTML=selector.trim();\n                    });\n                }\n                else\n                    elem.innerHTML = type;\n                _shimNodes(elem.childNodes, f);\n            }\n            return f;\n        };"
+    "code": "$.create = function(type, props) {\n            var elem;\n            var f = new $afm();\n            if (props || type[0] !== \"<\") {\n                if (props.html)\n                    props.innerHTML = props.html, delete props.html;\n\n                elem = document.createElement(type);\n                for (var j in props) {\n                    elem[j] = props[j];\n                }\n                f[f.length++] = elem;\n            } else {\n                elem = document.createElement(\"div\");\n                if (isWin8) {\n                    MSApp.execUnsafeLocalFunction(function() {\n                        elem.innerHTML = selector.trim();\n                    });\n                } else\n                    elem.innerHTML = type;\n                _shimNodes(elem.childNodes, f);\n            }\n            return f;\n        };"
   },
   {
     "tags": [
@@ -2588,7 +2588,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.query = function (sel, what) {\n            if (!sel)\n                return new $afm();\n            what = what || document;\n            var f = new $afm();\n            return f.selector(sel, what);\n        };"
+    "code": "$.query = function(sel, what) {\n            if (!sel)\n                return new $afm();\n            what = what || document;\n            var f = new $afm();\n            return f.selector(sel, what);\n        };"
   },
   {
     "tags": [],
@@ -2692,7 +2692,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "function findHandlers(element, event, fn, selector) {\n            event = parse(event);\n            if (event.ns)\n                var matcher = matcherFor(event.ns);\n            return (handlers[afmid(element)] || []).filter(function (handler) {\n                return handler && (!event.e || handler.e == event.e) && (!event.ns || matcher.test(handler.ns)) && (!fn || handler.fn == fn || (typeof handler.fn === 'function' && typeof fn === 'function' && \"\" + handler.fn === \"\" + fn)) && (!selector || handler.sel == selector);\n            });\n        }",
+    "code": "function findHandlers(element, event, fn, selector) {\n            event = parse(event);\n            if (event.ns)\n                var matcher = matcherFor(event.ns);\n            return (handlers[afmid(element)] || []).filter(function(handler) {\n                return handler && (!event.e || handler.e == event.e) && (!event.ns || matcher.test(handler.ns)) && (!fn || handler.fn == fn || (typeof handler.fn === 'function' && typeof fn === 'function' && \"\" + handler.fn === \"\" + fn)) && (!selector || handler.sel == selector);\n            });\n        }",
     "ctx": {
       "type": "function",
       "name": "findHandlers",
@@ -2810,7 +2810,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "function eachEvent(events, fn, iterator) {\n            if ($.isObject(events))\n                $.each(events, iterator);\n            else\n                events.split(/\\s/).forEach(function (type) {\n                    iterator(type, fn);\n                });\n        }",
+    "code": "function eachEvent(events, fn, iterator) {\n            if ($.isObject(events))\n                $.each(events, iterator);\n            else\n                events.split(/\\s/).forEach(function(type) {\n                    iterator(type, fn);\n                });\n        }",
     "ctx": {
       "type": "function",
       "name": "eachEvent",
@@ -2874,7 +2874,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "function add(element, events, fn, selector, getDelegate) {\n\n            var id = afmid(element),\n                set = (handlers[id] || (handlers[id] = []));\n            eachEvent(events, fn, function (event, fn) {\n                var delegate = getDelegate && getDelegate(fn, event),\n                    callback = delegate || fn;\n                var proxyfn = function (event) {\n                    var result = callback.apply(element, [event].concat(event.data));\n                    if (result === false)\n                        event.preventDefault();\n                    return result;\n                };\n                var handler = $.extend(parse(event), {\n                    fn: fn,\n                    proxy: proxyfn,\n                    sel: selector,\n                    del: delegate,\n                    i: set.length\n                });\n                set.push(handler);\n                element.addEventListener(handler.e, proxyfn, false);\n            });\n            //element=null;\n        }",
+    "code": "function add(element, events, fn, selector, getDelegate) {\n\n            var id = afmid(element),\n                set = (handlers[id] || (handlers[id] = []));\n            eachEvent(events, fn, function(event, fn) {\n                var delegate = getDelegate && getDelegate(fn, event),\n                    callback = delegate || fn;\n                var proxyfn = function(event) {\n                    var result = callback.apply(element, [event].concat(event.data));\n                    if (result === false)\n                        event.preventDefault();\n                    return result;\n                };\n                var handler = $.extend(parse(event), {\n                    fn: fn,\n                    proxy: proxyfn,\n                    sel: selector,\n                    del: delegate,\n                    i: set.length\n                });\n                set.push(handler);\n                element.addEventListener(handler.e, proxyfn, false);\n            });\n            //element=null;\n        }",
     "ctx": {
       "type": "function",
       "name": "add",
@@ -2930,7 +2930,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "function remove(element, events, fn, selector) {\n\n            var id = afmid(element);\n            eachEvent(events || '', fn, function (event, fn) {\n                findHandlers(element, event, fn, selector).forEach(function (handler) {\n                    delete handlers[id][handler.i];\n                    element.removeEventListener(handler.e, handler.proxy, false);\n                });\n            });\n        }\n\n        $.event = {\n            add: add,\n            remove: remove\n        };",
+    "code": "function remove(element, events, fn, selector) {\n\n            var id = afmid(element);\n            eachEvent(events || '', fn, function(event, fn) {\n                findHandlers(element, event, fn, selector).forEach(function(handler) {\n                    delete handlers[id][handler.i];\n                    element.removeEventListener(handler.e, handler.proxy, false);\n                });\n            });\n        }\n\n        $.event = {\n            add: add,\n            remove: remove\n        };",
     "ctx": {
       "type": "function",
       "name": "remove",
@@ -2975,7 +2975,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.fn.bind = function (event, callback) {\n            for (var i = 0; i < this.length; i++) {\n                add(this[i], event, callback);\n            }\n            return this;\n        };"
+    "code": "$.fn.bind = function(event, callback) {\n            for (var i = 0; i < this.length; i++) {\n                add(this[i], event, callback);\n            }\n            return this;\n        };"
   },
   {
     "tags": [
@@ -3015,7 +3015,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.fn.unbind = function (event, callback) {\n            for (var i = 0; i < this.length; i++) {\n                remove(this[i], event, callback);\n            }\n            return this;\n        };"
+    "code": "$.fn.unbind = function(event, callback) {\n            for (var i = 0; i < this.length; i++) {\n                remove(this[i], event, callback);\n            }\n            return this;\n        };"
   },
   {
     "tags": [
@@ -3055,7 +3055,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.fn.one = function (event, callback) {\n            return this.each(function (i, element) {\n                add(this, event, callback, null, function (fn, type) {\n                    return function () {\n                        var result = fn.apply(element, arguments);\n                        remove(element, type, fn);\n                        return result;\n                    };\n                });\n            });\n        };"
+    "code": "$.fn.one = function(event, callback) {\n            return this.each(function(i, element) {\n                add(this, event, callback, null, function(fn, type) {\n                    return function() {\n                        var result = fn.apply(element, arguments);\n                        remove(element, type, fn);\n                        return result;\n                    };\n                });\n            });\n        };"
   },
   {
     "tags": [
@@ -3071,7 +3071,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "var returnTrue = function () {\n            return true;\n        };\n        var returnFalse = function () {\n            return false;\n        };\n        var eventMethods = {\n            preventDefault: 'isDefaultPrevented',\n            stopImmediatePropagation: 'isImmediatePropagationStopped',\n            stopPropagation: 'isPropagationStopped'\n        };",
+    "code": "var returnTrue = function() {\n            return true;\n        };\n        var returnFalse = function() {\n            return false;\n        };\n        var eventMethods = {\n            preventDefault: 'isDefaultPrevented',\n            stopImmediatePropagation: 'isImmediatePropagationStopped',\n            stopPropagation: 'isPropagationStopped'\n        };",
     "ctx": {
       "type": "function",
       "name": "returnTrue",
@@ -3107,7 +3107,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "function createProxy(event) {\n            var proxy = $.extend({\n                originalEvent: event\n            }, event);\n            $.each(eventMethods, function (name, predicate) {\n                proxy[name] = function () {\n                    this[predicate] = returnTrue;\n                    if (name == \"stopImmediatePropagation\" || name == \"stopPropagation\") {\n                        event.cancelBubble = true;\n                        if (!event[name])\n                            return;\n                    }\n                    return event[name].apply(event, arguments);\n                };\n                proxy[predicate] = returnFalse;\n            });\n            return proxy;\n        }",
+    "code": "function createProxy(event) {\n            var proxy = $.extend({\n                originalEvent: event\n            }, event);\n            $.each(eventMethods, function(name, predicate) {\n                proxy[name] = function() {\n                    this[predicate] = returnTrue;\n                    if (name == \"stopImmediatePropagation\" || name == \"stopPropagation\") {\n                        event.cancelBubble = true;\n                        if (!event[name])\n                            return;\n                    }\n                    return event[name].apply(event, arguments);\n                };\n                proxy[predicate] = returnFalse;\n            });\n            return proxy;\n        }",
     "ctx": {
       "type": "function",
       "name": "createProxy",
@@ -3162,7 +3162,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.fn.delegate = function (selector, event, callback) {\n            for (var i = 0; i < this.length; i++) {\n                var element = this[i];\n                add(element, event, callback, selector, function (fn) {\n                    return function (e) {\n                        var evt, match = $(e.target).closest(selector, element).get(0);\n                        if (match) {\n                            evt = $.extend(createProxy(e), {\n                                currentTarget: match,\n                                liveFired: element\n                            });\n                            return fn.apply(match, [evt].concat([].slice.call(arguments, 1)));\n                        }\n                    };\n                });\n            }\n            return this;\n        };"
+    "code": "$.fn.delegate = function(selector, event, callback) {\n            for (var i = 0; i < this.length; i++) {\n                var element = this[i];\n                add(element, event, callback, selector, function(fn) {\n                    return function(e) {\n                        var evt, match = $(e.target).closest(selector, element).get(0);\n                        if (match) {\n                            evt = $.extend(createProxy(e), {\n                                currentTarget: match,\n                                liveFired: element\n                            });\n                            return fn.apply(match, [evt].concat([].slice.call(arguments, 1)));\n                        }\n                    };\n                });\n            }\n            return this;\n        };"
   },
   {
     "tags": [
@@ -3212,7 +3212,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.fn.undelegate = function (selector, event, callback) {\n            for (var i = 0; i < this.length; i++) {\n                remove(this[i], event, callback, selector);\n            }\n            return this;\n        };"
+    "code": "$.fn.undelegate = function(selector, event, callback) {\n            for (var i = 0; i < this.length; i++) {\n                remove(this[i], event, callback, selector);\n            }\n            return this;\n        };"
   },
   {
     "tags": [
@@ -3262,7 +3262,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.fn.on = function (event, selector, callback) {\n            return selector ===nundefined || $.isFunction(selector) ? this.bind(event, selector) : this.delegate(selector, event, callback);\n        };"
+    "code": "$.fn.on = function(event, selector, callback) {\n            return selector === nundefined || $.isFunction(selector) ? this.bind(event, selector) : this.delegate(selector, event, callback);\n        };"
   },
   {
     "tags": [
@@ -3312,7 +3312,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.fn.off = function (event, selector, callback) {\n            return selector ===nundefined || $.isFunction(selector) ? this.unbind(event, selector) : this.undelegate(selector, event, callback);\n        };"
+    "code": "$.fn.off = function(event, selector, callback) {\n            return selector === nundefined || $.isFunction(selector) ? this.unbind(event, selector) : this.undelegate(selector, event, callback);\n        };"
   },
   {
     "tags": [
@@ -3352,7 +3352,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.fn.trigger = function (event, data, props) {\n            if (typeof event == 'string')\n                event = $.Event(event, props);\n            event.data = data;\n            for (var i = 0; i < this.length; i++) {\n                this[i].dispatchEvent(event);\n            }\n            return this;\n        };"
+    "code": "$.fn.trigger = function(event, data, props) {\n            if (typeof event == 'string')\n                event = $.Event(event, props);\n            event.data = data;\n            for (var i = 0; i < this.length; i++) {\n                this[i].dispatchEvent(event);\n            }\n            return this;\n        };"
   },
   {
     "tags": [
@@ -3391,7 +3391,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.Event = function (type, props) {\n            var event = document.createEvent('Events'),\n                bubbles = true;\n            if (props)\n                for (var name in props)\n                    (name == 'bubbles') ? (bubbles = !! props[name]) : (event[name] = props[name]);\n            event.initEvent(type, bubbles, true, null, null, null, null, null, null, null, null, null, null, null, null);\n            return event;\n        };"
+    "code": "$.Event = function(type, props) {\n            var event = document.createEvent('Events'),\n                bubbles = true;\n            if (props)\n                for (var name in props)\n                    (name == 'bubbles') ? (bubbles = !! props[name]) : (event[name] = props[name]);\n            event.initEvent(type, bubbles, true, null, null, null, null, null, null, null, null, null, null, null, null);\n            return event;\n        };"
   },
   {
     "tags": [],
@@ -3440,7 +3440,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.bind = function (obj, ev, f) {\n            if(!obj) return;\n            if (!obj.__events) obj.__events = {};\n            if (!$.isArray(ev)) ev = [ev];\n            for (var i = 0; i < ev.length; i++) {\n                if (!obj.__events[ev[i]]) obj.__events[ev[i]] = [];\n                obj.__events[ev[i]].push(f);\n            }\n        };"
+    "code": "$.bind = function(obj, ev, f) {\n            if (!obj) return;\n            if (!obj.__events) obj.__events = {};\n            if (!$.isArray(ev)) ev = [ev];\n            for (var i = 0; i < ev.length; i++) {\n                if (!obj.__events[ev[i]]) obj.__events[ev[i]] = [];\n                obj.__events[ev[i]].push(f);\n            }\n        };"
   },
   {
     "tags": [
@@ -3480,7 +3480,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.trigger = function (obj, ev, args) {\n            if(!obj) return;\n            var ret = true;\n            if (!obj.__events) return ret;\n            if (!$.isArray(ev)) ev = [ev];\n            if (!$.isArray(args)) args = [];\n            for (var i = 0; i < ev.length; i++) {\n                if (obj.__events[ev[i]]) {\n                    var evts = obj.__events[ev[i]];\n                    for (var j = 0; j < evts.length; j++)\n                        if ($.isFunction(evts[j]) && evts[j].apply(obj, args) === false)\n                            ret = false;\n                }\n            }\n            return ret;\n        };"
+    "code": "$.trigger = function(obj, ev, args) {\n            if (!obj) return;\n            var ret = true;\n            if (!obj.__events) return ret;\n            if (!$.isArray(ev)) ev = [ev];\n            if (!$.isArray(args)) args = [];\n            for (var i = 0; i < ev.length; i++) {\n                if (obj.__events[ev[i]]) {\n                    var evts = obj.__events[ev[i]];\n                    for (var j = 0; j < evts.length; j++)\n                        if ($.isFunction(evts[j]) && evts[j].apply(obj, args) === false)\n                            ret = false;\n                }\n            }\n            return ret;\n        };"
   },
   {
     "tags": [
@@ -3520,7 +3520,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.unbind = function (obj, ev, f) {\n            if (!obj.__events) return;\n            if (!$.isArray(ev)) ev = [ev];\n            for (var i = 0; i < ev.length; i++) {\n                if (obj.__events[ev[i]]) {\n                    var evts = obj.__events[ev[i]];\n                    for (var j = 0; j < evts.length; j++) {\n                        if (f ==nundefined)\n                            delete evts[j];\n                        if (evts[j] == f) {\n                            evts.splice(j, 1);\n                            break;\n                        }\n                    }\n                }\n            }\n        };"
+    "code": "$.unbind = function(obj, ev, f) {\n            if (!obj.__events) return;\n            if (!$.isArray(ev)) ev = [ev];\n            for (var i = 0; i < ev.length; i++) {\n                if (obj.__events[ev[i]]) {\n                    var evts = obj.__events[ev[i]];\n                    for (var j = 0; j < evts.length; j++) {\n                        if (f == nundefined)\n                            delete evts[j];\n                        if (evts[j] == f) {\n                            evts.splice(j, 1);\n                            break;\n                        }\n                    }\n                }\n            }\n        };"
   },
   {
     "tags": [
@@ -3552,7 +3552,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.proxy = function (f, c, args) {\n            return function () {\n                if (args) return f.apply(c, args); //use provided arguments\n                return f.apply(c, arguments); //use scope function call arguments\n            };\n        };"
+    "code": "$.proxy = function(f, c, args) {\n            return function() {\n                if (args) return f.apply(c, args); //use provided arguments\n                return f.apply(c, arguments); //use scope function call arguments\n            };\n        };"
   },
   {
     "tags": [
@@ -3576,7 +3576,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "function cleanUpNode(node, kill) {\n            //kill it before it lays eggs!\n            if (kill && node.dispatchEvent) {\n                var e = $.Event('destroy', {\n                    bubbles: false\n                });\n                node.dispatchEvent(e);\n            }\n            //cleanup itself\n            var id = afmid(node);\n            if (id && handlers[id]) {\n                for (var key in handlers[id])\n                    node.removeEventListener(handlers[id][key].e, handlers[id][key].proxy, false);\n                delete handlers[id];\n            }\n        }\n\n        function cleanUpContent(node, kill) {\n            if (!node) return;\n            //cleanup children\n            var children = node.childNodes;\n            if (children && children.length > 0)\n                for (var child in children)\n                    cleanUpContent(children[child], kill);\n\n            cleanUpNode(node, kill);\n        }\n        var cleanUpAsap = function (els, kill) {\n            for (var i = 0; i < els.length; i++) {\n                cleanUpContent(els[i], kill);\n            }\n        };",
+    "code": "function cleanUpNode(node, kill) {\n            //kill it before it lays eggs!\n            if (kill && node.dispatchEvent) {\n                var e = $.Event('destroy', {\n                    bubbles: false\n                });\n                node.dispatchEvent(e);\n            }\n            //cleanup itself\n            var id = afmid(node);\n            if (id && handlers[id]) {\n                for (var key in handlers[id])\n                    node.removeEventListener(handlers[id][key].e, handlers[id][key].proxy, false);\n                delete handlers[id];\n            }\n        }\n\n        function cleanUpContent(node, kill) {\n            if (!node) return;\n            //cleanup children\n            var children = node.childNodes;\n            if (children && children.length > 0) {\n                for (var i; i < children.length; i++) {\n                    cleanUpContent(children[i], kill);\n                }\n            }\n\n            cleanUpNode(node, kill);\n        }\n        var cleanUpAsap = function(els, kill) {\n            for (var i = 0; i < els.length; i++) {\n                cleanUpContent(els[i], kill);\n            }\n        };",
     "ctx": {
       "type": "function",
       "name": "cleanUpNode",
@@ -3621,7 +3621,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.cleanUpContent = function (node, itself, kill) {\n            if (!node) return;\n            //cleanup children\n            var cn = node.childNodes;\n            if (cn && cn.length > 0) {\n                //destroy everything in a few ms to avoid memory leaks\n                //remove them all and copy objs into new array\n                $.asap(cleanUpAsap, {}, [slice.apply(cn, [0]), kill]);\n            }\n            //cleanUp this node\n            if (itself) cleanUpNode(node, kill);\n        };\n\n        // Like setTimeout(fn, 0); but much faster\n        var timeouts = [];\n        var contexts = [];\n        var params = [];"
+    "code": "$.cleanUpContent = function(node, itself, kill) {\n            if (!node) return;\n            //cleanup children\n            var cn = node.childNodes;\n            if (cn && cn.length > 0) {\n                //destroy everything in a few ms to avoid memory leaks\n                //remove them all and copy objs into new array\n                $.asap(cleanUpAsap, {}, [slice.apply(cn, [0]), kill]);\n            }\n            //cleanUp this node\n            if (itself) cleanUpNode(node, kill);\n        };\n\n        // Like setTimeout(fn, 0); but much faster\n        var timeouts = [];\n        var contexts = [];\n        var params = [];"
   },
   {
     "tags": [
@@ -3657,7 +3657,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.asap = function (fn, context, args) {\n            if (!$.isFunction(fn)) throw \"$.asap - argument is not a valid function\";\n            timeouts.push(fn);\n            contexts.push(context ? context : {});\n            params.push(args ? args : []);\n            //post a message to ourselves so we know we have to execute a function from the stack\n            window.postMessage(\"afm-asap\", \"*\");\n        };\n        window.addEventListener(\"message\", function (event) {\n            if (event.source == window && event.data == \"afm-asap\") {\n                event.stopPropagation();\n                if (timeouts.length > 0) { //just in case...\n                    (timeouts.shift()).apply(contexts.shift(), params.shift());\n                }\n            }\n        }, true);"
+    "code": "$.asap = function(fn, context, args) {\n            if (!$.isFunction(fn)) throw \"$.asap - argument is not a valid function\";\n            timeouts.push(fn);\n            contexts.push(context ? context : {});\n            params.push(args ? args : []);\n            //post a message to ourselves so we know we have to execute a function from the stack\n            window.postMessage(\"afm-asap\", \"*\");\n        };\n        window.addEventListener(\"message\", function(event) {\n            if (event.source == window && event.data == \"afm-asap\") {\n                event.stopPropagation();\n                if (timeouts.length > 0) { //just in case...\n                    (timeouts.shift()).apply(contexts.shift(), params.shift());\n                }\n            }\n        }, true);"
   },
   {
     "tags": [
@@ -3682,7 +3682,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "var remoteJSPages = {};\n        $.parseJS = function (div) {\n            if (!div)\n                return;\n            if (typeof (div) == \"string\") {\n                var elem = document.createElement(\"div\");\n                if(isWin8){\n                    MSApp.execUnsafeLocalFunction(function(){\n                        elem.innerHTML = div;\n                    });\n                }\n                else\n                    elem.innerHTML = div;\n\n                div = elem;\n            }\n            var scripts = div.getElementsByTagName(\"script\");\n            div = null;\n            for (var i = 0; i < scripts.length; i++) {\n                if (scripts[i].src.length > 0 && !remoteJSPages[scripts[i].src]&&!isWin8) {\n                    var doc = document.createElement(\"script\");\n                    doc.type = scripts[i].type;\n                    doc.src = scripts[i].src;\n                    document.getElementsByTagName('head')[0].appendChild(doc);\n                    remoteJSPages[scripts[i].src] = 1;\n                    doc = null;\n                } else {\n                    window['eval'](scripts[i].innerHTML);\n                }\n            }\n        };",
+    "code": "var remoteJSPages = {};\n        $.parseJS = function(div) {\n            if (!div)\n                return;\n            if (typeof(div) == \"string\") {\n                var elem = document.createElement(\"div\");\n                if (isWin8) {\n                    MSApp.execUnsafeLocalFunction(function() {\n                        elem.innerHTML = div;\n                    });\n                } else\n                    elem.innerHTML = div;\n\n                div = elem;\n            }\n            var scripts = div.getElementsByTagName(\"script\");\n            div = null;\n            for (var i = 0; i < scripts.length; i++) {\n                if (scripts[i].src.length > 0 && !remoteJSPages[scripts[i].src] && !isWin8) {\n                    var doc = document.createElement(\"script\");\n                    doc.type = scripts[i].type;\n                    doc.src = scripts[i].src;\n                    document.getElementsByTagName('head')[0].appendChild(doc);\n                    remoteJSPages[scripts[i].src] = 1;\n                    doc = null;\n                } else {\n                    window['eval'](scripts[i].innerHTML);\n                }\n            }\n        };",
     "ctx": {
       "type": "declaration",
       "name": "remoteJSPages",
@@ -3698,7 +3698,7 @@
       "body": ""
     },
     "ignore": false,
-    "code": "[\"click\", \"keydown\", \"keyup\", \"keypress\", \"submit\", \"load\", \"resize\", \"change\", \"select\", \"error\"].forEach(function (event) {\n            $.fn[event] = function (cb) {\n                return cb ? this.bind(event, cb) : this.trigger(event);\n            };\n        });\n\n\n        ['focus', 'blur'].forEach(function(name) {\n            $.fn[name] = function(callback) {\n                if(this.length===0) return;\n                if (callback)\n                    this.bind(name, callback);\n                else\n                for(var i=0;i<this.length;i++){\n                    try {\n                        this[i][name]();\n                    } catch (e) {}\n                }\n                return this;\n            };\n        });"
+    "code": "[\"click\", \"keydown\", \"keyup\", \"keypress\", \"submit\", \"load\", \"resize\", \"change\", \"select\", \"error\"].forEach(function(event) {\n            $.fn[event] = function(cb) {\n                return cb ? this.bind(event, cb) : this.trigger(event);\n            };\n        });\n\n\n        ['focus', 'blur'].forEach(function(name) {\n            $.fn[name] = function(callback) {\n                if (this.length === 0) return;\n                if (callback)\n                    this.bind(name, callback);\n                else\n                    for (var i = 0; i < this.length; i++) {\n                        try {\n                            this[i][name]();\n                        } catch (e) {}\n                }\n                return this;\n            };\n        });"
   },
   {
     "tags": [
@@ -3714,6 +3714,6 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "return $;\n\n    })(window);\n    window.jq = af; //backwards compat\n    '$' in window || (window.$ = af);\n    if ( typeof define === \"function\" && define.amd ) {\n        define( \"appframework\", [], function () { return af; } );\n    } else if (typeof module !== 'undefined' && module.exports) {\n        module.exports.af=af;\n        module.exports.$=af;\n    }\n    //Helper function used in af.mobi.plugins.\n    if (!window.numOnly) {\n        window.numOnly = function numOnly(val) {\n            if (val ===undefined || val === '') return 0;\n            if (isNaN(parseFloat(val))) {\n                if (val.replace) {\n                    val = val.replace(/[^0-9.-]/g, \"\");\n                } else return 0;\n            }\n            return parseFloat(val);\n        };\n    }\n}"
+    "code": "return $;\n\n    })(window);\n    window.jq = af; //backwards compat\n    '$' in window || (window.$ = af);\n    if (typeof define === \"function\" && define.amd) {\n        define(\"appframework\", [], function() {\n            return af;\n        });\n    } else if (typeof module !== 'undefined' && module.exports) {\n        module.exports.af = af;\n        module.exports.$ = af;\n    }\n    //Helper function used in af.mobi.plugins.\n    if (!window.numOnly) {\n        window.numOnly = function numOnly(val) {\n            if (val === undefined || val === '') return 0;\n            if (isNaN(parseFloat(val))) {\n                if (val.replace) {\n                    val = val.replace(/[^0-9.-]/g, \"\");\n                } else return 0;\n            }\n            return parseFloat(val);\n        };\n    }\n}"
   }
 ]

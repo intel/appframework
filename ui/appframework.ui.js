@@ -4922,7 +4922,7 @@
                     that.loadContent(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4]);
                 }
             });
-            if (window.navigator.standalone) {
+            if (window.navigator.standalone||this.isIntel) {
                 this.blockPageScroll();
             }
             this.topClickScroll();

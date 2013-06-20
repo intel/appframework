@@ -190,7 +190,7 @@
         },
 
         /**
-          * This is a boolean when set to true, we manage history and update the hash
+          * This is a boolean property.   When set to true, we manage history and update the hash
           ```
           $.ui.manageHistory=false;//Don't manage for apps using Backbone
           ```
@@ -199,7 +199,7 @@
         manageHistory: true,
 
         /**
-         * this is a boolean when set to true (default) it will load that panel when the app is started
+         * This is a boolean property.  When set to true (default) it will load that panel when the app is started
            ```
            $.ui.loadDefaultHash=false; //Never load the page from the hash when the app is started
            $.ui.loadDefaultHash=true; //Default
@@ -500,7 +500,7 @@
             $(target).find("span.af-badge").remove();
         },
         /**
-         * Toggles the bottom nav nav menu.  Force is a boolean to force show or hide.
+         * Toggles the bottom nav menu.  Force is a boolean to force show or hide.
            ```
            $.ui.toggleNavMenu();//toggle it
            $.ui.toggleNavMenu(true); //force show it
@@ -520,7 +520,7 @@
             }
         },
         /**
-         * Toggles the top header menu.
+         * Toggles the top header menu.  Force is a boolean to force show or hide.
            ```
            $.ui.toggleHeaderMenu();//toggle it
            ```
@@ -816,7 +816,7 @@
          * Show the loading mask
            ```
            $.ui.showMask()
-           $.ui.showMask(;Doing work')
+           $.ui.showMask('Doing work')
            ```
 
          * @param {String} [text]
@@ -929,7 +929,7 @@
             return this.updatePanel(id, content);
         },
         /**
-         * Dynamically create a new panel on the fly.  It wires events, creates the scroller, applies Android fixes, etc.
+         * Dynamically creates a new panel.  It wires events, creates the scroller, applies Android fixes, etc.
            ```
            $.ui.addContentDiv("myDiv","This is the new content","Title");
            ```
@@ -1776,7 +1776,7 @@
                     that.loadContent(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4]);
                 }
             });
-            if (window.navigator.standalone) {
+            if (window.navigator.standalone||this.isIntel) {
                 this.blockPageScroll();
             }
             this.topClickScroll();

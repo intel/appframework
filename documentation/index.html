@@ -10,9 +10,7 @@
     <link rel="stylesheet" type="text/css" href="af.ui.css" />
  <link rel="stylesheet" type="text/css" href="icons.css" />
 
-    <!--<script type="text/javascript" charset="utf-8" src="appframework.ui.min.js"></script>-->
-    <script src="appframework.js"></script>
-    <script src="appframework.ui.js"></script>
+    <script type="text/javascript" charset="utf-8" src="appframework.ui.min.js"></script>
     <script>
     function aj(obj){
       console.log(obj);
@@ -285,7 +283,7 @@
 
             <div class='viewsource' id='source_$_is$' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.is$ = function (obj) {
+            $.is$ = function(obj) {
             return obj instanceof $afm;
         };
             </code></pre>
@@ -347,22 +345,22 @@ Test it on the following.  <input type='button' onclick="testIs(true)" value="tm
 
             <div class='viewsource' id='source_$_map' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.map = function (elements, callback) {
+            $.map = function(elements, callback) {
             var value, values = [],
                 i, key;
             if ($.isArray(elements))
                 for (i = 0; i &lt; elements.length; i++) {
                     value = callback(elements[i], i);
-                    if (value !==nundefined)
+                    if (value !== nundefined)
                         values.push(value);
-                } else if ($.isObject(elements))
+            } else if ($.isObject(elements))
                 for (key in elements) {
                     if (!elements.hasOwnProperty(key))
                         continue;
                     value = callback(elements[key], key);
-                    if (value !==nundefined)
+                    if (value !== nundefined)
                         values.push(value);
-                }
+            }
             return af([values]);
         };
             </code></pre>
@@ -435,19 +433,19 @@ function testMap(){
 
             <div class='viewsource' id='source_$_each' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.each = function (elements, callback) {
+            $.each = function(elements, callback) {
             var i, key;
             if ($.isArray(elements))
                 for (i = 0; i &lt; elements.length; i++) {
                     if (callback(i, elements[i]) === false)
                         return elements;
-                } else if ($.isObject(elements))
+            } else if ($.isObject(elements))
                 for (key in elements) {
                     if (!elements.hasOwnProperty(key))
                         continue;
                     if (callback(key, elements[key]) === false)
                         return elements;
-                }
+            }
             return elements;
         };
             </code></pre>
@@ -512,15 +510,15 @@ function testSum(){
 
             <div class='viewsource' id='source_$_extend' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.extend = function (target) {
-            if (target ==nundefined)
+            $.extend = function(target) {
+            if (target == nundefined)
                 target = this;
             if (arguments.length === 1) {
                 for (var key in target)
                     this[key] = target[key];
                 return this;
             } else {
-                slice.call(arguments, 1).forEach(function (source) {
+                slice.call(arguments, 1).forEach(function(source) {
                     for (var key in source)
                         target[key] = source[key];
                 });
@@ -604,7 +602,7 @@ function testExtend(){
 
             <div class='viewsource' id='source_$_isArray' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.isArray = function (obj) {
+            $.isArray = function(obj) {
             return obj instanceof Array && obj.push != nundefined; //ios 3.1.3 doesn't have Array.isArray
         };
             </code></pre>
@@ -668,7 +666,7 @@ function testIsArray(pass){
 
             <div class='viewsource' id='source_$_isFunction' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.isFunction = function (obj) {
+            $.isFunction = function(obj) {
             return typeof obj === "function" && !(obj instanceof RegExp);
         };
             </code></pre>
@@ -732,7 +730,7 @@ function testisFunction(pass){
 
             <div class='viewsource' id='source_$_isObject' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.isObject = function (obj) {
+            $.isObject = function(obj) {
             return typeof obj === "object";
         };
             </code></pre>
@@ -799,12 +797,12 @@ function testisObject(pass){
 
             <div class='viewsource' id='source__map' style='display:none'>
             <pre style='padding-left:25px'><code>
-            map: function (fn) {
+            map: function(fn) {
                 var value, values = [],
                     i;
                 for (i = 0; i &lt; this.length; i++) {
                     value = fn(i, this[i]);
-                    if (value !==nundefined)
+                    if (value !== nundefined)
                         values.push(value);
                 }
                 return $([values]);
@@ -905,8 +903,8 @@ $('#equalize').bind("click",function(){
 
             <div class='viewsource' id='source__each' style='display:none'>
             <pre style='padding-left:25px'><code>
-            each: function (callback) {
-                this.forEach(function (el, idx) {
+            each: function(callback) {
+                this.forEach(function(el, idx) {
                     callback.call(el, idx, el);
                 });
                 return this;
@@ -944,7 +942,7 @@ $('#equalize').bind("click",function(){
 
             <div class='viewsource' id='source__ready' style='display:none'>
             <pre style='padding-left:25px'><code>
-            ready: function (callback) {
+            ready: function(callback) {
                 if (document.readyState === "complete" || document.readyState === "loaded" || (!$.os.ie && document.readyState === "interactive")) //IE10 fires interactive too early
                     callback();
                 else
@@ -1005,7 +1003,7 @@ $(document).ready(function(){
 
             <div class='viewsource' id='source__find' style='display:none'>
             <pre style='padding-left:25px'><code>
-            find: function (sel) {
+            find: function(sel) {
                 if (this.length === 0)
                     return this;
                 var elems = [];
@@ -1091,22 +1089,20 @@ function findTest(){
 
             <div class='viewsource' id='source__html' style='display:none'>
             <pre style='padding-left:25px'><code>
-            html: function (html, cleanup) {
+            html: function(html, cleanup) {
                 if (this.length === 0)
                     return this;
-                if (html ===nundefined)
+                if (html === nundefined)
                     return this[0].innerHTML;
 
                 for (var i = 0; i &lt; this.length; i++) {
                     if (cleanup !== false)
                         $.cleanUpContent(this[i], false, true);
-                    if(isWin8)
-                    {
-                        MSApp.execUnsafeLocalFunction(function(){
-                            this[i].innerHTML=html;
+                    if (isWin8) {
+                        MSApp.execUnsafeLocalFunction(function() {
+                            this[i].innerHTML = html;
                         });
-                    }
-                    else
+                    } else
                         this[i].innerHTML = html;
                 }
                 return this;
@@ -1172,10 +1168,10 @@ function findTest(){
 
             <div class='viewsource' id='source__text' style='display:none'>
             <pre style='padding-left:25px'><code>
-            text: function (text) {
+            text: function(text) {
                 if (this.length === 0)
                     return this;
-                if (text ===nundefined)
+                if (text === nundefined)
                     return this[0].textContent;
                 for (var i = 0; i &lt; this.length; i++) {
                     this[i].textContent = text;
@@ -1242,7 +1238,7 @@ function findTest(){
 
             <div class='viewsource' id='source__css' style='display:none'>
             <pre style='padding-left:25px'><code>
-            vendorCss: function (attribute, value, obj) {
+            vendorCss: function(attribute, value, obj) {
                 return this.css($.feat.cssPrefix + attribute, value, obj);
             },
             </code></pre>
@@ -1297,7 +1293,7 @@ function findTest(){
 
             <div class='viewsource' id='source__vendorCss' style='display:none'>
             <pre style='padding-left:25px'><code>
-            cssTranslate: function (val) {
+            cssTranslate: function(val) {
                 return this.vendorCss("Transform", "translate" + $.feat.cssTransformStart + val + $.feat.cssTransformEnd);
             },
             </code></pre>
@@ -1340,9 +1336,9 @@ function findTest(){
 
             <div class='viewsource' id='source__computedStyle' style='display:none'>
             <pre style='padding-left:25px'><code>
-            computedStyle:function(val){
-                if(this.length===0||val==nundefined) return;
-                return window.getComputedStyle(this[0],'')[val];
+            computedStyle: function(val) {
+                if (this.length === 0 || val == nundefined) return;
+                return window.getComputedStyle(this[0], '')[val];
             },
             </code></pre>
              </div>
@@ -1393,10 +1389,10 @@ function findTest(){
 
             <div class='viewsource' id='source__empty' style='display:none'>
             <pre style='padding-left:25px'><code>
-            empty: function () {
+            empty: function() {
                 for (var i = 0; i &lt; this.length; i++) {
                     $.cleanUpContent(this[i], false, true);
-                    this[i].innerHTML = '';
+                    this[i].textContent = '';
                 }
                 return this;
             },
@@ -1451,7 +1447,7 @@ function findTest(){
 
             <div class='viewsource' id='source__hide' style='display:none'>
             <pre style='padding-left:25px'><code>
-            hide: function () {
+            hide: function() {
                 if (this.length === 0)
                     return this;
                 for (var i = 0; i &lt; this.length; i++) {
@@ -1513,7 +1509,7 @@ function findTest(){
 
             <div class='viewsource' id='source__show' style='display:none'>
             <pre style='padding-left:25px'><code>
-            show: function () {
+            show: function() {
                 if (this.length === 0)
                     return this;
                 for (var i = 0; i &lt; this.length; i++) {
@@ -1575,10 +1571,10 @@ function findTest(){
 
             <div class='viewsource' id='source__toggle' style='display:none'>
             <pre style='padding-left:25px'><code>
-            toggle: function (show) {
+            toggle: function(show) {
                 var show2 = show === true ? true : false;
                 for (var i = 0; i &lt; this.length; i++) {
-                    if (window.getComputedStyle(this[i])['display'] !== "none" || (show !=nundefined && show2 === false)) {
+                    if (window.getComputedStyle(this[i])['display'] !== "none" || (show != nundefined && show2 === false)) {
                         this[i].setAttribute("afmOldStyle", this[i].style.display);
                         this[i].style.display = "none";
                     } else {
@@ -1640,10 +1636,10 @@ function findTest(){
 
             <div class='viewsource' id='source__val' style='display:none'>
             <pre style='padding-left:25px'><code>
-            val: function (value) {
+            val: function(value) {
                 if (this.length === 0)
-                    return (value ===nundefined) ? undefined : this;
-                if (value ==nundefined)
+                    return (value === nundefined) ? undefined : this;
+                if (value == nundefined)
                     return this[0].value;
                 for (var i = 0; i &lt; this.length; i++) {
                     this[i].value = value;
@@ -1703,10 +1699,10 @@ function findTest(){
 
             <div class='viewsource' id='source__attr' style='display:none'>
             <pre style='padding-left:25px'><code>
-            attr: function (attr, value) {
+            attr: function(attr, value) {
                 if (this.length === 0)
-                    return (value ===nundefined) ? undefined : this;
-                if (value ===nundefined && !$.isObject(attr)) {
+                    return (value === nundefined) ? undefined : this;
+                if (value === nundefined && !$.isObject(attr)) {
                     var val = (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) ? (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) : this[0].getAttribute(attr);
                     return val;
                 }
@@ -1723,7 +1719,7 @@ function findTest(){
                         if (!_attrCache[this[i].afmCacheId])
                             _attrCache[this[i].afmCacheId] = {};
                         _attrCache[this[i].afmCacheId][attr] = value;
-                    } else if (value ===null && value != nundefined) {
+                    } else if (value === null && value != nundefined) {
                         this[i].removeAttribute(attr);
                         if (this[i].afmCacheId && _attrCache[this[i].afmCacheId][attr])
                             delete _attrCache[this[i].afmCacheId][attr];
@@ -1790,10 +1786,10 @@ function findTest(){
 
             <div class='viewsource' id='source__removeAttr' style='display:none'>
             <pre style='padding-left:25px'><code>
-            removeAttr: function (attr) {
+            removeAttr: function(attr) {
                 var that = this;
                 for (var i = 0; i &lt; this.length; i++) {
-                    attr.split(/\s+/g).forEach(function (param) {
+                    attr.split(/\s+/g).forEach(function(param) {
                         that[i].removeAttribute(param);
                         if (that[i].afmCacheId && _attrCache[that[i].afmCacheId][attr])
                             delete _attrCache[that[i].afmCacheId][attr];
@@ -1857,10 +1853,10 @@ function findTest(){
 
             <div class='viewsource' id='source__prop' style='display:none'>
             <pre style='padding-left:25px'><code>
-            prop: function (prop, value) {
+            prop: function(prop, value) {
                 if (this.length === 0)
-                    return (value ===nundefined) ? undefined : this;
-                if (value ===nundefined && !$.isObject(prop)) {
+                    return (value === nundefined) ? undefined : this;
+                if (value === nundefined && !$.isObject(prop)) {
                     var res;
                     var val = (this[0].afmCacheId && _propCache[this[0].afmCacheId][prop]) ? (this[0].afmCacheId && _propCache[this[0].afmCacheId][prop]) : !(res = this[0][prop]) && prop in this[0] ? this[0][prop] : res;
                     return val;
@@ -1878,7 +1874,7 @@ function findTest(){
                         if (!_propCache[this[i].afmCacheId])
                             _propCache[this[i].afmCacheId] = {};
                         _propCache[this[i].afmCacheId][prop] = value;
-                    } else if (value === null && value !==undefined) {
+                    } else if (value === null && value !== undefined) {
                         $(this[i]).removeProp(prop);
                     } else {
                         this[i][prop] = value;
@@ -1943,12 +1939,12 @@ function findTest(){
 
             <div class='viewsource' id='source__removeProp' style='display:none'>
             <pre style='padding-left:25px'><code>
-            removeProp: function (prop) {
+            removeProp: function(prop) {
                 var that = this;
                 for (var i = 0; i &lt; this.length; i++) {
-                    prop.split(/\s+/g).forEach(function (param) {
+                    prop.split(/\s+/g).forEach(function(param) {
                         if (that[i][param])
-                            that[i][param]=undefined;
+                            that[i][param] = undefined;
                         if (that[i].afmCacheId && _propCache[that[i].afmCacheId][prop]) {
                             delete _propCache[that[i].afmCacheId][prop];
                         }
@@ -2013,9 +2009,9 @@ function findTest(){
 
             <div class='viewsource' id='source__remove' style='display:none'>
             <pre style='padding-left:25px'><code>
-            remove: function (selector) {
+            remove: function(selector) {
                 var elems = $(this).filter(selector);
-                if (elems ==nundefined)
+                if (elems == nundefined)
                     return this;
                 for (var i = 0; i &lt; elems.length; i++) {
                     $.cleanUpContent(elems[i], true, true);
@@ -2074,13 +2070,13 @@ function findTest(){
 
             <div class='viewsource' id='source__addClass' style='display:none'>
             <pre style='padding-left:25px'><code>
-            addClass: function (name) {
-                if(name==nundefined) return this;
+            addClass: function(name) {
+                if (name == nundefined) return this;
                 for (var i = 0; i &lt; this.length; i++) {
                     var cls = this[i].className;
                     var classList = [];
                     var that = this;
-                    name.split(/\s+/g).forEach(function (cname) {
+                    name.split(/\s+/g).forEach(function(cname) {
                         if (!that.hasClass(cname, that[i]))
                             classList.push(cname);
                     });
@@ -2140,15 +2136,15 @@ function findTest(){
 
             <div class='viewsource' id='source__removeClass' style='display:none'>
             <pre style='padding-left:25px'><code>
-            removeClass: function (name) {
-                if(name==nundefined) return this;
+            removeClass: function(name) {
+                if (name == nundefined) return this;
                 for (var i = 0; i &lt; this.length; i++) {
-                    if (name ==nundefined) {
+                    if (name == nundefined) {
                         this[i].className = '';
                         return this;
                     }
                     var classList = this[i].className;
-                    name.split(/\s+/g).forEach(function (cname) {
+                    name.split(/\s+/g).forEach(function(cname) {
                         classList = classList.replace(classRE(cname), " ");
                     });
                     if (classList.length &gt; 0)
@@ -2208,15 +2204,15 @@ function findTest(){
 
             <div class='viewsource' id='source__replaceClass' style='display:none'>
             <pre style='padding-left:25px'><code>
-            replaceClass: function (name, newName) {
-                if(name==nundefined||newName==nundefined) return this;
+            replaceClass: function(name, newName) {
+                if (name == nundefined || newName == nundefined) return this;
                 for (var i = 0; i &lt; this.length; i++) {
-                    if (name ==nundefined) {
+                    if (name == nundefined) {
                         this[i].className = newName;
                         continue;
                     }
                     var classList = this[i].className;
-                    name.split(/\s+/g).concat(newName.split(/\s+/g)).forEach(function (cname) {
+                    name.split(/\s+/g).concat(newName.split(/\s+/g)).forEach(function(cname) {
                         classList = classList.replace(classRE(cname), " ");
                     });
                     classList = classList.trim();
@@ -2277,7 +2273,7 @@ function findTest(){
 
             <div class='viewsource' id='source__hasClass' style='display:none'>
             <pre style='padding-left:25px'><code>
-            hasClass: function (name, element) {
+            hasClass: function(name, element) {
                 if (this.length === 0)
                     return false;
                 if (!element)
@@ -2336,7 +2332,7 @@ function findTest(){
 
             <div class='viewsource' id='source__append' style='display:none'>
             <pre style='padding-left:25px'><code>
-            append: function (element, insert) {
+            append: function(element, insert) {
                 if (element && element.length != nundefined && element.length === 0)
                     return this;
                 if ($.isArray(element) || $.isObject(element))
@@ -2350,7 +2346,7 @@ function findTest(){
                         _insertFragments(element, this[i], insert);
                     } else {
                         var obj = fragementRE.test(element) ? $(element) : undefined;
-                        if (obj ==nundefined || obj.length === 0) {
+                        if (obj == nundefined || obj.length === 0) {
                             obj = document.createTextNode(element);
                         }
                         if (obj.nodeName != nundefined && obj.nodeName.toLowerCase() == "script" && (!obj.type || obj.type.toLowerCase() === 'text/javascript')) {
@@ -2415,7 +2411,7 @@ function findTest(){
 
             <div class='viewsource' id='source__appendTo' style='display:none'>
             <pre style='padding-left:25px'><code>
-            appendTo: function (selector, insert) {
+            appendTo: function(selector, insert) {
                 var tmp = $(selector);
                 tmp.append(this);
                 return this;
@@ -2485,7 +2481,7 @@ function findTest(){
 
             <div class='viewsource' id='source__prependTo' style='display:none'>
             <pre style='padding-left:25px'><code>
-            prependTo: function (selector) {
+            prependTo: function(selector) {
                 var tmp = $(selector);
                 tmp.append(this, true);
                 return this;
@@ -2554,7 +2550,7 @@ function findTest(){
 
             <div class='viewsource' id='source__prepend' style='display:none'>
             <pre style='padding-left:25px'><code>
-            prepend: function (element) {
+            prepend: function(element) {
                 return this.append(element, 1);
             },
             </code></pre>
@@ -2607,7 +2603,7 @@ function findTest(){
 
             <div class='viewsource' id='source__insertBefore' style='display:none'>
             <pre style='padding-left:25px'><code>
-            insertBefore: function (target, after) {
+            insertBefore: function(target, after) {
                 if (this.length === 0)
                     return this;
                 target = $(target).get(0);
@@ -2676,7 +2672,7 @@ function findTest(){
 
             <div class='viewsource' id='source__insertAfter' style='display:none'>
             <pre style='padding-left:25px'><code>
-            insertAfter: function (target) {
+            insertAfter: function(target) {
                 this.insertBefore(target, true);
             },
             </code></pre>
@@ -2737,8 +2733,8 @@ function findTest(){
 
             <div class='viewsource' id='source__get' style='display:none'>
             <pre style='padding-left:25px'><code>
-            get: function (index) {
-                index = index ==nundefined ? 0 : index;
+            get: function(index) {
+                index = index == nundefined ? 0 : index;
                 if (index &lt; 0)
                     index += this.length;
                 return (this[index]) ? this[index] : undefined;
@@ -2798,7 +2794,7 @@ function findTest(){
 
             <div class='viewsource' id='source__offset' style='display:none'>
             <pre style='padding-left:25px'><code>
-            offset: function () {
+            offset: function() {
                 var obj;
                 if (this.length === 0)
                     return this;
@@ -2810,7 +2806,7 @@ function findTest(){
                         bottom: 0,
                         width: window.innerWidth,
                         height: window.innerHeight
-                    };
+                };
                 else
                     obj = this[0].getBoundingClientRect();
                 return {
@@ -2868,7 +2864,7 @@ function findTest(){
 </code></pre>
 
 <p></br><br />
-<input type="button" value="Append Content" onclick='alert(JSON.stringify($("#offsetTest").offset()))'></p>
+<input type="button" value="Get Offset" onclick='alert(JSON.stringify($("#offsetTest").offset()))'></p>
 
 <div style="position:relative;width:100%;height:300px;">
 <div id="offsetTest" style="position:absolute;background:red;width:100px;height:100px;right:100px;top:-50px;">
@@ -2887,7 +2883,7 @@ function findTest(){
 
             <div class='viewsource' id='source__height' style='display:none'>
             <pre style='padding-left:25px'><code>
-            height: function (val) {
+            height: function(val) {
                 if (this.length === 0)
                     return this;
                 if (val != nundefined)
@@ -2964,7 +2960,7 @@ function findTest(){
 
             <div class='viewsource' id='source__width' style='display:none'>
             <pre style='padding-left:25px'><code>
-            width: function (val) {
+            width: function(val) {
                 if (this.length === 0)
                     return this;
                 if (val != nundefined)
@@ -3041,7 +3037,7 @@ function findTest(){
 
             <div class='viewsource' id='source__parent' style='display:none'>
             <pre style='padding-left:25px'><code>
-            parent: function (selector, recursive) {
+            parent: function(selector, recursive) {
                 if (this.length === 0)
                     return this;
                 var elems = [];
@@ -3127,7 +3123,7 @@ function getParent(){
 
             <div class='viewsource' id='source__parents' style='display:none'>
             <pre style='padding-left:25px'><code>
-            parents: function (selector) {
+            parents: function(selector) {
                 return this.parent(selector, true);
             },
             </code></pre>
@@ -3221,7 +3217,7 @@ This test will not include "parent2", since gcs is a single element</p>
 
             <div class='viewsource' id='source__children' style='display:none'>
             <pre style='padding-left:25px'><code>
-            children: function (selector) {
+            children: function(selector) {
 
                 if (this.length === 0)
                     return this;
@@ -3318,7 +3314,7 @@ this will only have "gctest" since there is only one child of both childtest div
 
             <div class='viewsource' id='source__siblings' style='display:none'>
             <pre style='padding-left:25px'><code>
-            siblings: function (selector) {
+            siblings: function(selector) {
                 if (this.length === 0)
                     return this;
                 var elems = [];
@@ -3416,7 +3412,7 @@ this will be empty since there are no other elements in the div</p>
 
             <div class='viewsource' id='source__closest' style='display:none'>
             <pre style='padding-left:25px'><code>
-            closest: function (selector, context) {
+            closest: function(selector, context) {
                 if (this.length === 0)
                     return this;
                 var elems = [],
@@ -3520,11 +3516,11 @@ This will traverse up to .grandparent from all the .closest class divs<br />
 
             <div class='viewsource' id='source__filter' style='display:none'>
             <pre style='padding-left:25px'><code>
-            filter: function (selector) {
+            filter: function(selector) {
                 if (this.length === 0)
                     return this;
 
-                if (selector ==nundefined)
+                if (selector == nundefined)
                     return this;
                 var elems = [];
                 for (var i = 0; i &lt; this.length; i++) {
@@ -3598,7 +3594,7 @@ This will traverse up to .grandparent from all the .closest class divs<br />
 
             <div class='viewsource' id='source__not' style='display:none'>
             <pre style='padding-left:25px'><code>
-            not: function (selector) {
+            not: function(selector) {
                 if (this.length === 0)
                     return this;
                 var elems = [];
@@ -3673,7 +3669,7 @@ This will traverse up to .grandparent from all the .closest class divs<br />
 
             <div class='viewsource' id='source__data' style='display:none'>
             <pre style='padding-left:25px'><code>
-            data: function (key, value) {
+            data: function(key, value) {
                 return this.attr('data-' + key, value);
             },
             </code></pre>
@@ -3715,7 +3711,7 @@ This will traverse up to .grandparent from all the .closest class divs<br />
 
             <div class='viewsource' id='source__end' style='display:none'>
             <pre style='padding-left:25px'><code>
-            end: function () {
+            end: function() {
                 return this.oldElement != nundefined ? this.oldElement : $();
             },
             </code></pre>
@@ -3782,7 +3778,7 @@ After we call end(), it will reduce the set back to $("ul li");</p>
 
             <div class='viewsource' id='source__clone' style='display:none'>
             <pre style='padding-left:25px'><code>
-            clone: function (deep) {
+            clone: function(deep) {
                 deep = deep === false ? false : true;
                 if (this.length === 0)
                     return this;
@@ -3860,7 +3856,7 @@ function cloneTest(){
 
             <div class='viewsource' id='source__size' style='display:none'>
             <pre style='padding-left:25px'><code>
-            size: function () {
+            size: function() {
                 return this.length;
             },
             </code></pre>
@@ -3896,12 +3892,12 @@ function cloneTest(){
 
             <div class='viewsource' id='source__serialize' style='display:none'>
             <pre style='padding-left:25px'><code>
-            serialize: function () {
+            serialize: function() {
                 if (this.length === 0)
                     return "";
                 var params = [];
                 for (var i = 0; i &lt; this.length; i++) {
-                    this.slice.call(this[i].elements).forEach(function (elem) {
+                    this.slice.call(this[i].elements).forEach(function(elem) {
                         var type = elem.getAttribute("type");
                         if (elem.nodeName.toLowerCase() != "fieldset" && !elem.disabled && type != "submit" && type != "reset" && type != "button" && ((type != "radio" && type != "checkbox") || elem.checked)) {
 
@@ -3989,7 +3985,7 @@ function serializeForm() {
 
             <div class='viewsource' id='source__eq' style='display:none'>
             <pre style='padding-left:25px'><code>
-            eq: function (ind) {
+            eq: function(ind) {
                 return $(this.get(ind));
             },
             </code></pre>
@@ -4055,7 +4051,7 @@ function serializeForm() {
 
             <div class='viewsource' id='source__index' style='display:none'>
             <pre style='padding-left:25px'><code>
-            index: function (elem) {
+            index: function(elem) {
                 return elem ? this.indexOf($(elem)[0]) : this.parent().children().indexOf(this[0]);
             },
             </code></pre>
@@ -4120,7 +4116,7 @@ function serializeForm() {
 
             <div class='viewsource' id='source__is' style='display:none'>
             <pre style='padding-left:25px'><code>
-            is: function (selector) {
+            is: function(selector) {
                 return !!selector && this.filter(selector).length &gt; 0;
             }
 
@@ -4188,22 +4184,22 @@ function serializeForm() {
 
             <div class='viewsource' id='source_$_jsonP' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.jsonP = function (options) {
-            if(isWin8){
-                options.type="get";
-                options.dataType=null;
+            $.jsonP = function(options) {
+            if (isWin8) {
+                options.type = "get";
+                options.dataType = null;
                 return $.get(options);
             }
             var callbackName = 'jsonp_callback' + (++_jsonPID);
             var abortTimeout = "",
                 context;
             var script = document.createElement("script");
-            var abort = function () {
+            var abort = function() {
                 $(script).remove();
                 if (window[callbackName])
                     window[callbackName] = empty;
             };
-            window[callbackName] = function (data) {
+            window[callbackName] = function(data) {
                 clearTimeout(abortTimeout);
                 $(script).remove();
                 delete window[callbackName];
@@ -4211,14 +4207,14 @@ function serializeForm() {
             };
             script.src = options.url.replace(/=\?/, '=' + callbackName);
             if (options.error) {
-                script.onerror = function () {
+                script.onerror = function() {
                     clearTimeout(abortTimeout);
                     options.error.call(context, "", 'error');
                 };
             }
             $('head').append(script);
             if (options.timeout &gt; 0)
-                abortTimeout = setTimeout(function () {
+                abortTimeout = setTimeout(function() {
                     options.error.call(context, "", 'timeout');
                 }, options.timeout);
             return {};
@@ -4256,13 +4252,13 @@ function serializeForm() {
 
             <div class='viewsource' id='source_$_ajax' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.ajax = function (opts) {
+            $.ajax = function(opts) {
             var xhr;
             try {
 
                 var settings = opts || {};
                 for (var key in $.ajaxSettings) {
-                    if (typeof (settings[key]) == 'undefined')
+                    if (typeof(settings[key]) == 'undefined')
                         settings[key] = $.ajaxSettings[key];
                 }
 
@@ -4329,7 +4325,7 @@ function serializeForm() {
                 xhr = new window.XMLHttpRequest();
 
 
-                xhr.onreadystatechange = function () {
+                xhr.onreadystatechange = function() {
                     var mime = settings.dataType;
                     if (xhr.readyState === 4) {
                         clearTimeout(abortTimeout);
@@ -4376,7 +4372,7 @@ function serializeForm() {
                 }
 
                 if (settings.timeout &gt; 0)
-                    abortTimeout = setTimeout(function () {
+                    abortTimeout = setTimeout(function() {
                         xhr.onreadystatechange = empty;
                         xhr.abort();
                         settings.error.call(context, xhr, 'timeout');
@@ -4475,7 +4471,7 @@ function serializeForm() {
 
             <div class='viewsource' id='source_$_get' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.get = function (url, success) {
+            $.get = function(url, success) {
             return this.ajax({
                 url: url,
                 success: success
@@ -4521,12 +4517,12 @@ function serializeForm() {
 
             <div class='viewsource' id='source_$_post' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.post = function (url, data, success, dataType) {
-            if (typeof (data) === "function") {
+            $.post = function(url, data, success, dataType) {
+            if (typeof(data) === "function") {
                 success = data;
                 data = {};
             }
-            if (dataType ===nundefined)
+            if (dataType === nundefined)
                 dataType = "html";
             return this.ajax({
                 url: url,
@@ -4583,8 +4579,8 @@ function serializeForm() {
 
             <div class='viewsource' id='source_$_getJSON' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.getJSON = function (url, data, success) {
-            if (typeof (data) === "function") {
+            $.getJSON = function(url, data, success) {
+            if (typeof(data) === "function") {
                 success = data;
                 data = {};
             }
@@ -4641,16 +4637,19 @@ function serializeForm() {
 
             <div class='viewsource' id='source_$_param' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.param = function (obj, prefix) {
+            $.param = function(obj, prefix) {
             var str = [];
             if (obj instanceof $afm) {
-                obj.each(function () {
-                    var k = prefix ? prefix + "["+this.id+"]" : this.id,
+                obj.each(function() {
+                    var k = prefix ? prefix + "[" + this.id + "]" : this.id,
                         v = this.value;
                     str.push((k) + "=" + encodeURIComponent(v));
                 });
             } else {
                 for (var p in obj) {
+
+                    if ($.isFunction(obj[p]))
+                        continue;
                     var k = prefix ? prefix + "[" + p + "]" : p,
                         v = obj[p];
                     str.push($.isObject(v) ? $.param(v, k) : (k) + "=" + encodeURIComponent(v));
@@ -4712,7 +4711,7 @@ var $paramTest={
 
             <div class='viewsource' id='source_$_parseJSON' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.parseJSON = function (string) {
+            $.parseJSON = function(string) {
             return JSON.parse(string);
         };
             </code></pre>
@@ -4760,13 +4759,12 @@ var objParse=$.parseJSON("{\"foo\":\"bar\"}");
 
             <div class='viewsource' id='source_$_parseXML' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.parseXML = function (string) {
-            if(isWin8){
-                MSApp.execUnsafeLocalFunction(function(){
-                        return (new DOMParser()).parseFromString(string, "text/xml");
+            $.parseXML = function(string) {
+            if (isWin8) {
+                MSApp.execUnsafeLocalFunction(function() {
+                    return (new DOMParser()).parseFromString(string, "text/xml");
                 });
-            }
-            else
+            } else
                 return (new DOMParser()).parseFromString(string, "text/xml");
         };
             </code></pre>
@@ -4814,8 +4812,8 @@ var objParse=$.parseJSON("{\"foo\":\"bar\"}");
 
             <div class='viewsource' id='source_$_uuid' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.uuid = function () {
-            var S4 = function () {
+            $.uuid = function() {
+            var S4 = function() {
                 return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
             };
             return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
@@ -4858,7 +4856,7 @@ var objParse=$.parseJSON("{\"foo\":\"bar\"}");
 
             <div class='viewsource' id='source_$_create' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.create = function (type, props) {
+            $.create = function(type, props) {
             var elem;
             var f = new $afm();
             if (props || type[0] !== "&lt;") {
@@ -4872,13 +4870,11 @@ var objParse=$.parseJSON("{\"foo\":\"bar\"}");
                 f[f.length++] = elem;
             } else {
                 elem = document.createElement("div");
-                if(isWin8)
-                {
-                    MSApp.execUnsafeLocalFunction(function(){
-                        elem.innerHTML=selector.trim();
+                if (isWin8) {
+                    MSApp.execUnsafeLocalFunction(function() {
+                        elem.innerHTML = selector.trim();
                     });
-                }
-                else
+                } else
                     elem.innerHTML = type;
                 _shimNodes(elem.childNodes, f);
             }
@@ -4944,7 +4940,7 @@ var slower=$.create("<div id='test'>Test HTML</div>");
 
             <div class='viewsource' id='source_$_query' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.query = function (sel, what) {
+            $.query = function(sel, what) {
             if (!sel)
                 return new $afm();
             what = what || document;
@@ -4997,7 +4993,7 @@ var slower=$.create("<div id='test'>Test HTML</div>");
 
             <div class='viewsource' id='source__bind' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.fn.bind = function (event, callback) {
+            $.fn.bind = function(event, callback) {
             for (var i = 0; i &lt; this.length; i++) {
                 add(this[i], event, callback);
             }
@@ -5065,7 +5061,7 @@ $("#bindTest li").bind("click",function(event){alert(this.innerHTML)});
 
             <div class='viewsource' id='source__unbind' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.fn.unbind = function (event, callback) {
+            $.fn.unbind = function(event, callback) {
             for (var i = 0; i &lt; this.length; i++) {
                 remove(this[i], event, callback);
             }
@@ -5153,10 +5149,10 @@ function unbindTest(){
 
             <div class='viewsource' id='source__one' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.fn.one = function (event, callback) {
-            return this.each(function (i, element) {
-                add(this, event, callback, null, function (fn, type) {
-                    return function () {
+            $.fn.one = function(event, callback) {
+            return this.each(function(i, element) {
+                add(this, event, callback, null, function(fn, type) {
+                    return function() {
                         var result = fn.apply(element, arguments);
                         remove(element, type, fn);
                         return result;
@@ -5212,11 +5208,11 @@ $("#testAnchor").one("click",function(){alert("Submitting form")});
 
             <div class='viewsource' id='source__delegate' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.fn.delegate = function (selector, event, callback) {
+            $.fn.delegate = function(selector, event, callback) {
             for (var i = 0; i &lt; this.length; i++) {
                 var element = this[i];
-                add(element, event, callback, selector, function (fn) {
-                    return function (e) {
+                add(element, event, callback, selector, function(fn) {
+                    return function(e) {
                         var evt, match = $(e.target).closest(selector, element).get(0);
                         if (match) {
                             evt = $.extend(createProxy(e), {
@@ -5266,7 +5262,7 @@ $("#testAnchor").one("click",function(){alert("Submitting form")});
 
             <div class='viewsource' id='source__undelegate' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.fn.undelegate = function (selector, event, callback) {
+            $.fn.undelegate = function(selector, event, callback) {
             for (var i = 0; i &lt; this.length; i++) {
                 remove(this[i], event, callback, selector);
             }
@@ -5308,8 +5304,8 @@ $("#testAnchor").one("click",function(){alert("Submitting form")});
 
             <div class='viewsource' id='source__on' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.fn.on = function (event, selector, callback) {
-            return selector ===nundefined || $.isFunction(selector) ? this.bind(event, selector) : this.delegate(selector, event, callback);
+            $.fn.on = function(event, selector, callback) {
+            return selector === nundefined || $.isFunction(selector) ? this.bind(event, selector) : this.delegate(selector, event, callback);
         };
             </code></pre>
              </div>
@@ -5383,8 +5379,8 @@ $("#onTest").on("click","li",function(){alert(this.innerHTML)});
 
             <div class='viewsource' id='source__off' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.fn.off = function (event, selector, callback) {
-            return selector ===nundefined || $.isFunction(selector) ? this.unbind(event, selector) : this.undelegate(selector, event, callback);
+            $.fn.off = function(event, selector, callback) {
+            return selector === nundefined || $.isFunction(selector) ? this.unbind(event, selector) : this.undelegate(selector, event, callback);
         };
             </code></pre>
              </div>
@@ -5469,7 +5465,7 @@ function offTest(){
 
             <div class='viewsource' id='source__trigger' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.fn.trigger = function (event, data, props) {
+            $.fn.trigger = function(event, data, props) {
             if (typeof event == 'string')
                 event = $.Event(event, props);
             event.data = data;
@@ -5536,7 +5532,7 @@ function triggerIt(){
 
             <div class='viewsource' id='source_$_Event' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.Event = function (type, props) {
+            $.Event = function(type, props) {
             var event = document.createEvent('Events'),
                 bubbles = true;
             if (props)
@@ -5579,8 +5575,8 @@ function triggerIt(){
 
             <div class='viewsource' id='source_$_bind' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.bind = function (obj, ev, f) {
-            if(!obj) return;
+            $.bind = function(obj, ev, f) {
+            if (!obj) return;
             if (!obj.__events) obj.__events = {};
             if (!$.isArray(ev)) ev = [ev];
             for (var i = 0; i &lt; ev.length; i++) {
@@ -5628,8 +5624,8 @@ function triggerIt(){
 
             <div class='viewsource' id='source_$_trigger' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.trigger = function (obj, ev, args) {
-            if(!obj) return;
+            $.trigger = function(obj, ev, args) {
+            if (!obj) return;
             var ret = true;
             if (!obj.__events) return ret;
             if (!$.isArray(ev)) ev = [ev];
@@ -5679,14 +5675,14 @@ function triggerIt(){
 
             <div class='viewsource' id='source_$_unbind' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.unbind = function (obj, ev, f) {
+            $.unbind = function(obj, ev, f) {
             if (!obj.__events) return;
             if (!$.isArray(ev)) ev = [ev];
             for (var i = 0; i &lt; ev.length; i++) {
                 if (obj.__events[ev[i]]) {
                     var evts = obj.__events[ev[i]];
                     for (var j = 0; j &lt; evts.length; j++) {
-                        if (f ==nundefined)
+                        if (f == nundefined)
                             delete evts[j];
                         if (evts[j] == f) {
                             evts.splice(j, 1);
@@ -5735,8 +5731,8 @@ function triggerIt(){
 
             <div class='viewsource' id='source_$_proxy' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.proxy = function (f, c, args) {
-            return function () {
+            $.proxy = function(f, c, args) {
+            return function() {
                 if (args) return f.apply(c, args); //use provided arguments
                 return f.apply(c, arguments); //use scope function call arguments
             };
@@ -5799,7 +5795,7 @@ $("#proxyTest").bind("click",$.proxy(function(){alert(this.foo);},obj));
 
             <div class='viewsource' id='source_$_cleanUpContent' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.cleanUpContent = function (node, itself, kill) {
+            $.cleanUpContent = function(node, itself, kill) {
             if (!node) return;
             //cleanup children
             var cn = node.childNodes;
@@ -5878,17 +5874,16 @@ $("#proxyTest").bind("click",$.proxy(function(){alert(this.foo);},obj));
             <div class='viewsource' id='source_$_parseJS' style='display:none'>
             <pre style='padding-left:25px'><code>
             var remoteJSPages = {};
-        $.parseJS = function (div) {
+        $.parseJS = function(div) {
             if (!div)
                 return;
-            if (typeof (div) == "string") {
+            if (typeof(div) == "string") {
                 var elem = document.createElement("div");
-                if(isWin8){
-                    MSApp.execUnsafeLocalFunction(function(){
+                if (isWin8) {
+                    MSApp.execUnsafeLocalFunction(function() {
                         elem.innerHTML = div;
                     });
-                }
-                else
+                } else
                     elem.innerHTML = div;
 
                 div = elem;
@@ -5896,7 +5891,7 @@ $("#proxyTest").bind("click",$.proxy(function(){alert(this.foo);},obj));
             var scripts = div.getElementsByTagName("script");
             div = null;
             for (var i = 0; i &lt; scripts.length; i++) {
-                if (scripts[i].src.length &gt; 0 && !remoteJSPages[scripts[i].src]&&!isWin8) {
+                if (scripts[i].src.length &gt; 0 && !remoteJSPages[scripts[i].src] && !isWin8) {
                     var doc = document.createElement("script");
                     doc.type = scripts[i].type;
                     doc.src = scripts[i].src;
@@ -5957,13 +5952,13 @@ function doParseJS(){
 
             <div class='viewsource' id='source_$_ui_setSideMenuWidth' style='display:none'>
             <pre style='padding-left:25px'><code>
-            setSideMenuWidth:function(width){
-            this.sideMenuWidth=width;
+            setSideMenuWidth: function(width) {
+            this.sideMenuWidth = width;
             //override the css style
-            width=width+"";
-            width=width.replace("px","")+"px";
+            width = width + "";
+            width = width.replace("px", "") + "px";
             $("head").find("#styleWidth").remove();
-            $("head").append("&lt;style id='styleWidth'&gt;#afui #menu {width:"+width+" }&lt;/style&gt;");
+            $("head").append("&lt;style id='styleWidth'&gt;#afui #menu {width:" + width + "  !important}&lt;/style&gt;");
         },
             </code></pre>
              </div>
@@ -6011,7 +6006,7 @@ function doParseJS(){
 
             <div class='viewsource' id='source_$_ui_disableNativeScrolling' style='display:none'>
             <pre style='padding-left:25px'><code>
-            disableNativeScrolling: function () {
+            disableNativeScrolling: function() {
             $.feat.nativeTouchScroll = false;
         },
             </code></pre>
@@ -6060,7 +6055,7 @@ function doParseJS(){
 
 
 
-          <section class='description'><p>This is a boolean when set to true, we manage history and update the hash<br />                    $.ui.manageHistory=false;//Don't manage for apps using Backbone<br />          </p></section>
+          <section class='description'><p>This is a boolean property.   When set to true, we manage history and update the hash<br />                    $.ui.manageHistory=false;//Don't manage for apps using Backbone<br />          </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -6073,7 +6068,7 @@ function doParseJS(){
 
              <h2>Example</h2>
               <div class='markdowncontents'>
-              <p>$.ui.manageHistory - is a boolean property.  The default is true.  When this is true, we manage history internally and update the hash.</p>
+              <p>$.ui.manageHistory - This is a boolean property.  The default is true.  When this is true, we manage history internally and update the hash.</p>
 
 <p>When set to false, we do not manage history/hash.  This is useful for some frameworks like Backbone.js</p>
 
@@ -6101,7 +6096,7 @@ function doParseJS(){
 
 
 
-          <section class='description'><p>this is a boolean when set to true (default) it will load that panel when the app is started<br />                      $.ui.loadDefaultHash=false; //Never load the page from the hash when the app is started<br />           $.ui.loadDefaultHash=true; //Default<br />           </p></section>
+          <section class='description'><p>This is a boolean property.  When set to true (default) it will load that panel when the app is started<br />                      $.ui.loadDefaultHash=false; //Never load the page from the hash when the app is started<br />           $.ui.loadDefaultHash=true; //Default<br />           </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -6172,7 +6167,7 @@ function doParseJS(){
 
             <div class='viewsource' id='source_$_ui_actionsheet' style='display:none'>
             <pre style='padding-left:25px'><code>
-            actionsheet: function (opts) {
+            actionsheet: function(opts) {
             return $.query("#afui").actionsheet(opts);
         },
             </code></pre>
@@ -6222,7 +6217,7 @@ function doAS(){
 
             <div class='viewsource' id='source_$_ui_popup' style='display:none'>
             <pre style='padding-left:25px'><code>
-            popup: function (opts) {
+            popup: function(opts) {
             return $.query("#afui").popup(opts);
         },
             </code></pre>
@@ -6298,7 +6293,7 @@ $.ui.popup( {
 
             <div class='viewsource' id='source_$_ui_blockUI' style='display:none'>
             <pre style='padding-left:25px'><code>
-            blockUI: function (opacity) {
+            blockUI: function(opacity) {
             $.blockUI(opacity);
         },
             </code></pre>
@@ -6354,7 +6349,7 @@ function blockUI(){
 
             <div class='viewsource' id='source_$_ui_unblockUI' style='display:none'>
             <pre style='padding-left:25px'><code>
-            unblockUI: function () {
+            unblockUI: function() {
             $.unblockUI();
         },
             </code></pre>
@@ -6392,7 +6387,7 @@ function blockUI(){
 
             <div class='viewsource' id='source_$_ui_removeFooterMenu' style='display:none'>
             <pre style='padding-left:25px'><code>
-            removeFooterMenu: function () {
+            removeFooterMenu: function() {
             $.query("#navbar").hide();
             $.query("#content").css("bottom", "0px");
             this.showNavMenu = false;
@@ -6580,11 +6575,11 @@ function blockUI(){
 
             <div class='viewsource' id='source_$_ui_ready' style='display:none'>
             <pre style='padding-left:25px'><code>
-            ready: function (param) {
+            ready: function(param) {
 
             if (this.launchCompleted) param();
             else {
-                $(document).bind("afui:ready", function (e) {
+                $(document).bind("afui:ready", function(e) {
                     param();
                 }, false);
             }
@@ -6636,7 +6631,7 @@ function blockUI(){
 
             <div class='viewsource' id='source_$_ui_setBackButtonStyle' style='display:none'>
             <pre style='padding-left:25px'><code>
-            setBackButtonStyle: function (className) {
+            setBackButtonStyle: function(className) {
             $.query("#backButton").replaceClass(null, className);
         },
             </code></pre>
@@ -6678,7 +6673,7 @@ function blockUI(){
 
             <div class='viewsource' id='source_$_ui_goBack' style='display:none'>
             <pre style='padding-left:25px'><code>
-            goBack: function () {
+            goBack: function() {
             if (this.history.length &gt; 0) {
                 var that = this;
                 var tmpEl = this.history.pop();
@@ -6729,7 +6724,7 @@ function blockUI(){
 
             <div class='viewsource' id='source_$_ui_clearHistory' style='display:none'>
             <pre style='padding-left:25px'><code>
-            clearHistory: function () {
+            clearHistory: function() {
             this.history = [];
             this.setBackButtonVisibility(false);
         },
@@ -6773,7 +6768,7 @@ function blockUI(){
 
             <div class='viewsource' id='source_$_ui_updateBadge' style='display:none'>
             <pre style='padding-left:25px'><code>
-            updateBadge: function (target, value, position, color) {
+            updateBadge: function(target, value, position, color) {
             if (position === undefined) position = "";
 
             var $target = $(target);
@@ -6789,8 +6784,8 @@ function blockUI(){
             } else badge.html(value);
             badge.removeClass("tl bl br tr");
             badge.addClass(position);
-            if(color===undefined)
-                color="red";
+            if (color === undefined)
+                color = "red";
             if ($.isObject(color)) {
                 badge.css(color);
             } else if (color) {
@@ -6862,7 +6857,7 @@ function badge2(){
 
             <div class='viewsource' id='source_$_ui_removeBadge' style='display:none'>
             <pre style='padding-left:25px'><code>
-            removeBadge: function (target) {
+            removeBadge: function(target) {
             $(target).find("span.af-badge").remove();
         },
             </code></pre>
@@ -6921,7 +6916,7 @@ function removeBadge() {
 
             <div class='viewsource' id='source_$_ui_toggleNavMenu' style='display:none'>
             <pre style='padding-left:25px'><code>
-            toggleNavMenu: function (force) {
+            toggleNavMenu: function(force) {
             if (!this.showNavMenu) return;
             if ($.query("#navbar").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
                 $.query("#content").css("bottom", "0px");
@@ -6939,7 +6934,7 @@ function removeBadge() {
 
 
 
-          <section class='description'><p>Toggles the bottom nav nav menu.  Force is a boolean to force show or hide.<br />                      $.ui.toggleNavMenu();//toggle it<br />           $.ui.toggleNavMenu(true); //force show it<br />           </p></section>
+          <section class='description'><p>Toggles the bottom nav menu.  Force is a boolean to force show or hide.<br />                      $.ui.toggleNavMenu();//toggle it<br />           $.ui.toggleNavMenu(true); //force show it<br />           </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -6972,7 +6967,7 @@ function removeBadge() {
 
             <div class='viewsource' id='source_$_ui_toggleHeaderMenu' style='display:none'>
             <pre style='padding-left:25px'><code>
-            toggleHeaderMenu: function (force) {
+            toggleHeaderMenu: function(force) {
             if ($.query("#header").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
                 $.query("#content").css("top", "0px");
                 $.query("#header").hide();
@@ -6988,7 +6983,7 @@ function removeBadge() {
 
 
 
-          <section class='description'><p>Toggles the top header menu.<br />                      $.ui.toggleHeaderMenu();//toggle it<br />           </p></section>
+          <section class='description'><p>Toggles the top header menu.  Force is a boolean to force show or hide.<br />                      $.ui.toggleHeaderMenu();//toggle it<br />           </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -7015,26 +7010,28 @@ function removeBadge() {
           </article>
        </div>
 
-       <div id='$_ui_toggleSideMenu' title='$.ui.toggleSideMenu([force])' data-nav='nav_af_ui' class='panel'>
+       <div id='$_ui_toggleSideMenu' title='$.ui.toggleSideMenu([force],[callback],[time])' data-nav='nav_af_ui' class='panel'>
        <div class='source'>
           <h3><a class='collapsed' onclick='toggleSource("$_ui_toggleSideMenu",this)'>Show Source</a></h3>
 
             <div class='viewsource' id='source_$_ui_toggleSideMenu' style='display:none'>
             <pre style='padding-left:25px'><code>
-            toggleSideMenu: function (force, callback) {
+            toggleSideMenu: function(force, callback, time) {
             if (!this.isSideMenuEnabled() || this.togglingSideMenu) return;
 
             var that = this;
             var menu = $.query("#menu");
             var els = $.query("#content,  #header, #navbar");
+            time = time || this.transitionTime;
+            var open = this.isSideMenuOn();
 
-            if (force === 2 || (menu.css("display") !== "block" && ((force !== undefined && force !== false) || force === undefined))) {
+            if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
                 this.togglingSideMenu = true;
                 menu.show();
                 that.css3animate(els, {
                     x: that.sideMenuWidth,
-                    time: $.ui.transitionTime,
-                    complete: function (canceled) {
+                    time: time,
+                    complete: function(canceled) {
                         that.togglingSideMenu = false;
                         els.vendorCss("Transition", "");
                         if (callback) callback(canceled);
@@ -7045,9 +7042,9 @@ function removeBadge() {
                 this.togglingSideMenu = true;
                 that.css3animate(els, {
                     x: "0px",
-                    time: $.ui.transitionTime,
-                    complete: function (canceled) {
-                       // els.removeClass("on");
+                    time: time,
+                    complete: function(canceled) {
+                        // els.removeClass("on");
                         els.vendorCss("Transition", "");
                         els.vendorCss("Transform", "");
                         that.togglingSideMenu = false;
@@ -7060,7 +7057,7 @@ function removeBadge() {
             </code></pre>
              </div>
       </div>
-          <h2>$.ui.toggleSideMenu([force])</h2>
+          <h2>$.ui.toggleSideMenu([force],[callback],[time])</h2>
 
 
 
@@ -7069,6 +7066,8 @@ function removeBadge() {
           <div class='spacer'></div>
              <h2>Params</h2>
              <ol><li style='padding-left:15px;line-height:20px'>[force] - Boolean</li>
+<li style='padding-left:15px;line-height:20px'>[callback] - Function</li>
+<li style='padding-left:15px;line-height:20px'>[time] - int</li>
 </ol>
              <div class='spacer'></div>
              <h2>Returns</h2>
@@ -7099,14 +7098,15 @@ function removeBadge() {
 
             <div class='viewsource' id='source_$_ui_disableSideMenu' style='display:none'>
             <pre style='padding-left:25px'><code>
-            disableSideMenu: function () {
+            disableSideMenu: function() {
             var that = this;
-            var els = $.query("#content, #menu, #header, #navbar");
+            var els = $.query("#content, #header, #navbar");
             if (this.isSideMenuOn()) {
-                this.toggleSideMenu(false, function (canceled) {
+                this.toggleSideMenu(false, function(canceled) {
                     if (!canceled) els.removeClass("hasMenu");
                 });
             } else els.removeClass("hasMenu");
+            $.query("#menu").removeClass("tabletMenu");
         },
             </code></pre>
              </div>
@@ -7147,8 +7147,9 @@ function removeBadge() {
 
             <div class='viewsource' id='source_$_ui_enableSideMenu' style='display:none'>
             <pre style='padding-left:25px'><code>
-            enableSideMenu: function () {
-            $.query("#content, #menu, #header, #navbar").addClass("hasMenu");
+            enableSideMenu: function() {
+            $.query("#content, #header, #navbar").addClass("hasMenu");
+            $.query("#menu").addClass("tabletMenu");
         },
             </code></pre>
              </div>
@@ -7189,7 +7190,7 @@ function removeBadge() {
 
             <div class='viewsource' id='source_$_ui_updateNavbarElements' style='display:none'>
             <pre style='padding-left:25px'><code>
-            updateNavbarElements: function (elems) {
+            updateNavbarElements: function(elems) {
             if (this.prevFooter) {
                 if (this.prevFooter.data("parent")) this.prevFooter.appendTo("#" + this.prevFooter.data("parent"));
                 else this.prevFooter.appendTo("#afui");
@@ -7206,7 +7207,10 @@ function removeBadge() {
                 var width = parseFloat(100 / tmpAnchors.length);
                 tmpAnchors.css("width", width + "%");
             }
-            var nodes = $.query("#navbar footer").get(0).childNodes;
+            var nodes = $.query("#navbar footer");
+            if (nodes.length === 0) return;
+            nodes = nodes.get(0).childNodes;
+
             for (var i = 0; i &lt; nodes.length; i++) {
                 if (nodes[i].nodeType === 3) {
                     nodes[i].parentNode.removeChild(nodes[i]);
@@ -7269,35 +7273,47 @@ $(afui).ready(function(){
 
             <div class='viewsource' id='source_$_ui_updateHeaderElements' style='display:none'>
             <pre style='padding-left:25px'><code>
-            updateHeaderElements: function (elems,goBack) {
+            updateHeaderElements: function(elems, goBack) {
             var that = this;
+            if (!$.is$(elems)) //inline footer
+            {
+                elems = $.query("#" + elems);
+            }
+            if (elems == this.prevHeader) return;
+            this._currentHeaderID=elems.prop("id");
             if (this.prevHeader) {
                 //Let's slide them out
-                if (!$.is$(elems)) //inline footer
-                {
-                    elems = $.query("#" + elems);
+                $.query("#header").append(elems);
+                //Do not animate - sometimes they act funky
+                if (!$.ui.animateHeaders) {
+                    if (that.prevHeader.data("parent")) that.prevHeader.appendTo("#" + that.prevHeader.data("parent"));
+                    else that.prevHeader.appendTo("#afui");
+                    that.prevHeader = elems;
+                    return;
                 }
 
-                $.query("#header").append(elems);
-                var from=goBack?"100px":"-100px";
-                var to=goBack?"-100px":"100px";
-                that.css3animate(elems,{
-                    x:to,
-                    opacity:0.3,
-                    time:"0"
+                var from = goBack ? "100px" : "-100px";
+                var to = goBack ? "-100px" : "100px";
+                that.prevHeader.addClass("ignore");
+                that.css3animate(elems, {
+                    x: to,
+                    opacity: 0.3,
+                    time: "1ms"
                 });
                 that.css3animate(that.prevHeader, {
                     x: from,
                     y: 0,
                     opacity: 0.3,
                     time: that.transitionTime,
-                    delay:numOnly(that.transitionTime)/5+"ms",
-                    complete: function () {
+                    delay: numOnly(that.transitionTime) / 5 + "ms",
+                    complete: function() {
                         if (that.prevHeader.data("parent")) that.prevHeader.appendTo("#" + that.prevHeader.data("parent"));
                         else that.prevHeader.appendTo("#afui");
+                        that.prevHeader.removeClass("ignore");
                         that.css3animate(that.prevHeader, {
                             x: to,
-                            opacity: 1
+                            opacity: 1,
+                            time: "1ms"
                         });
                         that.prevHeader = elems;
                     }
@@ -7310,10 +7326,6 @@ $(afui).ready(function(){
 
 
             } else {
-                if (!$.is$(elems)) //inline footer
-                {
-                    elems = $.query("#" + elems);
-                }
                 $.query("#header").append(elems);
                 this.prevHeader = elems;
             }
@@ -7351,7 +7363,7 @@ $(afui).ready(function(){
 
             <div class='viewsource' id='source_$_ui_updateSideMenuElements' style='display:none'>
             <pre style='padding-left:25px'><code>
-            updateSideMenuElements: function (elems) {
+            updateSideMenuElements: function(elems) {
             var that = this;
             if (elems === undefined || elems === null) return;
             var nb = $.query("#menu_scroller");
@@ -7426,8 +7438,9 @@ $(afui).ready(function(){
 
             <div class='viewsource' id='source_$_ui_setTitle' style='display:none'>
             <pre style='padding-left:25px'><code>
-            setTitle: function (val) {
-            $.query("#header #pageTitle").html(val);
+            setTitle: function(val) {
+            if(this._currentHeaderID!=="defaultHeader") return;
+            $.query("#header header:not(.ignore)  #pageTitle").html(val);
         },
             </code></pre>
              </div>
@@ -7467,11 +7480,12 @@ $(afui).ready(function(){
 
             <div class='viewsource' id='source_$_ui_setBackButtonText' style='display:none'>
             <pre style='padding-left:25px'><code>
-            setBackButtonText: function (text) {
-            if(this.trimBackButtonText)
-                text=text.substring(0,5)+"...";
-            if (this.backButtonText.length &gt; 0) $.query("#header #backButton").html(this.backButtonText);
-            else $.query("#header #backButton").html(text);
+            setBackButtonText: function(text) {
+            if(this._currentHeaderID!=="defaultHeader") return;
+            if (this.trimBackButtonText)
+                text = text.substring(0, 5) + "...";
+            if (this.backButtonText.length &gt; 0) $.query("#header header:not(.ignore) #backButton").html(this.backButtonText);
+            else $.query("#header header:not(.ignore)  #backButton").html(text);
         },
             </code></pre>
              </div>
@@ -7494,7 +7508,7 @@ $(afui).ready(function(){
 
              <h2>Example</h2>
               <div class='markdowncontents'>
-              <p>$.ui.setBackButtonText(text)  - This will change the back buttont text for the current panel.</p>
+              <p>$.ui.setBackButtonText(text)  - This will change the back button text for the current panel.</p>
 
 <p>If you set $.ui.backButtonText (like this API doc does) , you can not use this function to change the back button text.</p>
 
@@ -7512,7 +7526,7 @@ $(afui).ready(function(){
 
             <div class='viewsource' id='source_$_ui_showMask' style='display:none'>
             <pre style='padding-left:25px'><code>
-            showMask: function (text) {
+            showMask: function(text) {
             if (!text) text = "Loading Content";
             $.query("#afui_mask&gt;h1").html(text);
             $.query("#afui_mask").show();
@@ -7524,7 +7538,7 @@ $(afui).ready(function(){
 
 
 
-          <section class='description'><p>Show the loading mask<br />                      $.ui.showMask()<br />           $.ui.showMask(;Doing work')<br />           </p></section>
+          <section class='description'><p>Show the loading mask<br />                      $.ui.showMask()<br />           $.ui.showMask('Doing work')<br />           </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -7565,7 +7579,7 @@ function testShowMask(){
 
             <div class='viewsource' id='source_$_ui_hideMask' style='display:none'>
             <pre style='padding-left:25px'><code>
-            hideMask: function () {
+            hideMask: function() {
             $.query("#afui_mask").hide();
         },
             </code></pre>
@@ -7608,27 +7622,23 @@ function testShowMask(){
 
             <div class='viewsource' id='source_$_ui_showModal' style='display:none'>
             <pre style='padding-left:25px'><code>
-            showModal: function (id) {
+            showModal: function(id, trans) {
             var that = this;
-            if(typeof(id)==="string")
+            this.modalTransition = trans || "up";
+            var modalDiv = $.query("#modalContainer");
+            if (typeof(id) === "string")
                 id = "#" + id.replace("#", "");
-            try {
-                if ($.query(id)) {
-                    $.query("#modalContainer").html($.feat.nativeTouchScroll ? $.query(id).html() : $.query(id).get(0).childNodes[0].innerHTML + '', true);
-                    $.query('#modalContainer').append("&lt;a onclick='$.ui.hideModal();' class='closebutton modalbutton'&gt;&lt;/a&gt;");
-                    this.modalWindow.style.opacity=0.1
-                    this.modalWindow.style.display = "block";
-                    setTimeout(function(){
-                        that.modalWindow.style.opacity=1;                        
-                    });
+            if ($.query(id)) {
+                modalDiv.html($.feat.nativeTouchScroll ? $.query(id).html() : $.query(id).get(0).childNodes[0].innerHTML + '', true);
+                modalDiv.append("&lt;a onclick='$.ui.hideModal();' class='closebutton modalbutton'&gt;&lt;/a&gt;");
+                that.modalWindow.style.display = "block";
 
-                    this.scrollingDivs.modal_container.enable(that.resetScrollers);
-                    this.scrollToTop('modal');
-                    $.query("#modalContainer").data("panel", id);
+                this.runTransition(this.modalTransition, that.modalTransContainer, that.modalWindow, false);
 
-                }
-            } catch (e) {
-                console.log("Error with modal - " + e, this.modalWindow);
+                this.scrollingDivs.modal_container.enable(that.resetScrollers);
+                this.scrollToTop('modal');
+                modalDiv.data("panel", id);
+
             }
         },
             </code></pre>
@@ -7638,11 +7648,12 @@ function testShowMask(){
 
 
 
-          <section class='description'><p>Load a content panel in a modal window.  We set the innerHTML so event binding will not work.  Please use the data-load or panelloaded events to setup any event binding<br />                      $.ui.showModal("#myDiv");<br />           </p></section>
+          <section class='description'><p>Load a content panel in a modal window.  We set the innerHTML so event binding will not work.  Please use the data-load or panelloaded events to setup any event binding<br />                      $.ui.showModal("#myDiv","fade");<br />           </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
              <ol><li style='padding-left:15px;line-height:20px'>panel - String|Object</li>
+<li style='padding-left:15px;line-height:20px'>[transition] - String</li>
 </ol>
              <div class='spacer'></div>
              <h2>Returns</h2>
@@ -7674,13 +7685,11 @@ function testShowMask(){
 
             <div class='viewsource' id='source_$_ui_hideModal' style='display:none'>
             <pre style='padding-left:25px'><code>
-            hideModal: function () {
-            var self=this;
+            hideModal: function() {
+            var self = this;
             $.query("#modalContainer").html("", true);
-            this.modalWindow.style.opacity=0.1;
-            setTimeout(function(){
-                self.modalWindow.style.display="none";
-            },250);
+
+            this.runTransition(self.modalTransition, self.modalWindow, self.modalTransContainer, true);
 
             this.scrollingDivs.modal_container.disable();
 
@@ -7725,7 +7734,7 @@ function testShowMask(){
 
             <div class='viewsource' id='source_$_ui_updatePanel' style='display:none'>
             <pre style='padding-left:25px'><code>
-            updatePanel: function (id, content) {
+            updatePanel: function(id, content) {
             id = "#" + id.replace("#", "");
             var el = $.query(id).get(0);
             if (!el) return;
@@ -7737,7 +7746,7 @@ function testShowMask(){
             else newDiv = newDiv.get(0);
 
 
-            if (el.getAttribute("js-scrolling") && (el.getAttribute("js-scrolling").toLowerCase() == "yes"||el.getAttribute("js-scrolling").toLowerCase() == "true")) {
+            if (el.getAttribute("js-scrolling") && (el.getAttribute("js-scrolling").toLowerCase() == "yes" || el.getAttribute("js-scrolling").toLowerCase() == "true")) {
                 $.cleanUpContent(el.childNodes[0], false, true);
                 $(el.childNodes[0]).html(content);
             } else {
@@ -7788,8 +7797,8 @@ function testShowMask(){
 
             <div class='viewsource' id='source_$_ui_updateContentDiv' style='display:none'>
             <pre style='padding-left:25px'><code>
-            updateContentDiv: function (id, content) {
-            return this.updatePanel(id,content);
+            updateContentDiv: function(id, content) {
+            return this.updatePanel(id, content);
         },
             </code></pre>
              </div>
@@ -7825,8 +7834,8 @@ function testShowMask(){
 
             <div class='viewsource' id='source_$_ui_addContentDiv' style='display:none'>
             <pre style='padding-left:25px'><code>
-            addContentDiv: function (el, content, title, refresh, refreshFunc) {
-            el = typeof (el) !== "string" ? el : el.indexOf("#") == -1 ? "#" + el : el;
+            addContentDiv: function(el, content, title, refresh, refreshFunc) {
+            el = typeof(el) !== "string" ? el : el.indexOf("#") == -1 ? "#" + el : el;
             var myEl = $.query(el).get(0);
             var newDiv, newId;
             if (!myEl) {
@@ -7857,7 +7866,7 @@ function testShowMask(){
 
 
 
-          <section class='description'><p>Dynamically create a new panel on the fly.  It wires events, creates the scroller, applies Android fixes, etc.<br />                      $.ui.addContentDiv("myDiv","This is the new content","Title");<br />           </p></section>
+          <section class='description'><p>Dynamically creates a new panel.  It wires events, creates the scroller, applies Android fixes, etc.<br />                      $.ui.addContentDiv("myDiv","This is the new content","Title");<br />           </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -7875,7 +7884,7 @@ function testShowMask(){
               <div class='markdowncontents'>
               <p>$.ui.addContentDiv(id,content,title) - This will create a new panel in your application for you.</p>
 
-<p>This handles all the heaving lifting, like wiring scollers and calling android fixes if needed.  This will add the div to the DOM with the class="panel"</p>
+<p>This handles all the heavy lifting, like wiring scollers and calling android fixes if needed.  This will add the div to the DOM with the class="panel"</p>
 
 <pre><code class="language-js"><span class='linenumber'>$.ui.addContentDiv("myTestPanel","This is a newly added panel","New Panel");</span>
 </code></pre>
@@ -7906,9 +7915,9 @@ function addPanel(obj){
 
             <div class='viewsource' id='source_$_ui_scrollToTop' style='display:none'>
             <pre style='padding-left:25px'><code>
-            scrollToTop: function (id,time) {
-            time=time||"300ms";
-            id=id.replace("#","");
+            scrollToTop: function(id, time) {
+            time = time || "300ms";
+            id = id.replace("#", "");
             if (this.scrollingDivs[id]) {
                 this.scrollingDivs[id].scrollToTop(time);
             }
@@ -7947,8 +7956,8 @@ function addPanel(obj){
 
             <div class='viewsource' id='source_$_ui_scrollToBottom' style='display:none'>
             <pre style='padding-left:25px'><code>
-            scrollToBottom: function (id,time) {
-            id=id.replace("#","");
+            scrollToBottom: function(id, time) {
+            id = id.replace("#", "");
             if (this.scrollingDivs[id]) {
                 this.scrollingDivs[id].scrollToBottom(time);
             }
@@ -7987,7 +7996,7 @@ function addPanel(obj){
 
             <div class='viewsource' id='source_$_ui_loadContent' style='display:none'>
             <pre style='padding-left:25px'><code>
-            loadContent: function (target, newTab, back, transition, anchor) {
+            loadContent: function(target, newTab, back, transition, anchor) {
 
             if (this.doingTransition) {
                 var that = this;
@@ -8052,7 +8061,7 @@ function addPanel(obj){
               <div class='markdowncontents'>
               <p>$.ui.loadContent(target, newTab, goBack, transition)</p>
 
-<p>This allows you programatically initiate a transition.  You specify the target panel, if it's a new tab and should clear the history, if it's going back, and the transition you want.</p>
+<p>This allows you to programatically initiate a transition.  You specify the target panel, if it's a new tab and should clear the history, if it's going back, and the transition you want.</p>
 
 <p>Below are two examples.  The first will go back with a pop transition and clear the history stack.  The second will go fowarded.</p>
 
@@ -8075,7 +8084,7 @@ function addPanel(obj){
 
             <div class='viewsource' id='source_$_ui_launch' style='display:none'>
             <pre style='padding-left:25px'><code>
-            launch: function () {
+            launch: function() {
 
             if (this.hasLaunched === false || this.launchCompleted) {
                 this.hasLaunched = true;
@@ -8083,14 +8092,14 @@ function addPanel(obj){
             }
 
             var that = this;
-            this.isIntel = (window.AppMobi && typeof (AppMobi) == "object" && AppMobi.app !== undefined) ? true : false;
+            this.isIntel = (window.AppMobi && typeof(AppMobi) == "object" && AppMobi.app !== undefined) ? true : false;
             this.viewportContainer = af.query("#afui");
             this.navbar = af.query("#navbar").get(0);
             this.content = af.query("#content").get(0);
             this.header = af.query("#header").get(0);
             this.menu = af.query("#menu").get(0);
             //set anchor click handler for UI
-            this.viewportContainer.on("click", "a", function (e) {
+            this.viewportContainer.on("click", "a", function(e) {
                 checkAnchorClick(e, e.currentTarget);
             });
 
@@ -8100,11 +8109,11 @@ function addPanel(obj){
             var enterEditEl = null;
 
             //on enter-edit keep a reference of the actioned element
-            $.bind($.touchLayer, 'enter-edit', function (el) {
+            $.bind($.touchLayer, 'enter-edit', function(el) {
                 enterEditEl = el;
             });
             //enter-edit-reshape panel padding and scroll adjust
-            $.bind($.touchLayer, 'enter-edit-reshape', function () {
+            $.bind($.touchLayer, 'enter-edit-reshape', function() {
                 //onReshape UI fixes
                 //check if focused element is within active panel
                 var jQel = $(enterEditEl);
@@ -8133,7 +8142,7 @@ function addPanel(obj){
                 }
             });
             if ($.os.ios) {
-                $.bind($.touchLayer, 'exit-edit-reshape', function () {
+                $.bind($.touchLayer, 'exit-edit-reshape', function() {
                     that.scrollingDivs[that.activeDiv.id].setPaddings(0, 0);
                 });
             }
@@ -8143,7 +8152,7 @@ function addPanel(obj){
             if (!this.navbar) {
                 this.navbar = $.create("div", {
                     id: "navbar"
-                }).hide().get(0);
+                }).get(0);
                 this.viewportContainer.append(this.navbar);
             }
             if (!this.header) {
@@ -8165,7 +8174,8 @@ function addPanel(obj){
                     vScrollCSS: "afScrollbar",
                     useJsScroll: !$.feat.nativeTouchScroll,
                     noParent: $.feat.nativeTouchScroll,
-                    autoEnable:true
+                    autoEnable: true,
+                    lockBounce: this.lockPageBounce
                 });
                 if ($.feat.nativeTouchScroll) $.query("#menu_scroller").css("height", "100%");
             }
@@ -8180,7 +8190,7 @@ function addPanel(obj){
             //insert backbutton (should optionally be left to developer..)
             $(this.header).html('&lt;a id="backButton" class="button"&gt;&lt;/a&gt; &lt;h1 id="pageTitle"&gt;&lt;/h1&gt;' + header.innerHTML);
             this.backButton = $.query("#header #backButton").css("visibility", "hidden");
-            $(document).on("click", "#header #backButton", function (e) {
+            $(document).on("click", "#header #backButton", function(e) {
                 e.preventDefault();
                 that.goBack();
             });
@@ -8203,15 +8213,20 @@ function addPanel(obj){
             var modalDiv = $.create("div", {
                 id: "afui_modal"
             }).get(0);
+
             modalDiv.appendChild($.create("div", {
                 id: 'modalContainer'
             }).get());
+            this.modalTransContainer = $.create("div", {
+                id: "modalTransContainer"
+            }).appendTo(modalDiv).get(0);
             this.viewportContainer.append(modalDiv);
             this.scrollingDivs.modal_container = $.query("#modalContainer").scroller({
                 scrollBars: true,
                 vertical: true,
                 vScrollCSS: "afScrollbar",
-                noParent: true
+                noParent: true,
+                lockBounce: this.lockPageBounce
             });
             this.modalWindow = modalDiv;
             //get first div, defer
@@ -8251,10 +8266,10 @@ function addPanel(obj){
                 loadingDefer = true;
                 var loaded = 0;
                 for (var j in defer) {
-                    (function (j) {
+                    (function(j) {
                         $.ajax({
                             url: AppMobi.webRoot + defer[j],
-                            success: function (data) {
+                            success: function(data) {
                                 if (data.length === 0) return;
                                 that.updatePanel(j, data);
                                 that.parseScriptTags($.query("#" + j).get());
@@ -8265,7 +8280,7 @@ function addPanel(obj){
 
                                 }
                             },
-                            error: function (msg) {
+                            error: function(msg) {
                                 //still trigger the file as being loaded to not block $.ui.ready
                                 console.log("Error with deferred load " + AppMobi.webRoot + defer[j]);
                                 loaded++;
@@ -8284,7 +8299,7 @@ function addPanel(obj){
                     this.scrollingDivs[this.activeDiv.id].enable();
                 }
 
-                var loadFirstDiv = function () {
+                var loadFirstDiv = function() {
 
 
                     $.query("#navbar").append($.create("footer", {
@@ -8308,7 +8323,7 @@ function addPanel(obj){
                     that.prevHeader = $.query("#defaultHeader");
 
                     //
-                    $.query("#navbar").on("click", "a", function (e) {
+                    $.query("#navbar").on("click", "a", function(e) {
                         $.query("#navbar a").not(e.currentTarget).removeClass("pressed");
                         $(e.currentTarget).addClass("pressed");
                     });
@@ -8324,6 +8339,7 @@ function addPanel(obj){
                         $.query("#afui #header").addClass("hasMenu");
                         $.query("#afui #content").addClass("hasMenu");
                         $.query("#afui #navbar").addClass("hasMenu");
+                        $.query("#afui #menu").addClass("tabletMenu");
                     }
                     //go to activeDiv
                     var firstPanelId = that.getPanelId(defaultHash);
@@ -8355,13 +8371,13 @@ function addPanel(obj){
                     $(document).one("defer:loaded", loadFirstDiv);
                 } else loadFirstDiv();
             }
-            $.bind(that, "content-loaded", function () {
+            $.bind(that, "content-loaded", function() {
                 if (that.loadContentQueue.length &gt; 0) {
                     var tmp = that.loadContentQueue.splice(0, 1)[0];
                     that.loadContent(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4]);
                 }
             });
-            if (window.navigator.standalone) {
+            if (window.navigator.standalone||this.isIntel) {
                 this.blockPageScroll();
             }
             this.topClickScroll();
@@ -8409,7 +8425,7 @@ function addPanel(obj){
 
             <div class='viewsource' id='source_$_ui_finishTransition' style='display:none'>
             <pre style='padding-left:25px'><code>
-            clearAnimations: function (inViewDiv) {
+            clearAnimations: function(inViewDiv) {
             inViewDiv.style[$.feat.cssPrefix + 'Transform'] = "none";
             inViewDiv.style[$.feat.cssPrefix + 'Transition'] = "none";
         }
@@ -8578,6 +8594,18 @@ function addPanel(obj){
 <li><a data-persist-ajax='true' href='#$_ui_finishTransition'>$.ui.finishTransition</a></li>
 </ul></nav>
     </div>
+    <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36721400-4']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
   </body>
 </html>
 
