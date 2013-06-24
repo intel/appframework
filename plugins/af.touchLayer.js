@@ -196,6 +196,7 @@
             return false;
         },
         hideAddressBar: function(retry, maxTries) {
+            if($.ui.isIntel) return;
             if (retry >= maxTries) {
                 this.resetFixUI();
                 return; //avoid a possible loop
