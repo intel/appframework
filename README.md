@@ -2,7 +2,7 @@
 
 App Framework is a Javascript framework targeted at HTML5 browsers with a blazingly fast query selector library that supports W3C queries.  
 
-Visit <http://app-framework-software.intel.com/index2.php> for more information, documentation, and support.
+Visit <http://app-framework-software.intel.com/index.php> for more information, documentation, and support.
 
 # Contribute
 
