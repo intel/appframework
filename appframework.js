@@ -1715,7 +1715,8 @@ if (!window.af || typeof(af) !== "function") {
                 if (settings.contentType)
                     settings.headers['Content-Type'] = settings.contentType;
                 for (var name in settings.headers)
-                    xhr.setRequestHeader(name, settings.headers[name]);
+                    if (typeof settings.headers[name] === 'string')
+                        xhr.setRequestHeader(name, settings.headers[name]);
                 if (settings.beforeSend.call(context, xhr, settings) === false) {
                     xhr.abort();
                     return false;
