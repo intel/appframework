@@ -475,7 +475,7 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                 $("#foo").find('.bar');
                 $("#foo").find($('.bar'));
-                $("#foo").find($('.bar').get());
+                $("#foo").find($('.bar').get(0));
                 ```
 
             * @param {String|Object|Array} selector
@@ -871,7 +871,7 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                 $().remove();  //Remove all
                 $().remove(".foo");//Remove off a string selector
-                var element=$("#foo").get();
+                var element=$("#foo").get(0);
                 $().remove(element); //Remove by an element
                 $().remove($(".foo"));  //Remove by a collection
 
@@ -1116,7 +1116,7 @@ if (!window.af || typeof(af) !== "function") {
             /**
             * Returns the raw DOM element.
                 ```
-                $().get(); //returns the first element
+                $().get(0); //returns the first element
                 $().get(2);// returns the third element
                 ```
 
@@ -1218,7 +1218,7 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                 $("#foo").parent('.bar');
                 $("#foo").parent($('.bar'));
-                $("#foo").parent($('.bar').get());
+                $("#foo").parent($('.bar').get(0));
                 ```
 
             * @param {String|Array|Object} [selector]
@@ -1246,7 +1246,7 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                 $("#foo").parents('.bar');
                 $("#foo").parents($('.bar'));
-                $("#foo").parents($('.bar').get());
+                $("#foo").parents($('.bar').get(0));
                 ```
 
             * @param {String|Array|Object} [selector]
@@ -1261,7 +1261,7 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                 $("#foo").children('.bar'); //Selector
                 $("#foo").children($('.bar')); //Objects
-                $("#foo").children($('.bar').get()); //Single element
+                $("#foo").children($('.bar').get(0)); //Single element
                 ```
 
             * @param {String|Array|Object} [selector]
@@ -1284,7 +1284,7 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                 $("#foo").siblings('.bar'); //Selector
                 $("#foo").siblings($('.bar')); //Objects
-                $("#foo").siblings($('.bar').get()); //Single element
+                $("#foo").siblings($('.bar').get(0)); //Single element
                 ```
 
             * @param {String|Array|Object} [selector]
@@ -1306,7 +1306,7 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                 $("#foo").closest('.bar'); //Selector
                 $("#foo").closest($('.bar')); //Objects
-                $("#foo").closest($('.bar').get()); //Single element
+                $("#foo").closest($('.bar').get(0)); //Single element
                 ```
 
             * @param {String|Array|Object} selector
@@ -1334,7 +1334,7 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                 $("#foo").filter('.bar'); //Selector
                 $("#foo").filter($('.bar')); //Objects
-                $("#foo").filter($('.bar').get()); //Single element
+                $("#foo").filter($('.bar').get(0)); //Single element
                 ```
 
             * @param {String|Array|Object} selector
@@ -1360,7 +1360,7 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                 $("#foo").not('.bar'); //Selector
                 $("#foo").not($('.bar')); //Objects
-                $("#foo").not($('.bar').get()); //Single element
+                $("#foo").not($('.bar').get(0)); //Single element
                 ```
 
             * @param {String|Array|Object} selector

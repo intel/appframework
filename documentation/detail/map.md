@@ -15,7 +15,7 @@ The following would loop through all checkboxes and return a string with every i
 ```js
 $('input[type='checkbox']).map(function() {
 	return this.id;
-}).get().join(",");
+}).get(0).join(",");
 ```
 
 The above would output the following <code>"terms, offers"</code>
@@ -36,7 +36,7 @@ Below is a more detailed example.  Here we will create a function to set the hei
 $.fn.equalizeHeights = function() {
   var maxHeight = this.map(function(i,e) {
     return $(e).height();
-  }).get();
+  }).get(0);
  
   return this.height( Math.min.apply(this, minHeight)+"px" );
 };
@@ -60,7 +60,7 @@ $('#equalize').bind("click",function(){
 $.fn.equalizeHeights = function() {
   var minHeight = this.map(function(i,e) {
     return $(e).height();
-  }).get();
+  }).get(0);
  
   return this.height( Math.min.apply(this, minHeight)+"px" );
 };

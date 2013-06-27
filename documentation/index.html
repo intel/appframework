@@ -843,7 +843,7 @@ function testisObject(pass){
 
 <pre><code class="language-js"><span class='linenumber'>$('input[type='checkbox']).map(function() {</span>
 <span class='linenumber'>    return this.id;</span>
-<span class='linenumber'>}).get().join(",");</span>
+<span class='linenumber'>}).get(0).join(",");</span>
 </code></pre>
 
 <p>The above would output the following <code>"terms, offers"</code></p>
@@ -858,7 +858,7 @@ function testisObject(pass){
 <span class='linenumber'>$.fn.equalizeHeights = function() {</span>
 <span class='linenumber'>  var maxHeight = this.map(function(i,e) {</span>
 <span class='linenumber'>    return $(e).height();</span>
-<span class='linenumber'>  }).get();</span>
+<span class='linenumber'>  }).get(0);</span>
 <span class='linenumber'>  return this.height( Math.min.apply(this, minHeight)+"px" );</span>
 <span class='linenumber'>};</span>
 <span class='linenumber'>$('#equalize').bind("click",function(){</span>
@@ -879,7 +879,7 @@ function testisObject(pass){
 $.fn.equalizeHeights = function() {
   var minHeight = this.map(function(i,e) {
     return $(e).height();
-  }).get();
+  }).get(0);
  
   return this.height( Math.min.apply(this, minHeight)+"px" );
 };
@@ -1024,7 +1024,7 @@ $(document).ready(function(){
 
 
 
-          <section class='description'><p>Searches through the collection and reduces them to elements that match the selector<br />                                $("#foo").find('.bar');<br />                $("#foo").find($('.bar'));<br />                $("#foo").find($('.bar').get());<br />                </p></section>
+          <section class='description'><p>Searches through the collection and reduces them to elements that match the selector<br />                                $("#foo").find('.bar');<br />                $("#foo").find($('.bar'));<br />                $("#foo").find($('.bar').get(0));<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -2026,7 +2026,7 @@ function findTest(){
 
 
 
-          <section class='description'><p>Removes elements based off a selector<br />                ```<br />                $().remove();  //Remove all<br />                $().remove(".foo");//Remove off a string selector<br />                var element=$("#foo").get();<br />                $().remove(element); //Remove by an element<br />                $().remove($(".foo"));  //Remove by a collection</p></section>
+          <section class='description'><p>Removes elements based off a selector<br />                ```<br />                $().remove();  //Remove all<br />                $().remove(".foo");//Remove off a string selector<br />                var element=$("#foo").get(0);<br />                $().remove(element); //Remove by an element<br />                $().remove($(".foo"));  //Remove by a collection</p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -2746,7 +2746,7 @@ function findTest(){
 
 
 
-          <section class='description'><p>Returns the raw DOM element.<br />                                $().get(); //returns the first element<br />                $().get(2);// returns the third element<br />                </p></section>
+          <section class='description'><p>Returns the raw DOM element.<br />                                $().get(0); //returns the first element<br />                $().get(2);// returns the third element<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -2762,7 +2762,7 @@ function findTest(){
               <div class='markdowncontents'>
               <p>$().get([index]) to get the raw DOM element</p>
 
-<p>Write a function that uses $().get() to get the first element</p>
+<p>Write a function that uses $().get(0) to get the first element</p>
 
 <pre><code class="language-js"><span class='linenumber'>function getElementByIndex(){</span>
 <span class='linenumber'>    var obj=$(".panel").get(0);</span>
@@ -3060,7 +3060,7 @@ function findTest(){
 
 
 
-          <section class='description'><p>Returns the parent nodes of the elements based off the selector<br />                                $("#foo").parent('.bar');<br />                $("#foo").parent($('.bar'));<br />                $("#foo").parent($('.bar').get());<br />                </p></section>
+          <section class='description'><p>Returns the parent nodes of the elements based off the selector<br />                                $("#foo").parent('.bar');<br />                $("#foo").parent($('.bar'));<br />                $("#foo").parent($('.bar').get(0));<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -3133,7 +3133,7 @@ function getParent(){
 
 
 
-          <section class='description'><p>Returns the parents of the elements based off the selector (traversing up until html document)<br />                                $("#foo").parents('.bar');<br />                $("#foo").parents($('.bar'));<br />                $("#foo").parents($('.bar').get());<br />                </p></section>
+          <section class='description'><p>Returns the parents of the elements based off the selector (traversing up until html document)<br />                                $("#foo").parents('.bar');<br />                $("#foo").parents($('.bar'));<br />                $("#foo").parents($('.bar').get(0));<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -3235,7 +3235,7 @@ This test will not include "parent2", since gcs is a single element</p>
 
 
 
-          <section class='description'><p>Returns the child nodes of the elements based off the selector<br />                                $("#foo").children('.bar'); //Selector<br />                $("#foo").children($('.bar')); //Objects<br />                $("#foo").children($('.bar').get()); //Single element<br />                </p></section>
+          <section class='description'><p>Returns the child nodes of the elements based off the selector<br />                                $("#foo").children('.bar'); //Selector<br />                $("#foo").children($('.bar')); //Objects<br />                $("#foo").children($('.bar').get(0)); //Single element<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -3331,7 +3331,7 @@ this will only have "gctest" since there is only one child of both childtest div
 
 
 
-          <section class='description'><p>Returns the siblings of the element based off the selector<br />                                $("#foo").siblings('.bar'); //Selector<br />                $("#foo").siblings($('.bar')); //Objects<br />                $("#foo").siblings($('.bar').get()); //Single element<br />                </p></section>
+          <section class='description'><p>Returns the siblings of the element based off the selector<br />                                $("#foo").siblings('.bar'); //Selector<br />                $("#foo").siblings($('.bar')); //Objects<br />                $("#foo").siblings($('.bar').get(0)); //Single element<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -3434,7 +3434,7 @@ this will be empty since there are no other elements in the div</p>
 
 
 
-          <section class='description'><p>Returns the closest element based off the selector and optional context<br />                                $("#foo").closest('.bar'); //Selector<br />                $("#foo").closest($('.bar')); //Objects<br />                $("#foo").closest($('.bar').get()); //Single element<br />                </p></section>
+          <section class='description'><p>Returns the closest element based off the selector and optional context<br />                                $("#foo").closest('.bar'); //Selector<br />                $("#foo").closest($('.bar')); //Objects<br />                $("#foo").closest($('.bar').get(0)); //Single element<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -3537,7 +3537,7 @@ This will traverse up to .grandparent from all the .closest class divs<br />
 
 
 
-          <section class='description'><p>Filters elements based off the selector<br />                                $("#foo").filter('.bar'); //Selector<br />                $("#foo").filter($('.bar')); //Objects<br />                $("#foo").filter($('.bar').get()); //Single element<br />                </p></section>
+          <section class='description'><p>Filters elements based off the selector<br />                                $("#foo").filter('.bar'); //Selector<br />                $("#foo").filter($('.bar')); //Objects<br />                $("#foo").filter($('.bar').get(0)); //Single element<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -3612,7 +3612,7 @@ This will traverse up to .grandparent from all the .closest class divs<br />
 
 
 
-          <section class='description'><p>Basically the reverse of filter.  Return all elements that do NOT match the selector<br />                                $("#foo").not('.bar'); //Selector<br />                $("#foo").not($('.bar')); //Objects<br />                $("#foo").not($('.bar').get()); //Single element<br />                </p></section>
+          <section class='description'><p>Basically the reverse of filter.  Return all elements that do NOT match the selector<br />                                $("#foo").not('.bar'); //Selector<br />                $("#foo").not($('.bar')); //Objects<br />                $("#foo").not($('.bar').get(0)); //Single element<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -6830,11 +6830,11 @@ function blockUI(){
 
 <script>
 function badge1(){
-    $.ui.updateBadge($("#badgeTest li").get(),"3","tl");
+    $.ui.updateBadge($("#badgeTest li").get(0),"3","tl");
 }
 
 function badge2(){
-    $.ui.updateBadge($("#badgeTest li").get(),"5","bl","blue");
+    $.ui.updateBadge($("#badgeTest li").get(0),"5","bl","blue");
 }
 </script>
 
@@ -7742,7 +7742,7 @@ function testShowMask(){
             var newDiv = $.create("div", {
                 html: content
             });
-            if (newDiv.children('.panel') && newDiv.children('.panel').length &gt; 0) newDiv = newDiv.children('.panel').get();
+            if (newDiv.children('.panel') && newDiv.children('.panel').length &gt; 0) newDiv = newDiv.children('.panel').get(0);
             else newDiv = newDiv.get(0);
 
 
@@ -7842,7 +7842,7 @@ function testShowMask(){
                 newDiv = $.create("div", {
                     html: content
                 });
-                if (newDiv.children('.panel') && newDiv.children('.panel').length &gt; 0) newDiv = newDiv.children('.panel').get();
+                if (newDiv.children('.panel') && newDiv.children('.panel').length &gt; 0) newDiv = newDiv.children('.panel').get(0);
                 else newDiv = newDiv.get(0);
 
                 if (!newDiv.title && title) newDiv.title = title;
@@ -8216,7 +8216,7 @@ function addPanel(obj){
 
             modalDiv.appendChild($.create("div", {
                 id: 'modalContainer'
-            }).get());
+            }).get(0));
             this.modalTransContainer = $.create("div", {
                 id: "modalTransContainer"
             }).appendTo(modalDiv).get(0);
@@ -8231,7 +8231,7 @@ function addPanel(obj){
             this.modalWindow = modalDiv;
             //get first div, defer
             var defer = {};
-            var contentDivs = this.viewportContainer.get().querySelectorAll(".panel");
+            var contentDivs = this.viewportContainer.get(0).querySelectorAll(".panel");
             for (var i = 0; i &lt; contentDivs.length; i++) {
                 var el = contentDivs[i];
                 var tmp = el;
@@ -8272,7 +8272,7 @@ function addPanel(obj){
                             success: function(data) {
                                 if (data.length === 0) return;
                                 that.updatePanel(j, data);
-                                that.parseScriptTags($.query("#" + j).get());
+                                that.parseScriptTags($.query("#" + j).get(0));
                                 loaded++;
                                 if (loaded &gt;= toLoad) {
                                     $(document).trigger("defer:loaded");

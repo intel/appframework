@@ -749,8 +749,8 @@
       }
     ],
     "description": {
-      "full": "<p>Searches through the collection and reduces them to elements that match the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").find('.bar');<br />                $(\"#foo\").find($('.bar'));<br />                $(\"#foo\").find($('.bar').get());<br />                </pre></div></p>",
-      "summary": "<p>Searches through the collection and reduces them to elements that match the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").find('.bar');<br />                $(\"#foo\").find($('.bar'));<br />                $(\"#foo\").find($('.bar').get());<br />                </pre></div></p>",
+      "full": "<p>Searches through the collection and reduces them to elements that match the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").find('.bar');<br />                $(\"#foo\").find($('.bar'));<br />                $(\"#foo\").find($('.bar').get(0));<br />                </pre></div></p>",
+      "summary": "<p>Searches through the collection and reduces them to elements that match the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").find('.bar');<br />                $(\"#foo\").find($('.bar'));<br />                $(\"#foo\").find($('.bar').get(0));<br />                </pre></div></p>",
       "body": ""
     },
     "isPrivate": false,
@@ -1281,8 +1281,8 @@
       }
     ],
     "description": {
-      "full": "<p>Removes elements based off a selector<br />                <div class=\"highlight\"><pre lang=\"\">                $().remove();  //Remove all<br />                $().remove(\".foo\");//Remove off a string selector<br />                var element=$(\"#foo\").get();<br />                $().remove(element); //Remove by an element<br />                $().remove($(\".foo\"));  //Remove by a collection</p>\n\n<pre><code>            &lt;/pre&gt;&lt;/div&gt;\n</code></pre>",
-      "summary": "<p>Removes elements based off a selector<br />                ```<br />                $().remove();  //Remove all<br />                $().remove(\".foo\");//Remove off a string selector<br />                var element=$(\"#foo\").get();<br />                $().remove(element); //Remove by an element<br />                $().remove($(\".foo\"));  //Remove by a collection</p>",
+      "full": "<p>Removes elements based off a selector<br />                <div class=\"highlight\"><pre lang=\"\">                $().remove();  //Remove all<br />                $().remove(\".foo\");//Remove off a string selector<br />                var element=$(\"#foo\").get(0);<br />                $().remove(element); //Remove by an element<br />                $().remove($(\".foo\"));  //Remove by a collection</p>\n\n<pre><code>            &lt;/pre&gt;&lt;/div&gt;\n</code></pre>",
+      "summary": "<p>Removes elements based off a selector<br />                ```<br />                $().remove();  //Remove all<br />                $().remove(\".foo\");//Remove off a string selector<br />                var element=$(\"#foo\").get(0);<br />                $().remove(element); //Remove by an element<br />                $().remove($(\".foo\"));  //Remove by a collection</p>",
       "body": "<pre><code>            ```\n</code></pre>"
     },
     "isPrivate": false,
@@ -1632,8 +1632,8 @@
       }
     ],
     "description": {
-      "full": "<p>Returns the raw DOM element.<br />                <div class=\"highlight\"><pre lang=\"\">                $().get(); //returns the first element<br />                $().get(2);// returns the third element<br />                </pre></div></p>",
-      "summary": "<p>Returns the raw DOM element.<br />                <div class=\"highlight\"><pre lang=\"\">                $().get(); //returns the first element<br />                $().get(2);// returns the third element<br />                </pre></div></p>",
+      "full": "<p>Returns the raw DOM element.<br />                <div class=\"highlight\"><pre lang=\"\">                $().get(0); //returns the first element<br />                $().get(2);// returns the third element<br />                </pre></div></p>",
+      "summary": "<p>Returns the raw DOM element.<br />                <div class=\"highlight\"><pre lang=\"\">                $().get(0); //returns the first element<br />                $().get(2);// returns the third element<br />                </pre></div></p>",
       "body": ""
     },
     "isPrivate": false,
@@ -1734,8 +1734,8 @@
       }
     ],
     "description": {
-      "full": "<p>Returns the parent nodes of the elements based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").parent('.bar');<br />                $(\"#foo\").parent($('.bar'));<br />                $(\"#foo\").parent($('.bar').get());<br />                </pre></div></p>",
-      "summary": "<p>Returns the parent nodes of the elements based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").parent('.bar');<br />                $(\"#foo\").parent($('.bar'));<br />                $(\"#foo\").parent($('.bar').get());<br />                </pre></div></p>",
+      "full": "<p>Returns the parent nodes of the elements based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").parent('.bar');<br />                $(\"#foo\").parent($('.bar'));<br />                $(\"#foo\").parent($('.bar').get(0));<br />                </pre></div></p>",
+      "summary": "<p>Returns the parent nodes of the elements based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").parent('.bar');<br />                $(\"#foo\").parent($('.bar'));<br />                $(\"#foo\").parent($('.bar').get(0));<br />                </pre></div></p>",
       "body": ""
     },
     "isPrivate": false,
@@ -1767,8 +1767,8 @@
       }
     ],
     "description": {
-      "full": "<p>Returns the parents of the elements based off the selector (traversing up until html document)<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").parents('.bar');<br />                $(\"#foo\").parents($('.bar'));<br />                $(\"#foo\").parents($('.bar').get());<br />                </pre></div></p>",
-      "summary": "<p>Returns the parents of the elements based off the selector (traversing up until html document)<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").parents('.bar');<br />                $(\"#foo\").parents($('.bar'));<br />                $(\"#foo\").parents($('.bar').get());<br />                </pre></div></p>",
+      "full": "<p>Returns the parents of the elements based off the selector (traversing up until html document)<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").parents('.bar');<br />                $(\"#foo\").parents($('.bar'));<br />                $(\"#foo\").parents($('.bar').get(0));<br />                </pre></div></p>",
+      "summary": "<p>Returns the parents of the elements based off the selector (traversing up until html document)<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").parents('.bar');<br />                $(\"#foo\").parents($('.bar'));<br />                $(\"#foo\").parents($('.bar').get(0));<br />                </pre></div></p>",
       "body": ""
     },
     "isPrivate": false,
@@ -1800,8 +1800,8 @@
       }
     ],
     "description": {
-      "full": "<p>Returns the child nodes of the elements based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").children('.bar'); //Selector<br />                $(\"#foo\").children($('.bar')); //Objects<br />                $(\"#foo\").children($('.bar').get()); //Single element<br />                </pre></div></p>",
-      "summary": "<p>Returns the child nodes of the elements based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").children('.bar'); //Selector<br />                $(\"#foo\").children($('.bar')); //Objects<br />                $(\"#foo\").children($('.bar').get()); //Single element<br />                </pre></div></p>",
+      "full": "<p>Returns the child nodes of the elements based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").children('.bar'); //Selector<br />                $(\"#foo\").children($('.bar')); //Objects<br />                $(\"#foo\").children($('.bar').get(0)); //Single element<br />                </pre></div></p>",
+      "summary": "<p>Returns the child nodes of the elements based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").children('.bar'); //Selector<br />                $(\"#foo\").children($('.bar')); //Objects<br />                $(\"#foo\").children($('.bar').get(0)); //Single element<br />                </pre></div></p>",
       "body": ""
     },
     "isPrivate": false,
@@ -1833,8 +1833,8 @@
       }
     ],
     "description": {
-      "full": "<p>Returns the siblings of the element based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").siblings('.bar'); //Selector<br />                $(\"#foo\").siblings($('.bar')); //Objects<br />                $(\"#foo\").siblings($('.bar').get()); //Single element<br />                </pre></div></p>",
-      "summary": "<p>Returns the siblings of the element based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").siblings('.bar'); //Selector<br />                $(\"#foo\").siblings($('.bar')); //Objects<br />                $(\"#foo\").siblings($('.bar').get()); //Single element<br />                </pre></div></p>",
+      "full": "<p>Returns the siblings of the element based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").siblings('.bar'); //Selector<br />                $(\"#foo\").siblings($('.bar')); //Objects<br />                $(\"#foo\").siblings($('.bar').get(0)); //Single element<br />                </pre></div></p>",
+      "summary": "<p>Returns the siblings of the element based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").siblings('.bar'); //Selector<br />                $(\"#foo\").siblings($('.bar')); //Objects<br />                $(\"#foo\").siblings($('.bar').get(0)); //Single element<br />                </pre></div></p>",
       "body": ""
     },
     "isPrivate": false,
@@ -1874,8 +1874,8 @@
       }
     ],
     "description": {
-      "full": "<p>Returns the closest element based off the selector and optional context<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").closest('.bar'); //Selector<br />                $(\"#foo\").closest($('.bar')); //Objects<br />                $(\"#foo\").closest($('.bar').get()); //Single element<br />                </pre></div></p>",
-      "summary": "<p>Returns the closest element based off the selector and optional context<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").closest('.bar'); //Selector<br />                $(\"#foo\").closest($('.bar')); //Objects<br />                $(\"#foo\").closest($('.bar').get()); //Single element<br />                </pre></div></p>",
+      "full": "<p>Returns the closest element based off the selector and optional context<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").closest('.bar'); //Selector<br />                $(\"#foo\").closest($('.bar')); //Objects<br />                $(\"#foo\").closest($('.bar').get(0)); //Single element<br />                </pre></div></p>",
+      "summary": "<p>Returns the closest element based off the selector and optional context<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").closest('.bar'); //Selector<br />                $(\"#foo\").closest($('.bar')); //Objects<br />                $(\"#foo\").closest($('.bar').get(0)); //Single element<br />                </pre></div></p>",
       "body": ""
     },
     "isPrivate": false,
@@ -1907,8 +1907,8 @@
       }
     ],
     "description": {
-      "full": "<p>Filters elements based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").filter('.bar'); //Selector<br />                $(\"#foo\").filter($('.bar')); //Objects<br />                $(\"#foo\").filter($('.bar').get()); //Single element<br />                </pre></div></p>",
-      "summary": "<p>Filters elements based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").filter('.bar'); //Selector<br />                $(\"#foo\").filter($('.bar')); //Objects<br />                $(\"#foo\").filter($('.bar').get()); //Single element<br />                </pre></div></p>",
+      "full": "<p>Filters elements based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").filter('.bar'); //Selector<br />                $(\"#foo\").filter($('.bar')); //Objects<br />                $(\"#foo\").filter($('.bar').get(0)); //Single element<br />                </pre></div></p>",
+      "summary": "<p>Filters elements based off the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").filter('.bar'); //Selector<br />                $(\"#foo\").filter($('.bar')); //Objects<br />                $(\"#foo\").filter($('.bar').get(0)); //Single element<br />                </pre></div></p>",
       "body": ""
     },
     "isPrivate": false,
@@ -1940,8 +1940,8 @@
       }
     ],
     "description": {
-      "full": "<p>Basically the reverse of filter.  Return all elements that do NOT match the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").not('.bar'); //Selector<br />                $(\"#foo\").not($('.bar')); //Objects<br />                $(\"#foo\").not($('.bar').get()); //Single element<br />                </pre></div></p>",
-      "summary": "<p>Basically the reverse of filter.  Return all elements that do NOT match the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").not('.bar'); //Selector<br />                $(\"#foo\").not($('.bar')); //Objects<br />                $(\"#foo\").not($('.bar').get()); //Single element<br />                </pre></div></p>",
+      "full": "<p>Basically the reverse of filter.  Return all elements that do NOT match the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").not('.bar'); //Selector<br />                $(\"#foo\").not($('.bar')); //Objects<br />                $(\"#foo\").not($('.bar').get(0)); //Single element<br />                </pre></div></p>",
+      "summary": "<p>Basically the reverse of filter.  Return all elements that do NOT match the selector<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#foo\").not('.bar'); //Selector<br />                $(\"#foo\").not($('.bar')); //Objects<br />                $(\"#foo\").not($('.bar').get(0)); //Single element<br />                </pre></div></p>",
       "body": ""
     },
     "isPrivate": false,

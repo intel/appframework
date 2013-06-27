@@ -570,7 +570,7 @@
                 } else {
                     afEl = af(this.refreshElement);
                 }
-                var el = afEl.get();
+                var el = afEl.get(0);
 
                 this.refreshContainer = af("<div style=\"overflow:hidden;width:100%;height:0;margin:0;padding:0;padding-left:5px;padding-right:5px;display:none;\"></div>");
                 $(this.el).prepend(this.refreshContainer.append(el, 'top'));
@@ -2016,7 +2016,7 @@
                 markup = $(markStart + opts + "<a href='javascript:;' class='cancel'>Cancel</a>" + markEnd);
             } else if (typeof opts == "object") {
                 markup = $(markStart + markEnd);
-                var container = $(markup.children().get());
+                var container = $(markup.children().get(0));
                 opts.push({
                     text: "Cancel",
                     cssClasses: "cancel"
@@ -4050,7 +4050,7 @@
             var newDiv = $.create("div", {
                 html: content
             });
-            if (newDiv.children('.panel') && newDiv.children('.panel').length > 0) newDiv = newDiv.children('.panel').get();
+            if (newDiv.children('.panel') && newDiv.children('.panel').length > 0) newDiv = newDiv.children('.panel').get(0);
             else newDiv = newDiv.get(0);
 
 
@@ -4093,7 +4093,7 @@
                 newDiv = $.create("div", {
                     html: content
                 });
-                if (newDiv.children('.panel') && newDiv.children('.panel').length > 0) newDiv = newDiv.children('.panel').get();
+                if (newDiv.children('.panel') && newDiv.children('.panel').length > 0) newDiv = newDiv.children('.panel').get(0);
                 else newDiv = newDiv.get(0);
 
                 if (!newDiv.title && title) newDiv.title = title;
@@ -4762,7 +4762,7 @@
 
             modalDiv.appendChild($.create("div", {
                 id: 'modalContainer'
-            }).get());
+            }).get(0));
             this.modalTransContainer = $.create("div", {
                 id: "modalTransContainer"
             }).appendTo(modalDiv).get(0);
@@ -4777,7 +4777,7 @@
             this.modalWindow = modalDiv;
             //get first div, defer
             var defer = {};
-            var contentDivs = this.viewportContainer.get().querySelectorAll(".panel");
+            var contentDivs = this.viewportContainer.get(0).querySelectorAll(".panel");
             for (var i = 0; i < contentDivs.length; i++) {
                 var el = contentDivs[i];
                 var tmp = el;
@@ -4818,7 +4818,7 @@
                             success: function(data) {
                                 if (data.length === 0) return;
                                 that.updatePanel(j, data);
-                                that.parseScriptTags($.query("#" + j).get());
+                                that.parseScriptTags($.query("#" + j).get(0));
                                 loaded++;
                                 if (loaded >= toLoad) {
                                     $(document).trigger("defer:loaded");

@@ -41,7 +41,7 @@
                 markup = $(markStart + opts + "<a href='javascript:;' class='cancel'>Cancel</a>" + markEnd);
             } else if (typeof opts == "object") {
                 markup = $(markStart + markEnd);
-                var container = $(markup.children().get());
+                var container = $(markup.children().get(0));
                 opts.push({
                     text: "Cancel",
                     cssClasses: "cancel"

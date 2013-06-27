@@ -83,7 +83,7 @@
                 if(search=="win8")
                     $.os.ie=true;
                 $.ui.ready(function(){
-                    $("#afui").get().className=search;
+                    $("#afui").get(0).className=search;
                 });
             }
             
@@ -277,7 +277,7 @@
                             <a href="#af22">$().prepend()</a>
                         </li>
                         <li>
-                            <a href="#af32">$().get()</a>
+                            <a href="#af32">$().get(0)</a>
                         </li>
                         <li>
                             <a href="#af31">$().offset()</a>
@@ -301,7 +301,7 @@
                             <a href="#af24">$.ajax()</a>
                         </li>
                         <li>
-                            <a href="#af25">$.get()</a>
+                            <a href="#af25">$.get(0)</a>
                         </li>
                         <li>
                             <a href="#af26">$.post()</a>
@@ -571,8 +571,8 @@
                     <br />
                     <a class="button"  onclick='getElementOffset()'>Get Offsett</a>
                 </div>
-                <!-- af> af get() -->
-                <div id="af32" class="panel" title=".get()" data-nav="menu_AppFramework">$("#div").get() - Get's an individual element by index.
+                <!-- af> af get(0) -->
+                <div id="af32" class="panel" title=".get(0)" data-nav="menu_AppFramework">$("#div").get(0) - Get's an individual element by index.
                     <br />
                     <br />
                     <script>
@@ -611,12 +611,12 @@
                     <br />
                     <a class="button"  onclick="doAjax()">Make Ajax Call</a>
                 </div>
-                <!-- af> af get() -->
-                <div id="af25" class="panel" title=".get()" data-nav="menu_AppFramework">$.get(url:"URL", success:function(){}, timeout:"1000", error:function(){} ) - makes an Ajax call
+                <!-- af> af get(0) -->
+                <div id="af25" class="panel" title=".get(0)" data-nav="menu_AppFramework">$.get(url:"URL", success:function(){}, timeout:"1000", error:function(){} ) - makes an Ajax call
                     <br />
                     <br />
                     <script type="text/javascript">
-                        function doGet() {
+                        function doget() {
                             $.get(webRoot + 'ajax.html', function (data) {
                                 $('#af25_content').html(data)
                             });
@@ -625,7 +625,7 @@
                     <div id="af25_content" style="border:1px solid black;">This will get updated with content from the ajax call</div>
                     <br />
                     <br />
-                    <a class="button"  onclick="doGet()">Make Get Call</a>
+                    <a class="button"  onclick="doget()">Make Get Call</a>
                 </div>
                 <!-- af> af post() -->
                 <div id="af26" class="panel" title=".post()" data-nav="menu_AppFramework">$.post(url,data:{foo:"bar"}, success:function(){}, timeout:"1000",error: function(){} ) - makes an Ajax call
@@ -773,7 +773,7 @@
 								</div>
 The parent id for this div is "content". Let's verify it.
                     <br>
-                    <a  onclick="alert($('#afparent').parent().get().id);" class="button">Get Parent ID</a>
+                    <a  onclick="alert($('#afparent').parent().get(0).id);" class="button">Get Parent ID</a>
                 </div>
                 <!-- ------------------------------------------ -->
                 <!-- ------------------------------------------ -->
@@ -2225,7 +2225,7 @@ The parent id for this div is "content". Let's verify it.
                         <a href="#af22">$().prepend()</a>
                     </li>
                     <li>
-                        <a href="#af32">$().get()</a>
+                        <a href="#af32">$().get(0)</a>
                     </li>
                     <li>
                         <a href="#af31">$().offset()</a>
@@ -2246,7 +2246,7 @@ The parent id for this div is "content". Let's verify it.
                         <a href="#af24">$.ajax()</a>
                     </li>
                     <li>
-                        <a href="#af25">$.get()</a>
+                        <a href="#af25">$.get(0)</a>
                     </li>
                     <li>
                         <a href="#af26">$.post()</a>

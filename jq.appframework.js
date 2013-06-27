@@ -66,13 +66,7 @@
                         this[i].className = newName;
                 }
                 return this;
-            },
-            get: function (index) {
-                index = index ==nundefined ? 0 : index;
-                if (index < 0)
-                    index += this.length;
-                return (this[index]) ? this[index] : undefined;
-            },
+            }
     });
     function detectUA($, userAgent) {
             $.os = {};

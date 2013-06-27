@@ -248,7 +248,7 @@
                 } else {
                     afEl = af(this.refreshElement);
                 }
-                var el = afEl.get();
+                var el = afEl.get(0);
 
                 this.refreshContainer = af("<div style=\"overflow:hidden;width:100%;height:0;margin:0;padding:0;padding-left:5px;padding-right:5px;display:none;\"></div>");
                 $(this.el).prepend(this.refreshContainer.append(el, 'top'));

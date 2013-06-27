@@ -903,7 +903,7 @@
             var newDiv = $.create("div", {
                 html: content
             });
-            if (newDiv.children('.panel') && newDiv.children('.panel').length > 0) newDiv = newDiv.children('.panel').get();
+            if (newDiv.children('.panel') && newDiv.children('.panel').length > 0) newDiv = newDiv.children('.panel').get(0);
             else newDiv = newDiv.get(0);
 
 
@@ -946,7 +946,7 @@
                 newDiv = $.create("div", {
                     html: content
                 });
-                if (newDiv.children('.panel') && newDiv.children('.panel').length > 0) newDiv = newDiv.children('.panel').get();
+                if (newDiv.children('.panel') && newDiv.children('.panel').length > 0) newDiv = newDiv.children('.panel').get(0);
                 else newDiv = newDiv.get(0);
 
                 if (!newDiv.title && title) newDiv.title = title;
@@ -1615,7 +1615,7 @@
 
             modalDiv.appendChild($.create("div", {
                 id: 'modalContainer'
-            }).get());
+            }).get(0));
             this.modalTransContainer = $.create("div", {
                 id: "modalTransContainer"
             }).appendTo(modalDiv).get(0);
@@ -1630,7 +1630,7 @@
             this.modalWindow = modalDiv;
             //get first div, defer
             var defer = {};
-            var contentDivs = this.viewportContainer.get().querySelectorAll(".panel");
+            var contentDivs = this.viewportContainer.get(0).querySelectorAll(".panel");
             for (var i = 0; i < contentDivs.length; i++) {
                 var el = contentDivs[i];
                 var tmp = el;
@@ -1671,7 +1671,7 @@
                             success: function(data) {
                                 if (data.length === 0) return;
                                 that.updatePanel(j, data);
-                                that.parseScriptTags($.query("#" + j).get());
+                                that.parseScriptTags($.query("#" + j).get(0));
                                 loaded++;
                                 if (loaded >= toLoad) {
                                     $(document).trigger("defer:loaded");
