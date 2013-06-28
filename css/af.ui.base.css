@@ -849,7 +849,7 @@ body {
     width: 100%;
     float:left;
     border: solid 1px #33B5E5;
-    left:0px !important;
+    left:0px ;
     padding: 10px;
     opacity: 1;
     -webkit-border-radius: 0;
@@ -1384,6 +1384,7 @@ body {
 
 #afui .grid {
   width: 100%;
+  overflow:hidden; /* hack to take up height*/
 }
 #afui .col2,
 #afui .col3,
@@ -1476,7 +1477,7 @@ body {
 }
 
 /*../plugins/css/af.popup.css*/
-
+
 
 BODY>DIV#mask{
     display:block;

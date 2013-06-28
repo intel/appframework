@@ -849,7 +849,7 @@ body {
     width: 100%;
     float:left;
     border: solid 1px #33B5E5;
-    left:0px !important;
+    left:0px ;
     padding: 10px;
     opacity: 1;
     -webkit-border-radius: 0;
@@ -1384,6 +1384,7 @@ body {
 
 #afui .grid {
   width: 100%;
+  overflow:hidden; /* hack to take up height*/
 }
 #afui .col2,
 #afui .col3,
@@ -1476,7 +1477,7 @@ body {
 }
 
 /*../plugins/css/af.popup.css*/
-
+
 
 BODY>DIV#mask{
     display:block;
@@ -2191,8 +2192,8 @@ margin-left:10px;
     z-index: 1000000;
     top: 50%;
     margin: 0px auto;
-    background:white;
-    color:black;
+    background:inherit;
+    color:inherit;
     padding:30px;
 }
 
@@ -2919,6 +2920,75 @@ color:black;
     background:#333;
     color:#fff;
     
+}
+
+
+
+
+#afui.ios .afPopup {
+     display: block;
+    width: 280px;
+    float:left;
+    border: solid 1px #72767b;
+    -webkit-box-shadow: 0px 4px 6px #555, 0 0 20px rgba(255,255,255,0.5);
+    -webkit-border-radius: 10px;
+    border-radius:10px;
+    padding: 10px;
+    opacity: 1;
+    -webkit-transform: scale(1);
+    -webkit-transition: all 0.20s  ease-in-out;
+    transform:scale(1);
+    transition: all 0.20s  ease-in-out;
+    position: absolute;
+    z-index: 1000000;
+    margin-left: auto!important;
+    margin-right: auto!important;
+    background: rgba(70,70,70,1);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(70,70,70,0.8)),    to(rgba(0,20,20,0.8)));
+}
+#afui.ios .afPopup >* {
+color:white;
+}
+
+#afui.ios .afPopup.hidden {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    top: 50%;
+    left: 50%;
+    margin: 0px auto;
+}
+
+#afui.ios .afPopup>HEADER{
+    font-weight:bold;
+    font-size:20px;    
+    margin:0;
+    padding:0;
+}
+
+#afui.ios .afPopup>DIV{
+    font-size:12px;
+    margin:8px;
+}
+
+#afui.ios .afPopup>FOOTER{
+    width:100%;    
+    text-align:center;
+    display:block !important;
+}
+
+#afui.ios .afPopup>FOOTER>A#cancel{
+    float:left;
+}
+
+#afui.ios .afPopup>FOOTER>A#action{
+    float:right;
+    margin-right:4px;
+}
+
+#afui.ios .afPopup>FOOTER>A.center{
+    float:none!important;
+    width:80%;
+    margin:8px;
 }
 
 

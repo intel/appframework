@@ -306,8 +306,8 @@ margin-left:10px;
     z-index: 1000000;
     top: 50%;
     margin: 0px auto;
-    background:white;
-    color:black;
+    background:inherit;
+    color:inherit;
     padding:30px;
 }
 

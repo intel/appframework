@@ -1,6 +1,7 @@
 
 #afui .grid {
   width: 100%;
+  overflow:hidden; /* hack to take up height*/
 }
 #afui .col2,
 #afui .col3,
