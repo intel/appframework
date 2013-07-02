@@ -1394,7 +1394,8 @@
             var that = this;
             if (target.indexOf("http") == -1) target = AppMobi.webRoot + target;
             var xmlhttp = new XMLHttpRequest();
-            if (anchor && typeof("anchor") !== "object") {
+        
+            if (anchor && typeof(anchor) !== "object") {
                 anchor = document.createElement("a");
                 anchor.setAttribute("data-persist-ajax", true);
             }
@@ -1420,6 +1421,7 @@
                         } : null;
                         //that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
                         var contents = $(xmlhttp.responseText);
+                        console.log(anchor);
                         if (contents.hasClass("panel"))
                             contents = contents.get(0).innerHTML;
                         else
