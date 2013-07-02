@@ -3493,9 +3493,9 @@
 
             if (this.launchCompleted) param();
             else {
-                $(document).bind("afui:ready", function(e) {
+                $(document).on("afui:ready", function(e) {
                     param();
-                }, false);
+                });
             }
         },
         /**
