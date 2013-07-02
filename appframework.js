@@ -521,8 +521,9 @@ if (!window.af || typeof(af) !== "function") {
                     if (cleanup !== false)
                         $.cleanUpContent(this[i], false, true);
                     if (isWin8) {
+                        var item=this[i];
                         MSApp.execUnsafeLocalFunction(function() {
-                            this[i].innerHTML = html;
+                            item.innerHTML = html;
                         });
                     } else
                         this[i].innerHTML = html;
