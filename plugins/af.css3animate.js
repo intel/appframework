@@ -1,6 +1,6 @@
 /**
  * af.css3animate - a css3 animation library that supports chaning/callbacks
- * Copyright 2012 - Intel
+ * Copyright 2013 - Intel
  */ (function($) {
     var cache = [];
     var objId = function(obj) {
