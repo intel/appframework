@@ -125,7 +125,7 @@ body {
 	font-size:18px;
 	font-weight:bold;
 	left:27.5%;
-	color:#fff;
+	color:inherit;
 	padding:10px 0;
 	text-shadow:rgba(0,0,0,0.8) 0 -1px 0;
 	text-align:center;

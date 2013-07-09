@@ -19,32 +19,28 @@
 	background:#FDFDFD;
 	color:#000;
 }
+#afui.android > #header {
+    background:inherit;
+    color:inherit;
+    border-color:#33B5E5;
+}
 
-#afui.android > #header{
- 	display:none !important;
- }
-
- #afui.android > #content {
- 	bottom:0px !important;
- 	top:49px !important;
- }
 
  #afui.android > #navbar {
     box-shadow: none;
- 	top:0px !important;
  	background:inherit;
- 	border-bottom:2px solid #33B5E5;
-    border-top:none;
+ 	border-top:2px solid #33B5E5;
+    border-bottom:none;
     padding:0;
  }
 
 #afui.android #navbar a {
 	color:inherit;
-	height:45px;
+    top:0px;
 }
  #afui.android #navbar a.pressed {
  	border:0px;
- 	border-bottom:4px solid #33B5E5;
+ 	border-top:4px solid #33B5E5;
  	border-radius:0px;
  	background:none;
  }

@@ -11,7 +11,7 @@
     background-image:linear-gradient(to bottom, #B3BECD 0%, #889BB3 50%, #6E84A2 51%);
     border: 1px solid;
     border-color:#CCD2DA transparent #2D3033 transparent;
-
+    color:white;
 } 
 
 #afui.ios #header h1 {

@@ -68,7 +68,7 @@
   top:10px;
   right:-225px;
   left:auto;
-  color:white;
+  color:inherit;
   font-family:inherit;
   -webkit-transform:none;
   transform:none;
@@ -86,6 +86,7 @@
   border:0px;
 	background: inherit;
 	border-bottom:inherit;
+  color:inherit;
  }
 
  #afui.win8 > #navbar {
