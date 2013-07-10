@@ -3283,7 +3283,7 @@
         selectBox: $.selectBox ? $.selectBox : false,
         ajaxUrl: "",
         transitionType: "slide",
-        scrollingDivs: [],
+        scrollingDivs: {},
         firstDiv: "",
         hasLaunched: false,
         launchCompleted: false,
