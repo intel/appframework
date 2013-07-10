@@ -3259,6 +3259,7 @@
     ui.prototype = {
         transitionTime: "230ms",
         showLoading: true,
+        loadingText: "Loading Content",
         loadContentQueue: [],
         isIntel: false,
         titlebar: "",
@@ -3970,7 +3971,7 @@
          * @title $.ui.showMask(text);
          */
         showMask: function(text) {
-            if (!text) text = "Loading Content";
+            if (!text) text = this.loadingText || "";
             $.query("#afui_mask>h1").html(text);
             $.query("#afui_mask").show();
         },
@@ -5105,6 +5106,7 @@
         });
     }
 })();
+
 (function($ui){
         function fadeTransition (oldDiv, currDiv, back) {
             oldDiv.style.display = "block";

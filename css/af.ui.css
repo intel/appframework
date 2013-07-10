@@ -380,7 +380,7 @@ body {
 	UI
 **********************************************************/
 
-#afui .ui-icon {
+.ui-icon {
 	background: 						#666;
 	background: 						rgba(0,0,0,.4);
 	background-repeat: no-repeat;
