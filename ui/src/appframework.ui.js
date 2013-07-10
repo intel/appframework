@@ -849,14 +849,22 @@
             var modalDiv = $.query("#modalContainer");
             if (typeof(id) === "string")
                 id = "#" + id.replace("#", "");
-            if ($.query(id)) {
-                modalDiv.html($.feat.nativeTouchScroll ? $.query(id).html() : $.query(id).get(0).childNodes[0].innerHTML + '', true);
+            var $panel = $.query(id);
+            if ($panel.length) {
+                var useScroller = this.scrollingDivs.hasOwnProperty( $panel.attr("id") );
+                modalDiv.html($.feat.nativeTouchScroll || !useScroller ? $.query(id).html() : $.query(id).get(0).childNodes[0].innerHTML + '', true);
                 modalDiv.append("<a onclick='$.ui.hideModal();' class='closebutton modalbutton'></a>");
                 that.modalWindow.style.display = "block";
 
                 this.runTransition(this.modalTransition, that.modalTransContainer, that.modalWindow, false);
 
-                this.scrollingDivs.modal_container.enable(that.resetScrollers);
+                if (useScroller) {
+                    this.scrollingDivs.modal_container.enable(that.resetScrollers);
+                }
+                else {
+                    this.scrollingDivs.modal_container.disable();
+                }
+
                 this.scrollToTop('modal');
                 modalDiv.data("panel", id);
 
