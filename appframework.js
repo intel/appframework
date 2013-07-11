@@ -28,7 +28,7 @@ if (!window.af || typeof(af) !== "function") {
             jsonPHandlers = [],
             _jsonPID = 1,
             fragementRE = /^\s*<(\w+)[^>]*>/,
-            classSelectorRE = /^\.([\w-]+)$/,
+            //classSelectorRE = /^\.([\w-]+)$/,
             tagSelectorRE = /^[\w-]+$/,
             _attrCache = {},
             _propCache = {},
@@ -905,16 +905,12 @@ if (!window.af || typeof(af) !== "function") {
             addClass: function(name) {
                 if (name == nundefined) return this;
                 for (var i = 0; i < this.length; i++) {
-                    var cls = this[i].className;
-                    var classList = [];
-                    var that = this;
-                    name.split(/\s+/g).forEach(function(cname) {
-                        if (!that.hasClass(cname, that[i]))
-                            classList.push(cname);
-                    });
-
-                    this[i].className += (cls ? " " : "") + classList.join(" ");
-                    this[i].className = this[i].className.trim();
+                    if (name === '') {
+                        this[i].className = '';
+                    }
+                    else {
+                        this[i].classList.add(name);
+                    }
                 }
                 return this;
             },
@@ -932,18 +928,7 @@ if (!window.af || typeof(af) !== "function") {
             removeClass: function(name) {
                 if (name == nundefined) return this;
                 for (var i = 0; i < this.length; i++) {
-                    if (name == nundefined) {
-                        this[i].className = '';
-                        return this;
-                    }
-                    var classList = this[i].className;
-                    name.split(/\s+/g).forEach(function(cname) {
-                        classList = classList.replace(classRE(cname), " ");
-                    });
-                    if (classList.length > 0)
-                        this[i].className = classList.trim();
-                    else
-                        this[i].className = "";
+                    this[i].classList.remove(name.split(' '));
                 }
                 return this;
             },
@@ -961,19 +946,8 @@ if (!window.af || typeof(af) !== "function") {
             replaceClass: function(name, newName) {
                 if (name == nundefined || newName == nundefined) return this;
                 for (var i = 0; i < this.length; i++) {
-                    if (name == nundefined) {
-                        this[i].className = newName;
-                        continue;
-                    }
-                    var classList = this[i].className;
-                    name.split(/\s+/g).concat(newName.split(/\s+/g)).forEach(function(cname) {
-                        classList = classList.replace(classRE(cname), " ");
-                    });
-                    classList = classList.trim();
-                    if (classList.length > 0) {
-                        this[i].className = (classList + " " + newName).trim();
-                    } else
-                        this[i].className = newName;
+                    this[i].classList.remove(name.split(' '));
+                    this[i].classList.add(newName);
                 }
                 return this;
             },
@@ -994,7 +968,7 @@ if (!window.af || typeof(af) !== "function") {
                     return false;
                 if (!element)
                     element = this[0];
-                return classRE(name).test(element.className);
+                return element.classList.contains(name);
             },
             /**
             * Appends to the elements
