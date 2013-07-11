@@ -464,7 +464,7 @@
          * @title $.ui.updateBadge(target,value,[position],[color])
          */
         updateBadge: function(target, value, position, color) {
-            if (position === undefined) position = "";
+            if (position === undefined) position = "tr";
 
             var $target = $(target);
             var badge = $target.find("span.af-badge");

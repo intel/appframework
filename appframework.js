@@ -909,7 +909,7 @@ if (!window.af || typeof(af) !== "function") {
                         this[i].className = '';
                     }
                     else {
-                        this[i].classList.add(name);
+                        DOMTokenList.prototype.add.apply(this[i].classList, name.split(' '));
                     }
                 }
                 return this;
@@ -928,7 +928,7 @@ if (!window.af || typeof(af) !== "function") {
             removeClass: function(name) {
                 if (name == nundefined) return this;
                 for (var i = 0; i < this.length; i++) {
-                    this[i].classList.remove(name.split(' '));
+                    DOMTokenList.prototype.remove.apply(this[i].classList, name.split(' '));
                 }
                 return this;
             },
@@ -946,8 +946,13 @@ if (!window.af || typeof(af) !== "function") {
             replaceClass: function(name, newName) {
                 if (name == nundefined || newName == nundefined) return this;
                 for (var i = 0; i < this.length; i++) {
-                    this[i].classList.remove(name.split(' '));
-                    this[i].classList.add(newName);
+                    DOMTokenList.prototype.remove.apply(this[i].classList, name.split(' '));
+                    if (newName === '') {
+                        this[i].className = '';
+                    }
+                    else {
+                        DOMTokenList.prototype.add.apply(this[i].classList, newName.split(' '));
+                    }
                 }
                 return this;
             },
