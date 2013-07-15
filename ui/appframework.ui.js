@@ -4700,7 +4700,9 @@
             });
             if ($.os.ios) {
                 $.bind($.touchLayer, 'exit-edit-reshape', function() {
-                    that.scrollingDivs[that.activeDiv.id].setPaddings(0, 0);
+                    if (that.activeDiv && that.activeDiv.id && that.scrollingDivs.hasOwnProperty(that.activeDiv.id)) {
+                        that.scrollingDivs[that.activeDiv.id].setPaddings(0, 0);
+                    }
                 });
             }
 
