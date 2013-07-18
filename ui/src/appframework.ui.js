@@ -1118,6 +1118,7 @@
             }
             if (hasHeader && hasHeader.toLowerCase() == "none") {
                 that.toggleHeaderMenu(false);
+                hasHeader=false;
             } else {
                 that.toggleHeaderMenu(true);
             }

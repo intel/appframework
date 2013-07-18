@@ -123,7 +123,7 @@
            @returns matrix with postion
            */
         $.getCssMatrix = function (ele) {
-            if(typeof(ele)===$afm) ele=ele.get(0);
+            if($.is$(ele)) ele=ele.get(0);
             if (ele ==nundefined) return window.WebKitCSSMatrix || window.MSCSSMatrix || {
                     a: 0,
                     b: 0,
