@@ -373,9 +373,9 @@
          * @param {Number} [delta=1]  relative position from the last element (> 0)
          */
         goBack: function(delta) {
-            delta = Math.abs(~~delta || 1);
+            delta = Math.min(Math.abs(~~delta || 1), this.history.length);
 
-            if (this.history.length > delta-1) {
+            if (delta) {
                 var tmpEl = this.history.splice(-delta).shift();
                 this.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
                 this.transitionType = tmpEl.transition;
