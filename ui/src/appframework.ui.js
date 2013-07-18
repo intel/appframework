@@ -376,11 +376,10 @@
             delta = Math.abs(~~delta || 1);
 
             if (this.history.length > delta-1) {
-                var that = this;
                 var tmpEl = this.history.splice(-delta).shift();
-                that.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
-                that.transitionType = tmpEl.transition;
-                that.updateHash(tmpEl.target);
+                this.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
+                this.transitionType = tmpEl.transition;
+                this.updateHash(tmpEl.target);
             }
         },
         /**
