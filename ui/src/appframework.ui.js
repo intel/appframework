@@ -370,11 +370,14 @@
            ```
 
          * @title $.ui.goBack()
+         * @param {Number} [delta=1]  relative position from the last element (> 0)
          */
-        goBack: function() {
-            if (this.history.length > 0) {
+        goBack: function(delta) {
+            delta = Math.abs(~~delta || 1);
+
+            if (this.history.length > delta-1) {
                 var that = this;
-                var tmpEl = this.history.pop();
+                var tmpEl = this.history.splice(-delta).shift();
                 that.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
                 that.transitionType = tmpEl.transition;
                 that.updateHash(tmpEl.target);
