@@ -700,13 +700,15 @@ if (!window.af || typeof(af) !== "function") {
             * @title $().toggle([show])
             */
             toggle: function(show) {
-                var show2 = show === true ? true : false;
+                if(this.length === 0)
+                    return this;
+                var show2 = !!(show === true);
                 for (var i = 0; i < this.length; i++) {
-                    if (window.getComputedStyle(this[i])['display'] !== "none" || (show != nundefined && show2 === false)) {
-                        this[i].setAttribute("afmOldStyle", this[i].style.display);
+                    if (this.css("display", null, this[i]) != "none" && (show == nundefined || show2 === false)) {
+                        this[i].setAttribute("afmOldStyle", this.css("display", null, this[i]));
                         this[i].style.display = "none";
-                    } else {
-                        this[i].style.display = this[i].getAttribute("afmOldStyle") != nundefined ? this[i].getAttribute("afmOldStyle") : 'block';
+                    } else if (this.css("display", null, this[i]) == "none" && (show == nundefined || show2 === true)) {
+                        this[i].style.display = this[i].getAttribute("afmOldStyle") ? this[i].getAttribute("afmOldStyle") : 'block';
                         this[i].removeAttribute("afmOldStyle");
                     }
                 }
