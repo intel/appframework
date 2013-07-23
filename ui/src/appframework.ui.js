@@ -8,7 +8,7 @@
     "use strict";
 
     var hasLaunched = false;
-    var startPath = window.location.pathname;
+    var startPath = window.location.href;
     var defaultHash = window.location.hash;
     var previousTarget = defaultHash;
     var ui = function() {
