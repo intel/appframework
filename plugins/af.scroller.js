@@ -274,15 +274,15 @@
                 if (this.scrollingLocked) return;
                 this.scrollingLocked = true;
                 this.rememberEventsActive = this.eventsActive;
-                if (!this.eventsActive) {
-                    this.initEvents();
+                if (this.eventsActive) {
+                    this.disable();
                 }
             },
             unlock: function () {
                 if (!this.scrollingLocked) return;
                 this.scrollingLocked = false;
-                if (!this.rememberEventsActive) {
-                    this.removeEvents();
+                if (this.rememberEventsActive) {
+                    this.enable();
                 }
             },
             scrollToItem: function (el, where) { //TODO: add functionality for x position
