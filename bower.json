@@ -8,7 +8,7 @@
   ],
   "repository": {
     "type": "git",
-    "url" : "git@github.com:01org/appframework.git"
+    "url" : "git://github.com/01org/appframework.git"
   },
   "main": "appframework.min.js",
   "ignore": [
