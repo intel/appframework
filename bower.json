@@ -1,0 +1,21 @@
+{
+  "name": "intel-appframework",
+  "homepage": "http://app-framework-software.intel.com/",
+  "description": "The definitive HTML5 mobile javascript framework",
+  "version": "2.0.0",
+  "keywords": [
+    "mobile", "app", "html5", "hybrid", "cordova", "phonegap", "tablet", "touch"
+  ],
+  "repository": {
+    "type": "git",
+    "url" : "git://github.com/01org/appframework.git"
+  },
+  "main": "appframework.min.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
