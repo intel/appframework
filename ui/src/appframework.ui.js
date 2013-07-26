@@ -1285,10 +1285,7 @@
 
             what = $.query("#" + what).get(0);
 
-            if (!what) {
-                $(window).trigger("missingpanel", null, {missingTarget: target});
-                return;
-            }
+            if (!what) return console.log("Target: " + target + " was not found");
             if (what == this.activeDiv && !back) {
                 //toggle the menu if applicable
                 if (this.isSideMenuOn()) this.toggleSideMenu(false);
@@ -1436,6 +1433,7 @@
                         } : null;
                         //that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
                         var contents = $(xmlhttp.responseText);
+                        console.log(anchor);
                         if (contents.hasClass("panel"))
                             contents = contents.get(0).innerHTML;
                         else
@@ -1760,14 +1758,11 @@
                     }
                     //go to activeDiv
                     var firstPanelId = that.getPanelId(defaultHash);
-                    var divFound = false;
                     //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
-                    if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId != ("#" + that.firstDiv.id)) {
+                    if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId != ("#" + that.firstDiv.id) && $.query(firstPanelId).length > 0) {
                         that.loadContent(defaultHash, true, false, 'none'); //load the active page as a newTab with no transition
-                        divFound = $.query(firstPanelId).length > 0; // check if div got created from load content (missingpanel event) otherwise just load the default panel below
-                    } 
-                    
-                    if (!divFound) {
+
+                    } else {
                         previousTarget = "#" + that.firstDiv.id;
 
                         that.firstDiv.style.display = "block";
