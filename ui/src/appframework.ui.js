@@ -1760,14 +1760,11 @@
                     }
                     //go to activeDiv
                     var firstPanelId = that.getPanelId(defaultHash);
-                    var divFound = false;
                     //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
                     if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId != ("#" + that.firstDiv.id)) {
                         that.loadContent(defaultHash, true, false, 'none'); //load the active page as a newTab with no transition
-                        divFound = $.query(firstPanelId).length > 0; // check if div got created from load content (missingpanel event) otherwise just load the default panel below
-                    } 
-                    
-                    if (!divFound) {
+                    }
+                    if ($.query(firstPanelId).length == 0){
                         previousTarget = "#" + that.firstDiv.id;
 
                         that.firstDiv.style.display = "block";
