@@ -1433,9 +1433,12 @@
                         } : null;
                         //that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
                         var contents = $(xmlhttp.responseText);
-                        console.log(anchor);
+                        
                         if (contents.hasClass("panel"))
+                        {
+                            urlHash=contents.attr("id");
                             contents = contents.get(0).innerHTML;
+                        }
                         else
                             contents = contents.html();
                         if ($("#" + urlHash).length > 0) {
