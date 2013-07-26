@@ -596,15 +596,15 @@
                 if (this.scrollingLocked) return;
                 this.scrollingLocked = true;
                 this.rememberEventsActive = this.eventsActive;
-                if (!this.eventsActive) {
-                    this.initEvents();
+                if (this.eventsActive) {
+                    this.disable();
                 }
             },
             unlock: function () {
                 if (!this.scrollingLocked) return;
                 this.scrollingLocked = false;
-                if (!this.rememberEventsActive) {
-                    this.removeEvents();
+                if (this.rememberEventsActive) {
+                    this.enable();
                 }
             },
             scrollToItem: function (el, where) { //TODO: add functionality for x position
@@ -3155,7 +3155,7 @@
     "use strict";
 
     var hasLaunched = false;
-    var startPath = window.location.pathname;
+    var startPath = window.location.pathname + (window.location.search ? '?' + window.location.search : '');
     var defaultHash = window.location.hash;
     var previousTarget = defaultHash;
     var ui = function() {
