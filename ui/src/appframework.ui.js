@@ -1285,7 +1285,10 @@
 
             what = $.query("#" + what).get(0);
 
-            if (!what) return console.log("Target: " + target + " was not found");
+            if (!what) {
+                $(document).trigger("missingpanel", null, {missingTarget: target});
+                return;
+            }
             if (what == this.activeDiv && !back) {
                 //toggle the menu if applicable
                 if (this.isSideMenuOn()) this.toggleSideMenu(false);
@@ -1762,10 +1765,10 @@
                     //go to activeDiv
                     var firstPanelId = that.getPanelId(defaultHash);
                     //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
-                    if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId != ("#" + that.firstDiv.id) && $.query(firstPanelId).length > 0) {
+                    if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId != ("#" + that.firstDiv.id)) {
                         that.loadContent(defaultHash, true, false, 'none'); //load the active page as a newTab with no transition
-
-                    } else {
+                    }
+                    if ($.query(firstPanelId).length == 0) {
                         previousTarget = "#" + that.firstDiv.id;
 
                         that.firstDiv.style.display = "block";
