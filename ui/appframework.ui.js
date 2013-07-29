@@ -4432,7 +4432,10 @@
 
             what = $.query("#" + what).get(0);
 
-            if (!what) return console.log("Target: " + target + " was not found");
+            if (!what) {
+                $(document).trigger("missingpanel", null, {missingTarget: target});
+                return;
+            }
             if (what == this.activeDiv && !back) {
                 //toggle the menu if applicable
                 if (this.isSideMenuOn()) this.toggleSideMenu(false);
@@ -4909,10 +4912,11 @@
                     //go to activeDiv
                     var firstPanelId = that.getPanelId(defaultHash);
                     //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
-                    if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId != ("#" + that.firstDiv.id) && $.query(firstPanelId).length > 0) {
+                    var isFirstPanel = !!(firstPanelId == "#" + that.firstDiv.id);
+                    if (firstPanelId.length > 0 && that.loadDefaultHash && !isFirstPanel) {
                         that.loadContent(defaultHash, true, false, 'none'); //load the active page as a newTab with no transition
-
-                    } else {
+                    }
+                    if ($.query(firstPanelId).length == 0 || isFirstPanel) {
                         previousTarget = "#" + that.firstDiv.id;
 
                         that.firstDiv.style.display = "block";
@@ -5029,7 +5033,7 @@
 
             var custom = (typeof $.ui.customClickHandler == "function") ? $.ui.customClickHandler : false;
             if (custom !== false) {
-                if ($.ui.customClickHandler(theTarget)) return e.preventDefault();
+                if ($.ui.customClickHandler(theTarget,e)) return e.preventDefault();
 
             }
             if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1 || theTarget.getAttribute("data-ignore")) {

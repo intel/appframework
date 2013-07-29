@@ -1886,7 +1886,7 @@
 
             var custom = (typeof $.ui.customClickHandler == "function") ? $.ui.customClickHandler : false;
             if (custom !== false) {
-                if ($.ui.customClickHandler(theTarget)) return e.preventDefault();
+                if ($.ui.customClickHandler(theTarget,e)) return e.preventDefault();
 
             }
             if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1 || theTarget.getAttribute("data-ignore")) {
