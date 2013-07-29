@@ -1765,10 +1765,11 @@
                     //go to activeDiv
                     var firstPanelId = that.getPanelId(defaultHash);
                     //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
-                    if (firstPanelId.length > 0 && that.loadDefaultHash && firstPanelId != ("#" + that.firstDiv.id)) {
+                    var isFirstPanel = !!(firstPanelId == "#" + that.firstDiv.id);
+                    if (firstPanelId.length > 0 && that.loadDefaultHash && !isFirstPanel) {
                         that.loadContent(defaultHash, true, false, 'none'); //load the active page as a newTab with no transition
                     }
-                    if ($.query(firstPanelId).length == 0) {
+                    if ($.query(firstPanelId).length == 0 || isFirstPanel) {
                         previousTarget = "#" + that.firstDiv.id;
 
                         that.firstDiv.style.display = "block";
