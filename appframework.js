@@ -194,9 +194,7 @@ if (!window.af || typeof(af) !== "function") {
         function _selectorAll(selector, what) {
             try {
                 return what.querySelectorAll(selector);
-                /*classSelectorRE.test(selector) ? what.getElementsByClassName(RegExp.$1) :
-                    tagSelectorRE.test(selector) ? what.getElementsByTagName(selector) :
-                    what.querySelectorAll(selector);*/
+              
             } catch (e) {
                 return [];
             }
@@ -213,7 +211,7 @@ if (!window.af || typeof(af) !== "function") {
 
             selector = selector.trim();
 
-            if (selector[0] === "#" && selector.indexOf(".") == -1 && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
+            if (selector[0] === "#" && selector.indexOf(".") == -1 &&selector.indexOf(",") == -1 && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
                 if (what == document)
                     _shimNodes(what.getElementById(selector.replace("#", "")), this);
                 else
