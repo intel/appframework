@@ -570,6 +570,11 @@ body {
 
  */
 
+ @-ms-viewport {
+  width: device-width;
+}
+
+
 #afui {
     background:white;
     color:#53575E;
@@ -1890,6 +1895,7 @@ color:inherit;
  hover : #111
 
  */
+
 
  #afui.win8 {
 

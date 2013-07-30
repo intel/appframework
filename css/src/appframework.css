@@ -2,6 +2,11 @@
 
  */
 
+ @-ms-viewport {
+  width: device-width;
+}
+
+
 #afui {
     background:white;
     color:#53575E;
