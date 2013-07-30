@@ -96,9 +96,11 @@
                     $("head").append($.create("script", {
                         src: "plugins/af.8tiles.js"
                     }));
-                } else if ($.os.blackberry) {
+                } else if ($.os.blackberry||$.os.blackberry10||$.os.playbook) {
                     $("#afui").addClass("bb");
                     that.backButtonText = "Back";
+                    $("head").find("#bb10VisibilityHack").remove();
+                    $("head").append("<style id='bb10VisibilityHack'>#afui .panel {-webkit-backface-visibility:visible  !important}</style>");
                 } else if ($.os.ios7)
                     $("#afui").addClass("ios7");
                 else if ($.os.ios)
@@ -1018,7 +1020,7 @@
                 tmp.title = null;
                 tmp.id = null;
                 var $tmp = $(tmp);
-                $tmp.removeAttr("data-footer data-nav data-header selected data-load data-unload data-tab data-crc");
+                $tmp.removeAttr("data-footer data-aside data-nav data-header selected data-load data-unload data-tab data-crc");
 
                 $tmp.replaceClass("panel", "afScrollPanel");
 
@@ -1166,8 +1168,7 @@
                 }
                 this.customMenu = false;
             }
-
-
+       
 
             if (oldDiv) {
                 fnc = oldDiv.getAttribute("data-unload");
@@ -1599,6 +1600,23 @@
                     lockBounce: this.lockPageBounce
                 });
                 if ($.feat.nativeTouchScroll) $.query("#menu_scroller").css("height", "100%");
+
+                this.asideMenu = $.create("div", {
+                    id: "aside_menu",
+                    html: '<div id="aside_menu_scroller"></div>'
+                }).get(0);
+                this.viewportContainer.append(this.asideMenu);
+                this.asideMenu.style.overflow = "hidden";
+                this.scrollingDivs.menu_scroller = $.query("#aside_menu_scroller").scroller({
+                    scrollBars: true,
+                    verticalScroll: true,
+                    vScrollCSS: "afScrollbar",
+                    useJsScroll: !$.feat.nativeTouchScroll,
+                    noParent: $.feat.nativeTouchScroll,
+                    autoEnable: true,
+                    lockBounce: this.lockPageBounce
+                });
+                if ($.feat.nativeTouchScroll) $.query("#aside_menu_scroller").css("height", "100%");
             }
 
             if (!this.content) {

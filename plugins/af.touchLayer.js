@@ -34,7 +34,6 @@
     var inputElementRequiresNativeTap = $.os.blackberry || ($.os.android && !$.os.chrome); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
     var selectElementRequiresNativeTap = $.os.blackberry || ($.os.android && !$.os.chrome); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
     var focusScrolls = $.os.ios; //devices scrolling on focus instead of resizing
-    var focusResizes = $.os.blackberry10;
     var requirePanning = $.os.ios; //devices which require panning feature
     var addressBarError = 0.97; //max 3% error in position
     var maxHideTries = 2; //HideAdressBar does not retry more than 2 times (3 overall)
@@ -72,6 +71,7 @@
         };
         //iPhone double clicks workaround
         document.addEventListener('click', function(e) {
+        
             if (cancelClick) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -255,7 +255,7 @@
         onClick: function(e) {
             //handle forms
             var tag = e.target && e.target.tagName !== undefined ? e.target.tagName.toLowerCase() : '';
-
+            
             //this.log("click on "+tag);
             if (inputElements.indexOf(tag) !== -1 && (!this.isFocused_ || e.target !== (this.focusedElement))) {
                 var type = e.target && e.target.type !== undefined ? e.target.type.toLowerCase() : '';
@@ -295,7 +295,8 @@
 
                 //BB10 needs to be preventDefault on touchstart and thus need manual blur on click
             } else if ($.os.blackberry10 && this.isFocused_) {
-                //this.log("forcing blur on bb10 ");
+                
+
                 this.focusedElement.blur();
             }
         },
@@ -579,6 +580,7 @@
             if (!af.os.ios || !this.requiresNativeTap) this.allowDocumentScroll_ = false;
 
             //panning action
+
             if (this.isPanning_ && itMoved) {
                 //wait 2 secs and cancel
                 this.wasPanning_ = true;
@@ -621,6 +623,11 @@
                     if (!this.isFocused_) $.trigger(this, 'cancel-enter-edit', [e.target]);
                 }
             }
+            if($.os.blackberry10) {
+                this.lastTouchStartX = this.dX;
+                this.lastTouchStartY = this.dY;
+            }
+            
             this.clearTouchVars();
         },
 

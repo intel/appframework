@@ -2525,7 +2525,6 @@
     var inputElementRequiresNativeTap = $.os.blackberry || ($.os.android && !$.os.chrome); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
     var selectElementRequiresNativeTap = $.os.blackberry || ($.os.android && !$.os.chrome); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
     var focusScrolls = $.os.ios; //devices scrolling on focus instead of resizing
-    var focusResizes = $.os.blackberry10;
     var requirePanning = $.os.ios; //devices which require panning feature
     var addressBarError = 0.97; //max 3% error in position
     var maxHideTries = 2; //HideAdressBar does not retry more than 2 times (3 overall)
@@ -2563,6 +2562,7 @@
         };
         //iPhone double clicks workaround
         document.addEventListener('click', function(e) {
+        
             if (cancelClick) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -2746,7 +2746,7 @@
         onClick: function(e) {
             //handle forms
             var tag = e.target && e.target.tagName !== undefined ? e.target.tagName.toLowerCase() : '';
-
+            
             //this.log("click on "+tag);
             if (inputElements.indexOf(tag) !== -1 && (!this.isFocused_ || e.target !== (this.focusedElement))) {
                 var type = e.target && e.target.type !== undefined ? e.target.type.toLowerCase() : '';
@@ -2786,7 +2786,8 @@
 
                 //BB10 needs to be preventDefault on touchstart and thus need manual blur on click
             } else if ($.os.blackberry10 && this.isFocused_) {
-                //this.log("forcing blur on bb10 ");
+                
+
                 this.focusedElement.blur();
             }
         },
@@ -3070,6 +3071,7 @@
             if (!af.os.ios || !this.requiresNativeTap) this.allowDocumentScroll_ = false;
 
             //panning action
+
             if (this.isPanning_ && itMoved) {
                 //wait 2 secs and cancel
                 this.wasPanning_ = true;
@@ -3112,6 +3114,11 @@
                     if (!this.isFocused_) $.trigger(this, 'cancel-enter-edit', [e.target]);
                 }
             }
+            if($.os.blackberry10) {
+                this.lastTouchStartX = this.dX;
+                this.lastTouchStartY = this.dY;
+            }
+            
             this.clearTouchVars();
         },
 
@@ -3243,9 +3250,11 @@
                     $("head").append($.create("script", {
                         src: "plugins/af.8tiles.js"
                     }));
-                } else if ($.os.blackberry) {
+                } else if ($.os.blackberry||$.os.blackberry10||$.os.playbook) {
                     $("#afui").addClass("bb");
                     that.backButtonText = "Back";
+                    $("head").find("#bb10VisibilityHack").remove();
+                    $("head").append("<style id='bb10VisibilityHack'>#afui .panel {-webkit-backface-visibility:visible  !important}</style>");
                 } else if ($.os.ios7)
                     $("#afui").addClass("ios7");
                 else if ($.os.ios)
@@ -4165,7 +4174,7 @@
                 tmp.title = null;
                 tmp.id = null;
                 var $tmp = $(tmp);
-                $tmp.removeAttr("data-footer data-nav data-header selected data-load data-unload data-tab data-crc");
+                $tmp.removeAttr("data-footer data-aside data-nav data-header selected data-load data-unload data-tab data-crc");
 
                 $tmp.replaceClass("panel", "afScrollPanel");
 
@@ -4313,8 +4322,7 @@
                 }
                 this.customMenu = false;
             }
-
-
+       
 
             if (oldDiv) {
                 fnc = oldDiv.getAttribute("data-unload");
@@ -4746,6 +4754,23 @@
                     lockBounce: this.lockPageBounce
                 });
                 if ($.feat.nativeTouchScroll) $.query("#menu_scroller").css("height", "100%");
+
+                this.asideMenu = $.create("div", {
+                    id: "aside_menu",
+                    html: '<div id="aside_menu_scroller"></div>'
+                }).get(0);
+                this.viewportContainer.append(this.asideMenu);
+                this.asideMenu.style.overflow = "hidden";
+                this.scrollingDivs.menu_scroller = $.query("#aside_menu_scroller").scroller({
+                    scrollBars: true,
+                    verticalScroll: true,
+                    vScrollCSS: "afScrollbar",
+                    useJsScroll: !$.feat.nativeTouchScroll,
+                    noParent: $.feat.nativeTouchScroll,
+                    autoEnable: true,
+                    lockBounce: this.lockPageBounce
+                });
+                if ($.feat.nativeTouchScroll) $.query("#aside_menu_scroller").css("height", "100%");
             }
 
             if (!this.content) {

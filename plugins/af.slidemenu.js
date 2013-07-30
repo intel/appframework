@@ -60,9 +60,9 @@
                 doMenu = false;
                 return true;
             }            
-            console.log(dx,max);
+            
             if (dx > max) return true;
-            console.log(dy,startY,dx,startX);
+            
             showHide = dx - startX > 0 ? 2 : false;
             var thePlace = Math.abs(dx - startX);
 
