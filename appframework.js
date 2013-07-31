@@ -948,6 +948,27 @@ if (!window.af || typeof(af) !== "function") {
                 return this;
             },
             /**
+            * Adds or removes a css class to elements.
+                ```
+                $().toggleClass("selected");
+                ```
+
+            * @param {String} classes that are space delimited
+            * @param {Boolean} [state] force toggle to add or remove classes
+            * @return {Object} appframework object
+            * @title $().toggleClass(name)
+            */
+            toggleClass: function(name, state) {
+                if (name == nundefined) return this;
+                for (var i = 0; i < this.length; i++) {
+                    if (typeof state != "boolean") {
+                        state = this.hasClass(name, this[i]);
+                    }
+                    this[state ? 'removeClass' : 'addClass'](name);
+                }
+                return this;
+            },
+            /**
             * Replaces a css class on elements.
                 ```
                 $().replaceClass("on", "off");
