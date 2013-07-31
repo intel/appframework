@@ -3014,6 +3014,7 @@
         //scroll finish detectors
         scrollEnded: function(e) {
             //this.log("scrollEnded");
+            if (this.scrollTimeoutEl_ === null) { return; }
             if (e) this.scrollTimeoutEl_.removeEventListener('scroll', this.scrollEndedProxy_, false);
             this.fireEvent('UIEvents', 'scrollend', this.scrollTimeoutEl_, false, false);
             this.scrollTimeoutEl_ = null;
