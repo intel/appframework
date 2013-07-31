@@ -964,7 +964,7 @@ if (!window.af || typeof(af) !== "function") {
                     if (typeof state != "boolean") {
                         state = this.hasClass(name, this[i]);
                     }
-                    this[state ? 'removeClass' : 'addClass'](name);
+                    $(this[i])[state ? 'removeClass' : 'addClass'](name);
                 }
                 return this;
             },
