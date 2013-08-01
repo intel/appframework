@@ -69,9 +69,8 @@ body {
 }
 
 
-#afui .afmScrollbar { background:white !important; } /* Sets the color of the scrollbar */
 
-#afui .afmScrollPanel { width:100%; min-height:100%;overflow:hidden;/*hack to auto expand height with floats*/ }
+#afui .afScrollPanel { width:100%; min-height:100%;overflow:hidden;/*hack to auto expand height with floats*/ }
 
 #afui {
 	position:absolute;
