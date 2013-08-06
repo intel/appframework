@@ -2324,14 +2324,13 @@ if (!window.af || typeof(af) !== "function") {
         */
         $.fn.delegate = function(selector, event, callback) {
             for (var i = 0; i < this.length; i++) {
-                var element = this[i];
-                add(element, event, callback, selector, function(fn) {
+                add(this[i], event, callback, selector, function(fn) {
                     return function(e) {
-                        var evt, match = $(e.target).closest(selector, element).get(0);
+                        var evt, match = $(e.target).closest(selector, this[i]).get(0);
                         if (match) {
                             evt = $.extend(createProxy(e), {
                                 currentTarget: match,
-                                liveFired: element
+                                liveFired: this[i]
                             });
                             return fn.apply(match, [evt].concat([].slice.call(arguments, 1)));
                         }
