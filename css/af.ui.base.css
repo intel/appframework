@@ -70,9 +70,8 @@ body {
 }
 
 
-#afui .afmScrollbar { background:white !important; } /* Sets the color of the scrollbar */
 
-#afui .afmScrollPanel { width:100%; min-height:100%;overflow:hidden;/*hack to auto expand height with floats*/ }
+#afui .afScrollPanel { width:100%; min-height:100%;overflow-y:hidden;/*hack to auto expand height with floats*/ }
 
 #afui {
 	position:absolute;
@@ -126,7 +125,7 @@ body {
 	font-size:18px;
 	font-weight:bold;
 	left:27.5%;
-	color:#fff;
+	color:inherit;
 	padding:10px 0;
 	text-shadow:rgba(0,0,0,0.8) 0 -1px 0;
 	text-align:center;
@@ -380,7 +379,7 @@ body {
 	UI
 **********************************************************/
 
-#afui .ui-icon {
+.ui-icon {
 	background: 						#666;
 	background: 						rgba(0,0,0,.4);
 	background-repeat: no-repeat;
@@ -570,6 +569,11 @@ body {
 
  */
 
+ @-ms-viewport {
+  width: device-width;
+}
+
+
 #afui {
     background:white;
     color:#53575E;
@@ -580,6 +584,7 @@ body {
     background:#0088D1;
     border:none;
     border-bottom:1px solid #0088D1;
+    color:white;
  }
 
 #afui  #header h1 {
