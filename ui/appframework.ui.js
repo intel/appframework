@@ -4942,7 +4942,8 @@
                     if (firstPanelId.length > 0 && that.loadDefaultHash && !isFirstPanel) {
                         that.loadContent(defaultHash, true, false, 'none'); //load the active page as a newTab with no transition
                     }
-                    if ($.query(firstPanelId).length == 0 || isFirstPanel) {
+
+                    else {
                         previousTarget = "#" + that.firstDiv.id;
 
                         that.firstDiv.style.display = "block";
