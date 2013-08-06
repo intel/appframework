@@ -888,7 +888,9 @@ if (!window.af || typeof(af) !== "function") {
                     return this;
                 for (var i = 0; i < elems.length; i++) {
                     $.cleanUpContent(elems[i], true, true);
-                    elems[i].parentNode.removeChild(elems[i]);
+                    if (elems[i] && elems[i].parentNode) {
+                        elems[i].parentNode.removeChild(elems[i]);
+                    }
                 }
                 return this;
             },
