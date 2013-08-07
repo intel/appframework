@@ -168,6 +168,7 @@ if (!window.af || typeof(af) !== "function") {
                 if (what instanceof $afm) {
                     return what.find(toSelect);
                 }
+                what=what.parentNode;
 
             } else {
                 what = document;
@@ -2322,20 +2323,24 @@ if (!window.af || typeof(af) !== "function") {
         * @return {Object} appframework object
         * @title $().delegate(selector,event,callback)
         */
-        $.fn.delegate = function(selector, event, callback) {
-            for (var i = 0; i < this.length; i++) {
-                add(this[i], event, callback, selector, function(fn) {
+        function addDelegate(element,event,callback,selector){
+            add(element, event, callback, selector, function(fn) {
                     return function(e) {
-                        var evt, match = $(e.target).closest(selector, this[i]).get(0);
+                        var evt, match = $(e.target).closest(selector, element).get(0);
                         if (match) {
                             evt = $.extend(createProxy(e), {
                                 currentTarget: match,
-                                liveFired: this[i]
+                                liveFired: element
                             });
                             return fn.apply(match, [evt].concat([].slice.call(arguments, 1)));
                         }
                     };
                 });
+        }
+        $.fn.delegate = function(selector, event, callback) {
+            
+            for (var i = 0; i < this.length; i++) {
+                addDelegate(this[i],event,callback,selector)
             }
             return this;
         };
