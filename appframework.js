@@ -2260,8 +2260,8 @@ if (!window.af || typeof(af) !== "function") {
             return this.each(function(i, element) {
                 add(this, event, callback, null, function(fn, type) {
                     return function() {
-                        var result = fn.apply(element, arguments);
                         remove(element, type, fn);
+                        var result = fn.apply(element, arguments);                        
                         return result;
                     };
                 });
