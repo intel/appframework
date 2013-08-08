@@ -8,6 +8,26 @@ Visit <http://app-framework-software.intel.com/index.php> for more information, 
 
 You can contribute to the core code by forking it and make a pull request.  Please keep in mind we do not want to add functionality that is a one-off case.  These are best dealt with via plugins.
 
+You can make changes to the following files.
+
+1. appframework.js
+2. css/src/*.css
+3. ui/src/appframework.ui.js
+4. plugins/*.js
+5. plugins/*.css
+
+Once a pull request is accepted, we will rebuild the necessary files and push them back up to github.
+
+# Pull Requests
+
+Pull requests will not be considered without the following
+
+1. Explination of the bug
+2. Test case that proves the current code base is failing
+3. Explination of the fix
+
+We will pull the code down and test it and then provide feedback.  If everything passes, we will merge and rebuild the files.
+
 
 # Bugs
 
