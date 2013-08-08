@@ -167,8 +167,7 @@ if (!window.af || typeof(af) !== "function") {
             } else if (what !== nundefined) {
                 if (what instanceof $afm) {
                     return what.find(toSelect);
-                }
-                what=what.parentNode;
+                }                
 
             } else {
                 what = document;
@@ -1344,8 +1343,9 @@ if (!window.af || typeof(af) !== "function") {
                     return this;
                 var elems = [],
                     cur = this[0];
-
+                
                 var start = $(selector, context);
+                console.log(start);
                 if (start.length === 0)
                     return $();
                 while (cur && start.indexOf(cur) == -1) {
