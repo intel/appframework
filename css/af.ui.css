@@ -71,7 +71,7 @@ body {
 
 
 
-#afui .afScrollPanel { width:100%; min-height:100%;overflow-y:hidden;/*hack to auto expand height with floats*/ }
+#afui .afScrollPanel { width:100%; min-height:100%; }
 
 #afui {
 	position:absolute;
