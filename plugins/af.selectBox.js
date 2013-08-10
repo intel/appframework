@@ -102,7 +102,7 @@
                     var scrollThreshold = numOnly($list.find("li").computedStyle("height"));
                     var theHeight = numOnly($("#afSelectBoxContainer").computedStyle("height"));
                     if (foundInd * scrollThreshold >= theHeight) scrollToPos = (foundInd - 1) * -scrollThreshold;
-                    this.scroller.scrollTo({
+                    this.scroller._scrollTo({
                         x: 0,
                         y: scrollToPos
                     });
@@ -129,7 +129,7 @@
                 el.selectedIndex = value;
                 $el.find("option").prop("selected", false);
                 $el.find("option:nth-child(" + (value + 1) + ")").prop("selected", true);
-                this.scroller.scrollTo({
+                this.scroller._scrollTo({
                     x: 0,
                     y: 0
                 });
