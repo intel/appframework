@@ -1213,8 +1213,10 @@
             this.lastScrollInfo = scrollInfo;
             this.hasMoved = false;
 
-            this.scrollerMoveCSS(this.lastScrollInfo, 0);
-      
+           if(this.elementInfo.maxTop==0&&this.elementInfo.maxLeft==0)
+                this.currentScrollingObject=null;
+            else
+                this.scrollerMoveCSS(this.lastScrollInfo, 0);
 
         };
         jsScroller.prototype.getCSSMatrix = function (el) {
