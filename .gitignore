@@ -19,3 +19,4 @@ v1.html
 css/af.ui.less.css
 css/build.php
 *.svn
+/node_modules
