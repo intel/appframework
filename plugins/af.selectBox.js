@@ -95,7 +95,7 @@
                 row.data("ind", j);
                 $list.append(row);
             }
-            $("#afSelectBoxContainer").show();
+            $("#afModalMask").show();
             try {
                 if (foundInd > 0 && el.getAttribute("multiple") != "multiple") {
                     var scrollToPos = 0;
@@ -151,7 +151,7 @@
             el = null;
         },
         hideDropDown: function() {
-            $("#afSelectBoxContainer").hide();
+            $("#afModalMask").hide();
             $("#afSelectBoxfix").html("");
         },
         createHtml: function() {
@@ -170,6 +170,7 @@
                     else
                         $("#afSelectClose").hide();
                     that.initDropDown(this.linker);
+
                 });
                 var container = $.create("div", {
                     id: "afSelectBoxContainer"
@@ -187,17 +188,27 @@
                     html: "<a id='afSelectDone'>Done</a> <a id='afSelectCancel'>Cancel</a>"
                 });
 
+                var modalMask = $.create("div", {
+                    id:"afModalMask"
+                });
 
                 var $afui = $("#afui");
                 container.prepend(closeDiv).append(modalWrapper);
-                if ($afui.length > 0) $afui.append(container);
-                else document.body.appendChild(container.get(0));
+                modalMask.append(container);
+                if ($afui.length > 0) $afui.append(modalMask);
+                else document.body.appendChild(modalMask.get(0));
 
                 that.scroller = $.query("#afSelectBoxfix").scroller({
                     scroller: false,
                     verticalScroll: true,
                     vScrollCSS: "jqselectscrollBarV"
                 });
+
+                $("#afModalMask").on("click",function(e){
+                    var $e=$(e.target);
+                    if($e.closest("#afSelectBoxContainer").length===0)
+                        that.hideDropDown();
+                })
 
                 $("#afSelectBoxfix").on("click", "li", function(e) {
                     var $el = $(e.target);
@@ -219,6 +230,9 @@
                     });
 
                     that.hideDropDown();
+                    e.stopPropagation();
+                    e.preventDefault();
+                    return false;
                 });
 
             });
