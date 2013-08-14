@@ -17,6 +17,7 @@ untitled
 v1.html
 css/af.ui.less.css
 css/build.php
+ui/transitions/build.php
 *.svn
 /node_modules
 build
