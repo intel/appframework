@@ -4,6 +4,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-uglify");
+    grunt.loadNpmTasks("grunt-mochaccino");
 
     grunt.initConfig({
         clean: [ "build" ],
@@ -80,6 +81,10 @@ module.exports = function (grunt) {
                     ]
                 }
             }
+        },
+
+        mochaccino: {
+            all: [ "test/**/*.test.js" ]
         }
     });
 
