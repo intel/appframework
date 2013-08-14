@@ -1,18 +1,14 @@
-var path = require("path");
 var should = require("chai").should();
 var domHelper = require("./dom.helper");
-var afPath = path.join(__dirname, "../appframework.js");
 
 describe("removeClass", function () {
     // set up the DOM and some global variables
     before(function () {
         domHelper(
-          "<div id=\"single\" class=\"red\"></div>" +
-          "<div id=\"multiple1\" class=\"red green\"></div>" +
-          "<div id=\"multiple2\" class=\"orange green\"></div>"
+            "<div id=\"single\" class=\"red\"></div>" +
+            "<div id=\"multiple1\" class=\"red green\"></div>" +
+            "<div id=\"multiple2\" class=\"orange green\"></div>"
         );
-        require(afPath);
-        global.$ = window.$;
     });
 
     it("should remove a single class from an element", function () {
