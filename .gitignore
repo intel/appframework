@@ -1,4 +1,3 @@
-
 *.bat
 /dev
 /kitchensink/base
@@ -20,3 +19,4 @@ css/af.ui.less.css
 css/build.php
 *.svn
 /node_modules
+build

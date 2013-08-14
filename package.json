@@ -1,0 +1,39 @@
+{
+  "name": "intel-appframework",
+  "version": "2.0.0",
+  "description": "App Framework is a Javascript framework targeted at HTML5 browsers with a blazingly fast query selector library that supports W3C queries.",
+  "main": "appframework.min.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/01org/appframework.git"
+  },
+  "authors": [
+    {
+      "name": "Ian Maffett",
+      "email": "ian.maffett@intel.com"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/01org/appframework/issues"
+  },
+  "keywords": [
+    "mobile",
+    "app",
+    "html5",
+    "hybrid",
+    "cordova",
+    "phonegap",
+    "tablet",
+    "touch"
+  ],
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-jshint": "~0.6.2",
+    "grunt-contrib-clean": "~0.5.0"
+  }
+}
