@@ -84,7 +84,15 @@ module.exports = function (grunt) {
         },
 
         mochaccino: {
-            all: [ "test/**/*.test.js" ]
+            all: [ "test/**/*.test.js" ],
+
+            cov: {
+                files: [
+                    { src: "test/**/*.test.js" }
+                ],
+                reporter: 'html-cov',
+                reportDir: 'build'
+            }
         }
     });
 
@@ -93,4 +101,6 @@ module.exports = function (grunt) {
         "jshint",
         "uglify"
     ]);
+
+    grunt.registerTask("test", ["mochaccino:all"]);
 };
