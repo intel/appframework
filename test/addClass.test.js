@@ -1,4 +1,3 @@
-var path = require("path");
 var should = require("chai").should();
 var domHelper = require("./dom.helper");
 
