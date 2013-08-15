@@ -2,8 +2,8 @@
  * App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.
  * Since most mobile devices (Android, iOS, webOS) use a WebKit browser, you only need to target one browser.
  * We are able to increase the speed greatly by removing support for legacy desktop browsers and taking advantage of browser features, like native JSON parsing and querySelectorAll
- 
- 
+
+
  * MIT License
  * @author AppMobi
  * @copyright Intel
@@ -167,7 +167,7 @@ if (!window.af || typeof(af) !== "function") {
             } else if (what !== nundefined) {
                 if (what instanceof $afm) {
                     return what.find(toSelect);
-                }                
+                }
 
             } else {
                 what = document;
@@ -194,7 +194,7 @@ if (!window.af || typeof(af) !== "function") {
         function _selectorAll(selector, what) {
             try {
                 return what.querySelectorAll(selector);
-              
+
             } catch (e) {
                 return [];
             }
@@ -384,7 +384,7 @@ if (!window.af || typeof(af) !== "function") {
         * @title $.isObject(param)
         */
         $.isObject = function(obj) {
-            return typeof obj === "object";
+            return typeof obj === "object" && obj !== null;
         };
 
         /**
@@ -768,7 +768,7 @@ if (!window.af || typeof(af) !== "function") {
                         if (!_attrCache[this[i].afmCacheId])
                             _attrCache[this[i].afmCacheId] = {};
                         _attrCache[this[i].afmCacheId][attr] = value;
-                    } else if (value === null && value != nundefined) {
+                    } else if (value === null) {
                         this[i].removeAttribute(attr);
                         if (this[i].afmCacheId && _attrCache[this[i].afmCacheId][attr])
                             delete _attrCache[this[i].afmCacheId][attr];
@@ -1343,8 +1343,8 @@ if (!window.af || typeof(af) !== "function") {
                     return this;
                 var elems = [],
                     cur = this[0];
-                
-                var start = $(selector, context);                
+
+                var start = $(selector, context);
                 if (start.length === 0)
                     return $();
                 while (cur && start.indexOf(cur) == -1) {
@@ -1925,7 +1925,7 @@ if (!window.af || typeof(af) !== "function") {
             $.os.webos = userAgent.match(/(webOS|hpwOS)[\s\/]([\d.]+)/) ? true : false;
             $.os.touchpad = $.os.webos && userAgent.match(/TouchPad/) ? true : false;
             $.os.ios = $.os.ipad || $.os.iphone;
-            $.os.playbook = userAgent.match(/PlayBook/) ? true : false;            
+            $.os.playbook = userAgent.match(/PlayBook/) ? true : false;
             $.os.blackberry10 = userAgent.match(/BB10/) ? true : false;
             $.os.blackberry = $.os.playbook || $.os.blackberry10|| userAgent.match(/BlackBerry/) ? true : false;
             $.os.chrome = userAgent.match(/Chrome/) ? true : false;
@@ -2260,7 +2260,7 @@ if (!window.af || typeof(af) !== "function") {
                 add(this, event, callback, null, function(fn, type) {
                     return function() {
                         remove(element, type, fn);
-                        var result = fn.apply(element, arguments);                        
+                        var result = fn.apply(element, arguments);
                         return result;
                     };
                 });
@@ -2337,7 +2337,7 @@ if (!window.af || typeof(af) !== "function") {
                 });
         }
         $.fn.delegate = function(selector, event, callback) {
-            
+
             for (var i = 0; i < this.length; i++) {
                 addDelegate(this[i],event,callback,selector)
             }
