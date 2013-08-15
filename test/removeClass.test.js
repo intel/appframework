@@ -30,4 +30,11 @@ describe("removeClass", function () {
         $("#multiple1").removeClass("red green");
         $("#multiple1").attr("class").should.equal("");
     });
+
+    it("should remove classes from multiple elements", function () {
+        var greenDivs = $(".green");
+        greenDivs.removeClass("red green");
+        greenDivs[0].getAttribute("class").should.equal("");
+        greenDivs[1].getAttribute("class").should.equal("orange");
+    });
 });
