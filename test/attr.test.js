@@ -4,8 +4,8 @@ var domHelper = require("./dom.helper");
 describe("attr", function () {
     beforeEach(function () {
         domHelper(
-            "<div id=\"single1\" class=\"red\"></div>" +
-            "<div id=\"single2\" class=\"red\"></div>"
+            "<div id=\"single1\" class=\"red\" data-spong=\"bang\"></div>" +
+            "<div id=\"single2\" class=\"red\" data-spong=\"bloing\"></div>"
         );
     });
 
@@ -76,5 +76,28 @@ describe("attr", function () {
         var elt2 = document.getElementById("single2");
         var value2 = elt2.getAttribute("data-greet");
         (value2 === null).should.be.true
+    });
+
+    it("should remove a (pseudo) attribute if value is set to null", function () {
+        $(".red").attr("data-greet", {a: 1, b: 2});
+        $(".red").attr("data-greet", null);
+
+        var elt1 = document.getElementById("single1");
+        var value1 = elt1.getAttribute("data-greet");
+        (value1 === null).should.be.true
+
+        var elt2 = document.getElementById("single2");
+        var value2 = elt2.getAttribute("data-greet");
+        (value2 === null).should.be.true
+    });
+
+    it("should get an attribute's value from a single element", function () {
+        var actual = $("#single1").attr("data-spong");
+        actual.should.equal("bang");
+    });
+
+    it("should get the first element's attribute value if called on an af collection", function () {
+        var actual = $(".red").attr("data-spong");
+        actual.should.equal("bang");
     });
 });
