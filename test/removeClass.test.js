@@ -30,9 +30,4 @@ describe("removeClass", function () {
         $("#multiple1").removeClass("red green");
         $("#multiple1").attr("class").should.equal("");
     });
-
-    it("should only remove matching classes if multiple classes are to be removed", function () {
-        $("#multiple2").removeClass("red green");
-        $("#multiple2").attr("class").should.equal("orange");
-    });
 });
