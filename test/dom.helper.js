@@ -13,5 +13,7 @@ module.exports = function (html) {
         global.$ = window.$;
     }
 
-    window.document.querySelector("body").innerHTML = html;
+    if (html) {
+        window.document.querySelector("body").innerHTML = html;
+    }
 };
