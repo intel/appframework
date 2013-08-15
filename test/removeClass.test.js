@@ -3,7 +3,7 @@ var domHelper = require("./dom.helper");
 
 describe("removeClass", function () {
     // set up the DOM and some global variables
-    before(function () {
+    beforeEach(function () {
         domHelper(
             "<div id=\"single\" class=\"red\"></div>" +
             "<div id=\"multiple1\" class=\"red green\"></div>" +

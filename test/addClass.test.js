@@ -4,7 +4,7 @@ var domHelper = require("./dom.helper");
 
 describe("addClass", function () {
     // set up the DOM and some global variables
-    before(function () {
+    beforeEach(function () {
         domHelper(
             "<div id=\"single1\" class=\"red\"></div>" +
             "<div id=\"single2\" class=\"red\"></div>"
