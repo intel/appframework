@@ -11,6 +11,7 @@ module.exports = function (html) {
         global.navigator = global.window.navigator;
         require(afPath);
         global.$ = window.$;
+        global.document = window.document;
     }
 
     if (html) {
