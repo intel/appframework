@@ -1,4 +1,4 @@
-var should = require("chai").should();
+require("./chai.helper");
 var domHelper = require("./dom.helper");
 
 describe("each", function () {
