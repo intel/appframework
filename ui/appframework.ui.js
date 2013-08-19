@@ -3323,6 +3323,7 @@
         lockPageBounce: false,
         animateHeaders: true,
         useAutoPressed: true,
+        horizontalScroll:false,
         _currentHeaderID:"defaultHeader",
         autoBoot: function() {
             this.hasLaunched = true;
@@ -4157,6 +4158,7 @@
          * @api private
          */
         addDivAndScroll: function(tmp, refreshPull, refreshFunc, container) {
+            var self=this;
             var jsScroll = false,
                 scrollEl;
             var overflowStyle = tmp.style.overflow;
@@ -4211,7 +4213,7 @@
                 this.scrollingDivs[scrollEl.id] = ($(tmp).scroller({
                     scrollBars: true,
                     verticalScroll: true,
-                    horizontalScroll: false,
+                    horizontalScroll: self.horizontalScroll,
                     vScrollCSS: "afScrollbar",
                     refresh: refreshPull,
                     useJsScroll: jsScroll,
