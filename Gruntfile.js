@@ -3,7 +3,9 @@ var path = require("path");
 module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-jshint");
+    grunt.loadNpmTasks("grunt-contrib-cssmin");
     grunt.loadNpmTasks("grunt-contrib-uglify");
+    grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-mochaccino");
 
     grunt.initConfig({
@@ -32,8 +34,8 @@ module.exports = function (grunt) {
         // * appframework.js and jq.appframework.js are minified
         //   into separate files
         // * plugins are minified separately (one file per plugin)
-        // * ui includes both the appframework.ui.js file and the
-        //   files in ui/transitions (NOT appframework.js)
+        // * ui includes both the appframework.ui.js file, the
+        //   files in ui/transitions, and the needed plugins  (NOT appframework.js)
         uglify: {
             options: {
                 compress: true,
@@ -76,19 +78,17 @@ module.exports = function (grunt) {
             ui: {
                 files: {
                     "build/ui/appframework.ui.min.js": [
-                        "appframework.js",
-                        "ui/src/appframework.ui.js",
-                        "ui/transitions/**/*.js"
-                        "ui/transitions/**/*.js",                        
-                        "plugins/af.css3animate.js",
-                        "plugins/af.scroller.js",
-                        "plugins/af.popup.js",
-                        "plugins/af.actionsheet.js",
-                        "plugins/af.passwordBox.js",
-                        "plugins/af.selectBox.js",
-                        "plugins/af.touchEvents.js",
-                        "plugins/af.touchLayer.js",
-                        "plugins/af.8tiles.js"
+                    "ui/src/appframework.ui.js",
+                    "ui/transitions/**/*.js",                        
+                    "plugins/af.css3animate.js",
+                    "plugins/af.scroller.js",
+                    "plugins/af.popup.js",
+                    "plugins/af.actionsheet.js",
+                    "plugins/af.passwordBox.js",
+                    "plugins/af.selectBox.js",
+                    "plugins/af.touchEvents.js",
+                    "plugins/af.touchLayer.js",
+                    "plugins/af.8tiles.js"
 
                     ]
                 }
@@ -105,13 +105,114 @@ module.exports = function (grunt) {
                 reporter: 'html-cov',
                 reportDir: 'build'
             }
+        },
+        cssmin: {
+            all: {   
+                files: {
+                'build/css/af.ui.min.css': [
+                    "css/src/main.css",
+                    "css/src/appframework.css",
+                    "css/src/lists.css",
+                    "css/src/forms.css",
+                    "css/src/buttons.css",
+                    "css/src/badges.css",
+                    "css/src/grid.css",
+                    "css/src/android.css",
+                    "css/src/win8.css",
+                    "css/src/bb.css",
+                    "css/src/ios7.css",
+                    "css/src/ios.css",
+                    "plugins/css/af.actionsheet.css",
+                    "plugins/css/af.popup.css",
+                    "plugins/css/af.scroller.css",
+                    "plugins/css/af.selectbox.css"
+                    ]
+                }
+            },
+            base: {                
+                files: {
+                'build/css/af.ui.base.min.css': [
+                    "css/src/main.css",
+                    "css/src/appframework.css",
+                    "css/src/lists.css",
+                    "css/src/forms.css",
+                    "css/src/buttons.css",
+                    "css/src/badges.css",
+                    "css/src/grid.css",                    
+                    "plugins/css/af.actionsheet.css",
+                    "plugins/css/af.popup.css",
+                    "plugins/css/af.scroller.css",
+                    "plugins/css/af.selectbox.css"
+                    ]
+                }
+            }
+        },
+        concat: {
+            cssall: {   
+                files: {
+                'build/css/af.ui.css': [
+                    "css/src/main.css",
+                    "css/src/appframework.css",
+                    "css/src/lists.css",
+                    "css/src/forms.css",
+                    "css/src/buttons.css",
+                    "css/src/badges.css",
+                    "css/src/grid.css",
+                    "css/src/android.css",
+                    "css/src/win8.css",
+                    "css/src/bb.css",
+                    "css/src/ios7.css",
+                    "css/src/ios.css",
+                    "plugins/css/af.actionsheet.css",
+                    "plugins/css/af.popup.css",
+                    "plugins/css/af.scroller.css",
+                    "plugins/css/af.selectbox.css"
+                    ]
+                }
+            },
+            cssbase: {                
+                files: {
+                'build/css/af.ui.base.css': [
+                    "css/src/main.css",
+                    "css/src/appframework.css",
+                    "css/src/lists.css",
+                    "css/src/forms.css",
+                    "css/src/buttons.css",
+                    "css/src/badges.css",
+                    "css/src/grid.css",                    
+                    "plugins/css/af.actionsheet.css",
+                    "plugins/css/af.popup.css",
+                    "plugins/css/af.scroller.css",
+                    "plugins/css/af.selectbox.css"
+                    ]
+                }
+            },
+            afui:{
+                 files: {
+                    "build/ui/appframework.ui.js": [
+                    "ui/src/appframework.ui.js",
+                    "ui/transitions/**/*.js",                        
+                    "plugins/af.css3animate.js",
+                    "plugins/af.scroller.js",
+                    "plugins/af.popup.js",
+                    "plugins/af.actionsheet.js",
+                    "plugins/af.passwordBox.js",
+                    "plugins/af.selectBox.js",
+                    "plugins/af.touchEvents.js",
+                    "plugins/af.touchLayer.js",
+                    "plugins/af.8tiles.js"
+
+                    ]
+                }
+            }
         }
     });
 
     grunt.registerTask("default", [
         "clean",
-        "jshint",
-        "uglify"
+        "uglify",
+        "cssmin",
+        "concat"
     ]);
 
     grunt.registerTask("test", ["mochaccino:all"]);
