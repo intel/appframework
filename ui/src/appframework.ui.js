@@ -1973,6 +1973,8 @@
 
 
     $.ui = new ui();
+    $(window).trigger('afui:preinit');
+    $(window).trigger('afui:init'); 
 
 })(af);
 
