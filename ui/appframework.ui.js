@@ -3236,13 +3236,13 @@
             });
         }
         else if (document.readyState == "complete" || document.readyState == "loaded") {
-			$(window).one("afui:init", function() {
-				that.autoBoot();	
-			})
+            $(window).one("afui:init", function() {
+        		that.autoBoot();  
+			}) 
         } else $(document).ready(function() {
 				$(window).one("afui:init", function() {
 					that.autoBoot();
-				})
+				}) 
             }, false);
 
         if (!("AppMobi" in window)) window.AppMobi = {}, window.AppMobi.webRoot = "";
@@ -5145,7 +5145,7 @@
 
     $.ui = new ui();
     $(window).trigger('afui:preinit');
-    $(window).trigger('afui:init');
+    $(window).trigger('afui:init'); 
 
 })(af);
 
