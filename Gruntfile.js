@@ -79,7 +79,7 @@ module.exports = function (grunt) {
                 files: {
                     "build/ui/appframework.ui.min.js": [
                     "ui/src/appframework.ui.js",
-                    "ui/transitions/**/*.js",                        
+                    "ui/transitions/**/*.js",
                     "plugins/af.css3animate.js",
                     "plugins/af.scroller.js",
                     "plugins/af.popup.js",
@@ -96,8 +96,9 @@ module.exports = function (grunt) {
         },
 
         mochaccino: {
-            all: [ "test/**/*.test.js" ],
+            unit: [ "test/**/*.test.js" ],
 
+            // unit tests with coverage report in build/
             cov: {
                 files: [
                     { src: "test/**/*.test.js" }
@@ -107,7 +108,7 @@ module.exports = function (grunt) {
             }
         },
         cssmin: {
-            all: {   
+            all: {
                 files: {
                 'build/css/af.ui.min.css': [
                     "css/src/main.css",
@@ -129,7 +130,7 @@ module.exports = function (grunt) {
                     ]
                 }
             },
-            base: {                
+            base: {
                 files: {
                 'build/css/af.ui.base.min.css': [
                     "css/src/main.css",
@@ -138,7 +139,7 @@ module.exports = function (grunt) {
                     "css/src/forms.css",
                     "css/src/buttons.css",
                     "css/src/badges.css",
-                    "css/src/grid.css",                    
+                    "css/src/grid.css",
                     "plugins/css/af.actionsheet.css",
                     "plugins/css/af.popup.css",
                     "plugins/css/af.scroller.css",
@@ -148,7 +149,7 @@ module.exports = function (grunt) {
             }
         },
         concat: {
-            cssall: {   
+            cssall: {
                 files: {
                 'build/css/af.ui.css': [
                     "css/src/main.css",
@@ -170,7 +171,7 @@ module.exports = function (grunt) {
                     ]
                 }
             },
-            cssbase: {                
+            cssbase: {
                 files: {
                 'build/css/af.ui.base.css': [
                     "css/src/main.css",
@@ -179,7 +180,7 @@ module.exports = function (grunt) {
                     "css/src/forms.css",
                     "css/src/buttons.css",
                     "css/src/badges.css",
-                    "css/src/grid.css",                    
+                    "css/src/grid.css",
                     "plugins/css/af.actionsheet.css",
                     "plugins/css/af.popup.css",
                     "plugins/css/af.scroller.css",
@@ -191,7 +192,7 @@ module.exports = function (grunt) {
                  files: {
                     "build/ui/appframework.ui.js": [
                     "ui/src/appframework.ui.js",
-                    "ui/transitions/**/*.js",                        
+                    "ui/transitions/**/*.js",
                     "plugins/af.css3animate.js",
                     "plugins/af.scroller.js",
                     "plugins/af.popup.js",
@@ -208,12 +209,15 @@ module.exports = function (grunt) {
         }
     });
 
+    // NB jshint is disabled for now as it fails with the current code
     grunt.registerTask("default", [
         "clean",
+        "test",
         "uglify",
         "cssmin",
         "concat"
     ]);
 
-    grunt.registerTask("test", ["mochaccino:all"]);
+    grunt.registerTask("test", ["mochaccino:unit"]);
+    grunt.registerTask("cov", ["clean", "mochaccino:cov"]);
 };
