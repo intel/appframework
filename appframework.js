@@ -1973,32 +1973,46 @@ if (!window.af || typeof(af) !== "function") {
            */
         $.getCssMatrix = function(ele) {
             if ($.is$(ele)) ele = ele.get(0);
-            if (ele == nundefined) return window.WebKitCSSMatrix || window.MSCSSMatrix || {
-                    a: 0,
-                    b: 0,
-                    c: 0,
-                    d: 0,
-                    e: 0,
-                    f: 0
-            };
-            try {
-                if (window.WebKitCSSMatrix)
-                    return new WebKitCSSMatrix(window.getComputedStyle(ele).webkitTransform);
-                else if (window.MSCSSMatrix)
-                    return new MSCSSMatrix(window.getComputedStyle(ele).transform);
+
+            var matrixFn = window.WebKitCSSMatrix || window.MSCSSMatrix;
+
+            if (ele === nundefined) {
+                if (matrixFn) {
+                    return new matrixFn();
+                }
                 else {
-                    //fake css matrix
-                    var mat = window.getComputedStyle(ele)[$.feat.cssPrefix + 'Transform'].replace(/[^0-9\-.,]/g, '').split(',');
                     return {
-                        a: +mat[0],
-                        b: +mat[1],
-                        c: +mat[2],
-                        d: +mat[3],
-                        e: +mat[4],
-                        f: +mat[5]
+                        a: 0,
+                        b: 0,
+                        c: 0,
+                        d: 0,
+                        e: 0,
+                        f: 0
                     };
                 }
-            } catch (e) {
+            }
+
+            var computedStyle = window.getComputedStyle(ele);
+
+            var transform = computedStyle.webkitTransform ||
+                            computedStyle.transform ||
+                            computedStyle[$.feat.cssPrefix + 'Transform'];
+
+            if (matrixFn)
+                return new matrixFn(transform);
+            else if (transform) {
+                //fake css matrix
+                var mat = transform.replace(/[^0-9\-.,]/g, '').split(',');
+                return {
+                    a: +mat[0],
+                    b: +mat[1],
+                    c: +mat[2],
+                    d: +mat[3],
+                    e: +mat[4],
+                    f: +mat[5]
+                };
+            }
+            else {
                 return {
                     a: 0,
                     b: 0,
