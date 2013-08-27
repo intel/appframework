@@ -65,13 +65,22 @@
             });
         }
         else if (document.readyState == "complete" || document.readyState == "loaded") {
-            $(window).one("afui:init", function() {
-        		that.autoBoot();  
-			}) 
+            if(that.init)
+                that.autoBoot();
+            else{
+                $(window).one("afui:init", function() {
+        		  that.autoBoot();  
+			     });
+            }
         } else $(document).ready(function() {
-				$(window).one("afui:init", function() {
-					that.autoBoot();
-				}) 
+                if(that.init)
+                    that.autoBoot();
+                else{
+				    $(window).one("afui:init", function() {
+                    
+					   that.autoBoot();
+				    });
+                }
             }, false);
 
         if (!("AppMobi" in window)) window.AppMobi = {}, window.AppMobi.webRoot = "";
@@ -115,6 +124,7 @@
 
 
     ui.prototype = {
+        init:false,
         transitionTime: "230ms",
         showLoading: true,
         loadingText: "Loading Content",
@@ -1973,6 +1983,7 @@
 
 
     $.ui = new ui();
+    $.ui.init=true;
     $(window).trigger('afui:preinit');
     $(window).trigger('afui:init'); 
 
