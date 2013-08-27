@@ -21,7 +21,9 @@
       "email": "ian.maffett@intel.com"
     }
   ],
-  "engines" : { "node" : ">=0.8.14 <0.11" },
+  "engines": {
+    "node": ">=0.8.14 <0.11"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/01org/appframework/issues"
@@ -47,6 +49,7 @@
     "chai": "~1.7.2",
     "blanket": "~1.1.5",
     "grunt-cli": "~0.1.9",
-    "jsdom": "~0.8.3"
+    "jsdom": "~0.8.3",
+    "sinon": "~1.7.3"
   }
 }
