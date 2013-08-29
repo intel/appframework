@@ -190,4 +190,34 @@ describe("ajax", function () {
             }
         });
     });
+
+    it("should call error callback if request times out", function (done) {
+        var requestMatcher = {
+            method: "GET",
+            path: "/",
+            host: "localhost"
+        };
+
+        // response should still error because it times out,
+        // even though the status code is 200
+        var response = { status: 200, pause: 2000, data: "OK" };
+
+        server.registerFake(response, requestMatcher);
+
+        $.ajax({
+            type: "GET",
+            url: "http://" + host + "/",
+
+            timeout: 100,
+
+            success: function (data) {
+                done(new Error("success cb should not be called"));
+            },
+
+            error: function (xhr, message) {
+                message.should.equal("timeout");
+                done();
+            }
+        });
+    });
 });
