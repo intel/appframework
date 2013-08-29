@@ -1,6 +1,7 @@
 require("./chai.helper");
 var domHelper = require("./dom.helper");
 var HttpFake = require("./http-fake.helper");
+var XMLHttpRequest = require("./http-fake-xmlhttprequest.helper");
 
 // NB sinon has a fake XMLHTTPRequest object, but it doesn't
 // work properly with node.js;
@@ -8,48 +9,58 @@ var HttpFake = require("./http-fake.helper");
 
 describe("ajax", function () {
     var originalXmlHttpRequest;
+    var server = HttpFake.createServer();
 
-    before(function () {
+    // we need to refer to this from the tests, but we allow
+    // the server to randomly get a port before setting it
+    var host;
+
+    before(function (done) {
         domHelper(
             "<div id=\"foo\">" +
             "</div>"
         );
 
+        // replace jsdom's XMLHttpRequest with
+        // node-xmlhttprequest, to support POST requests
         originalXmlHttpRequest = window.XMLHttpRequest;
+        window.XMLHttpRequest = XMLHttpRequest;
 
-        // use our doctored XMLHttpRequest, associating it with
-        // the jsdom window
-        window.XMLHttpRequest = HttpFake.Request;
+        server.start(function () {
+            host = "localhost:" + server.port;
+            done.apply(null, arguments);
+        });
     });
 
     afterEach(function () {
-        HttpFake.clearFakes();
+        server.clearFakes();
     });
 
-    after(function () {
+    after(function (done) {
         window.XMLHttpRequest = originalXmlHttpRequest;
+        server.stop(done);
     });
 
     it("should do a GET request to a specified url", function (done) {
         // this is what we expect the request to look like
-        var expectedRequest = {
+        var requestMatcher = {
             method: "GET",
-            path: "/?a=1&b=2",
+            path: "/",
+            query: {a: "1", b: "2"},
             host: "localhost",
             headers: {
-                "X-bloop": "glong"
+                "x-bloop": "glong"
             }
         };
 
         // this is what we send back if we get the expected request
         var response = { data: "hello world" };
 
-        HttpFake.registerFake(response, expectedRequest);
+        server.registerFake(response, requestMatcher);
 
         $.ajax({
             type: "GET",
-            url: "/",
-            host: "localhost",
+            url: "http://" + host + "/",
             data: "a=1&b=2",
             dataType: "text",
             headers: {
@@ -66,29 +77,31 @@ describe("ajax", function () {
     });
 
     it("should do a POST request to a specified url", function (done) {
+        var postData = {a: 1, b: 2};
+
         // this is what we expect the request to look like
-        var expectedRequest = {
+        var requestMatcher = {
             method: "POST",
             path: "/save",
             host: "localhost",
             headers: {
-                "Content-Type": "application/json"
-            }
+                "content-type": "application/x-www-form-urlencoded"
+            },
+            body: { a: "1", b: "2" }
         };
 
         // this is what we send back if we get the expected request
         var response = { data: "OK" };
 
-        HttpFake.registerFake(response, expectedRequest);
+        server.registerFake(response, requestMatcher);
 
         $.ajax({
             type: "POST",
-            url: "/save",
-            host: "localhost",
-            contentType: "application/json",
-            data: {a: 1, b: 2},
-            success: function (data) {
-                data.should.equal("OK");
+            url: "http://" + host + "/save",
+            contentType: "application/x-www-form-urlencoded",
+            data: postData,
+            success: function (responseText) {
+                responseText.should.equal("OK");
                 done();
             },
             error: function (xhr) {
@@ -98,22 +111,22 @@ describe("ajax", function () {
     });
 
     it("should do a GET request for XML to a specified url", function (done) {
-        var expectedRequest = {
+        var requestMatcher = {
             method: "GET",
-            path: "/?x=10&y=20&z=30",
+            path: "/",
+            query: { x: "10", y: "20", z: "30" },
             host: "localhost"
         };
 
         var xml = "<?xml version=\"1.0\"><top/>";
         var response = { data: xml };
 
-        HttpFake.registerFake(response, expectedRequest);
+        server.registerFake(response, requestMatcher);
 
         $.ajax({
             type: "GET",
-            url: "/?x=10",
+            url: "http://" + host + "/?x=10",
             data: "y=20&z=30",
-            host: "localhost",
             dataType: "xml",
             success: function (data) {
                 data.should.equal(xml);
@@ -126,21 +139,20 @@ describe("ajax", function () {
     });
 
     it("should do a json request and parse the response", function (done) {
-        var expectedRequest = {
+        var requestMatcher = {
             method: "GET",
             path: "/",
             host: "localhost"
         };
 
-        var responseData = {"hi": "world", "nice": "to see you"};
+        var responseData = {hi: "world", nice: "to see you"};
         var response = { data: JSON.stringify(responseData) };
 
-        HttpFake.registerFake(response, expectedRequest);
+        server.registerFake(response, requestMatcher);
 
         $.ajax({
             type: "GET",
-            url: "/",
-            host: "localhost",
+            url: "http://" + host + "/",
             dataType: "json",
             success: function (data) {
                 data.should.eql(responseData);

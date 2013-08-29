@@ -1,144 +1,206 @@
 /*
- * Fake partial implementation of the node http module,
- * for use with tests and to create a fake XMLHttpRequest
- * class for headless testing.
- *
- * Note that this is a very broken implementation, only sending
- * the data and objects required for use with our fake XMLHttpRequest.
+ * HTTP server with programmable API for adding stubs/mocks.
  */
-require("./chai.helper");
-var xmlHttpRequestClassMaker = require("./http-fake-xmlhttprequest.helper");
-var EventEmitter = require('events').EventEmitter;
-var util = require("util");
+var express = require("express");
+var http = require("http");
+var expect = require("chai").expect;
 
-// REQUEST
-// a bare-bones implementation; we basically ignore most
-// of its functionality
-var Request = function (config) {
-    EventEmitter.call(this);
-};
+// compare a requestMatcher with a request; if each property
+// in the requestMatcher matches with a property in the request,
+// return true; otherwise, return false
+//
+// note that chai's eql is abused to do the matches
+var meetsCriteria = function (request, requestMatcher) {
+    var good = true;
 
-util.inherits(Request, EventEmitter);
+    // if we're recursing into an object in the requestMatcher,
+    // but request doesn't have a corresponding object, just
+    // return false immediately
+    if (!request) {
+        return false;
+    }
 
-Request.prototype.end = function () {};
-Request.prototype.write = function () {};
-
-// RESPONSE
-var Response = function (config) {
-    this.statusCode = config.status || 200;
-    this.headers = config.headers || {}
-    this.data = config.data || null;
-    EventEmitter.call(this);
-};
-
-util.inherits(Response, EventEmitter);
-
-// ignore setEncoding
-Response.prototype.setEncoding = function () {};
-
-// for running the fake response
-Response.prototype.run = function () {
-    this.emit("data", this.data);
-    this.emit("end");
-};
-
-// http fake; NB we only fake the request() method which is used
-// by our fake XMLHTTPRequest class
-
-// this contains objects with the structure
-// {request: {...}, response: <Response instance>};
-// when an HTTP request is made via the request() method exported
-// by this module, the options passed to request() are compared
-// against the request property of each object in this array;
-// as soon as a match is found, the corresponding Response instance
-// is returned
-var requestsToResponses = [];
-
-// compare the parameters object with the candidate object,
-// returning true if all of the parameters are matched by candidate;
-// this will halt via a chai exception if any key in candidate
-// is missing from parameters
-var parametersMatch = function (parameters, candidate) {
-    var isMatch = true;
-
-    for (var key in candidate) {
-        /// if the key in candidate is itself an object, recursively
-        // compare with the key in parameters
-        if (typeof candidate[key] === "object") {
-            return parametersMatch(parameters[key], candidate[key]);
+    for (var key in requestMatcher) {
+        if (typeof requestMatcher[key] === "object") {
+            good = meetsCriteria(request[key], requestMatcher[key]);
         }
         else {
-            isMatch = (candidate[key] === parameters[key]);
+            try {
+                expect(requestMatcher[key]).to.eql(request[key]);
+            }
+            catch (e) {
+                good = false;
+            }
         }
 
-        if (!isMatch) {
+        if (!good) {
             break;
         }
     }
 
-    return isMatch;
+    return good;
 };
 
-// map an actual request onto a fake response by comparing
-// the request options with each candidate in requestsToResponses
-var findResponse = function (requestOptions) {
-    var candidateResponse = null;
+// matches the request req against the requestMatchers in
+// map (see Server.map property, below); when a match is found, send it
+// via the Express response object res, using the responseConfig in
+// the map
+var matcher = function (map, req, res) {
+    var toSend = null;
 
-    var candidateRequest;
-    for (var i = 0; i < requestsToResponses.length; i += 1) {
-        candidateRequest = requestsToResponses[i].request;
+    var requestMatcher;
+    var responseConfig;
 
-        if (parametersMatch(requestOptions, candidateRequest)) {
-            candidateResponse = requestsToResponses[i].response;
-            break;
+    for (var i = 0; i < map.length; i += 1) {
+        requestMatcher = map[i].requestMatcher;
+        if (meetsCriteria(req, requestMatcher)) {
+            toSend = map[i].responseConfig;
         }
     }
 
-    if (!candidateResponse) {
-        var msg = "received request but could not map to fake response; " +
-        "request was:\n" +
-        JSON.stringify(requestOptions);
-
-        candidateResponse = new Response({ status: 503, data: msg });
-    }
-
-    // return a 503 status (internal server error) if we
-    // couldn't find a candidate response
-    return candidateResponse;
+    return toSend;
 };
 
-var HttpFake = {
-    // register a fake response for a given request pattern;
-    // responseOptions specifies how the response should
-    // be constructed; requestOptions specifies the content of the
-    // request to be matched
-    registerFake: function (responseOptions, requestOptions) {
-        requestOptions = requestOptions || {};
-        var fakeResponse = new Response(responseOptions);
-        var requestToResponse = {
-            request: requestOptions,
-            response: fakeResponse
+var Server = function () {
+    var self = this;
+
+    // this contains objects with the structure
+    // {requestMatcher: {...}, responseConfig: {...}};
+    // when the server receives a request, it iterates through
+    // these objects until it finds a requestMatcher which matches
+    // the request; then, it returns a response generated from
+    // responseConfig
+    this.map = [];
+
+    this.app = express();
+
+    // use middleware to parse request body
+    this.app.use(express.bodyParser());
+
+    // hand off requests to the request/response matcher
+    this.app.all(/.*/, function (req, res) {
+        // defaults if no response config found
+        var data = "No matching response for request";
+        var statusCode = 503;
+
+        // try to find an appropriate response for this request
+        var responseConfig = matcher(self.map, req, res);
+
+        if (responseConfig) {
+            statusCode = responseConfig.status || 200;
+
+            // should we generate the response body data using the
+            // responseConfig's data function?
+            if (typeof responseConfig.data === "function") {
+                data = responseConfig.data(req);
+            }
+            else {
+                data = responseConfig.data || '';
+            }
+        }
+        else {
+            console.error("could not find a response configuration for request");
+        }
+
+        res.status(statusCode)
+           .send(data);
+    });
+
+    this.server = require("http").createServer(this.app);
+
+    this.port = null;
+};
+
+// register a fake response for a given request pattern;
+// responseConfig specifies how the response should
+// be constructed; requestMatcher is an object to compare with
+// each received request, to determine if the response is
+// an appropriate candidate to return;
+// NB if requestMatcher is not specified, the fake response
+// will match every request
+//
+// responseConfig currently uses the following properties:
+// * data: sets the response body; this can be set to a function:
+// if it is, that function is passed the original express request
+// object, and should return a string to be used as the response body
+// * status: sets the status code for the response (default: 200)
+//
+// note that if you want requestMatcher to compare headers,
+// you should lowercase the names of the headers so they match
+// headers as perceived by express; also note that the server
+// will parse application/json, multipart/form-data and
+// application/x-www-form-urlencoded requests into objects, so
+// any matchers for the request body should use objects rather than
+// strings
+Server.prototype.registerFake = function (responseConfig, requestMatcher) {
+    this.map.push({
+        responseConfig: responseConfig,
+        requestMatcher: requestMatcher || {}
+    });
+};
+
+Server.prototype.clearFakes = function () {
+    this.map = [];
+};
+
+// cb is invoked when the server emits a "listening" event
+// or with any thrown error
+Server.prototype.start = function (cb) {
+    var self = this;
+
+    var realCb = function () {
+        if (typeof cb === "function") {
+            cb.apply(null, arguments);
+        }
+        // if first argument is set, it's an error,
+        // so throw it if a callback is not defined
+        else if (arguments[0]) {
+            throw arguments[0];
+        }
+    };
+
+    try {
+        var maxConnectionsQueueLength = 511;
+
+        // "listening" event handler
+        var handler = function () {
+            self.port = self.server.address().port;
+            realCb();
         };
-        requestsToResponses.push(requestToResponse);
-    },
 
-    clearFakes: function () {
-        requestsToResponses = [];
-    },
-
-    // stand in for http.request
-    request: function (options, callback) {
-        var resp = findResponse(options);
-        callback(resp);
-
-        resp.run();
-
-        return new Request();
+        this.server.listen(0, "localhost", maxConnectionsQueueLength, handler);
+    }
+    catch (e) {
+        realCb(e);
     }
 };
 
-// construct our XMLHttpRequest class using the fake http implementation
-HttpFake.Request = xmlHttpRequestClassMaker(HttpFake, HttpFake);
+// cb is invoked with an error if any occurs, otherwise
+// with no arguments
+Server.prototype.stop = function (cb) {
+    var self = this;
 
-// export everything
-module.exports = HttpFake;
+    var realCb = function () {
+        if (typeof cb === "function") {
+            cb.apply(null, arguments);
+        }
+        else if (arguments[0]) {
+            throw arguments[0];
+        }
+    };
+
+    try {
+        this.server.on("close", realCb);
+    }
+    catch (e) {
+        realCb(e);
+    }
+
+    this.server.close();
+};
+
+module.exports = {
+    createServer: function () {
+        return new Server();
+    }
+};

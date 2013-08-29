@@ -610,7 +610,4 @@ var construct = function (http, https) {
   };
 };
 
-// we return a constructor function which will give back a tailored
-// XMLHttpRequest class, so that we can create XMLHttpRequest
-// instances which don't send real requests over HTTP.
-module.exports = construct;
+module.exports = construct(require("http"), require("https"));
