@@ -21,7 +21,10 @@ var meetsCriteria = function (request, requestMatcher) {
     }
 
     for (var key in requestMatcher) {
-        if (typeof requestMatcher[key] === "object") {
+        if (typeof requestMatcher[key] === "function") {
+            good = requestMatcher[key](request[key]);
+        }
+        else if (typeof requestMatcher[key] === "object") {
             good = meetsCriteria(request[key], requestMatcher[key]);
         }
         else {
@@ -124,6 +127,18 @@ var Server = function () {
 // if it is, that function is passed the original express request
 // object, and should return a string to be used as the response body
 // * status: sets the status code for the response (default: 200)
+//
+// in the requestMatcher, set a property for each property of the
+// request you want to test; the value of the property in the
+// requestMatcher can either be a value for comparison (using
+// chai's eql() function) or a function which will be passed
+// the corresponding value from the request; for example:
+//
+// {
+//     query: function (reqQuery) {
+//        return reqQuery["id"] === "1";
+//     }
+// }
 //
 // note that if you want requestMatcher to compare headers,
 // you should lowercase the names of the headers so they match
