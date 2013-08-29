@@ -1,8 +1,8 @@
 /**
  * Fake XMLHttpRequest implementation for node.
  *
- * Modified from the code for node-xmlhttprequest, to enable
- * use of a fake http module.
+ * Modified from the code for node-xmlhttprequest to enable
+ * support for returning XML etc.
  *
  * See https://github.com/driverdan/node-XMLHttpRequest
  * for the original code.
