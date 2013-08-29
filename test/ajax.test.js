@@ -163,4 +163,31 @@ describe("ajax", function () {
             }
         });
     });
+
+    it("should call error callback if request fails", function (done) {
+        var requestMatcher = {
+            method: "GET",
+            path: "/",
+            host: "localhost"
+        };
+
+        var response = { status: 503 };
+
+        server.registerFake(response, requestMatcher);
+
+        $.ajax({
+            type: "GET",
+            url: "http://" + host + "/",
+
+            success: function (data) {
+                done(new Error("success cb should not be called"));
+            },
+
+            error: function (xhr, message) {
+                xhr.status.should.equal(503);
+                message.should.equal("error");
+                done();
+            }
+        });
+    });
 });
