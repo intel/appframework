@@ -85,6 +85,7 @@ var Server = function () {
         // defaults if no response config found
         var data = "No matching response for request";
         var statusCode = 503;
+        var pause = 0;
 
         // try to find an appropriate response for this request
         var responseConfig = matcher(self.map, req, res);
@@ -100,13 +101,17 @@ var Server = function () {
             else {
                 data = responseConfig.data || '';
             }
+
+            pause = responseConfig.pause || 0;
         }
         else {
             console.error("could not find a response configuration for request");
         }
 
-        res.status(statusCode)
-           .send(data);
+        setTimeout(function () {
+            res.status(statusCode)
+               .send(data);
+        }, pause);
     });
 
     this.server = require("http").createServer(this.app);
@@ -127,6 +132,7 @@ var Server = function () {
 // if it is, that function is passed the original express request
 // object, and should return a string to be used as the response body
 // * status: sets the status code for the response (default: 200)
+// * pause: sets a pause (ms) before the response is returned (default: 0)
 //
 // in the requestMatcher, set a property for each property of the
 // request you want to test; the value of the property in the
