@@ -1,5 +1,4 @@
 *.bat
-.DS_Store
 /dev
 /kitchensink/base
 /closuredist
