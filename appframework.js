@@ -306,7 +306,7 @@ if (!window.af || typeof(af) !== "function") {
                         return elements;
             } else if ($.isObject(elements))
                 for (key in elements) {
-                    if (!elements.hasOwnProperty(key))
+                    if (!elements.hasOwnProperty(key) || key == "length")
                         continue;
                     if (callback(key, elements[key]) === false)
                         return elements;
