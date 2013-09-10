@@ -1830,6 +1830,7 @@
                 };
                 this.id = id = opts.id = opts.id || $.uuid(); //opts is passed by reference
                 var self = this;
+                this.addCssClass = opts.addCssClass ? "" : opts.addCssClass;
                 this.title = opts.suppressTitle ? "" : (opts.title || "Alert");
                 this.message = opts.message || "";
                 this.cancelText = opts.cancelText || "Cancel";
@@ -1855,6 +1856,7 @@
 
         popup.prototype = {
             id: null,
+            addCssClass: null,
             title: null,
             message: null,
             cancelText: null,
@@ -1869,7 +1871,7 @@
             supressTitle: false,
             show: function () {
                 var self = this;
-                var markup = '<div id="' + this.id + '" class="afPopup hidden">'+
+                var markup = '<div id="' + this.id + '" class="afPopup hidden '+ addCssClass + '">'+
                             '<header>' + this.title + '</header>'+
                              '<div>' + this.message + '</div>'+
                              '<footer style="clear:both;">'+
@@ -4057,6 +4059,12 @@
 
                 this.scrollToTop('modal');
                 modalDiv.data("panel", id);
+                var myPanel=$panel.get(0);
+                var fnc = myPanel.getAttribute("data-load");
+                if (typeof fnc == "string" && window[fnc]) {
+                    window[fnc](myPanel);
+                }
+                $panel.trigger("loadpanel");
 
             }
         },
@@ -4373,19 +4381,7 @@
             $(what).trigger("loadpanel");
             if (this.isSideMenuOn()) {
                 var that = this;
-                that.toggleSideMenu(false);
-                /* $("#menu").width(window.innerWidth);
-
-                $(".hasMenu").css3Animate({
-                    x: (window.innerWidth + 100),
-                    time: that.transitionTime,
-                    complete: function() {
-                        $("#menu").width(that.sideMenuWidth);
-                        that.toggleSideMenu(false);
-
-                    }
-                });
-                */
+                that.toggleSideMenu(false);               
             }
         },
         /**
@@ -4489,11 +4485,12 @@
             var currWhat = what;
 
             if (what.getAttribute("data-modal") == "true" || what.getAttribute("modal") == "true") {
-                var fnc = what.getAttribute("data-load");
+                /*var fnc = what.getAttribute("data-load");
                 if (typeof fnc == "string" && window[fnc]) {
                     window[fnc](what);
                 }
-                $(what).trigger("loadpanel");
+                $(what).trigger("loadpanel");                
+                */
                 return this.showModal(what.id);
             }
 

@@ -886,6 +886,12 @@
 
                 this.scrollToTop('modal');
                 modalDiv.data("panel", id);
+                var myPanel=$panel.get(0);
+                var fnc = myPanel.getAttribute("data-load");
+                if (typeof fnc == "string" && window[fnc]) {
+                    window[fnc](myPanel);
+                }
+                $panel.trigger("loadpanel");
 
             }
         },
@@ -1202,19 +1208,7 @@
             $(what).trigger("loadpanel");
             if (this.isSideMenuOn()) {
                 var that = this;
-                that.toggleSideMenu(false);
-                /* $("#menu").width(window.innerWidth);
-
-                $(".hasMenu").css3Animate({
-                    x: (window.innerWidth + 100),
-                    time: that.transitionTime,
-                    complete: function() {
-                        $("#menu").width(that.sideMenuWidth);
-                        that.toggleSideMenu(false);
-
-                    }
-                });
-                */
+                that.toggleSideMenu(false);               
             }
         },
         /**
@@ -1318,11 +1312,12 @@
             var currWhat = what;
 
             if (what.getAttribute("data-modal") == "true" || what.getAttribute("modal") == "true") {
-                var fnc = what.getAttribute("data-load");
+                /*var fnc = what.getAttribute("data-load");
                 if (typeof fnc == "string" && window[fnc]) {
                     window[fnc](what);
                 }
-                $(what).trigger("loadpanel");
+                $(what).trigger("loadpanel");                
+                */
                 return this.showModal(what.id);
             }
 

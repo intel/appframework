@@ -278,7 +278,7 @@ if (!window.af || typeof(af) !== "function") {
                         values.push(value);
             } else if ($.isObject(elements))
                 for (key in elements) {
-                    if (!elements.hasOwnProperty(key))
+                    if (!elements.hasOwnProperty(key) || key == "length")
                         continue;
                     value = callback(elements[key], key);
                     if (value !== nundefined)
