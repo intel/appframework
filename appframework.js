@@ -27,7 +27,7 @@ if (!window.af || typeof(af) !== "function") {
             _eventID = 1,
             jsonPHandlers = [],
             _jsonPID = 1,
-            fragementRE = /^\s*<(\w+)[^>]*>/,
+            fragmentRE = /<(\w+)[^>]*>/,
             classSelectorRE = /^\.([\w-]+)$/,
             tagSelectorRE = /^[\w-]+$/,
             _attrCache = {},
@@ -1047,7 +1047,7 @@ if (!window.af || typeof(af) !== "function") {
                         element = $(element);
                         _insertFragments(element, this[i], insert);
                     } else {
-                        var obj = fragementRE.test(element) ? $(element) : undefined;
+                        var obj = fragmentRE.test(element) ? $(element) : undefined;                        
                         if (obj == nundefined || obj.length === 0) {
                             obj = document.createTextNode(element);
                         }
