@@ -334,7 +334,8 @@
            $.ui.showBackButton = false; //
          * @title $.ui.showBackButton
          */
-        showBackbutton: true,
+        showBackbutton: true, // Kept for backward compatibility.
+        showBackButton: true,
         /**
          *  Override the back button text
             ```
@@ -1398,7 +1399,7 @@
                 this.setBackButtonVisibility(false);
                 this.history = [];
                 $("#header #menubadge").css("float", "left");
-            } else if (this.showBackbutton) this.setBackButtonVisibility(true);
+            } else if (this.showBackButton && this.showBackbutton) this.setBackButtonVisibility(true);
             this.activeDiv = what;
             if (this.scrollingDivs[this.activeDiv.id]) {
                 this.scrollingDivs[this.activeDiv.id].enable(this.resetScrollers);
