@@ -941,7 +941,7 @@ if (!window.af || typeof(af) !== "function") {
                     var classList = this[i].className;
 					//SGV LINK EVENT
 					if (typeof this[i].className == "object") {
-						classList = "pressed";
+						classList = " ";
 					}
                     name.split(/\s+/g).forEach(function(cname) {
                         classList = classList.replace(classRE(cname), " ");
