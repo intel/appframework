@@ -939,6 +939,10 @@ if (!window.af || typeof(af) !== "function") {
                         return this;
                     }
                     var classList = this[i].className;
+					//SGV LINK EVENT
+					if (typeof this[i].className == "object") {
+						classList = "pressed";
+					}
                     name.split(/\s+/g).forEach(function(cname) {
                         classList = classList.replace(classRE(cname), " ");
                     });
