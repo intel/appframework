@@ -54,7 +54,7 @@
                 };
                 this.id = id = opts.id = opts.id || $.uuid(); //opts is passed by reference
                 var self = this;
-                this.addCssClass = opts.addCssClass ? "" : opts.addCssClass;
+                this.addCssClass = opts.addCssClass ? opts.addCssClass : "";
                 this.title = opts.suppressTitle ? "" : (opts.title || "Alert");
                 this.message = opts.message || "";
                 this.cancelText = opts.cancelText || "Cancel";
@@ -95,7 +95,7 @@
             supressTitle: false,
             show: function () {
                 var self = this;
-                var markup = '<div id="' + this.id + '" class="afPopup hidden '+ addCssClass + '">'+
+                var markup = '<div id="' + this.id + '" class="afPopup hidden '+ this.addCssClass + '">'+
                             '<header>' + this.title + '</header>'+
                              '<div>' + this.message + '</div>'+
                              '<footer style="clear:both;">'+
