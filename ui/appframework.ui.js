@@ -5095,6 +5095,10 @@
                 if ($.ui.customClickHandler(theTarget,e)) return e.preventDefault();
 
             }
+			//svg link (xlink object)
+			if (typeof theTarget.href == "object") {
+				return;
+			}
             if (theTarget.href.toLowerCase().indexOf("javascript:") !== -1 || theTarget.getAttribute("data-ignore")) {
                 return;
             }
