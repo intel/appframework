@@ -249,7 +249,18 @@ body {
 	
 }
 
-#afui #menu_scroller {
+#afui > #aside_menu {
+	z-index:1;
+	width:200px;
+	bottom:0;
+	height:100%;
+	display:block !important;
+	position:absolute; top:0; right:0;
+	
+}
+
+
+#afui #menu_scroller, #afui #aside_menu_scroller {
 	padding-bottom:10px;
 	overflow-y:auto;
 	overflow-x:hidden;
@@ -258,7 +269,7 @@ body {
 }
 
 
-#afui #menu_scroller > * {
+#afui #menu_scroller > *,  #afui #aside_menu_scroller > * {
 	-webkit-backface-visibility: hidden;
 	-webkit-perspective: 1000;
 }
@@ -1576,7 +1587,18 @@ color:inherit;
 }
 
 /*../plugins/css/af.selectbox.css*/
-	#afSelectBoxContainer {
+	#afModalMask {
+		position:absolute;
+		top:0px;
+		left:0px;
+		width:100%;
+		height:100%;
+		background:transparent;
+		display:none;
+		z-index:9999;
+	}
+
+	#afSelectBoxContainer {
 		position:absolute;
 		display:block;
 		width:90%;
@@ -2428,7 +2450,7 @@ color: white;
 
 
 #afui.ios7 #header {
-    background:rgba(249,249,249,0.9);
+    background:rgb(249,249,249);
     color:inherit;
     border:none;
     border-bottom:1px solid rgba(158,158,158,255);
@@ -2439,22 +2461,14 @@ color: white;
     text-shadow:none;
 }
 
-#afui.ios7 #content {
-    top:0px !important;
-    bottom:0px !important;
-    padding-top:44px;
-    padding-bottom:49px;
-}
-#afui.ios7 .panel {
-    background:rgba(238,238,238,255);
-    padding-top:44px;
-    padding-bottom:49px;
 
+#afui.ios7 .panel {
+    background:rgba(238,238,238,255);    
 }
 #afui.ios7 .panel h2 { color:inherit;}
 
 #afui.ios7 #navbar {
-    background:rgba(249,249,249,0.95);
+    background:rgb(249,249,249);
     color:black;
     border-top:1px solid rgba(158,158,158,255);
     box-shadow:none;
@@ -2585,7 +2599,8 @@ color:black;
 
 #afui.ios7 .button {
     box-shadow:none;
-    border:none;
+    border-radius: 0;
+    border-color:#ccc;
     color:rgba(82,155,234,255);
     text-shadow:none;
 }

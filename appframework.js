@@ -27,7 +27,7 @@ if (!window.af || typeof(af) !== "function") {
             _eventID = 1,
             jsonPHandlers = [],
             _jsonPID = 1,
-            fragementRE = /^\s*<(\w+)[^>]*>/,
+            fragmentRE = /<(\w+)[^>]*>/,
             classSelectorRE = /^\.([\w-]+)$/,
             tagSelectorRE = /^[\w-]+$/,
             _attrCache = {},
@@ -273,18 +273,18 @@ if (!window.af || typeof(af) !== "function") {
                 i, key;
             if ($.isArray(elements))
                 for (i = 0; i < elements.length; i++) {
-                    value = callback(elements[i], i);
+                    value = callback.apply(elements[i],[i,elements[i]]);
                     if (value !== nundefined)
                         values.push(value);
             } else if ($.isObject(elements))
                 for (key in elements) {
-                    if (!elements.hasOwnProperty(key))
+                    if (!elements.hasOwnProperty(key) || key == "length")
                         continue;
-                    value = callback(elements[key], key);
+                    value = callback(elements[key],[key,elements[key]]);
                     if (value !== nundefined)
                         values.push(value);
             }
-            return af([values]);
+            return af(values);
         };
 
         /**
@@ -306,7 +306,7 @@ if (!window.af || typeof(af) !== "function") {
                         return elements;
             } else if ($.isObject(elements))
                 for (key in elements) {
-                    if (!elements.hasOwnProperty(key))
+                    if (!elements.hasOwnProperty(key) || key == "length")
                         continue;
                     if (callback(key, elements[key]) === false)
                         return elements;
@@ -428,11 +428,11 @@ if (!window.af || typeof(af) !== "function") {
                 var value, values = [],
                     i;
                 for (i = 0; i < this.length; i++) {
-                    value = fn(i, this[i]);
+                    value = fn.apply(this[i],[i,this[i]]);
                     if (value !== nundefined)
                         values.push(value);
                 }
-                return $([values]);
+                return $(values);
             },
             /**
             * Iterates through all elements and applys a callback function
@@ -939,6 +939,10 @@ if (!window.af || typeof(af) !== "function") {
                         return this;
                     }
                     var classList = this[i].className;
+					//SGV LINK EVENT
+					if (typeof this[i].className == "object") {
+						classList = " ";
+					}
                     name.split(/\s+/g).forEach(function(cname) {
                         classList = classList.replace(classRE(cname), " ");
                     });
@@ -1047,7 +1051,7 @@ if (!window.af || typeof(af) !== "function") {
                         element = $(element);
                         _insertFragments(element, this[i], insert);
                     } else {
-                        var obj = fragementRE.test(element) ? $(element) : undefined;
+                        var obj = fragmentRE.test(element) ? $(element) : undefined;                        
                         if (obj == nundefined || obj.length === 0) {
                             obj = document.createTextNode(element);
                         }

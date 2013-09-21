@@ -11,7 +11,7 @@
 
 
 #afui.ios7 #header {
-    background:rgba(249,249,249,0.9);
+    background:rgb(249,249,249);
     color:inherit;
     border:none;
     border-bottom:1px solid rgba(158,158,158,255);
@@ -22,22 +22,14 @@
     text-shadow:none;
 }
 
-#afui.ios7 #content {
-    top:0px !important;
-    bottom:0px !important;
-    padding-top:44px;
-    padding-bottom:49px;
-}
-#afui.ios7 .panel {
-    background:rgba(238,238,238,255);
-    padding-top:44px;
-    padding-bottom:49px;
 
+#afui.ios7 .panel {
+    background:rgba(238,238,238,255);    
 }
 #afui.ios7 .panel h2 { color:inherit;}
 
 #afui.ios7 #navbar {
-    background:rgba(249,249,249,0.95);
+    background:rgb(249,249,249);
     color:black;
     border-top:1px solid rgba(158,158,158,255);
     box-shadow:none;
@@ -168,7 +160,8 @@ color:black;
 
 #afui.ios7 .button {
     box-shadow:none;
-    border:none;
+    border-radius: 0;
+    border-color:#ccc;
     color:rgba(82,155,234,255);
     text-shadow:none;
 }

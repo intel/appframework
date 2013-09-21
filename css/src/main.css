@@ -248,7 +248,18 @@ body {
 	
 }
 
-#afui #menu_scroller {
+#afui > #aside_menu {
+	z-index:1;
+	width:200px;
+	bottom:0;
+	height:100%;
+	display:block !important;
+	position:absolute; top:0; right:0;
+	
+}
+
+
+#afui #menu_scroller, #afui #aside_menu_scroller {
 	padding-bottom:10px;
 	overflow-y:auto;
 	overflow-x:hidden;
@@ -257,7 +268,7 @@ body {
 }
 
 
-#afui #menu_scroller > * {
+#afui #menu_scroller > *,  #afui #aside_menu_scroller > * {
 	-webkit-backface-visibility: hidden;
 	-webkit-perspective: 1000;
 }
