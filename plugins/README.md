@@ -1,6 +1,6 @@
 #App Framework plugins
 
 
-These plugins are core to App Framework UI. Please see the included kitchen sink sample for implementation details
+These are plugins you can use in your App Framework app.  They are also used by App Framework UI.
 
 
