@@ -7,7 +7,7 @@
         "mobile",
         "appframework"
     ],
-    "version": "2.0.2",
+    "version": "2.0.4",
     "author": {
         "name": "Intel",
         "url": "https://github.com/01org/appframework"
@@ -29,7 +29,6 @@
     "docs": "http://app-framework-software.intel.com/doc2.php#afui/afui_jquery",
     "download": "https://github.com/01org/appframework",
     "dependencies": {
-        "jquery": ">=1.9",
-        "appframework":">=2.0"
+        "jquery": ">=1.9"
     }
 }
