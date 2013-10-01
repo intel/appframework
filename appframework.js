@@ -391,6 +391,7 @@ if (!window.af || typeof(af) !== "function") {
          * Prototype for afm object.  Also extens $.fn
          */
         $.fn = $afm.prototype = {
+            namepsace:"appframework",
             constructor: $afm,
             forEach: emptyArray.forEach,
             reduce: emptyArray.reduce,
