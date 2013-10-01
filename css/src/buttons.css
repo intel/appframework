@@ -86,6 +86,28 @@
 	border-bottom-right-radius: 6px;
 }
 
+#afui .button-grouped.flex {
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flexbox;
+	display: flex;
+}
+
+#afui .button-grouped.flex > .button {
+	-webkit-flex: 1 auto;
+	-moz-flex: 1 auto;
+	-ms-flex: 1 auto;
+	flex: 1 auto;
+
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#afui .button-grouped.flex.vertical {
+	display: inline-block;
+}
+
 #afui .button-grouped.vertical * {
 	border-radius:0px;
 	display:block;
