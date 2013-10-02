@@ -4,6 +4,8 @@ App Framework is a Javascript framework targeted at HTML5 browsers with a blazin
 
 Visit <http://app-framework-software.intel.com/index.php> for more information, documentation, and support.
 
+Visit <http://app-framework-software.intel.com/documentation.php#afui/afui_jquery> for more information on using App Framework UI and jQuery.
+
 # Contribute
 
 You can contribute to the core code by forking it and make a pull request.  Please keep in mind we do not want to add functionality that is a one-off case.  These are best dealt with via plugins.
