@@ -1403,7 +1403,7 @@
             }
 
             if (this.infinite && !this.infiniteTriggered) {
-                if ((Math.abs(this.lastScrollInfo.top) >= (this.el.clientHeight - this.container.clientHeight))) {
+                if ((Math.abs(this.lastScrollInfo.top) > (this.el.clientHeight - this.container.clientHeight))) {
                     this.infiniteTriggered = true;
                     $.trigger(this, "infinite-scroll");
                 }
