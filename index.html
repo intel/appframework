@@ -3,9 +3,20 @@
 <html>
 
     <head>
+        <script>
+        (function() {
+    if ("-ms-user-select" in document.documentElement.style && navigator.userAgent.match(/IEMobile\/10\.0/)) {
+        var msViewportStyle = document.createElement("style");
+        msViewportStyle.appendChild(
+            document.createTextNode("@-ms-viewport{width:auto!important}")
+        );
+        document.getElementsByTagName("head")[0].appendChild(msViewportStyle);
+    }
+})();
+</script>
         <title>App Framework Kitchen Sink</title>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -1674,11 +1685,13 @@ The parent id for this div is "content". Let's verify it.
                                 console.log("infinite triggered");
                                 $(this.el).append("<div id='infinite' style='border:2px solid black;margin-top:10px;width:100%;height:20px'>Fetching content...</div>");
                                 $.bind(myScroller, "infinite-scroll-end", function () {
-                                    myScroller.scrollToBottom();
                                     $.unbind(myScroller, "infinite-scroll-end");
+                                    self.scrollToBottom();
                                     setTimeout(function () {
                                         $(self.el).find("#infinite").remove();
                                         self.clearInfinite();
+                                        $(self.el).append("<div>This was loaded via inifinite scroll<br>More Content</div>");
+                                        self.scrollToBottom();
                                     }, 3000);
                                 });
                             });
@@ -2110,7 +2123,7 @@ The parent id for this div is "content". Let's verify it.
             <!-- navbar -->
             
             <div id="navbar" style='margin: 0;float:left;'>
-                <a href="#main" id='navbar_home' class='icon home'>home <span class='af-badge lr'>3</span></a><a href="#af" id='navbar_js' class="icon target">selectors</a><a href="#afuidemo" id='navbar_ui' class="icon picture">ui</a><a href="#afweb" id='navbar_plugins' class="icon key">plugins</a>
+                <a href="#main/1/3" id='navbar_home' class='icon home'>home <span class='af-badge lr'>3</span></a><a href="#af" id='navbar_js' class="icon target">selectors</a><a href="#afuidemo" id='navbar_ui' class="icon picture">ui</a><a href="#afweb" id='navbar_plugins' class="icon key">plugins</a>
             </div>
         
             <footer id='footerui'>

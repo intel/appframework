@@ -87,17 +87,19 @@
 }
 
 #afui .button-grouped.flex {
-	display: -webkit-flex;
-	display: -moz-flex;
-	display: -ms-flexbox;
-	display: flex;
+	display: -webkit-box;
+  	display: -moz-box;
+  	display: -ms-flexbox;
+  	display: -webkit-flex;
+  	display: flex;
 }
 
 #afui .button-grouped.flex > .button {
-	-webkit-flex: 1 auto;
-	-moz-flex: 1 auto;
-	-ms-flex: 1 auto;
-	flex: 1 auto;
+	-webkit-box-flex: 1;
+  	-moz-box-flex: 1 auto;
+  	-webkit-flex: 1 auto;
+  	-ms-flex: 1 auto;
+  	flex: 1 auto;
 
 	white-space: nowrap;
 	overflow: hidden;

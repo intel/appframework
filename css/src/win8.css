@@ -7,7 +7,9 @@
  hover : #111
 
  */
-
+@-ms-viewport{
+  width: device-width;
+}
  #afui.win8 {
 
  }
