@@ -1479,7 +1479,7 @@
                     } else {
                         that.updatePanel("afui_ajax", xmlhttp.responseText);
                         $.query("#afui_ajax").get(0).setAttribute("data-title",anchor.title ? anchor.title : target);
-                        that.loadContent("#afui_ajax", newTab, back);
+                        that.loadContent("#afui_ajax", newTab, back, transition);
                         doReturn = true;
                     }
                     //Let's load the content now.
@@ -1493,7 +1493,7 @@
                         return;
                     }
 
-                    that.loadContent("#" + urlHash);
+                    that.loadContent("#" + urlHash, newTab, back, transition);
                     if (that.showLoading) that.hideMask();
                     return null;
                 }
