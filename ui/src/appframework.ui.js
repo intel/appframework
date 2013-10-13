@@ -1733,14 +1733,14 @@
                         $.ajax({
                             url: AppMobi.webRoot + defer[j],
                             success: function(data) {
-                                if (data.length === 0) return;
-                                that.updatePanel(j, data);
-                                that.parseScriptTags($.query("#" + j).get(0));
+                                if (data.length > 0) {
+                                    that.updatePanel(j, data);
+                                    that.parseScriptTags($.query("#" + j).get(0));
+                                }
                                 loaded++;
                                 if (loaded >= toLoad) {
-                                    $(document).trigger("defer:loaded");
                                     loadingDefer = false;
-
+                                    $(document).trigger("defer:loaded");
                                 }
                             },
                             error: function(msg) {
@@ -1748,8 +1748,8 @@
                                 console.log("Error with deferred load " + AppMobi.webRoot + defer[j]);
                                 loaded++;
                                 if (loaded >= toLoad) {
-                                    $(document).trigger("defer:loaded");
                                     loadingDefer = false;
+                                    $(document).trigger("defer:loaded");
                                 }
                             }
                         });
