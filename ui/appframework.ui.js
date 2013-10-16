@@ -523,6 +523,7 @@
                     $.unbind($.touchLayer, 'orientationchange-reshape', orientationChangeProxy);
                 });
                 $.bind($.touchLayer, 'orientationchange-reshape', orientationChangeProxy);
+                $(window).bind('resize', orientationChangeProxy);
             },
             needsFormsFix: function (focusEl) {
                 return this.useJsScroll && this.isEnabled() && this.el.style.display != "none" && $(focusEl).closest(this.afEl).size() > 0;
