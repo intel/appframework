@@ -575,6 +575,24 @@ body {
 	#afui .menuButton { display:none;	}
 }
 
+@media print {
+      body {
+          overflow:visible;
+      }
+      #afui #content{
+      	overflow: visible;
+      	left:0;      	
+      }
+      #afui {
+      	overflow:visible;
+      }
+      #afui .panel {
+      	overflow-x:visible !important;
+      	overflow-y:visible !important;
+      	overflow:visible !important;
+      }
+}
+
 /*src/appframework.css*/
 /* blue #0190d6
 
@@ -1292,17 +1310,19 @@ body {
 }
 
 #afui .button-grouped.flex {
-	display: -webkit-flex;
-	display: -moz-flex;
-	display: -ms-flexbox;
-	display: flex;
+	display: -webkit-box;
+  	display: -moz-box;
+  	display: -ms-flexbox;
+  	display: -webkit-flex;
+  	display: flex;
 }
 
 #afui .button-grouped.flex > .button {
-	-webkit-flex: 1 auto;
-	-moz-flex: 1 auto;
-	-ms-flex: 1 auto;
-	flex: 1 auto;
+	-webkit-box-flex: 1;
+  	-moz-box-flex: 1 auto;
+  	-webkit-flex: 1 auto;
+  	-ms-flex: 1 auto;
+  	flex: 1 auto;
 
 	white-space: nowrap;
 	overflow: hidden;
@@ -1938,7 +1958,9 @@ color:inherit;
  hover : #111
 
  */
-
+@-ms-viewport{
+  width: device-width;
+}
  #afui.win8 {
 
  }
@@ -2476,6 +2498,10 @@ color: white;
     color:inherit;
     border:none;
     border-bottom:1px solid rgba(158,158,158,255);
+}
+
+#afui.ios7 #header .button {
+    border: 1px solid transparent !important; 
 }
 
 #afui.ios7 #header h1 {

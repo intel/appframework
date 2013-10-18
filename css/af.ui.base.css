@@ -575,6 +575,24 @@ body {
 	#afui .menuButton { display:none;	}
 }
 
+@media print {
+      body {
+          overflow:visible;
+      }
+      #afui #content{
+      	overflow: visible;
+      	left:0;      	
+      }
+      #afui {
+      	overflow:visible;
+      }
+      #afui .panel {
+      	overflow-x:visible !important;
+      	overflow-y:visible !important;
+      	overflow:visible !important;
+      }
+}
+
 /*src/appframework.css*/
 /* blue #0190d6
 
@@ -1289,6 +1307,30 @@ body {
 #afui .button-grouped > .button:last-child {
 	border-top-right-radius: 6px;
 	border-bottom-right-radius: 6px;
+}
+
+#afui .button-grouped.flex {
+	display: -webkit-box;
+  	display: -moz-box;
+  	display: -ms-flexbox;
+  	display: -webkit-flex;
+  	display: flex;
+}
+
+#afui .button-grouped.flex > .button {
+	-webkit-box-flex: 1;
+  	-moz-box-flex: 1 auto;
+  	-webkit-flex: 1 auto;
+  	-ms-flex: 1 auto;
+  	flex: 1 auto;
+
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+#afui .button-grouped.flex.vertical {
+	display: inline-block;
 }
 
 #afui .button-grouped.vertical * {

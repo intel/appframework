@@ -573,3 +573,21 @@ body {
 	
 	#afui .menuButton { display:none;	}
 }
+
+@media print {
+      body {
+          overflow:visible;
+      }
+      #afui #content{
+      	overflow: visible;
+      	left:0;      	
+      }
+      #afui {
+      	overflow:visible;
+      }
+      #afui .panel {
+      	overflow-x:visible !important;
+      	overflow-y:visible !important;
+      	overflow:visible !important;
+      }
+}

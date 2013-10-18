@@ -192,7 +192,7 @@
                 var that = this;
                 var orientationChangeProxy = function () {
                     //no need to readjust if disabled...
-                    if (that.eventsActive) that.adjustScroll();
+                    if (that.eventsActive||!$.feath.nativeTouchScroll) that.adjustScroll();
                 };
                 this.afEl.bind('destroy', function () {
                     that.disable(true); //with destroy notice
@@ -331,6 +331,9 @@
             clearInfinite: function () {
                 this.infiniteTriggered = false;
                 this.scrollSkip = true;
+            },
+            scrollTo:function (pos, time) {
+                return this._scrollTo(pos, time);
             }
         };
 

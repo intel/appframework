@@ -1043,7 +1043,7 @@
                 tmp.removeAttribute("js-scrolling");
             }
 
-            if (!jsScroll) {
+            if (!jsScroll||$.os.desktop) {
                 container.appendChild(tmp);
                 scrollEl = tmp;
                 tmp.style['-webkit-overflow-scrolling'] = "none";
@@ -1960,7 +1960,7 @@
                 href = href.substring(prefix.length);
             }
             //empty links
-            if (href == "#" || (href.indexOf("#") === href.length - 1) || (href.length === 0 && theTarget.hash.length === 0)) return;
+            if (href == "#" || (href.indexOf("#") === href.length - 1) || (href.length === 0 && theTarget.hash.length === 0)) return e.preventDefault();
 
             //internal links
             e.preventDefault();

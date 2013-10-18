@@ -514,7 +514,7 @@
                 var that = this;
                 var orientationChangeProxy = function () {
                     //no need to readjust if disabled...
-                    if (that.eventsActive) that.adjustScroll();
+                    if (that.eventsActive||!$.feath.nativeTouchScroll) that.adjustScroll();
                 };
                 this.afEl.bind('destroy', function () {
                     that.disable(true); //with destroy notice
@@ -653,6 +653,9 @@
             clearInfinite: function () {
                 this.infiniteTriggered = false;
                 this.scrollSkip = true;
+            },
+            scrollTo:function (pos, time) {
+                return this._scrollTo(pos, time);
             }
         };
 
@@ -4217,7 +4220,7 @@
                 tmp.removeAttribute("js-scrolling");
             }
 
-            if (!jsScroll) {
+            if (!jsScroll||$.os.desktop) {
                 container.appendChild(tmp);
                 scrollEl = tmp;
                 tmp.style['-webkit-overflow-scrolling'] = "none";
@@ -5134,7 +5137,7 @@
                 href = href.substring(prefix.length);
             }
             //empty links
-            if (href == "#" || (href.indexOf("#") === href.length - 1) || (href.length === 0 && theTarget.hash.length === 0)) return;
+            if (href == "#" || (href.indexOf("#") === href.length - 1) || (href.length === 0 && theTarget.hash.length === 0)) return e.preventDefault();
 
             //internal links
             e.preventDefault();
