@@ -86,7 +86,7 @@
 
         //click back event
         window.addEventListener("popstate", function() {
-
+            if(!that.useInteralRouting) return;
             var id = that.getPanelId(document.location.hash);
             var hashChecker = document.location.href.replace(document.location.origin + "/", "");
             //make sure we allow hash changes outside afui
