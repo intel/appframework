@@ -3354,6 +3354,7 @@
         useAutoPressed: true,
         horizontalScroll:false,
         _currentHeaderID:"defaultHeader",
+        useInteralRouting:true,
         autoBoot: function() {
             this.hasLaunched = true;
             if (this.autoLaunch) {
@@ -4721,7 +4722,8 @@
             this.menu = af.query("#menu").get(0);
             //set anchor click handler for UI
             this.viewportContainer.on("click", "a", function(e) {
-                checkAnchorClick(e, e.currentTarget);
+                if(that.useInteralRouting)
+                    checkAnchorClick(e, e.currentTarget);
             });
 
 
