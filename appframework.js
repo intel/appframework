@@ -1936,7 +1936,7 @@ if (!window.af || typeof(af) !== "function") {
             $.os.chrome = userAgent.match(/Chrome/) ? true : false;
             $.os.opera = userAgent.match(/Opera/) ? true : false;
             $.os.fennec = userAgent.match(/fennec/i) ? true : userAgent.match(/Firefox/) ? true : false;
-            $.os.ie = userAgent.match(/MSIE 10.0/i) ? true : false;
+            $.os.ie = userAgent.match(/MSIE 10.0/i)||userAgent.match(/Trident\/7/i) ? true : false;
             $.os.ieTouch = $.os.ie && userAgent.toLowerCase().match(/touch/i) ? true : false;
             $.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || 'ontouchstart' in window);
             //features
