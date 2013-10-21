@@ -24,6 +24,15 @@
     color:inherit;
     border-color:#33B5E5;
 }
+#afui.android #backButton
+{
+    background: inherit;
+    color:inherit;
+}
+
+#afui.android .menuButton:after {
+    border-color:black;
+}
 
 
  #afui.android > #navbar {
