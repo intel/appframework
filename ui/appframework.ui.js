@@ -3179,7 +3179,7 @@
  * appframework.ui - A User Interface library for App Framework applications
  *
  * @copyright 2011 Intel
- * @author AppMobi
+ * @author Intel
  * @version 2.0
  */ (function($) {
     "use strict";
@@ -3211,7 +3211,7 @@
                 afui = document.createElement("div");
                 afui.id = "afui";
                 var body = document.body;
-                while (body.firstChild) {
+                while (body&&body.firstChild) {
                     afui.appendChild(body.firstChild);
                 }
                 $(document.body).prepend(afui);
@@ -3236,8 +3236,8 @@
 
 
 
-        if ("AppMobi" in window){ 
-            document.addEventListener("appMobi.device.ready", function() {
+        if ("intel" in window){ 
+            document.addEventListener("intel.xdk.ready", function() {
                 that.autoBoot();
             });
         }
@@ -3259,7 +3259,7 @@
                 }
             }, false);
 
-        if (!("AppMobi" in window)) window.AppMobi = {}, window.AppMobi.webRoot = "";
+        if (!("intel" in window)) window.intel = {xdk:{}}, window.intel.xdk.webRoot = "";
 
         //click back event
         window.addEventListener("popstate", function() {
@@ -4610,7 +4610,7 @@
             if (this.activeDiv.id == "afui_ajax" && target == this.ajaxUrl) return;
             var urlHash = "url" + crc32(target); //Ajax urls
             var that = this;
-            if (target.indexOf("http") == -1) target = AppMobi.webRoot + target;
+            if (target.indexOf("http") == -1) target = intel.xdk.webRoot + target;
             var xmlhttp = new XMLHttpRequest();
         
             if (anchor && typeof(anchor) !== "object") {
@@ -4714,7 +4714,7 @@
             }
 
             var that = this;
-            this.isIntel = (window.AppMobi && typeof(AppMobi) == "object" && AppMobi.app !== undefined) ? true : false;
+            this.isIntel = (window.intel && typeof(intel) == "object" &&intel.xdk&&intel.xdk.app !== undefined) ? true : false;
             this.viewportContainer = af.query("#afui");
             this.navbar = af.query("#navbar").get(0);
             this.content = af.query("#content").get(0);
@@ -4910,7 +4910,7 @@
                 for (var j in defer) {
                     (function(j) {
                         $.ajax({
-                            url: AppMobi.webRoot + defer[j],
+                            url: intel.xdk.webRoot + defer[j],
                             success: function(data) {
                                 if (data.length > 0) {
                                     that.updatePanel(j, data);
@@ -4924,7 +4924,7 @@
                             },
                             error: function(msg) {
                                 //still trigger the file as being loaded to not block $.ui.ready
-                                console.log("Error with deferred load " + AppMobi.webRoot + defer[j]);
+                                console.log("Error with deferred load " + intel.xdk.webRoot + defer[j]);
                                 loaded++;
                                 if (loaded >= toLoad) {
                                     loadingDefer = false;
@@ -5123,7 +5123,7 @@
                 if (theTarget.href.toLowerCase().indexOf("javascript:") !== 0) {
                     if ($.ui.isIntel) {
                         e.preventDefault();
-                        AppMobi.device.launchExternal(theTarget.href);
+                        intel.xdk.device.launchExternal(theTarget.href);
                     } else if (!$.os.desktop) {
                         e.target.target = "_blank";
                     }
@@ -5176,10 +5176,10 @@
 
 
 
-//The following functions are utilitiy functions for afui within appMobi.
+//The following functions are utilitiy functions for afui within intel xdk.
 
 (function() {
-    $(document).one("appMobi.device.ready", function() { //in AppMobi, we need to undo the height stuff since it causes issues.
+    $(document).one("intel.xdk.device.ready", function() { //in intel xdk, we need to undo the height stuff since it causes issues.
         setTimeout(function() {
             document.getElementById('afui').style.height = "100%";
             document.body.style.height = "100%";
