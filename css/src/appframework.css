@@ -205,7 +205,7 @@
     
 }
 
-.list > li > a:after{
+#afui .list > li > a:after{
     color:#0088D1;
 }
 

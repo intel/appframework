@@ -27,6 +27,7 @@
         });
 
         $("#afui").bind("touchstart", function(e) {
+            if(e.touches.length>1) return;
             startX = e.touches[0].pageX;
             startY = e.touches[0].pageY;
 
@@ -38,10 +39,10 @@
             else
                 doMenu = true;
             max = $("#menu").width();
-            menuState = $menu.css("display") == "block";
+            menuState = $menu.css("display") == "block";            
         });
         $("#afui").bind("touchmove", function(e) {
-
+            if(e.touches.length>1) return;
             
             if (!$.ui.slideSideMenu||keepOpen) return true;
             if (!checking) {
@@ -91,6 +92,6 @@
             checking = false;
             doMenu = false;
             keepOpen=false;
-        });
+        });        
     });
 })(af);

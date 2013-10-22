@@ -64,14 +64,15 @@
                 var script = document.createElement("script");
                 script.src = "plugins/af.desktopBrowsers.js";
                 var tag = $("head").append(script);
+                //$.os.desktop=true;
             }
-           
           
-        </script>
+        </script>        
         <script type="text/javascript" charset="utf-8" src="./plugins/af.actionsheet.js"></script>
          <script type="text/javascript" charset="utf-8" src="./plugins/af.css3animate.js"></script>
          <script type="text/javascript" charset="utf-8" src="./plugins/af.passwordBox.js"></script>
-          <script type="text/javascript" charset="utf-8" src="./plugins/af.scroller.js"></script>
+          <script type="text/javascript" charset="utf-8" src="./plugins/af.animate.js"></script>
+          <script type="text/javascript" charset="utf-8" src="./plugins/af.scrollernew.js"></script>
            <script type="text/javascript" charset="utf-8" src="./plugins/af.selectBox.js"></script>
             <script type="text/javascript" charset="utf-8" src="./plugins/af.touchEvents.js"></script>
           <script type="text/javascript" charset="utf-8" src="./plugins/af.touchLayer.js"></script>
@@ -93,7 +94,6 @@
              var search=document.location.search.toLowerCase().replace("?","");
              //if(!search)
                 //$.os.useOSThemes=false;
-                
             if(search) //Android fix has too many buggy issues on iOS - can't preview with $.os.android
             {
 
@@ -109,7 +109,7 @@
             // $.os.android=true;
             $.ui.autoLaunch = false;
             $.ui.openLinksNewTab = false;
-            //$.ui.resetScrollers=false;
+            $.ui.splitview=false;
             
 
             $(document).ready(function(){
@@ -2293,6 +2293,9 @@ The parent id for this div is "content". Let's verify it.
                     </li>
                 </ul>
             </nav>
+            <aside>
+                This is a chat aside
+            </aside>
         </div>
 
     </body>

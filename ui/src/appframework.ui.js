@@ -154,6 +154,8 @@
         defaultFooter: "",
         defaultHeader: null,
         customMenu: false,
+        customAside:false,
+        defaultAside:"",
         defaultMenu: "",
         _readyFunc: null,
         doingTransition: false,
@@ -201,8 +203,8 @@
             //override the css style
             width = width + "";
             width = width.replace("px", "") + "px";
-            $("head").find("#styleWidth").remove();
-            $("head").append("<style id='styleWidth'>#afui #menu {width:" + width + "  !important}</style>");
+            $("head").find("style#afui_sideMenuWidth").remove();
+            $("head").append("<style id='afui_sideMenuWidth'>#afui #menu {width:" + width + "  !important}</style>");
         },
 
         /**
@@ -567,6 +569,13 @@
                 $.query("#content").css("top", $.query("#header").css("height"));
             }
         },
+
+        /**
+        * Toggles the right hand side menu
+        */
+        toggleAsideMenu:function(force,callback,time){
+            return this.toggleSideMenu(force,callback,time,true);
+        },
         /**
          * Toggles the side menu.  Force is a boolean to force show or hide.
            ```
@@ -577,7 +586,7 @@
          * @param {int} [time] Time to run the transition
          * @title $.ui.toggleSideMenu([force],[callback],[time])
          */
-        toggleSideMenu: function(force, callback, time) {
+        toggleSideMenu: function(force, callback, time, aside) {
             if (!this.isSideMenuEnabled() || this.togglingSideMenu) return;
 
             var that = this;
@@ -585,12 +594,19 @@
             var els = $.query("#content,  #header, #navbar");
             time = time || this.transitionTime;
             var open = this.isSideMenuOn();
-
+            var toX=aside?"-"+that.sideMenuWidth:that.sideMenuWidth;
+            //Here we need to check if we are toggling the left to right, or right to left
+            var menuPos=this.getSideMenuPosition();
+            if(open&&!aside&&menuPos<0)
+                open=false;
+            else if(open&&aside&&menuPos>0)
+                open=false;
             if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
                 this.togglingSideMenu = true;
                 menu.show();
+
                 that.css3animate(els, {
-                    x: that.sideMenuWidth,
+                    x: toX,
                     time: time,
                     complete: function(canceled) {
                         that.togglingSideMenu = false;
@@ -657,10 +673,36 @@
          * @api private
          */
         isSideMenuOn: function() {
-
-            var menu = parseInt($.getCssMatrix($("#content")).e) > 1 ? true : false;
+            var menu = this.getSideMenuPosition() !==0 ? true : false;
             return this.isSideMenuEnabled() && menu;
         },
+        /**
+         * @title $.ui.getSideMenuPosition();
+         * @api private
+         */
+        getSideMenuPosition:function(){
+            return parseFloat($.getCssMatrix($("#content")).e);
+        },
+        /**
+         * Boolean that will disable the splitview before launch
+           ```
+           $.ui.splitView=false;
+           ```
+          * @title $.ui.splitview
+          */
+        splitview:true,
+        /**
+         * Disables the split view on tablets
+           ```
+           $.ui.disableSplitView();
+           ```
+         * @title $.ui.disableSplitView();
+         */
+        disableSplitView:function(){
+            $.query("#content, #header, #navbar, #menu").removeClass("splitview");
+            this.splitView=false;
+        },
+
 
         /**
          * Reference to the default footer
@@ -773,13 +815,40 @@
                 this.prevHeader = elems;
             }
         },
+        /** 
+         * @api private
+         */
+        previAsideMenu:null,
+        /**
+         * Updates the right hand aside menus
+         */
+
+        updateAsideElements:function(elems){
+            var that = this;
+            if (elems === undefined || elems === null) return;
+            var nb = $.query("#aside_menu_scroller");
+
+            if (this.prevAsideMenu) {
+                this.prevAsideMenu.insertBefore("#afui #aside_menu");
+                this.prevAsideMenu = null;
+            }
+
+            if (!$.is$(elems)) elems = $.query("#" + elems);
+
+            nb.html('');
+            nb.append(elems);
+            this.prevAsideMenu = elems;
+            //Move the scroller to the top and hide it
+            this.scrollingDivs.aside_menu_scroller.hideScrollbars();
+            this.scrollingDivs.aside_menu_scroller.scrollToTop();
+        },
         /**
          * @api private
          * Kept for backwards compatibility
          */
         updateSideMenu: function(elems) {
             return this.updateSideMenuElements(elems);
-        },
+        },        
         /**
          * Updates the elements in the side menu
            ```
@@ -919,7 +988,6 @@
             $.query("#modalContainer").html("", true);
 
             this.runTransition(self.modalTransition, self.modalWindow, self.modalTransContainer, true);
-
             this.scrollingDivs.modal_container.disable();
 
             var tmp = $.query($.query("#modalContainer").data("panel"));
@@ -1204,7 +1272,20 @@
                 }
                 this.customMenu = false;
             }
-       
+
+
+            var hasAside = what.getAttribute("data-aside");
+            if(hasAside && this.customAside!=hasAside){
+                this.customAside= hasAside;
+                this.updateAsideElements(hasAside);
+            }
+            else if(hasAside != this.customAside) {
+                if(this.customAside){
+                    this.updateAsideElements(this.defaultAside);
+                }
+                this.customAside=false;
+            }
+
 
             if (oldDiv) {
                 fnc = oldDiv.getAttribute("data-unload");
@@ -1324,12 +1405,6 @@
             var currWhat = what;
 
             if (what.getAttribute("data-modal") == "true" || what.getAttribute("modal") == "true") {
-                /*var fnc = what.getAttribute("data-load");
-                if (typeof fnc == "string" && window[fnc]) {
-                    window[fnc](what);
-                }
-                $(what).trigger("loadpanel");                
-                */
                 return this.showModal(what.id);
             }
 
@@ -1360,6 +1435,8 @@
             this.parsePanelFunctions(what, oldDiv, back);
             //Need to call after parsePanelFunctions, since new headers can override
             this.loadContentData(what, newTab, back, transition);
+
+            //this fixes a bug in iOS where a div flashes when the the overflow property is changed from auto to hidden
             setTimeout(function() {
                 if (that.scrollingDivs[oldDiv.id]) {
                     that.scrollingDivs[oldDiv.id].disable();
@@ -1633,7 +1710,7 @@
                 }).get(0);
                 this.viewportContainer.append(this.asideMenu);
                 this.asideMenu.style.overflow = "hidden";
-                this.scrollingDivs.menu_scroller = $.query("#aside_menu_scroller").scroller({
+                this.scrollingDivs.aside_menu_scroller = $.query("#aside_menu_scroller").scroller({
                     scrollBars: true,
                     verticalScroll: true,
                     vScrollCSS: "afScrollbar",
@@ -1780,6 +1857,12 @@
                         that.updateSideMenuElements(that.defaultMenu);
                         that.prevMenu = that.defaultMenu;
                     }
+                    var firstAside = $.query("aside").get(0);
+                    if(firstAside) {
+                        that.defaultAside=$(firstAside);
+                        that.updateAsideElements(that.defaultAside);
+                        that.prevAsideMenu=that.defaultAside;
+                    }
                     //get default header
                     that.defaultHeader = "defaultHeader";
                     $.query("#header").append($.create("header", {
@@ -1801,10 +1884,11 @@
 
                     //There is a bug in chrome with @media queries where the header was not getting repainted
                     if ($.query("nav").length > 0) {
-                        $.query("#afui #header").addClass("hasMenu");
-                        $.query("#afui #content").addClass("hasMenu");
-                        $.query("#afui #navbar").addClass("hasMenu");
-                        $.query("#afui #menu").addClass("tabletMenu");
+                        var splitViewClass=that.splitview?" splitview":""
+                        $.query("#afui #header").addClass("hasMenu"+splitViewClass);
+                        $.query("#afui #content").addClass("hasMenu"+splitViewClass);
+                        $.query("#afui #navbar").addClass("hasMenu"+splitViewClass);
+                        $.query("#afui #menu").addClass("tabletMenu"+splitViewClass);
                     }
                     //go to activeDiv
                     var firstPanelId = that.getPanelId(defaultHash);
@@ -1848,7 +1932,6 @@
                 this.blockPageScroll();
             }
             this.topClickScroll();
-
         },
         /**
          * This simulates the click and scroll to top of browsers
@@ -2008,9 +2091,7 @@
             document.body.style.height = "100%";
             document.documentElement.style.minHeight = window.innerHeight;
         }, 300);
-        $.ui.ready(function() {
-            $.ui.blockPageScroll();
-        });
+
     });
     //Fix an ios bug where scrolling will not work with rotation
     if ($.feat.nativeTouchScroll) {

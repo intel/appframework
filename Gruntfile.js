@@ -24,7 +24,7 @@ module.exports = function (grunt) {
 
             plugins: [ "plugins/**/*.js" ],
 
-            ui: [ "ui/appframework.ui.js", "ui/transitions/**/*.js" ]
+            ui: ["ui/appframework.ui.js", "ui/transitions/**/*.js" ]
         },
 
         // minification
@@ -78,6 +78,7 @@ module.exports = function (grunt) {
             ui: {
                 files: {
                     "build/ui/appframework.ui.min.js": [
+                    "appframework.js",
                     "ui/src/appframework.ui.js",
                     "ui/transitions/**/*.js",
                     "plugins/af.css3animate.js",
