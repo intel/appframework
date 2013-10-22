@@ -127,6 +127,9 @@
                 $("head").find("#ios7BlurrHack").remove();
                 $("head").append("<style id='ios7BlurrHack'>#afui .panel {-webkit-perspective:0  !important}</style>");   
             }
+            else if ($.os.anroid&&!$.os.androidICS){
+                $.ui.transitionTime="150ms";
+            }
             //iOS 7 specific hack */
 
         }
@@ -591,6 +594,7 @@
 
             var that = this;
             var menu = $.query("#menu");
+            var asideMenu= $.query("#aside_menu");
             var els = $.query("#content,  #header, #navbar");
             time = time || this.transitionTime;
             var open = this.isSideMenuOn();
@@ -603,15 +607,17 @@
                 open=false;
             if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
                 this.togglingSideMenu = true;
-                menu.show();
-
+                if(!aside)
+                    menu.show()
+                else
+                    asideMenu.show();
                 that.css3animate(els, {
                     x: toX,
                     time: time,
                     complete: function(canceled) {
                         that.togglingSideMenu = false;
                         els.vendorCss("Transition", "");
-                        if (callback) callback(canceled);
+                        if (callback) callback(canceled);                        
                     }
                 });
 
@@ -627,6 +633,7 @@
                         that.togglingSideMenu = false;
                         if (callback) callback(canceled);
                         menu.hide();
+                        asideMenu.hide();
                     }
                 });
             }
