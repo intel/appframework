@@ -28,7 +28,7 @@ border-color:#009CE1 transparent #004E92 transparent;
 #afui.bb #backButton {
     display: block;
     position: absolute;
-    line-height:60px;
+    line-height:68px;
 
     left: 5px;
     text-overflow: ellipsis;
