@@ -5,7 +5,7 @@
  * Optimizations and bug improvements by Intel
  * @copyright Intel
  */ (function ($) {
-    var HIDE_REFRESH_TIME = 75; // hide animation of pull2ref duration in ms
+    var HIDE_REFRESH_TIME = 300; // hide animation of pull2ref duration in ms
     var cache = [];
     var objId = function (obj) {
         if (!obj.afScrollerId) obj.afScrollerId = $.uuid();
@@ -122,12 +122,14 @@
             bubbles:true,
             lockBounce:false,
             _scrollTo: function (params, time) {
-                time = parseInt(time, 10);
+
+                time = parseInt(time, 10);                
                 if (time === 0 || isNaN(time)) {
                     this.el.scrollTop = Math.abs(params.y);
                     this.el.scrollLeft = Math.abs(params.x);
                     return;
                 }
+
                 var singleTick = 10;
                 var distPerTick = (this.el.scrollTop - params.y) / Math.ceil(time / singleTick);
                 var distLPerTick = (this.el.scrollLeft - params.x) / Math.ceil(time / singleTick);
@@ -192,7 +194,7 @@
                 var that = this;
                 var orientationChangeProxy = function () {
                     //no need to readjust if disabled...
-                    if (that.eventsActive||!$.feath.nativeTouchScroll) that.adjustScroll();
+                    if (that.eventsActive||!$.feat.nativeTouchScroll) that.adjustScroll();
                 };
                 this.afEl.bind('destroy', function () {
                     that.disable(true); //with destroy notice
@@ -597,13 +599,8 @@
 
             if (animate === false || !that.afEl.css3Animate) {
                 endAnimationCb();
-            } else {
-                that.afEl.css3Animate({
-                    y: (that.el.scrollTop - that.refreshHeight) + "px",
-                    x: "0%",
-                    time: HIDE_REFRESH_TIME + "ms",
-                    complete: endAnimationCb
-                });
+            } else {              
+                that.afEl.animate({x:0,y:(that.el.scrollTop - that.refreshHeight),duration:HIDE_REFRESH_TIME,complete:endAnimationCb}).start();
             }
             this.refreshTriggered = false;
             //this.el.addEventListener('touchend', this, false);
@@ -783,6 +780,8 @@
             this.moved = false;
             this.currentScrollingObject = null;
 
+            $(this.el).animate().stop();
+
             if (!this.container) return;
             if (this.refreshCancelCB) {
                 clearTimeout(this.refreshCancelCB);
@@ -878,7 +877,7 @@
                 else
                     this.vscrollBar.style.right = "0px";
                 this.vscrollBar.style[$.feat.cssPrefix + "Transition"] = '';
-                // this.vscrollBar.style.opacity = 1;
+                $(this.vscrollBar).animate().stop();            
             }
 
             //horizontal scroll
@@ -888,7 +887,7 @@
                 else
                     this.hscrollBar.style.bottom = numOnly(this.hscrollBar.style.height);
                 this.hscrollBar.style[$.feat.cssPrefix + "Transition"] = '';
-                // this.hscrollBar.style.opacity = 1;
+                $(this.hscrollBar).animate().stop();
             }
 
             //save scrollInfo
@@ -899,6 +898,8 @@
                 this.currentScrollingObject=null;
             else
                 this.scrollerMoveCSS(this.lastScrollInfo, 0);
+
+            this.scrollerMoveCSS(this.lastScrollInfo, 0);
 
         };
         jsScroller.prototype.getCSSMatrix = function (el) {
@@ -1084,7 +1085,7 @@
                 }
             }
 
-            if (this.infinite && !this.infiniteTriggered) {
+            if (this.infinite && !this.infiniteTriggered) {                
                 if ((Math.abs(this.lastScrollInfo.top) > (this.el.clientHeight - this.container.clientHeight))) {
                     this.infiniteTriggered = true;
                     $.trigger(this, "infinite-scroll");
@@ -1222,7 +1223,7 @@
         jsScroller.prototype.onTouchEnd = function (event) {
 
 
-            if (this.currentScrollingObject === null || !this.moved) return;
+            if (this.currentScrollingObject === null || !this.moved) return this.hideScrollbars();
             //event.preventDefault();
             this.finishScrollingObject = this.currentScrollingObject;
             this.currentScrollingObject = null;
@@ -1291,7 +1292,7 @@
 
         //finish callback
         jsScroller.prototype.setFinishCalback = function (duration) {
-            var that = this;
+            var that = this;            
             this.scrollingFinishCB = setTimeout(function () {
                 that.hideScrollbars();
                 $.trigger($.touchLayer, 'scrollend', [that.el]); //notify touchLayer of this elements scrollend
@@ -1386,10 +1387,7 @@
                         this.el.style.marginTop = Math.round(distanceToMove.y) + "px";
                         this.el.style.marginLeft = Math.round(distanceToMove.x) + "px";
                     } else {
-
-                        this.el.style[$.feat.cssPrefix + "Transform"] = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
-                        this.el.style[$.feat.cssPrefix + "TransitionDuration"] = time + "ms";
-                        this.el.style[$.feat.cssPrefix + "TransitionTimingFunction"] = timingFunction;
+                        $(this.el).animate({x:distanceToMove.x,y:distanceToMove.y,duration:time,easing:"easeOutSine"}).start();
                     }
                 }
                 // Position should be updated even when the scroller is disabled so we log the change
@@ -1422,9 +1420,7 @@
                     el.style.marginTop = Math.round(distanceToMove.y) + "px";
                     el.style.marginLeft = Math.round(distanceToMove.x) + "px";
                 } else {
-                    el.style[$.feat.cssPrefix + "Transform"] = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
-                    el.style[$.feat.cssPrefix + "TransitionDuration"] = time + "ms";
-                    el.style[$.feat.cssPrefix + "TransitionTimingFunction"] = timingFunction;
+                    $(el).animate({x:distanceToMove.x,y:distanceToMove.y,duration:time,easing:"easeOutSine"}).start();
                 }
             }
         };
