@@ -1759,6 +1759,10 @@ color:inherit;
 }
 
 #afui.android .menuButton:after {
+    border-color:white;
+}
+
+#afui.android.light .menuButton:after {
     border-color:black;
 }
 
