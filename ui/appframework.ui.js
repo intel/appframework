@@ -3237,7 +3237,7 @@
 
 
         if ("intel" in window){ 
-            document.addEventListener("intel.xdk.ready", function() {
+            document.addEventListener("intel.xdk.device.ready", function() {
                 that.autoBoot();
             });
         }
