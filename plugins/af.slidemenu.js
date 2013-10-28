@@ -52,6 +52,8 @@
             else if(sidePos<0)
                 openState=2;
         });
+        var moveCounter=0;
+        
         $("#afui").bind("touchmove", function(e) {
             if(e.touches.length>1) return;
 
@@ -70,6 +72,7 @@
 
             //if (!menuState && dx < startX) return;
             //else if (menuState && dx > startX) return;
+
             if (Math.abs(dy - startY) > Math.abs(dx - startX)) {
                 doMenu = false;
                 return true;
@@ -83,23 +86,31 @@
                 else
                     $("#menu").show();
             }
+
+
             if (Math.abs(thePlace) > max) return true;
            // showHide = dx - startX > 0 ? 2 : false;
             
 
             showHideThresh=Math.abs(thePlace)<slideOver?showHide?showHide:false:2;
             
-            if(openState==1) {
+            
+            if(openState==1) {            
                 thePlace+=max;
                 showHideThresh=Math.abs(thePlace)<slideOver*2?showHide?showHide:false:2;
+                if(thePlace>max)
+                    thePlace=max;
             }
             else if(openState==2){
                 thePlace=(-1*max)+thePlace;
                 showHideThresh=Math.abs(thePlace)<slideOver*2?showHide?showHide:false:2;
+                if(thePlace<(-1*max))
+                    thePlace=-1*max;
             }
             else if(thePlace<0&&thePlace<(-1*max))
                 thePlace=-1*max;            
   
+
 
 
             if (!showHide) {            
@@ -116,7 +127,6 @@
         });
         $("#afui").bind("touchend", function(e) {
 
-            console.log(transTime);
             if (doMenu && checking&&!keepOpen) {
                 $.ui.toggleSideMenu(showHideThresh, function(){
                 }, transTime,isAside);                
