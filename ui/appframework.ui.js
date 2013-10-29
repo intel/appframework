@@ -3239,7 +3239,7 @@
         if ("intel" in window){ 
             document.addEventListener("intel.xdk.ready", function() {
                 that.autoBoot();
-            });
+            },true);
         }
         else if (document.readyState == "complete" || document.readyState == "loaded") {
             if(that.init)
