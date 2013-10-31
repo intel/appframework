@@ -3203,23 +3203,7 @@
         this.availableTransitions = {};
         this.availableTransitions['default'] = this.availableTransitions.none = this.noTransition;
         //setup the menu and boot touchLayer
-        $(document).ready(function() {
-            //boot touchLayer
-            //create afui element if it still does not exist
-            var afui = document.getElementById("afui");
-            if (afui === null) {
-                afui = document.createElement("div");
-                afui.id = "afui";
-                var body = document.body;
-                while (body&&body.firstChild) {
-                    afui.appendChild(body.firstChild);
-                }
-                $(document.body).prepend(afui);
-            }
-            if ($.os.supportsTouch) $.touchLayer(afui);
-            setupCustomTheme();
-
-        });
+       
 
         function checkNodeInserted(i) {
             if (i.target.id === "afui") {
@@ -3261,6 +3245,23 @@
 
         if (!("intel" in window)) window.intel = {xdk:{}}, window.intel.xdk.webRoot = "";
 
+         $(document).ready(function() {
+            //boot touchLayer
+            //create afui element if it still does not exist
+            var afui = document.getElementById("afui");
+            if (afui === null) {
+                afui = document.createElement("div");
+                afui.id = "afui";
+                var body = document.body;
+                while (body&&body.firstChild) {
+                    afui.appendChild(body.firstChild);
+                }
+                $(document.body).prepend(afui);
+            }
+            if ($.os.supportsTouch) $.touchLayer(afui);
+            setupCustomTheme();
+
+        });
         //click back event
         window.addEventListener("popstate", function() {
             if(!that.useInteralRouting) return;
@@ -4714,7 +4715,7 @@
             }
 
             var that = this;
-            this.isIntel = (window.intel && typeof(intel) == "object" &&intel.xdk&&intel.xdk.app !== undefined) ? true : false;
+            
             this.viewportContainer = af.query("#afui");
             this.navbar = af.query("#navbar").get(0);
             this.content = af.query("#content").get(0);
