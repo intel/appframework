@@ -327,7 +327,7 @@
  * Optimizations and bug improvements by Intel
  * @copyright Intel
  */ (function ($) {
-    var HIDE_REFRESH_TIME = 75; // hide animation of pull2ref duration in ms
+    var HIDE_REFRESH_TIME = 300; // hide animation of pull2ref duration in ms
     var cache = [];
     var objId = function (obj) {
         if (!obj.afScrollerId) obj.afScrollerId = $.uuid();
@@ -444,12 +444,14 @@
             bubbles:true,
             lockBounce:false,
             _scrollTo: function (params, time) {
-                time = parseInt(time, 10);
+
+                time = parseInt(time, 10);                
                 if (time === 0 || isNaN(time)) {
                     this.el.scrollTop = Math.abs(params.y);
                     this.el.scrollLeft = Math.abs(params.x);
                     return;
                 }
+
                 var singleTick = 10;
                 var distPerTick = (this.el.scrollTop - params.y) / Math.ceil(time / singleTick);
                 var distLPerTick = (this.el.scrollLeft - params.x) / Math.ceil(time / singleTick);
@@ -514,7 +516,7 @@
                 var that = this;
                 var orientationChangeProxy = function () {
                     //no need to readjust if disabled...
-                    if (that.eventsActive||!$.feath.nativeTouchScroll) that.adjustScroll();
+                    if (that.eventsActive||!$.feat.nativeTouchScroll) that.adjustScroll();
                 };
                 this.afEl.bind('destroy', function () {
                     that.disable(true); //with destroy notice
@@ -919,13 +921,8 @@
 
             if (animate === false || !that.afEl.css3Animate) {
                 endAnimationCb();
-            } else {
-                that.afEl.css3Animate({
-                    y: (that.el.scrollTop - that.refreshHeight) + "px",
-                    x: "0%",
-                    time: HIDE_REFRESH_TIME + "ms",
-                    complete: endAnimationCb
-                });
+            } else {              
+                that.afEl.animate({x:0,y:(that.el.scrollTop - that.refreshHeight),duration:HIDE_REFRESH_TIME,complete:endAnimationCb}).start();
             }
             this.refreshTriggered = false;
             //this.el.addEventListener('touchend', this, false);
@@ -1105,6 +1102,8 @@
             this.moved = false;
             this.currentScrollingObject = null;
 
+            $(this.el).animate().stop();
+
             if (!this.container) return;
             if (this.refreshCancelCB) {
                 clearTimeout(this.refreshCancelCB);
@@ -1200,7 +1199,7 @@
                 else
                     this.vscrollBar.style.right = "0px";
                 this.vscrollBar.style[$.feat.cssPrefix + "Transition"] = '';
-                // this.vscrollBar.style.opacity = 1;
+                $(this.vscrollBar).animate().stop();            
             }
 
             //horizontal scroll
@@ -1210,7 +1209,7 @@
                 else
                     this.hscrollBar.style.bottom = numOnly(this.hscrollBar.style.height);
                 this.hscrollBar.style[$.feat.cssPrefix + "Transition"] = '';
-                // this.hscrollBar.style.opacity = 1;
+                $(this.hscrollBar).animate().stop();
             }
 
             //save scrollInfo
@@ -1221,6 +1220,8 @@
                 this.currentScrollingObject=null;
             else
                 this.scrollerMoveCSS(this.lastScrollInfo, 0);
+
+            this.scrollerMoveCSS(this.lastScrollInfo, 0);
 
         };
         jsScroller.prototype.getCSSMatrix = function (el) {
@@ -1406,7 +1407,7 @@
                 }
             }
 
-            if (this.infinite && !this.infiniteTriggered) {
+            if (this.infinite && !this.infiniteTriggered) {                
                 if ((Math.abs(this.lastScrollInfo.top) > (this.el.clientHeight - this.container.clientHeight))) {
                     this.infiniteTriggered = true;
                     $.trigger(this, "infinite-scroll");
@@ -1544,7 +1545,7 @@
         jsScroller.prototype.onTouchEnd = function (event) {
 
 
-            if (this.currentScrollingObject === null || !this.moved) return;
+            if (this.currentScrollingObject === null || !this.moved) return this.hideScrollbars();
             //event.preventDefault();
             this.finishScrollingObject = this.currentScrollingObject;
             this.currentScrollingObject = null;
@@ -1613,7 +1614,7 @@
 
         //finish callback
         jsScroller.prototype.setFinishCalback = function (duration) {
-            var that = this;
+            var that = this;            
             this.scrollingFinishCB = setTimeout(function () {
                 that.hideScrollbars();
                 $.trigger($.touchLayer, 'scrollend', [that.el]); //notify touchLayer of this elements scrollend
@@ -1708,10 +1709,7 @@
                         this.el.style.marginTop = Math.round(distanceToMove.y) + "px";
                         this.el.style.marginLeft = Math.round(distanceToMove.x) + "px";
                     } else {
-
-                        this.el.style[$.feat.cssPrefix + "Transform"] = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
-                        this.el.style[$.feat.cssPrefix + "TransitionDuration"] = time + "ms";
-                        this.el.style[$.feat.cssPrefix + "TransitionTimingFunction"] = timingFunction;
+                        $(this.el).animate({x:distanceToMove.x,y:distanceToMove.y,duration:time,easing:"easeOutSine"}).start();
                     }
                 }
                 // Position should be updated even when the scroller is disabled so we log the change
@@ -1744,9 +1742,7 @@
                     el.style.marginTop = Math.round(distanceToMove.y) + "px";
                     el.style.marginLeft = Math.round(distanceToMove.x) + "px";
                 } else {
-                    el.style[$.feat.cssPrefix + "Transform"] = "translate" + translateOpen + distanceToMove.x + "px," + distanceToMove.y + "px" + translateClose;
-                    el.style[$.feat.cssPrefix + "TransitionDuration"] = time + "ms";
-                    el.style[$.feat.cssPrefix + "TransitionTimingFunction"] = timingFunction;
+                    $(el).animate({x:distanceToMove.x,y:distanceToMove.y,duration:time,easing:"easeOutSine"}).start();
                 }
             }
         };
@@ -3203,23 +3199,7 @@
         this.availableTransitions = {};
         this.availableTransitions['default'] = this.availableTransitions.none = this.noTransition;
         //setup the menu and boot touchLayer
-        $(document).ready(function() {
-            //boot touchLayer
-            //create afui element if it still does not exist
-            var afui = document.getElementById("afui");
-            if (afui === null) {
-                afui = document.createElement("div");
-                afui.id = "afui";
-                var body = document.body;
-                while (body&&body.firstChild) {
-                    afui.appendChild(body.firstChild);
-                }
-                $(document.body).prepend(afui);
-            }
-            if ($.os.supportsTouch) $.touchLayer(afui);
-            setupCustomTheme();
-
-        });
+       
 
         function checkNodeInserted(i) {
             if (i.target.id === "afui") {
@@ -3237,7 +3217,7 @@
 
 
         if ("intel" in window){ 
-            document.addEventListener("intel.xdk.ready", function() {
+            document.addEventListener("intel.xdk.device.ready", function() {
                 that.autoBoot();
             },true);
         }
@@ -3261,6 +3241,23 @@
 
         if (!("intel" in window)) window.intel = {xdk:{}}, window.intel.xdk.webRoot = "";
 
+         $(document).ready(function() {
+            //boot touchLayer
+            //create afui element if it still does not exist
+            var afui = document.getElementById("afui");
+            if (afui === null) {
+                afui = document.createElement("div");
+                afui.id = "afui";
+                var body = document.body;
+                while (body&&body.firstChild) {
+                    afui.appendChild(body.firstChild);
+                }
+                $(document.body).prepend(afui);
+            }
+            if ($.os.supportsTouch) $.touchLayer(afui);
+            setupCustomTheme();
+
+        });
         //click back event
         window.addEventListener("popstate", function() {
             if(!that.useInteralRouting) return;
@@ -3304,6 +3301,9 @@
                 $("head").find("#ios7BlurrHack").remove();
                 $("head").append("<style id='ios7BlurrHack'>#afui .panel {-webkit-perspective:0  !important}</style>");   
             }
+            else if ($.os.anroid&&!$.os.androidICS){
+                $.ui.transitionTime="150ms";
+            }
             //iOS 7 specific hack */
 
         }
@@ -3331,6 +3331,8 @@
         defaultFooter: "",
         defaultHeader: null,
         customMenu: false,
+        customAside:false,
+        defaultAside:"",
         defaultMenu: "",
         _readyFunc: null,
         doingTransition: false,
@@ -3378,8 +3380,8 @@
             //override the css style
             width = width + "";
             width = width.replace("px", "") + "px";
-            $("head").find("#styleWidth").remove();
-            $("head").append("<style id='styleWidth'>#afui #menu {width:" + width + "  !important}</style>");
+            $("head").find("style#afui_sideMenuWidth").remove();
+            $("head").append("<style id='afui_sideMenuWidth'>#afui #menu {width:" + width + "  !important}</style>");
         },
 
         /**
@@ -3744,6 +3746,13 @@
                 $.query("#content").css("top", $.query("#header").css("height"));
             }
         },
+
+        /**
+        * Toggles the right hand side menu
+        */
+        toggleAsideMenu:function(force,callback,time){
+            return this.toggleSideMenu(force,callback,time,true);
+        },
         /**
          * Toggles the side menu.  Force is a boolean to force show or hide.
            ```
@@ -3754,25 +3763,35 @@
          * @param {int} [time] Time to run the transition
          * @title $.ui.toggleSideMenu([force],[callback],[time])
          */
-        toggleSideMenu: function(force, callback, time) {
+        toggleSideMenu: function(force, callback, time, aside) {
             if (!this.isSideMenuEnabled() || this.togglingSideMenu) return;
 
             var that = this;
             var menu = $.query("#menu");
+            var asideMenu= $.query("#aside_menu");
             var els = $.query("#content,  #header, #navbar");
             time = time || this.transitionTime;
             var open = this.isSideMenuOn();
-
+            var toX=aside?"-"+that.sideMenuWidth:that.sideMenuWidth;
+            //Here we need to check if we are toggling the left to right, or right to left
+            var menuPos=this.getSideMenuPosition();
+            if(open&&!aside&&menuPos<0)
+                open=false;
+            else if(open&&aside&&menuPos>0)
+                open=false;
             if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
                 this.togglingSideMenu = true;
-                menu.show();
+                if(!aside)
+                    menu.show()
+                else
+                    asideMenu.show();
                 that.css3animate(els, {
-                    x: that.sideMenuWidth,
+                    x: toX,
                     time: time,
                     complete: function(canceled) {
                         that.togglingSideMenu = false;
                         els.vendorCss("Transition", "");
-                        if (callback) callback(canceled);
+                        if (callback) callback(canceled);                        
                     }
                 });
 
@@ -3788,6 +3807,7 @@
                         that.togglingSideMenu = false;
                         if (callback) callback(canceled);
                         menu.hide();
+                        asideMenu.hide();
                     }
                 });
             }
@@ -3834,10 +3854,36 @@
          * @api private
          */
         isSideMenuOn: function() {
-
-            var menu = parseInt($.getCssMatrix($("#content")).e) > 1 ? true : false;
+            var menu = this.getSideMenuPosition() !==0 ? true : false;
             return this.isSideMenuEnabled() && menu;
         },
+        /**
+         * @title $.ui.getSideMenuPosition();
+         * @api private
+         */
+        getSideMenuPosition:function(){
+            return parseFloat($.getCssMatrix($("#content")).e);
+        },
+        /**
+         * Boolean that will disable the splitview before launch
+           ```
+           $.ui.splitView=false;
+           ```
+          * @title $.ui.splitview
+          */
+        splitview:true,
+        /**
+         * Disables the split view on tablets
+           ```
+           $.ui.disableSplitView();
+           ```
+         * @title $.ui.disableSplitView();
+         */
+        disableSplitView:function(){
+            $.query("#content, #header, #navbar, #menu").removeClass("splitview");
+            this.splitView=false;
+        },
+
 
         /**
          * Reference to the default footer
@@ -3950,13 +3996,40 @@
                 this.prevHeader = elems;
             }
         },
+        /** 
+         * @api private
+         */
+        previAsideMenu:null,
+        /**
+         * Updates the right hand aside menus
+         */
+
+        updateAsideElements:function(elems){
+            var that = this;
+            if (elems === undefined || elems === null) return;
+            var nb = $.query("#aside_menu_scroller");
+
+            if (this.prevAsideMenu) {
+                this.prevAsideMenu.insertBefore("#afui #aside_menu");
+                this.prevAsideMenu = null;
+            }
+
+            if (!$.is$(elems)) elems = $.query("#" + elems);
+
+            nb.html('');
+            nb.append(elems);
+            this.prevAsideMenu = elems;
+            //Move the scroller to the top and hide it
+            this.scrollingDivs.aside_menu_scroller.hideScrollbars();
+            this.scrollingDivs.aside_menu_scroller.scrollToTop();
+        },
         /**
          * @api private
          * Kept for backwards compatibility
          */
         updateSideMenu: function(elems) {
             return this.updateSideMenuElements(elems);
-        },
+        },        
         /**
          * Updates the elements in the side menu
            ```
@@ -4096,7 +4169,6 @@
             $.query("#modalContainer").html("", true);
 
             this.runTransition(self.modalTransition, self.modalWindow, self.modalTransContainer, true);
-
             this.scrollingDivs.modal_container.disable();
 
             var tmp = $.query($.query("#modalContainer").data("panel"));
@@ -4381,7 +4453,20 @@
                 }
                 this.customMenu = false;
             }
-       
+
+
+            var hasAside = what.getAttribute("data-aside");
+            if(hasAside && this.customAside!=hasAside){
+                this.customAside= hasAside;
+                this.updateAsideElements(hasAside);
+            }
+            else if(hasAside != this.customAside) {
+                if(this.customAside){
+                    this.updateAsideElements(this.defaultAside);
+                }
+                this.customAside=false;
+            }
+
 
             if (oldDiv) {
                 fnc = oldDiv.getAttribute("data-unload");
@@ -4501,12 +4586,6 @@
             var currWhat = what;
 
             if (what.getAttribute("data-modal") == "true" || what.getAttribute("modal") == "true") {
-                /*var fnc = what.getAttribute("data-load");
-                if (typeof fnc == "string" && window[fnc]) {
-                    window[fnc](what);
-                }
-                $(what).trigger("loadpanel");                
-                */
                 return this.showModal(what.id);
             }
 
@@ -4537,6 +4616,8 @@
             this.parsePanelFunctions(what, oldDiv, back);
             //Need to call after parsePanelFunctions, since new headers can override
             this.loadContentData(what, newTab, back, transition);
+
+            //this fixes a bug in iOS where a div flashes when the the overflow property is changed from auto to hidden
             setTimeout(function() {
                 if (that.scrollingDivs[oldDiv.id]) {
                     that.scrollingDivs[oldDiv.id].disable();
@@ -4714,7 +4795,7 @@
             }
 
             var that = this;
-            this.isIntel = (window.intel && typeof(intel) == "object" &&intel.xdk&&intel.xdk.app !== undefined) ? true : false;
+            
             this.viewportContainer = af.query("#afui");
             this.navbar = af.query("#navbar").get(0);
             this.content = af.query("#content").get(0);
@@ -4810,7 +4891,7 @@
                 }).get(0);
                 this.viewportContainer.append(this.asideMenu);
                 this.asideMenu.style.overflow = "hidden";
-                this.scrollingDivs.menu_scroller = $.query("#aside_menu_scroller").scroller({
+                this.scrollingDivs.aside_menu_scroller = $.query("#aside_menu_scroller").scroller({
                     scrollBars: true,
                     verticalScroll: true,
                     vScrollCSS: "afScrollbar",
@@ -4957,6 +5038,12 @@
                         that.updateSideMenuElements(that.defaultMenu);
                         that.prevMenu = that.defaultMenu;
                     }
+                    var firstAside = $.query("aside").get(0);
+                    if(firstAside) {
+                        that.defaultAside=$(firstAside);
+                        that.updateAsideElements(that.defaultAside);
+                        that.prevAsideMenu=that.defaultAside;
+                    }
                     //get default header
                     that.defaultHeader = "defaultHeader";
                     $.query("#header").append($.create("header", {
@@ -4978,10 +5065,11 @@
 
                     //There is a bug in chrome with @media queries where the header was not getting repainted
                     if ($.query("nav").length > 0) {
-                        $.query("#afui #header").addClass("hasMenu");
-                        $.query("#afui #content").addClass("hasMenu");
-                        $.query("#afui #navbar").addClass("hasMenu");
-                        $.query("#afui #menu").addClass("tabletMenu");
+                        var splitViewClass=that.splitview?" splitview":""
+                        $.query("#afui #header").addClass("hasMenu"+splitViewClass);
+                        $.query("#afui #content").addClass("hasMenu"+splitViewClass);
+                        $.query("#afui #navbar").addClass("hasMenu"+splitViewClass);
+                        $.query("#afui #menu").addClass("tabletMenu"+splitViewClass);
                     }
                     //go to activeDiv
                     var firstPanelId = that.getPanelId(defaultHash);
@@ -5025,7 +5113,6 @@
                 this.blockPageScroll();
             }
             this.topClickScroll();
-
         },
         /**
          * This simulates the click and scroll to top of browsers
@@ -5185,9 +5272,7 @@
             document.body.style.height = "100%";
             document.documentElement.style.minHeight = window.innerHeight;
         }, 300);
-        $.ui.ready(function() {
-            $.ui.blockPageScroll();
-        });
+
     });
     //Fix an ios bug where scrolling will not work with rotation
     if ($.feat.nativeTouchScroll) {
