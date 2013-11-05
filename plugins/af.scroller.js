@@ -121,9 +121,13 @@
             scrollLeftInterval: null,
             bubbles:true,
             lockBounce:false,
+            hideHeader:false,
+            _headerShown:true,
+            _headerTrack:0,
+            _headerToggle:false,
+            _scrollHeaderThreshold:80,
             _scrollTo: function (params, time) {
-
-                time = parseInt(time, 10);                
+                time = parseInt(time, 10);
                 if (time === 0 || isNaN(time)) {
                     this.el.scrollTop = Math.abs(params.y);
                     this.el.scrollLeft = Math.abs(params.x);
@@ -216,12 +220,16 @@
                             this.preventHideRefresh = !this.refreshRunning; // if it's not running why prevent it xD
                             this.moved = false;
                             this.onTouchStart(e);
+                            this._headerTrack=this.lastScrollInfo.top;
+                            this._headerToggle=false;                            
                             if(!this.bubbles)
                                 e.stopPropagation();
                             break;
                         case 'touchmove':
 
                             this.onTouchMove(e);
+                            if(this.hideHeader)
+                                this.hideHeaderCheck();
                             if(!this.bubbles)
                                 e.stopPropagation();
                             break;
@@ -253,7 +261,7 @@
                 }
                 var el = afEl.get(0);
 
-                this.refreshContainer = af("<div style=\"overflow:hidden;width:100%;height:0;margin:0;padding:0;padding-left:5px;padding-right:5px;display:none;\"></div>");
+                this.refreshContainer = af("<div style=\"overflow:hidden;width:100%;height:0;margin:0;padding:0;padding-left:5px;padding-right:5px;display:block;position:relative;top:-3px\"></div>");
                 $(this.el).prepend(this.refreshContainer.append(el, 'top'));
                 this.refreshContainer = this.refreshContainer[0];
             },
@@ -336,6 +344,54 @@
             },
             scrollTo:function (pos, time) {
                 return this._scrollTo(pos, time);
+            },
+            hideHeaderCheck:function(){
+                var delta=this.lastScrollInfo.top;
+                
+                var theCheck=delta-this._headerTrack;
+                
+                if(theCheck>this._scrollHeaderThreshold&&!this._headerShown){
+                    this._headerToggle=true;
+                    $("#header").css3Animate({
+                        y:"0",
+                        time:200
+                    });
+                    $("#content").css3Animate({
+                        y:"0",
+                        time:200
+                    });
+                    $("#content").css("bottom",$("#navbar").computedStyle("height"));
+                    this._headerShown=true;
+                }
+                else if(this._headerShown&&theCheck<-this._scrollHeaderThreshold){
+                    this._headerToggle=true;
+                    
+                     $("#header").css3Animate({
+                        y:"-"+($.query('#afui #header').computedStyle('height')),
+                        time:200
+                    });
+                    $("#content").css3Animate({
+                        y:"-"+($.query('#afui #header').computedStyle('height')),
+                        time:200
+                    });
+                    $("#content").css("bottom",numOnly($("#navbar").computedStyle("height"))-numOnly($("#header").computedStyle("height")));
+                    this._headerShown=false;
+                }
+                else if(!this._headerShown&&theCheck>-this._scrollHeaderThreshold&&theCheck<-(this._scrollHeaderThreshold/2)&&this._headerToggle)
+                {
+
+                    this._headerToggle=true;
+                    $("#header").css3Animate({
+                        y:"0",
+                        time:200
+                    });
+                    $("#content").css3Animate({
+                        y:"0",
+                        time:200
+                    });
+                    $("#content").css("bottom","5px");
+                    this._headerShown=true;
+                }
             }
         };
 
@@ -468,6 +524,9 @@
         nativeScroller.prototype.onTouchStart = function (e) {
             
 
+            this.lastScrollInfo= {
+                top:0
+            };
             if(this.el.scrollTop===0)
                 this.el.scrollTop=1;
             if(this.el.scrollTop===(this.el.scrollHeight - this.el.clientHeight))
@@ -527,8 +586,11 @@
                 $.trigger(this, 'refresh-cancel');
             }
 
+
+
             this.cY = newcY;
             this.cX = newcX;
+            this.lastScrollInfo.top=this.cY;
         };
         nativeScroller.prototype.showRefresh = function () {
             if (!this.refreshTriggered) {
@@ -599,8 +661,13 @@
 
             if (animate === false || !that.afEl.css3Animate) {
                 endAnimationCb();
-            } else {              
-                that.afEl.animate({x:0,y:(that.el.scrollTop - that.refreshHeight),duration:HIDE_REFRESH_TIME,complete:endAnimationCb}).start();
+            } else {
+                that.afEl.css3Animate({
+                    y: (that.el.scrollTop - that.refreshHeight) + "px",
+                    x: "0%",
+                    time: HIDE_REFRESH_TIME + "ms",
+                    complete: endAnimationCb
+                });
             }
             this.refreshTriggered = false;
             //this.el.addEventListener('touchend', this, false);
@@ -987,8 +1054,8 @@
 
 
             if (this.refresh && scrollInfo.top === 0) {
-                this.refreshContainer.style.display = "block";
-                this.refreshHeight = this.refreshContainer.firstChild.clientHeight;
+                this.refreshContainer.style.display = "block";                
+                this.refreshHeight = this.refreshContainer.firstChild.clientHeight-parseInt(this.refreshContainer.style.top);                
                 this.refreshContainer.firstChild.style.top = (-this.refreshHeight) + 'px';
                 this.refreshContainer.style.overflow = 'visible';
                 this.preventPullToRefresh = false;
@@ -1084,8 +1151,7 @@
                     $.trigger(this, 'refresh-cancel');
                 }
             }
-
-            if (this.infinite && !this.infiniteTriggered) {                
+            if (this.infinite && !this.infiniteTriggered) {
                 if ((Math.abs(this.lastScrollInfo.top) > (this.el.clientHeight - this.container.clientHeight))) {
                     this.infiniteTriggered = true;
                     $.trigger(this, "infinite-scroll");
@@ -1223,7 +1289,7 @@
         jsScroller.prototype.onTouchEnd = function (event) {
 
 
-            if (this.currentScrollingObject === null || !this.moved) return this.hideScrollbars();
+            if (this.currentScrollingObject === null || !this.moved) return;
             //event.preventDefault();
             this.finishScrollingObject = this.currentScrollingObject;
             this.currentScrollingObject = null;
@@ -1284,22 +1350,25 @@
             this.setFinishCalback(scrollInfo.duration);
             if (this.infinite && !this.infiniteTriggered) {
                 if ((Math.abs(scrollInfo.y) >= (this.el.clientHeight - this.container.clientHeight))) {
-                    this.infiniteTriggered = true;
-                    $.trigger(this, "infinite-scroll");
+                    var self=this;
+                    setTimeout(function(){
+                        self.infiniteTriggered = true;
+                        $.trigger(self, "infinite-scroll");
+                    },scrollInfo.duration-50);
                 }
             }
         };
 
         //finish callback
         jsScroller.prototype.setFinishCalback = function (duration) {
-            var that = this;            
+            var that = this;
             this.scrollingFinishCB = setTimeout(function () {
                 that.hideScrollbars();
                 $.trigger($.touchLayer, 'scrollend', [that.el]); //notify touchLayer of this elements scrollend
                 $.trigger(that, "scrollend", [that.el]);
                 that.isScrolling = false;
-                that.elementInfo = null; //reset elementInfo when idle
-                if (that.infinite) $.trigger(that, "infinite-scroll-end");
+                that.elementInfo = null; //reset elementInfo when idle)
+                if (that.infinite&&that.infiniteTriggered) $.trigger(that, "infinite-scroll-end");
             }, duration);
         };
 

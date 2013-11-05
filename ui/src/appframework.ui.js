@@ -184,6 +184,7 @@
         horizontalScroll:false,
         _currentHeaderID:"defaultHeader",
         useInteralRouting:true,
+        hideHeaderOnScroll:false,
         autoBoot: function() {
             this.hasLaunched = true;
             if (this.autoLaunch) {
@@ -1158,6 +1159,8 @@
                     autoEnable: false //dont enable the events unnecessarilly
                 }));
                 //backwards compatibility
+                if(this.hideHeaderOnScroll)
+                    this.scrollingDivs[scrollEl.id].hideHeader=true;
                 if (refreshFunc) $.bind(this.scrollingDivs[scrollEl.id], 'refresh-release', function(trigger) {
                         if (trigger) refreshFunc();
                     });
