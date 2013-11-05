@@ -40,9 +40,10 @@
                 touch.isDoubleTap = true;
             touch.last = now;
            longTapTimer=setTimeout(longTap, longTapDelay);
+           
             if ($.ui.useAutoPressed && !touch.el.data("ignore-pressed"))
                 touch.el.addClass("pressed");
-            if(prevEl && $.ui.useAutoPressed && !prevEl.data("ignore-pressed"))
+            if(prevEl && $.ui.useAutoPressed && !prevEl.data("ignore-pressed")&&prevEl[0]!=touch.el[0])
                 prevEl.removeClass("pressed");
             prevEl=touch.el;
         }).bind('touchmove', function(e) {
@@ -68,8 +69,6 @@
                 touch.x1 = touch.x2 = touch.y1 = touch.y2 = touch.last = 0;
             } else if ('last' in touch) {
                 touch.el.trigger('tap');
-
-
                 touchTimeout = setTimeout(function() {
                     touchTimeout = null;
                     if (touch.el)
