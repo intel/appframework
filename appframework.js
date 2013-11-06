@@ -1,6 +1,5 @@
 /**
- * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
- * Since most mobile devices (Android, iOS, webOS) use a WebKit browser, you only need to target one browser.
+ * App Framework  query selector class for HTML5 mobile apps on a Webkit or IE 10 browser.
  * We are able to increase the speed greatly by removing support for legacy desktop browsers and taking advantage of browser features, like native JSON parsing and querySelectorAll
 
 
