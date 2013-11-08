@@ -1915,6 +1915,7 @@ if (!window.af || typeof(af) !== "function") {
          * .os.ieTouch
          * .os.supportsTouch
          * .os.playbook
+         $.os.tizen
          * .feat.nativetouchScroll
          * @api private
          */
@@ -1938,6 +1939,7 @@ if (!window.af || typeof(af) !== "function") {
             $.os.fennec = userAgent.match(/fennec/i) ? true : userAgent.match(/Firefox/) ? true : false;
             $.os.ie = userAgent.match(/MSIE 10.0/i)||userAgent.match(/Trident\/7/i) ? true : false;
             $.os.ieTouch = $.os.ie && userAgent.toLowerCase().match(/touch/i) ? true : false;
+            $.os.tizen = userAgent.match(/Tizen/i)?true:false;
             $.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || 'ontouchstart' in window);
             //features
             $.feat = {};
@@ -1948,7 +1950,6 @@ if (!window.af || typeof(af) !== "function") {
             $.feat.cssTransformEnd = !$.os.opera ? ",0)" : ")";
             if ($.os.android && !$.os.webkit)
                 $.os.android = false;
-
 
         }
 
