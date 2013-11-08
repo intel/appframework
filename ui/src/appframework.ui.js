@@ -1826,7 +1826,10 @@
                     that.launchCompleted = true;
                     //trigger ui ready
                     $.query("#afui #splashscreen").remove();
-                    $(document).trigger("afui:ready");
+                    //Fix a bug with android dispatching events in the middle of other code execution
+                    setTimeout(function(){
+                        $(document).trigger("afui:ready");
+                    });
                     
                 };
                 if (loadingDefer) {
