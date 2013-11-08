@@ -21,6 +21,7 @@
         var slideOver = max/3;
         var menuState;
         var transTime = $.ui.transitionTime;
+        $.ui.toggleSideMenu(false, null, 0);
 
         window.addEventListener("resize", function(e) {
             max = $("#menu").width();
