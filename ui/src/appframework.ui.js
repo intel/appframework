@@ -1628,7 +1628,7 @@
                 });
                 if ($.feat.nativeTouchScroll) $.query("#menu_scroller").css("height", "100%");
 
-                this.asideMenu = $.create("div", {
+                /*this.asideMenu = $.create("div", {
                     id: "aside_menu",
                     html: '<div id="aside_menu_scroller"></div>'
                 }).get(0);
@@ -1643,7 +1643,9 @@
                     autoEnable: true,
                     lockBounce: this.lockPageBounce
                 });
+
                 if ($.feat.nativeTouchScroll) $.query("#aside_menu_scroller").css("height", "100%");
+                */
             }
 
             if (!this.content) {
@@ -2004,6 +2006,7 @@
 
 (function() {
     $(document).one("intel.xdk.device.ready", function() { //in intel xdk, we need to undo the height stuff since it causes issues.
+        $.ui.isIntel=true;
         setTimeout(function() {
             document.getElementById('afui').style.height = "100%";
             document.body.style.height = "100%";
