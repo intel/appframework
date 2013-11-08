@@ -15,9 +15,9 @@
       }
     ],
     "description": {
-      "full": "<p>App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.<br />Since most mobile devices (Android, iOS, webOS) use a WebKit browser, you only need to target one browser.<br />We are able to increase the speed greatly by removing support for legacy desktop browsers and taking advantage of browser features, like native JSON parsing and querySelectorAll</p>\n\n<p>MIT License</p>",
-      "summary": "<p>App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.<br />Since most mobile devices (Android, iOS, webOS) use a WebKit browser, you only need to target one browser.<br />We are able to increase the speed greatly by removing support for legacy desktop browsers and taking advantage of browser features, like native JSON parsing and querySelectorAll</p>\n\n<p>MIT License</p>",
-      "body": ""
+      "full": "<p>App Framework  query selector class for HTML5 mobile apps on a Webkit or IE 10 browser.<br />We are able to increase the speed greatly by removing support for legacy desktop browsers and taking advantage of browser features, like native JSON parsing and querySelectorAll</p>\n\n<p>MIT License</p>",
+      "summary": "<p>App Framework  query selector class for HTML5 mobile apps on a Webkit or IE 10 browser.<br />We are able to increase the speed greatly by removing support for legacy desktop browsers and taking advantage of browser features, like native JSON parsing and querySelectorAll</p>",
+      "body": "<p>MIT License</p>"
     },
     "isPrivate": true,
     "ignore": false,
@@ -41,7 +41,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "var af = (function(window) {\n        \"use strict\";\n        var nundefined, document = window.document,\n            emptyArray = [],\n            slice = emptyArray.slice,\n            classCache = {},\n            eventHandlers = [],\n            _eventID = 1,\n            jsonPHandlers = [],\n            _jsonPID = 1,\n            fragementRE = /^\\s*<(\\w+)[^>]*>/,\n            classSelectorRE = /^\\.([\\w-]+)$/,\n            tagSelectorRE = /^[\\w-]+$/,\n            _attrCache = {},\n            _propCache = {},\n            cssNumber = {\n                \"columncount\": true,\n                \"fontweight\": true,\n                \"lineheight\": true,\n                \"column-count\": true,\n                \"font-weight\": true,\n                \"line-height\": true,\n                \"opacity\": true,\n                \"orphans\": true,\n                \"widows\": true,\n                \"zIndex\": true,\n                \"z-index\": true,\n                \"zoom\": true\n            },\n            isWin8 = (typeof(MSApp) === \"object\");",
+    "code": "var af = (function(window) {\n        \"use strict\";\n        var nundefined, document = window.document,\n            emptyArray = [],\n            slice = emptyArray.slice,\n            classCache = {},\n            eventHandlers = [],\n            _eventID = 1,\n            jsonPHandlers = [],\n            _jsonPID = 1,\n            fragmentRE = /<(\\w+)[^>]*>/,\n            classSelectorRE = /^\\.([\\w-]+)$/,\n            tagSelectorRE = /^[\\w-]+$/,\n            _attrCache = {},\n            _propCache = {},\n            cssNumber = {\n                \"columncount\": true,\n                \"fontweight\": true,\n                \"lineheight\": true,\n                \"column-count\": true,\n                \"font-weight\": true,\n                \"line-height\": true,\n                \"opacity\": true,\n                \"orphans\": true,\n                \"widows\": true,\n                \"zIndex\": true,\n                \"z-index\": true,\n                \"zoom\": true\n            },\n            isWin8 = (typeof(MSApp) === \"object\");",
     "ctx": {
       "type": "declaration",
       "name": "af",
@@ -287,22 +287,12 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "function _selectorAll(selector, what) {\n            try {\n                return what.querySelectorAll(selector);",
+    "code": "function _selectorAll(selector, what) {\n            try {\n                return what.querySelectorAll(selector);\n\n            } catch (e) {\n                return [];\n            }\n        }",
     "ctx": {
       "type": "function",
       "name": "_selectorAll",
       "string": "_selectorAll()"
     }
-  },
-  {
-    "tags": [],
-    "description": {
-      "full": "<p>lassSelectorRE.test(selector) ? what.getElementsByClassName(RegExp.$1) :<br />                    tagSelectorRE.test(selector) ? what.getElementsByTagName(selector) :<br />                    what.querySelectorAll(selector);</p>",
-      "summary": "<p>lassSelectorRE.test(selector) ? what.getElementsByClassName(RegExp.$1) :<br />                    tagSelectorRE.test(selector) ? what.getElementsByTagName(selector) :<br />                    what.querySelectorAll(selector);</p>",
-      "body": ""
-    },
-    "ignore": false,
-    "code": "} catch (e) {\n                return [];\n            }\n        }"
   },
   {
     "tags": [
@@ -336,7 +326,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "function _selector(selector, what) {\n\n\n            selector = selector.trim();\n\n            if (selector[0] === \"#\" && selector.indexOf(\".\") == -1 && selector.indexOf(\" \") === -1 && selector.indexOf(\">\") === -1) {\n                if (what == document)\n                    _shimNodes(what.getElementById(selector.replace(\"#\", \"\")), this);\n                else\n                    _shimNodes(_selectorAll(selector, what), this);\n            } else if ((selector[0] === \"<\" && selector[selector.length - 1] === \">\") || (selector.indexOf(\"<\") !== -1 && selector.indexOf(\">\") !== -1)) //html\n\n            {\n                var tmp = document.createElement(\"div\");\n                if (isWin8) {\n                    MSApp.execUnsafeLocalFunction(function() {\n                        tmp.innerHTML = selector.trim();\n                    });\n                } else\n                    tmp.innerHTML = selector.trim();\n                _shimNodes(tmp.childNodes, this);\n            } else {\n                _shimNodes((_selectorAll(selector, what)), this);\n            }\n            return this;\n        }\n\n        function _shimNodes(nodes, obj) {\n            if (!nodes)\n                return;\n            if (nodes.nodeType) {\n                obj[obj.length++] = nodes;\n                return;\n            }\n            for (var i = 0, iz = nodes.length; i < iz; i++)\n                obj[obj.length++] = nodes[i];\n        }",
+    "code": "function _selector(selector, what) {\n\n\n            selector = selector.trim();\n\n            if (selector[0] === \"#\" && selector.indexOf(\".\") == -1 &&selector.indexOf(\",\") == -1 && selector.indexOf(\" \") === -1 && selector.indexOf(\">\") === -1) {\n                if (what == document)\n                    _shimNodes(what.getElementById(selector.replace(\"#\", \"\")), this);\n                else\n                    _shimNodes(_selectorAll(selector, what), this);\n            } else if ((selector[0] === \"<\" && selector[selector.length - 1] === \">\") || (selector.indexOf(\"<\") !== -1 && selector.indexOf(\">\") !== -1)) //html\n\n            {\n                var tmp = document.createElement(\"div\");\n                if (isWin8) {\n                    MSApp.execUnsafeLocalFunction(function() {\n                        tmp.innerHTML = selector.trim();\n                    });\n                } else\n                    tmp.innerHTML = selector.trim();\n                _shimNodes(tmp.childNodes, this);\n            } else {\n                _shimNodes((_selectorAll(selector, what)), this);\n            }\n            return this;\n        }\n\n        function _shimNodes(nodes, obj) {\n            if (!nodes)\n                return;\n            if (nodes.nodeType) {\n                obj[obj.length++] = nodes;\n                return;\n            }\n            for (var i = 0, iz = nodes.length; i < iz; i++)\n                obj[obj.length++] = nodes[i];\n        }",
     "ctx": {
       "type": "function",
       "name": "_selector",
@@ -412,7 +402,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.map = function(elements, callback) {\n            var value, values = [],\n                i, key;\n            if ($.isArray(elements))\n                for (i = 0; i < elements.length; i++) {\n                    value = callback(elements[i], i);\n                    if (value !== nundefined)\n                        values.push(value);\n            } else if ($.isObject(elements))\n                for (key in elements) {\n                    if (!elements.hasOwnProperty(key))\n                        continue;\n                    value = callback(elements[key], key);\n                    if (value !== nundefined)\n                        values.push(value);\n            }\n            return af([values]);\n        };"
+    "code": "$.map = function(elements, callback) {\n            var value, values = [],\n                i, key;\n            if ($.isArray(elements))\n                for (i = 0; i < elements.length; i++) {\n                    value = callback.apply(elements[i],[i,elements[i]]);\n                    if (value !== nundefined)\n                        values.push(value);\n            } else if ($.isObject(elements))\n                for (key in elements) {\n                    if (!elements.hasOwnProperty(key) || key == \"length\")\n                        continue;\n                    value = callback(elements[key],[key,elements[key]]);\n                    if (value !== nundefined)\n                        values.push(value);\n            }\n            return af(values);\n        };"
   },
   {
     "tags": [
@@ -452,7 +442,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.each = function(elements, callback) {\n            var i, key;\n            if ($.isArray(elements))\n                for (i = 0; i < elements.length; i++) {\n                    if (callback(i, elements[i]) === false)\n                        return elements;\n            } else if ($.isObject(elements))\n                for (key in elements) {\n                    if (!elements.hasOwnProperty(key))\n                        continue;\n                    if (callback(key, elements[key]) === false)\n                        return elements;\n            }\n            return elements;\n        };"
+    "code": "$.each = function(elements, callback) {\n            var i, key;\n            if ($.isArray(elements))\n                for (i = 0; i < elements.length; i++) {\n                    if (callback(i, elements[i]) === false)\n                        return elements;\n            } else if ($.isObject(elements))\n                for (key in elements) {\n                    if (!elements.hasOwnProperty(key) || key == \"length\")\n                        continue;\n                    if (callback(key, elements[key]) === false)\n                        return elements;\n            }\n            return elements;\n        };"
   },
   {
     "tags": [
@@ -588,7 +578,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.isObject = function(obj) {\n            return typeof obj === \"object\";\n        };"
+    "code": "$.isObject = function(obj) {\n            return typeof obj === \"object\" && obj !== null;\n        };"
   },
   {
     "tags": [],
@@ -598,7 +588,7 @@
       "body": ""
     },
     "ignore": false,
-    "code": "$.fn = $afm.prototype = {\n            constructor: $afm,\n            forEach: emptyArray.forEach,\n            reduce: emptyArray.reduce,\n            push: emptyArray.push,\n            indexOf: emptyArray.indexOf,\n            concat: emptyArray.concat,\n            selector: _selector,\n            oldElement: undefined,\n            slice: emptyArray.slice,\n            length: 0,"
+    "code": "$.fn = $afm.prototype = {\n            namepsace:\"appframework\",\n            constructor: $afm,\n            forEach: emptyArray.forEach,\n            reduce: emptyArray.reduce,\n            push: emptyArray.push,\n            indexOf: emptyArray.indexOf,\n            concat: emptyArray.concat,\n            selector: _selector,\n            oldElement: undefined,\n            slice: emptyArray.slice,\n            length: 0,"
   },
   {
     "tags": [
@@ -660,7 +650,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "map: function(fn) {\n                var value, values = [],\n                    i;\n                for (i = 0; i < this.length; i++) {\n                    value = fn(i, this[i]);\n                    if (value !== nundefined)\n                        values.push(value);\n                }\n                return $([values]);\n            },"
+    "code": "map: function(fn) {\n                var value, values = [],\n                    i;\n                for (i = 0; i < this.length; i++) {\n                    value = fn.apply(this[i],[i,this[i]]);\n                    if (value !== nundefined)\n                        values.push(value);\n                }\n                return $(values);\n            },"
   },
   {
     "tags": [
@@ -794,7 +784,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "html: function(html, cleanup) {\n                if (this.length === 0)\n                    return this;\n                if (html === nundefined)\n                    return this[0].innerHTML;\n\n                for (var i = 0; i < this.length; i++) {\n                    if (cleanup !== false)\n                        $.cleanUpContent(this[i], false, true);\n                    if (isWin8) {\n                        MSApp.execUnsafeLocalFunction(function() {\n                            this[i].innerHTML = html;\n                        });\n                    } else\n                        this[i].innerHTML = html;\n                }\n                return this;\n            },"
+    "code": "html: function(html, cleanup) {\n                if (this.length === 0)\n                    return this;\n                if (html === nundefined)\n                    return this[0].innerHTML;\n\n                for (var i = 0; i < this.length; i++) {\n                    if (cleanup !== false)\n                        $.cleanUpContent(this[i], false, true);\n                    if (isWin8) {\n                        var item=this[i];\n                        MSApp.execUnsafeLocalFunction(function() {\n                            item.innerHTML = html;\n                        });\n                    } else\n                        this[i].innerHTML = html;\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1068,7 +1058,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "toggle: function(show) {\n                var show2 = show === true ? true : false;\n                for (var i = 0; i < this.length; i++) {\n                    if (window.getComputedStyle(this[i])['display'] !== \"none\" || (show != nundefined && show2 === false)) {\n                        this[i].setAttribute(\"afmOldStyle\", this[i].style.display);\n                        this[i].style.display = \"none\";\n                    } else {\n                        this[i].style.display = this[i].getAttribute(\"afmOldStyle\") != nundefined ? this[i].getAttribute(\"afmOldStyle\") : 'block';\n                        this[i].removeAttribute(\"afmOldStyle\");\n                    }\n                }\n                return this;\n            },"
+    "code": "toggle: function(show) {\n                if(this.length === 0)\n                    return this;\n                var show2 = !!(show === true);\n                for (var i = 0; i < this.length; i++) {\n                    if (this.css(\"display\", null, this[i]) != \"none\" && (show == nundefined || show2 === false)) {\n                        this[i].setAttribute(\"afmOldStyle\", this.css(\"display\", null, this[i]));\n                        this[i].style.display = \"none\";\n                    } else if (this.css(\"display\", null, this[i]) == \"none\" && (show == nundefined || show2 === true)) {\n                        this[i].style.display = this[i].getAttribute(\"afmOldStyle\") ? this[i].getAttribute(\"afmOldStyle\") : 'block';\n                        this[i].removeAttribute(\"afmOldStyle\");\n                    }\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1146,7 +1136,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "attr: function(attr, value) {\n                if (this.length === 0)\n                    return (value === nundefined) ? undefined : this;\n                if (value === nundefined && !$.isObject(attr)) {\n                    var val = (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) ? (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) : this[0].getAttribute(attr);\n                    return val;\n                }\n                for (var i = 0; i < this.length; i++) {\n                    if ($.isObject(attr)) {\n                        for (var key in attr) {\n                            $(this[i]).attr(key, attr[key]);\n                        }\n                    } else if ($.isArray(value) || $.isObject(value) || $.isFunction(value)) {\n\n                        if (!this[i].afmCacheId)\n                            this[i].afmCacheId = $.uuid();\n\n                        if (!_attrCache[this[i].afmCacheId])\n                            _attrCache[this[i].afmCacheId] = {};\n                        _attrCache[this[i].afmCacheId][attr] = value;\n                    } else if (value === null && value != nundefined) {\n                        this[i].removeAttribute(attr);\n                        if (this[i].afmCacheId && _attrCache[this[i].afmCacheId][attr])\n                            delete _attrCache[this[i].afmCacheId][attr];\n                    } else {\n                        this[i].setAttribute(attr, value);\n                    }\n                }\n                return this;\n            },"
+    "code": "attr: function(attr, value) {\n                if (this.length === 0)\n                    return (value === nundefined) ? undefined : this;\n                if (value === nundefined && !$.isObject(attr)) {\n                    var val = (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) ? (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) : this[0].getAttribute(attr);\n                    return val;\n                }\n                for (var i = 0; i < this.length; i++) {\n                    if ($.isObject(attr)) {\n                        for (var key in attr) {\n                            $(this[i]).attr(key, attr[key]);\n                        }\n                    } else if ($.isArray(value) || $.isObject(value) || $.isFunction(value)) {\n\n                        if (!this[i].afmCacheId)\n                            this[i].afmCacheId = $.uuid();\n\n                        if (!_attrCache[this[i].afmCacheId])\n                            _attrCache[this[i].afmCacheId] = {};\n                        _attrCache[this[i].afmCacheId][attr] = value;\n                    } else if (value === null) {\n                        this[i].removeAttribute(attr);\n                        if (this[i].afmCacheId && _attrCache[this[i].afmCacheId][attr])\n                            delete _attrCache[this[i].afmCacheId][attr];\n                    } else {\n                        this[i].setAttribute(attr, value);\n                    }\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1287,7 +1277,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "remove: function(selector) {\n                var elems = $(this).filter(selector);\n                if (elems == nundefined)\n                    return this;\n                for (var i = 0; i < elems.length; i++) {\n                    $.cleanUpContent(elems[i], true, true);\n                    elems[i].parentNode.removeChild(elems[i]);\n                }\n                return this;\n            },"
+    "code": "remove: function(selector) {\n                var elems = $(this).filter(selector);\n                if (elems == nundefined)\n                    return this;\n                for (var i = 0; i < elems.length; i++) {\n                    $.cleanUpContent(elems[i], true, true);\n                    if (elems[i] && elems[i].parentNode) {\n                        elems[i].parentNode.removeChild(elems[i]);\n                    }\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1349,7 +1339,46 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "removeClass: function(name) {\n                if (name == nundefined) return this;\n                for (var i = 0; i < this.length; i++) {\n                    if (name == nundefined) {\n                        this[i].className = '';\n                        return this;\n                    }\n                    var classList = this[i].className;\n                    name.split(/\\s+/g).forEach(function(cname) {\n                        classList = classList.replace(classRE(cname), \" \");\n                    });\n                    if (classList.length > 0)\n                        this[i].className = classList.trim();\n                    else\n                        this[i].className = \"\";\n                }\n                return this;\n            },"
+    "code": "removeClass: function(name) {\n                if (name == nundefined) return this;\n                for (var i = 0; i < this.length; i++) {\n                    if (name == nundefined) {\n                        this[i].className = '';\n                        return this;\n                    }\n                    var classList = this[i].className;\n\t\t\t\t\t//SGV LINK EVENT\n\t\t\t\t\tif (typeof this[i].className == \"object\") {\n\t\t\t\t\t\tclassList = \" \";\n\t\t\t\t\t}\n                    name.split(/\\s+/g).forEach(function(cname) {\n                        classList = classList.replace(classRE(cname), \" \");\n                    });\n                    if (classList.length > 0)\n                        this[i].className = classList.trim();\n                    else\n                        this[i].className = \"\";\n                }\n                return this;\n            },"
+  },
+  {
+    "tags": [
+      {
+        "type": "param",
+        "types": [
+          "String"
+        ],
+        "name": "classes",
+        "description": "that are space delimited"
+      },
+      {
+        "type": "param",
+        "types": [
+          "Boolean"
+        ],
+        "name": "[state]",
+        "description": "force toggle to add or remove classes"
+      },
+      {
+        "type": "return",
+        "types": [
+          "Object"
+        ],
+        "description": "appframework object"
+      },
+      {
+        "type": "title",
+        "string": "$().toggleClass(name)"
+      }
+    ],
+    "description": {
+      "full": "<p>Adds or removes a css class to elements.<br />                <div class=\"highlight\"><pre lang=\"\">                $().toggleClass(\"selected\");<br />                </pre></div></p>",
+      "summary": "<p>Adds or removes a css class to elements.<br />                <div class=\"highlight\"><pre lang=\"\">                $().toggleClass(\"selected\");<br />                </pre></div></p>",
+      "body": ""
+    },
+    "isPrivate": false,
+    "ignore": false,
+    "code": "toggleClass: function(name, state) {\n                if (name == nundefined) return this;\n                for (var i = 0; i < this.length; i++) {\n                    if (typeof state != \"boolean\") {\n                        state = this.hasClass(name, this[i]);\n                    }\n                    $(this[i])[state ? 'removeClass' : 'addClass'](name);\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -1467,7 +1496,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "append: function(element, insert) {\n                if (element && element.length != nundefined && element.length === 0)\n                    return this;\n                if ($.isArray(element) || $.isObject(element))\n                    element = $(element);\n                var i;\n\n\n                for (i = 0; i < this.length; i++) {\n                    if (element.length && typeof element != \"string\") {\n                        element = $(element);\n                        _insertFragments(element, this[i], insert);\n                    } else {\n                        var obj = fragementRE.test(element) ? $(element) : undefined;\n                        if (obj == nundefined || obj.length === 0) {\n                            obj = document.createTextNode(element);\n                        }\n                        if (obj.nodeName != nundefined && obj.nodeName.toLowerCase() == \"script\" && (!obj.type || obj.type.toLowerCase() === 'text/javascript')) {\n                            window['eval'](obj.innerHTML);\n                        } else if (obj instanceof $afm) {\n                            _insertFragments(obj, this[i], insert);\n                        } else {\n                            insert != nundefined ? this[i].insertBefore(obj, this[i].firstChild) : this[i].appendChild(obj);\n                        }\n                    }\n                }\n                return this;\n            },"
+    "code": "append: function(element, insert) {\n                if (element && element.length != nundefined && element.length === 0)\n                    return this;\n                if ($.isArray(element) || $.isObject(element))\n                    element = $(element);\n                var i;\n\n\n                for (i = 0; i < this.length; i++) {\n                    if (element.length && typeof element != \"string\") {\n                        element = $(element);\n                        _insertFragments(element, this[i], insert);\n                    } else {\n                        var obj = fragmentRE.test(element) ? $(element) : undefined;                        \n                        if (obj == nundefined || obj.length === 0) {\n                            obj = document.createTextNode(element);\n                        }\n                        if (obj.nodeName != nundefined && obj.nodeName.toLowerCase() == \"script\" && (!obj.type || obj.type.toLowerCase() === 'text/javascript')) {\n                            window['eval'](obj.innerHTML);\n                        } else if (obj instanceof $afm) {\n                            _insertFragments(obj, this[i], insert);\n                        } else {\n                            insert != nundefined ? this[i].insertBefore(obj, this[i].firstChild) : this[i].appendChild(obj);\n                        }\n                    }\n                }\n                return this;\n            },"
   },
   {
     "tags": [
@@ -2246,7 +2275,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.ajax = function(opts) {\n            var xhr;\n            try {\n\n                var settings = opts || {};\n                for (var key in $.ajaxSettings) {\n                    if (typeof(settings[key]) == 'undefined')\n                        settings[key] = $.ajaxSettings[key];\n                }\n\n                if (!settings.url)\n                    settings.url = window.location;\n                if (!settings.contentType)\n                    settings.contentType = \"application/x-www-form-urlencoded\";\n                if (!settings.headers)\n                    settings.headers = {};\n\n                if (!('async' in settings) || settings.async !== false)\n                    settings.async = true;\n\n                if (!settings.dataType)\n                    settings.dataType = \"text/html\";\n                else {\n                    switch (settings.dataType) {\n                        case \"script\":\n                            settings.dataType = 'text/javascript, application/javascript';\n                            break;\n                        case \"json\":\n                            settings.dataType = 'application/json';\n                            break;\n                        case \"xml\":\n                            settings.dataType = 'application/xml, text/xml';\n                            break;\n                        case \"html\":\n                            settings.dataType = 'text/html';\n                            break;\n                        case \"text\":\n                            settings.dataType = 'text/plain';\n                            break;\n                        default:\n                            settings.dataType = \"text/html\";\n                            break;\n                        case \"jsonp\":\n                            return $.jsonP(opts);\n                    }\n                }\n                if ($.isObject(settings.data))\n                    settings.data = $.param(settings.data);\n                if (settings.type.toLowerCase() === \"get\" && settings.data) {\n                    if (settings.url.indexOf(\"?\") === -1)\n                        settings.url += \"?\" + settings.data;\n                    else\n                        settings.url += \"&\" + settings.data;\n                }\n\n                if (/=\\?/.test(settings.url)) {\n                    return $.jsonP(settings);\n                }\n                if (settings.crossDomain === null) settings.crossDomain = /^([\\w-]+:)?\\/\\/([^\\/]+)/.test(settings.url) &&\n                        RegExp.$2 != window.location.host;\n\n                if (!settings.crossDomain)\n                    settings.headers = $.extend({\n                        'X-Requested-With': 'XMLHttpRequest'\n                    }, settings.headers);\n                var abortTimeout;\n                var context = settings.context;\n                var protocol = /^([\\w-]+:)\\/\\//.test(settings.url) ? RegExp.$1 : window.location.protocol;\n\n                //ok, we are really using xhr\n                xhr = new window.XMLHttpRequest();\n\n\n                xhr.onreadystatechange = function() {\n                    var mime = settings.dataType;\n                    if (xhr.readyState === 4) {\n                        clearTimeout(abortTimeout);\n                        var result, error = false;\n                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0 && protocol == 'file:') {\n                            if (mime === 'application/json' && !(/^\\s*$/.test(xhr.responseText))) {\n                                try {\n                                    result = JSON.parse(xhr.responseText);\n                                } catch (e) {\n                                    error = e;\n                                }\n                            } else if (mime === 'application/xml, text/xml') {\n                                result = xhr.responseXML;\n                            } else if (mime == \"text/html\") {\n                                result = xhr.responseText;\n                                $.parseJS(result);\n                            } else\n                                result = xhr.responseText;\n                            //If we're looking at a local file, we assume that no response sent back means there was an error\n                            if (xhr.status === 0 && result.length === 0)\n                                error = true;\n                            if (error)\n                                settings.error.call(context, xhr, 'parsererror', error);\n                            else {\n                                settings.success.call(context, result, 'success', xhr);\n                            }\n                        } else {\n                            error = true;\n                            settings.error.call(context, xhr, 'error');\n                        }\n                        settings.complete.call(context, xhr, error ? 'error' : 'success');\n                    }\n                };\n                xhr.open(settings.type, settings.url, settings.async);\n                if (settings.withCredentials) xhr.withCredentials = true;\n\n                if (settings.contentType)\n                    settings.headers['Content-Type'] = settings.contentType;\n                for (var name in settings.headers)\n                    xhr.setRequestHeader(name, settings.headers[name]);\n                if (settings.beforeSend.call(context, xhr, settings) === false) {\n                    xhr.abort();\n                    return false;\n                }\n\n                if (settings.timeout > 0)\n                    abortTimeout = setTimeout(function() {\n                        xhr.onreadystatechange = empty;\n                        xhr.abort();\n                        settings.error.call(context, xhr, 'timeout');\n                    }, settings.timeout);\n                xhr.send(settings.data);\n            } catch (e) {\n                // General errors (e.g. access denied) should also be sent to the error callback\n                console.log(e);\n                settings.error.call(context, xhr, 'error', e);\n            }\n            return xhr;\n        };"
+    "code": "$.ajax = function(opts) {\n            var xhr;\n            try {\n\n                var settings = opts || {};\n                for (var key in $.ajaxSettings) {\n                    if (typeof(settings[key]) == 'undefined')\n                        settings[key] = $.ajaxSettings[key];\n                }\n\n                if (!settings.url)\n                    settings.url = window.location;\n                if (!settings.contentType)\n                    settings.contentType = \"application/x-www-form-urlencoded\";\n                if (!settings.headers)\n                    settings.headers = {};\n\n                if (!('async' in settings) || settings.async !== false)\n                    settings.async = true;\n\n                if (!settings.dataType)\n                    settings.dataType = \"text/html\";\n                else {\n                    switch (settings.dataType) {\n                        case \"script\":\n                            settings.dataType = 'text/javascript, application/javascript';\n                            break;\n                        case \"json\":\n                            settings.dataType = 'application/json';\n                            break;\n                        case \"xml\":\n                            settings.dataType = 'application/xml, text/xml';\n                            break;\n                        case \"html\":\n                            settings.dataType = 'text/html';\n                            break;\n                        case \"text\":\n                            settings.dataType = 'text/plain';\n                            break;\n                        default:\n                            settings.dataType = \"text/html\";\n                            break;\n                        case \"jsonp\":\n                            return $.jsonP(opts);\n                    }\n                }\n                if ($.isObject(settings.data))\n                    settings.data = $.param(settings.data);\n                if (settings.type.toLowerCase() === \"get\" && settings.data) {\n                    if (settings.url.indexOf(\"?\") === -1)\n                        settings.url += \"?\" + settings.data;\n                    else\n                        settings.url += \"&\" + settings.data;\n                }\n\n                if (/=\\?/.test(settings.url)) {\n                    return $.jsonP(settings);\n                }\n                if (settings.crossDomain === null) settings.crossDomain = /^([\\w-]+:)?\\/\\/([^\\/]+)/.test(settings.url) &&\n                        RegExp.$2 != window.location.host;\n\n                if (!settings.crossDomain)\n                    settings.headers = $.extend({\n                        'X-Requested-With': 'XMLHttpRequest'\n                    }, settings.headers);\n                var abortTimeout;\n                var context = settings.context;\n                var protocol = /^([\\w-]+:)\\/\\//.test(settings.url) ? RegExp.$1 : window.location.protocol;\n\n                //ok, we are really using xhr\n                xhr = new window.XMLHttpRequest();\n\n\n                xhr.onreadystatechange = function() {\n                    var mime = settings.dataType;\n                    if (xhr.readyState === 4) {\n                        clearTimeout(abortTimeout);\n                        var result, error = false;\n                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0 && protocol == 'file:') {\n                            if (mime === 'application/json' && !(/^\\s*$/.test(xhr.responseText))) {\n                                try {\n                                    result = JSON.parse(xhr.responseText);\n                                } catch (e) {\n                                    error = e;\n                                }\n                            } else if (mime === 'application/xml, text/xml') {\n                                result = xhr.responseXML;\n                            } else if (mime == \"text/html\") {\n                                result = xhr.responseText;\n                                $.parseJS(result);\n                            } else\n                                result = xhr.responseText;\n                            //If we're looking at a local file, we assume that no response sent back means there was an error\n                            if (xhr.status === 0 && result.length === 0)\n                                error = true;\n                            if (error)\n                                settings.error.call(context, xhr, 'parsererror', error);\n                            else {\n                                settings.success.call(context, result, 'success', xhr);\n                            }\n                        } else {\n                            error = true;\n                            settings.error.call(context, xhr, 'error');\n                        }\n                        settings.complete.call(context, xhr, error ? 'error' : 'success');\n                    }\n                };\n                xhr.open(settings.type, settings.url, settings.async);\n                if (settings.withCredentials) xhr.withCredentials = true;\n\n                if (settings.contentType)\n                    settings.headers['Content-Type'] = settings.contentType;\n                for (var name in settings.headers)\n                    if (typeof settings.headers[name] === 'string')\n                        xhr.setRequestHeader(name, settings.headers[name]);\n                if (settings.beforeSend.call(context, xhr, settings) === false) {\n                    xhr.abort();\n                    return false;\n                }\n\n                if (settings.timeout > 0)\n                    abortTimeout = setTimeout(function() {\n                        xhr.onreadystatechange = empty;\n                        xhr.abort();\n                        settings.error.call(context, xhr, 'timeout');\n                    }, settings.timeout);\n                xhr.send(settings.data);\n            } catch (e) {\n                // General errors (e.g. access denied) should also be sent to the error callback\n                console.log(e);\n                settings.error.call(context, xhr, 'error', e);\n            }\n            return xhr;\n        };"
   },
   {
     "tags": [
@@ -2479,7 +2508,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "function detectUA($, userAgent) {\n            $.os = {};\n            $.os.webkit = userAgent.match(/WebKit\\/([\\d.]+)/) ? true : false;\n            $.os.android = userAgent.match(/(Android)\\s+([\\d.]+)/) || userAgent.match(/Silk-Accelerated/) ? true : false;\n            $.os.androidICS = $.os.android && userAgent.match(/(Android)\\s4/) ? true : false;\n            $.os.ipad = userAgent.match(/(iPad).*OS\\s([\\d_]+)/) ? true : false;\n            $.os.iphone = !$.os.ipad && userAgent.match(/(iPhone\\sOS)\\s([\\d_]+)/) ? true : false;\n            $.os.ios7 = userAgent.match(/(iPhone\\sOS)\\s([7_]+)/) ? true : false;\n            $.os.webos = userAgent.match(/(webOS|hpwOS)[\\s\\/]([\\d.]+)/) ? true : false;\n            $.os.touchpad = $.os.webos && userAgent.match(/TouchPad/) ? true : false;\n            $.os.ios = $.os.ipad || $.os.iphone;\n            $.os.playbook = userAgent.match(/PlayBook/) ? true : false;\n            $.os.blackberry = $.os.playbook || userAgent.match(/BlackBerry/) ? true : false;\n            $.os.blackberry10 = $.os.blackberry && userAgent.match(/Safari\\/536/) ? true : false;\n            $.os.chrome = userAgent.match(/Chrome/) ? true : false;\n            $.os.opera = userAgent.match(/Opera/) ? true : false;\n            $.os.fennec = userAgent.match(/fennec/i) ? true : userAgent.match(/Firefox/) ? true : false;\n            $.os.ie = userAgent.match(/MSIE 10.0/i) ? true : false;\n            $.os.ieTouch = $.os.ie && userAgent.toLowerCase().match(/touch/i) ? true : false;\n            $.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || 'ontouchstart' in window);\n            //features\n            $.feat = {};\n            var head = document.documentElement.getElementsByTagName(\"head\")[0];\n            $.feat.nativeTouchScroll = typeof(head.style[\"-webkit-overflow-scrolling\"]) !== \"undefined\" && $.os.ios;\n            $.feat.cssPrefix = $.os.webkit ? \"Webkit\" : $.os.fennec ? \"Moz\" : $.os.ie ? \"ms\" : $.os.opera ? \"O\" : \"\";\n            $.feat.cssTransformStart = !$.os.opera ? \"3d(\" : \"(\";\n            $.feat.cssTransformEnd = !$.os.opera ? \",0)\" : \")\";\n            if ($.os.android && !$.os.webkit)\n                $.os.android = false;\n        }\n\n        detectUA($, navigator.userAgent);\n        $.__detectUA = detectUA; //needed for unit tests",
+    "code": "function detectUA($, userAgent) {\n            $.os = {};\n            $.os.webkit = userAgent.match(/WebKit\\/([\\d.]+)/) ? true : false;\n            $.os.android = userAgent.match(/(Android)\\s+([\\d.]+)/) || userAgent.match(/Silk-Accelerated/) ? true : false;\n            $.os.androidICS = $.os.android && userAgent.match(/(Android)\\s4/) ? true : false;\n            $.os.ipad = userAgent.match(/(iPad).*OS\\s([\\d_]+)/) ? true : false;\n            $.os.iphone = !$.os.ipad && userAgent.match(/(iPhone\\sOS)\\s([\\d_]+)/) ? true : false;\n            $.os.ios7 = ($.os.ipad||$.os.iphone)&&userAgent.match(/7_/) ? true : false;\n            $.os.webos = userAgent.match(/(webOS|hpwOS)[\\s\\/]([\\d.]+)/) ? true : false;\n            $.os.touchpad = $.os.webos && userAgent.match(/TouchPad/) ? true : false;\n            $.os.ios = $.os.ipad || $.os.iphone;\n            $.os.playbook = userAgent.match(/PlayBook/) ? true : false;\n            $.os.blackberry10 = userAgent.match(/BB10/) ? true : false;\n            $.os.blackberry = $.os.playbook || $.os.blackberry10|| userAgent.match(/BlackBerry/) ? true : false;\n            $.os.chrome = userAgent.match(/Chrome/) ? true : false;\n            $.os.opera = userAgent.match(/Opera/) ? true : false;\n            $.os.fennec = userAgent.match(/fennec/i) ? true : userAgent.match(/Firefox/) ? true : false;\n            $.os.ie = userAgent.match(/MSIE 10.0/i)||userAgent.match(/Trident\\/7/i) ? true : false;\n            $.os.ieTouch = $.os.ie && userAgent.toLowerCase().match(/touch/i) ? true : false;\n            $.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || 'ontouchstart' in window);\n            //features\n            $.feat = {};\n            var head = document.documentElement.getElementsByTagName(\"head\")[0];\n            $.feat.nativeTouchScroll = typeof(head.style[\"-webkit-overflow-scrolling\"]) !== \"undefined\" && ($.os.ios||$.os.blackberry10);\n            $.feat.cssPrefix = $.os.webkit ? \"Webkit\" : $.os.fennec ? \"Moz\" : $.os.ie ? \"ms\" : $.os.opera ? \"O\" : \"\";\n            $.feat.cssTransformStart = !$.os.opera ? \"3d(\" : \"(\";\n            $.feat.cssTransformEnd = !$.os.opera ? \",0)\" : \")\";\n            if ($.os.android && !$.os.webkit)\n                $.os.android = false;\n\n\n        }\n\n        detectUA($, navigator.userAgent);\n        $.__detectUA = detectUA; //needed for unit tests",
     "ctx": {
       "type": "function",
       "name": "detectUA",
@@ -2510,7 +2539,7 @@
       "body": ""
     },
     "ignore": false,
-    "code": "$.getCssMatrix = function(ele) {\n            if ($.is$(ele)) ele = ele.get(0);\n            if (ele == nundefined) return window.WebKitCSSMatrix || window.MSCSSMatrix || {\n                    a: 0,\n                    b: 0,\n                    c: 0,\n                    d: 0,\n                    e: 0,\n                    f: 0\n            };\n            try {\n                if (window.WebKitCSSMatrix)\n                    return new WebKitCSSMatrix(window.getComputedStyle(ele).webkitTransform);\n                else if (window.MSCSSMatrix)\n                    return new MSCSSMatrix(window.getComputedStyle(ele).transform);\n                else {\n                    //fake css matrix\n                    var mat = window.getComputedStyle(ele)[$.feat.cssPrefix + 'Transform'].replace(/[^0-9\\-.,]/g, '').split(',');\n                    return {\n                        a: +mat[0],\n                        b: +mat[1],\n                        c: +mat[2],\n                        d: +mat[3],\n                        e: +mat[4],\n                        f: +mat[5]\n                    };\n                }\n            } catch (e) {\n                return {\n                    a: 0,\n                    b: 0,\n                    c: 0,\n                    d: 0,\n                    e: 0,\n                    f: 0\n                };\n            }\n        };"
+    "code": "$.getCssMatrix = function(ele) {\n            if ($.is$(ele)) ele = ele.get(0);\n\n            var matrixFn = window.WebKitCSSMatrix || window.MSCSSMatrix;\n\n            if (ele === nundefined) {\n                if (matrixFn) {\n                    return new matrixFn();\n                }\n                else {\n                    return {\n                        a: 0,\n                        b: 0,\n                        c: 0,\n                        d: 0,\n                        e: 0,\n                        f: 0\n                    };\n                }\n            }\n\n            var computedStyle = window.getComputedStyle(ele);\n\n            var transform = computedStyle.webkitTransform ||\n                            computedStyle.transform ||\n                            computedStyle[$.feat.cssPrefix + 'Transform'];\n\n            if (matrixFn)\n                return new matrixFn(transform);\n            else if (transform) {\n                //fake css matrix\n                var mat = transform.replace(/[^0-9\\-.,]/g, '').split(',');\n                return {\n                    a: +mat[0],\n                    b: +mat[1],\n                    c: +mat[2],\n                    d: +mat[3],\n                    e: +mat[4],\n                    f: +mat[5]\n                };\n            }\n            else {\n                return {\n                    a: 0,\n                    b: 0,\n                    c: 0,\n                    d: 0,\n                    e: 0,\n                    f: 0\n                };\n            }\n        };"
   },
   {
     "tags": [
@@ -2692,7 +2721,7 @@
     },
     "isPrivate": true,
     "ignore": false,
-    "code": "function findHandlers(element, event, fn, selector) {\n            event = parse(event);\n            if (event.ns)\n                var matcher = matcherFor(event.ns);\n            return (handlers[afmid(element)] || []).filter(function(handler) {\n                return handler && (!event.e || handler.e == event.e) && (!event.ns || matcher.test(handler.ns)) && (!fn || handler.fn == fn || (typeof handler.fn === 'function' && typeof fn === 'function' && \"\" + handler.fn === \"\" + fn)) && (!selector || handler.sel == selector);\n            });\n        }",
+    "code": "function findHandlers(element, event, fn, selector) {\n            event = parse(event);\n            if (event.ns)\n                var matcher = matcherFor(event.ns);\n            return (handlers[afmid(element)] || []).filter(function(handler) {\n                return handler && (!event.e || handler.e == event.e) && (!event.ns || matcher.test(handler.ns)) && (!fn || handler.fn == fn || (typeof handler.fn === 'function' && typeof fn === 'function' && handler.fn === fn)) && (!selector || handler.sel == selector);\n            });\n        }",
     "ctx": {
       "type": "function",
       "name": "findHandlers",
@@ -3055,7 +3084,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.fn.one = function(event, callback) {\n            return this.each(function(i, element) {\n                add(this, event, callback, null, function(fn, type) {\n                    return function() {\n                        var result = fn.apply(element, arguments);\n                        remove(element, type, fn);\n                        return result;\n                    };\n                });\n            });\n        };"
+    "code": "$.fn.one = function(event, callback) {\n            return this.each(function(i, element) {\n                add(this, event, callback, null, function(fn, type) {\n                    return function() {\n                        remove(element, type, fn);\n                        var result = fn.apply(element, arguments);\n                        return result;\n                    };\n                });\n            });\n        };"
   },
   {
     "tags": [
@@ -3138,6 +3167,14 @@
       {
         "type": "param",
         "types": [
+          "Object"
+        ],
+        "name": "data",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
           "Function"
         ],
         "name": "callback",
@@ -3152,7 +3189,7 @@
       },
       {
         "type": "title",
-        "string": "$().delegate(selector,event,callback)"
+        "string": "$().delegate(selector,event,[data],callback)"
       }
     ],
     "description": {
@@ -3162,7 +3199,12 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.fn.delegate = function(selector, event, callback) {\n            for (var i = 0; i < this.length; i++) {\n                var element = this[i];\n                add(element, event, callback, selector, function(fn) {\n                    return function(e) {\n                        var evt, match = $(e.target).closest(selector, element).get(0);\n                        if (match) {\n                            evt = $.extend(createProxy(e), {\n                                currentTarget: match,\n                                liveFired: element\n                            });\n                            return fn.apply(match, [evt].concat([].slice.call(arguments, 1)));\n                        }\n                    };\n                });\n            }\n            return this;\n        };"
+    "code": "function addDelegate(element,event,callback,selector,data){\n            add(element, event, callback, selector, function(fn) {\n                    return function(e) {\n                        var evt, match = $(e.target).closest(selector, element).get(0);\n                        if (match) {\n                            evt = $.extend(createProxy(e), {\n                                currentTarget: match,\n                                liveFired: element,\n                                data:data\n                            });\n                            return fn.apply(match, [evt].concat([].slice.call(arguments, 1)));\n                        }\n                    };\n                });\n        }\n        $.fn.delegate = function(selector, event,data, callback) {\n\n            for (var i = 0; i < this.length; i++) {\n                addDelegate(this[i],event,callback,selector,data)\n            }\n            return this;\n        };",
+    "ctx": {
+      "type": "function",
+      "name": "addDelegate",
+      "string": "addDelegate()"
+    }
   },
   {
     "tags": [
@@ -3238,6 +3280,14 @@
       {
         "type": "param",
         "types": [
+          "Object"
+        ],
+        "name": "data",
+        "description": ""
+      },
+      {
+        "type": "param",
+        "types": [
           "Function"
         ],
         "name": "callback",
@@ -3252,7 +3302,7 @@
       },
       {
         "type": "title",
-        "string": "$().on(event,selector,callback);"
+        "string": "$().on(event,selector,[data],callback);"
       }
     ],
     "description": {
@@ -3262,7 +3312,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.fn.on = function(event, selector, callback) {\n            return selector === nundefined || $.isFunction(selector) ? this.bind(event, selector) : this.delegate(selector, event, callback);\n        };"
+    "code": "$.fn.on = function(event, selector,data, callback) {\n            if(!$.isObject(data)){\n                callback=data;\n                data=null;\n            }\n\n            return selector === nundefined || $.isFunction(selector) ? this.bind(event, selector) : this.delegate(selector, event, data,callback);\n        };"
   },
   {
     "tags": [
@@ -3480,7 +3530,7 @@
     },
     "isPrivate": false,
     "ignore": false,
-    "code": "$.trigger = function(obj, ev, args) {\n            if (!obj) return;\n            var ret = true;\n            if (!obj.__events) return ret;\n            if (!$.isArray(ev)) ev = [ev];\n            if (!$.isArray(args)) args = [];\n            for (var i = 0; i < ev.length; i++) {\n                if (obj.__events[ev[i]]) {\n                    var evts = obj.__events[ev[i]];\n                    for (var j = 0; j < evts.length; j++)\n                        if ($.isFunction(evts[j]) && evts[j].apply(obj, args) === false)\n                            ret = false;\n                }\n            }\n            return ret;\n        };"
+    "code": "$.trigger = function(obj, ev, args) {\n            if (!obj) return;\n            var ret = true;\n            if (!obj.__events) return ret;\n            if (!$.isArray(ev)) ev = [ev];\n            if (!$.isArray(args)) args = [];\n            for (var i = 0; i < ev.length; i++) {\n                if (obj.__events[ev[i]]) {\n                    var evts = obj.__events[ev[i]].slice(0);\n                    for (var j = 0; j < evts.length; j++)\n                        if ($.isFunction(evts[j]) && evts[j].apply(obj, args) === false)\n                            ret = false;\n                }\n            }\n            return ret;\n        };"
   },
   {
     "tags": [

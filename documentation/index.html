@@ -10,7 +10,9 @@
     <link rel="stylesheet" type="text/css" href="af.ui.css" />
  <link rel="stylesheet" type="text/css" href="icons.css" />
 
-    <script type="text/javascript" charset="utf-8" src="appframework.ui.min.js"></script>
+    <!--<script type="text/javascript" charset="utf-8" src="appframework.ui.min.js"></script>-->
+    <script src="appframework.js"></script>
+    <script src="ui/appframework.ui.js"></script>
     <script>
     function aj(obj){
       console.log(obj);
@@ -178,6 +180,7 @@
 <li><a data-persist-ajax='true' href='#_remove'>.remove</a></li>
 <li><a data-persist-ajax='true' href='#_addClass'>.addClass</a></li>
 <li><a data-persist-ajax='true' href='#_removeClass'>.removeClass</a></li>
+<li><a data-persist-ajax='true' href='#_toggleClass'>.toggleClass</a></li>
 <li><a data-persist-ajax='true' href='#_replaceClass'>.replaceClass</a></li>
 <li><a data-persist-ajax='true' href='#_hasClass'>.hasClass</a></li>
 <li><a data-persist-ajax='true' href='#_append'>.append</a></li>
@@ -350,18 +353,18 @@ Test it on the following.  <input type='button' onclick="testIs(true)" value="tm
                 i, key;
             if ($.isArray(elements))
                 for (i = 0; i &lt; elements.length; i++) {
-                    value = callback(elements[i], i);
+                    value = callback.apply(elements[i],[i,elements[i]]);
                     if (value !== nundefined)
                         values.push(value);
             } else if ($.isObject(elements))
                 for (key in elements) {
-                    if (!elements.hasOwnProperty(key))
+                    if (!elements.hasOwnProperty(key) || key == "length")
                         continue;
-                    value = callback(elements[key], key);
+                    value = callback(elements[key],[key,elements[key]]);
                     if (value !== nundefined)
                         values.push(value);
             }
-            return af([values]);
+            return af(values);
         };
             </code></pre>
              </div>
@@ -441,7 +444,7 @@ function testMap(){
                         return elements;
             } else if ($.isObject(elements))
                 for (key in elements) {
-                    if (!elements.hasOwnProperty(key))
+                    if (!elements.hasOwnProperty(key) || key == "length")
                         continue;
                     if (callback(key, elements[key]) === false)
                         return elements;
@@ -731,7 +734,7 @@ function testisFunction(pass){
             <div class='viewsource' id='source_$_isObject' style='display:none'>
             <pre style='padding-left:25px'><code>
             $.isObject = function(obj) {
-            return typeof obj === "object";
+            return typeof obj === "object" && obj !== null;
         };
             </code></pre>
              </div>
@@ -801,11 +804,11 @@ function testisObject(pass){
                 var value, values = [],
                     i;
                 for (i = 0; i &lt; this.length; i++) {
-                    value = fn(i, this[i]);
+                    value = fn.apply(this[i],[i,this[i]]);
                     if (value !== nundefined)
                         values.push(value);
                 }
-                return $([values]);
+                return $(values);
             },
             </code></pre>
              </div>
@@ -1099,8 +1102,9 @@ function findTest(){
                     if (cleanup !== false)
                         $.cleanUpContent(this[i], false, true);
                     if (isWin8) {
+                        var item=this[i];
                         MSApp.execUnsafeLocalFunction(function() {
-                            this[i].innerHTML = html;
+                            item.innerHTML = html;
                         });
                     } else
                         this[i].innerHTML = html;
@@ -1572,13 +1576,15 @@ function findTest(){
             <div class='viewsource' id='source__toggle' style='display:none'>
             <pre style='padding-left:25px'><code>
             toggle: function(show) {
-                var show2 = show === true ? true : false;
+                if(this.length === 0)
+                    return this;
+                var show2 = !!(show === true);
                 for (var i = 0; i &lt; this.length; i++) {
-                    if (window.getComputedStyle(this[i])['display'] !== "none" || (show != nundefined && show2 === false)) {
-                        this[i].setAttribute("afmOldStyle", this[i].style.display);
+                    if (this.css("display", null, this[i]) != "none" && (show == nundefined || show2 === false)) {
+                        this[i].setAttribute("afmOldStyle", this.css("display", null, this[i]));
                         this[i].style.display = "none";
-                    } else {
-                        this[i].style.display = this[i].getAttribute("afmOldStyle") != nundefined ? this[i].getAttribute("afmOldStyle") : 'block';
+                    } else if (this.css("display", null, this[i]) == "none" && (show == nundefined || show2 === true)) {
+                        this[i].style.display = this[i].getAttribute("afmOldStyle") ? this[i].getAttribute("afmOldStyle") : 'block';
                         this[i].removeAttribute("afmOldStyle");
                     }
                 }
@@ -1719,7 +1725,7 @@ function findTest(){
                         if (!_attrCache[this[i].afmCacheId])
                             _attrCache[this[i].afmCacheId] = {};
                         _attrCache[this[i].afmCacheId][attr] = value;
-                    } else if (value === null && value != nundefined) {
+                    } else if (value === null) {
                         this[i].removeAttribute(attr);
                         if (this[i].afmCacheId && _attrCache[this[i].afmCacheId][attr])
                             delete _attrCache[this[i].afmCacheId][attr];
@@ -2015,7 +2021,9 @@ function findTest(){
                     return this;
                 for (var i = 0; i &lt; elems.length; i++) {
                     $.cleanUpContent(elems[i], true, true);
-                    elems[i].parentNode.removeChild(elems[i]);
+                    if (elems[i] && elems[i].parentNode) {
+                        elems[i].parentNode.removeChild(elems[i]);
+                    }
                 }
                 return this;
             },
@@ -2144,6 +2152,10 @@ function findTest(){
                         return this;
                     }
                     var classList = this[i].className;
+					//SGV LINK EVENT
+					if (typeof this[i].className == "object") {
+						classList = " ";
+					}
                     name.split(/\s+/g).forEach(function(cname) {
                         classList = classList.replace(classRE(cname), " ");
                     });
@@ -2193,6 +2205,50 @@ function findTest(){
 
 <p><input type="button" value="Remove the Class" onclick='$("#removeclass_content").removeClass("greenredclass");'></p>
 
+              </div>
+             </div>
+          </article>
+       </div>
+
+       <div id='_toggleClass' title='$().toggleClass(name)' data-nav='nav_appframework' class='panel'>
+       <div class='source'>
+          <h3><a class='collapsed' onclick='toggleSource("_toggleClass",this)'>Show Source</a></h3>
+
+            <div class='viewsource' id='source__toggleClass' style='display:none'>
+            <pre style='padding-left:25px'><code>
+            toggleClass: function(name, state) {
+                if (name == nundefined) return this;
+                for (var i = 0; i &lt; this.length; i++) {
+                    if (typeof state != "boolean") {
+                        state = this.hasClass(name, this[i]);
+                    }
+                    $(this[i])[state ? 'removeClass' : 'addClass'](name);
+                }
+                return this;
+            },
+            </code></pre>
+             </div>
+      </div>
+          <h2>$().toggleClass(name)</h2>
+
+
+
+          <section class='description'><p>Adds or removes a css class to elements.<br />                                $().toggleClass("selected");<br />                </p></section>
+          <article>
+          <div class='spacer'></div>
+             <h2>Params</h2>
+             <ol><li style='padding-left:15px;line-height:20px'>classes - String</li>
+<li style='padding-left:15px;line-height:20px'>[state] - Boolean</li>
+</ol>
+             <div class='spacer'></div>
+             <h2>Returns</h2>
+             <div style='padding-left:30px;line-height:20px;'>Object - appframework object</div>
+             <div class='spacer'></div>
+             <div class='markdown'>
+
+             <h2>Example</h2>
+              <div class='markdowncontents'>
+              
               </div>
              </div>
           </article>
@@ -2345,7 +2401,7 @@ function findTest(){
                         element = $(element);
                         _insertFragments(element, this[i], insert);
                     } else {
-                        var obj = fragementRE.test(element) ? $(element) : undefined;
+                        var obj = fragmentRE.test(element) ? $(element) : undefined;                        
                         if (obj == nundefined || obj.length === 0) {
                             obj = document.createTextNode(element);
                         }
@@ -4365,7 +4421,8 @@ function serializeForm() {
                 if (settings.contentType)
                     settings.headers['Content-Type'] = settings.contentType;
                 for (var name in settings.headers)
-                    xhr.setRequestHeader(name, settings.headers[name]);
+                    if (typeof settings.headers[name] === 'string')
+                        xhr.setRequestHeader(name, settings.headers[name]);
                 if (settings.beforeSend.call(context, xhr, settings) === false) {
                     xhr.abort();
                     return false;
@@ -5153,8 +5210,8 @@ function unbindTest(){
             return this.each(function(i, element) {
                 add(this, event, callback, null, function(fn, type) {
                     return function() {
-                        var result = fn.apply(element, arguments);
                         remove(element, type, fn);
+                        var result = fn.apply(element, arguments);
                         return result;
                     };
                 });
@@ -5202,34 +5259,38 @@ $("#testAnchor").one("click",function(){alert("Submitting form")});
           </article>
        </div>
 
-       <div id='_delegate' title='$().delegate(selector,event,callback)' data-nav='nav_appframework' class='panel'>
+       <div id='_delegate' title='$().delegate(selector,event,[data],callback)' data-nav='nav_appframework' class='panel'>
        <div class='source'>
           <h3><a class='collapsed' onclick='toggleSource("_delegate",this)'>Show Source</a></h3>
 
             <div class='viewsource' id='source__delegate' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.fn.delegate = function(selector, event, callback) {
-            for (var i = 0; i &lt; this.length; i++) {
-                var element = this[i];
-                add(element, event, callback, selector, function(fn) {
+            function addDelegate(element,event,callback,selector,data){
+            add(element, event, callback, selector, function(fn) {
                     return function(e) {
                         var evt, match = $(e.target).closest(selector, element).get(0);
                         if (match) {
                             evt = $.extend(createProxy(e), {
                                 currentTarget: match,
-                                liveFired: element
+                                liveFired: element,
+                                data:data
                             });
                             return fn.apply(match, [evt].concat([].slice.call(arguments, 1)));
                         }
                     };
                 });
+        }
+        $.fn.delegate = function(selector, event,data, callback) {
+
+            for (var i = 0; i &lt; this.length; i++) {
+                addDelegate(this[i],event,callback,selector,data)
             }
             return this;
         };
             </code></pre>
              </div>
       </div>
-          <h2>$().delegate(selector,event,callback)</h2>
+          <h2>$().delegate(selector,event,[data],callback)</h2>
 
 
 
@@ -5239,6 +5300,7 @@ $("#testAnchor").one("click",function(){alert("Submitting form")});
              <h2>Params</h2>
              <ol><li style='padding-left:15px;line-height:20px'>selector - String|Array|Object</li>
 <li style='padding-left:15px;line-height:20px'>event - String|Object</li>
+<li style='padding-left:15px;line-height:20px'>data - Object</li>
 <li style='padding-left:15px;line-height:20px'>callback - Function</li>
 </ol>
              <div class='spacer'></div>
@@ -5298,19 +5360,24 @@ $("#testAnchor").one("click",function(){alert("Submitting form")});
           </article>
        </div>
 
-       <div id='_on' title='$().on(event,selector,callback);' data-nav='nav_appframework' class='panel'>
+       <div id='_on' title='$().on(event,selector,[data],callback);' data-nav='nav_appframework' class='panel'>
        <div class='source'>
           <h3><a class='collapsed' onclick='toggleSource("_on",this)'>Show Source</a></h3>
 
             <div class='viewsource' id='source__on' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.fn.on = function(event, selector, callback) {
-            return selector === nundefined || $.isFunction(selector) ? this.bind(event, selector) : this.delegate(selector, event, callback);
+            $.fn.on = function(event, selector,data, callback) {
+            if(!$.isObject(data)){
+                callback=data;
+                data=null;
+            }
+
+            return selector === nundefined || $.isFunction(selector) ? this.bind(event, selector) : this.delegate(selector, event, data,callback);
         };
             </code></pre>
              </div>
       </div>
-          <h2>$().on(event,selector,callback);</h2>
+          <h2>$().on(event,selector,[data],callback);</h2>
 
 
 
@@ -5320,6 +5387,7 @@ $("#testAnchor").one("click",function(){alert("Submitting form")});
              <h2>Params</h2>
              <ol><li style='padding-left:15px;line-height:20px'>selector - String|Array|Object</li>
 <li style='padding-left:15px;line-height:20px'>event - String|Object</li>
+<li style='padding-left:15px;line-height:20px'>data - Object</li>
 <li style='padding-left:15px;line-height:20px'>callback - Function</li>
 </ol>
              <div class='spacer'></div>
@@ -5343,7 +5411,7 @@ $("#testAnchor").one("click",function(){alert("Submitting form")});
 
 <p>To bind a click event, we can do</p>
 
-<pre><code class="language-js"><span class='linenumber'>$("ol").bind("click","li",function(){alert(this.innerHTML)});</span>
+<pre><code class="language-js"><span class='linenumber'>$("ol").on("click","li",function(){alert(this.innerHTML)});</span>
 </code></pre>
 
 <p>Below is a list.  There is a button to append options to the list.  We will delegate the click to the &lt;ol> and then select the &lt;li> it was click on to execute.</p>
@@ -5632,7 +5700,7 @@ function triggerIt(){
             if (!$.isArray(args)) args = [];
             for (var i = 0; i &lt; ev.length; i++) {
                 if (obj.__events[ev[i]]) {
-                    var evts = obj.__events[ev[i]];
+                    var evts = obj.__events[ev[i]].slice(0);
                     for (var j = 0; j &lt; evts.length; j++)
                         if ($.isFunction(evts[j]) && evts[j].apply(obj, args) === false)
                             ret = false;
@@ -6111,7 +6179,7 @@ function doParseJS(){
               <div class='markdowncontents'>
               <p>$.ui.loadDefaultHash is a boolean value you set before $.ui.launch happens.  This tells the browser to load the first panel off the hash/URL being loaded.</p>
 
-<pre><code class="language-js"><span class='linenumber'>$.ui.loadHash=true;</span>
+<pre><code class="language-js"><span class='linenumber'>$.ui.loadDefaultHash=true;</span>
 <span class='linenumber'>$.ui.launch();</span>
 </code></pre>
 
@@ -6317,7 +6385,7 @@ $.ui.popup( {
 
              <h2>Example</h2>
               <div class='markdowncontents'>
-              <p>$.ui.blockUI is a short cut to $.blockUI from the popup plugin.</p>
+              <p>$.ui.blockUI is a shortcut to $.blockUI from the popup plugin.</p>
 
 <p>This function throws up a mask on the screen and is used with plugins like the popup plugin.</p>
 
@@ -6372,7 +6440,7 @@ function blockUI(){
 
              <h2>Example</h2>
               <div class='markdowncontents'>
-              <p>$.ui.unblockUI is a short cut to $.unblockUI from the popup plugin.</p>
+              <p>$.ui.unblockUI is a shortcut to $.unblockUI from the popup plugin.</p>
 
 <p>This function clears the mask that was created by $.blockUI</p>
 
@@ -6468,7 +6536,8 @@ function blockUI(){
 
             <div class='viewsource' id='source_$_ui_showBackButton' style='display:none'>
             <pre style='padding-left:25px'><code>
-            showBackbutton: true,
+            showBackbutton: true, // Kept for backward compatibility.
+        showBackButton: true,
             </code></pre>
              </div>
       </div>
@@ -6526,7 +6595,11 @@ function blockUI(){
 
              <h2>Example</h2>
               <div class='markdowncontents'>
-              
+              <p>$.ui.backButtonText will override the back button text everywhere in the application.</p>
+
+<pre><code class="language-js"><span class='linenumber'>$.ui.backButtonText='Back';</span>
+</code></pre>
+
               </div>
              </div>
           </article>
@@ -6579,9 +6652,9 @@ function blockUI(){
 
             if (this.launchCompleted) param();
             else {
-                $(document).bind("afui:ready", function(e) {
+                $(document).on("afui:ready", function(e) {
                     param();
-                }, false);
+                });
             }
         },
             </code></pre>
@@ -6673,13 +6746,14 @@ function blockUI(){
 
             <div class='viewsource' id='source_$_ui_goBack' style='display:none'>
             <pre style='padding-left:25px'><code>
-            goBack: function() {
-            if (this.history.length &gt; 0) {
-                var that = this;
-                var tmpEl = this.history.pop();
-                that.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
-                that.transitionType = tmpEl.transition;
-                that.updateHash(tmpEl.target);
+            goBack: function(delta) {
+            delta = Math.min(Math.abs(~~delta || 1), this.history.length);
+
+            if (delta) {
+                var tmpEl = this.history.splice(-delta).shift();
+                this.loadContent(tmpEl.target + "", 0, 1, tmpEl.transition);
+                this.transitionType = tmpEl.transition;
+                this.updateHash(tmpEl.target);
             }
         },
             </code></pre>
@@ -6693,7 +6767,8 @@ function blockUI(){
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
-             <ol></ol>
+             <ol><li style='padding-left:15px;line-height:20px'>[delta=1] - Number</li>
+</ol>
              <div class='spacer'></div>
              <h2>Returns</h2>
              <div style='padding-left:30px;line-height:20px;'>null</div>
@@ -6950,9 +7025,9 @@ function removeBadge() {
               <div class='markdowncontents'>
               <p>$.ui.toggleNavMenu(force) - will toggle the nav (footer) menu for your app.</p>
 
-<p>If you specify false for "force", it will always hide the navbar when you call it with "false"</p>
+<p>If you specify false for "force", it will always hide the navbar.</p>
 
-<p>If you specify true for "force", it will always show the navbar when you call it with "true"</p>
+<p>If you specify true for "force", it will always show the navbar.</p>
 
 <p><input type="button" onclick="$.ui.toggleNavMenu()" value="Toggle"> <input type="button" onclick="$.ui.toggleNavMenu(false)" value="Hide"> <input type="button" onclick="$.ui.toggleNavMenu(true)" value="Show"></p>
 
@@ -6999,9 +7074,9 @@ function removeBadge() {
               <div class='markdowncontents'>
               <p>$.ui.toggleHeaderMenu(force) - will toggle the header menu for your app.</p>
 
-<p>If you specify false for "force", it will always hide the header when you call it with "false"</p>
+<p>If you specify false for "force", it will always hide the header.</p>
 
-<p>If you specify true for "force", it will always show the header when you call it with "true"</p>
+<p>If you specify true for "force", it will always show the header.</p>
 
 <p><input type="button" onclick="$.ui.toggleHeaderMenu()" value="Toggle"> <input type="button" onclick="$.ui.toggleHeaderMenu(false)" value="Hide"> <input type="button" onclick="$.ui.toggleHeaderMenu(true)" value="Show"></p>
 
@@ -7079,11 +7154,11 @@ function removeBadge() {
               <div class='markdowncontents'>
               <p>$.ui.toggleSideMenu(force) - will toggle the Side menu for your app.</p>
 
-<p><em>note</em> On tablets and desktops, we always show the side menu so resize your browser to test this</p>
+<p><strong>note</strong> On tablets and desktops, we always show the side menu so resize your browser to test this.</p>
 
-<p>If you specify false for "force", it will always hide the Side when you call it with "false"</p>
+<p>If you specify false for "force", it will always hide the Side Menu.</p>
 
-<p>If you specify true for "force", it will always show the Side when you call it with "true"</p>
+<p>If you specify true for "force", it will always show the Side Menu.</p>
 
 <p><input type="button" onclick="$.ui.toggleSideMenu()" value="Toggle"> <input type="button" onclick="$.ui.toggleSideMenu(false)" value="Hide"> <input type="button" onclick="$.ui.toggleSideMenu(true)" value="Show"></p>
 
@@ -7527,7 +7602,7 @@ $(afui).ready(function(){
             <div class='viewsource' id='source_$_ui_showMask' style='display:none'>
             <pre style='padding-left:25px'><code>
             showMask: function(text) {
-            if (!text) text = "Loading Content";
+            if (!text) text = this.loadingText || "";
             $.query("#afui_mask&gt;h1").html(text);
             $.query("#afui_mask").show();
         },
@@ -7628,16 +7703,30 @@ function testShowMask(){
             var modalDiv = $.query("#modalContainer");
             if (typeof(id) === "string")
                 id = "#" + id.replace("#", "");
-            if ($.query(id)) {
-                modalDiv.html($.feat.nativeTouchScroll ? $.query(id).html() : $.query(id).get(0).childNodes[0].innerHTML + '', true);
+            var $panel = $.query(id);
+            if ($panel.length) {
+                var useScroller = this.scrollingDivs.hasOwnProperty( $panel.attr("id") );
+                modalDiv.html($.feat.nativeTouchScroll || !useScroller ? $.query(id).html() : $.query(id).get(0).childNodes[0].innerHTML + '', true);
                 modalDiv.append("&lt;a onclick='$.ui.hideModal();' class='closebutton modalbutton'&gt;&lt;/a&gt;");
                 that.modalWindow.style.display = "block";
 
                 this.runTransition(this.modalTransition, that.modalTransContainer, that.modalWindow, false);
 
-                this.scrollingDivs.modal_container.enable(that.resetScrollers);
+                if (useScroller) {
+                    this.scrollingDivs.modal_container.enable(that.resetScrollers);
+                }
+                else {
+                    this.scrollingDivs.modal_container.disable();
+                }
+
                 this.scrollToTop('modal');
                 modalDiv.data("panel", id);
+                var myPanel=$panel.get(0);
+                var fnc = myPanel.getAttribute("data-load");
+                if (typeof fnc == "string" && window[fnc]) {
+                    window[fnc](myPanel);
+                }
+                $panel.trigger("loadpanel");
 
             }
         },
@@ -7753,7 +7842,7 @@ function testShowMask(){
                 $.cleanUpContent(el, false, true);
                 $(el).html(content);
             }
-            if (newDiv.title) el.title = newDiv.title;
+            if (newDiv.getAttribute("data-title")) el.setAttribute("data-title",newDiv.getAttribute("data-title"));
         },
             </code></pre>
              </div>
@@ -7845,7 +7934,7 @@ function testShowMask(){
                 if (newDiv.children('.panel') && newDiv.children('.panel').length &gt; 0) newDiv = newDiv.children('.panel').get(0);
                 else newDiv = newDiv.get(0);
 
-                if (!newDiv.title && title) newDiv.title = title;
+                if (!newDiv.getAttribute("data-title") && title) newDiv.setAttribute("data-title",title);
                 newId = (newDiv.id) ? newDiv.id : el.replace("#", ""); //figure out the new id - either the id from the loaded div.panel or the crc32 hash
                 newDiv.id = newId;
                 if (newDiv.id != el) newDiv.setAttribute("data-crc", el.replace("#", ""));
@@ -8092,7 +8181,7 @@ function addPanel(obj){
             }
 
             var that = this;
-            this.isIntel = (window.AppMobi && typeof(AppMobi) == "object" && AppMobi.app !== undefined) ? true : false;
+            
             this.viewportContainer = af.query("#afui");
             this.navbar = af.query("#navbar").get(0);
             this.content = af.query("#content").get(0);
@@ -8100,7 +8189,8 @@ function addPanel(obj){
             this.menu = af.query("#menu").get(0);
             //set anchor click handler for UI
             this.viewportContainer.on("click", "a", function(e) {
-                checkAnchorClick(e, e.currentTarget);
+                if(that.useInteralRouting)
+                    checkAnchorClick(e, e.currentTarget);
             });
 
 
@@ -8143,7 +8233,9 @@ function addPanel(obj){
             });
             if ($.os.ios) {
                 $.bind($.touchLayer, 'exit-edit-reshape', function() {
-                    that.scrollingDivs[that.activeDiv.id].setPaddings(0, 0);
+                    if (that.activeDiv && that.activeDiv.id && that.scrollingDivs.hasOwnProperty(that.activeDiv.id)) {
+                        that.scrollingDivs[that.activeDiv.id].setPaddings(0, 0);
+                    }
                 });
             }
 
@@ -8178,211 +8270,6 @@ function addPanel(obj){
                     lockBounce: this.lockPageBounce
                 });
                 if ($.feat.nativeTouchScroll) $.query("#menu_scroller").css("height", "100%");
-            }
-
-            if (!this.content) {
-                this.content = $.create("div", {
-                    id: "content"
-                }).get(0);
-                this.viewportContainer.append(this.content);
-            }
-
-            //insert backbutton (should optionally be left to developer..)
-            $(this.header).html('&lt;a id="backButton" class="button"&gt;&lt;/a&gt; &lt;h1 id="pageTitle"&gt;&lt;/h1&gt;' + header.innerHTML);
-            this.backButton = $.query("#header #backButton").css("visibility", "hidden");
-            $(document).on("click", "#header #backButton", function(e) {
-                e.preventDefault();
-                that.goBack();
-            });
-
-            //page title (should optionally be left to developer..)
-            this.titleBar = $.query("#header #pageTitle").get(0);
-
-            //setup ajax mask
-            this.addContentDiv("afui_ajax", "");
-            var maskDiv = $.create("div", {
-                id: "afui_mask",
-                className: "ui-loader",
-                html: "&lt;span class='ui-icon ui-icon-loading spin'&gt;&lt;/span&gt;&lt;h1&gt;Loading Content&lt;/h1&gt;"
-            }).css({
-                'z-index': 20000,
-                display: "none"
-            });
-            document.body.appendChild(maskDiv.get(0));
-            //setup modalDiv
-            var modalDiv = $.create("div", {
-                id: "afui_modal"
-            }).get(0);
-
-            modalDiv.appendChild($.create("div", {
-                id: 'modalContainer'
-            }).get(0));
-            this.modalTransContainer = $.create("div", {
-                id: "modalTransContainer"
-            }).appendTo(modalDiv).get(0);
-            this.viewportContainer.append(modalDiv);
-            this.scrollingDivs.modal_container = $.query("#modalContainer").scroller({
-                scrollBars: true,
-                vertical: true,
-                vScrollCSS: "afScrollbar",
-                noParent: true,
-                lockBounce: this.lockPageBounce
-            });
-            this.modalWindow = modalDiv;
-            //get first div, defer
-            var defer = {};
-            var contentDivs = this.viewportContainer.get(0).querySelectorAll(".panel");
-            for (var i = 0; i &lt; contentDivs.length; i++) {
-                var el = contentDivs[i];
-                var tmp = el;
-                var id;
-                var prevSibling = el.previousSibling;
-                if (el.parentNode && el.parentNode.id != "content") {
-
-                    el.parentNode.removeChild(el);
-                    id = el.id;
-                    if (tmp.getAttribute("selected")) this.firstDiv = $.query("#" + id).get(0);
-                    this.addDivAndScroll(tmp);
-                    $.query("#" + id).insertAfter(prevSibling);
-                } else if (!el.parsedContent) {
-                    el.parsedContent = 1;
-                    el.parentNode.removeChild(el);
-                    id = el.id;
-                    if (tmp.getAttribute("selected")) this.firstDiv = $.query("#" + id).get(0);
-                    this.addDivAndScroll(tmp);
-                    $.query("#" + id).insertAfter(prevSibling);
-                }
-                if (el.getAttribute("data-defer")) {
-                    defer[id] = el.getAttribute("data-defer");
-                }
-                if (!this.firstDiv) this.firstDiv = $.query("#" + id).get(0);
-
-                el = null;
-            }
-            contentDivs = null;
-            var loadingDefer = false;
-            var toLoad = Object.keys(defer).length;
-            if (toLoad &gt; 0) {
-                loadingDefer = true;
-                var loaded = 0;
-                for (var j in defer) {
-                    (function(j) {
-                        $.ajax({
-                            url: AppMobi.webRoot + defer[j],
-                            success: function(data) {
-                                if (data.length === 0) return;
-                                that.updatePanel(j, data);
-                                that.parseScriptTags($.query("#" + j).get(0));
-                                loaded++;
-                                if (loaded &gt;= toLoad) {
-                                    $(document).trigger("defer:loaded");
-                                    loadingDefer = false;
-
-                                }
-                            },
-                            error: function(msg) {
-                                //still trigger the file as being loaded to not block $.ui.ready
-                                console.log("Error with deferred load " + AppMobi.webRoot + defer[j]);
-                                loaded++;
-                                if (loaded &gt;= toLoad) {
-                                    $(document).trigger("defer:loaded");
-                                    loadingDefer = false;
-                                }
-                            }
-                        });
-                    })(j);
-                }
-            }
-            if (this.firstDiv) {
-                this.activeDiv = this.firstDiv;
-                if (this.scrollingDivs[this.activeDiv.id]) {
-                    this.scrollingDivs[this.activeDiv.id].enable();
-                }
-
-                var loadFirstDiv = function() {
-
-
-                    $.query("#navbar").append($.create("footer", {
-                        id: 'defaultNav'
-                    }).append($.query("#navbar").children()));
-                    that.defaultFooter = "defaultNav";
-                    that.prevFooter = $.query("#defaultNav");
-                    that.updateNavbarElements(that.prevFooter);
-                    //setup initial menu
-                    var firstMenu = $.query("nav").get(0);
-                    if (firstMenu) {
-                        that.defaultMenu = $(firstMenu);
-                        that.updateSideMenuElements(that.defaultMenu);
-                        that.prevMenu = that.defaultMenu;
-                    }
-                    //get default header
-                    that.defaultHeader = "defaultHeader";
-                    $.query("#header").append($.create("header", {
-                        id: 'defaultHeader'
-                    }).append($.query("#header").children()));
-                    that.prevHeader = $.query("#defaultHeader");
-
-                    //
-                    $.query("#navbar").on("click", "a", function(e) {
-                        $.query("#navbar a").not(e.currentTarget).removeClass("pressed");
-                        $(e.currentTarget).addClass("pressed");
-                    });
-
-                    //update the width
-                    var footerLinks = $.query("#navbar a");
-                    if (footerLinks.length &gt; 0) {
-                        footerLinks.css("width", (100 / footerLinks.length) + "%");
-                    }
-
-                    //There is a bug in chrome with @media queries where the header was not getting repainted
-                    if ($.query("nav").length &gt; 0) {
-                        $.query("#afui #header").addClass("hasMenu");
-                        $.query("#afui #content").addClass("hasMenu");
-                        $.query("#afui #navbar").addClass("hasMenu");
-                        $.query("#afui #menu").addClass("tabletMenu");
-                    }
-                    //go to activeDiv
-                    var firstPanelId = that.getPanelId(defaultHash);
-                    //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
-                    if (firstPanelId.length &gt; 0 && that.loadDefaultHash && firstPanelId != ("#" + that.firstDiv.id) && $.query(firstPanelId).length &gt; 0) {
-                        that.loadContent(defaultHash, true, false, 'none'); //load the active page as a newTab with no transition
-
-                    } else {
-                        previousTarget = "#" + that.firstDiv.id;
-
-                        that.firstDiv.style.display = "block";
-                        //Let's check if it has a function to run to update the data
-                        that.parsePanelFunctions(that.firstDiv);
-                        //Need to call after parsePanelFunctions, since new headers can override
-                        that.loadContentData(that.firstDiv);
-
-                        $.query("#header #backButton").css("visibility", "hidden");
-                        if (that.firstDiv.getAttribute("data-modal") == "true" || that.firstDiv.getAttribute("modal") == "true") {
-                            that.showModal(that.firstDiv.id);
-                        }
-                    }
-
-                    that.launchCompleted = true;
-                    //trigger ui ready
-                    $(document).trigger("afui:ready");
-                    $.query("#afui #splashscreen").remove();
-                };
-                if (loadingDefer) {
-                    $(document).one("defer:loaded", loadFirstDiv);
-                } else loadFirstDiv();
-            }
-            $.bind(that, "content-loaded", function() {
-                if (that.loadContentQueue.length &gt; 0) {
-                    var tmp = that.loadContentQueue.splice(0, 1)[0];
-                    that.loadContent(tmp[0], tmp[1], tmp[2], tmp[3], tmp[4]);
-                }
-            });
-            if (window.navigator.standalone||this.isIntel) {
-                this.blockPageScroll();
-            }
-            this.topClickScroll();
-
-        },
             </code></pre>
              </div>
       </div>
@@ -8497,6 +8384,7 @@ function addPanel(obj){
 <li><a data-persist-ajax='true' href='#_remove'>.remove</a></li>
 <li><a data-persist-ajax='true' href='#_addClass'>.addClass</a></li>
 <li><a data-persist-ajax='true' href='#_removeClass'>.removeClass</a></li>
+<li><a data-persist-ajax='true' href='#_toggleClass'>.toggleClass</a></li>
 <li><a data-persist-ajax='true' href='#_replaceClass'>.replaceClass</a></li>
 <li><a data-persist-ajax='true' href='#_hasClass'>.hasClass</a></li>
 <li><a data-persist-ajax='true' href='#_append'>.append</a></li>

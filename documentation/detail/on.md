@@ -13,7 +13,7 @@ Say you have a list that you are adding items to dynamcally.  You want to captur
 To bind a click event, we can do
 
 ```js
-$("ol").bind("click","li",function(){alert(this.innerHTML)});
+$("ol").on("click","li",function(){alert(this.innerHTML)});
 ```
 
 
