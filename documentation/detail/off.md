@@ -16,14 +16,14 @@ function bindOne(){
 function bindTwo(){
 }
 
-$("ol").bind("click","li",bindOne);
-$("ol").bind("click","li",bindTwo);
+$("ol").on("click","li",bindOne);
+$("ol").on("click","li",bindTwo);
 ```
 
 Now we want to unbind only "bindOne"
 
 ```js
-$("ol").unbind("click","li",bindOne);
+$("ol").of("click","li",bindOne);
 ```
 
 ```html

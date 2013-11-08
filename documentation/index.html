@@ -12,7 +12,7 @@
 
     <!--<script type="text/javascript" charset="utf-8" src="appframework.ui.min.js"></script>-->
     <script src="appframework.js"></script>
-    <script src="ui/appframework.ui.js"></script>
+    <script src="appframework.ui.js"></script>
     <script>
     function aj(obj){
       console.log(obj);
@@ -5488,13 +5488,13 @@ $("#onTest").on("click","li",function(){alert(this.innerHTML)});
 <span class='linenumber'>}</span>
 <span class='linenumber'>function bindTwo(){</span>
 <span class='linenumber'>}</span>
-<span class='linenumber'>$("ol").bind("click","li",bindOne);</span>
-<span class='linenumber'>$("ol").bind("click","li",bindTwo);</span>
+<span class='linenumber'>$("ol").on("click","li",bindOne);</span>
+<span class='linenumber'>$("ol").on("click","li",bindTwo);</span>
 </code></pre>
 
 <p>Now we want to unbind only "bindOne"</p>
 
-<pre><code class="language-js"><span class='linenumber'>$("ol").unbind("click","li",bindOne);</span>
+<pre><code class="language-js"><span class='linenumber'>$("ol").of("click","li",bindOne);</span>
 </code></pre>
 
 <pre><code class="language-html"><span class='linenumber'>&lt;ol&gt;</span>
