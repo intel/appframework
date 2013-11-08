@@ -115,6 +115,8 @@
                     $("#afui").addClass("ios7");
                 else if ($.os.ios)
                     $("#afui").addClass("ios");
+                else if($.os.tizen)
+                    $("#afui").addClass("tizen");
             }
             if($.os.ios){
                 $("head").find("#iosBlurrHack").remove();
