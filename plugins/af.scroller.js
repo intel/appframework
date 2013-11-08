@@ -392,6 +392,19 @@
                     $("#content").css("bottom","5px");
                     this._headerShown=true;
                 }
+            },
+            forceShowHeader:function(){
+                this._headerToggle=false;
+                $("#header").css3Animate({
+                    y:"0",
+                    time:0
+                });
+                $("#content").css3Animate({
+                    y:"0",
+                    time:0
+                });
+                $("#content").css("bottom",$("#navbar").computedStyle("height"));
+                this._headerShown=true;
             }
         };
 

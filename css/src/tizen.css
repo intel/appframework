@@ -18,6 +18,25 @@
     color:inherit;
     border-color:#313f66;
 }
+
+#afui.tizen.light > #header {
+    background:#e9e6df;
+    color:inherit;
+    border-color:#e9e6df;
+}
+
+#afui.tizen.light > #navbar {
+    background:#dedcd5;
+    color:inherit;
+    border-top:2px solid #e9e6df;
+}
+
+ #afui.tizen.light #navbar a.pressed {
+    border-top:4px solid #e9e6df;
+
+ }
+
+
 #afui.tizen #backButton
 {
     background: inherit;
@@ -41,15 +60,14 @@
     padding:0;
  }
 
-#afui.tizen #navbar a {
-    color:inherit;
+#afui.tizen #navbar a.pressed {
     top:0px;
+    height:47px;
 }
  #afui.tizen #navbar a.pressed {
     border:0px;
-    border-top:4px solid #313f66;
+    background:#313f66;
     border-radius:0px;
-    background:none;
  }
 
 #afui.tizen #navbar .icon.pressed:before {
@@ -149,46 +167,7 @@
     font-weight: normal;
 }
 
-#afui.tizen .button {
-    border-radius:0;
-    border:none;
-    background:#424343;
-    border-color:transparent;
-    color:inherit;
-    text-shadow:none;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.4);
-}
 
-#afui.tizen.light .button {
-  background:#D1D1D1;
-  border-color:#D1D1D1;
-}
-
-#afui.tizen .button.pressed {
-    background:#313f66;
-    border-color:#313f66;
-}
-
-#afui.tizen .button.previous::after {
-    width:20px; height:20px;
-    background-color:inherit;
-    top:5px; left:-12px;
-    border-radius:0;
-    box-shadow:none;
-    border-color:transparent;
-}
-
-#afui.tizen .button.next::after {
-    width:20px; height:20px;
-    background-color:inherit;
-    top:5px; right:-12px;
-    border-radius:0;
-    box-shadow:none;
-    border-color:transparent;
-}
-
-#afui.tizen .button-grouped * { border-right:1px solid rgba(255,255,255,.25); }
-#afui.tizen .button-grouped > .button:last-child, #afui.tizen .button-grouped.vertical * { border-right:none; }
 
 #afui.tizen .afPopup {
     display: block;

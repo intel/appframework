@@ -1338,6 +1338,10 @@
             }
             if (target.length === 0) return;
 
+            if($.ui.hideHeaderOnScroll&&$.ui.scrollingDivs[$.ui.activeDiv.id])
+            {
+                $.ui.scrollingDivs[$.ui.activeDiv.id].forceShowHeader();
+            }
             var what = null;
             var loadAjax = true;
             anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor

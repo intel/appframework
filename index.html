@@ -67,7 +67,7 @@
                 var tag = $("head").append(script);
                 //$.os.desktop=true;
             }
-            $.os.tizen=true;
+            
           
         </script>        
         <script type="text/javascript" charset="utf-8" src="./plugins/af.actionsheet.js"></script>
@@ -112,7 +112,7 @@
             $.ui.autoLaunch = false;
             $.ui.openLinksNewTab = false;
             $.ui.splitview=false;
-            
+            $.ui.hideHeaderOnScroll=true;
 
             $(document).ready(function(){
                    $.ui.launch();
@@ -217,6 +217,10 @@
                        <li>
                             <a href="index.html?ios7" data-ignore="true">ios7</a>
                         </li>
+                         <li>
+                            <a href="index.html?tizen" data-ignore="true">tizen</a>
+                        </li>
+
 
                     </ul>
                 </div>

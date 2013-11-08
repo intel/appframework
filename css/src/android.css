@@ -178,7 +178,7 @@
 #afui.android .button.previous::after {
 	width:20px; height:20px;
 	background-color:inherit;
-  	top:5px; left:-12px;
+  	top:5px; left:-11px;
     border-radius:0;
     box-shadow:none;
     border-color:transparent;
@@ -187,7 +187,7 @@
 #afui.android .button.next::after {
 	width:20px; height:20px;
 	background-color:inherit;
-  	top:5px; right:-12px;
+  	top:5px; right:-11px;
     border-radius:0;
     box-shadow:none;
     border-color:transparent;
