@@ -5001,8 +5001,9 @@
 
                     that.launchCompleted = true;
                     //trigger ui ready
-                    $(document).trigger("afui:ready");
                     $.query("#afui #splashscreen").remove();
+                    $(document).trigger("afui:ready");
+                    
                 };
                 if (loadingDefer) {
                     $(document).one("defer:loaded", loadFirstDiv);
