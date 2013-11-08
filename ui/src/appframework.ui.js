@@ -116,20 +116,11 @@
                 else if ($.os.ios)
                     $("#afui").addClass("ios");
             }
-            //BB 10 hack to work with any theme
-            if ($.os.blackberry||$.os.blackberry10||$.os.playbook)
-            {
-                $("head").find("#bb10VisibilityHack").remove();
-                $("head").append("<style id='bb10VisibilityHack'>#afui .panel {-webkit-backface-visibility:visible  !important}</style>");
+            if($.os.ios){
+                $("head").find("#iosBlurrHack").remove();
+                $("head").append("<style id='iosBlurrHack'>#afui .panel > * {-webkit-backface-visibility: hidden;-webkit-perspective: 1000;}</style>");
             }
-            /** iOS 7 will get blurry if you use the perspective hack, so we remove it */
-            /** @TODO - refactor CSS to not use the perspective hack and move the ios5/6 hacks here */
-            else if($.os.ios7){
-                $("head").find("#ios7BlurrHack").remove();
-                $("head").append("<style id='ios7BlurrHack'>#afui .panel {-webkit-perspective:0  !important}</style>");   
-            }
-            //iOS 7 specific hack */
-
+            
         }
     };
 
