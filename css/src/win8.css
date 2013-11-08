@@ -125,6 +125,11 @@
   background-color: rgba(166, 166, 166, 0.7);
  }
 
+ #afui.win8.light #navbar a {
+  text-shadow: 0 -1px rgba(255, 255, 255, 0.5);  
+}
+
+
  #afui.win8 #navbar .icon.pressed:before {
 	color:inherit;
 }
