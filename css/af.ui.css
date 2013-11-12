@@ -157,17 +157,12 @@ body {
 	overflow-y:auto;
 	overflow-x:hidden;
 	-webkit-overflow-scrolling:touch;
-	-webkit-backface-visibility: hidden;
-	-webkit-perspective: 1000;
+	-webkit-backface-visibility: visible;	
 	padding:10px;
 	padding-top:0px;
 } /* This class is applied to the divs that contain the various "views" or pages of the app. */
 
 
-#afui .panel > * {
-	-webkit-backface-visibility: hidden;
-	-webkit-perspective: 1000;
-}
 
 
 /**********************************************************
@@ -1270,7 +1265,7 @@ body {
 	position:absolute;
 	width:25px; height:25px;
 	background-color:inherit;
-  	top:3px; left:-11px;
+  	top:4px; left:-11px;
     border-radius:5px;
     border:1px solid;
 	border-color:transparent transparent inherit transparent;
@@ -1282,7 +1277,7 @@ body {
 	position:absolute;
 	width:25px; height:25px;
 	background-color:inherit;
-  	top:3px; right:-11px;
+  	top:4px; right:-11px;
     border-radius:5px;
     border:1px solid;
     border-color:transparent transparent transparent transparent;
@@ -1911,7 +1906,7 @@ color:inherit;
 #afui.android .button.previous::after {
 	width:20px; height:20px;
 	background-color:inherit;
-  	top:5px; left:-12px;
+  	top:5px; left:-11px;
     border-radius:0;
     box-shadow:none;
     border-color:transparent;
@@ -1920,7 +1915,7 @@ color:inherit;
 #afui.android .button.next::after {
 	width:20px; height:20px;
 	background-color:inherit;
-  	top:5px; right:-12px;
+  	top:5px; right:-11px;
     border-radius:0;
     box-shadow:none;
     border-color:transparent;
@@ -2093,6 +2088,11 @@ color:inherit;
  #afui.win8 #navbar a.pressed {
   background-color: rgba(166, 166, 166, 0.7);
  }
+
+ #afui.win8.light #navbar a {
+  text-shadow: 0 -1px rgba(255, 255, 255, 0.5);  
+}
+
 
  #afui.win8 #navbar .icon.pressed:before {
 	color:inherit;
