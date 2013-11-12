@@ -231,6 +231,7 @@ color:black;
 
 #afui.ios7 .button.pressed {
     font-weight:bold;
+    background: white;
 }
 
 
@@ -271,7 +272,6 @@ color:black;
 
 
 #afui.ios7 .button.previous {
-
     border:none;
 }
 #afui.ios7 .button.next {
@@ -343,14 +343,13 @@ color:black;
 }
 
 #afui.ios7 .button.yellow {
-    color-color:#F1C222;
+    color:#F1C222;
     background-color:transparent;
 }
 
 #afui.ios7 .button.red {
     color:#b20000;
     background-color:transparent;
-    
 }
 
 #afui.ios7 .button.green {
