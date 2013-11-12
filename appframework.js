@@ -2350,6 +2350,7 @@ if (!window.af || typeof(af) !== "function") {
                             evt = $.extend(createProxy(e), {
                                 currentTarget: match,
                                 liveFired: element,
+                                delegateTarget:element,
                                 data:data
                             });
                             return fn.apply(match, [evt].concat([].slice.call(arguments, 1)));
