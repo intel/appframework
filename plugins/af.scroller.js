@@ -5,7 +5,7 @@
  * Optimizations and bug improvements by Intel
  * @copyright Intel
  */ (function ($) {
-    var HIDE_REFRESH_TIME = 75; // hide animation of pull2ref duration in ms
+    var HIDE_REFRESH_TIME = 325; // hide animation of pull2ref duration in ms
     var cache = [];
     var objId = function (obj) {
         if (!obj.afScrollerId) obj.afScrollerId = $.uuid();
@@ -244,20 +244,20 @@
                     if (orginalEl !== null) {
                         afEl = af(orginalEl);
                     } else {
-                        afEl = af("<div id='" + this.container.id + "_pulldown' class='afscroll_refresh' style='border-radius:.6em;border: 1px solid #2A2A2A;background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0,#666666),color-stop(1,#222222));background:#222222;margin:0px;height:60px;position:relative;text-align:center;line-height:60px;color:white;width:100%;'>" + this.refreshContent + "</div>");
+                        afEl = af("<div id='" + this.container.id + "_pulldown' class='afscroll_refresh' style='position:relative;height:60px;text-align:center;line-height:60px;font-weight:bold;'>" + this.refreshContent + "</div>");
                     }
                 } else {
                     afEl = af(this.refreshElement);
                 }
                 var el = afEl.get(0);
 
-                this.refreshContainer = af("<div style=\"overflow:hidden;width:100%;height:0;margin:0;padding:0;padding-left:5px;padding-right:5px;display:none;\"></div>");
+                this.refreshContainer = af('<div style="overflow:hidden;height:0;display:none;"></div>');
                 $(this.el).prepend(this.refreshContainer.append(el, 'top'));
                 this.refreshContainer = this.refreshContainer[0];
             },
             fireRefreshRelease: function (triggered, allowHide) {
                 if (!this.refresh || !triggered) return;
-
+                this.setRefreshContent("Refreshing...");
                 var autoCancel = $.trigger(this, 'refresh-release', [triggered]) !== false;
                 this.preventHideRefresh = false;
                 this.refreshRunning = true;
@@ -522,6 +522,7 @@
                 this.refreshTriggered = false;
                 if (this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
                 this.hideRefresh(false);
+                this.setRefreshContent("Pull to Refresh");
                 $.trigger(this, 'refresh-cancel');
             }
 
@@ -531,6 +532,7 @@
         nativeScroller.prototype.showRefresh = function () {
             if (!this.refreshTriggered) {
                 this.refreshTriggered = true;
+                this.setRefreshContent("Release to Refresh");
                 $.trigger(this, 'refresh-trigger');
             }
         };
@@ -592,6 +594,7 @@
                 that.refreshContainer.style.top = "-60px";
                 that.refreshContainer.style.position = "absolute";
                 that.dY = that.cY = 0;
+                this.setRefreshContent("Pull to Refresh");
                 $.trigger(that, "refresh-finish");
             };
 
@@ -1077,9 +1080,11 @@
             if (this.refresh && !this.preventPullToRefresh) {
                 if (!this.refreshTriggered && this.lastScrollInfo.top > this.refreshHeight) {
                     this.refreshTriggered = true;
+                    this.setRefreshContent("Release to Refresh");
                     $.trigger(this, 'refresh-trigger');
                 } else if (this.refreshTriggered && this.lastScrollInfo.top < this.refreshHeight) {
                     this.refreshTriggered = false;
+                    this.setRefreshContent("Pull to Refresh");
                     $.trigger(this, 'refresh-cancel');
                 }
             }
@@ -1177,13 +1182,12 @@
             var that = this;
             if (this.preventHideRefresh) return;
             this.scrollerMoveCSS({
-                x: 0,
-                y: 0,
-                complete: function () {
-                    $.trigger(that, "refresh-finish");
-                }
+                x: 0, 
+                y: 0
             }, HIDE_REFRESH_TIME);
             this.refreshTriggered = false;
+            this.setRefreshContent("Pull to Refresh");
+            $.trigger(that, "refresh-finish");
         };
 
         jsScroller.prototype.setMomentum = function (scrollInfo) {
