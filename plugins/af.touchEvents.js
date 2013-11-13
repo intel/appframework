@@ -90,4 +90,4 @@
             return this.bind(m, callback);
         };
     });
-})(jq);
+})(af);
