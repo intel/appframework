@@ -19,7 +19,11 @@ You can make changes to the following files.
 5. plugins/*.js
 6. plugins/*.css
 
-Once a pull request is accepted, we will rebuild the necessary files and push them back up to github.
+
+#Building
+
+We use Grunt to build our compiled files.  When you have made a change, run "grunt rebuild" to compile new source and minified files to include in your PR.
+
 
 # Pull Requests
 
