@@ -1662,12 +1662,12 @@ The parent id for this div is "content". Let's verify it.
                                 console.log("scroll start");
                             });
                             $.bind(myScroller, "refresh-trigger", function () {
-                                this.setRefreshContent("New content");
+                                console.log("refresh-trigger");
                             });
                             var hideClose;
                             $.bind(myScroller, "refresh-release", function () {
+                                console.log("refresh-release");
                                 var that = this;
-                                this.setRefreshContent("New content...");
                                 clearTimeout(hideClose);
                                 hideClose = setTimeout(function () {
                                     console.log("hiding manually refresh");
@@ -1677,15 +1677,15 @@ The parent id for this div is "content". Let's verify it.
                             });
 
                             $.bind(myScroller, "refresh-cancel", function () {
+                                console.log("refresh-cancel");
                                 clearTimeout(hideClose);
-                                console.log("cancelled");
                             });
                             myScroller.enable();
 
                             $.bind(myScroller, "infinite-scroll", function () {
                                 var self = this;
                                 console.log("infinite triggered");
-                                $(this.el).append("<div id='infinite' style='border:2px solid black;margin-top:10px;width:100%;height:20px'>Fetching content...</div>");
+                                $(this.el).append("<div id='infinite' style='height:60px;line-height:60px;text-align:center;font-weight:bold'>Fetching content...</div>");
                                 $.bind(myScroller, "infinite-scroll-end", function () {
                                     $.unbind(myScroller, "infinite-scroll-end");
                                     self.scrollToBottom();
