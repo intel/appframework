@@ -515,11 +515,20 @@
             var difX = newcX-this.cX;
 
             //check for trigger
-            if (this.refresh && (this.el.scrollTop) < -this.refreshHeight) {
+            if (this.refresh && (this.el.scrollTop < -this.refreshHeight)) {
                 this.showRefresh();
-                //check for cancel
-            } else if (this.refreshTriggered && this.refresh && (this.el.scrollTop > -this.refreshHeight)) {
+            //check for cancel when refresh is running
+            } else if (this.refresh && this.refreshTriggered && this.refreshRunning && (this.el.scrollTop > this.refreshHeight)) {
                 this.refreshTriggered = false;
+                this.refreshRunning = false;
+                if (this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
+                this.hideRefresh(false);
+                this.setRefreshContent("Pull to Refresh");
+                $.trigger(this, 'refresh-cancel');
+            //check for cancel when refresh is not running
+            } else if (this.refresh && this.refreshTriggered && !this.refreshRunning && (this.el.scrollTop > -this.refreshHeight)) {
+                this.refreshTriggered = false;
+                this.refreshRunning = false;
                 if (this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
                 this.hideRefresh(false);
                 this.setRefreshContent("Pull to Refresh");
@@ -585,17 +594,18 @@
 
             var that = this;
             var endAnimationCb = function (canceled) {
+                that.refreshContainer.style.top = "-60px";
+                that.refreshContainer.style.position = "absolute";
+                that.dY = that.cY = 0;
                 if (!canceled) { //not sure if this should be the correct logic....
                     that.el.style[$.feat.cssPrefix + "Transform"] = "none";
                     that.el.style[$.feat.cssPrefix + "TransitionProperty"] = "none";
                     that.el.scrollTop = 0;
                     that.logPos(that.el.scrollLeft, 0);
+                    that.refreshRunning = false;
+                    that.setRefreshContent("Pull to Refresh");
+                    $.trigger(that, "refresh-finish");
                 }
-                that.refreshContainer.style.top = "-60px";
-                that.refreshContainer.style.position = "absolute";
-                that.dY = that.cY = 0;
-                that.setRefreshContent("Pull to Refresh");
-                $.trigger(that, "refresh-finish");
             };
 
             if (animate === false || !that.afEl.css3Animate) {
@@ -1179,15 +1189,22 @@
         };
 
         jsScroller.prototype.hideRefresh = function (animate) {
-            var that = this;
             if (this.preventHideRefresh) return;
-            this.scrollerMoveCSS({
-                x: 0, 
-                y: 0
-            }, HIDE_REFRESH_TIME);
-            this.refreshTriggered = false;
-            this.setRefreshContent("Pull to Refresh");
-            $.trigger(that, "refresh-finish");
+            var that = this;
+            var endAnimationCb = function () {
+                that.setRefreshContent("Pull to Refresh");
+                $.trigger(that, "refresh-finish");
+            };
+            this.scrollerMoveCSS({x: 0, y: 0}, HIDE_REFRESH_TIME);
+            if (animate === false || !that.afEl.css3Animate) {
+                endAnimationCb();
+            } else {
+                that.afEl.css3Animate({
+                    time: HIDE_REFRESH_TIME + "ms",
+                    complete: endAnimationCb
+                });
+            }
+            this.refreshTriggered = false;            
         };
 
         jsScroller.prototype.setMomentum = function (scrollInfo) {
