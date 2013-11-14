@@ -121,11 +121,7 @@
             scrollLeftInterval: null,
             bubbles:true,
             lockBounce:false,
-            hideHeader:false,
-            _headerShown:true,
-            _headerTrack:0,
-            _headerToggle:false,
-            _scrollHeaderThreshold:80,
+            initScrollProgress:false,
             _scrollTo: function (params, time) {
                 time = parseInt(time, 10);
                 if (time === 0 || isNaN(time)) {
@@ -228,8 +224,6 @@
                         case 'touchmove':
 
                             this.onTouchMove(e);
-                            if(this.hideHeader)
-                                this.hideHeaderCheck();
                             if(!this.bubbles)
                                 e.stopPropagation();
                             break;
@@ -344,68 +338,7 @@
             },
             scrollTo:function (pos, time) {
                 return this._scrollTo(pos, time);
-            },
-            hideHeaderCheck:function(){
-                var delta=this.lastScrollInfo.top;
-                
-                var theCheck=delta-this._headerTrack;
-                
-                if(theCheck>this._scrollHeaderThreshold&&!this._headerShown){
-                    this._headerToggle=true;
-                    $("#header").css3Animate({
-                        y:"0",
-                        time:200
-                    });
-                    $("#content").css3Animate({
-                        y:"0",
-                        time:200
-                    });
-                    $("#content").css("bottom",$("#navbar").computedStyle("height"));
-                    this._headerShown=true;
-                }
-                else if(this._headerShown&&theCheck<-this._scrollHeaderThreshold){
-                    this._headerToggle=true;
-                    
-                     $("#header").css3Animate({
-                        y:"-"+($.query('#afui #header').computedStyle('height')),
-                        time:200
-                    });
-                    $("#content").css3Animate({
-                        y:"-"+($.query('#afui #header').computedStyle('height')),
-                        time:200
-                    });
-                    $("#content").css("bottom",numOnly($("#navbar").computedStyle("height"))-numOnly($("#header").computedStyle("height")));
-                    this._headerShown=false;
-                }
-                else if(!this._headerShown&&theCheck>-this._scrollHeaderThreshold&&theCheck<-(this._scrollHeaderThreshold/2)&&this._headerToggle)
-                {
-
-                    this._headerToggle=true;
-                    $("#header").css3Animate({
-                        y:"0",
-                        time:200
-                    });
-                    $("#content").css3Animate({
-                        y:"0",
-                        time:200
-                    });
-                    $("#content").css("bottom","5px");
-                    this._headerShown=true;
-                }
-            },
-            forceShowHeader:function(){
-                this._headerToggle=false;
-                $("#header").css3Animate({
-                    y:"0",
-                    time:0
-                });
-                $("#content").css3Animate({
-                    y:"0",
-                    time:0
-                });
-                $("#content").css("bottom",$("#navbar").computedStyle("height"));
-                this._headerShown=true;
-            }
+            }            
         };
 
         //extend to jsScroller and nativeScroller (constructs)
@@ -599,11 +532,11 @@
                 $.trigger(this, 'refresh-cancel');
             }
 
-
-
             this.cY = newcY;
             this.cX = newcX;
             this.lastScrollInfo.top=this.cY;
+            if(this.initScrollProgress)
+                $.trigger(this,'scroll',{x:this.cX,y:this.cY});
         };
         nativeScroller.prototype.showRefresh = function () {
             if (!this.refreshTriggered) {
@@ -651,6 +584,8 @@
                     $.trigger($.touchLayer, 'scrollend', [self.el]); //notify touchLayer of this elements scrollend
                     $.trigger(self, "scrollend", [self.el]);
                 }
+                if(self.initScrollProgress)
+                    $.trigger(this,'scroll',{x:self.el.scrollLeft,y:self.el.scrollTop});
 
             }, 20);
         };
@@ -1169,7 +1104,7 @@
                     this.infiniteTriggered = true;
                     $.trigger(this, "infinite-scroll");
                 }
-            }
+            }            
 
         };
 
@@ -1461,6 +1396,7 @@
             if (!time) time = 0;
             if (!timingFunction) timingFunction = "linear";
             time = numOnly(time);
+            var self=this;
             if (this.el && this.el.style) {
 
                 //do not touch the DOM if disabled
@@ -1469,7 +1405,18 @@
                         this.el.style.marginTop = Math.round(distanceToMove.y) + "px";
                         this.el.style.marginLeft = Math.round(distanceToMove.x) + "px";
                     } else {
-                        $(this.el).animate({x:distanceToMove.x,y:distanceToMove.y,duration:time,easing:"easeOutSine"}).start();
+                        var opts={
+                            x:distanceToMove.x,
+                            y:distanceToMove.y,
+                            duration:time,
+                            easing:"easeOutSine",                        
+                        }
+                        if(this.initScrollProgress){
+                            opts['update']=function(pos){
+                                $.trigger(self,'scroll',[pos]);
+                            }
+                        }
+                        $(this.el).animate(opts).start();
                     }
                 }
                 // Position should be updated even when the scroller is disabled so we log the change
