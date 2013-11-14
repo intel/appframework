@@ -251,7 +251,7 @@
                 }
                 var el = afEl.get(0);
 
-                this.refreshContainer = af('<div style="overflow:hidden;height:0;display:none;"></div>');
+                this.refreshContainer = af('<div style="overflow:hidden;height:0;width:100%;display:none;"></div>');
                 $(this.el).prepend(this.refreshContainer.append(el, 'top'));
                 this.refreshContainer = this.refreshContainer[0];
             },
@@ -515,10 +515,10 @@
             var difX = newcX-this.cX;
 
             //check for trigger
-            if (this.refresh && (this.el.scrollTop) < 0) {
+            if (this.refresh && (this.el.scrollTop) < -this.refreshHeight) {
                 this.showRefresh();
                 //check for cancel
-            } else if (this.refreshTriggered && this.refresh && (this.el.scrollTop > this.refreshHeight)) {
+            } else if (this.refreshTriggered && this.refresh && (this.el.scrollTop > -this.refreshHeight)) {
                 this.refreshTriggered = false;
                 if (this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
                 this.hideRefresh(false);
@@ -594,7 +594,7 @@
                 that.refreshContainer.style.top = "-60px";
                 that.refreshContainer.style.position = "absolute";
                 that.dY = that.cY = 0;
-                this.setRefreshContent("Pull to Refresh");
+                that.setRefreshContent("Pull to Refresh");
                 $.trigger(that, "refresh-finish");
             };
 
