@@ -25,20 +25,20 @@
        <!--   
      <link rel="stylesheet" type="text/css" href="css/af.ui.css" title="default" />
   -->
-      <link rel="stylesheet" type="text/css" href="css/src/main.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/appframework.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/android.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/win8.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/bb.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/ios.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/ios7.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/tizen.css"  />
+      <link rel="stylesheet" type="text/css" href="css/main.css"  />
+      <link rel="stylesheet" type="text/css" href="css/appframework.css"  />
+      <link rel="stylesheet" type="text/css" href="css/android.css"  />
+      <link rel="stylesheet" type="text/css" href="css/win8.css"  />
+      <link rel="stylesheet" type="text/css" href="css/bb.css"  />
+      <link rel="stylesheet" type="text/css" href="css/ios.css"  />
+      <link rel="stylesheet" type="text/css" href="css/ios7.css"  />
+      <link rel="stylesheet" type="text/css" href="css/tizen.css"  />
 
-      <link rel="stylesheet" type="text/css" href="css/src/badges.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/buttons.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/lists.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/forms.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/grid.css"  />
+      <link rel="stylesheet" type="text/css" href="css/badges.css"  />
+      <link rel="stylesheet" type="text/css" href="css/buttons.css"  />
+      <link rel="stylesheet" type="text/css" href="css/lists.css"  />
+      <link rel="stylesheet" type="text/css" href="css/forms.css"  />
+      <link rel="stylesheet" type="text/css" href="css/grid.css"  />
 
       <link rel="stylesheet" type="text/css" href="plugins/css/af.actionsheet.css"  />
       <link rel="stylesheet" type="text/css" href="plugins/css/af.popup.css"  />
@@ -68,20 +68,19 @@
                 //$.os.desktop=true;
             }
 
-
+          //  $.feat.nativeTouchScroll=true;
           
         </script>        
         <script type="text/javascript" charset="utf-8" src="./plugins/af.actionsheet.js"></script>
-         <script type="text/javascript" charset="utf-8" src="./plugins/af.css3animate.js"></script>
-         <script type="text/javascript" charset="utf-8" src="./plugins/af.passwordBox.js"></script>
-          <script type="text/javascript" charset="utf-8" src="./plugins/af.animate.js"></script>
-          <script type="text/javascript" charset="utf-8" src="./plugins/af.scroller.js"></script>
-           <script type="text/javascript" charset="utf-8" src="./plugins/af.selectBox.js"></script>
-            <script type="text/javascript" charset="utf-8" src="./plugins/af.touchEvents.js"></script>
-          <script type="text/javascript" charset="utf-8" src="./plugins/af.touchLayer.js"></script>
+        <script type="text/javascript" charset="utf-8" src="./plugins/af.css3animate.js"></script>
+        <script type="text/javascript" charset="utf-8" src="./plugins/af.passwordBox.js"></script>          
+        <script type="text/javascript" charset="utf-8" src="./plugins/af.scroller.js"></script>
+        <script type="text/javascript" charset="utf-8" src="./plugins/af.selectBox.js"></script>
+        <script type="text/javascript" charset="utf-8" src="./plugins/af.touchEvents.js"></script>
+        <script type="text/javascript" charset="utf-8" src="./plugins/af.touchLayer.js"></script>
         <script type="text/javascript" charset="utf-8" src="./plugins/af.popup.js"></script>
 
-        <script type="text/javascript" charset="utf-8" src="./ui/src/appframework.ui.js"></script>
+        <script type="text/javascript" charset="utf-8" src="./ui/appframework.ui.js"></script>
         <!-- <script type="text/javascript" charset="utf-8" src="./ui/transitions/all.js"></script> -->
         <script type="text/javascript" charset="utf-8" src="./ui/transitions/fade.js"></script>
         <script type="text/javascript" charset="utf-8" src="./ui/transitions/flip.js"></script>
@@ -113,7 +112,7 @@
             $.ui.autoLaunch = false;
             $.ui.openLinksNewTab = false;
             $.ui.splitview=false;
-            $.ui.hideHeaderOnScroll=true;
+            
 
             $(document).ready(function(){
                    $.ui.launch();
@@ -156,11 +155,7 @@
                             $el.addClass("light");
                     });
                 });
-            }
-            $.ui.ready(function(){
-                confirm("ASDFASDF");
-            })
-            
+            }                        
         </script>
         <style>
            .samplecode {
@@ -1663,6 +1658,7 @@ The parent id for this div is "content". Let's verify it.
                             // myScroller=$.ui.scrollingDivs['webslider'];
                             myScroller.addInfinite();
                             myScroller.addPullToRefresh();
+                            myScroller.runCB=true;
                             $.bind(myScroller, 'scrollend', function () {
                                 console.log("scroll end");
                             });
@@ -1670,6 +1666,9 @@ The parent id for this div is "content". Let's verify it.
                             $.bind(myScroller, 'scrollstart', function () {
                                 console.log("scroll start");
                             });
+                            $.bind(myScroller,"scroll",function(position){
+                                
+                            })
                             $.bind(myScroller, "refresh-trigger", function () {
                                 this.setRefreshContent("New content");
                             });
