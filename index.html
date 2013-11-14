@@ -1661,9 +1661,11 @@ The parent id for this div is "content". Let's verify it.
                             $.bind(myScroller, 'scrollstart', function () {
                                 console.log("scroll start");
                             });
+                            
                             $.bind(myScroller, "refresh-trigger", function () {
                                 console.log("refresh-trigger");
                             });
+                            
                             var hideClose;
                             $.bind(myScroller, "refresh-release", function () {
                                 console.log("refresh-release");
@@ -1680,6 +1682,11 @@ The parent id for this div is "content". Let's verify it.
                                 console.log("refresh-cancel");
                                 clearTimeout(hideClose);
                             });
+                            
+                            $.bind(myScroller, "refresh-finish", function () {
+                                console.log("refresh-finish");
+                            });
+                            
                             myScroller.enable();
 
                             $.bind(myScroller, "infinite-scroll", function () {
