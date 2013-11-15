@@ -172,3 +172,16 @@ color: white;
 #afui.bb .panel {
     background:#fff;
 }
+
+#afui.bb #af_actionsheet {
+    background:white;
+    color:inherit;
+}
+
+#afui.bb #af_actionsheet a{
+    border-radius:5px;
+    -webkit-border-radius:5px;
+    border:1px solid #ccc;
+    background:#eee;
+    color:#111;
+}

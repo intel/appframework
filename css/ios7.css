@@ -231,6 +231,7 @@ color:black;
 
 #afui.ios7 .button.pressed {
     font-weight:bold;
+    background: white;
 }
 
 
@@ -240,15 +241,16 @@ color:black;
 }
 
 #afui.ios7 #af_actionsheet {
-    background:white;
+    background-color:transparent;
     color:black;
-    padding-left:0;
-    padding-right:0;
+    padding-left:10px;
+    padding-right:10px;
+    border-top: transparent 1px solid;
+    box-shadow: 0px -1px 2px rgba(0,0,0,0);
 }
 
-#afui.ios7    #af_actionsheet a{
+#afui.ios7 #af_actionsheet a{
     background-image:none;
-    
     text-shadow:none;
     box-shadow:none;
     font-weight:normal;
@@ -256,13 +258,28 @@ color:black;
     border:none;
     -webkit-box-shadow:none;
     color:rgba(82,155,234,255);
-    background:white;
+    background-color:white;
     cursor:pointer;
-    border-radius:5px;
+    border-radius:0px;
+    line-height: 40px;
+    font-size: 20px;
+    margin-bottom: 1px;
 }
 
-#afui.ios7    #af_actionsheet a:not(:last-of-type){
-    border-bottom:1px solid rgba(82,155,234,255);
+#afui.ios7 #af_actionsheet a:first-child{
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+}
+
+#afui.ios7 #af_actionsheet a:nth-last-child(2){
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+}
+
+#afui.ios7 #af_actionsheet a.cancel{
+    font-weight:bold;
+    margin: 9px 0;
+    border-radius:5px;
 }
 
 #afui.ios7 #navbar a.pressed,#navbar .icon.pressed:before  {
@@ -271,7 +288,6 @@ color:black;
 
 
 #afui.ios7 .button.previous {
-
     border:none;
 }
 #afui.ios7 .button.next {
@@ -343,14 +359,13 @@ color:black;
 }
 
 #afui.ios7 .button.yellow {
-    color-color:#F1C222;
+    color:#F1C222;
     background-color:transparent;
 }
 
 #afui.ios7 .button.red {
     color:#b20000;
     background-color:transparent;
-    
 }
 
 #afui.ios7 .button.green {

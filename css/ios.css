@@ -190,3 +190,25 @@ color:white;
     width:80%;
     margin:8px;
 }
+
+#afui.ios #af_actionsheet {
+    background:#595c61;
+    color:inherit;
+}
+
+#afui.ios #af_actionsheet a{
+    border-radius:10px;
+    -webkit-border-radius:10px;
+    border:3px solid #111;
+    background:#eee;
+    background: linear-gradient(to bottom, #fff 0%,#ccc 100%);
+    color:#111;
+    text-shadow:0 1px 0 #fff;
+}
+
+#afui.ios #af_actionsheet a.cancel{
+    background:#333;
+    background: linear-gradient(to bottom, #666 0%,#333 100%);
+    color:white;
+    text-shadow:0 -1px 0 #000;
+}

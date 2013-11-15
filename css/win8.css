@@ -109,35 +109,37 @@
   width: 56px !important;
   height: 56px;
   display: inline-block;
-  font: normal 11px/85px Segoe WP, Segoe UI, Verdana, Helvetica, Sans-Serif;
+  font: normal 9px/85px Segoe WP, Segoe UI, Verdana, Helvetica, Sans-Serif;
   text-decoration: none;
   color: inherit;
   text-align: center;
-  text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 0 rgba(0, 0, 0, 0);
   overflow: hidden;
-  border-radius:44px;
   background:inherit;
   -webkit-backface-visibility: hidden;
   -webkit-perspective: 1000;
-
 }
- #afui.win8 #navbar a.pressed {
-  background-color: rgba(166, 166, 166, 0.7);
- }
-
- #afui.win8.light #navbar a {
-  text-shadow: 0 -1px rgba(255, 255, 255, 0.5);  
+#afui.win8.light #navbar a {
+  text-shadow: 0 0 rgba(0, 0, 0, 0);  
 }
-
 
  #afui.win8 #navbar .icon.pressed:before {
-	color:inherit;
+	background-color: #00ABA9;
 }
 
 #afui.win8 #navbar .icon:before {
-    top: 8px;
+    top: 0px;
+    left: 10px;
+    font-size:19px;
+    width:auto;
+    padding: 5px;
+    border: 3px solid #fff;
+    border-radius: 20px;
 }
 
+#afui.win8.light #navbar .icon:before {
+    border: 3px solid #000;
+}
 
   #afui.win8 #navbar a:not(:last-of-type){
   	border:none;
@@ -161,21 +163,26 @@
 
  #afui.win8 .list .divider,  #afui.win8 #menu.tabletMenu .list .divider  {
  	background:#00ABA9;
- 	padding:14px;
+ 	padding:5px;
     display:inline;
- 	font-size:1em;
- 	font-weight:bold;
+ 	font-size:16px;
+ 	font-weight:normal;
  	border-top:none;
  	border-bottom:none;
-  color:inherit;
+    color:inherit;
  }
 
  #afui.win8 .list li {
  	border-top:none;
  	border-bottom:none;
+    font-size:20px;
  }
  #afui.win8 .panel h2 {
  	color:inherit;
+    font-weight:normal;
+    font-size:34px;
+    line-height:34px;
+    height:auto;
  }
 
 
@@ -258,20 +265,32 @@ margin-left:10px;
 #afui.win8 .button {
 	border-radius:0;
 	border:none;
-	background:#424343;
-	border-color:#424343;
+	background:inherit;
+	border:3px solid #fff;
 	color:white;
 	text-shadow:none;
-	box-shadow: inset 0 1px 1px rgba(255, 255, 255, .4), 0 1px 2px rgba(0, 0, 0, .05);
+	box-shadow:none;
 }
 
 #afui.win8 .button.pressed {
 	background:#00ABA9;
-	border-color:#00ABA9;
 }
 
+#afui.win8 .button.next, #afui.win8 .button.previous {
+    border-color: #fff !important;
+}
+#afui.win8 .button.next::after, #afui.win8 .button.previous::after{
+    border:none;    
+}
 
+#afui.win8 .button-grouped .button{
+    border:2px solid #fff;
+}
 
+#afui.win8 .button-grouped > .button:first-child, #afui.win8 .button-grouped > .button:last-child {
+    border-radius:0; 
+    border:2px solid #fff;
+}
 
 
 #afui.win8 #menu {
@@ -282,6 +301,7 @@ margin-left:10px;
   z-index: 1000;
   width:100%;
   height: 150px;
+  font-size:20px;
   top:auto;
   background:inherit;
   color:inherit;
@@ -320,16 +340,18 @@ margin-left:10px;
 }
 
 #afui.win8 #af_actionsheet {
-    background:white;
+    background:#aaa;
     color:black;
 }
 
 #afui.win8 #af_actionsheet a{
     border-radius:0;
     -webkit-border-radius:0;
-    border:1px solid black;
-    background:white;
+    border:0px solid black;
+    background-color:transparent;
+    font-weight:normal;
     color:black;
+    box-shadow: 0px 1px 1px rgba(255,255,255,0);
 }
 
 #afui.win8 #menu .list > li > a {
