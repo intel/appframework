@@ -320,7 +320,7 @@
          */
         removeFooterMenu: function() {
             $.query("#navbar").hide();
-            $.query("#content").css("bottom", "0px");
+            //$.query("#content").css("bottom", "0px");
             this.showNavMenu = false;
         },
         /**
@@ -542,11 +542,11 @@
         toggleNavMenu: function(force) {
             if (!this.showNavMenu) return;
             if ($.query("#navbar").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
-                $.query("#content").css("bottom", "0px");
+               // $.query("#content").css("bottom", "0px");
                 $.query("#navbar").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
                 $.query("#navbar").show();
-                $.query("#content").css("bottom", $.query("#navbar").css("height"));
+              //  $.query("#content").css("bottom", $.query("#navbar").css("height"));
 
             }
         },
@@ -560,11 +560,11 @@
          */
         toggleHeaderMenu: function(force) {
             if ($.query("#header").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
-                $.query("#content").css("top", "0px");
+               // $.query("#content").css("top", "0px");
                 $.query("#header").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
                 $.query("#header").show();
-                $.query("#content").css("top", $.query("#header").css("height"));
+               // $.query("#content").css("top", $.query("#header").css("height"));
             }
         },
 
