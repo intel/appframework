@@ -1,0 +1,380 @@
+/** iOS 7 theme */
+
+/** Blue color color:rgba(82,155,234,255); */
+
+/* border rgba(158,158,158,255) */
+
+#afui.ios7 {
+     font-family:'HelveticaNeue', 'Helvetica Neue',Helvetica, Arial, sans-serif;
+}
+
+
+
+#afui.ios7 #header {
+    background:rgb(249,249,249);
+    color:inherit;
+    border:none;
+    border-bottom:1px solid rgba(158,158,158,255);
+}
+
+#afui.ios7 #header .button {
+    border: 1px solid transparent !important; 
+}
+
+#afui.ios7 #header h1 {
+    color:inherit;
+    text-shadow:none;
+}
+
+
+#afui.ios7 .panel {
+    background:rgba(238,238,238,255);    
+}
+#afui.ios7 .panel h2 { color:inherit;}
+
+#afui.ios7 #navbar {
+    background:rgb(249,249,249);
+    color:black;
+    border-top:1px solid rgba(158,158,158,255);
+    box-shadow:none;
+}
+
+#afui.ios7 #navbar a {
+    color:rgba(96,96,96,255);
+}
+
+#afui.ios7 #navbar a.pressed {
+    border-radius:0;    
+    background:transparent;
+}
+
+#afui.ios7 #menubadge:after {
+    border-color:rgba(82,155,234,255);
+}
+
+#afui.ios7 .list {
+    font-weight:normal;
+}
+
+#afui.ios7 > #menu {
+    border-right:none;
+    background:rgba(238,238,238,255);
+     color:black;
+}
+
+#afui.ios7 #menu .list li,#afui.ios7 #menu .list .divider,#afui.ios7 #menu .list li:first-child,#afui.ios7 #menu .list li:last-child {
+    border-color:rgb(215,215,215);
+    font-weight:normal;
+    box-shadow:none;
+}
+
+#afui.ios7 #menu .list .divider {
+    background:rgba(238,238,238,255);
+    color:inherit;
+    font-size: 1em;
+border-bottom:1px solid rgb(215,215,215);
+color:black;
+
+}
+
+#afui.ios7 #menu .list a {
+    color:black;
+}
+
+
+#afui.ios7 #menu .list {
+    background:white;
+    font-weight: normal;
+    color:black;
+}
+
+#afui.ios7 .list > li > a:after{
+    color:rgba(217,217,217,255);
+}
+
+#afui.ios7 .button {
+    background-color:transparent;
+}
+
+#afui.ios7 #backButton {
+    background:rgba(249,249,249,1);
+    color:rgba(82,155,234,255);
+    display: block;
+    position: absolute;
+    line-height:44px;
+
+    left: 25px;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    padding: none;
+    text-shadow: none;
+    background-color: transparent;
+    border:none;
+    border-color:none;
+    height: 44px;
+    top:0;
+    border-radius: none;
+    box-shadow:none;
+    margin: 0;
+    padding-left: 0;
+    text-align: center;
+    width:50px;
+    padding:0 !important;
+    margin:0 !important;
+
+}
+
+#afui.ios7 #backButton::before {
+    z-index: -1;
+    font-size:22px;
+    position: absolute;
+    top: 10px;
+    left: -20px;
+    text-align: center;
+    border-radius: none;
+    border: none;
+    border-color: none;
+    box-shadow: none;
+    -webkit-transform: none;
+    transform: none;
+
+    font-family: 'chevron';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content: "\f054";
+    -webkit-transform:rotate(180deg);
+    transform:rotate(180deg);
+    background-color: transparent;
+    
+
+}
+
+#afui.ios7 #backButton::after {
+    content: '';
+    width:0;
+    height:0;
+    border:none;
+}
+
+
+#afui.ios7 .button {
+    box-shadow:none;
+    border-radius: 0;
+    border-color:#ccc;
+    color:rgba(82,155,234,255);
+    text-shadow:none;
+}
+
+#afui.ios7 .button-grouped * {
+    border-right: 1px solid rgba(82,155,234,255);
+    border-bottom: 1px solid rgba(82,155,234,255);
+    border-top: 1px solid rgba(82,155,234,255);
+
+}
+#afui.ios7 .button-grouped >  .button:first-child {
+    border-left: 1px solid rgba(82,155,234,255);
+}
+#afui.ios7  .button-grouped >.button:last-child {
+    
+}
+
+#afui.ios7 .button-grouped.vertical * {
+    border-left: 1px solid rgba(82,155,234,255);
+    border-right: 1px solid rgba(82,155,234,255);
+    border-top: 1px solid rgba(82,155,234,255);
+}
+
+#afui.ios7  .button-grouped.vertical > .button:first-child {
+    border-left: 1px solid rgba(82,155,234,255);
+    
+}
+#afui.ios7 .button-grouped.vertical >  .button:last-child {
+
+    border-bottom:1px solid rgba(82,155,234,255);
+}
+
+#afui.ios7 .button-grouped .button.pressed {
+    color:white;
+    background:rgba(82,155,234,255);
+}
+
+#afui.ios7 .afPopup {
+    display: block;
+    border:1px solid rgba(158,158,158,255);
+    padding:0;
+    text-align: center;
+    
+    position: absolute;
+    z-index: 1000000;
+    top: 50%;
+    
+    color:inherit;
+    background:rgba(249,249,249,1);
+    align:center;
+}
+
+#afui.ios7 .afPopup .button {
+    border: none;
+    width: 50%;
+    margin: 0;
+    border-radius: 0;
+    background: transparent;
+    border-top:1px solid rgba(158,158,158,255);
+    color:rgba(82,155,234,255);
+    padding:12px 0;
+}
+
+#afui.ios7 .button.pressed {
+    font-weight:bold;
+}
+
+
+#afui.ios7 .afPopup a:not(:first-of-type) {
+
+    border-left:1px solid rgba(158,158,158,255);
+}
+
+#afui.ios7 #af_actionsheet {
+    background:white;
+    color:black;
+    padding-left:0;
+    padding-right:0;
+}
+
+#afui.ios7    #af_actionsheet a{
+    background-image:none;
+    
+    text-shadow:none;
+    box-shadow:none;
+    font-weight:normal;
+    border-radius:none;
+    border:none;
+    -webkit-box-shadow:none;
+    color:rgba(82,155,234,255);
+    background:white;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+#afui.ios7    #af_actionsheet a:not(:last-of-type){
+    border-bottom:1px solid rgba(82,155,234,255);
+}
+
+#afui.ios7 #navbar a.pressed,#navbar .icon.pressed:before  {
+    color:rgba(82,155,234,255);
+}
+
+
+#afui.ios7 .button.previous {
+
+    border:none;
+}
+#afui.ios7 .button.next {
+    border:none;   
+}
+
+
+#afui.ios7 .button.previous::after {
+    color:rgba(82,155,234,255);
+    z-index: -1;
+    font-size:22px;
+    position: absolute;
+    top: 2px;
+    left: -25px;
+    text-align: center;
+    border-radius: none;
+    border: none;
+    border-color: none;
+    box-shadow: none;
+    -webkit-transform: none;
+    transform: none;
+
+    font-family: 'chevron';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content: "\f054";
+    -webkit-transform:rotate(180deg);
+    transform:rotate(180deg);
+    background-color: transparent;
+}
+#afui.ios7 .button.next::after {
+   color:rgba(82,155,234,255);
+
+    z-index: -1;
+    font-size:22px;
+    position: absolute;
+    top: 6px;
+    right: -25px;
+    text-align: center;
+    border-radius: none;
+    border: none;
+    border-color: none;
+    box-shadow: none;
+    -webkit-transform: none;
+    transform: none;
+
+    font-family: 'chevron';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content: "\f054";
+    
+    background-color: transparent;
+}
+
+
+#afui.ios7 .button.gray {
+    color:#999;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.yellow {
+    color-color:#F1C222;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.red {
+    color:#b20000;
+    background-color:transparent;
+    
+}
+
+#afui.ios7 .button.green {
+    color:#009C0C;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.orange {
+    color:#FF8000;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.black {
+    color:black;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.slate {
+    color:#171F28;
+    background-color:transparent;    
+}
+
+#afui.ios7 .af-badge {
+    border:none;
+    box-shadow:none;
+    font-size:12px;
+}

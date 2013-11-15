@@ -1,0 +1,192 @@
+/* iOS theme */
+#afui.ios {
+    color:black;
+}
+
+#afui.ios > #header { 
+    background-color:#889BB3;
+    background-image:-ms-linear-gradient(top, #B3BECD 0%, #889BB3 50%, #6E84A2 51%);
+    background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0, #B3BECD), color-stop(.5, #889BB3), color-stop(.51, #6E84A2));
+    background-image:-webkit-linear-gradient(top, #B3BECD 0%, #889BB3 50%, #6E84A2 51%);
+    background-image:linear-gradient(to bottom, #B3BECD 0%, #889BB3 50%, #6E84A2 51%);
+    border: 1px solid;
+    border-color:#CCD2DA transparent #2D3033 transparent;
+    color:white;
+} 
+
+#afui.ios #header h1 {
+        text-shadow: rgba(0,0,0,0.8) 0 -1px 0;
+}
+
+#afui.ios .af-badge {
+    border:2px solid #fff;
+    box-shadow:0 1px 2px #555;
+    line-height:18px;
+}
+#afui.ios .panel {
+    background:#e7e7e7;
+    
+}
+
+#afui.ios .panel h2 { color:inherit;}
+
+#afui.ios > #navbar {
+    background-color:#000;
+    background-image:-ms-linear-gradient(top, #222 0%, #111 50%, #000 51%);
+    background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0, #222), color-stop(0.5, #111), color-stop(.51, #000));
+    background-image:-webkit-linear-gradient(top, #222 0%, #111 50%, #000 51%);
+    background-image:linear-gradient(to bottom, #222 0%, #111 50%, #000 51%);
+    box-shadow:0 1px 0 #555 inset;
+   
+    border-top:1px solid #000;
+}
+
+
+
+#afui.ios #navbar a.pressed {
+    background:rgba(255, 255, 255, 0.13);
+    border-radius:6px;
+}
+
+
+#afui.ios #navbar .icon.pressed:before {
+    color:#3a9de2;
+}
+
+
+#afui.ios > #menu.tabletMenu {
+   border-right:none;
+    background:#000;
+    color:#fff;
+}
+
+#afui.ios #backButton {
+    line-height:15px;
+    width:58px;
+    display:block;
+    position:absolute;
+    top:5px; left:5px;
+    text-overflow:ellipsis;
+    font-size:12px;
+    padding:7px !important;
+    color:#fff;
+    text-shadow:0 -1px 0 #333;
+    background-color:#476999;
+    border:1px solid;
+    border-color:#375073 #375073 #375073 transparent;
+    height:32px;
+    border-radius:5px;
+    box-shadow:0 1px 0 #9CABC0;
+    margin:0 0 0 15px !important;
+    padding-left:4px !important;
+} /* Sets up positioning of the back button which appears in the header */
+
+
+#afui.ios #backButton::before {
+    z-index:-1;
+    content:'';
+    position:absolute;
+    width:24px; height:24px;
+    background-color:#476999;
+    top:2px; left:-11px;
+    border-radius:5px;
+    border:1px solid;
+    border-color:transparent transparent #9CABC0 transparent;
+    box-shadow:1px -1px 0 #375073 inset;
+    -ms-transform:rotate(45deg); -moz-transform:rotate(45deg); -webkit-transform:rotate(45deg); transform:rotate(45deg);
+}
+
+
+#afui.ios #menu .list li, 
+#afui.ios #menu .list .divider, 
+#afui.ios #menu .list li:first-child, 
+#afui.ios #menu  .list li:last-child {
+
+    border-color:#101012;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+
+}
+
+#afui.ios #menu .list > li > a {
+    color:#ccc;
+    
+}
+
+
+
+
+#afui.ios #menu .list .divider {
+    background:#333;
+    color:#fff;
+    
+}
+
+
+
+
+#afui.ios .afPopup {
+     display: block;
+    width: 280px;
+    float:left;
+    border: solid 1px #72767b;
+    -webkit-box-shadow: 0px 4px 6px #555, 0 0 20px rgba(255,255,255,0.5);
+    -webkit-border-radius: 10px;
+    border-radius:10px;
+    padding: 10px;
+    opacity: 1;
+    -webkit-transform: scale(1);
+    -webkit-transition: all 0.20s  ease-in-out;
+    transform:scale(1);
+    transition: all 0.20s  ease-in-out;
+    position: absolute;
+    z-index: 1000000;
+    margin-left: auto!important;
+    margin-right: auto!important;
+    background: rgba(70,70,70,1);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(70,70,70,0.8)),    to(rgba(0,20,20,0.8)));
+}
+#afui.ios .afPopup >* {
+color:white;
+}
+
+#afui.ios .afPopup.hidden {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    top: 50%;
+    left: 50%;
+    margin: 0px auto;
+}
+
+#afui.ios .afPopup>HEADER{
+    font-weight:bold;
+    font-size:20px;    
+    margin:0;
+    padding:0;
+}
+
+#afui.ios .afPopup>DIV{
+    font-size:12px;
+    margin:8px;
+}
+
+#afui.ios .afPopup>FOOTER{
+    width:100%;    
+    text-align:center;
+    display:block !important;
+}
+
+#afui.ios .afPopup>FOOTER>A#cancel{
+    float:left;
+}
+
+#afui.ios .afPopup>FOOTER>A#action{
+    float:right;
+    margin-right:4px;
+}
+
+#afui.ios .afPopup>FOOTER>A.center{
+    float:none!important;
+    width:80%;
+    margin:8px;
+}
