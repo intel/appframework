@@ -470,6 +470,8 @@ if (!Date.now)
             if (this.runTime===0||(now >= this.startTime + this.runTime)) {
                 that.setPosition(this.animateOpts.x,this.animateOpts.y);
                 that.isAnimating = false;
+                if(this.updateCB)            
+                    this.updateCB({x:this.animateOpts.x,y:this.animateOpts.y});
                 if(this.completeCB)
                     this.completeCB();
                 return;
@@ -481,7 +483,7 @@ if (!Date.now)
             nextX = (this.animateOpts.x - this.startMatrix.e) * easeStep + this.startMatrix.e;
             nextY = (this.animateOpts.y - this.startMatrix.f) * easeStep + this.startMatrix.f;
             this.setPosition(nextX,nextY);
-            if(this.updateCB)
+            if(this.updateCB)            
                 this.updateCB({x:nextX,y:nextY});
 
             if (this.isAnimating) 
