@@ -7,7 +7,7 @@
     -webkit-tap-highlight-color:rgba(0, 0, 0, 0); /* set highlight color for user interaction */
     -moz-tap-highlight-color:rgba(0, 0, 0, 0); /* set highlight color for user interaction */
     -ms-touch-action:none;
-    -moz-user-select:-moz-none
+    -moz-user-select:-moz-none;
     -webkit-touch-callout: none; /* prevent the popup menu on any links*/
     margin:0;
     padding:0;
@@ -81,6 +81,7 @@ body {
     display: -webkit-box;
     display:    -moz-box;
     display:         box;
+    display: -ms-flexbox;
 
     -webkit-box-orient: vertical;
        -moz-box-orient: vertical;
@@ -90,7 +91,7 @@ body {
     /* current syntax */
     display: -webkit-flex;
     display:    -moz-flex;
-    display:     -ms-flex;
+    display:     -ms-flex;    
     display:         flex;
 
     -webkit-flex-direction: column;
@@ -171,6 +172,7 @@ body {
             -ms-flex: 1;
                 flex: 1;
     overflow:hidden;
+
 } /* Accounts for positioning of the content area, which is everything below the header and above the navbar. */
 
 
