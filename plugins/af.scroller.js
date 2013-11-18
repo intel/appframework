@@ -568,7 +568,7 @@
                 this.refreshContainer.style.top = "0px";
             }
 
-            this.dY = this.cY = 0;
+            //this.dY = this.cY = 0;
             this.el.removeEventListener('touchmove', this, false);
             this.el.removeEventListener('touchend', this, false);
             this.infiniteEndCheck = true;
@@ -586,12 +586,19 @@
                 left: this.el.scrollLeft
             };
             var counter = 0;
+            clearInterval(self.nativePolling);
             self.nativePolling = setInterval(function () {
                 counter++;
+                
+                if(counter==parseInt(max/8)){
+                    if(self.initScrollProgress)
+                        $.trigger(self,'scroll',[{x:-self.el.scrollLeft+self.cX,y:-self.el.scrollTop+self.cY}]);
+                }
                 if (counter >= max) {
                     clearInterval(self.nativePolling);
                     if(self.initScrollProgress)
                         $.trigger(self,'scroll',[{x:-self.el.scrollLeft,y:-self.el.scrollTop}]);
+                    
                     return;
                 }
                 if (self.el.scrollTop != currPos.top || self.el.scrollLeft != currPos.left) {
