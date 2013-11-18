@@ -17,7 +17,7 @@ You can make changes to the following files.
 3. ui/src/appframework.ui.js
 4. ui/transitions/*.js
 5. plugins/*.js
-6. plugins/*.css
+6. plugins/css/*.css
 
 
 #Building
