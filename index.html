@@ -89,6 +89,7 @@
         <script type="text/javascript" charset="utf-8" src="./ui/transitions/slideDown.js"></script>
         <script type="text/javascript" charset="utf-8" src="./ui/transitions/slideUp.js"></script>
         <script type="text/javascript" charset="utf-8" src="./plugins/af.slidemenu.js"></script>
+        <script type="text/javascript" charset="utf-8" src="./plugins/af.scrollScreen.js"></script>
 
         <script type="text/javascript">
             /* This function runs once the page is loaded, but appMobi is not yet active */
@@ -186,6 +187,10 @@
             </div>
             <div id="header">
                 <a id='menubadge' onclick='af.ui.toggleSideMenu()' class='menuButton'></a>
+                 <div id="updater" style="position: absolute;top: 0px;left: 50px;height: 30px;z-index: 999;background: red;width: 30px;">
+
+                    </div>
+
             </div>
             <div id="content">
                 <div title='Welcome' id="main" class="panel" selected="true" data-load="loadedPanel" data-unload="unloadedPanel" data-tab="navbar_home">
@@ -1670,12 +1675,12 @@ The parent id for this div is "content". Let's verify it.
                                 
                             })
                             $.bind(myScroller, "refresh-trigger", function () {
-                                this.setRefreshContent("New content");
+                                console.log("Refresh trigger");
                             });
                             var hideClose;
                             $.bind(myScroller, "refresh-release", function () {
                                 var that = this;
-                                this.setRefreshContent("New content...");
+                                console.log("Refresh release");
                                 clearTimeout(hideClose);
                                 hideClose = setTimeout(function () {
                                     console.log("hiding manually refresh");
@@ -1706,9 +1711,14 @@ The parent id for this div is "content". Let's verify it.
                                 });
                             });
                             $("#webslider").css("overflow", "auto");
+                            myScroller.initScrollProgress=true;
+
+                            $.bind(myScroller,"scroll",function(e){
+                                $.query("#updater").html(e.y);
+                            })
                         });
                     </script>
-                    <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue sed convallis elementum, magna diam pharetra magna, id vestibulum est eros
+                                       <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue sed convallis elementum, magna diam pharetra magna, id vestibulum est eros
                         vitae ante. Ut auctor erat a tellus venenatis eu fermentum lorem scelerisque. Cras dignissim leo ornare massa sollicitudin sit amet pulvinar turpis hendrerit. Morbi hendrerit nunc eget turpis luctus id ultricies lorem consequat. Donec eu lacus sed mauris
                         sollicitudin laoreet. Cras vitae sodales diam. Donec mollis, libero ut pellentesque dignissim, risus orci ornare nisi, sed eleifend enim purus malesuada neque. Nulla tellus sem, scelerisque sed sagittis id, eleifend venenatis ligula. Vivamus placerat
                         neque sit amet metus ultricies facilisis. Nulla a odio magna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed commodo quam eu enim lacinia vitae ultrices nulla mollis. Aenean eget lectus turpis, at ultrices

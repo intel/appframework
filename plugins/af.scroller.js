@@ -546,8 +546,10 @@
             this.cX = newcX;
             this.lastScrollInfo.top=this.cY;
 
-            if(this.initScrollProgress)
+            if(this.initScrollProgress){
                 $.trigger(this,'scroll',[{x:-this.el.scrollLeft,y:-this.el.scrollTop}]);
+                $.trigger($.touchLayer,'scroll',[{x:-this.el.scrollLeft,y:-this.el.scrollTop}]);
+            }
 
         };
         nativeScroller.prototype.showRefresh = function () {
@@ -591,13 +593,17 @@
                 counter++;
                 
                 if(counter==parseInt(max/8)){
-                    if(self.initScrollProgress)
+                    if(self.initScrollProgress){
                         $.trigger(self,'scroll',[{x:-self.el.scrollLeft+self.cX,y:-self.el.scrollTop+self.cY}]);
+                        $.trigger($.touchLayer,'scroll',[{x:-self.el.scrollLeft+self.cX,y:-self.el.scrollTop+self.cY}]);
+                    }
                 }
                 if (counter >= max) {
                     clearInterval(self.nativePolling);
-                    if(self.initScrollProgress)
+                    if(self.initScrollProgress){
                         $.trigger(self,'scroll',[{x:-self.el.scrollLeft,y:-self.el.scrollTop}]);
+                        $.trigger($.touchLayer,'scroll',[{x:-self.el.scrollLeft,y:-self.el.scrollTop}]);
+                    }
                     
                     return;
                 }
@@ -605,8 +611,10 @@
                     clearInterval(self.nativePolling);
                     $.trigger($.touchLayer, 'scrollend', [self.el]); //notify touchLayer of this elements scrollend
                     $.trigger(self, "scrollend", [self.el]);
-                    if(self.initScrollProgress)
+                    if(self.initScrollProgress){
                         $.trigger(self,'scroll',[{x:-self.el.scrollLeft,y:-self.el.scrollTop}]);
+                        $.trigger($.touchLayer,'scroll',[{x:-self.el.scrollLeft,y:-self.el.scrollTop}]);
+                    }
                 }
                 
 
@@ -1451,6 +1459,7 @@
                         if(self.initScrollProgress){
                             opts['update']=function(pos){
                                 $.trigger(self,'scroll',[pos]);
+                                $.trigger($.touchLayer,'scroll',[pos]);
                             }
                         }
                         $(this.el).animate(opts).start();
