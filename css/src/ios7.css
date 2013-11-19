@@ -206,9 +206,10 @@ color:black;
 #afui.ios7 .afPopup {
     display: block;
     border:1px solid rgba(158,158,158,255);
+    border-radius:10px;
     padding:0;
     text-align: center;
-    
+    width:280px;
     position: absolute;
     z-index: 1000000;
     top: 50%;
@@ -218,15 +219,30 @@ color:black;
     align:center;
 }
 
+#afui.ios7 .afPopup>HEADER{
+    padding:10px 0;
+}
+
+#afui.ios7 .afPopup>DIV{
+    font-size:14px;
+    padding-bottom:10px;
+}
+
+#afui.ios7 .afPopup>FOOTER{
+    border-top:1px solid #aaa;
+}
+
 #afui.ios7 .afPopup .button {
     border: none;
     width: 50%;
     margin: 0;
-    border-radius: 0;
     background: transparent;
-    border-top:1px solid rgba(158,158,158,255);
     color:rgba(82,155,234,255);
     padding:12px 0;
+}
+
+#afui.ios7 .afPopup .button.pressed {
+    background: none;
 }
 
 #afui.ios7 .button.pressed {

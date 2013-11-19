@@ -173,6 +173,63 @@ color: white;
     background:#fff;
 }
 
+#afui.bb .afPopup {
+    display: block;
+    width: 280px;
+    float:left;
+    border: solid 1px #ccc;
+    padding: 10px;
+    opacity: 1;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    position: absolute;
+    z-index: 1000000;
+    top: 50%;
+    margin: 0px auto;
+    background:inherit;
+    color:inherit;
+    padding:0;
+}
+
+#afui.bb .afPopup>HEADER{
+    font-weight:normal;
+    font-size:20px;    
+    text-align:center;
+    margin:0;
+    padding:8px;
+    color:white;
+    border-radius: 2px;
+    background:#00609E;
+    background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:-moz-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
+    background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);    
+}
+
+#afui.bb .afPopup>DIV{
+    font-size:14px;
+    text-align:center;
+    padding:10px;
+    margin:0;
+}
+
+#afui.bb .afPopup>FOOTER{
+    padding:5px;
+}
+
+#afui.bb .afPopup>FOOTER>A#cancel{
+    float:left;
+    width:120px;
+    margin-left:4px;
+}
+
+#afui.bb .afPopup>FOOTER>A#action{
+    float:right;
+    width:120px;
+    margin-right:4px;
+}
+
 #afui.bb #af_actionsheet {
     background:white;
     color:inherit;
