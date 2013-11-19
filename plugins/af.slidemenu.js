@@ -43,7 +43,7 @@
         });
         $("#afui").bind("touchmove", function(e) {
 
-            
+            if (!$.ui.isSideMenuEnabled()) return true;
             if (!$.ui.slideSideMenu||keepOpen) return true;
             if (!checking) {
                 checking = true;
