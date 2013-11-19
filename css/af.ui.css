@@ -1921,10 +1921,9 @@ color:inherit;
 
 #afui.android .afPopup {
     display: block;
-    width: 100%;
+    width: 280px;
     float:left;
     border: solid 1px #33B5E5;
-    left:0px !important;
     padding: 10px;
     opacity: 1;
     -webkit-border-radius: 0;
@@ -1939,20 +1938,64 @@ color:inherit;
     margin: 0px auto;
     background:inherit;
     color:inherit;
-    padding:30px;
+    padding:10px;
+}
+
+#afui.android .afPopup>HEADER{
+    font-weight:bold;
+    font-size:20px;    
+    text-align:center;
+    margin:0;
+    padding:5px;
+}
+
+#afui.android .afPopup>DIV{
+    font-size:14px;
+    text-align:center;
+    padding:5px;
+    margin:0;
+}
+
+#afui.android .afPopup>FOOTER>A#cancel{
+    float:left;
+    width:120px;
+    margin-left:4px;
+}
+
+#afui.android .afPopup>FOOTER>A#action{
+    float:right;
+    width:120px;
+    margin-right:4px;
 }
 
 #afui.android #af_actionsheet {
-    background:inherit;
+    border: #666 1px solid;
+    border-top: #33B5E5 3px solid;
+    background:#555;
     color:inherit;
+    margin:-20px 20px 0 20px;
+    padding:0px;
+}
+#afui.android.light #af_actionsheet {
+    border: #bbb 1px solid;
+    border-top: #33B5E5 3px solid;
+    background:#bbb;
 }
 
-#afui.android	 #af_actionsheet a{
+#afui.android #af_actionsheet a{
     border-radius:0;
     -webkit-border-radius:0;
-    border:1px solid #33B5E5;
-    background:inherit;
+    border:0px solid #777;
+    background:#424343;
     color:inherit;
+    line-height: 50px;
+    margin-bottom: 1px;
+}
+#afui.android.light #af_actionsheet a{
+    background:#fff;
+}
+#afui.android #af_actionsheet a.cancel{
+    margin-bottom: 0px;
 }
 
 
@@ -2068,33 +2111,37 @@ color:inherit;
   width: 56px !important;
   height: 56px;
   display: inline-block;
-  font: normal 11px/85px Segoe WP, Segoe UI, Verdana, Helvetica, Sans-Serif;
+  font: normal 9px/85px Segoe WP, Segoe UI, Verdana, Helvetica, Sans-Serif;
   text-decoration: none;
   color: inherit;
   text-align: center;
-  text-shadow: 0 -1px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 0 rgba(0, 0, 0, 0);
   overflow: hidden;
-  border-radius:44px;
   background:inherit;
   -webkit-backface-visibility: hidden;
   -webkit-perspective: 1000;
 }
 #afui.win8.light #navbar a {
-  text-shadow: 0 -1px rgba(255, 255, 255, 0.5);  
+  text-shadow: 0 0 rgba(0, 0, 0, 0);  
 }
 
- #afui.win8 #navbar a.pressed {
-  background-color: rgba(166, 166, 166, 0.7);
- }
-
  #afui.win8 #navbar .icon.pressed:before {
-	color:inherit;
+	background-color: #00ABA9;
 }
 
 #afui.win8 #navbar .icon:before {
-    top: 8px;
+    top: 0px;
+    left: 10px;
+    font-size:19px;
+    width:auto;
+    padding: 5px;
+    border: 3px solid #fff;
+    border-radius: 20px;
 }
 
+#afui.win8.light #navbar .icon:before {
+    border: 3px solid #000;
+}
 
   #afui.win8 #navbar a:not(:last-of-type){
   	border:none;
@@ -2118,21 +2165,26 @@ color:inherit;
 
  #afui.win8 .list .divider,  #afui.win8 #menu.tabletMenu .list .divider  {
  	background:#00ABA9;
- 	padding:14px;
+ 	padding:5px;
     display:inline;
- 	font-size:1em;
- 	font-weight:bold;
+ 	font-size:16px;
+ 	font-weight:normal;
  	border-top:none;
  	border-bottom:none;
-  color:inherit;
+    color:inherit;
  }
 
  #afui.win8 .list li {
  	border-top:none;
  	border-bottom:none;
+    font-size:20px;
  }
  #afui.win8 .panel h2 {
  	color:inherit;
+    font-weight:normal;
+    font-size:34px;
+    line-height:34px;
+    height:auto;
  }
 
 
@@ -2215,20 +2267,36 @@ margin-left:10px;
 #afui.win8 .button {
 	border-radius:0;
 	border:none;
-	background:#424343;
-	border-color:#424343;
-	color:white;
+	background:inherit;
+	border:3px solid #fff;
+	color:inherit;
 	text-shadow:none;
-	box-shadow: inset 0 1px 1px rgba(255, 255, 255, .4), 0 1px 2px rgba(0, 0, 0, .05);
+	box-shadow:none;
+}
+
+#afui.win8.light .button {
+	border:3px solid #000;
 }
 
 #afui.win8 .button.pressed {
 	background:#00ABA9;
-	border-color:#00ABA9;
 }
 
+#afui.win8 .button.next, #afui.win8 .button.previous {
+    border-color: #fff !important;
+}
+#afui.win8 .button.next::after, #afui.win8 .button.previous::after{
+    border:none;    
+}
 
+#afui.win8 .button-grouped .button{
+    border:2px solid #fff;
+}
 
+#afui.win8 .button-grouped > .button:first-child, #afui.win8 .button-grouped > .button:last-child {
+    border-radius:0; 
+    border:2px solid #fff;
+}
 
 
 #afui.win8 #menu {
@@ -2239,6 +2307,7 @@ margin-left:10px;
   z-index: 1000;
   width:100%;
   height: 150px;
+  font-size:20px;
   top:auto;
   background:inherit;
   color:inherit;
@@ -2257,7 +2326,7 @@ margin-left:10px;
     display: block;
     width: 100%;
     float:left;
-    border: solid 1px #72767b;
+    border: solid 0px #72767b;
     left:0px !important;
     padding: 10px;
     opacity: 1;
@@ -2269,24 +2338,66 @@ margin-left:10px;
     transition:none;
     position: absolute;
     z-index: 1000000;
-    top: 50%;
+    top: 0 !important;
     margin: 0px auto;
-    background:inherit;
+    background:#222;
     color:inherit;
-    padding:30px;
+    padding:15px;
+}
+
+#afui.win8.light .afPopup {
+    background:#eee;
+}
+
+#afui.win8 .afPopup>HEADER{
+    font-weight:bold;
+    font-size:20px;    
+    margin:0;
+    padding:0;
+}
+
+#afui.win8 .afPopup>DIV{
+    font-size:16px;
+    padding:10px 0;
+    margin:0;
+}
+
+#afui.win8 .afPopup>FOOTER{
+    width:100%;
+    text-align:left;    
+    display:block !important;
+}
+
+#afui.win8 .afPopup>FOOTER>A#cancel{
+    float:left;
+    min-width:100px;
+}
+
+#afui.win8 .afPopup>FOOTER>A#action{
+    float:left;
+    min-width:100px;
+    margin-left:10px;
+}
+
+#afui.win8 .afPopup>FOOTER>A.center{
+    float:none!important;
+    width:auto;
+    margin:8px;
 }
 
 #afui.win8 #af_actionsheet {
-    background:white;
+    background:#aaa;
     color:black;
 }
 
 #afui.win8 #af_actionsheet a{
     border-radius:0;
     -webkit-border-radius:0;
-    border:1px solid black;
-    background:white;
+    border:0px solid black;
+    background-color:transparent;
+    font-weight:normal;
     color:black;
+    box-shadow: 0px 1px 1px rgba(255,255,255,0);
 }
 
 #afui.win8 #menu .list > li > a {
@@ -2324,7 +2435,6 @@ margin-left:10px;
 #afui.bb #header {
 background:#00609E;
 background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
-background:-moz-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
 background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
 background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
 background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
@@ -2489,6 +2599,75 @@ color: white;
 
 #afui.bb .panel {
     background:#fff;
+}
+
+#afui.bb .afPopup {
+    display: block;
+    width: 280px;
+    float:left;
+    border: solid 1px #ccc;
+    padding: 10px;
+    opacity: 1;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    position: absolute;
+    z-index: 1000000;
+    top: 50%;
+    margin: 0px auto;
+    background:inherit;
+    color:inherit;
+    padding:0;
+}
+
+#afui.bb .afPopup>HEADER{
+    font-weight:normal;
+    font-size:20px;    
+    text-align:center;
+    margin:0;
+    padding:8px;
+    color:white;
+    border-radius: 2px;
+    background:#00609E;
+    background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
+    background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);    
+}
+
+#afui.bb .afPopup>DIV{
+    font-size:14px;
+    text-align:center;
+    padding:10px;
+    margin:0;
+}
+
+#afui.bb .afPopup>FOOTER{
+    padding:5px;
+}
+
+#afui.bb .afPopup>FOOTER>A#cancel{
+    float:left;
+    width:120px;
+    margin-left:4px;
+}
+
+#afui.bb .afPopup>FOOTER>A#action{
+    float:right;
+    width:120px;
+    margin-right:4px;
+}
+
+#afui.bb #af_actionsheet {
+    background:white;
+    color:inherit;
+}
+
+#afui.bb #af_actionsheet a{
+    border-radius:5px;
+    -webkit-border-radius:5px;
+    border:1px solid #ccc;
+    background:#eee;
+    color:#111;
 }
 
 /*src/ios7.css*/
@@ -2700,9 +2879,10 @@ color:black;
 #afui.ios7 .afPopup {
     display: block;
     border:1px solid rgba(158,158,158,255);
+    border-radius:10px;
     padding:0;
     text-align: center;
-    
+    width:280px;
     position: absolute;
     z-index: 1000000;
     top: 50%;
@@ -2712,15 +2892,30 @@ color:black;
     align:center;
 }
 
+#afui.ios7 .afPopup>HEADER{
+    padding:10px 0;
+}
+
+#afui.ios7 .afPopup>DIV{
+    font-size:14px;
+    padding-bottom:10px;
+}
+
+#afui.ios7 .afPopup>FOOTER{
+    border-top:1px solid #aaa;
+}
+
 #afui.ios7 .afPopup .button {
     border: none;
     width: 50%;
     margin: 0;
-    border-radius: 0;
     background: transparent;
-    border-top:1px solid rgba(158,158,158,255);
     color:rgba(82,155,234,255);
     padding:12px 0;
+}
+
+#afui.ios7 .afPopup .button.pressed {
+    background: none;
 }
 
 #afui.ios7 .button.pressed {
@@ -2735,15 +2930,16 @@ color:black;
 }
 
 #afui.ios7 #af_actionsheet {
-    background:white;
+    background-color:transparent;
     color:black;
-    padding-left:0;
-    padding-right:0;
+    padding-left:10px;
+    padding-right:10px;
+    border-top: transparent 1px solid;
+    box-shadow: 0px -1px 2px rgba(0,0,0,0);
 }
 
-#afui.ios7    #af_actionsheet a{
+#afui.ios7 #af_actionsheet a{
     background-image:none;
-    
     text-shadow:none;
     box-shadow:none;
     font-weight:normal;
@@ -2751,13 +2947,28 @@ color:black;
     border:none;
     -webkit-box-shadow:none;
     color:rgba(82,155,234,255);
-    background:white;
+    background-color:white;
     cursor:pointer;
-    border-radius:5px;
+    border-radius:0px;
+    line-height: 40px;
+    font-size: 20px;
+    margin-bottom: 1px;
 }
 
-#afui.ios7    #af_actionsheet a:not(:last-of-type){
-    border-bottom:1px solid rgba(82,155,234,255);
+#afui.ios7 #af_actionsheet a:first-child{
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+}
+
+#afui.ios7 #af_actionsheet a:nth-last-child(2){
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+}
+
+#afui.ios7 #af_actionsheet a.cancel{
+    font-weight:bold;
+    margin: 9px 0;
+    border-radius:5px;
 }
 
 #afui.ios7 #navbar a.pressed,#navbar .icon.pressed:before  {
@@ -3004,8 +3215,8 @@ color:black;
      display: block;
     width: 280px;
     float:left;
-    border: solid 1px #72767b;
-    -webkit-box-shadow: 0px 4px 6px #555, 0 0 20px rgba(255,255,255,0.5);
+    border: solid 2px #fff;
+    -webkit-box-shadow: 0px 4px 6px #555, 0 0 20px rgba(0,0,0,0.5);
     -webkit-border-radius: 10px;
     border-radius:10px;
     padding: 10px;
@@ -3018,8 +3229,8 @@ color:black;
     z-index: 1000000;
     margin-left: auto!important;
     margin-right: auto!important;
-    background: rgba(70,70,70,1);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(70,70,70,0.8)),    to(rgba(0,20,20,0.8)));
+    background: #1b294b;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#626c82), to(#1b294b));
 }
 #afui.ios .afPopup >* {
 color:white;
@@ -3036,12 +3247,15 @@ color:white;
 #afui.ios .afPopup>HEADER{
     font-weight:bold;
     font-size:20px;    
+    text-align:center;
+    text-shadow:0 -1px #000;
     margin:0;
     padding:0;
 }
 
 #afui.ios .afPopup>DIV{
-    font-size:12px;
+    font-size:14px;
+    text-align:center;
     margin:8px;
 }
 
@@ -3053,10 +3267,13 @@ color:white;
 
 #afui.ios .afPopup>FOOTER>A#cancel{
     float:left;
+    width:120px;
+    margin-left:4px;
 }
 
 #afui.ios .afPopup>FOOTER>A#action{
     float:right;
+    width:120px;
     margin-right:4px;
 }
 
@@ -3064,6 +3281,28 @@ color:white;
     float:none!important;
     width:80%;
     margin:8px;
+}
+
+#afui.ios #af_actionsheet {
+    background:#595c61;
+    color:inherit;
+}
+
+#afui.ios #af_actionsheet a{
+    border-radius:10px;
+    -webkit-border-radius:10px;
+    border:3px solid #111;
+    background:#eee;
+    background: linear-gradient(to bottom, #fff 0%,#ccc 100%);
+    color:#111;
+    text-shadow:0 1px 0 #fff;
+}
+
+#afui.ios #af_actionsheet a.cancel{
+    background:#333;
+    background: linear-gradient(to bottom, #666 0%,#333 100%);
+    color:white;
+    text-shadow:0 -1px 0 #000;
 }
 
 

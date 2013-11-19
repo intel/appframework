@@ -6,7 +6,6 @@
 #afui.bb #header {
 background:#00609E;
 background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
-background:-moz-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
 background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
 background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
 background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
@@ -201,7 +200,6 @@ color: white;
     border-radius: 2px;
     background:#00609E;
     background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
-    background:-moz-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
     background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
     background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
     background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);    
