@@ -34,7 +34,7 @@
     var inputElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android && !$.os.chrome); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
     var selectElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android && !$.os.chrome); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
     var focusScrolls = $.os.ios; //devices scrolling on focus instead of resizing
-    var requirePanning = $.os.ios; //devices which require panning feature
+    var requirePanning = $.os.ios&&!$.os.ios7; //devices which require panning feature
     var addressBarError = 0.97; //max 3% error in position
     var maxHideTries = 2; //HideAdressBar does not retry more than 2 times (3 overall)
     var skipTouchEnd = false; //Fix iOS bug with alerts/confirms
