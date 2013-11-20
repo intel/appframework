@@ -1156,7 +1156,7 @@
                         if (trigger) refreshFunc();
                     });
             }
-
+            return scrollEl.id;
             tmp = null;
             scrollEl = null;
         },

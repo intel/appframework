@@ -34,6 +34,19 @@
         var ftrHeight;        
         var scrollSetup=false;
 
+        for(var j in $.ui.scrollingDivs){
+            $.ui.scrollingDivs[j].initScrollProgress=true;
+            $.ui.scrollingDivs[j].lockBounce=false;
+        }
+
+        var oldAddDiv=$.ui.addDivAndScroll;
+
+        $.ui.addDivAndScroll=function(){
+            var id=oldAddDiv.apply($.ui,arguments);
+            $.ui.scrollingDivs[id].initScrollProgress=(headerShown||footerShown);
+            $.ui.scrollingDivs[id].lockBounce=false;
+        };
+
         $.ui.setupScrollStart=function(){
             if(scrollSetup) return;
             $.bind($.touchLayer,"scrollstart",initScrollStart);

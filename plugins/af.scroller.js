@@ -216,8 +216,6 @@
                             this.preventHideRefresh = !this.refreshRunning; // if it's not running why prevent it xD
                             this.moved = false;
                             this.onTouchStart(e);
-                            this._headerTrack=this.lastScrollInfo.top;
-                            this._headerToggle=false;                            
                             if(!this.bubbles)
                                 e.stopPropagation();
                             break;
@@ -942,7 +940,7 @@
             this.lastScrollInfo = scrollInfo;
             this.hasMoved = false;
 
-           if(this.elementInfo.maxTop==0&&this.elementInfo.maxLeft==0)
+           if(this.elementInfo.maxTop==0&&this.elementInfo.maxLeft==0&&this.lockBounce)
                 this.currentScrollingObject=null;
             else
                 this.scrollerMoveCSS(this.lastScrollInfo, 0);
