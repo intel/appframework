@@ -14,6 +14,7 @@
     }
 })();
 </script>
+
         <title>App Framework Kitchen Sink</title>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
@@ -186,11 +187,7 @@
 
             </div>
             <div id="header">
-                <a id='menubadge' onclick='af.ui.toggleSideMenu()' class='menuButton'></a>
-                 <div id="updater" style="position: absolute;top: 0px;left: 50px;height: 30px;z-index: 999;background: red;width: 30px;">
-
-                    </div>
-
+                <a id='menubadge' onclick='af.ui.toggleSideMenu()' class='menuButton'></a>                 
             </div>
             <div id="content">
                 <div title='Welcome' id="main" class="panel" selected="true" data-load="loadedPanel" data-unload="unloadedPanel" data-tab="navbar_home">
@@ -1713,9 +1710,7 @@ The parent id for this div is "content". Let's verify it.
                             $("#webslider").css("overflow", "auto");
                             myScroller.initScrollProgress=true;
 
-                            $.bind(myScroller,"scroll",function(e){
-                                $.query("#updater").html(e.y);
-                            })
+                            
                         });
                     </script>
                                        <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue sed convallis elementum, magna diam pharetra magna, id vestibulum est eros
@@ -2159,7 +2154,7 @@ The parent id for this div is "content". Let's verify it.
                 <a href="#uiapi" id='navbar_plugins' class="icon info">api</a>
             </footer>
             <header id="testheader">
-                <a id="backButton" onclick="$.ui.goBack()" class='button'>Go Back</a>
+                <a id="backButton" onclick="$.ui.goBack()" class='button'>Back</a>
                 	<h1>Custom Header</h1>
 
             </header>
