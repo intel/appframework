@@ -512,8 +512,8 @@
             }
 
             if (!this.moved) {
-                $.trigger(this, "scrollstart", [this.el]);
-                $.trigger($.touchLayer, "scrollstart", [this.el]);
+                $.trigger(this, "scrollstart", [this.el,{x:newcX,y:newcY}]);
+                $.trigger($.touchLayer, "scrollstart", [this.el,{x:newcX,y:newcY}]);
                 this.el.addEventListener('touchend', this, false);
                 this.moved = true;
             }
@@ -1026,8 +1026,8 @@
 
             this.lastScrollInfo = scrollInfo;
             if (!this.moved) {
-                $.trigger(this, "scrollstart");
-                $.trigger($.touchLayer, "scrollstart", [this.el]);
+                $.trigger(this, "scrollstart",[this.el,{x:this.lastScrollInfo.top,y:this.lastScrollInfo.left}]);
+                $.trigger($.touchLayer, "scrollstart", [this.el,{x:this.lastScrollInfo.top,y:this.lastScrollInfo.left}]);
                 if (this.elementInfo.requiresVScrollBar) this.vscrollBar.style.display="block";
                 if (this.elementInfo.requiresHScrollBar) this.hscrollBar.style.display="block";
             }
