@@ -74,7 +74,8 @@
                 }
             }
 
-            if(pos.y>prevY&&(Math.abs(pos.y)-Math.abs(startY)))
+
+            if(pos.y>prevY&&(Math.abs(pos.y)-Math.abs(startY))<-40)
             {
                 if(headerShown&&$.ui._hideHeaderOnScroll){
                     headerShown=false;
