@@ -15,9 +15,9 @@
     var keepOpen=false;
 
     $.ui.ready(function() {
-        //  $("head").append("<style>#afui #menu {display:block !important}</style>");
+        
         if ($.os.ie) return; //ie has the menu at the bottom
-        // return;
+        
 
         var elems = $("#content, #header, #navbar");
         var $menu = $("#menu");
