@@ -57,9 +57,9 @@
 }
 
 #afui.ios7 > #menu {
-    border-right:none;
+    border-right:1px solid #bbb;
     background:rgba(238,238,238,255);
-     color:black;
+    color:black;
 }
 
 #afui.ios7 #menu .list li,#afui.ios7 #menu .list .divider,#afui.ios7 #menu .list li:first-child,#afui.ios7 #menu .list li:last-child {
