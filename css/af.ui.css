@@ -1852,7 +1852,7 @@ color:inherit;
 }
 
 #afui.android > #menu {
-    border-right:none;
+    border-right:1px solid rgba(128,128,128,0.5);
 	color:inherit;
 	background:inherit;
 }
@@ -2245,7 +2245,7 @@ color:inherit;
 }
 
 #afui.win8 > #menu {
-  border-right:none;
+    border-right:1px solid rgba(128,128,128,0.5);
 	color:inherit;
 	background:inherit;
 }
@@ -2568,7 +2568,7 @@ color: white;
 }
 
 #afui.bb #menu {
-    border-right:none;
+    border-right:1px solid #bbb;
     background: #fff;
     color: #000;
 }
@@ -2730,9 +2730,9 @@ color: white;
 }
 
 #afui.ios7 > #menu {
-    border-right:none;
+    border-right:1px solid #bbb;
     background:rgba(238,238,238,255);
-     color:black;
+    color:black;
 }
 
 #afui.ios7 #menu .list li,#afui.ios7 #menu .list .divider,#afui.ios7 #menu .list li:first-child,#afui.ios7 #menu .list li:last-child {
