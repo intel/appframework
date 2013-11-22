@@ -7,7 +7,7 @@
 	-webkit-tap-highlight-color:rgba(0, 0, 0, 0); /* set highlight color for user interaction */
 	-moz-tap-highlight-color:rgba(0, 0, 0, 0); /* set highlight color for user interaction */
 	-ms-touch-action:none;
-	-moz-user-select:-moz-none
+	-moz-user-select:-moz-none;
 	-webkit-touch-callout: none; /* prevent the popup menu on any links*/
 	margin:0;
 	padding:0;

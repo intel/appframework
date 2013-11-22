@@ -34,14 +34,14 @@
     left: 25px;
     text-overflow: ellipsis;
     font-size: 14px;
-    padding: none;
+    padding: 0;
     text-shadow: none;
     background-color: transparent;
     border:none;
-    border-color:none;
+    border-color: transparent;
     height: 44px;
     top:0;
-    border-radius: none;
+    border-radius: 0;
     box-shadow:none;
     margin: 0;
     padding-left: 0;
@@ -59,13 +59,12 @@
     top: 10px;
     left: -20px;
     text-align: center;
-    border-radius: none;
+    border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -78,13 +77,11 @@
     -webkit-transform:rotate(180deg);
     transform:rotate(180deg);
     background-color: transparent;
-    
-
 }
 
 
- #afui > #navbar {
-     background:#0088D1;
+#afui > #navbar {
+    background:#0088D1;
     border:none;
     border-top:1px solid #0088D1;
     box-shadow:none;
@@ -215,9 +212,9 @@
 }
 
 #afui .button.previous {
-
     border:none;
 }
+
 #afui .button.next {
     border:none;   
 }
@@ -231,13 +228,12 @@
     top: 2px;
     left: -25px;
     text-align: center;
-    border-radius: none;
+    border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -251,22 +247,21 @@
     transform:rotate(180deg);
     background-color: transparent;
 }
-#afui .button.next::after {
-   color:black;
 
+#afui .button.next::after {
+    color:black;
     z-index: -1;
     font-size:22px;
     position: absolute;
     top: 6px;
     right: -25px;
     text-align: center;
-    border-radius: none;
+    border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -276,10 +271,8 @@
     line-height: 1;
     -webkit-font-smoothing: antialiased;
     content: "\f054";
-    
     background-color: transparent;
 }
-
 
 
 #afui .afPopup {
