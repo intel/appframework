@@ -8,7 +8,7 @@
 	-webkit-tap-highlight-color:rgba(0, 0, 0, 0); /* set highlight color for user interaction */
 	-moz-tap-highlight-color:rgba(0, 0, 0, 0); /* set highlight color for user interaction */
 	-ms-touch-action:none;
-	-moz-user-select:-moz-none
+	-moz-user-select:-moz-none;
 	-webkit-touch-callout: none; /* prevent the popup menu on any links*/
 	margin:0;
 	padding:0;
@@ -589,6 +589,7 @@ body {
       }
 }
 
+
 /*src/appframework.css*/
 /* blue #0190d6
 
@@ -626,14 +627,14 @@ body {
     left: 25px;
     text-overflow: ellipsis;
     font-size: 14px;
-    padding: none;
+    padding: 0;
     text-shadow: none;
     background-color: transparent;
     border:none;
-    border-color:none;
+    border-color: transparent;
     height: 44px;
     top:0;
-    border-radius: none;
+    border-radius: 0;
     box-shadow:none;
     margin: 0;
     padding-left: 0;
@@ -651,13 +652,12 @@ body {
     top: 10px;
     left: -20px;
     text-align: center;
-    border-radius: none;
+    border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -670,13 +670,11 @@ body {
     -webkit-transform:rotate(180deg);
     transform:rotate(180deg);
     background-color: transparent;
-    
-
 }
 
 
- #afui > #navbar {
-     background:#0088D1;
+#afui > #navbar {
+    background:#0088D1;
     border:none;
     border-top:1px solid #0088D1;
     box-shadow:none;
@@ -807,9 +805,9 @@ body {
 }
 
 #afui .button.previous {
-
     border:none;
 }
+
 #afui .button.next {
     border:none;   
 }
@@ -823,13 +821,12 @@ body {
     top: 2px;
     left: -25px;
     text-align: center;
-    border-radius: none;
+    border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -843,22 +840,21 @@ body {
     transform:rotate(180deg);
     background-color: transparent;
 }
-#afui .button.next::after {
-   color:black;
 
+#afui .button.next::after {
+    color:black;
     z-index: -1;
     font-size:22px;
     position: absolute;
     top: 6px;
     right: -25px;
     text-align: center;
-    border-radius: none;
+    border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -868,10 +864,8 @@ body {
     line-height: 1;
     -webkit-font-smoothing: antialiased;
     content: "\f054";
-    
     background-color: transparent;
 }
-
 
 
 #afui .afPopup {
@@ -1142,7 +1136,7 @@ body {
   left: 5px;
   width: 42px;
   text-align: left;
-  z-index: 3px;
+  z-index: 3;
   top: 3px;
   overflow: hidden;
   background-color: transparent;
@@ -1215,6 +1209,7 @@ body {
   color: inherit;
   margin: 16px 0 8px;
 }
+
 
 /*src/buttons.css*/
 #afui .button {
@@ -1619,10 +1614,11 @@ color:inherit;
    width:5px !important;
    height:20px !important;
    border-radius:2px !important;
-   border:1px soldid black !important;
+   border:1px solid black !important;
    background:black !important;
    opacity:0 !important;
 }
+
 
 /*../plugins/css/af.selectbox.css*/
 	#afModalMask {
@@ -1930,7 +1926,7 @@ color:inherit;
     border-radius: 0;
     -webkit-transform:none;
     transform:none;
-    --webkit-transition: none;
+    -webkit-transition: none;
     transition:none;
     position: absolute;
     z-index: 1000000;
@@ -2334,7 +2330,7 @@ margin-left:10px;
     border-radius: 0;
     -webkit-transform:none;
     transform:none;
-    --webkit-transition: none;
+    -webkit-transition: none;
     transition:none;
     position: absolute;
     z-index: 1000000;
@@ -2426,6 +2422,7 @@ margin-left:10px;
   }
 }
 
+
 /*src/bb.css*/
 #afui.bb {
     font-family: "Slate Pro",Slate,"Myriad Pro","BBAlpha Sans",Helvetica;
@@ -2457,19 +2454,18 @@ border-color:#009CE1 transparent #004E92 transparent;
     display: block;
     position: absolute;
     line-height:60px;
-
     left: 5px;
     text-overflow: ellipsis;
     font-size: 10px;
-    padding: none;
+    padding: 0;
     color: #fff;
     text-shadow: none;
     background-color: transparent;
     border:none;
-    border-color:none;
+    border-color: transparent;
     height: 44px;
     top:0;
-    border-radius: none;
+    border-radius: 0;
     box-shadow:none;
     margin: 0;
     padding-left: 0;
@@ -2487,13 +2483,12 @@ border-color:#009CE1 transparent #004E92 transparent;
     top: -15px;
     left: 15px;
     text-align: center;
-    border-radius: none;
+    border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: 0;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -2507,8 +2502,6 @@ border-color:#009CE1 transparent #004E92 transparent;
     -webkit-transform:rotate(180deg);
     transform:rotate(180deg);
     background-color: transparent;
-    
-
 }
 
 #afui.bb #backButton::after {
@@ -2518,7 +2511,6 @@ border-color:#009CE1 transparent #004E92 transparent;
     position: absolute;
     font-weight:bold;
     background-color: transparent;
-
     left:55px;
     height:48px;
     top:-5px;
@@ -2526,14 +2518,14 @@ border-color:#009CE1 transparent #004E92 transparent;
     background: #0aa9dc;
     margin:auto;
     text-align: center;
-    border-radius: none;
+    border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: 0;
     box-shadow: none;
     -webkit-transform: rotate(10deg);
     transform: rotate(10deg);
-
 }
+
 #afui.bb #navbar {
     background:#1e1e1e;;
     border:none;
@@ -2670,6 +2662,7 @@ color: white;
     color:#111;
 }
 
+
 /*src/ios7.css*/
 /** iOS 7 theme */
 
@@ -2775,18 +2768,17 @@ color:black;
     display: block;
     position: absolute;
     line-height:44px;
-
     left: 25px;
     text-overflow: ellipsis;
     font-size: 14px;
-    padding: none;
+    padding: 0;
     text-shadow: none;
     background-color: transparent;
     border:none;
-    border-color:none;
+    border-color: transparent;
     height: 44px;
     top:0;
-    border-radius: none;
+    border-radius: 0;
     box-shadow:none;
     margin: 0;
     padding-left: 0;
@@ -2794,7 +2786,6 @@ color:black;
     width:50px;
     padding:0 !important;
     margin:0 !important;
-
 }
 
 #afui.ios7 #backButton::before {
@@ -2804,13 +2795,12 @@ color:black;
     top: 10px;
     left: -20px;
     text-align: center;
-    border-radius: none;
+    border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -2823,8 +2813,6 @@ color:black;
     -webkit-transform:rotate(180deg);
     transform:rotate(180deg);
     background-color: transparent;
-    
-
 }
 
 #afui.ios7 #backButton::after {
@@ -2849,9 +2837,11 @@ color:black;
     border-top: 1px solid rgba(82,155,234,255);
 
 }
+
 #afui.ios7 .button-grouped >  .button:first-child {
     border-left: 1px solid rgba(82,155,234,255);
 }
+
 #afui.ios7  .button-grouped >.button:last-child {
     
 }
@@ -2864,10 +2854,9 @@ color:black;
 
 #afui.ios7  .button-grouped.vertical > .button:first-child {
     border-left: 1px solid rgba(82,155,234,255);
-    
 }
-#afui.ios7 .button-grouped.vertical >  .button:last-child {
 
+#afui.ios7 .button-grouped.vertical >  .button:last-child {
     border-bottom:1px solid rgba(82,155,234,255);
 }
 
@@ -2886,10 +2875,9 @@ color:black;
     position: absolute;
     z-index: 1000000;
     top: 50%;
-    
     color:inherit;
     background:rgba(249,249,249,1);
-    align:center;
+    text-align:center;
 }
 
 #afui.ios7 .afPopup>HEADER{
@@ -2923,9 +2911,7 @@ color:black;
     background: white;
 }
 
-
 #afui.ios7 .afPopup a:not(:first-of-type) {
-
     border-left:1px solid rgba(158,158,158,255);
 }
 
@@ -2943,7 +2929,7 @@ color:black;
     text-shadow:none;
     box-shadow:none;
     font-weight:normal;
-    border-radius:none;
+    border-radius: 0;
     border:none;
     -webkit-box-shadow:none;
     color:rgba(82,155,234,255);
@@ -2975,14 +2961,13 @@ color:black;
     color:rgba(82,155,234,255);
 }
 
-
 #afui.ios7 .button.previous {
     border:none;
 }
+
 #afui.ios7 .button.next {
     border:none;   
 }
-
 
 #afui.ios7 .button.previous::after {
     color:rgba(82,155,234,255);
@@ -2992,13 +2977,12 @@ color:black;
     top: 2px;
     left: -25px;
     text-align: center;
-    border-radius: none;
+    border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -3012,22 +2996,21 @@ color:black;
     transform:rotate(180deg);
     background-color: transparent;
 }
-#afui.ios7 .button.next::after {
-   color:rgba(82,155,234,255);
 
+#afui.ios7 .button.next::after {
+    color:rgba(82,155,234,255);
     z-index: -1;
     font-size:22px;
     position: absolute;
     top: 6px;
     right: -25px;
     text-align: center;
-    border-radius: none;
+    border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -3037,10 +3020,8 @@ color:black;
     line-height: 1;
     -webkit-font-smoothing: antialiased;
     content: "\f054";
-    
     background-color: transparent;
 }
-
 
 #afui.ios7 .button.gray {
     color:#999;
@@ -3082,6 +3063,7 @@ color:black;
     box-shadow:none;
     font-size:12px;
 }
+
 
 /*src/ios.css*/
 /* iOS theme */
