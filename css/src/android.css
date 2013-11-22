@@ -207,7 +207,7 @@
     border-radius: 0;
     -webkit-transform:none;
     transform:none;
-    --webkit-transition: none;
+    -webkit-transition: none;
     transition:none;
     position: absolute;
     z-index: 1000000;
