@@ -5,7 +5,7 @@
  */
  ;
 (function($) {
-    var startX, startY, dx, dy, blocking = false,
+    var startX, startY, dx, dy,
         checking = false,
         doMenu = true,
         showHide = false;
@@ -20,15 +20,11 @@
         
 
         var elems = $("#content, #header, #navbar");
-        var $menu = $("#menu");
         var max = 0;
         var slideOver = max/3;
-        var menuState;
         var transTime = $.ui.transitionTime;
-        var hasAside=$.query("aside").length!=0;
         var openState=0;
         var showHideThresh=false;
-        var trackClick=false;
         $("#afui").bind("touchstart", function(e) {
             openState=0;
             if(e.touches.length>1) return;
@@ -45,14 +41,12 @@
                 doMenu = true;
             max = parseInt($("#menu").width());
             slideOver=max/3;
-            menuState = $menu.css("display") == "block";
             var sidePos=$.ui.getSideMenuPosition();
             if(sidePos>0)
                 openState=1;
             else if(sidePos<0)
                 openState=2;
         });
-        var moveCounter=0;
         
         $("#afui").bind("touchmove", function(e) {
             if(e.touches.length>1) return;
