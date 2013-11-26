@@ -13,8 +13,8 @@ You can contribute to the core code by forking it and make a pull request.  Plea
 You can make changes to the following files.
 
 1. appframework.js
-2. css/src/*.css
-3. ui/src/appframework.ui.js
+2. css/*.css
+3. ui/appframework.ui.js
 4. ui/transitions/*.js
 5. plugins/*.js
 6. plugins/css/*.css
