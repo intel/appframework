@@ -122,8 +122,11 @@
                 transTime = ((max - thePlace) / max) * numOnly($.ui.transitionTime);
             }
             transTime=Math.abs(transTime);
-            if(thePlace<0)
+            if(thePlace<0){
                 isAside=true;
+            } else {
+                isAside=false;
+            }
             elems.cssTranslate(thePlace + "px,0");
             e.preventDefault();
             e.stopPropagation();        
