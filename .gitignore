@@ -21,4 +21,3 @@ css/build.php
 ui/transitions/build.php
 *.svn
 /node_modules
-build

@@ -7,8 +7,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-mochaccino");
     grunt.loadNpmTasks("grunt-closure-compiler");
+    grunt.loadNpmTasks("grunt-banner");
 
     grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
         clean: [ "build" ],
 
         // see .jshintrc file for the options;
@@ -136,6 +138,13 @@ module.exports = function (grunt) {
                         "plugins/af.8tiles.js"
                     ]
                 }
+            },
+            af:{
+                files:{
+                    "build/appframework.js":[
+                    "appframework.js"
+                    ]
+                }
             }
         },
         "closure-compiler": {
@@ -176,19 +185,32 @@ module.exports = function (grunt) {
                 noreport:true
             }
 
+        },
+        usebanner: {
+            taskName: {
+                options: {
+                    position: "top",
+                    banner: "/*! <%= pkg.name %> - v<%= pkg.version %> - "+
+                        "<%= grunt.template.today('yyyy-mm-dd hh:mm:ss') %> */\n",
+                    linebreak: true
+                },
+                files: {
+                    src: [ "build/*.js","build/ui/*.js","build/css/*.css" ]
+                }
+            }
         }
     });
 
     // NB jshint is disabled for now as it fails with the current code
     grunt.registerTask("default", [
         "clean",
-        "test",
         "cssmin",
         "concat",
-        "closure-compiler"
+        "closure-compiler",
+        "usebanner"
     ]);
 
     grunt.registerTask("test", ["mochaccino:unit"]);
     grunt.registerTask("cov", ["clean", "mochaccino:cov"]);
-    grunt.registerTask("rebuild" , ["cssmin","concat","closure-compiler"]);
+    grunt.registerTask("rebuild" , ["cssmin","concat","closure-compiler","usebanner"]);
 };
