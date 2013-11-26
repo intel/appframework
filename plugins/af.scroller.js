@@ -1451,8 +1451,8 @@
                             x:distanceToMove.x,
                             y:distanceToMove.y,
                             duration:time,
-                            easing:"easeOutSine",                        
-                        }
+                            easing:"easeOutSine"
+                        };
 
                         if(self.initScrollProgress){
                             opts['update']=function(pos){
