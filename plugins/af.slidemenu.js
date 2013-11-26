@@ -81,10 +81,13 @@
 
             var thePlace = (dx - startX);
             if(openState==0){
-                if(thePlace<0)
+                if(thePlace<0){
                     $("#aside_menu").show();
-                else
+                    $("#menu").hide();
+                } else {
                     $("#menu").show();
+                    $("#aside_menu").hide();
+                }
             }
 
 
