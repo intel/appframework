@@ -58,6 +58,12 @@
             if(e.touches.length>1) return;
 
             if (!$.ui.slideSideMenu||keepOpen) return true;
+
+            dx = e.touches[0].pageX;
+            dy = e.touches[0].pageY;
+
+            if (Math.abs(dy - startY) > Math.abs(dx - startX)) return true;  
+            
             if (!checking) {
                 checking = true;
                 doMenu=false;
@@ -65,19 +71,6 @@
             }
             else 
                 doMenu=true;
-             if(!doMenu) return;
-
-            dx = e.touches[0].pageX;
-            dy = e.touches[0].pageY;
-
-            //if (!menuState && dx < startX) return;
-            //else if (menuState && dx > startX) return;
-
-            if (Math.abs(dy - startY) > Math.abs(dx - startX)) {
-                doMenu = false;
-                return true;
-            }
-            
 
             var thePlace = (dx - startX);
             if(openState==0){
