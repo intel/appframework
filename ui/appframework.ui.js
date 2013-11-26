@@ -4221,7 +4221,7 @@
                 jsScroll = true;
                 hasScroll = true;
             }
-            var title=tmp.title||tmp.getAttribute("data-title");
+            var title=tmp.getAttribute("data-title")||tmp.title;
             tmp.title="";
             tmp.setAttribute("data-title",title);
 
