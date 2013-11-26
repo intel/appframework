@@ -141,7 +141,7 @@
 }
 
 #afui.tizen > #menu {
-    border-right:none;
+    border-right: 1px solid rgba(128,128,128,0.5);
     color:inherit;
     background:inherit;
 }
