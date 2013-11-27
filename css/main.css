@@ -158,7 +158,7 @@ body {
 
 #afui #content {
     z-index:180;
-    width:100%;
+    
     position:relative;
     /* previous syntax */
         -webkit-box-flex: 1;
@@ -207,7 +207,6 @@ body {
     left:0;
     right:0;
     padding:0 3px;
-    width:100%;
 }
 
 
@@ -581,7 +580,7 @@ body {
     #afui > #navbar.hasMenu.splitview, #afui > #header.hasMenu.splitview, #afui > #content.hasMenu.splitview  {
         position:relative;        
         right:0px;
-        left:256px;
+        margin-left:256px;
         -webkit-transition: transform 0ms;
         -webkit-transform:none!important;
         transition:transform 0ms;
@@ -598,13 +597,11 @@ body {
         height:100% !important;
         display:block !important;
         position:absolute !important; top:0;
-        left:0;
+        left:0px;
         -webkit-transform:none !important;
         -webkit-transition:none !important;
         transform:none !important;
-        transition:none !important;
-        width: -webkit-calc(100% - 256px);
-        width: calc(100% - 256px);           
+        transition:none !important;        
     }
     
     #afui .splitview .menuButton { display:none;    }
