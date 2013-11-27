@@ -580,7 +580,7 @@ body {
 @media handheld, only screen and (min-width: 768px) {
     #afui > #navbar.hasMenu.splitview, #afui > #header.hasMenu.splitview, #afui > #content.hasMenu.splitview  {
         position:relative;
-        left:256px;
+        margin-left:256px;
         -webkit-transition: transform 0ms;
         -webkit-transform:none!important;
         transition:transform 0ms;
