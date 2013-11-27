@@ -191,7 +191,7 @@ module.exports = function (grunt) {
                 options: {
                     position: "top",
                     banner: "/*! <%= pkg.name %> - v<%= pkg.version %> - "+
-                        "<%= grunt.template.today('yyyy-mm-dd hh:mm:ss') %> */\n",
+                        "<%= grunt.template.today('yyyy-mm-dd') %> */\n",
                     linebreak: true
                 },
                 files: {

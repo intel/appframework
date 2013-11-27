@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-11-26 10:11:59 */
+/*! intel-appframework - v2.1.0 - 2013-11-27 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -160,7 +160,7 @@ body {
 
 #afui #content {
     z-index:180;
-    width:100%;
+    
     position:relative;
     /* previous syntax */
         -webkit-box-flex: 1;
@@ -209,7 +209,6 @@ body {
     left:0;
     right:0;
     padding:0 3px;
-    width:100%;
 }
 
 
@@ -272,6 +271,7 @@ body {
     height:100%;
     display:none;
     position:absolute; top:0; left:0;
+    border-right: 1px solid rgba(128,128,128,0.5);
     
 }
 
@@ -282,7 +282,7 @@ body {
     height:100%;
     display:none;
     position:absolute; top:0; right:0;
-    
+    border-left: 1px solid rgba(128,128,128,0.5);
 }
 
 
@@ -580,12 +580,15 @@ body {
 
 @media handheld, only screen and (min-width: 768px) {
     #afui > #navbar.hasMenu.splitview, #afui > #header.hasMenu.splitview, #afui > #content.hasMenu.splitview  {
-        position:relative;
-        left:256px;
+        position:relative;        
+        right:0px;
+        margin-left:256px;
         -webkit-transition: transform 0ms;
         -webkit-transform:none!important;
         transition:transform 0ms;
-        transform:none !important;
+        transform:none !important; 
+        width: -webkit-calc(100% - 256px);
+        width: calc(100% - 256px);
     }
     
         
@@ -596,11 +599,11 @@ body {
         height:100% !important;
         display:block !important;
         position:absolute !important; top:0;
-        left:0;
+        left:0px;
         -webkit-transform:none !important;
         -webkit-transition:none !important;
         transform:none !important;
-        transition:none !important;
+        transition:none !important;        
     }
     
     #afui .splitview .menuButton { display:none;    }
