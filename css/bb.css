@@ -6,7 +6,6 @@
 #afui.bb #header {
 background:#00609E;
 background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
-background:-moz-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
 background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
 background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
 background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
@@ -28,17 +27,16 @@ border-color:#009CE1 transparent #004E92 transparent;
 #afui.bb #backButton {
     display: block;
     position: absolute;
-    line-height:68px;
-
+    line-height:60px;
     left: 5px;
     text-overflow: ellipsis;
     font-size: 10px;
-    padding:0;
+    padding: 0;
     color: #fff;
     text-shadow: none;
     background-color: transparent;
     border:none;
-    border-color:transparent;
+    border-color: transparent;
     height: 44px;
     top:0;
     border-radius: 0;
@@ -61,11 +59,10 @@ border-color:#009CE1 transparent #004E92 transparent;
     text-align: center;
     border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: 0;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -79,8 +76,6 @@ border-color:#009CE1 transparent #004E92 transparent;
     -webkit-transform:rotate(180deg);
     transform:rotate(180deg);
     background-color: transparent;
-    
-
 }
 
 #afui.bb #backButton::after {
@@ -90,7 +85,6 @@ border-color:#009CE1 transparent #004E92 transparent;
     position: absolute;
     font-weight:bold;
     background-color: transparent;
-
     left:55px;
     height:48px;
     top:-5px;
@@ -98,14 +92,14 @@ border-color:#009CE1 transparent #004E92 transparent;
     background: #0aa9dc;
     margin:auto;
     text-align: center;
-    border-radius:0;
+    border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: 0;
     box-shadow: none;
     -webkit-transform: rotate(10deg);
     transform: rotate(10deg);
-
 }
+
 #afui.bb #navbar {
     background:#1e1e1e;;
     border:none;
@@ -171,6 +165,62 @@ color: white;
 
 #afui.bb .panel {
     background:#fff;
+}
+
+#afui.bb .afPopup {
+    display: block;
+    width: 280px;
+    float:left;
+    border: solid 1px #ccc;
+    padding: 10px;
+    opacity: 1;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    position: absolute;
+    z-index: 1000000;
+    top: 50%;
+    margin: 0px auto;
+    background:inherit;
+    color:inherit;
+    padding:0;
+}
+
+#afui.bb .afPopup>HEADER{
+    font-weight:normal;
+    font-size:20px;    
+    text-align:center;
+    margin:0;
+    padding:8px;
+    color:white;
+    border-radius: 2px;
+    background:#00609E;
+    background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
+    background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);    
+}
+
+#afui.bb .afPopup>DIV{
+    font-size:14px;
+    text-align:center;
+    padding:10px;
+    margin:0;
+}
+
+#afui.bb .afPopup>FOOTER{
+    padding:5px;
+}
+
+#afui.bb .afPopup>FOOTER>A#cancel{
+    float:left;
+    width:120px;
+    margin-left:4px;
+}
+
+#afui.bb .afPopup>FOOTER>A#action{
+    float:right;
+    width:120px;
+    margin-right:4px;
 }
 
 #afui.bb #af_actionsheet {

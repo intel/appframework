@@ -129,8 +129,8 @@
      display: block;
     width: 280px;
     float:left;
-    border: solid 1px #72767b;
-    -webkit-box-shadow: 0px 4px 6px #555, 0 0 20px rgba(255,255,255,0.5);
+    border: solid 2px #fff;
+    -webkit-box-shadow: 0px 4px 6px #555, 0 0 20px rgba(0,0,0,0.5);
     -webkit-border-radius: 10px;
     border-radius:10px;
     padding: 10px;
@@ -143,8 +143,8 @@
     z-index: 1000000;
     margin-left: auto!important;
     margin-right: auto!important;
-    background: rgba(70,70,70,1);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(70,70,70,0.8)),    to(rgba(0,20,20,0.8)));
+    background: #1b294b;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#626c82), to(#1b294b));
 }
 #afui.ios .afPopup >* {
 color:white;
@@ -161,12 +161,15 @@ color:white;
 #afui.ios .afPopup>HEADER{
     font-weight:bold;
     font-size:20px;    
+    text-align:center;
+    text-shadow:0 -1px #000;
     margin:0;
     padding:0;
 }
 
 #afui.ios .afPopup>DIV{
-    font-size:12px;
+    font-size:14px;
+    text-align:center;
     margin:8px;
 }
 
@@ -178,10 +181,13 @@ color:white;
 
 #afui.ios .afPopup>FOOTER>A#cancel{
     float:left;
+    width:120px;
+    margin-left:4px;
 }
 
 #afui.ios .afPopup>FOOTER>A#action{
     float:right;
+    width:120px;
     margin-right:4px;
 }
 

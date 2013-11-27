@@ -1247,6 +1247,7 @@ body {
   color: inherit;
   margin: 16px 0 8px;
 }
+
 #afui .button {
 	position:relative;
 	display:inline-block;
@@ -1290,7 +1291,7 @@ body {
 	position:absolute;
 	width:25px; height:25px;
 	background-color:inherit;
-  	top:4px; left:-11px;
+  	top:3px; left:-11px;
     border-radius:5px;
     border:1px solid;
 	border-color:transparent transparent inherit transparent;
@@ -1302,7 +1303,7 @@ body {
 	position:absolute;
 	width:25px; height:25px;
 	background-color:inherit;
-  	top:4px; right:-11px;
+  	top:3px; right:-11px;
     border-radius:5px;
     border:1px solid;
     border-color:transparent transparent transparent transparent;

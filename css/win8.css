@@ -243,7 +243,7 @@
 }
 
 #afui.win8 > #menu {
-  border-right:1px solid rgba(128,128,128,0.5);
+    border-right:1px solid rgba(128,128,128,0.5);
 	color:inherit;
 	background:inherit;
 }
@@ -267,9 +267,13 @@ margin-left:10px;
 	border:none;
 	background:inherit;
 	border:3px solid #fff;
-	color:white;
+	color:inherit;
 	text-shadow:none;
 	box-shadow:none;
+}
+
+#afui.win8.light .button {
+	border:3px solid #000;
 }
 
 #afui.win8 .button.pressed {
@@ -320,7 +324,7 @@ margin-left:10px;
     display: block;
     width: 100%;
     float:left;
-    border: solid 1px #72767b;
+    border: solid 0px #72767b;
     left:0px !important;
     padding: 10px;
     opacity: 1;
@@ -332,11 +336,51 @@ margin-left:10px;
     transition:none;
     position: absolute;
     z-index: 1000000;
-    top: 50%;
+    top: 0 !important;
     margin: 0px auto;
-    background:inherit;
+    background:#222;
     color:inherit;
-    padding:30px;
+    padding:15px;
+}
+
+#afui.win8.light .afPopup {
+    background:#eee;
+}
+
+#afui.win8 .afPopup>HEADER{
+    font-weight:bold;
+    font-size:20px;    
+    margin:0;
+    padding:0;
+}
+
+#afui.win8 .afPopup>DIV{
+    font-size:16px;
+    padding:10px 0;
+    margin:0;
+}
+
+#afui.win8 .afPopup>FOOTER{
+    width:100%;
+    text-align:left;    
+    display:block !important;
+}
+
+#afui.win8 .afPopup>FOOTER>A#cancel{
+    float:left;
+    min-width:100px;
+}
+
+#afui.win8 .afPopup>FOOTER>A#action{
+    float:left;
+    min-width:100px;
+    margin-left:10px;
+}
+
+#afui.win8 .afPopup>FOOTER>A.center{
+    float:none!important;
+    width:auto;
+    margin:8px;
 }
 
 #afui.win8 #af_actionsheet {

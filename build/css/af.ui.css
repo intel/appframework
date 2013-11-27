@@ -1247,6 +1247,7 @@ body {
   color: inherit;
   margin: 16px 0 8px;
 }
+
 #afui .button {
 	position:relative;
 	display:inline-block;
@@ -1290,7 +1291,7 @@ body {
 	position:absolute;
 	width:25px; height:25px;
 	background-color:inherit;
-  	top:4px; left:-11px;
+  	top:3px; left:-11px;
     border-radius:5px;
     border:1px solid;
 	border-color:transparent transparent inherit transparent;
@@ -1302,7 +1303,7 @@ body {
 	position:absolute;
 	width:25px; height:25px;
 	background-color:inherit;
-  	top:4px; right:-11px;
+  	top:3px; right:-11px;
     border-radius:5px;
     border:1px solid;
     border-color:transparent transparent transparent transparent;
@@ -1695,10 +1696,9 @@ body {
 
 #afui.android .afPopup {
     display: block;
-    width: 100%;
+    width: 280px;
     float:left;
     border: solid 1px #33B5E5;
-    left:0px !important;
     padding: 10px;
     opacity: 1;
     -webkit-border-radius: 0;
@@ -1713,7 +1713,34 @@ body {
     margin: 0px auto;
     background:inherit;
     color:inherit;
-    padding:30px;
+    padding:10px;
+}
+
+#afui.android .afPopup>HEADER{
+    font-weight:bold;
+    font-size:20px;    
+    text-align:center;
+    margin:0;
+    padding:5px;
+}
+
+#afui.android .afPopup>DIV{
+    font-size:14px;
+    text-align:center;
+    padding:5px;
+    margin:0;
+}
+
+#afui.android .afPopup>FOOTER>A#cancel{
+    float:left;
+    width:120px;
+    margin-left:4px;
+}
+
+#afui.android .afPopup>FOOTER>A#action{
+    float:right;
+    width:120px;
+    margin-right:4px;
 }
 
 #afui.android #af_actionsheet {
@@ -1991,7 +2018,7 @@ body {
 }
 
 #afui.win8 > #menu {
-  border-right:1px solid rgba(128,128,128,0.5);
+    border-right:1px solid rgba(128,128,128,0.5);
 	color:inherit;
 	background:inherit;
 }
@@ -2015,9 +2042,13 @@ margin-left:10px;
 	border:none;
 	background:inherit;
 	border:3px solid #fff;
-	color:white;
+	color:inherit;
 	text-shadow:none;
 	box-shadow:none;
+}
+
+#afui.win8.light .button {
+	border:3px solid #000;
 }
 
 #afui.win8 .button.pressed {
@@ -2068,7 +2099,7 @@ margin-left:10px;
     display: block;
     width: 100%;
     float:left;
-    border: solid 1px #72767b;
+    border: solid 0px #72767b;
     left:0px !important;
     padding: 10px;
     opacity: 1;
@@ -2080,11 +2111,51 @@ margin-left:10px;
     transition:none;
     position: absolute;
     z-index: 1000000;
-    top: 50%;
+    top: 0 !important;
     margin: 0px auto;
-    background:inherit;
+    background:#222;
     color:inherit;
-    padding:30px;
+    padding:15px;
+}
+
+#afui.win8.light .afPopup {
+    background:#eee;
+}
+
+#afui.win8 .afPopup>HEADER{
+    font-weight:bold;
+    font-size:20px;    
+    margin:0;
+    padding:0;
+}
+
+#afui.win8 .afPopup>DIV{
+    font-size:16px;
+    padding:10px 0;
+    margin:0;
+}
+
+#afui.win8 .afPopup>FOOTER{
+    width:100%;
+    text-align:left;    
+    display:block !important;
+}
+
+#afui.win8 .afPopup>FOOTER>A#cancel{
+    float:left;
+    min-width:100px;
+}
+
+#afui.win8 .afPopup>FOOTER>A#action{
+    float:left;
+    min-width:100px;
+    margin-left:10px;
+}
+
+#afui.win8 .afPopup>FOOTER>A.center{
+    float:none!important;
+    width:auto;
+    margin:8px;
 }
 
 #afui.win8 #af_actionsheet {
@@ -2136,7 +2207,6 @@ margin-left:10px;
 #afui.bb #header {
 background:#00609E;
 background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
-background:-moz-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
 background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
 background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
 background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
@@ -2158,17 +2228,16 @@ border-color:#009CE1 transparent #004E92 transparent;
 #afui.bb #backButton {
     display: block;
     position: absolute;
-    line-height:68px;
-
+    line-height:60px;
     left: 5px;
     text-overflow: ellipsis;
     font-size: 10px;
-    padding:0;
+    padding: 0;
     color: #fff;
     text-shadow: none;
     background-color: transparent;
     border:none;
-    border-color:transparent;
+    border-color: transparent;
     height: 44px;
     top:0;
     border-radius: 0;
@@ -2191,11 +2260,10 @@ border-color:#009CE1 transparent #004E92 transparent;
     text-align: center;
     border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: 0;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -2209,8 +2277,6 @@ border-color:#009CE1 transparent #004E92 transparent;
     -webkit-transform:rotate(180deg);
     transform:rotate(180deg);
     background-color: transparent;
-    
-
 }
 
 #afui.bb #backButton::after {
@@ -2220,7 +2286,6 @@ border-color:#009CE1 transparent #004E92 transparent;
     position: absolute;
     font-weight:bold;
     background-color: transparent;
-
     left:55px;
     height:48px;
     top:-5px;
@@ -2228,14 +2293,14 @@ border-color:#009CE1 transparent #004E92 transparent;
     background: #0aa9dc;
     margin:auto;
     text-align: center;
-    border-radius:0;
+    border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: 0;
     box-shadow: none;
     -webkit-transform: rotate(10deg);
     transform: rotate(10deg);
-
 }
+
 #afui.bb #navbar {
     background:#1e1e1e;;
     border:none;
@@ -2303,6 +2368,62 @@ color: white;
     background:#fff;
 }
 
+#afui.bb .afPopup {
+    display: block;
+    width: 280px;
+    float:left;
+    border: solid 1px #ccc;
+    padding: 10px;
+    opacity: 1;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    position: absolute;
+    z-index: 1000000;
+    top: 50%;
+    margin: 0px auto;
+    background:inherit;
+    color:inherit;
+    padding:0;
+}
+
+#afui.bb .afPopup>HEADER{
+    font-weight:normal;
+    font-size:20px;    
+    text-align:center;
+    margin:0;
+    padding:8px;
+    color:white;
+    border-radius: 2px;
+    background:#00609E;
+    background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
+    background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);    
+}
+
+#afui.bb .afPopup>DIV{
+    font-size:14px;
+    text-align:center;
+    padding:10px;
+    margin:0;
+}
+
+#afui.bb .afPopup>FOOTER{
+    padding:5px;
+}
+
+#afui.bb .afPopup>FOOTER>A#cancel{
+    float:left;
+    width:120px;
+    margin-left:4px;
+}
+
+#afui.bb .afPopup>FOOTER>A#action{
+    float:right;
+    width:120px;
+    margin-right:4px;
+}
+
 #afui.bb #af_actionsheet {
     background:white;
     color:inherit;
@@ -2331,7 +2452,7 @@ color: white;
 #afui.ios7 #header {
     background:rgb(249,249,249);
     color:inherit;
-    border:0;
+    border:none;
     border-bottom:1px solid rgba(158,158,158,255);
 }
 
@@ -2420,7 +2541,6 @@ color:black;
     display: block;
     position: absolute;
     line-height:44px;
-
     left: 25px;
     text-overflow: ellipsis;
     font-size: 14px;
@@ -2428,7 +2548,7 @@ color:black;
     text-shadow: none;
     background-color: transparent;
     border:none;
-    border-color:transparent;
+    border-color: transparent;
     height: 44px;
     top:0;
     border-radius: 0;
@@ -2439,7 +2559,6 @@ color:black;
     width:50px;
     padding:0 !important;
     margin:0 !important;
-
 }
 
 #afui.ios7 #backButton::before {
@@ -2451,11 +2570,10 @@ color:black;
     text-align: center;
     border-radius: 0;
     border: none;
-    border-color: none;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -2468,8 +2586,6 @@ color:black;
     -webkit-transform:rotate(180deg);
     transform:rotate(180deg);
     background-color: transparent;
-    
-
 }
 
 #afui.ios7 #backButton::after {
@@ -2494,9 +2610,11 @@ color:black;
     border-top: 1px solid rgba(82,155,234,255);
 
 }
+
 #afui.ios7 .button-grouped >  .button:first-child {
     border-left: 1px solid rgba(82,155,234,255);
 }
+
 #afui.ios7  .button-grouped >.button:last-child {
     
 }
@@ -2509,10 +2627,9 @@ color:black;
 
 #afui.ios7  .button-grouped.vertical > .button:first-child {
     border-left: 1px solid rgba(82,155,234,255);
-    
 }
-#afui.ios7 .button-grouped.vertical >  .button:last-child {
 
+#afui.ios7 .button-grouped.vertical >  .button:last-child {
     border-bottom:1px solid rgba(82,155,234,255);
 }
 
@@ -2524,27 +2641,42 @@ color:black;
 #afui.ios7 .afPopup {
     display: block;
     border:1px solid rgba(158,158,158,255);
+    border-radius:10px;
     padding:0;
     text-align: center;
-    
+    width:280px;
     position: absolute;
     z-index: 1000000;
     top: 50%;
-    
     color:inherit;
     background:rgba(249,249,249,1);
-    align:center;
+    text-align:center;
+}
+
+#afui.ios7 .afPopup>HEADER{
+    padding:10px 0;
+}
+
+#afui.ios7 .afPopup>DIV{
+    font-size:14px;
+    padding-bottom:10px;
+}
+
+#afui.ios7 .afPopup>FOOTER{
+    border-top:1px solid #aaa;
 }
 
 #afui.ios7 .afPopup .button {
     border: none;
     width: 50%;
     margin: 0;
-    border-radius: 0;
     background: transparent;
-    border-top:1px solid rgba(158,158,158,255);
     color:rgba(82,155,234,255);
     padding:12px 0;
+}
+
+#afui.ios7 .afPopup .button.pressed {
+    background: none;
 }
 
 #afui.ios7 .button.pressed {
@@ -2552,9 +2684,7 @@ color:black;
     background: white;
 }
 
-
 #afui.ios7 .afPopup a:not(:first-of-type) {
-
     border-left:1px solid rgba(158,158,158,255);
 }
 
@@ -2572,7 +2702,7 @@ color:black;
     text-shadow:none;
     box-shadow:none;
     font-weight:normal;
-    border-radius:0;
+    border-radius: 0;
     border:none;
     -webkit-box-shadow:none;
     color:rgba(82,155,234,255);
@@ -2604,14 +2734,13 @@ color:black;
     color:rgba(82,155,234,255);
 }
 
-
 #afui.ios7 .button.previous {
     border:none;
 }
+
 #afui.ios7 .button.next {
     border:none;   
 }
-
 
 #afui.ios7 .button.previous::after {
     color:rgba(82,155,234,255);
@@ -2621,13 +2750,12 @@ color:black;
     top: 2px;
     left: -25px;
     text-align: center;
-    border-radius: none;
+    border-radius: 0;
     border: none;
     border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -2641,22 +2769,21 @@ color:black;
     transform:rotate(180deg);
     background-color: transparent;
 }
-#afui.ios7 .button.next::after {
-   color:rgba(82,155,234,255);
 
+#afui.ios7 .button.next::after {
+    color:rgba(82,155,234,255);
     z-index: -1;
     font-size:22px;
     position: absolute;
     top: 6px;
     right: -25px;
     text-align: center;
-    border-radius: none;
+    border-radius: 0;
     border: none;
     border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -2666,10 +2793,8 @@ color:black;
     line-height: 1;
     -webkit-font-smoothing: antialiased;
     content: "\f054";
-    
     background-color: transparent;
 }
-
 
 #afui.ios7 .button.gray {
     color:#999;
@@ -2843,8 +2968,8 @@ color:black;
      display: block;
     width: 280px;
     float:left;
-    border: solid 1px #72767b;
-    -webkit-box-shadow: 0px 4px 6px #555, 0 0 20px rgba(255,255,255,0.5);
+    border: solid 2px #fff;
+    -webkit-box-shadow: 0px 4px 6px #555, 0 0 20px rgba(0,0,0,0.5);
     -webkit-border-radius: 10px;
     border-radius:10px;
     padding: 10px;
@@ -2857,8 +2982,8 @@ color:black;
     z-index: 1000000;
     margin-left: auto!important;
     margin-right: auto!important;
-    background: rgba(70,70,70,1);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(70,70,70,0.8)),    to(rgba(0,20,20,0.8)));
+    background: #1b294b;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#626c82), to(#1b294b));
 }
 #afui.ios .afPopup >* {
 color:white;
@@ -2875,12 +3000,15 @@ color:white;
 #afui.ios .afPopup>HEADER{
     font-weight:bold;
     font-size:20px;    
+    text-align:center;
+    text-shadow:0 -1px #000;
     margin:0;
     padding:0;
 }
 
 #afui.ios .afPopup>DIV{
-    font-size:12px;
+    font-size:14px;
+    text-align:center;
     margin:8px;
 }
 
@@ -2892,10 +3020,13 @@ color:white;
 
 #afui.ios .afPopup>FOOTER>A#cancel{
     float:left;
+    width:120px;
+    margin-left:4px;
 }
 
 #afui.ios .afPopup>FOOTER>A#action{
     float:right;
+    width:120px;
     margin-right:4px;
 }
 
@@ -2926,7 +3057,6 @@ color:white;
     color:white;
     text-shadow:0 -1px 0 #000;
 }
-
 #af_actionsheet {
     position:absolute;
     left:0px;
