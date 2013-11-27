@@ -270,6 +270,7 @@ body {
     height:100%;
     display:none;
     position:absolute; top:0; left:0;
+    border-right: 1px solid rgba(128,128,128,0.5);
     
 }
 
@@ -280,7 +281,7 @@ body {
     height:100%;
     display:none;
     position:absolute; top:0; right:0;
-    
+    border-left: 1px solid rgba(128,128,128,0.5);
 }
 
 
