@@ -28,13 +28,6 @@
   -->
       <link rel="stylesheet" type="text/css" href="css/main.css"  />
       <link rel="stylesheet" type="text/css" href="css/appframework.css"  />
-      <link rel="stylesheet" type="text/css" href="css/android.css"  />
-      <link rel="stylesheet" type="text/css" href="css/win8.css"  />
-      <link rel="stylesheet" type="text/css" href="css/bb.css"  />
-      <link rel="stylesheet" type="text/css" href="css/ios.css"  />
-      <link rel="stylesheet" type="text/css" href="css/ios7.css"  />
-      <link rel="stylesheet" type="text/css" href="css/tizen.css"  />
-
       <link rel="stylesheet" type="text/css" href="css/badges.css"  />
       <link rel="stylesheet" type="text/css" href="css/buttons.css"  />
       <link rel="stylesheet" type="text/css" href="css/lists.css"  />
@@ -45,9 +38,17 @@
       <link rel="stylesheet" type="text/css" href="plugins/css/af.popup.css"  />
       <link rel="stylesheet" type="text/css" href="plugins/css/af.selectBox.css"  />
 
-        <!-- uncomment for AppMobi apps <script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/appmobi.js"></script>
-<script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/xhr.js"></script>
--->
+      <link rel="stylesheet" type="text/css" href="css/android.css"  />
+      <link rel="stylesheet" type="text/css" href="css/win8.css"  />
+      <link rel="stylesheet" type="text/css" href="css/bb.css"  />
+      <link rel="stylesheet" type="text/css" href="css/ios.css"  />
+      <link rel="stylesheet" type="text/css" href="css/ios7.css"  />
+      <link rel="stylesheet" type="text/css" href="css/tizen.css"  />        
+        
+        <!-- uncomment for intel.xdk apps 
+        <script type="text/javascript" charset="utf-8" src="intelxdk.js"></script>
+        <script type="text/javascript" charset="utf-8" src="xhr.js"></script>
+        -->
         <script type="text/javascript" charset="utf-8" src="./appframework.js"></script>
         <!-- include af.desktopBrowsers.js on desktop browsers only -->
         <script>
@@ -93,7 +94,7 @@
         <script type="text/javascript" charset="utf-8" src="./plugins/af.scrollScreen.js"></script>
 
         <script type="text/javascript">
-            /* This function runs once the page is loaded, but appMobi is not yet active */
+            /* This function runs once the page is loaded, but intel.xdk is not yet active */
             //$.ui.animateHeaders=false;
              var search=document.location.search.toLowerCase().replace("?","");
              //if(!search)
@@ -121,15 +122,15 @@
 
             });
             
-            /* This code is used to run as soon as appMobi activates */
+            /* This code is used to run as soon as intel.xdk activates */
             var onDeviceReady = function () {
-                AppMobi.device.setRotateOrientation("portrait");
-                AppMobi.device.setAutoRotate(false);
-                webRoot = AppMobi.webRoot + "";
+                intel.xdk.device.setRotateOrientation("portrait");
+                intel.xdk.device.setAutoRotate(false);
+                webRoot = intel.xdk.webRoot + "";
                 //hide splash screen
-                AppMobi.device.hideSplashScreen();
+                intel.xdk.device.hideSplashScreen();
                 $.ui.blockPageScroll(); //block the page from scrolling at the header/footer
-
+                $.ui.launch();
             };
             document.addEventListener("intel.xdk.device.ready", onDeviceReady, false);
 

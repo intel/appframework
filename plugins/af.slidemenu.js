@@ -5,7 +5,7 @@
  */
  ;
 (function($) {
-    var startX, startY, dx, dy, blocking = false,
+    var startX, startY, dx, dy,
         checking = false,
         doMenu = true,
         showHide = false;
@@ -20,15 +20,11 @@
         
 
         var elems = $("#content, #header, #navbar");
-        var $menu = $("#menu");
         var max = 0;
         var slideOver = max/3;
-        var menuState;
         var transTime = $.ui.transitionTime;
-        var hasAside=$.query("aside").length!=0;
         var openState=0;
         var showHideThresh=false;
-        var trackClick=false;
         $("#afui").bind("touchstart", function(e) {
             openState=0;
             if(e.touches.length>1) return;
@@ -45,19 +41,23 @@
                 doMenu = true;
             max = parseInt($("#menu").width());
             slideOver=max/3;
-            menuState = $menu.css("display") == "block";
             var sidePos=$.ui.getSideMenuPosition();
             if(sidePos>0)
                 openState=1;
             else if(sidePos<0)
                 openState=2;
         });
-        var moveCounter=0;
         
         $("#afui").bind("touchmove", function(e) {
             if(e.touches.length>1) return;
 
             if (!$.ui.slideSideMenu||keepOpen) return true;
+
+            dx = e.touches[0].pageX;
+            dy = e.touches[0].pageY;
+
+            if (Math.abs(dy - startY) > Math.abs(dx - startX)) return true;  
+            
             if (!checking) {
                 checking = true;
                 doMenu=false;
@@ -65,26 +65,16 @@
             }
             else 
                 doMenu=true;
-             if(!doMenu) return;
-
-            dx = e.touches[0].pageX;
-            dy = e.touches[0].pageY;
-
-            //if (!menuState && dx < startX) return;
-            //else if (menuState && dx > startX) return;
-
-            if (Math.abs(dy - startY) > Math.abs(dx - startX)) {
-                doMenu = false;
-                return true;
-            }
-            
 
             var thePlace = (dx - startX);
             if(openState==0){
-                if(thePlace<0)
+                if(thePlace<0){
                     $("#aside_menu").show();
-                else
+                    $("#menu").hide();
+                } else {
                     $("#menu").show();
+                    $("#aside_menu").hide();
+                }
             }
 
 
@@ -119,8 +109,11 @@
                 transTime = ((max - thePlace) / max) * numOnly($.ui.transitionTime);
             }
             transTime=Math.abs(transTime);
-            if(thePlace<0)
+            if(thePlace<0){
                 isAside=true;
+            } else {
+                isAside=false;
+            }
             elems.cssTranslate(thePlace + "px,0");
             e.preventDefault();
             e.stopPropagation();        
