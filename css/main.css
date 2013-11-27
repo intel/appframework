@@ -579,12 +579,15 @@ body {
 
 @media handheld, only screen and (min-width: 768px) {
     #afui > #navbar.hasMenu.splitview, #afui > #header.hasMenu.splitview, #afui > #content.hasMenu.splitview  {
-        position:relative;
-        margin-left:256px;
+        position:relative;        
+        right:0px;
+        left:256px;
         -webkit-transition: transform 0ms;
         -webkit-transform:none!important;
         transition:transform 0ms;
-        transform:none !important;
+        transform:none !important; 
+        width: -webkit-calc(100% - 256px);
+        width: calc(100% - 256px);
     }
     
         
@@ -600,6 +603,8 @@ body {
         -webkit-transition:none !important;
         transform:none !important;
         transition:none !important;
+        width: -webkit-calc(100% - 256px);
+        width: calc(100% - 256px);           
     }
     
     #afui .splitview .menuButton { display:none;    }
