@@ -1999,7 +1999,7 @@
 
 //The following functions are utilitiy functions for afui within intel xdk.
 
-(function() {
+(function($) {
     $(document).one("intel.xdk.device.ready", function() { //in intel xdk, we need to undo the height stuff since it causes issues.
         $.ui.isIntel=true;
         setTimeout(function() {
@@ -2025,4 +2025,4 @@
             }
         });
     }
-})();
+})(af);
