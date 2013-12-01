@@ -115,20 +115,21 @@
 	display:block;
 	float:none;
 	width:100%;
-	border:0px;
 	border-left: 1px solid #666;
 	border-right: 1px solid #666;
 	border-top: 1px solid #666;
+    border-bottom: 0px solid #666;
 }
 
 #afui .button-grouped.vertical > .button:first-child {
-	border-left: 1px solid #666;
 	border-top-left-radius: 6px;
 	border-top-right-radius: 6px;
 	border-bottom-left-radius:0px;
+    border-bottom-right-radius:0px;
 }
 #afui .button-grouped.vertical > .button:last-child {
 	border-top-right-radius:0px;
+    border-top-left-radius:0px;
 	border-bottom-right-radius: 6px;
 	border-bottom-left-radius: 6px;
 	border-bottom:1px solid #666;
