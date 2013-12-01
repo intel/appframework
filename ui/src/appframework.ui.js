@@ -567,9 +567,10 @@
          * @param {Boolean} [force]
          * @param {Function} [callback] Callback function to execute after menu toggle is finished
          * @param {int} [time] Time to run the transition
-         * @title $.ui.toggleSideMenu([force],[callback],[time])
+         * @param {Boolean} [panelScrolling] Allow scrolling on main panel when side menu is open
+         * @title $.ui.toggleSideMenu([force],[callback],[time],[panelScrolling])
          */
-        toggleSideMenu: function(force, callback, time) {
+        toggleSideMenu: function(force, callback, time, panelScrolling) {
             if (!this.isSideMenuEnabled() || this.togglingSideMenu) return;
 
             var that = this;
@@ -588,9 +589,11 @@
                         that.togglingSideMenu = false;
                         els.vendorCss("Transition", "");
                         if (callback) callback(canceled);
+                        if(af().scroller && !panelScrolling) {
+                            $('.panel[selected="true"]').scroller().lock();
+                        } 
                     }
                 });
-
             } else if (force === undefined || (force !== undefined && force === false)) {
                 this.togglingSideMenu = true;
                 that.css3animate(els, {
@@ -603,6 +606,9 @@
                         that.togglingSideMenu = false;
                         if (callback) callback(canceled);
                         menu.hide();
+                        if(af().scroller && !panelScrolling) {
+                            $('.panel[selected="true"]').scroller().unlock();
+                        } 
                     }
                 });
             }
