@@ -19,13 +19,14 @@
 	background:#FDFDFD;
 	color:#000;
 }
+
 #afui.android > #header {
     background:inherit;
     color:inherit;
     border-color:#33B5E5;
 }
-#afui.android #backButton
-{
+
+#afui.android #backButton{
     background: inherit;
     color:inherit;
 }
@@ -38,48 +39,48 @@
     border-color:black;
 }
 
-
- #afui.android > #navbar {
+#afui.android > #navbar {
     box-shadow: none;
  	background:inherit;
  	border-top:2px solid #33B5E5;
     border-bottom:none;
     padding:0;
- }
+}
 
 #afui.android #navbar a {
 	color:inherit;
     top:0px;
 }
- #afui.android #navbar a.pressed {
+
+#afui.android #navbar a.pressed {
  	border:0px;
  	border-top:4px solid #33B5E5;
  	border-radius:0px;
  	background:none;
- }
+}
 
 #afui.android #navbar .icon.pressed:before {
 	color:inherit;
 }
 
-
 #afui.android .af-badge {
 	border:none;
 }
+
 #afui.android #content,#afui.android #content > .panel {
  	background:inherit;
  	color:inherit;
- }
+}
 
- #afui.android .list {
+#afui.android .list {
  	background:inherit;
  	color:inherit;
  	border-color:#303030;
- }
+}
 
- #afui.android .list .divider {	color:black; }
+#afui.android .list .divider {	color:black; }
 
- #afui.android .panel h2 { color:inherit; }
+#afui.android .panel h2 { color:inherit; }
 
 
 #afui.android .collapsed:after {border-top: 6px solid;}
@@ -90,6 +91,7 @@
 #afui.android .collapsed:before,#afui.android .expanded:before {
     border-color: inherit;
 }
+
 #afui.android .collapsed:after,
 #afui.android .expanded:after{
     border-top-color:inherit;
@@ -166,8 +168,8 @@
 }
 
 #afui.android.light .button {
-  background:#D1D1D1;
-  border-color:#D1D1D1;
+    background:#D1D1D1;
+    border-color:#D1D1D1;
 }
 
 #afui.android .button.pressed {
@@ -193,56 +195,75 @@
     border-color:transparent;
 }
 
-#afui.android .button-grouped * { border-right:1px solid rgba(255,255,255,.25); }
-#afui.android .button-grouped > .button:last-child, #afui.android .button-grouped.vertical * { border-right:none; }
+#afui.android .button-grouped * { 
+    border-right:1px solid rgba(255,255,255,.25);
+    border-bottom:1px solid rgba(255,255,255,.25); 
+}
+
+#afui.android .button-grouped.vertical * {
+    border-left:1px solid rgba(255,255,255,.25);
+    border-bottom:0;
+}
+
+#afui.android .button-grouped.vertical .button:last-child {
+    border-bottom:1px solid rgba(255,255,255,.25);
+}
 
 #afui.android .afPopup {
-    display: block;
-    width: 280px;
-    float:left;
-    border: solid 1px #33B5E5;
-    padding: 10px;
-    opacity: 1;
+    border: solid 1px #aaa;
+    padding: 0;
     -webkit-border-radius: 0;
     border-radius: 0;
     -webkit-transform:none;
     transform:none;
     -webkit-transition: none;
     transition:none;
-    position: absolute;
-    z-index: 1000000;
-    top: 50%;
-    margin: 0px auto;
     background:inherit;
+    background-color:rgba(0,0,0,0.9);
     color:inherit;
-    padding:10px;
+}
+
+#afui.android.light .afPopup {
+    background-color:rgba(255,255,255,0.9);
 }
 
 #afui.android .afPopup>HEADER{
-    font-weight:bold;
+    font-weight:normal;
     font-size:20px;    
-    text-align:center;
-    margin:0;
-    padding:5px;
+    text-align:left;
+    padding:10px;
 }
 
 #afui.android .afPopup>DIV{
     font-size:14px;
-    text-align:center;
-    padding:5px;
+    text-align:left;
+    padding:10px;
     margin:0;
+    border-top: solid 1px #aaa;
+    border-bottom: solid 1px #aaa;
+}
+
+#afui.android .afPopup>FOOTER {
+    background:#bbb;
+}
+
+#afui.android .afPopup>FOOTER>A, #afui.android.light .afPopup>FOOTER>A {
+    background:#fff;
+    color:#111;
 }
 
 #afui.android .afPopup>FOOTER>A#cancel{
-    float:left;
+    margin-left:10px;
     width:120px;
-    margin-left:4px;
 }
 
 #afui.android .afPopup>FOOTER>A#action{
-    float:right;
+    margin-right:10px;
     width:120px;
-    margin-right:4px;
+}
+
+#afui.android .afPopup>FOOTER>A.center{
+    margin:8px;
 }
 
 #afui.android #af_actionsheet {
@@ -253,6 +274,7 @@
     margin:-20px 20px 0 20px;
     padding:0px;
 }
+
 #afui.android.light #af_actionsheet {
     border: #bbb 1px solid;
     border-top: #33B5E5 3px solid;
@@ -268,9 +290,11 @@
     line-height: 50px;
     margin-bottom: 1px;
 }
+
 #afui.android.light #af_actionsheet a{
     background:#fff;
 }
+
 #afui.android #af_actionsheet a.cancel{
     margin-bottom: 0px;
 }

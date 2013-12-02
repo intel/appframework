@@ -98,11 +98,12 @@
                 var markup = '<div id="' + this.id + '" class="afPopup hidden '+ this.addCssClass + '">'+
                             '<header>' + this.title + '</header>'+
                              '<div>' + this.message + '</div>'+
-                             '<footer style="clear:both;">'+
+                             '<footer>'+
                                  '<a href="javascript:;" class="' + this.cancelClass + '" id="cancel">' + this.cancelText + '</a>'+
                                  '<a href="javascript:;" class="' + this.doneClass + '" id="action">' + this.doneText + '</a>'+
+                                 '<div style="clear:both"></div>'+
                             ' </footer>'+
-                         '</div></div>';
+                         '</div>';
                 $(this.container).append($(markup));
 
                 var $el = $.query("#" + this.id);

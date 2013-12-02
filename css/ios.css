@@ -15,7 +15,7 @@
 } 
 
 #afui.ios #header h1 {
-        text-shadow: rgba(0,0,0,0.8) 0 -1px 0;
+    text-shadow: rgba(0,0,0,0.8) 0 -1px 0;
 }
 
 #afui.ios .af-badge {
@@ -25,7 +25,6 @@
 }
 #afui.ios .panel {
     background:#e7e7e7;
-    
 }
 
 #afui.ios .panel h2 { color:inherit;}
@@ -41,18 +40,14 @@
     border-top:1px solid #000;
 }
 
-
-
 #afui.ios #navbar a.pressed {
     background:rgba(255, 255, 255, 0.13);
     border-radius:6px;
 }
 
-
 #afui.ios #navbar .icon.pressed:before {
     color:#3a9de2;
 }
-
 
 #afui.ios > #menu.tabletMenu {
    border-right:none;
@@ -81,7 +76,6 @@
     padding-left:4px !important;
 } /* Sets up positioning of the back button which appears in the header */
 
-
 #afui.ios #backButton::before {
     z-index:-1;
     content:'';
@@ -96,105 +90,68 @@
     -ms-transform:rotate(45deg); -moz-transform:rotate(45deg); -webkit-transform:rotate(45deg); transform:rotate(45deg);
 }
 
-
 #afui.ios #menu .list li, 
 #afui.ios #menu .list .divider, 
 #afui.ios #menu .list li:first-child, 
 #afui.ios #menu  .list li:last-child {
-
     border-color:#101012;
     -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
-
 }
 
 #afui.ios #menu .list > li > a {
-    color:#ccc;
-    
+    color:#ccc;   
 }
-
-
-
 
 #afui.ios #menu .list .divider {
     background:#333;
-    color:#fff;
-    
+    color:#fff;   
 }
 
-
-
-
 #afui.ios .afPopup {
-     display: block;
-    width: 280px;
-    float:left;
     border: solid 2px #fff;
     -webkit-box-shadow: 0px 4px 6px #555, 0 0 20px rgba(0,0,0,0.5);
     -webkit-border-radius: 10px;
     border-radius:10px;
-    padding: 10px;
-    opacity: 1;
-    -webkit-transform: scale(1);
-    -webkit-transition: all 0.20s  ease-in-out;
-    transform:scale(1);
-    transition: all 0.20s  ease-in-out;
-    position: absolute;
-    z-index: 1000000;
-    margin-left: auto!important;
-    margin-right: auto!important;
+    padding: 0;
     background: #1b294b;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#626c82), to(#1b294b));
 }
-#afui.ios .afPopup >* {
-color:white;
-}
 
-#afui.ios .afPopup.hidden {
-    opacity: 0;
-    -webkit-transform: scale(0);
-    top: 50%;
-    left: 50%;
-    margin: 0px auto;
+#afui.ios .afPopup >* {
+    color:white;
 }
 
 #afui.ios .afPopup>HEADER{
-    font-weight:bold;
-    font-size:20px;    
+    font-weight:bold;   
     text-align:center;
     text-shadow:0 -1px #000;
-    margin:0;
-    padding:0;
+    padding:5px;
 }
 
 #afui.ios .afPopup>DIV{
-    font-size:14px;
     text-align:center;
-    margin:8px;
 }
 
-#afui.ios .afPopup>FOOTER{
-    width:100%;    
-    text-align:center;
-    display:block !important;
+#afui.ios .afPopup>FOOTER>A{
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#626c82), to(#1b294b));
+    color:white;
 }
 
 #afui.ios .afPopup>FOOTER>A#cancel{
-    float:left;
     width:120px;
-    margin-left:4px;
+    margin-left:10px;
 }
 
 #afui.ios .afPopup>FOOTER>A#action{
-    float:right;
     width:120px;
-    margin-right:4px;
+    margin-right:10px;
 }
 
 #afui.ios .afPopup>FOOTER>A.center{
     float:none!important;
-    width:80%;
-    margin:8px;
+    width:95%!important;
+    margin:8px!important;
 }
 
 #afui.ios #af_actionsheet {
@@ -215,6 +172,13 @@ color:white;
 #afui.ios #af_actionsheet a.cancel{
     background:#333;
     background: linear-gradient(to bottom, #666 0%,#333 100%);
+    color:white;
+    text-shadow:0 -1px 0 #000;
+}
+
+#afui.ios #af_actionsheet a.red{
+    background:#d11;
+    background: linear-gradient(to bottom, #d55 0%,#d11 100%);
     color:white;
     text-shadow:0 -1px 0 #000;
 }

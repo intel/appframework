@@ -8,8 +8,6 @@
      font-family:'HelveticaNeue', 'Helvetica Neue',Helvetica, Arial, sans-serif;
 }
 
-
-
 #afui.ios7 #header {
     background:rgb(249,249,249);
     color:inherit;
@@ -26,11 +24,13 @@
     text-shadow:none;
 }
 
-
 #afui.ios7 .panel {
     background:rgba(238,238,238,255);    
 }
-#afui.ios7 .panel h2 { color:inherit;}
+
+#afui.ios7 .panel h2 { 
+    color:inherit;
+}
 
 #afui.ios7 #navbar {
     background:rgb(249,249,249);
@@ -72,15 +72,13 @@
     background:rgba(238,238,238,255);
     color:inherit;
     font-size: 1em;
-border-bottom:1px solid rgb(215,215,215);
-color:black;
-
+    border-bottom:1px solid rgb(215,215,215);
+    color:black;
 }
 
 #afui.ios7 #menu .list a {
     color:black;
 }
-
 
 #afui.ios7 #menu .list {
     background:white;
@@ -165,33 +163,12 @@ color:black;
     text-shadow:none;
 }
 
-#afui.ios7 .button-grouped * {
-    border-right: 1px solid rgba(82,155,234,255);
-    border-bottom: 1px solid rgba(82,155,234,255);
-    border-top: 1px solid rgba(82,155,234,255);
-
-}
-
-#afui.ios7 .button-grouped >  .button:first-child {
-    border-left: 1px solid rgba(82,155,234,255);
-}
-
-#afui.ios7  .button-grouped >.button:last-child {
-    
-}
-
-#afui.ios7 .button-grouped.vertical * {
-    border-left: 1px solid rgba(82,155,234,255);
-    border-right: 1px solid rgba(82,155,234,255);
-    border-top: 1px solid rgba(82,155,234,255);
-}
-
-#afui.ios7  .button-grouped.vertical > .button:first-child {
-    border-left: 1px solid rgba(82,155,234,255);
-}
-
-#afui.ios7 .button-grouped.vertical >  .button:last-child {
-    border-bottom:1px solid rgba(82,155,234,255);
+#afui.ios7 .button-grouped * ,
+#afui.ios7 .button-grouped >  .button:first-child,
+#afui.ios7 .button-grouped.vertical * ,
+#afui.ios7 .button-grouped.vertical >  .button:last-child 
+{
+    border-color:rgba(82,155,234,255);
 }
 
 #afui.ios7 .button-grouped .button.pressed {
@@ -200,18 +177,12 @@ color:black;
 }
 
 #afui.ios7 .afPopup {
-    display: block;
     border:1px solid rgba(158,158,158,255);
     border-radius:10px;
     padding:0;
     text-align: center;
-    width:280px;
-    position: absolute;
-    z-index: 1000000;
-    top: 50%;
     color:inherit;
     background:rgba(249,249,249,1);
-    text-align:center;
 }
 
 #afui.ios7 .afPopup>HEADER{
@@ -219,12 +190,15 @@ color:black;
 }
 
 #afui.ios7 .afPopup>DIV{
-    font-size:14px;
     padding-bottom:10px;
 }
 
 #afui.ios7 .afPopup>FOOTER{
     border-top:1px solid #aaa;
+}
+
+#afui.ios7 .afPopup>FOOTER>A.center{
+    width:100%!important;
 }
 
 #afui.ios7 .afPopup .button {
@@ -237,7 +211,7 @@ color:black;
 }
 
 #afui.ios7 .afPopup .button.pressed {
-    background: none;
+    background: transparent;
 }
 
 #afui.ios7 .button.pressed {
@@ -289,6 +263,10 @@ color:black;
     font-weight:bold;
     margin: 9px 0;
     border-radius:5px;
+}
+
+#afui.ios7 #af_actionsheet a.red{
+    color:#f44;
 }
 
 #afui.ios7 #navbar a.pressed,#navbar .icon.pressed:before  {
