@@ -1331,6 +1331,29 @@ if (!window.af || typeof(af) !== "function") {
                 return this.setupOld($(elems).filter(selector));
             },
             /**
+            * Returns the child nodes of the elements based off the selector and includes text nodes
+                ```
+                $("#foo").contents('.bar'); //Selector
+                $("#foo").contents($('.bar')); //Objects
+                $("#foo").contents($('.bar').get(0)); //Single element
+                ```
+
+            * @param {String|Array|Object} [selector]
+            * @return {Object} appframework object with unique children
+            * @title $().contents(selector)
+            */
+            contents:function(selector){
+                if (this.length === 0)
+                    return this;
+                var elems = [];
+                for (var i = 0; i < this.length; i++) {
+                    if (this[i].parentNode)
+                        //elems = elems.concat(this[i].childNodes);
+                        _shimNodes(this[i].childNodes,elems);
+                }
+                return this.setupOld($(elems).filter(selector));
+            },
+            /**
             * Returns the closest element based off the selector and optional context
                 ```
                 $("#foo").closest('.bar'); //Selector

@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-11-27 */
+/*! intel-appframework - v2.1.0 - 2013-12-03 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -68,6 +68,8 @@ body {
 #afui #modalContainer > * {
     -webkit-backface-visibility: hidden;
     -webkit-perspective: 1000;
+    background: black;
+    color:white;
 }
 
 
@@ -630,35 +632,33 @@ body {
 
  */
 
- @-ms-viewport {
+@-ms-viewport {
   width: device-width;
 }
-
 
 #afui {
     background:white;
     color:#53575E;
 }
 
-
 #afui > #header{
     background:#0088D1;
     border:none;
     border-bottom:1px solid #0088D1;
     color:white;
- }
+}
 
 #afui  #header h1 {
     text-shadow:none;
     width:45%;
 }
- #afui #backButton {
+
+#afui #backButton {
     background:rgba(249,249,249,1);
     color:#fff;
     display: block;
     position: absolute;
     line-height:44px;
-
     left: 25px;
     text-overflow: ellipsis;
     font-size: 14px;
@@ -677,7 +677,6 @@ body {
     width:50px;
     padding:0 !important;
     margin:0 !important;
-
 }
 
 #afui #backButton::before {
@@ -693,7 +692,6 @@ body {
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -706,12 +704,9 @@ body {
     -webkit-transform:rotate(180deg);
     transform:rotate(180deg);
     background-color: transparent;
-    
-
 }
 
-
- #afui > #navbar {
+#afui > #navbar {
      background:#0088D1;
     border:none;
     border-top:1px solid #0088D1;
@@ -721,40 +716,39 @@ body {
 #afui #navbar a {
  
 }
- #afui #navbar a.pressed {
+
+#afui #navbar a.pressed {
     border-radius:0;    
     background:#00AEEF;
- }
-
+}
 
 #afui #navbar .icon.pressed:before {
     color:inherit;
 }
 
-
 #afui .af-badge {
     border:none;
 }
 
- #afui .list {
+#afui .list {
     background:inherit;
     color:inherit;
     border-color:#303030;
     font-weight:normal;
- }
+}
 
- #afui .af-badge {
+#afui .af-badge {
     box-shadow:none;
- }
+}
 
- #afui .list .divider { color:black; }
+#afui .list .divider { color:black; }
 
 #afui .panel {
     color:inherit;
     background:white;
 }
- #afui .panel h2 { color:#0088D1;}
 
+#afui .panel h2 { color:#0088D1;}
 
 #afui .collapsed:after {border-top: 6px solid;}
 #afui .collapsed:before {border:2px solid;}
@@ -764,8 +758,8 @@ body {
 #afui .collapsed:before,#afui .expanded:before {
     border-color: inherit;
 }
-#afui .collapsed:after,
-#afui .expanded:after{
+
+#afui .collapsed:after, #afui .expanded:after{
     border-top-color:inherit;
     border-top-color:inherit;
 }
@@ -807,14 +801,12 @@ body {
 
 #afui #menu .list li,#afui #menu .list .divider,#afui #menu .list li:last-child {
     border-color: #4CC6F4;
-    
 }
 
 #afui #menu .list .divider {
     background:#0088D1;
     color:inherit;
     font-size: 1em;
-    
 }
 
 #afui #menu .list > li > a {
@@ -830,26 +822,23 @@ body {
 #afui .button {
     border-radius:0;
     text-shadow:none !important;
-    
 }
 
 #afui .list > li > a:after{
     color:#0088D1;
 }
 
-
 #afui .button.pressed {
    
 }
 
 #afui .button.previous {
-
     border:none;
 }
+
 #afui .button.next {
     border:none;   
 }
-
 
 #afui .button.previous::after {
     color:black;
@@ -865,7 +854,6 @@ body {
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -879,9 +867,9 @@ body {
     transform:rotate(180deg);
     background-color: transparent;
 }
-#afui .button.next::after {
-   color:black;
 
+#afui .button.next::after {
+    color:black;
     z-index: -1;
     font-size:22px;
     position: absolute;
@@ -894,7 +882,6 @@ body {
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -903,30 +890,20 @@ body {
     text-transform: none;
     line-height: 1;
     -webkit-font-smoothing: antialiased;
-    content: "\f054";
-    
+    content: "\f054";   
     background-color: transparent;
 }
 
-
-
 #afui .afPopup {
-    display: block;
-    width: 100%;
-    float:left;
     border: solid 1px #33B5E5;
-    left:0px ;
-    padding: 10px;
-    opacity: 1;
-    -webkit-border-radius: 0;
-    border-radius: 0;
-    position: absolute;
-    z-index: 1000000;
-    top: 50%;
-    margin: 0px auto;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
     background:inherit;
     color:inherit;
-    padding:30px;
+}
+
+#afui .afPopup>FOOTER>A{
+    width: 120px;
 }
 
 #afui #af_actionsheet {
@@ -934,7 +911,7 @@ body {
     color:inherit;
 }
 
-#afui    #af_actionsheet a{
+#afui #af_actionsheet a{
     border-radius:0;
     -webkit-border-radius:0;
     color:black;
@@ -1365,20 +1342,21 @@ body {
 	display:block;
 	float:none;
 	width:100%;
-	border:0px;
 	border-left: 1px solid #666;
 	border-right: 1px solid #666;
 	border-top: 1px solid #666;
+    border-bottom: 0px solid #666;
 }
 
 #afui .button-grouped.vertical > .button:first-child {
-	border-left: 1px solid #666;
 	border-top-left-radius: 6px;
 	border-top-right-radius: 6px;
 	border-bottom-left-radius:0px;
+    border-bottom-right-radius:0px;
 }
 #afui .button-grouped.vertical > .button:last-child {
 	border-top-right-radius:0px;
+    border-top-left-radius:0px;
 	border-bottom-right-radius: 6px;
 	border-bottom-left-radius: 6px;
 	border-bottom:1px solid #666;
@@ -1517,13 +1495,14 @@ body {
 	background:#FDFDFD;
 	color:#000;
 }
+
 #afui.android > #header {
     background:inherit;
     color:inherit;
     border-color:#33B5E5;
 }
-#afui.android #backButton
-{
+
+#afui.android #backButton{
     background: inherit;
     color:inherit;
 }
@@ -1536,48 +1515,48 @@ body {
     border-color:black;
 }
 
-
- #afui.android > #navbar {
+#afui.android > #navbar {
     box-shadow: none;
  	background:inherit;
  	border-top:2px solid #33B5E5;
     border-bottom:none;
     padding:0;
- }
+}
 
 #afui.android #navbar a {
 	color:inherit;
     top:0px;
 }
- #afui.android #navbar a.pressed {
+
+#afui.android #navbar a.pressed {
  	border:0px;
  	border-top:4px solid #33B5E5;
  	border-radius:0px;
  	background:none;
- }
+}
 
 #afui.android #navbar .icon.pressed:before {
 	color:inherit;
 }
 
-
 #afui.android .af-badge {
 	border:none;
 }
+
 #afui.android #content,#afui.android #content > .panel {
  	background:inherit;
  	color:inherit;
- }
+}
 
- #afui.android .list {
+#afui.android .list {
  	background:inherit;
  	color:inherit;
  	border-color:#303030;
- }
+}
 
- #afui.android .list .divider {	color:black; }
+#afui.android .list .divider {	color:black; }
 
- #afui.android .panel h2 { color:inherit; }
+#afui.android .panel h2 { color:inherit; }
 
 
 #afui.android .collapsed:after {border-top: 6px solid;}
@@ -1588,6 +1567,7 @@ body {
 #afui.android .collapsed:before,#afui.android .expanded:before {
     border-color: inherit;
 }
+
 #afui.android .collapsed:after,
 #afui.android .expanded:after{
     border-top-color:inherit;
@@ -1664,8 +1644,8 @@ body {
 }
 
 #afui.android.light .button {
-  background:#D1D1D1;
-  border-color:#D1D1D1;
+    background:#D1D1D1;
+    border-color:#D1D1D1;
 }
 
 #afui.android .button.pressed {
@@ -1691,56 +1671,75 @@ body {
     border-color:transparent;
 }
 
-#afui.android .button-grouped * { border-right:1px solid rgba(255,255,255,.25); }
-#afui.android .button-grouped > .button:last-child, #afui.android .button-grouped.vertical * { border-right:none; }
+#afui.android .button-grouped * { 
+    border-right:1px solid rgba(255,255,255,.25);
+    border-bottom:1px solid rgba(255,255,255,.25); 
+}
+
+#afui.android .button-grouped.vertical * {
+    border-left:1px solid rgba(255,255,255,.25);
+    border-bottom:0;
+}
+
+#afui.android .button-grouped.vertical .button:last-child {
+    border-bottom:1px solid rgba(255,255,255,.25);
+}
 
 #afui.android .afPopup {
-    display: block;
-    width: 280px;
-    float:left;
-    border: solid 1px #33B5E5;
-    padding: 10px;
-    opacity: 1;
+    border: solid 1px #aaa;
+    padding: 0;
     -webkit-border-radius: 0;
     border-radius: 0;
     -webkit-transform:none;
     transform:none;
     -webkit-transition: none;
     transition:none;
-    position: absolute;
-    z-index: 1000000;
-    top: 50%;
-    margin: 0px auto;
     background:inherit;
+    background-color:rgba(0,0,0,0.9);
     color:inherit;
-    padding:10px;
+}
+
+#afui.android.light .afPopup {
+    background-color:rgba(255,255,255,0.9);
 }
 
 #afui.android .afPopup>HEADER{
-    font-weight:bold;
+    font-weight:normal;
     font-size:20px;    
-    text-align:center;
-    margin:0;
-    padding:5px;
+    text-align:left;
+    padding:10px;
 }
 
 #afui.android .afPopup>DIV{
     font-size:14px;
-    text-align:center;
-    padding:5px;
+    text-align:left;
+    padding:10px;
     margin:0;
+    border-top: solid 1px #aaa;
+    border-bottom: solid 1px #aaa;
+}
+
+#afui.android .afPopup>FOOTER {
+    background:#bbb;
+}
+
+#afui.android .afPopup>FOOTER>A, #afui.android.light .afPopup>FOOTER>A {
+    background:#fff;
+    color:#111;
 }
 
 #afui.android .afPopup>FOOTER>A#cancel{
-    float:left;
+    margin-left:10px;
     width:120px;
-    margin-left:4px;
 }
 
 #afui.android .afPopup>FOOTER>A#action{
-    float:right;
+    margin-right:10px;
     width:120px;
-    margin-right:4px;
+}
+
+#afui.android .afPopup>FOOTER>A.center{
+    margin:8px;
 }
 
 #afui.android #af_actionsheet {
@@ -1751,6 +1750,7 @@ body {
     margin:-20px 20px 0 20px;
     padding:0px;
 }
+
 #afui.android.light #af_actionsheet {
     border: #bbb 1px solid;
     border-top: #33B5E5 3px solid;
@@ -1766,9 +1766,11 @@ body {
     line-height: 50px;
     margin-bottom: 1px;
 }
+
 #afui.android.light #af_actionsheet a{
     background:#fff;
 }
+
 #afui.android #af_actionsheet a.cancel{
     margin-bottom: 0px;
 }
@@ -1814,7 +1816,7 @@ body {
 }
 
 #afui.win8 #backButton.pressed {
-  background:inherit;
+    background:inherit;
 }
 
 #afui.win8 #backButton {
@@ -1837,7 +1839,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-
 #afui.win8 #backButton::before {
   content: "\e000";
   font-size:30px;
@@ -1851,33 +1852,31 @@ body {
   transform:none;
 }
 
-
-
-
 #afui.win8 > #header h1 {
 	text-align: left;
-  color:inherit;
+    color:inherit;
 }
 
 #afui.win8 > #header{
-  border:0px;
+    border:0px;
 	background: inherit;
 	border-bottom:inherit;
-  color:inherit;
- }
+    color:inherit;
+}
 
- #afui.win8 > #navbar {
-  padding:0px;
+#afui.win8 > #navbar {
+    padding:0px;
  	background:inherit;
  	text-align: center;
  	height:65px;
  	background:rgba(33,32,33,.9);
-  border-top:none;
- }
- #afui.win8.light > #navbar{
+    border-top:none;
+}
+ 
+#afui.win8.light > #navbar{
     background:#F2F2F2;
     color:black;
-  }
+}
 
 #afui.win8 #navbar a {
   position: relative;
@@ -1894,11 +1893,12 @@ body {
   -webkit-backface-visibility: hidden;
   -webkit-perspective: 1000;
 }
+
 #afui.win8.light #navbar a {
   text-shadow: 0 0 rgba(0, 0, 0, 0);  
 }
 
- #afui.win8 #navbar .icon.pressed:before {
+#afui.win8 #navbar .icon.pressed:before {
 	background-color: #00ABA9;
 }
 
@@ -1916,27 +1916,26 @@ body {
     border: 3px solid #000;
 }
 
-  #afui.win8 #navbar a:not(:last-of-type){
+#afui.win8 #navbar a:not(:last-of-type){
   	border:none;
-  }
-
+}
 
 #afui.win8 .af-badge {
 	border:none;
 }
+
 #afui.win8 #content,#afui.win8 #content > .panel {
  	background:inherit;
  	color:inherit;
- }
+}
 
- #afui.win8 .list {
+#afui.win8 .list {
  	background:inherit;
  	color:inherit;
  	border-color:#303030;
+}
 
- }
-
- #afui.win8 .list .divider,  #afui.win8 #menu.tabletMenu .list .divider  {
+#afui.win8 .list .divider,  #afui.win8 #menu.tabletMenu .list .divider  {
  	background:#00ABA9;
  	padding:5px;
     display:inline;
@@ -1945,22 +1944,21 @@ body {
  	border-top:none;
  	border-bottom:none;
     color:inherit;
- }
+}
 
- #afui.win8 .list li {
+#afui.win8 .list li {
  	border-top:none;
  	border-bottom:none;
     font-size:20px;
- }
- #afui.win8 .panel h2 {
+}
+
+#afui.win8 .panel h2 {
  	color:inherit;
     font-weight:normal;
     font-size:34px;
     line-height:34px;
     height:auto;
- }
-
-
+}
 
 #afui.win8 .collapsed:after {border-top: 6px solid;}
 #afui.win8 .collapsed:before {border:2px solid;}
@@ -1970,19 +1968,15 @@ body {
 #afui.win8 .collapsed:before,#afui.win8 .expanded:before {
     border-color: inherit;
 }
+
 #afui.win8 .collapsed:after,
 #afui.win8 .expanded:after{
     border-top-color:inherit;
     border-top-color:inherit;
 }
 
-
-
-
-
 #afui.win8 .afScrollbar {background:white !important;}
 #afui.win8.light .afScrollbar {background:black !important;}
-
 
 #afui.win8 select, #afui.win8 textarea, #afui.win8 input[type="text"], #afui.win8 input[type="search"], #afui.win8 input[type="password"], #afui.win8 input[type="datetime"], #afui.win8 input[type="datetime-local"], #afui.win8 input[type="date"], #afui.win8 input[type="month"], #afui.win8 input[type="time"], #afui.win8 input[type="week"], #afui.win8 input[type="number"], #afui.win8 input[type="email"], #afui.win8 input[type="url"], #afui.win8 input[type="tel"], #afui.win8 input[type="color"], #afui.win8 .input-group {
   	background:black;
@@ -1992,7 +1986,6 @@ body {
 #afui.win8.light select, #afui.win8.light textarea, #afui.win8.light input[type="text"], #afui.win8.light input[type="search"], #afui.win8.light input[type="password"], #afui.win8.light input[type="datetime"], #afui.win8.light input[type="datetime-local"], #afui.win8.light input[type="date"], #afui.win8.light input[type="month"], #afui.win8.light input[type="time"], #afui.win8.light input[type="week"], #afui.win8.light input[type="number"], #afui.win8.light input[type="email"], #afui.win8.light input[type="url"], #afui.win8.light input[type="tel"], #afui.win8.light input[type="color"], #afui.win8.light .input-group {
     background:white;
 }
-
 
 #afui.win8 input.toggle+label:after {
 	color:inherit;
@@ -2024,9 +2017,9 @@ body {
 }
 
 #afui.win8 #menu .list .divider {
-padding:4px;
-line-height:30px;
-margin-left:10px;
+    padding:4px;
+    line-height:30px;
+    margin-left:10px;
 }
 
 #afui.win8 #menu .list {
@@ -2034,7 +2027,7 @@ margin-left:10px;
 }
 
 #afui.win8 #menu .list li,#afui.win8 #menu .list .divider {
-		box-shadow:none;
+    box-shadow:none;
 }
 
 #afui.win8 .button {
@@ -2063,14 +2056,30 @@ margin-left:10px;
 }
 
 #afui.win8 .button-grouped .button{
-    border:2px solid #fff;
+    border:3px solid #fff;
+    border-right:0;
+}
+
+#afui.win8 .button-grouped > .button:last-child {
+    border-right:3px solid #fff;
 }
 
 #afui.win8 .button-grouped > .button:first-child, #afui.win8 .button-grouped > .button:last-child {
     border-radius:0; 
-    border:2px solid #fff;
 }
 
+#afui.win8 .button-grouped.vertical .button{
+    border:3px solid #fff;
+    border-bottom:0;
+}
+
+#afui.win8 .button-grouped.vertical > .button:last-child {
+    border-bottom:3px solid #fff;
+}
+
+#afui.win8.light .button-grouped .button, #afui.win8.light .button-grouped.vertical .button{
+    border-color: #111;
+}
 
 #afui.win8 #menu {
   display: none;
@@ -2096,23 +2105,16 @@ margin-left:10px;
 }
 
 #afui.win8 .afPopup {
-    display: block;
     width: 100%;
-    float:left;
     border: solid 0px #72767b;
     left:0px !important;
-    padding: 10px;
-    opacity: 1;
     -webkit-border-radius: 0;
     border-radius: 0;
     -webkit-transform:none;
     transform:none;
     -webkit-transition: none;
     transition:none;
-    position: absolute;
-    z-index: 1000000;
     top: 0 !important;
-    margin: 0px auto;
     background:#222;
     color:inherit;
     padding:15px;
@@ -2123,10 +2125,7 @@ margin-left:10px;
 }
 
 #afui.win8 .afPopup>HEADER{
-    font-weight:bold;
-    font-size:20px;    
-    margin:0;
-    padding:0;
+    font-size:20px;
 }
 
 #afui.win8 .afPopup>DIV{
@@ -2153,9 +2152,7 @@ margin-left:10px;
 }
 
 #afui.win8 .afPopup>FOOTER>A.center{
-    float:none!important;
     width:auto;
-    margin:8px;
 }
 
 #afui.win8 #af_actionsheet {
@@ -2175,28 +2172,25 @@ margin-left:10px;
 
 #afui.win8 #menu .list > li > a {
     color:inherit;
-  }
-
+}
 
 @media handheld, only screen and (min-width: 768px){
 
 	#afui.win8 #navbar footer #metroMenu {
 		display:none;
 	}
-
 	#afui.win8 #navbar {
 		-webkit-transform:translate3d(0,0,0) !important;
 		transform:translate(0,0) !important;
 	}
 	#afui.win8 #menu  {
 		background:inherit;
-    color:inherit;
-    font-size:18px;
+        color:inherit;
+        font-size:18px;
 	}
-
-  #afui.win8 #menu .list > li > a:after{
-    margin-top:-11px;
-  }
+    #afui.win8 #menu .list > li > a:after{
+        margin-top:-11px;
+    }
 }
 
 #afui.bb {
@@ -2205,14 +2199,14 @@ margin-left:10px;
 }
 
 #afui.bb #header {
-background:#00609E;
-background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
-background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
-background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
-background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
-border-style:solid;
-border-width:1px;
-border-color:#009CE1 transparent #004E92 transparent;
+    background:#00609E;
+    background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
+    background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    border-style:solid;
+    border-width:1px;
+    border-color:#009CE1 transparent #004E92 transparent;
 }
 
 #afui.bb #header h1 {
@@ -2223,7 +2217,6 @@ border-color:#009CE1 transparent #004E92 transparent;
 #afui.bb .list {
     font-weight: normal;
 }
-
 
 #afui.bb #backButton {
     display: block;
@@ -2248,7 +2241,6 @@ border-color:#009CE1 transparent #004E92 transparent;
     width:50px;
     padding:0 !important;
     margin:0 !important;
-
 }
 
 #afui.bb #backButton::before {
@@ -2260,7 +2252,7 @@ border-color:#009CE1 transparent #004E92 transparent;
     text-align: center;
     border-radius: 0;
     border: none;
-    border-color: 0;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
@@ -2280,7 +2272,7 @@ border-color:#009CE1 transparent #004E92 transparent;
 }
 
 #afui.bb #backButton::after {
- z-index: -1;
+    z-index: -1;
     font-size:24px;
     content: ' ';
     position: absolute;
@@ -2295,14 +2287,13 @@ border-color:#009CE1 transparent #004E92 transparent;
     text-align: center;
     border-radius: 0;
     border: none;
-    border-color: 0;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: rotate(10deg);
     transform: rotate(10deg);
 }
 
 #afui.bb #navbar {
-    background:#1e1e1e;;
     border:none;
     border-radius:0px;
     background:none;
@@ -2318,20 +2309,20 @@ border-color:#009CE1 transparent #004E92 transparent;
     background:#1e1e1e;
 }
 
- #afui.bb #navbar a.pressed {
+#afui.bb #navbar a.pressed {
     border:0px;
     border-top:4px solid #0aa9dc;
     border-radius:0px;
     background:#3a3a3a;
     color:white;
- }
+}
 
- #afui.bb #navbar a:not(:last-of-type):not(.pressed){
+#afui.bb #navbar a:not(:last-of-type):not(.pressed){
     border-right:1px solid black;
- }
+}
 
 #afui.bb #navbar .icon.pressed:before {
-color: white;
+    color: white;
 }
 
 #afui.bb #menu {
@@ -2360,8 +2351,13 @@ color: white;
     border-bottom-color :#ccc;
 }
 
-#afui.bb .button {
-    border:1px solid #ccc;
+#afui.bb .button ,
+#afui.bb .button-grouped *,
+#afui.bb .button-grouped > .button:first-child,
+#afui.bb .button-grouped.vertical *,
+#afui.bb .button-grouped.vertical >  .button:last-child 
+{
+    border-color:#ccc;
 }
 
 #afui.bb .panel {
@@ -2369,18 +2365,9 @@ color: white;
 }
 
 #afui.bb .afPopup {
-    display: block;
-    width: 280px;
-    float:left;
     border: solid 1px #ccc;
-    padding: 10px;
-    opacity: 1;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    position: absolute;
-    z-index: 1000000;
-    top: 50%;
-    margin: 0px auto;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
     background:inherit;
     color:inherit;
     padding:0;
@@ -2402,10 +2389,8 @@ color: white;
 }
 
 #afui.bb .afPopup>DIV{
-    font-size:14px;
     text-align:center;
     padding:10px;
-    margin:0;
 }
 
 #afui.bb .afPopup>FOOTER{
@@ -2413,15 +2398,11 @@ color: white;
 }
 
 #afui.bb .afPopup>FOOTER>A#cancel{
-    float:left;
     width:120px;
-    margin-left:4px;
 }
 
 #afui.bb .afPopup>FOOTER>A#action{
-    float:right;
     width:120px;
-    margin-right:4px;
 }
 
 #afui.bb #af_actionsheet {
@@ -2447,8 +2428,6 @@ color: white;
      font-family:'HelveticaNeue', 'Helvetica Neue',Helvetica, Arial, sans-serif;
 }
 
-
-
 #afui.ios7 #header {
     background:rgb(249,249,249);
     color:inherit;
@@ -2465,11 +2444,13 @@ color: white;
     text-shadow:none;
 }
 
-
 #afui.ios7 .panel {
     background:rgba(238,238,238,255);    
 }
-#afui.ios7 .panel h2 { color:inherit;}
+
+#afui.ios7 .panel h2 { 
+    color:inherit;
+}
 
 #afui.ios7 #navbar {
     background:rgb(249,249,249);
@@ -2511,15 +2492,13 @@ color: white;
     background:rgba(238,238,238,255);
     color:inherit;
     font-size: 1em;
-border-bottom:1px solid rgb(215,215,215);
-color:black;
-
+    border-bottom:1px solid rgb(215,215,215);
+    color:black;
 }
 
 #afui.ios7 #menu .list a {
     color:black;
 }
-
 
 #afui.ios7 #menu .list {
     background:white;
@@ -2604,33 +2583,12 @@ color:black;
     text-shadow:none;
 }
 
-#afui.ios7 .button-grouped * {
-    border-right: 1px solid rgba(82,155,234,255);
-    border-bottom: 1px solid rgba(82,155,234,255);
-    border-top: 1px solid rgba(82,155,234,255);
-
-}
-
-#afui.ios7 .button-grouped >  .button:first-child {
-    border-left: 1px solid rgba(82,155,234,255);
-}
-
-#afui.ios7  .button-grouped >.button:last-child {
-    
-}
-
-#afui.ios7 .button-grouped.vertical * {
-    border-left: 1px solid rgba(82,155,234,255);
-    border-right: 1px solid rgba(82,155,234,255);
-    border-top: 1px solid rgba(82,155,234,255);
-}
-
-#afui.ios7  .button-grouped.vertical > .button:first-child {
-    border-left: 1px solid rgba(82,155,234,255);
-}
-
-#afui.ios7 .button-grouped.vertical >  .button:last-child {
-    border-bottom:1px solid rgba(82,155,234,255);
+#afui.ios7 .button-grouped * ,
+#afui.ios7 .button-grouped >  .button:first-child,
+#afui.ios7 .button-grouped.vertical * ,
+#afui.ios7 .button-grouped.vertical >  .button:last-child 
+{
+    border-color:rgba(82,155,234,255);
 }
 
 #afui.ios7 .button-grouped .button.pressed {
@@ -2639,18 +2597,12 @@ color:black;
 }
 
 #afui.ios7 .afPopup {
-    display: block;
     border:1px solid rgba(158,158,158,255);
     border-radius:10px;
     padding:0;
     text-align: center;
-    width:280px;
-    position: absolute;
-    z-index: 1000000;
-    top: 50%;
     color:inherit;
     background:rgba(249,249,249,1);
-    text-align:center;
 }
 
 #afui.ios7 .afPopup>HEADER{
@@ -2658,12 +2610,15 @@ color:black;
 }
 
 #afui.ios7 .afPopup>DIV{
-    font-size:14px;
     padding-bottom:10px;
 }
 
 #afui.ios7 .afPopup>FOOTER{
     border-top:1px solid #aaa;
+}
+
+#afui.ios7 .afPopup>FOOTER>A.center{
+    width:100%!important;
 }
 
 #afui.ios7 .afPopup .button {
@@ -2676,7 +2631,7 @@ color:black;
 }
 
 #afui.ios7 .afPopup .button.pressed {
-    background: none;
+    background: transparent;
 }
 
 #afui.ios7 .button.pressed {
@@ -2728,6 +2683,10 @@ color:black;
     font-weight:bold;
     margin: 9px 0;
     border-radius:5px;
+}
+
+#afui.ios7 #af_actionsheet a.red{
+    color:#f44;
 }
 
 #afui.ios7 #navbar a.pressed,#navbar .icon.pressed:before  {
@@ -2854,7 +2813,7 @@ color:black;
 } 
 
 #afui.ios #header h1 {
-        text-shadow: rgba(0,0,0,0.8) 0 -1px 0;
+    text-shadow: rgba(0,0,0,0.8) 0 -1px 0;
 }
 
 #afui.ios .af-badge {
@@ -2864,7 +2823,6 @@ color:black;
 }
 #afui.ios .panel {
     background:#e7e7e7;
-    
 }
 
 #afui.ios .panel h2 { color:inherit;}
@@ -2880,18 +2838,14 @@ color:black;
     border-top:1px solid #000;
 }
 
-
-
 #afui.ios #navbar a.pressed {
     background:rgba(255, 255, 255, 0.13);
     border-radius:6px;
 }
 
-
 #afui.ios #navbar .icon.pressed:before {
     color:#3a9de2;
 }
-
 
 #afui.ios > #menu.tabletMenu {
    border-right:none;
@@ -2920,7 +2874,6 @@ color:black;
     padding-left:4px !important;
 } /* Sets up positioning of the back button which appears in the header */
 
-
 #afui.ios #backButton::before {
     z-index:-1;
     content:'';
@@ -2935,105 +2888,68 @@ color:black;
     -ms-transform:rotate(45deg); -moz-transform:rotate(45deg); -webkit-transform:rotate(45deg); transform:rotate(45deg);
 }
 
-
 #afui.ios #menu .list li, 
 #afui.ios #menu .list .divider, 
 #afui.ios #menu .list li:first-child, 
 #afui.ios #menu  .list li:last-child {
-
     border-color:#101012;
     -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
-
 }
 
 #afui.ios #menu .list > li > a {
-    color:#ccc;
-    
+    color:#ccc;   
 }
-
-
-
 
 #afui.ios #menu .list .divider {
     background:#333;
-    color:#fff;
-    
+    color:#fff;   
 }
 
-
-
-
 #afui.ios .afPopup {
-     display: block;
-    width: 280px;
-    float:left;
     border: solid 2px #fff;
     -webkit-box-shadow: 0px 4px 6px #555, 0 0 20px rgba(0,0,0,0.5);
     -webkit-border-radius: 10px;
     border-radius:10px;
-    padding: 10px;
-    opacity: 1;
-    -webkit-transform: scale(1);
-    -webkit-transition: all 0.20s  ease-in-out;
-    transform:scale(1);
-    transition: all 0.20s  ease-in-out;
-    position: absolute;
-    z-index: 1000000;
-    margin-left: auto!important;
-    margin-right: auto!important;
+    padding: 0;
     background: #1b294b;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#626c82), to(#1b294b));
 }
-#afui.ios .afPopup >* {
-color:white;
-}
 
-#afui.ios .afPopup.hidden {
-    opacity: 0;
-    -webkit-transform: scale(0);
-    top: 50%;
-    left: 50%;
-    margin: 0px auto;
+#afui.ios .afPopup >* {
+    color:white;
 }
 
 #afui.ios .afPopup>HEADER{
-    font-weight:bold;
-    font-size:20px;    
+    font-weight:bold;   
     text-align:center;
     text-shadow:0 -1px #000;
-    margin:0;
-    padding:0;
+    padding:5px;
 }
 
 #afui.ios .afPopup>DIV{
-    font-size:14px;
     text-align:center;
-    margin:8px;
 }
 
-#afui.ios .afPopup>FOOTER{
-    width:100%;    
-    text-align:center;
-    display:block !important;
+#afui.ios .afPopup>FOOTER>A{
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#626c82), to(#1b294b));
+    color:white;
 }
 
 #afui.ios .afPopup>FOOTER>A#cancel{
-    float:left;
     width:120px;
-    margin-left:4px;
+    margin-left:10px;
 }
 
 #afui.ios .afPopup>FOOTER>A#action{
-    float:right;
     width:120px;
-    margin-right:4px;
+    margin-right:10px;
 }
 
 #afui.ios .afPopup>FOOTER>A.center{
     float:none!important;
-    width:80%;
-    margin:8px;
+    width:95%!important;
+    margin:8px!important;
 }
 
 #afui.ios #af_actionsheet {
@@ -3054,6 +2970,13 @@ color:white;
 #afui.ios #af_actionsheet a.cancel{
     background:#333;
     background: linear-gradient(to bottom, #666 0%,#333 100%);
+    color:white;
+    text-shadow:0 -1px 0 #000;
+}
+
+#afui.ios #af_actionsheet a.red{
+    background:#d11;
+    background: linear-gradient(to bottom, #d55 0%,#d11 100%);
     color:white;
     text-shadow:0 -1px 0 #000;
 }
@@ -3131,7 +3054,7 @@ BODY>DIV#mask{
 
 
 .afPopup {
-     display: block;
+    display: block;
     width: 280px;
     float:left;
     border: solid 1px #72767b;
@@ -3152,7 +3075,7 @@ BODY>DIV#mask{
     color:white;
 }
 .afPopup >* {
-color:inherit;
+    color:inherit;
 }
 
 .afPopup.hidden {
@@ -3167,11 +3090,11 @@ color:inherit;
     font-weight:bold;
     font-size:20px;
     margin:0;
-    padding:0;
+    padding:5px;
 }
 
 .afPopup>DIV{
-    font-size:12px;
+    font-size:14px;
     margin:8px;
 }
 
@@ -3183,11 +3106,12 @@ color:inherit;
 
 .afPopup>FOOTER>A#cancel{
     float:left;
+    margin-left:5px;
 }
 
 .afPopup>FOOTER>A#action{
     float:right;
-    margin-right:4px;
+    margin-right:5px;
 }
 
 .afPopup>FOOTER>A.center{
