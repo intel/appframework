@@ -1649,8 +1649,17 @@ if (!window.af || typeof(af) !== "function") {
 
                 if (!('async' in settings) || settings.async !== false)
                     settings.async = true;
+                    
+                if ($.isObject(settings.data))
+                    settings.data = $.param(settings.data);
+                if (settings.type.toLowerCase() === "get" && settings.data) {
+                    if (settings.url.indexOf("?") === -1)
+                        settings.url += "?" + settings.data;
+                    else
+                        settings.url += "&" + settings.data;
+                }
 
-                if (!settings.dataType)
+		if (!settings.dataType)
                     settings.dataType = "text/html";
                 else {
                     switch (settings.dataType) {
@@ -1669,22 +1678,15 @@ if (!window.af || typeof(af) !== "function") {
                         case "text":
                             settings.dataType = 'text/plain';
                             break;
+                        case "jsonp":
+                            return $.jsonP(settings);
+                            break;
                         default:
                             settings.dataType = "text/html";
                             break;
-                        case "jsonp":
-                            return $.jsonP(opts);
                     }
                 }
-                if ($.isObject(settings.data))
-                    settings.data = $.param(settings.data);
-                if (settings.type.toLowerCase() === "get" && settings.data) {
-                    if (settings.url.indexOf("?") === -1)
-                        settings.url += "?" + settings.data;
-                    else
-                        settings.url += "&" + settings.data;
-                }
-
+                
                 if (/=\?/.test(settings.url)) {
                     return $.jsonP(settings);
                 }
