@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-11-26 10:11:59 */
+/*! intel-appframework - v2.1.0 - 2013-12-03 */
 
 /**
  * App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -1329,6 +1329,29 @@ if (!window.af || typeof(af) !== "function") {
                 for (var i = 0; i < this.length; i++) {
                     if (this[i].parentNode)
                         elems = elems.concat(siblings(this[i].parentNode.firstChild, this[i]));
+                }
+                return this.setupOld($(elems).filter(selector));
+            },
+            /**
+            * Returns the child nodes of the elements based off the selector and includes text nodes
+                ```
+                $("#foo").contents('.bar'); //Selector
+                $("#foo").contents($('.bar')); //Objects
+                $("#foo").contents($('.bar').get(0)); //Single element
+                ```
+
+            * @param {String|Array|Object} [selector]
+            * @return {Object} appframework object with unique children
+            * @title $().contents(selector)
+            */
+            contents:function(selector){
+                if (this.length === 0)
+                    return this;
+                var elems = [];
+                for (var i = 0; i < this.length; i++) {
+                    if (this[i].parentNode)
+                        //elems = elems.concat(this[i].childNodes);
+                        _shimNodes(this[i].childNodes,elems);
                 }
                 return this.setupOld($(elems).filter(selector));
             },

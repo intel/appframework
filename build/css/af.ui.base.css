@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-11-27 */
+/*! intel-appframework - v2.1.0 - 2013-12-03 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -68,6 +68,8 @@ body {
 #afui #modalContainer > * {
     -webkit-backface-visibility: hidden;
     -webkit-perspective: 1000;
+    background: black;
+    color:white;
 }
 
 
@@ -630,35 +632,33 @@ body {
 
  */
 
- @-ms-viewport {
+@-ms-viewport {
   width: device-width;
 }
-
 
 #afui {
     background:white;
     color:#53575E;
 }
 
-
 #afui > #header{
     background:#0088D1;
     border:none;
     border-bottom:1px solid #0088D1;
     color:white;
- }
+}
 
 #afui  #header h1 {
     text-shadow:none;
     width:45%;
 }
- #afui #backButton {
+
+#afui #backButton {
     background:rgba(249,249,249,1);
     color:#fff;
     display: block;
     position: absolute;
     line-height:44px;
-
     left: 25px;
     text-overflow: ellipsis;
     font-size: 14px;
@@ -677,7 +677,6 @@ body {
     width:50px;
     padding:0 !important;
     margin:0 !important;
-
 }
 
 #afui #backButton::before {
@@ -693,7 +692,6 @@ body {
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -706,12 +704,9 @@ body {
     -webkit-transform:rotate(180deg);
     transform:rotate(180deg);
     background-color: transparent;
-    
-
 }
 
-
- #afui > #navbar {
+#afui > #navbar {
      background:#0088D1;
     border:none;
     border-top:1px solid #0088D1;
@@ -721,40 +716,39 @@ body {
 #afui #navbar a {
  
 }
- #afui #navbar a.pressed {
+
+#afui #navbar a.pressed {
     border-radius:0;    
     background:#00AEEF;
- }
-
+}
 
 #afui #navbar .icon.pressed:before {
     color:inherit;
 }
 
-
 #afui .af-badge {
     border:none;
 }
 
- #afui .list {
+#afui .list {
     background:inherit;
     color:inherit;
     border-color:#303030;
     font-weight:normal;
- }
+}
 
- #afui .af-badge {
+#afui .af-badge {
     box-shadow:none;
- }
+}
 
- #afui .list .divider { color:black; }
+#afui .list .divider { color:black; }
 
 #afui .panel {
     color:inherit;
     background:white;
 }
- #afui .panel h2 { color:#0088D1;}
 
+#afui .panel h2 { color:#0088D1;}
 
 #afui .collapsed:after {border-top: 6px solid;}
 #afui .collapsed:before {border:2px solid;}
@@ -764,8 +758,8 @@ body {
 #afui .collapsed:before,#afui .expanded:before {
     border-color: inherit;
 }
-#afui .collapsed:after,
-#afui .expanded:after{
+
+#afui .collapsed:after, #afui .expanded:after{
     border-top-color:inherit;
     border-top-color:inherit;
 }
@@ -807,14 +801,12 @@ body {
 
 #afui #menu .list li,#afui #menu .list .divider,#afui #menu .list li:last-child {
     border-color: #4CC6F4;
-    
 }
 
 #afui #menu .list .divider {
     background:#0088D1;
     color:inherit;
     font-size: 1em;
-    
 }
 
 #afui #menu .list > li > a {
@@ -830,26 +822,23 @@ body {
 #afui .button {
     border-radius:0;
     text-shadow:none !important;
-    
 }
 
 #afui .list > li > a:after{
     color:#0088D1;
 }
 
-
 #afui .button.pressed {
    
 }
 
 #afui .button.previous {
-
     border:none;
 }
+
 #afui .button.next {
     border:none;   
 }
-
 
 #afui .button.previous::after {
     color:black;
@@ -865,7 +854,6 @@ body {
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -879,9 +867,9 @@ body {
     transform:rotate(180deg);
     background-color: transparent;
 }
-#afui .button.next::after {
-   color:black;
 
+#afui .button.next::after {
+    color:black;
     z-index: -1;
     font-size:22px;
     position: absolute;
@@ -894,7 +882,6 @@ body {
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
-
     font-family: 'chevron';
     speak: none;
     font-style: normal;
@@ -903,30 +890,20 @@ body {
     text-transform: none;
     line-height: 1;
     -webkit-font-smoothing: antialiased;
-    content: "\f054";
-    
+    content: "\f054";   
     background-color: transparent;
 }
 
-
-
 #afui .afPopup {
-    display: block;
-    width: 100%;
-    float:left;
     border: solid 1px #33B5E5;
-    left:0px ;
-    padding: 10px;
-    opacity: 1;
-    -webkit-border-radius: 0;
-    border-radius: 0;
-    position: absolute;
-    z-index: 1000000;
-    top: 50%;
-    margin: 0px auto;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
     background:inherit;
     color:inherit;
-    padding:30px;
+}
+
+#afui .afPopup>FOOTER>A{
+    width: 120px;
 }
 
 #afui #af_actionsheet {
@@ -934,7 +911,7 @@ body {
     color:inherit;
 }
 
-#afui    #af_actionsheet a{
+#afui #af_actionsheet a{
     border-radius:0;
     -webkit-border-radius:0;
     color:black;
@@ -1365,20 +1342,21 @@ body {
 	display:block;
 	float:none;
 	width:100%;
-	border:0px;
 	border-left: 1px solid #666;
 	border-right: 1px solid #666;
 	border-top: 1px solid #666;
+    border-bottom: 0px solid #666;
 }
 
 #afui .button-grouped.vertical > .button:first-child {
-	border-left: 1px solid #666;
 	border-top-left-radius: 6px;
 	border-top-right-radius: 6px;
 	border-bottom-left-radius:0px;
+    border-bottom-right-radius:0px;
 }
 #afui .button-grouped.vertical > .button:last-child {
 	border-top-right-radius:0px;
+    border-top-left-radius:0px;
 	border-bottom-right-radius: 6px;
 	border-bottom-left-radius: 6px;
 	border-bottom:1px solid #666;
@@ -1570,7 +1548,7 @@ BODY>DIV#mask{
 
 
 .afPopup {
-     display: block;
+    display: block;
     width: 280px;
     float:left;
     border: solid 1px #72767b;
@@ -1591,7 +1569,7 @@ BODY>DIV#mask{
     color:white;
 }
 .afPopup >* {
-color:inherit;
+    color:inherit;
 }
 
 .afPopup.hidden {
@@ -1606,11 +1584,11 @@ color:inherit;
     font-weight:bold;
     font-size:20px;
     margin:0;
-    padding:0;
+    padding:5px;
 }
 
 .afPopup>DIV{
-    font-size:12px;
+    font-size:14px;
     margin:8px;
 }
 
@@ -1622,11 +1600,12 @@ color:inherit;
 
 .afPopup>FOOTER>A#cancel{
     float:left;
+    margin-left:5px;
 }
 
 .afPopup>FOOTER>A#action{
     float:right;
-    margin-right:4px;
+    margin-right:5px;
 }
 
 .afPopup>FOOTER>A.center{
