@@ -67,6 +67,8 @@ body {
 #afui #modalContainer > * {
 	-webkit-backface-visibility: hidden;
 	-webkit-perspective: 1000;
+	background: black;
+    color:white;
 }
 
 
