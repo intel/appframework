@@ -191,12 +191,12 @@
         /**
          * This changes the side menu width
          * ```
-           $.ui.setSideMenuWidth('300px');
+           $.ui.setLeftSideMenuWidth('300px');
            ```
-         *@title $.ui.setSideMenuWidth
+         *@title $.ui.setLeftSideMenuWidth
          */
 
-        setSideMenuWidth: function(width) {
+        setLeftSideMenuWidth: function(width) {
             this.sideMenuWidth = width;
             //override the css style
             width = width + "";
@@ -204,6 +204,26 @@
             $("head").find("style#afui_sideMenuWidth").remove();
             $("head").append("<style id='afui_sideMenuWidth'>#afui #menu {width:" + width + "  !important}</style>");
         },
+        setSideMenuWidth:function(){
+            this.setLeftSideMenuWidth.apply(this,arguments);
+        },
+        /**
+         * This changes the side menu width
+         * ```
+           $.ui.setRightSideMenuWidth('300px');
+           ```
+         *@title $.ui.setRightSideMenuWidth
+         */
+
+        setRightSideMenuWidth: function(width) {
+            this.sideMenuWidth = width;
+            //override the css style
+            width = width + "";
+            width = width.replace("px", "") + "px";
+            $("head").find("style#afui_asideMenuWidth").remove();
+            $("head").append("<style id='afui_asideMenuWidth'>#afui #asid_menu {width:" + width + "  !important}</style>");
+        },
+
 
         /**
          * this will disable native scrolling on iOS
@@ -571,8 +591,12 @@
         /**
         * Toggles the right hand side menu
         */
-        toggleAsideMenu:function(force,callback,time){
-            return this.toggleSideMenu(force,callback,time,true);
+        toggleAsideMenu:function(){
+            this.toggleRightSideMenu.apply(this,arguments);
+        },
+        toggleRightSideMenu:function(force,callback,time){
+            
+            return this.toggleLeftSideMenu(force,callback,time,true);
         },
         /**
          * Toggles the side menu.  Force is a boolean to force show or hide.
@@ -584,7 +608,7 @@
          * @param {int} [time] Time to run the transition
          * @title $.ui.toggleSideMenu([force],[callback],[time])
          */
-        toggleSideMenu: function(force, callback, time, aside) {
+        toggleLeftSideMenu: function(force, callback, time, aside) {
             if (!this.isSideMenuEnabled() || this.togglingSideMenu) return;
 
             var that = this;
@@ -633,6 +657,10 @@
                 });
             }
         },
+        toggleSideMenu:function(){
+
+            this.toggleLeftSideMenu.apply(this,arguments);
+        },
         /**
          * Disables the side menu
            ```
@@ -641,6 +669,9 @@
         * @title $.ui.disableSideMenu();
         */
         disableSideMenu: function() {
+            this.disableLeftSideMenu();
+        },
+        disableLeftSideMenu:function(){
             var that = this;
             var els = $.query("#content, #header, #navbar");
             if (this.isSideMenuOn()) {
@@ -657,10 +688,42 @@
            ```
         * @title $.ui.enableSideMenu();
         */
-        enableSideMenu: function() {
+        enableLeftSideMenu: function() {
             $.query("#content, #header, #navbar").addClass("hasMenu");
             $.query("#menu").addClass("tabletMenu");
         },
+        enableSideMenu:function(){
+            return this.enableLeftSideMenu();
+        },
+
+        /**
+         * Disables the side menu
+           ```
+           $.ui.disableSideMenu();
+           ```
+        * @title $.ui.disableSideMenu();
+        */
+        disableRightSideMenu:function(){
+            var that = this;
+            var els = $.query("#content, #header, #navbar");
+            if (this.isSideMenuOn()) {
+                this.toggleSideMenu(false, function(canceled) {
+                    if (!canceled) els.removeClass("hasMenu");
+                });
+            } else els.removeClass("hasMenu");
+            $.query("#menu").removeClass("tabletMenu");
+        },
+        /**
+         * Enables the side menu if it has been disabled
+           ```
+           $.ui.enableRightSideMenu();
+           ```
+        * @title $.ui.enableRightSideMenu();
+        */
+        enableRightSideMenu: function() {
+            $.query("#content, #header, #navbar").addClass("hasMenu");
+            $.query("#menu").addClass("tabletMenu");
+        },        
         /**
          *
          * @title $.ui.enableSideMenu();
@@ -825,7 +888,10 @@
          * Updates the right hand aside menus
          */
 
-        updateAsideElements:function(elems){
+        updateAsideElements:function(){
+            return this.updateRightSideMenuElements.apply(this,arguments);
+        },
+        updateRightSideMenuElements:function(elems){
             var that = this;
             if (elems === undefined || elems === null) return;
             var nb = $.query("#aside_menu_scroller");
@@ -859,8 +925,11 @@
          * @param {String|Object} Elements
          * @title $.ui.updateSideMenuElements(Elements)
          */
-        updateSideMenuElements: function(elems) {
-            var that = this;
+        updateSideMenuElements: function() {
+           return this.updateLeftSideMenuElements.apply(this,arguments);
+        },
+        updateLeftSideMenuElements:function(elems) {
+             var that = this;
             if (elems === undefined || elems === null) return;
             var nb = $.query("#menu_scroller");
 
@@ -878,6 +947,7 @@
             this.scrollingDivs.menu_scroller.hideScrollbars();
             this.scrollingDivs.menu_scroller.scrollToTop();
         },
+        
         /**
          * Set the title of the current panel
            ```
