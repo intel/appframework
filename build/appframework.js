@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-12-03 */
+/*! intel-appframework - v2.1.0 - 2013-12-05 */
 
 /**
  * App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -1210,13 +1210,13 @@ if (!window.af || typeof(af) !== "function") {
                 if (this[0] == this[0].window)
                     return window.innerHeight + '';
                 if (this[0].nodeType == this[0].DOCUMENT_NODE)
-                    return this[0].documentElement.offsetheight + '';
+                    return this[0].documentElement.offsetheight;
                 else {
                     var tmpVal = this.css("height").replace("px", "");
                     if (tmpVal)
-                        return tmpVal;
+                        return +tmpVal;
                     else
-                        return this.offset().height + '';
+                        return this.offset().height;
                 }
             },
             /**
@@ -1233,15 +1233,15 @@ if (!window.af || typeof(af) !== "function") {
                 if (val != nundefined)
                     return this.css("width", val);
                 if (this[0] == this[0].window)
-                    return window.innerWidth + '';
+                    return window.innerWidth;
                 if (this[0].nodeType == this[0].DOCUMENT_NODE)
-                    return this[0].documentElement.offsetwidth + '';
+                    return this[0].documentElement.offsetwidth;
                 else {
                     var tmpVal = this.css("width").replace("px", "");
                     if (tmpVal)
-                        return tmpVal;
+                        return +tmpVal;
                     else
-                        return this.offset().width + '';
+                        return this.offset().width;
                 }
             },
             /**
@@ -1676,6 +1676,14 @@ if (!window.af || typeof(af) !== "function") {
                 if (!('async' in settings) || settings.async !== false)
                     settings.async = true;
 
+                if ($.isObject(settings.data))
+                    settings.data = $.param(settings.data);
+                if (settings.type.toLowerCase() === "get" && settings.data) {
+                    if (settings.url.indexOf("?") === -1)
+                        settings.url += "?" + settings.data;
+                    else
+                        settings.url += "&" + settings.data;
+                }
                 if (!settings.dataType)
                     settings.dataType = "text/html";
                 else {
@@ -1694,22 +1702,15 @@ if (!window.af || typeof(af) !== "function") {
                             break;
                         case "text":
                             settings.dataType = 'text/plain';
-                            break;
+                            break;                        
+                        case "jsonp":
+                            return $.jsonP(opts);
                         default:
                             settings.dataType = "text/html";
                             break;
-                        case "jsonp":
-                            return $.jsonP(opts);
                     }
                 }
-                if ($.isObject(settings.data))
-                    settings.data = $.param(settings.data);
-                if (settings.type.toLowerCase() === "get" && settings.data) {
-                    if (settings.url.indexOf("?") === -1)
-                        settings.url += "?" + settings.data;
-                    else
-                        settings.url += "&" + settings.data;
-                }
+               
 
                 if (/=\?/.test(settings.url)) {
                     return $.jsonP(settings);

@@ -1674,6 +1674,14 @@ if (!window.af || typeof(af) !== "function") {
                 if (!('async' in settings) || settings.async !== false)
                     settings.async = true;
 
+                if ($.isObject(settings.data))
+                    settings.data = $.param(settings.data);
+                if (settings.type.toLowerCase() === "get" && settings.data) {
+                    if (settings.url.indexOf("?") === -1)
+                        settings.url += "?" + settings.data;
+                    else
+                        settings.url += "&" + settings.data;
+                }
                 if (!settings.dataType)
                     settings.dataType = "text/html";
                 else {
@@ -1692,22 +1700,15 @@ if (!window.af || typeof(af) !== "function") {
                             break;
                         case "text":
                             settings.dataType = 'text/plain';
-                            break;
+                            break;                        
+                        case "jsonp":
+                            return $.jsonP(opts);
                         default:
                             settings.dataType = "text/html";
                             break;
-                        case "jsonp":
-                            return $.jsonP(opts);
                     }
                 }
-                if ($.isObject(settings.data))
-                    settings.data = $.param(settings.data);
-                if (settings.type.toLowerCase() === "get" && settings.data) {
-                    if (settings.url.indexOf("?") === -1)
-                        settings.url += "?" + settings.data;
-                    else
-                        settings.url += "&" + settings.data;
-                }
+               
 
                 if (/=\?/.test(settings.url)) {
                     return $.jsonP(settings);
