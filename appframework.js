@@ -940,10 +940,10 @@ if (!window.af || typeof(af) !== "function") {
                         return this;
                     }
                     var classList = this[i].className;
-					//SGV LINK EVENT
-					if (typeof this[i].className == "object") {
-						classList = " ";
-					}
+                    //SGV LINK EVENT
+                    if (typeof this[i].className == "object") {
+                        classList = " ";
+                    }
                     name.split(/\s+/g).forEach(function(cname) {
                         classList = classList.replace(classRE(cname), " ");
                     });
@@ -1058,13 +1058,13 @@ if (!window.af || typeof(af) !== "function") {
                         }
                         if (obj instanceof $afm) {
                             for (var k=0,lenk=obj.length; k<lenk; k++) {
-                            	node = obj[k];
-                            	if (node.nodeName != nundefined && node.nodeName.toLowerCase() == "script" && (!node.type || node.type.toLowerCase() === 'text/javascript')) {
-                            	    window['eval'](node.innerHTML);	
-                            	} else {
-                            	    _insertFragments($(node), this[i], insert);
-                            	}
-                            }	
+                                node = obj[k];
+                                if (node.nodeName != nundefined && node.nodeName.toLowerCase() == "script" && (!node.type || node.type.toLowerCase() === 'text/javascript')) {
+                                    window['eval'](node.innerHTML);
+                                } else {
+                                    _insertFragments($(node), this[i], insert);
+                                }
+                            }   
                         } else {
                             insert != nundefined ? this[i].insertBefore(obj, this[i].firstChild) : this[i].appendChild(obj);
                         }

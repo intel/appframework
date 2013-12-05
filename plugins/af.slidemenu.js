@@ -25,8 +25,10 @@
         var transTime = $.ui.transitionTime;
         var openState=0;
         var showHideThresh=false;
+        var $cnt=$.query("#content");
         $("#afui").bind("touchstart", function(e) {
             openState=0;
+            if(!$cnt.hasClass("hasMenu")) return;
             if(e.touches.length>1) return;
             startX = e.touches[0].pageX;
             startY = e.touches[0].pageY;
@@ -49,6 +51,7 @@
         });
         
         $("#afui").bind("touchmove", function(e) {
+            if(!$cnt.hasClass("hasMenu")) return;
             if(e.touches.length>1) return;
 
             if (!$.ui.slideSideMenu||keepOpen) return true;
@@ -119,6 +122,7 @@
             e.stopPropagation();        
         });
         $("#afui").bind("touchend", function(e) {
+            if(!$cnt.hasClass("hasMenu")) return;
 
             if (doMenu && checking&&!keepOpen) {
                 $.ui.toggleSideMenu(showHideThresh, function(){

@@ -678,8 +678,7 @@
                 this.toggleSideMenu(false, function(canceled) {
                     if (!canceled) els.removeClass("hasMenu");
                 });
-            } else els.removeClass("hasMenu");
-            $.query("#menu").removeClass("tabletMenu");
+            } else els.removeClass("hasMenu");            
         },
         /**
          * Enables the side menu if it has been disabled
@@ -689,8 +688,7 @@
         * @title $.ui.enableSideMenu();
         */
         enableLeftSideMenu: function() {
-            $.query("#content, #header, #navbar").addClass("hasMenu");
-            $.query("#menu").addClass("tabletMenu");
+            $.query("#content, #header, #navbar").addClass("hasMenu");            
         },
         enableSideMenu:function(){
             return this.enableLeftSideMenu();
@@ -711,7 +709,6 @@
                     if (!canceled) els.removeClass("hasMenu");
                 });
             } else els.removeClass("hasMenu");
-            $.query("#menu").removeClass("tabletMenu");
         },
         /**
          * Enables the side menu if it has been disabled
@@ -721,8 +718,7 @@
         * @title $.ui.enableRightSideMenu();
         */
         enableRightSideMenu: function() {
-            $.query("#content, #header, #navbar").addClass("hasMenu");
-            $.query("#menu").addClass("tabletMenu");
+            $.query("#content, #header, #navbar").addClass("hasMenu");            
         },        
         /**
          *
@@ -1987,8 +1983,9 @@
                         $.query("#afui #header").addClass("hasMenu"+splitViewClass);
                         $.query("#afui #content").addClass("hasMenu"+splitViewClass);
                         $.query("#afui #navbar").addClass("hasMenu"+splitViewClass);
-                        $.query("#afui #menu").addClass("tabletMenu"+splitViewClass);
+                        
                     }
+                    $.query("#afui #menu").addClass("tabletMenu");
                     //go to activeDiv
                     var firstPanelId = that.getPanelId(defaultHash);
                     //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
