@@ -4877,7 +4877,7 @@
             }
 
             //insert backbutton (should optionally be left to developer..)
-            $(this.header).html('<a id="backButton" class="button"></a> <h1 id="pageTitle"></h1>' + header.innerHTML);
+            $(this.header).html('<a id="backButton" class="button"></a> <h1 id="pageTitle"></h1>' + this.header.innerHTML);
             this.backButton = $.query("#header #backButton").css("visibility", "hidden");
             $(document).on("click", "#header #backButton", function(e) {
                 e.preventDefault();
