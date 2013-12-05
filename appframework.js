@@ -1043,7 +1043,7 @@ if (!window.af || typeof(af) !== "function") {
                     return this;
                 if ($.isArray(element) || $.isObject(element))
                     element = $(element);
-                var i;
+                var i, node;
 
 
                 for (i = 0; i < this.length; i++) {
@@ -1055,10 +1055,15 @@ if (!window.af || typeof(af) !== "function") {
                         if (obj == nundefined || obj.length === 0) {
                             obj = document.createTextNode(element);
                         }
-                        if (obj.nodeName != nundefined && obj.nodeName.toLowerCase() == "script" && (!obj.type || obj.type.toLowerCase() === 'text/javascript')) {
-                            window['eval'](obj.innerHTML);
-                        } else if (obj instanceof $afm) {
-                            _insertFragments(obj, this[i], insert);
+                        if (obj instanceof $afm) {
+                            for (var k=0,lenk=obj.length; k<lenk; k++) {
+                            	node = obj[k];
+                            	if (node.nodeName != nundefined && node.nodeName.toLowerCase() == "script" && (!node.type || node.type.toLowerCase() === 'text/javascript')) {
+                            	    window['eval'](node.innerHTML);	
+                            	} else {
+                            	    _insertFragments($(node), this[i], insert);
+                            	}
+                            }	
                         } else {
                             insert != nundefined ? this[i].insertBefore(obj, this[i].firstChild) : this[i].appendChild(obj);
                         }
