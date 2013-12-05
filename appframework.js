@@ -1208,13 +1208,13 @@ if (!window.af || typeof(af) !== "function") {
                 if (this[0] == this[0].window)
                     return window.innerHeight + '';
                 if (this[0].nodeType == this[0].DOCUMENT_NODE)
-                    return this[0].documentElement.offsetheight + '';
+                    return this[0].documentElement.offsetheight;
                 else {
                     var tmpVal = this.css("height").replace("px", "");
                     if (tmpVal)
-                        return tmpVal;
+                        return +tmpVal;
                     else
-                        return this.offset().height + '';
+                        return this.offset().height;
                 }
             },
             /**
@@ -1231,15 +1231,15 @@ if (!window.af || typeof(af) !== "function") {
                 if (val != nundefined)
                     return this.css("width", val);
                 if (this[0] == this[0].window)
-                    return window.innerWidth + '';
+                    return window.innerWidth;
                 if (this[0].nodeType == this[0].DOCUMENT_NODE)
-                    return this[0].documentElement.offsetwidth + '';
+                    return this[0].documentElement.offsetwidth;
                 else {
                     var tmpVal = this.css("width").replace("px", "");
                     if (tmpVal)
-                        return tmpVal;
+                        return +tmpVal;
                     else
-                        return this.offset().width + '';
+                        return this.offset().width;
                 }
             },
             /**
