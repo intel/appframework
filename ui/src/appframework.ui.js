@@ -579,9 +579,10 @@
             time = time || this.transitionTime;
             var open = this.isSideMenuOn();
 
-            if(panelMask.length === 0 && window.innerWidth < $.ui.fixedSideMenuWidth){
+            if(panelMask.length === 0 && window.innerWidth < 768){
                 els.append('<div class="afui_panel_mask"></div>');
-                $(".afui_panel_mask").bind("touchend", function(){
+                panelMask = $.query(".afui_panel_mask");
+                $(".afui_panel_mask").bind("click", function(){
                     $.ui.toggleSideMenu(false);
                 });
             }
@@ -596,7 +597,7 @@
                         that.togglingSideMenu = false;
                         els.vendorCss("Transition", "");
                         if (callback) callback(canceled);
-                        if(window.innerWidth < $.ui.fixedSideMenuWidth){
+                        if(panelMask.length !== 0 && window.innerWidth < 768){
                             panelMask.show();
                         }
                     }
@@ -614,7 +615,7 @@
                         that.togglingSideMenu = false;
                         if (callback) callback(canceled);
                         menu.hide();
-                        if(window.innerWidth < $.ui.fixedSideMenuWidth){
+                        if(panelMask.length !== 0 && window.innerWidth < 768){
                             panelMask.hide();
                         }
                     }
