@@ -575,9 +575,17 @@
             var that = this;
             var menu = $.query("#menu");
             var els = $.query("#content,  #header, #navbar");
+            var panelMask = $.query(".afui_panel_mask");
             time = time || this.transitionTime;
             var open = this.isSideMenuOn();
 
+            if(panelMask.length === 0 && window.innerWidth < $.ui.fixedSideMenuWidth){
+                els.append('<div class="afui_panel_mask"></div>');
+                $(".afui_panel_mask").bind("touchend", function(){
+                    $.ui.toggleSideMenu(false);
+                });
+            }
+            
             if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
                 this.togglingSideMenu = true;
                 menu.show();
@@ -588,6 +596,9 @@
                         that.togglingSideMenu = false;
                         els.vendorCss("Transition", "");
                         if (callback) callback(canceled);
+                        if(window.innerWidth < $.ui.fixedSideMenuWidth){
+                            panelMask.show();
+                        }
                     }
                 });
 
@@ -603,6 +614,9 @@
                         that.togglingSideMenu = false;
                         if (callback) callback(canceled);
                         menu.hide();
+                        if(window.innerWidth < $.ui.fixedSideMenuWidth){
+                            panelMask.hide();
+                        }
                     }
                 });
             }
