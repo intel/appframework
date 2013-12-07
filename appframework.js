@@ -2271,7 +2271,7 @@ if (!window.af || typeof(af) !== "function") {
         * @title $().bind(event,callback)
         */
         $.fn.bind = function(event, callback) {
-            for (var i = 0; i < this.length; i++) {
+            for (var i = 0, len = this.length; i < len; i++) {
                 add(this[i], event, callback);
             }
             return this;
@@ -2289,7 +2289,7 @@ if (!window.af || typeof(af) !== "function") {
         * @title $().unbind(event,[callback]);
         */
         $.fn.unbind = function(event, callback) {
-            for (var i = 0; i < this.length; i++) {
+            for (var i = 0, len = this.length; i < len; i++) {
                 remove(this[i], event, callback);
             }
             return this;
@@ -2390,10 +2390,13 @@ if (!window.af || typeof(af) !== "function") {
                     };
                 });
         }
-        $.fn.delegate = function(selector, event,data, callback) {
-
-            for (var i = 0; i < this.length; i++) {
-                addDelegate(this[i],event,callback,selector,data)
+        $.fn.delegate = function(selector, event, data, callback) {
+            if ($.isFunction(data)) {
+                callback = data;
+                data = null;
+            }
+            for (var i = 0, len = this.length; i < len; i++) {
+                addDelegate(this[i],event,callback,selector,data);
             }
             return this;
         };
@@ -2412,7 +2415,7 @@ if (!window.af || typeof(af) !== "function") {
         * @title $().undelegate(selector,event,[callback]);
         */
         $.fn.undelegate = function(selector, event, callback) {
-            for (var i = 0; i < this.length; i++) {
+            for (var i = 0, len = this.length; i < len; i++) {
                 remove(this[i], event, callback, selector);
             }
             return this;
@@ -2432,10 +2435,10 @@ if (!window.af || typeof(af) !== "function") {
         * @return {Object} appframework object
         * @title $().on(event,selector,[data],callback);
         */
-        $.fn.on = function(event, selector,data, callback) {
-            if(!$.isObject(data)){
-                callback=data;
-                data=null;
+        $.fn.on = function(event, selector, data, callback) {
+            if ($.isFunction(data)) {
+                callback = data;
+                data = null;
             }
 
             return selector === nundefined || $.isFunction(selector) ? this.bind(event, selector) : this.delegate(selector, event, data,callback);
@@ -2473,7 +2476,7 @@ if (!window.af || typeof(af) !== "function") {
             if (typeof event == 'string')
                 event = $.Event(event, props);
             event.data = data;
-            for (var i = 0; i < this.length; i++) {
+            for (var i = 0, len = this.length; i < len; i++) {
                 this[i].dispatchEvent(event);
             }
             return this;
