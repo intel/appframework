@@ -33,6 +33,11 @@
     color:#000;
 }
 
+#afui.win8 #header .button {
+    color: inherit;
+    border-color:transparent;
+    font-size:14px;
+}
 
 #afui.win8 > #header #menubadge {
 	display:none;

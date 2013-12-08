@@ -6,7 +6,6 @@
 	font-weight:bold;
 	color:#000;
 	text-align:center;
-	text-shadow:0 1px 0 #fff;
 	vertical-align:top;
 	cursor:pointer;
 	background-color:#eee;
@@ -181,11 +180,23 @@
 	border-color:#666;
 }
 
-#afui #header .button {
-	font-size:12px;
-	padding:7px ;
-	height:32px;
-	margin-top:5px;
+ #afui #header .button {
+    color: #fff;
+    background:none;
+    border:1px solid transparent;
+ 	font-size:12px;
+	padding:7px;
+ 	height:32px;
+	margin:5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
-
-
+ 
+#header .button.icon:before{
+    padding: 0 6px;
+}
+ 
+#afui #backButton {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

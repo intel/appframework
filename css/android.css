@@ -26,6 +26,13 @@
     border-color:#33B5E5;
 }
 
+#afui.android #header .button {
+    color: inherit;
+    background:none;
+    font-size:14px;
+    box-shadow:none;
+}
+
 #afui.android #backButton{
     background: inherit;
     color:inherit;

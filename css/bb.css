@@ -98,6 +98,13 @@
     transform: rotate(10deg);
 }
 
+#afui.bb #header .button {
+    color:#fff;
+    background:none;
+    text-shadow:0 -1px 0 #333;
+    border-color:transparent;
+}
+
 #afui.bb #navbar {
     border:none;
     border-radius:0px;
