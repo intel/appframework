@@ -15,7 +15,7 @@
 } 
 
 #afui.ios #header h1 {
-        text-shadow: rgba(0,0,0,0.8) 0 -1px 0;
+    text-shadow: rgba(0,0,0,0.8) 0 -1px 0;
 }
 
 #afui.ios .af-badge {
@@ -25,7 +25,6 @@
 }
 #afui.ios .panel {
     background:#e7e7e7;
-    
 }
 
 #afui.ios .panel h2 { color:inherit;}
@@ -41,18 +40,14 @@
     border-top:1px solid #000;
 }
 
-
-
 #afui.ios #navbar a.pressed {
     background:rgba(255, 255, 255, 0.13);
     border-radius:6px;
 }
 
-
 #afui.ios #navbar .icon.pressed:before {
     color:#3a9de2;
 }
-
 
 #afui.ios > #menu.tabletMenu {
    border-right:none;
@@ -72,6 +67,7 @@
     color:#fff;
     text-shadow:0 -1px 0 #333;
     background-color:#476999;
+    background-image: none !important;
     border:1px solid;
     border-color:#375073 #375073 #375073 transparent;
     height:32px;
@@ -80,7 +76,6 @@
     margin:0 0 0 15px !important;
     padding-left:4px !important;
 } /* Sets up positioning of the back button which appears in the header */
-
 
 #afui.ios #backButton::before {
     z-index:-1;
@@ -96,34 +91,36 @@
     -ms-transform:rotate(45deg); -moz-transform:rotate(45deg); -webkit-transform:rotate(45deg); transform:rotate(45deg);
 }
 
+#afui.ios #header .button {
+    color:#fff;
+    text-shadow:0 -1px 0 #333;
+    background-color:#476999;
+    border:1px solid #375073;
+    box-shadow:0 1px 0 #9CABC0;
+    background-image:linear-gradient(to bottom, #9CABC0 0%, #6E84A2 50%, #476999 51%);
+}
+
+#afui.ios #header .button.pressed {
+    background-image:linear-gradient(to bottom, #6E84A2 0%, #476999 50%, #274979 51%);
+}
 
 #afui.ios #menu .list li, 
 #afui.ios #menu .list .divider, 
 #afui.ios #menu .list li:first-child, 
 #afui.ios #menu  .list li:last-child {
-
     border-color:#101012;
     -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
-
 }
 
 #afui.ios #menu .list > li > a {
-    color:#ccc;
-    
+    color:#ccc;   
 }
-
-
-
 
 #afui.ios #menu .list .divider {
     background:#333;
-    color:#fff;
-    
+    color:#fff;   
 }
-
-
-
 
 #afui.ios .afPopup {
      display: block;

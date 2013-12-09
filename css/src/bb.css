@@ -4,14 +4,14 @@
 }
 
 #afui.bb #header {
-background:#00609E;
-background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
-background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
-background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
-background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
-border-style:solid;
-border-width:1px;
-border-color:#009CE1 transparent #004E92 transparent;
+    background:#00609E;
+    background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
+    background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    border-style:solid;
+    border-width:1px;
+    border-color:#009CE1 transparent #004E92 transparent;
 }
 
 #afui.bb #header h1 {
@@ -22,7 +22,6 @@ border-color:#009CE1 transparent #004E92 transparent;
 #afui.bb .list {
     font-weight: normal;
 }
-
 
 #afui.bb #backButton {
     display: block;
@@ -47,7 +46,6 @@ border-color:#009CE1 transparent #004E92 transparent;
     width:50px;
     padding:0 !important;
     margin:0 !important;
-
 }
 
 #afui.bb #backButton::before {
@@ -59,7 +57,7 @@ border-color:#009CE1 transparent #004E92 transparent;
     text-align: center;
     border-radius: 0;
     border: none;
-    border-color: 0;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
@@ -79,7 +77,7 @@ border-color:#009CE1 transparent #004E92 transparent;
 }
 
 #afui.bb #backButton::after {
- z-index: -1;
+    z-index: -1;
     font-size:24px;
     content: ' ';
     position: absolute;
@@ -94,14 +92,20 @@ border-color:#009CE1 transparent #004E92 transparent;
     text-align: center;
     border-radius: 0;
     border: none;
-    border-color: 0;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: rotate(10deg);
     transform: rotate(10deg);
 }
 
+#afui.bb #header .button {
+    color:#fff;
+    background:none;
+    text-shadow:0 -1px 0 #333;
+    border-color:transparent;
+}
+
 #afui.bb #navbar {
-    background:#1e1e1e;;
     border:none;
     border-radius:0px;
     background:none;
@@ -117,20 +121,20 @@ border-color:#009CE1 transparent #004E92 transparent;
     background:#1e1e1e;
 }
 
- #afui.bb #navbar a.pressed {
+#afui.bb #navbar a.pressed {
     border:0px;
     border-top:4px solid #0aa9dc;
     border-radius:0px;
     background:#3a3a3a;
     color:white;
- }
+}
 
- #afui.bb #navbar a:not(:last-of-type):not(.pressed){
+#afui.bb #navbar a:not(:last-of-type):not(.pressed){
     border-right:1px solid black;
- }
+}
 
 #afui.bb #navbar .icon.pressed:before {
-color: white;
+    color: white;
 }
 
 #afui.bb #menu {
@@ -159,8 +163,17 @@ color: white;
     border-bottom-color :#ccc;
 }
 
-#afui.bb .button {
-    border:1px solid #ccc;
+#afui.bb .button ,
+#afui.bb .button-grouped *,
+#afui.bb .button-grouped > .button:first-child,
+#afui.bb .button-grouped.vertical *,
+#afui.bb .button-grouped.vertical >  .button:last-child, 
+#afui.bb > #header .button-grouped > .button {
+    border-color:#ccc;
+}
+
+#afui.bb > #header .button-grouped > .button.pressed {
+    background:#07a;
 }
 
 #afui.bb .panel {

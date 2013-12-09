@@ -19,13 +19,21 @@
 	background:#FDFDFD;
 	color:#000;
 }
+
 #afui.android > #header {
     background:inherit;
     color:inherit;
     border-color:#33B5E5;
 }
-#afui.android #backButton
-{
+
+#afui.android #header .button {
+    color: inherit;
+    background:none;
+    font-size:14px;
+    box-shadow:none;
+}
+
+#afui.android #backButton{
     background: inherit;
     color:inherit;
 }
@@ -38,48 +46,48 @@
     border-color:black;
 }
 
-
- #afui.android > #navbar {
+#afui.android > #navbar {
     box-shadow: none;
  	background:inherit;
  	border-top:2px solid #33B5E5;
     border-bottom:none;
     padding:0;
- }
+}
 
 #afui.android #navbar a {
 	color:inherit;
     top:0px;
 }
- #afui.android #navbar a.pressed {
+
+#afui.android #navbar a.pressed {
  	border:0px;
  	border-top:4px solid #33B5E5;
  	border-radius:0px;
  	background:none;
- }
+}
 
 #afui.android #navbar .icon.pressed:before {
 	color:inherit;
 }
 
-
 #afui.android .af-badge {
 	border:none;
 }
+
 #afui.android #content,#afui.android #content > .panel {
  	background:inherit;
  	color:inherit;
- }
+}
 
- #afui.android .list {
+#afui.android .list {
  	background:inherit;
  	color:inherit;
  	border-color:#303030;
- }
+}
 
- #afui.android .list .divider {	color:black; }
+#afui.android .list .divider {	color:black; }
 
- #afui.android .panel h2 { color:inherit; }
+#afui.android .panel h2 { color:inherit; }
 
 
 #afui.android .collapsed:after {border-top: 6px solid;}
@@ -166,11 +174,12 @@
 }
 
 #afui.android.light .button {
-  background:#D1D1D1;
-  border-color:#D1D1D1;
+    background:#eee;
+    border-color:#D1D1D1;
 }
 
-#afui.android .button.pressed {
+#afui.android .button.pressed,
+#afui.android > #header .button-grouped > .button.pressed {
 	background:#33B5E5;
 	border-color:#33B5E5;
 }
@@ -193,8 +202,24 @@
     border-color:transparent;
 }
 
-#afui.android .button-grouped * { border-right:1px solid rgba(255,255,255,.25); }
-#afui.android .button-grouped > .button:last-child, #afui.android .button-grouped.vertical * { border-right:none; }
+#afui.android > #header .button-grouped > .button {
+    border-color:#777;
+}
+
+#afui.android .button-grouped * { 
+    border:1px solid rgba(255,255,255,.25);
+    border-left-width:0;
+    box-shadow:none;
+}
+
+#afui.android .button-grouped.vertical * {
+    border-left:1px solid rgba(255,255,255,.25);
+    border-bottom-width:0;
+}
+
+#afui.android .button-grouped.vertical .button:last-child {
+    border-bottom:1px solid rgba(255,255,255,.25);
+}
 
 #afui.android .afPopup {
     display: block;
