@@ -942,7 +942,7 @@
             var self = this;
             //$.query("#modalContainer").html("", true);
             var $cnt=$.query("#modalContainer");
-            $cnt.find("#closebutton.modalbutton").remove();
+            $cnt.find(".closebutton.modalbutton").remove();
             var useScroller = this.scrollingDivs.hasOwnProperty(this.modalReference_.attr("id"));
 
 
