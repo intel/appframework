@@ -53,7 +53,7 @@
         $("#afui").bind("touchmove", function(e) {
             if(!$cnt.hasClass("hasMenu")) return;
             if(e.touches.length>1) return;
-
+            if (!$.ui.isSideMenuEnabled()) return true;
             if (!$.ui.slideSideMenu||keepOpen) return true;
 
             dx = e.touches[0].pageX;
