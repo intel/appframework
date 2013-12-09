@@ -162,6 +162,7 @@
         menuAnimation: null,
         togglingSideMenu: false,
         sideMenuWidth: "200px",
+        handheldMinWidth: "768",
         trimBackButtonText: true,
         useOSThemes: true,
         lockPageBounce: false,
@@ -579,7 +580,7 @@
             time = time || this.transitionTime;
             var open = this.isSideMenuOn();
 
-            if(panelMask.length === 0 && window.innerWidth < 768){
+            if(panelMask.length === 0 && window.innerWidth < $.ui.handheldMinWidth){
                 els.append('<div class="afui_panel_mask"></div>');
                 panelMask = $.query(".afui_panel_mask");
                 $(".afui_panel_mask").bind("click", function(){
@@ -597,7 +598,7 @@
                         that.togglingSideMenu = false;
                         els.vendorCss("Transition", "");
                         if (callback) callback(canceled);
-                        if(panelMask.length !== 0 && window.innerWidth < 768){
+                        if(panelMask.length !== 0 && window.innerWidth < $.ui.handheldMinWidth){
                             panelMask.show();
                         }
                     }
@@ -615,7 +616,7 @@
                         that.togglingSideMenu = false;
                         if (callback) callback(canceled);
                         menu.hide();
-                        if(panelMask.length !== 0 && window.innerWidth < 768){
+                        if(panelMask.length !== 0 && window.innerWidth < $.ui.handheldMinWidth){
                             panelMask.hide();
                         }
                     }
