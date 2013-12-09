@@ -1606,7 +1606,7 @@ if (!window.af || typeof(af) !== "function") {
             }
             var callbackName = 'jsonp_callback' + (++_jsonPID);
             var abortTimeout = "",
-                context;
+                context, callback;
             var script = document.createElement("script");
             var abort = function() {
                 $(script).remove();
@@ -1619,7 +1619,18 @@ if (!window.af || typeof(af) !== "function") {
                 delete window[callbackName];
                 options.success.call(context, data);
             };
-            script.src = options.url.replace(/=\?/, '=' + callbackName);
+            if (options.url.indexOf('callback=?') !== -1) {
+                script.src = options.url.replace(/=\?/, '=' + callbackName);
+            } else {
+                callback = options.jsonp ? options.jsonp : 'callback';
+                if (options.url.indexOf("?") === -1) {
+                    options.url += ("?" + callback + '=' + callbackName);
+                }
+                else {
+                    options.url += ("&" + callback + '=' + callbackName);
+                }
+                script.src = options.url;
+            }
             if (options.error) {
                 script.onerror = function() {
                     clearTimeout(abortTimeout);
