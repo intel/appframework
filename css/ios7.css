@@ -42,7 +42,7 @@
     box-shadow:none;
 }
 
-#afui .ios7 #navbar a {
+#afui.ios7 #navbar a {
     color:rgba(96,96,96,255);
 }
 
