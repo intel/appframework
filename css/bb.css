@@ -167,9 +167,13 @@
 #afui.bb .button-grouped *,
 #afui.bb .button-grouped > .button:first-child,
 #afui.bb .button-grouped.vertical *,
-#afui.bb .button-grouped.vertical >  .button:last-child 
-{
+#afui.bb .button-grouped.vertical >  .button:last-child, 
+#afui.bb > #header .button-grouped > .button {
     border-color:#ccc;
+}
+
+#afui.bb > #header .button-grouped > .button.pressed {
+    background:#07a;
 }
 
 #afui.bb .panel {

@@ -175,11 +175,12 @@
 }
 
 #afui.android.light .button {
-    background:#D1D1D1;
+    background:#eee;
     border-color:#D1D1D1;
 }
 
-#afui.android .button.pressed {
+#afui.android .button.pressed,
+#afui.android > #header .button-grouped > .button.pressed {
 	background:#33B5E5;
 	border-color:#33B5E5;
 }
@@ -202,14 +203,19 @@
     border-color:transparent;
 }
 
+#afui.android > #header .button-grouped > .button {
+    border-color:#777;
+}
+
 #afui.android .button-grouped * { 
-    border-right:1px solid rgba(255,255,255,.25);
-    border-bottom:1px solid rgba(255,255,255,.25); 
+    border:1px solid rgba(255,255,255,.25);
+    border-left-width:0;
+    box-shadow:none;
 }
 
 #afui.android .button-grouped.vertical * {
     border-left:1px solid rgba(255,255,255,.25);
-    border-bottom:0;
+    border-bottom-width:0;
 }
 
 #afui.android .button-grouped.vertical .button:last-child {

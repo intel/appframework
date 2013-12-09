@@ -65,11 +65,20 @@
 	border-radius: 0;
 	box-shadow:none;
 }
-#afui .button-grouped { display:inline-block; }
+
+#afui #header .button-grouped>.button {
+	margin:0;
+    border-color:#fff;
+}
+
+#afui .button-grouped { 
+    display:inline-block;
+    margin: 5px;
+}
 #afui .button-grouped * {
 	border-radius:0px;
 	float:left;
-	border:0px;
+	border-left:0px solid transparent;
 	border-right: 1px solid #666;
 	border-bottom: 1px solid #666;
 	border-top: 1px solid #666;
@@ -180,10 +189,10 @@
 	border-color:#666;
 }
 
- #afui #header .button {
+#afui #header .button {
     color: #fff;
     background:none;
-    border:1px solid transparent;
+    border-color: transparent;
  	font-size:12px;
 	padding:7px;
  	height:32px;

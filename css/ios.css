@@ -100,6 +100,10 @@
     background-image:linear-gradient(to bottom, #9CABC0 0%, #6E84A2 50%, #476999 51%);
 }
 
+#afui.ios #header .button.pressed {
+    background-image:linear-gradient(to bottom, #6E84A2 0%, #476999 50%, #274979 51%);
+}
+
 #afui.ios #menu .list li, 
 #afui.ios #menu .list .divider, 
 #afui.ios #menu .list li:first-child, 
