@@ -169,6 +169,7 @@
         menuAnimation: null,
         togglingSideMenu: false,
         sideMenuWidth: "200px",
+        handheldMinWidth: "768",
         trimBackButtonText: true,
         useOSThemes: true,
         lockPageBounce: false,
@@ -620,7 +621,7 @@
             var open = this.isSideMenuOn();
             var toX=aside?"-"+that.sideMenuWidth:that.sideMenuWidth;
             // add panel mask to block when side menu is open for phone devices
-            if(panelMask.length === 0 && window.innerWidth < 768){
+            if(panelMask.length === 0 && window.innerWidth < $.ui.handheldMinWidth){
                  els.append('<div class="afui_panel_mask"></div>');
                  panelMask = $.query(".afui_panel_mask");
                  $(".afui_panel_mask").bind("click", function(){
@@ -646,7 +647,7 @@
                         that.togglingSideMenu = false;
                         els.vendorCss("Transition", "");
                         if (callback) callback(canceled); 
-                        if(panelMask.length !== 0 && window.innerWidth < 768){
+                        if(panelMask.length !== 0 && window.innerWidth < $.ui.handheldMinWidth){
                             panelMask.show();
                         }
                     }
@@ -665,7 +666,7 @@
                         if (callback) callback(canceled);
                         menu.hide();
                         asideMenu.hide();
-                        if(panelMask.length !== 0 && window.innerWidth < 768){
+                        if(panelMask.length !== 0 && window.innerWidth < $.ui.handheldMinWidth){
                             panelMask.hide();
                         }                        
                     }
