@@ -33,13 +33,18 @@
     color:#000;
 }
 
+#afui.win8 #header .button {
+    color: inherit;
+    border-color:transparent;
+    font-size:14px;
+}
 
 #afui.win8 > #header #menubadge {
 	display:none;
 }
 
 #afui.win8 #backButton.pressed {
-  background:inherit;
+    background:inherit;
 }
 
 #afui.win8 #backButton {
@@ -62,7 +67,6 @@
   -webkit-font-smoothing: antialiased;
 }
 
-
 #afui.win8 #backButton::before {
   content: "\e000";
   font-size:30px;
@@ -76,33 +80,31 @@
   transform:none;
 }
 
-
-
-
 #afui.win8 > #header h1 {
 	text-align: left;
-  color:inherit;
+    color:inherit;
 }
 
 #afui.win8 > #header{
-  border:0px;
+    border:0px;
 	background: inherit;
 	border-bottom:inherit;
-  color:inherit;
- }
+    color:inherit;
+}
 
- #afui.win8 > #navbar {
-  padding:0px;
+#afui.win8 > #navbar {
+    padding:0px;
  	background:inherit;
  	text-align: center;
  	height:65px;
  	background:rgba(33,32,33,.9);
-  border-top:none;
- }
- #afui.win8.light > #navbar{
+    border-top:none;
+}
+ 
+#afui.win8.light > #navbar{
     background:#F2F2F2;
     color:black;
-  }
+}
 
 #afui.win8 #navbar a {
   position: relative;
@@ -119,11 +121,12 @@
   -webkit-backface-visibility: hidden;
   -webkit-perspective: 1000;
 }
+
 #afui.win8.light #navbar a {
   text-shadow: 0 0 rgba(0, 0, 0, 0);  
 }
 
- #afui.win8 #navbar .icon.pressed:before {
+#afui.win8 #navbar .icon.pressed:before {
 	background-color: #00ABA9;
 }
 
@@ -141,27 +144,26 @@
     border: 3px solid #000;
 }
 
-  #afui.win8 #navbar a:not(:last-of-type){
+#afui.win8 #navbar a:not(:last-of-type){
   	border:none;
-  }
-
+}
 
 #afui.win8 .af-badge {
 	border:none;
 }
+
 #afui.win8 #content,#afui.win8 #content > .panel {
  	background:inherit;
  	color:inherit;
- }
+}
 
- #afui.win8 .list {
+#afui.win8 .list {
  	background:inherit;
  	color:inherit;
  	border-color:#303030;
+}
 
- }
-
- #afui.win8 .list .divider,  #afui.win8 #menu.tabletMenu .list .divider  {
+#afui.win8 .list .divider,  #afui.win8 #menu.tabletMenu .list .divider  {
  	background:#00ABA9;
  	padding:5px;
     display:inline;
@@ -170,22 +172,21 @@
  	border-top:none;
  	border-bottom:none;
     color:inherit;
- }
+}
 
- #afui.win8 .list li {
+#afui.win8 .list li {
  	border-top:none;
  	border-bottom:none;
     font-size:20px;
- }
- #afui.win8 .panel h2 {
+}
+
+#afui.win8 .panel h2 {
  	color:inherit;
     font-weight:normal;
     font-size:34px;
     line-height:34px;
     height:auto;
- }
-
-
+}
 
 #afui.win8 .collapsed:after {border-top: 6px solid;}
 #afui.win8 .collapsed:before {border:2px solid;}
@@ -195,19 +196,15 @@
 #afui.win8 .collapsed:before,#afui.win8 .expanded:before {
     border-color: inherit;
 }
+
 #afui.win8 .collapsed:after,
 #afui.win8 .expanded:after{
     border-top-color:inherit;
     border-top-color:inherit;
 }
 
-
-
-
-
 #afui.win8 .afScrollbar {background:white !important;}
 #afui.win8.light .afScrollbar {background:black !important;}
-
 
 #afui.win8 select, #afui.win8 textarea, #afui.win8 input[type="text"], #afui.win8 input[type="search"], #afui.win8 input[type="password"], #afui.win8 input[type="datetime"], #afui.win8 input[type="datetime-local"], #afui.win8 input[type="date"], #afui.win8 input[type="month"], #afui.win8 input[type="time"], #afui.win8 input[type="week"], #afui.win8 input[type="number"], #afui.win8 input[type="email"], #afui.win8 input[type="url"], #afui.win8 input[type="tel"], #afui.win8 input[type="color"], #afui.win8 .input-group {
   	background:black;
@@ -217,7 +214,6 @@
 #afui.win8.light select, #afui.win8.light textarea, #afui.win8.light input[type="text"], #afui.win8.light input[type="search"], #afui.win8.light input[type="password"], #afui.win8.light input[type="datetime"], #afui.win8.light input[type="datetime-local"], #afui.win8.light input[type="date"], #afui.win8.light input[type="month"], #afui.win8.light input[type="time"], #afui.win8.light input[type="week"], #afui.win8.light input[type="number"], #afui.win8.light input[type="email"], #afui.win8.light input[type="url"], #afui.win8.light input[type="tel"], #afui.win8.light input[type="color"], #afui.win8.light .input-group {
     background:white;
 }
-
 
 #afui.win8 input.toggle+label:after {
 	color:inherit;
@@ -249,9 +245,9 @@
 }
 
 #afui.win8 #menu .list .divider {
-padding:4px;
-line-height:30px;
-margin-left:10px;
+    padding:4px;
+    line-height:30px;
+    margin-left:10px;
 }
 
 #afui.win8 #menu .list {
@@ -259,7 +255,7 @@ margin-left:10px;
 }
 
 #afui.win8 #menu .list li,#afui.win8 #menu .list .divider {
-		box-shadow:none;
+    box-shadow:none;
 }
 
 #afui.win8 .button {
@@ -287,15 +283,42 @@ margin-left:10px;
     border:none;    
 }
 
-#afui.win8 .button-grouped .button{
-    border:2px solid #fff;
+#afui.win8 .button-grouped > .button{
+    border:3px solid #fff;
+    border-right:0;
 }
 
-#afui.win8 .button-grouped > .button:first-child, #afui.win8 .button-grouped > .button:last-child {
+#afui.win8 .button-grouped > .button:last-child {
+    border-right:3px solid #fff;
+}
+
+#afui.win8 .button-grouped > .button:first-child, 
+#afui.win8 .button-grouped > .button:last-child {
     border-radius:0; 
-    border:2px solid #fff;
 }
 
+#afui.win8 .button-grouped.vertical >.button{
+    border:3px solid #fff;
+    border-bottom:0;
+}
+
+#afui.win8 .button-grouped.vertical > .button:last-child {
+    border-bottom:3px solid #fff;
+}
+
+#afui.win8 > #header .button-grouped > .button{
+    border-color: #fff;
+}
+
+#afui.win8 > #header .button-grouped > .button.pressed{
+    background:#00ABA9;
+}
+
+#afui.win8.light .button-grouped > .button, 
+#afui.win8.light .button-grouped.vertical > .button, 
+#afui.win8.light > #header .button-grouped > .button{
+    border-color: #111;
+}
 
 #afui.win8 #menu {
   display: none;
@@ -400,26 +423,23 @@ margin-left:10px;
 
 #afui.win8 #menu .list > li > a {
     color:inherit;
-  }
-
+}
 
 @media handheld, only screen and (min-width: 768px){
 
 	#afui.win8 #navbar footer #metroMenu {
 		display:none;
 	}
-
 	#afui.win8 #navbar {
 		-webkit-transform:translate3d(0,0,0) !important;
 		transform:translate(0,0) !important;
 	}
 	#afui.win8 #menu  {
 		background:inherit;
-    color:inherit;
-    font-size:18px;
+        color:inherit;
+        font-size:18px;
 	}
-
-  #afui.win8 #menu .list > li > a:after{
-    margin-top:-11px;
-  }
+    #afui.win8 #menu .list > li > a:after{
+        margin-top:-11px;
+    }
 }

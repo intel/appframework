@@ -6,25 +6,24 @@
   width: device-width;
 }
 
-
 #afui {
     background:white;
     color:#53575E;
 }
-
 
 #afui > #header{
     background:#0088D1;
     border:none;
     border-bottom:1px solid #0088D1;
     color:white;
- }
+}
 
 #afui  #header h1 {
     text-shadow:none;
     width:45%;
 }
- #afui #backButton {
+
+#afui #backButton {
     background:rgba(249,249,249,1);
     color:#fff;
     display: block;
@@ -79,7 +78,6 @@
     background-color: transparent;
 }
 
-
 #afui > #navbar {
     background:#0088D1;
     border:none;
@@ -90,11 +88,11 @@
 #afui #navbar a {
  
 }
- #afui #navbar a.pressed {
+
+#afui #navbar a.pressed {
     border-radius:0;    
     background:#00AEEF;
- }
-
+}
 
 #afui #navbar .icon.pressed:before {
     color:inherit;
@@ -105,18 +103,18 @@
     border:none;
 }
 
- #afui .list {
+#afui .list {
     background:inherit;
     color:inherit;
     border-color:#303030;
     font-weight:normal;
- }
+}
 
- #afui .af-badge {
+#afui .af-badge {
     box-shadow:none;
- }
+}
 
- #afui .list .divider { color:black; }
+#afui .list .divider { color:black; }
 
 #afui .panel {
     color:inherit;
@@ -198,14 +196,12 @@
 
 #afui .button {
     border-radius:0;
-    text-shadow:none !important;
-    
+    text-shadow:none;
 }
 
 .list > li > a:after{
     color:#0088D1;
 }
-
 
 #afui .button.pressed {
    
@@ -218,7 +214,6 @@
 #afui .button.next {
     border:none;   
 }
-
 
 #afui .button.previous::after {
     color:black;
@@ -274,7 +269,6 @@
     background-color: transparent;
 }
 
-
 #afui .afPopup {
     display: block;
     width: 100%;
@@ -299,7 +293,7 @@
     color:inherit;
 }
 
-#afui    #af_actionsheet a{
+#afui #af_actionsheet a{
     border-radius:0;
     -webkit-border-radius:0;
     color:black;
