@@ -33,6 +33,11 @@
     color:#000;
 }
 
+#afui.win8 #header .button {
+    color: inherit;
+    border-color:transparent;
+    font-size:14px;
+}
 
 #afui.win8 > #header #menubadge {
 	display:none;
@@ -278,7 +283,7 @@
     border:none;    
 }
 
-#afui.win8 .button-grouped .button{
+#afui.win8 .button-grouped > .button{
     border:3px solid #fff;
     border-right:0;
 }
@@ -287,11 +292,12 @@
     border-right:3px solid #fff;
 }
 
-#afui.win8 .button-grouped > .button:first-child, #afui.win8 .button-grouped > .button:last-child {
+#afui.win8 .button-grouped > .button:first-child, 
+#afui.win8 .button-grouped > .button:last-child {
     border-radius:0; 
 }
 
-#afui.win8 .button-grouped.vertical .button{
+#afui.win8 .button-grouped.vertical >.button{
     border:3px solid #fff;
     border-bottom:0;
 }
@@ -300,7 +306,17 @@
     border-bottom:3px solid #fff;
 }
 
-#afui.win8.light .button-grouped .button, #afui.win8.light .button-grouped.vertical .button{
+#afui.win8 > #header .button-grouped > .button{
+    border-color: #fff;
+}
+
+#afui.win8 > #header .button-grouped > .button.pressed{
+    background:#00ABA9;
+}
+
+#afui.win8.light .button-grouped > .button, 
+#afui.win8.light .button-grouped.vertical > .button, 
+#afui.win8.light > #header .button-grouped > .button{
     border-color: #111;
 }
 

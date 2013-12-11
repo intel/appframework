@@ -191,7 +191,7 @@
 
 #afui .button {
     border-radius:0;
-    text-shadow:none !important;
+    text-shadow:none;
 }
 
 #afui .list > li > a:after{

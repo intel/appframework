@@ -67,6 +67,7 @@
     color:#fff;
     text-shadow:0 -1px 0 #333;
     background-color:#476999;
+    background-image: none !important;
     border:1px solid;
     border-color:#375073 #375073 #375073 transparent;
     height:32px;
@@ -88,6 +89,19 @@
     border-color:transparent transparent #9CABC0 transparent;
     box-shadow:1px -1px 0 #375073 inset;
     -ms-transform:rotate(45deg); -moz-transform:rotate(45deg); -webkit-transform:rotate(45deg); transform:rotate(45deg);
+}
+
+#afui.ios #header .button {
+    color:#fff;
+    text-shadow:0 -1px 0 #333;
+    background-color:#476999;
+    border:1px solid #375073;
+    box-shadow:0 1px 0 #9CABC0;
+    background-image:linear-gradient(to bottom, #9CABC0 0%, #6E84A2 50%, #476999 51%);
+}
+
+#afui.ios #header .button.pressed {
+    background-image:linear-gradient(to bottom, #6E84A2 0%, #476999 50%, #274979 51%);
 }
 
 #afui.ios #menu .list li, 

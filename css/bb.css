@@ -98,6 +98,13 @@
     transform: rotate(10deg);
 }
 
+#afui.bb #header .button {
+    color:#fff;
+    background:none;
+    text-shadow:0 -1px 0 #333;
+    border-color:transparent;
+}
+
 #afui.bb #navbar {
     border:none;
     border-radius:0px;
@@ -160,9 +167,13 @@
 #afui.bb .button-grouped *,
 #afui.bb .button-grouped > .button:first-child,
 #afui.bb .button-grouped.vertical *,
-#afui.bb .button-grouped.vertical >  .button:last-child 
-{
+#afui.bb .button-grouped.vertical >  .button:last-child, 
+#afui.bb > #header .button-grouped > .button {
     border-color:#ccc;
+}
+
+#afui.bb > #header .button-grouped > .button.pressed {
+    background:#07a;
 }
 
 #afui.bb .panel {

@@ -16,7 +16,10 @@
 }
 
 #afui.ios7 #header .button {
-    border: 1px solid transparent !important; 
+    color:rgba(82,155,234,255);
+    border-color:transparent;
+    font-size:14px;
+    font-weight:normal;
 }
 
 #afui.ios7 #header h1 {
@@ -166,12 +169,13 @@
 #afui.ios7 .button-grouped * ,
 #afui.ios7 .button-grouped >  .button:first-child,
 #afui.ios7 .button-grouped.vertical * ,
-#afui.ios7 .button-grouped.vertical >  .button:last-child 
-{
+#afui.ios7 .button-grouped.vertical >  .button:last-child, 
+#afui.ios7 #header .button-grouped > .button {
     border-color:rgba(82,155,234,255);
 }
 
-#afui.ios7 .button-grouped .button.pressed {
+#afui.ios7 .button-grouped > .button.pressed ,
+#afui.ios7 #header .button-grouped > .button.pressed{
     color:white;
     background:rgba(82,155,234,255);
 }

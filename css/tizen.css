@@ -26,6 +26,16 @@
     border-color:#e9e6df;
 }
 
+#afui.tizen #header .button {
+    color: inherit;
+    border-color:transparent;
+    font-size:14px;
+}
+
+#afui.tizen #header .button-grouped>.button {
+    border-color:#aaa;
+}
+
 #afui.tizen > #navbar {
     box-shadow: none;
     background: none;
