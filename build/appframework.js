@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-12-05 */
+/*! intel-appframework - v2.1.0 - 2013-12-09 */
 
 /**
  * App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -942,10 +942,10 @@ if (!window.af || typeof(af) !== "function") {
                         return this;
                     }
                     var classList = this[i].className;
-					//SGV LINK EVENT
-					if (typeof this[i].className == "object") {
-						classList = " ";
-					}
+                    //SGV LINK EVENT
+                    if (typeof this[i].className == "object") {
+                        classList = " ";
+                    }
                     name.split(/\s+/g).forEach(function(cname) {
                         classList = classList.replace(classRE(cname), " ");
                     });
@@ -1046,7 +1046,7 @@ if (!window.af || typeof(af) !== "function") {
                     return this;
                 if ($.isArray(element) || $.isObject(element))
                     element = $(element);
-                var i;
+                var i, node;
 
 
                 for (i = 0; i < this.length; i++) {
@@ -1058,10 +1058,15 @@ if (!window.af || typeof(af) !== "function") {
                         if (obj == nundefined || obj.length === 0) {
                             obj = document.createTextNode(element);
                         }
-                        if (obj.nodeName != nundefined && obj.nodeName.toLowerCase() == "script" && (!obj.type || obj.type.toLowerCase() === 'text/javascript')) {
-                            window['eval'](obj.innerHTML);
-                        } else if (obj instanceof $afm) {
-                            _insertFragments(obj, this[i], insert);
+                        if (obj instanceof $afm) {
+                            for (var k=0,lenk=obj.length; k<lenk; k++) {
+                                node = obj[k];
+                                if (node.nodeName != nundefined && node.nodeName.toLowerCase() == "script" && (!node.type || node.type.toLowerCase() === 'text/javascript')) {
+                                    window['eval'](node.innerHTML);
+                                } else {
+                                    _insertFragments($(node), this[i], insert);
+                                }
+                            }   
                         } else {
                             insert != nundefined ? this[i].insertBefore(obj, this[i].firstChild) : this[i].appendChild(obj);
                         }
@@ -1602,7 +1607,7 @@ if (!window.af || typeof(af) !== "function") {
             }
             var callbackName = 'jsonp_callback' + (++_jsonPID);
             var abortTimeout = "",
-                context;
+                context, callback;
             var script = document.createElement("script");
             var abort = function() {
                 $(script).remove();
@@ -1615,7 +1620,18 @@ if (!window.af || typeof(af) !== "function") {
                 delete window[callbackName];
                 options.success.call(context, data);
             };
-            script.src = options.url.replace(/=\?/, '=' + callbackName);
+            if (options.url.indexOf('callback=?') !== -1) {
+                script.src = options.url.replace(/=\?/, '=' + callbackName);
+            } else {
+                callback = options.jsonp ? options.jsonp : 'callback';
+                if (options.url.indexOf("?") === -1) {
+                    options.url += ("?" + callback + '=' + callbackName);
+                }
+                else {
+                    options.url += ("&" + callback + '=' + callbackName);
+                }
+                script.src = options.url;
+            }
             if (options.error) {
                 script.onerror = function() {
                     clearTimeout(abortTimeout);
@@ -2225,7 +2241,7 @@ if (!window.af || typeof(af) !== "function") {
                 set.push(handler);
                 element.addEventListener(handler.e, proxyfn, false);
             });
-            //element=null;
+            element=null;
         }
 
         /**
@@ -2266,7 +2282,7 @@ if (!window.af || typeof(af) !== "function") {
         * @title $().bind(event,callback)
         */
         $.fn.bind = function(event, callback) {
-            for (var i = 0; i < this.length; i++) {
+            for (var i = 0, len = this.length; i < len; i++) {
                 add(this[i], event, callback);
             }
             return this;
@@ -2284,7 +2300,7 @@ if (!window.af || typeof(af) !== "function") {
         * @title $().unbind(event,[callback]);
         */
         $.fn.unbind = function(event, callback) {
-            for (var i = 0; i < this.length; i++) {
+            for (var i = 0, len = this.length; i < len; i++) {
                 remove(this[i], event, callback);
             }
             return this;
@@ -2385,10 +2401,13 @@ if (!window.af || typeof(af) !== "function") {
                     };
                 });
         }
-        $.fn.delegate = function(selector, event,data, callback) {
-
-            for (var i = 0; i < this.length; i++) {
-                addDelegate(this[i],event,callback,selector,data)
+        $.fn.delegate = function(selector, event, data, callback) {
+            if ($.isFunction(data)) {
+                callback = data;
+                data = null;
+            }
+            for (var i = 0, len = this.length; i < len; i++) {
+                addDelegate(this[i],event,callback,selector,data);
             }
             return this;
         };
@@ -2407,7 +2426,7 @@ if (!window.af || typeof(af) !== "function") {
         * @title $().undelegate(selector,event,[callback]);
         */
         $.fn.undelegate = function(selector, event, callback) {
-            for (var i = 0; i < this.length; i++) {
+            for (var i = 0, len = this.length; i < len; i++) {
                 remove(this[i], event, callback, selector);
             }
             return this;
@@ -2427,10 +2446,10 @@ if (!window.af || typeof(af) !== "function") {
         * @return {Object} appframework object
         * @title $().on(event,selector,[data],callback);
         */
-        $.fn.on = function(event, selector,data, callback) {
-            if(!$.isObject(data)){
-                callback=data;
-                data=null;
+        $.fn.on = function(event, selector, data, callback) {
+            if ($.isFunction(data)) {
+                callback = data;
+                data = null;
             }
 
             return selector === nundefined || $.isFunction(selector) ? this.bind(event, selector) : this.delegate(selector, event, data,callback);
@@ -2468,7 +2487,7 @@ if (!window.af || typeof(af) !== "function") {
             if (typeof event == 'string')
                 event = $.Event(event, props);
             event.data = data;
-            for (var i = 0; i < this.length; i++) {
+            for (var i = 0, len = this.length; i < len; i++) {
                 this[i].dispatchEvent(event);
             }
             return this;

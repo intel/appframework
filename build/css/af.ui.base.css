@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-12-05 */
+/*! intel-appframework - v2.1.0 - 2013-12-09 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -205,11 +205,12 @@ body {
 #afui #navbar {
     
     
-    z-index:1000;
+    z-index:180;
     height:49px;
     display:block;
     left:0;
     right:0;
+    position:relative;
     padding:0 3px;
 }
 
@@ -269,8 +270,7 @@ body {
 #afui > #menu.tabletMenu {
     z-index:1;
     width:200px;
-    bottom:0;
-    height:100%;
+    bottom:0;    
     display:none;
     position:absolute; top:0; left:0;
     border-right: 1px solid rgba(128,128,128,0.5);
@@ -469,6 +469,7 @@ body {
 
 #afui_mask { position:absolute;top:45%;z-index:999999; }
 
+.afui_panel_mask { position:absolute;top:0;bottom:0;left:0;right:0;z-index:2000;background-color:rgba(0,0,0,0.1);display:none}
 
 #afui .hasMenu{
     left:0;

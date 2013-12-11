@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-12-05 */
+/*! intel-appframework - v2.1.0 - 2013-12-09 */
 
 /**
  * appframework.ui - A User Interface library for App Framework applications
@@ -171,6 +171,7 @@
         menuAnimation: null,
         togglingSideMenu: false,
         sideMenuWidth: "200px",
+        handheldMinWidth: "768",
         trimBackButtonText: true,
         useOSThemes: true,
         lockPageBounce: false,
@@ -617,9 +618,18 @@
             var menu = $.query("#menu");
             var asideMenu= $.query("#aside_menu");
             var els = $.query("#content,  #header, #navbar");
+            var panelMask = $.query(".afui_panel_mask");
             time = time || this.transitionTime;
             var open = this.isSideMenuOn();
             var toX=aside?"-"+that.sideMenuWidth:that.sideMenuWidth;
+            // add panel mask to block when side menu is open for phone devices
+            if(panelMask.length === 0 && window.innerWidth < $.ui.handheldMinWidth){
+                 els.append('<div class="afui_panel_mask"></div>');
+                 panelMask = $.query(".afui_panel_mask");
+                 $(".afui_panel_mask").bind("click", function(){
+                     $.ui.toggleSideMenu(false);
+                 });
+            }
             //Here we need to check if we are toggling the left to right, or right to left
             var menuPos=this.getSideMenuPosition();
             if(open&&!aside&&menuPos<0)
@@ -638,7 +648,10 @@
                     complete: function(canceled) {
                         that.togglingSideMenu = false;
                         els.vendorCss("Transition", "");
-                        if (callback) callback(canceled);                        
+                        if (callback) callback(canceled); 
+                        if(panelMask.length !== 0 && window.innerWidth < $.ui.handheldMinWidth){
+                            panelMask.show();
+                        }
                     }
                 });
 
@@ -655,6 +668,9 @@
                         if (callback) callback(canceled);
                         menu.hide();
                         asideMenu.hide();
+                        if(panelMask.length !== 0 && window.innerWidth < $.ui.handheldMinWidth){
+                            panelMask.hide();
+                        }                        
                     }
                 });
             }
@@ -680,8 +696,7 @@
                 this.toggleSideMenu(false, function(canceled) {
                     if (!canceled) els.removeClass("hasMenu");
                 });
-            } else els.removeClass("hasMenu");
-            $.query("#menu").removeClass("tabletMenu");
+            } else els.removeClass("hasMenu");            
         },
         /**
          * Enables the side menu if it has been disabled
@@ -691,8 +706,7 @@
         * @title $.ui.enableSideMenu();
         */
         enableLeftSideMenu: function() {
-            $.query("#content, #header, #navbar").addClass("hasMenu");
-            $.query("#menu").addClass("tabletMenu");
+            $.query("#content, #header, #navbar").addClass("hasMenu");            
         },
         enableSideMenu:function(){
             return this.enableLeftSideMenu();
@@ -713,7 +727,6 @@
                     if (!canceled) els.removeClass("hasMenu");
                 });
             } else els.removeClass("hasMenu");
-            $.query("#menu").removeClass("tabletMenu");
         },
         /**
          * Enables the side menu if it has been disabled
@@ -723,8 +736,7 @@
         * @title $.ui.enableRightSideMenu();
         */
         enableRightSideMenu: function() {
-            $.query("#content, #header, #navbar").addClass("hasMenu");
-            $.query("#menu").addClass("tabletMenu");
+            $.query("#content, #header, #navbar").addClass("hasMenu");            
         },        
         /**
          *
@@ -1989,8 +2001,9 @@
                         $.query("#afui #header").addClass("hasMenu"+splitViewClass);
                         $.query("#afui #content").addClass("hasMenu"+splitViewClass);
                         $.query("#afui #navbar").addClass("hasMenu"+splitViewClass);
-                        $.query("#afui #menu").addClass("tabletMenu"+splitViewClass);
+                        
                     }
+                    $.query("#afui #menu").addClass("tabletMenu");
                     //go to activeDiv
                     var firstPanelId = that.getPanelId(defaultHash);
                     //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
