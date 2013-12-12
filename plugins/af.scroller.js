@@ -194,7 +194,7 @@
                 var that = this;
                 var orientationChangeProxy = function () {
                     //no need to readjust if disabled...
-                    if (that.eventsActive||!$.feat.nativeTouchScroll) that.adjustScroll();
+                    if (that.eventsActive&&!$.feat.nativeTouchScroll) that.adjustScroll();
                 };
                 this.afEl.bind('destroy', function () {
                     that.disable(true); //with destroy notice
