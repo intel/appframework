@@ -603,25 +603,24 @@ body {
   width: device-width;
 }
 
-
 #afui {
     background:white;
     color:#53575E;
 }
-
 
 #afui > #header{
     background:#0088D1;
     border:none;
     border-bottom:1px solid #0088D1;
     color:white;
- }
+}
 
 #afui  #header h1 {
     text-shadow:none;
     width:45%;
 }
- #afui #backButton {
+
+#afui #backButton {
     background:rgba(249,249,249,1);
     color:#fff;
     display: block;
@@ -676,7 +675,6 @@ body {
     background-color: transparent;
 }
 
-
 #afui > #navbar {
     background:#0088D1;
     border:none;
@@ -687,11 +685,11 @@ body {
 #afui #navbar a {
  
 }
- #afui #navbar a.pressed {
+
+#afui #navbar a.pressed {
     border-radius:0;    
     background:#00AEEF;
- }
-
+}
 
 #afui #navbar .icon.pressed:before {
     color:inherit;
@@ -702,18 +700,18 @@ body {
     border:none;
 }
 
- #afui .list {
+#afui .list {
     background:inherit;
     color:inherit;
     border-color:#303030;
     font-weight:normal;
- }
+}
 
- #afui .af-badge {
+#afui .af-badge {
     box-shadow:none;
- }
+}
 
- #afui .list .divider { color:black; }
+#afui .list .divider { color:black; }
 
 #afui .panel {
     color:inherit;
@@ -795,14 +793,12 @@ body {
 
 #afui .button {
     border-radius:0;
-    text-shadow:none !important;
-    
+    text-shadow:none;
 }
 
 .list > li > a:after{
     color:#0088D1;
 }
-
 
 #afui .button.pressed {
    
@@ -815,7 +811,6 @@ body {
 #afui .button.next {
     border:none;   
 }
-
 
 #afui .button.previous::after {
     color:black;
@@ -871,7 +866,6 @@ body {
     background-color: transparent;
 }
 
-
 #afui .afPopup {
     display: block;
     width: 100%;
@@ -896,7 +890,7 @@ body {
     color:inherit;
 }
 
-#afui    #af_actionsheet a{
+#afui #af_actionsheet a{
     border-radius:0;
     -webkit-border-radius:0;
     color:black;
@@ -1224,7 +1218,6 @@ body {
 	font-weight:bold;
 	color:#000;
 	text-align:center;
-	text-shadow:0 1px 0 #fff;
 	vertical-align:top;
 	cursor:pointer;
 	background-color:#eee;
@@ -1284,11 +1277,20 @@ body {
 	border-radius: 0;
 	box-shadow:none;
 }
-#afui .button-grouped { display:inline-block; }
+
+#afui #header .button-grouped>.button {
+	margin:0;
+    border-color:#fff;
+}
+
+#afui .button-grouped { 
+	display:inline-block;
+	margin: 5px;
+}
 #afui .button-grouped * {
 	border-radius:0px;
 	float:left;
-	border:0px;
+	border-left:0px solid transparent;
 	border-right: 1px solid #666;
 	border-bottom: 1px solid #666;
 	border-top: 1px solid #666;
@@ -1333,20 +1335,21 @@ body {
 	display:block;
 	float:none;
 	width:100%;
-	border:0px;
 	border-left: 1px solid #666;
 	border-right: 1px solid #666;
 	border-top: 1px solid #666;
+    border-bottom: 0px solid #666;
 }
 
 #afui .button-grouped.vertical > .button:first-child {
-	border-left: 1px solid #666;
 	border-top-left-radius: 6px;
 	border-top-right-radius: 6px;
 	border-bottom-left-radius:0px;
+    border-bottom-right-radius:0px;
 }
 #afui .button-grouped.vertical > .button:last-child {
 	border-top-right-radius:0px;
+    border-top-left-radius:0px;
 	border-bottom-right-radius: 6px;
 	border-bottom-left-radius: 6px;
 	border-bottom:1px solid #666;
@@ -1399,14 +1402,25 @@ body {
 }
 
 #afui #header .button {
-	font-size:12px;
-	padding:7px ;
-	height:32px;
-	margin-top:5px;
+    color: #fff;
+    background:none;
+    border-color: transparent;
+ 	font-size:12px;
+	padding:7px;
+ 	height:32px;
+	margin:5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
-
-
-
+ 
+#header .button.icon:before{
+    padding-left:6px;
+}
+ 
+#afui #backButton {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
 /*src/badges.css*/
 #afui .af-badge {
@@ -1742,13 +1756,21 @@ color:inherit;
 	background:#FDFDFD;
 	color:#000;
 }
+
 #afui.android > #header {
     background:inherit;
     color:inherit;
     border-color:#33B5E5;
 }
-#afui.android #backButton
-{
+
+#afui.android #header .button {
+    color: inherit;
+    background:none;
+    font-size:14px;
+    box-shadow:none;
+}
+
+#afui.android #backButton{
     background: inherit;
     color:inherit;
 }
@@ -1761,48 +1783,48 @@ color:inherit;
     border-color:black;
 }
 
-
- #afui.android > #navbar {
+#afui.android > #navbar {
     box-shadow: none;
  	background:inherit;
  	border-top:2px solid #33B5E5;
     border-bottom:none;
     padding:0;
- }
+}
 
 #afui.android #navbar a {
 	color:inherit;
     top:0px;
 }
- #afui.android #navbar a.pressed {
+
+#afui.android #navbar a.pressed {
  	border:0px;
  	border-top:4px solid #33B5E5;
  	border-radius:0px;
  	background:none;
- }
+}
 
 #afui.android #navbar .icon.pressed:before {
 	color:inherit;
 }
 
-
 #afui.android .af-badge {
 	border:none;
 }
+
 #afui.android #content,#afui.android #content > .panel {
  	background:inherit;
  	color:inherit;
- }
+}
 
- #afui.android .list {
+#afui.android .list {
  	background:inherit;
  	color:inherit;
  	border-color:#303030;
- }
+}
 
- #afui.android .list .divider {	color:black; }
+#afui.android .list .divider {	color:black; }
 
- #afui.android .panel h2 { color:inherit; }
+#afui.android .panel h2 { color:inherit; }
 
 
 #afui.android .collapsed:after {border-top: 6px solid;}
@@ -1889,11 +1911,12 @@ color:inherit;
 }
 
 #afui.android.light .button {
-  background:#D1D1D1;
-  border-color:#D1D1D1;
+    background:#eee;
+    border-color:#D1D1D1;
 }
 
-#afui.android .button.pressed {
+#afui.android .button.pressed,
+#afui.android > #header .button-grouped > .button.pressed {
 	background:#33B5E5;
 	border-color:#33B5E5;
 }
@@ -1916,8 +1939,24 @@ color:inherit;
     border-color:transparent;
 }
 
-#afui.android .button-grouped * { border-right:1px solid rgba(255,255,255,.25); }
-#afui.android .button-grouped > .button:last-child, #afui.android .button-grouped.vertical * { border-right:none; }
+#afui.android > #header .button-grouped > .button {
+    border-color:#777;
+}
+
+#afui.android .button-grouped * { 
+    border:1px solid rgba(255,255,255,.25);
+    border-left-width:0;
+    box-shadow:none;
+}
+
+#afui.android .button-grouped.vertical * {
+    border-left:1px solid rgba(255,255,255,.25);
+    border-bottom-width:0;
+}
+
+#afui.android .button-grouped.vertical .button:last-child {
+    border-bottom:1px solid rgba(255,255,255,.25);
+}
 
 #afui.android .afPopup {
     display: block;
@@ -2035,13 +2074,18 @@ color:inherit;
     color:#000;
 }
 
+#afui.win8 #header .button {
+    color: inherit;
+    border-color:transparent;
+    font-size:14px;
+}
 
 #afui.win8 > #header #menubadge {
 	display:none;
 }
 
 #afui.win8 #backButton.pressed {
-  background:inherit;
+    background:inherit;
 }
 
 #afui.win8 #backButton {
@@ -2064,7 +2108,6 @@ color:inherit;
   -webkit-font-smoothing: antialiased;
 }
 
-
 #afui.win8 #backButton::before {
   content: "\e000";
   font-size:30px;
@@ -2078,33 +2121,31 @@ color:inherit;
   transform:none;
 }
 
-
-
-
 #afui.win8 > #header h1 {
 	text-align: left;
-  color:inherit;
+    color:inherit;
 }
 
 #afui.win8 > #header{
-  border:0px;
+    border:0px;
 	background: inherit;
 	border-bottom:inherit;
-  color:inherit;
- }
+    color:inherit;
+}
 
- #afui.win8 > #navbar {
-  padding:0px;
+#afui.win8 > #navbar {
+    padding:0px;
  	background:inherit;
  	text-align: center;
  	height:65px;
  	background:rgba(33,32,33,.9);
-  border-top:none;
- }
- #afui.win8.light > #navbar{
+    border-top:none;
+}
+ 
+#afui.win8.light > #navbar{
     background:#F2F2F2;
     color:black;
-  }
+}
 
 #afui.win8 #navbar a {
   position: relative;
@@ -2121,11 +2162,12 @@ color:inherit;
   -webkit-backface-visibility: hidden;
   -webkit-perspective: 1000;
 }
+
 #afui.win8.light #navbar a {
   text-shadow: 0 0 rgba(0, 0, 0, 0);  
 }
 
- #afui.win8 #navbar .icon.pressed:before {
+#afui.win8 #navbar .icon.pressed:before {
 	background-color: #00ABA9;
 }
 
@@ -2143,27 +2185,26 @@ color:inherit;
     border: 3px solid #000;
 }
 
-  #afui.win8 #navbar a:not(:last-of-type){
+#afui.win8 #navbar a:not(:last-of-type){
   	border:none;
-  }
-
+}
 
 #afui.win8 .af-badge {
 	border:none;
 }
+
 #afui.win8 #content,#afui.win8 #content > .panel {
  	background:inherit;
  	color:inherit;
- }
+}
 
- #afui.win8 .list {
+#afui.win8 .list {
  	background:inherit;
  	color:inherit;
  	border-color:#303030;
+}
 
- }
-
- #afui.win8 .list .divider,  #afui.win8 #menu.tabletMenu .list .divider  {
+#afui.win8 .list .divider,  #afui.win8 #menu.tabletMenu .list .divider  {
  	background:#00ABA9;
  	padding:5px;
     display:inline;
@@ -2172,22 +2213,21 @@ color:inherit;
  	border-top:none;
  	border-bottom:none;
     color:inherit;
- }
+}
 
- #afui.win8 .list li {
+#afui.win8 .list li {
  	border-top:none;
  	border-bottom:none;
     font-size:20px;
- }
- #afui.win8 .panel h2 {
+}
+
+#afui.win8 .panel h2 {
  	color:inherit;
     font-weight:normal;
     font-size:34px;
     line-height:34px;
     height:auto;
- }
-
-
+}
 
 #afui.win8 .collapsed:after {border-top: 6px solid;}
 #afui.win8 .collapsed:before {border:2px solid;}
@@ -2197,19 +2237,15 @@ color:inherit;
 #afui.win8 .collapsed:before,#afui.win8 .expanded:before {
     border-color: inherit;
 }
+
 #afui.win8 .collapsed:after,
 #afui.win8 .expanded:after{
     border-top-color:inherit;
     border-top-color:inherit;
 }
 
-
-
-
-
 #afui.win8 .afScrollbar {background:white !important;}
 #afui.win8.light .afScrollbar {background:black !important;}
-
 
 #afui.win8 select, #afui.win8 textarea, #afui.win8 input[type="text"], #afui.win8 input[type="search"], #afui.win8 input[type="password"], #afui.win8 input[type="datetime"], #afui.win8 input[type="datetime-local"], #afui.win8 input[type="date"], #afui.win8 input[type="month"], #afui.win8 input[type="time"], #afui.win8 input[type="week"], #afui.win8 input[type="number"], #afui.win8 input[type="email"], #afui.win8 input[type="url"], #afui.win8 input[type="tel"], #afui.win8 input[type="color"], #afui.win8 .input-group {
   	background:black;
@@ -2219,7 +2255,6 @@ color:inherit;
 #afui.win8.light select, #afui.win8.light textarea, #afui.win8.light input[type="text"], #afui.win8.light input[type="search"], #afui.win8.light input[type="password"], #afui.win8.light input[type="datetime"], #afui.win8.light input[type="datetime-local"], #afui.win8.light input[type="date"], #afui.win8.light input[type="month"], #afui.win8.light input[type="time"], #afui.win8.light input[type="week"], #afui.win8.light input[type="number"], #afui.win8.light input[type="email"], #afui.win8.light input[type="url"], #afui.win8.light input[type="tel"], #afui.win8.light input[type="color"], #afui.win8.light .input-group {
     background:white;
 }
-
 
 #afui.win8 input.toggle+label:after {
 	color:inherit;
@@ -2251,9 +2286,9 @@ color:inherit;
 }
 
 #afui.win8 #menu .list .divider {
-padding:4px;
-line-height:30px;
-margin-left:10px;
+    padding:4px;
+    line-height:30px;
+    margin-left:10px;
 }
 
 #afui.win8 #menu .list {
@@ -2261,7 +2296,7 @@ margin-left:10px;
 }
 
 #afui.win8 #menu .list li,#afui.win8 #menu .list .divider {
-		box-shadow:none;
+    box-shadow:none;
 }
 
 #afui.win8 .button {
@@ -2289,15 +2324,42 @@ margin-left:10px;
     border:none;    
 }
 
-#afui.win8 .button-grouped .button{
-    border:2px solid #fff;
+#afui.win8 .button-grouped > .button{
+    border:3px solid #fff;
+    border-right:0;
 }
 
-#afui.win8 .button-grouped > .button:first-child, #afui.win8 .button-grouped > .button:last-child {
+#afui.win8 .button-grouped > .button:last-child {
+    border-right:3px solid #fff;
+}
+
+#afui.win8 .button-grouped > .button:first-child, 
+#afui.win8 .button-grouped > .button:last-child {
     border-radius:0; 
-    border:2px solid #fff;
 }
 
+#afui.win8 .button-grouped.vertical >.button{
+    border:3px solid #fff;
+    border-bottom:0;
+}
+
+#afui.win8 .button-grouped.vertical > .button:last-child {
+    border-bottom:3px solid #fff;
+}
+
+#afui.win8 > #header .button-grouped > .button{
+    border-color: #fff;
+}
+
+#afui.win8 > #header .button-grouped > .button.pressed{
+    background:#00ABA9;
+}
+
+#afui.win8.light .button-grouped > .button, 
+#afui.win8.light .button-grouped.vertical > .button, 
+#afui.win8.light > #header .button-grouped > .button{
+    border-color: #111;
+}
 
 #afui.win8 #menu {
   display: none;
@@ -2402,30 +2464,26 @@ margin-left:10px;
 
 #afui.win8 #menu .list > li > a {
     color:inherit;
-  }
-
+}
 
 @media handheld, only screen and (min-width: 768px){
 
 	#afui.win8 #navbar footer #metroMenu {
 		display:none;
 	}
-
 	#afui.win8 #navbar {
 		-webkit-transform:translate3d(0,0,0) !important;
 		transform:translate(0,0) !important;
 	}
 	#afui.win8 #menu  {
 		background:inherit;
-    color:inherit;
-    font-size:18px;
+        color:inherit;
+        font-size:18px;
 	}
-
-  #afui.win8 #menu .list > li > a:after{
-    margin-top:-11px;
-  }
+    #afui.win8 #menu .list > li > a:after{
+        margin-top:-11px;
+    }
 }
-
 
 /*src/bb.css*/
 #afui.bb {
@@ -2434,14 +2492,14 @@ margin-left:10px;
 }
 
 #afui.bb #header {
-background:#00609E;
-background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
-background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
-background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
-background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
-border-style:solid;
-border-width:1px;
-border-color:#009CE1 transparent #004E92 transparent;
+    background:#00609E;
+    background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
+    background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    border-style:solid;
+    border-width:1px;
+    border-color:#009CE1 transparent #004E92 transparent;
 }
 
 #afui.bb #header h1 {
@@ -2452,7 +2510,6 @@ border-color:#009CE1 transparent #004E92 transparent;
 #afui.bb .list {
     font-weight: normal;
 }
-
 
 #afui.bb #backButton {
     display: block;
@@ -2477,7 +2534,6 @@ border-color:#009CE1 transparent #004E92 transparent;
     width:50px;
     padding:0 !important;
     margin:0 !important;
-
 }
 
 #afui.bb #backButton::before {
@@ -2489,7 +2545,7 @@ border-color:#009CE1 transparent #004E92 transparent;
     text-align: center;
     border-radius: 0;
     border: none;
-    border-color: 0;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
@@ -2509,7 +2565,7 @@ border-color:#009CE1 transparent #004E92 transparent;
 }
 
 #afui.bb #backButton::after {
- z-index: -1;
+    z-index: -1;
     font-size:24px;
     content: ' ';
     position: absolute;
@@ -2524,14 +2580,20 @@ border-color:#009CE1 transparent #004E92 transparent;
     text-align: center;
     border-radius: 0;
     border: none;
-    border-color: 0;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: rotate(10deg);
     transform: rotate(10deg);
 }
 
+#afui.bb #header .button {
+    color:#fff;
+    background:none;
+    text-shadow:0 -1px 0 #333;
+    border-color:transparent;
+}
+
 #afui.bb #navbar {
-    background:#1e1e1e;;
     border:none;
     border-radius:0px;
     background:none;
@@ -2547,20 +2609,20 @@ border-color:#009CE1 transparent #004E92 transparent;
     background:#1e1e1e;
 }
 
- #afui.bb #navbar a.pressed {
+#afui.bb #navbar a.pressed {
     border:0px;
     border-top:4px solid #0aa9dc;
     border-radius:0px;
     background:#3a3a3a;
     color:white;
- }
+}
 
- #afui.bb #navbar a:not(:last-of-type):not(.pressed){
+#afui.bb #navbar a:not(:last-of-type):not(.pressed){
     border-right:1px solid black;
- }
+}
 
 #afui.bb #navbar .icon.pressed:before {
-color: white;
+    color: white;
 }
 
 #afui.bb #menu {
@@ -2589,8 +2651,17 @@ color: white;
     border-bottom-color :#ccc;
 }
 
-#afui.bb .button {
-    border:1px solid #ccc;
+#afui.bb .button ,
+#afui.bb .button-grouped *,
+#afui.bb .button-grouped > .button:first-child,
+#afui.bb .button-grouped.vertical *,
+#afui.bb .button-grouped.vertical >  .button:last-child, 
+#afui.bb > #header .button-grouped > .button {
+    border-color:#ccc;
+}
+
+#afui.bb > #header .button-grouped > .button.pressed {
+    background:#07a;
 }
 
 #afui.bb .panel {
@@ -2678,8 +2749,6 @@ color: white;
      font-family:'HelveticaNeue', 'Helvetica Neue',Helvetica, Arial, sans-serif;
 }
 
-
-
 #afui.ios7 #header {
     background:rgb(249,249,249);
     color:inherit;
@@ -2688,14 +2757,16 @@ color: white;
 }
 
 #afui.ios7 #header .button {
-    border: 1px solid transparent !important; 
+    color:rgba(82,155,234,255);
+    border-color:transparent;
+    font-size:14px;
+    font-weight:normal;
 }
 
 #afui.ios7 #header h1 {
     color:inherit;
     text-shadow:none;
 }
-
 
 #afui.ios7 .panel {
     background:rgba(238,238,238,255);    
@@ -2742,15 +2813,13 @@ color: white;
     background:rgba(238,238,238,255);
     color:inherit;
     font-size: 1em;
-border-bottom:1px solid rgb(215,215,215);
-color:black;
-
+    border-bottom:1px solid rgb(215,215,215);
+    color:black;
 }
 
 #afui.ios7 #menu .list a {
     color:black;
 }
-
 
 #afui.ios7 #menu .list {
     background:white;
@@ -2835,36 +2904,16 @@ color:black;
     text-shadow:none;
 }
 
-#afui.ios7 .button-grouped * {
-    border-right: 1px solid rgba(82,155,234,255);
-    border-bottom: 1px solid rgba(82,155,234,255);
-    border-top: 1px solid rgba(82,155,234,255);
-
+#afui.ios7 .button-grouped * ,
+#afui.ios7 .button-grouped >  .button:first-child,
+#afui.ios7 .button-grouped.vertical * ,
+#afui.ios7 .button-grouped.vertical >  .button:last-child, 
+#afui.ios7 #header .button-grouped > .button {
+    border-color:rgba(82,155,234,255);
 }
 
-#afui.ios7 .button-grouped >  .button:first-child {
-    border-left: 1px solid rgba(82,155,234,255);
-}
-
-#afui.ios7  .button-grouped >.button:last-child {
-    
-}
-
-#afui.ios7 .button-grouped.vertical * {
-    border-left: 1px solid rgba(82,155,234,255);
-    border-right: 1px solid rgba(82,155,234,255);
-    border-top: 1px solid rgba(82,155,234,255);
-}
-
-#afui.ios7  .button-grouped.vertical > .button:first-child {
-    border-left: 1px solid rgba(82,155,234,255);
-}
-
-#afui.ios7 .button-grouped.vertical >  .button:last-child {
-    border-bottom:1px solid rgba(82,155,234,255);
-}
-
-#afui.ios7 .button-grouped .button.pressed {
+#afui.ios7 .button-grouped > .button.pressed ,
+#afui.ios7 #header .button-grouped > .button.pressed{
     color:white;
     background:rgba(82,155,234,255);
 }
@@ -3087,7 +3136,7 @@ color:black;
 } 
 
 #afui.ios #header h1 {
-        text-shadow: rgba(0,0,0,0.8) 0 -1px 0;
+    text-shadow: rgba(0,0,0,0.8) 0 -1px 0;
 }
 
 #afui.ios .af-badge {
@@ -3097,7 +3146,6 @@ color:black;
 }
 #afui.ios .panel {
     background:#e7e7e7;
-    
 }
 
 #afui.ios .panel h2 { color:inherit;}
@@ -3113,18 +3161,14 @@ color:black;
     border-top:1px solid #000;
 }
 
-
-
 #afui.ios #navbar a.pressed {
     background:rgba(255, 255, 255, 0.13);
     border-radius:6px;
 }
 
-
 #afui.ios #navbar .icon.pressed:before {
     color:#3a9de2;
 }
-
 
 #afui.ios > #menu.tabletMenu {
    border-right:none;
@@ -3144,6 +3188,7 @@ color:black;
     color:#fff;
     text-shadow:0 -1px 0 #333;
     background-color:#476999;
+    background-image: none !important;
     border:1px solid;
     border-color:#375073 #375073 #375073 transparent;
     height:32px;
@@ -3152,7 +3197,6 @@ color:black;
     margin:0 0 0 15px !important;
     padding-left:4px !important;
 } /* Sets up positioning of the back button which appears in the header */
-
 
 #afui.ios #backButton::before {
     z-index:-1;
@@ -3168,34 +3212,36 @@ color:black;
     -ms-transform:rotate(45deg); -moz-transform:rotate(45deg); -webkit-transform:rotate(45deg); transform:rotate(45deg);
 }
 
+#afui.ios #header .button {
+    color:#fff;
+    text-shadow:0 -1px 0 #333;
+    background-color:#476999;
+    border:1px solid #375073;
+    box-shadow:0 1px 0 #9CABC0;
+    background-image:linear-gradient(to bottom, #9CABC0 0%, #6E84A2 50%, #476999 51%);
+}
+
+#afui.ios #header .button.pressed {
+    background-image:linear-gradient(to bottom, #6E84A2 0%, #476999 50%, #274979 51%);
+}
 
 #afui.ios #menu .list li, 
 #afui.ios #menu .list .divider, 
 #afui.ios #menu .list li:first-child, 
 #afui.ios #menu  .list li:last-child {
-
     border-color:#101012;
     -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
-
 }
 
 #afui.ios #menu .list > li > a {
-    color:#ccc;
-    
+    color:#ccc;   
 }
-
-
-
 
 #afui.ios #menu .list .divider {
     background:#333;
-    color:#fff;
-    
+    color:#fff;   
 }
-
-
-
 
 #afui.ios .afPopup {
      display: block;

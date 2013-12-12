@@ -514,7 +514,7 @@
                 var that = this;
                 var orientationChangeProxy = function () {
                     //no need to readjust if disabled...
-                    if (that.eventsActive||!$.feat.nativeTouchScroll) that.adjustScroll();
+                    if (that.eventsActive&&!$.feat.nativeTouchScroll) that.adjustScroll();
                 };
                 this.afEl.bind('destroy', function () {
                     that.disable(true); //with destroy notice
@@ -3359,6 +3359,7 @@
         menuAnimation: null,
         togglingSideMenu: false,
         sideMenuWidth: "200px",
+        handheldMinWidth: "768",
         trimBackButtonText: true,
         useOSThemes: true,
         lockPageBounce: false,
@@ -3776,9 +3777,10 @@
             time = time || this.transitionTime;
             var open = this.isSideMenuOn();
 
-            if(panelMask.length === 0 && window.innerWidth < $.ui.fixedSideMenuWidth){
+            if(panelMask.length === 0 && window.innerWidth < $.ui.handheldMinWidth){
                 els.append('<div class="afui_panel_mask"></div>');
-                $(".afui_panel_mask").bind("touchend", function(){
+                panelMask = $.query(".afui_panel_mask");
+                $(".afui_panel_mask").bind("click", function(){
                     $.ui.toggleSideMenu(false);
                 });
             }
@@ -3793,7 +3795,7 @@
                         that.togglingSideMenu = false;
                         els.vendorCss("Transition", "");
                         if (callback) callback(canceled);
-                        if(window.innerWidth < $.ui.fixedSideMenuWidth){
+                        if(panelMask.length !== 0 && window.innerWidth < $.ui.handheldMinWidth){
                             panelMask.show();
                         }
                     }
@@ -3811,7 +3813,7 @@
                         that.togglingSideMenu = false;
                         if (callback) callback(canceled);
                         menu.hide();
-                        if(window.innerWidth < $.ui.fixedSideMenuWidth){
+                        if(panelMask.length !== 0 && window.innerWidth < $.ui.handheldMinWidth){
                             panelMask.hide();
                         }
                     }
