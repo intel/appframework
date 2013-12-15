@@ -984,7 +984,7 @@
          */
         setBackButtonText: function(text) {
             if(this._currentHeaderID!=="defaultHeader") return;
-            if (this.trimBackButtonText)
+            if (this.trimBackButtonText && text.length >= 7)
                 text = text.substring(0, 5) + "...";
             if (this.backButtonText.length > 0) $.query("#header header:not(.ignore) #backButton").html(this.backButtonText);
             else $.query("#header header:not(.ignore)  #backButton").html(text);
