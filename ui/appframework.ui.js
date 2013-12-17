@@ -615,7 +615,7 @@
                  els.append('<div class="afui_panel_mask"></div>');
                  panelMask = $.query(".afui_panel_mask");
                  $(".afui_panel_mask").bind("click", function(){
-                     $.ui.toggleSideMenu(false);
+                     $.ui.toggleSideMenu(false, null, null, aside);
                  });
             }
             //Here we need to check if we are toggling the left to right, or right to left
