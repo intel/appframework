@@ -1955,8 +1955,8 @@ if (!window.af || typeof(af) !== "function") {
          * .os.ieTouch
          * .os.supportsTouch
          * .os.playbook
-         $.os.tizen
-         * .feat.nativetouchScroll
+         * .os.tizen
+         * .feat.nativeTouchScroll
          * @api private
          */
 
