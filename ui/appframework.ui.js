@@ -584,7 +584,7 @@
             this.toggleRightSideMenu.apply(this,arguments);
         },
         toggleRightSideMenu:function(force,callback,time){
-            
+            if(!this.isAsideMenuEnabled()) return;
             return this.toggleLeftSideMenu(force,callback,time,true);
         },
         /**
@@ -598,7 +598,9 @@
          * @title $.ui.toggleSideMenu([force],[callback],[time])
          */
         toggleLeftSideMenu: function(force, callback, time, aside) {
-            if (!this.isSideMenuEnabled() || this.togglingSideMenu) return;
+            if ((!this.isSideMenuEnabled()&&!this.isAsideMenuEnabled()) || this.togglingSideMenu) return;
+
+            if(!aside&&!this.isSideMenuEnabled()) return;
 
             var that = this;
             var menu = $.query("#menu");
@@ -622,6 +624,8 @@
                 open=false;
             else if(open&&aside&&menuPos>0)
                 open=false;
+
+
             if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
                 this.togglingSideMenu = true;
                 if(!aside)
@@ -726,11 +730,19 @@
         },        
         /**
          *
-         * @title $.ui.enableSideMenu();
+         * @title $.ui.isSideMenuEnabled();
          * @api private
          */
         isSideMenuEnabled: function() {
             return $.query("#content").hasClass("hasMenu");
+        },
+        /**
+         *
+         * @title $.ui.isAsideMenuEnabled();
+         * @api private
+         */
+        isAsideMenuEnabled: function() {
+            return $.query("#content").hasClass("hasAside");
         },
         /**
          *
@@ -739,7 +751,7 @@
          */
         isSideMenuOn: function() {
             var menu = this.getSideMenuPosition() !==0 ? true : false;
-            return this.isSideMenuEnabled() && menu;
+            return (this.isSideMenuEnabled()||this.isAsideMenuEnabled) && menu;
         },
         /**
          * @title $.ui.getSideMenuPosition();
@@ -1988,6 +2000,9 @@
                         $.query("#afui #content").addClass("hasMenu"+splitViewClass);
                         $.query("#afui #navbar").addClass("hasMenu"+splitViewClass);
                         
+                    }
+                    if($.query("aside").length > 0) {
+                        $.query("#afui #header, #afui #content, #afui #navbar").addClass("hasAside");
                     }
                     $.query("#afui #menu").addClass("tabletMenu");
                     //go to activeDiv
