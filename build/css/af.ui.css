@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-12-09 */
+/*! intel-appframework - v2.1.0 - 2013-12-17 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -822,7 +822,7 @@ body {
 
 #afui .button {
     border-radius:0;
-    text-shadow:none !important;
+    text-shadow:none;
 }
 
 #afui .list > li > a:after{
@@ -1234,7 +1234,6 @@ body {
 	font-weight:bold;
 	color:#000;
 	text-align:center;
-	text-shadow:0 1px 0 #fff;
 	vertical-align:top;
 	cursor:pointer;
 	background-color:#eee;
@@ -1294,11 +1293,20 @@ body {
 	border-radius: 0;
 	box-shadow:none;
 }
-#afui .button-grouped { display:inline-block; }
+
+#afui #header .button-grouped>.button {
+	margin:0;
+    border-color:#fff;
+}
+
+#afui .button-grouped { 
+    display:inline-block;
+    margin: 5px;
+}
 #afui .button-grouped * {
 	border-radius:0px;
 	float:left;
-	border:0px;
+	border-left:0px solid transparent;
 	border-right: 1px solid #666;
 	border-bottom: 1px solid #666;
 	border-top: 1px solid #666;
@@ -1410,13 +1418,25 @@ body {
 }
 
 #afui #header .button {
-	font-size:12px;
-	padding:7px ;
-	height:32px;
-	margin-top:5px;
+    color: #fff;
+    background:none;
+    border-color: transparent;
+ 	font-size:12px;
+	padding:7px;
+ 	height:32px;
+	margin:5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
-
-
+ 
+#header .button.icon:before{
+    padding-left:6px;
+}
+ 
+#afui #backButton {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
 #afui .af-badge {
 	position:absolute;
@@ -1501,6 +1521,13 @@ body {
     background:inherit;
     color:inherit;
     border-color:#33B5E5;
+}
+
+#afui.android #header .button {
+    color: inherit;
+    background:none;
+    font-size:14px;
+    box-shadow:none;
 }
 
 #afui.android #backButton{
@@ -1645,11 +1672,12 @@ body {
 }
 
 #afui.android.light .button {
-    background:#D1D1D1;
+    background:#eee;
     border-color:#D1D1D1;
 }
 
-#afui.android .button.pressed {
+#afui.android .button.pressed,
+#afui.android > #header .button-grouped > .button.pressed {
 	background:#33B5E5;
 	border-color:#33B5E5;
 }
@@ -1672,14 +1700,19 @@ body {
     border-color:transparent;
 }
 
+#afui.android > #header .button-grouped > .button {
+    border-color:#777;
+}
+
 #afui.android .button-grouped * { 
-    border-right:1px solid rgba(255,255,255,.25);
-    border-bottom:1px solid rgba(255,255,255,.25); 
+    border:1px solid rgba(255,255,255,.25);
+    border-left-width:0;
+    box-shadow:none;
 }
 
 #afui.android .button-grouped.vertical * {
     border-left:1px solid rgba(255,255,255,.25);
-    border-bottom:0;
+    border-bottom-width:0;
 }
 
 #afui.android .button-grouped.vertical .button:last-child {
@@ -1811,6 +1844,11 @@ body {
     color:#000;
 }
 
+#afui.win8 #header .button {
+    color: inherit;
+    border-color:transparent;
+    font-size:14px;
+}
 
 #afui.win8 > #header #menubadge {
 	display:none;
@@ -2056,7 +2094,7 @@ body {
     border:none;    
 }
 
-#afui.win8 .button-grouped .button{
+#afui.win8 .button-grouped > .button{
     border:3px solid #fff;
     border-right:0;
 }
@@ -2065,11 +2103,12 @@ body {
     border-right:3px solid #fff;
 }
 
-#afui.win8 .button-grouped > .button:first-child, #afui.win8 .button-grouped > .button:last-child {
+#afui.win8 .button-grouped > .button:first-child, 
+#afui.win8 .button-grouped > .button:last-child {
     border-radius:0; 
 }
 
-#afui.win8 .button-grouped.vertical .button{
+#afui.win8 .button-grouped.vertical >.button{
     border:3px solid #fff;
     border-bottom:0;
 }
@@ -2078,7 +2117,17 @@ body {
     border-bottom:3px solid #fff;
 }
 
-#afui.win8.light .button-grouped .button, #afui.win8.light .button-grouped.vertical .button{
+#afui.win8 > #header .button-grouped > .button{
+    border-color: #fff;
+}
+
+#afui.win8 > #header .button-grouped > .button.pressed{
+    background:#00ABA9;
+}
+
+#afui.win8.light .button-grouped > .button, 
+#afui.win8.light .button-grouped.vertical > .button, 
+#afui.win8.light > #header .button-grouped > .button{
     border-color: #111;
 }
 
@@ -2294,6 +2343,13 @@ body {
     transform: rotate(10deg);
 }
 
+#afui.bb #header .button {
+    color:#fff;
+    background:none;
+    text-shadow:0 -1px 0 #333;
+    border-color:transparent;
+}
+
 #afui.bb #navbar {
     border:none;
     border-radius:0px;
@@ -2356,9 +2412,13 @@ body {
 #afui.bb .button-grouped *,
 #afui.bb .button-grouped > .button:first-child,
 #afui.bb .button-grouped.vertical *,
-#afui.bb .button-grouped.vertical >  .button:last-child 
-{
+#afui.bb .button-grouped.vertical >  .button:last-child, 
+#afui.bb > #header .button-grouped > .button {
     border-color:#ccc;
+}
+
+#afui.bb > #header .button-grouped > .button.pressed {
+    background:#07a;
 }
 
 #afui.bb .panel {
@@ -2437,7 +2497,10 @@ body {
 }
 
 #afui.ios7 #header .button {
-    border: 1px solid transparent !important; 
+    color:rgba(82,155,234,255);
+    border-color:transparent;
+    font-size:14px;
+    font-weight:normal;
 }
 
 #afui.ios7 #header h1 {
@@ -2587,12 +2650,13 @@ body {
 #afui.ios7 .button-grouped * ,
 #afui.ios7 .button-grouped >  .button:first-child,
 #afui.ios7 .button-grouped.vertical * ,
-#afui.ios7 .button-grouped.vertical >  .button:last-child 
-{
+#afui.ios7 .button-grouped.vertical >  .button:last-child, 
+#afui.ios7 #header .button-grouped > .button {
     border-color:rgba(82,155,234,255);
 }
 
-#afui.ios7 .button-grouped .button.pressed {
+#afui.ios7 .button-grouped > .button.pressed ,
+#afui.ios7 #header .button-grouped > .button.pressed{
     color:white;
     background:rgba(82,155,234,255);
 }
@@ -2866,6 +2930,7 @@ body {
     color:#fff;
     text-shadow:0 -1px 0 #333;
     background-color:#476999;
+    background-image: none !important;
     border:1px solid;
     border-color:#375073 #375073 #375073 transparent;
     height:32px;
@@ -2887,6 +2952,19 @@ body {
     border-color:transparent transparent #9CABC0 transparent;
     box-shadow:1px -1px 0 #375073 inset;
     -ms-transform:rotate(45deg); -moz-transform:rotate(45deg); -webkit-transform:rotate(45deg); transform:rotate(45deg);
+}
+
+#afui.ios #header .button {
+    color:#fff;
+    text-shadow:0 -1px 0 #333;
+    background-color:#476999;
+    border:1px solid #375073;
+    box-shadow:0 1px 0 #9CABC0;
+    background-image:linear-gradient(to bottom, #9CABC0 0%, #6E84A2 50%, #476999 51%);
+}
+
+#afui.ios #header .button.pressed {
+    background-image:linear-gradient(to bottom, #6E84A2 0%, #476999 50%, #274979 51%);
 }
 
 #afui.ios #menu .list li, 

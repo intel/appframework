@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-12-09 */
+/*! intel-appframework - v2.1.0 - 2013-12-17 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -822,7 +822,7 @@ body {
 
 #afui .button {
     border-radius:0;
-    text-shadow:none !important;
+    text-shadow:none;
 }
 
 #afui .list > li > a:after{
@@ -1234,7 +1234,6 @@ body {
 	font-weight:bold;
 	color:#000;
 	text-align:center;
-	text-shadow:0 1px 0 #fff;
 	vertical-align:top;
 	cursor:pointer;
 	background-color:#eee;
@@ -1294,11 +1293,20 @@ body {
 	border-radius: 0;
 	box-shadow:none;
 }
-#afui .button-grouped { display:inline-block; }
+
+#afui #header .button-grouped>.button {
+	margin:0;
+    border-color:#fff;
+}
+
+#afui .button-grouped { 
+    display:inline-block;
+    margin: 5px;
+}
 #afui .button-grouped * {
 	border-radius:0px;
 	float:left;
-	border:0px;
+	border-left:0px solid transparent;
 	border-right: 1px solid #666;
 	border-bottom: 1px solid #666;
 	border-top: 1px solid #666;
@@ -1410,13 +1418,25 @@ body {
 }
 
 #afui #header .button {
-	font-size:12px;
-	padding:7px ;
-	height:32px;
-	margin-top:5px;
+    color: #fff;
+    background:none;
+    border-color: transparent;
+ 	font-size:12px;
+	padding:7px;
+ 	height:32px;
+	margin:5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
-
-
+ 
+#header .button.icon:before{
+    padding-left:6px;
+}
+ 
+#afui #backButton {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
 
 #afui .af-badge {
 	position:absolute;

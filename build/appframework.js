@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-12-09 */
+/*! intel-appframework - v2.1.0 - 2013-12-17 */
 
 /**
  * App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -1957,8 +1957,8 @@ if (!window.af || typeof(af) !== "function") {
          * .os.ieTouch
          * .os.supportsTouch
          * .os.playbook
-         $.os.tizen
-         * .feat.nativetouchScroll
+         * .os.tizen
+         * .feat.nativeTouchScroll
          * @api private
          */
 

@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-12-09 */
+/*! intel-appframework - v2.1.0 - 2013-12-17 */
 
 /**
  * appframework.ui - A User Interface library for App Framework applications
@@ -28,34 +28,19 @@
         this.availableTransitions = {};
         this.availableTransitions['default'] = this.availableTransitions.none = this.noTransition;
         //setup the menu and boot touchLayer
-       
 
-        function checkNodeInserted(i) {
-            if (i.target.id === "afui") {
-                setupCustomTheme();
-                $(document).unbind("DOMNodeInserted", checkNodeInserted);
-            }
-        }
 
         if ($("#afui").length === 1) {
             setupCustomTheme();
-        } else {
-            $(document).bind("DOMNodeInserted", checkNodeInserted);
         }
 
 
-
-        if ("intel" in window){ 
-            document.addEventListener("intel.xdk.device.ready", function() {
-                that.autoBoot();
-            },true);
-        }
-        else if (document.readyState == "complete" || document.readyState == "loaded") {
+        if (document.readyState == "complete" || document.readyState == "loaded") {
             if(that.init)
                 that.autoBoot();
             else{
                 $(window).one("afui:init", function() {
-        		  that.autoBoot();  
+        		  that.autoBoot();
                 });
             }
         } else $(document).ready(function() {
@@ -68,6 +53,7 @@
                 }
             }, false);
 
+        
         if (!("intel" in window)) window.intel = {xdk:{}}, window.intel.xdk.webRoot = "";
 
          $(document).ready(function() {
@@ -83,6 +69,7 @@
                 }
                 $(document.body).prepend(afui);
             }
+            that.isIntel="intel" in window&&intel&&intel.xdk&&intel.xdk.app;
             if ($.os.supportsTouch) $.touchLayer(afui);
             setupCustomTheme();
 
@@ -104,6 +91,7 @@
         function setupCustomTheme() {
 
             if (that.useOSThemes) {
+                $("#afui").removeClass("ios,ios7,win8,tizen,bb,android,light,dark");
                 if ($.os.android) $("#afui").addClass("android");
                 else if ($.os.ie) {
                     $("#afui").addClass("win8");
@@ -986,7 +974,7 @@
          */
         setBackButtonText: function(text) {
             if(this._currentHeaderID!=="defaultHeader") return;
-            if (this.trimBackButtonText)
+            if (this.trimBackButtonText && text.length >= 7)
                 text = text.substring(0, 5) + "...";
             if (this.backButtonText.length > 0) $.query("#header header:not(.ignore) #backButton").html(this.backButtonText);
             else $.query("#header header:not(.ignore)  #backButton").html(text);
@@ -3673,7 +3661,7 @@ if (!Date.now)
                 var that = this;
                 var orientationChangeProxy = function () {
                     //no need to readjust if disabled...
-                    if (that.eventsActive||!$.feat.nativeTouchScroll) that.adjustScroll();
+                    if (that.eventsActive&&!$.feat.nativeTouchScroll) that.adjustScroll();
                 };
                 this.afEl.bind('destroy', function () {
                     that.disable(true); //with destroy notice
