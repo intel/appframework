@@ -28,7 +28,7 @@
         var $cnt=$.query("#content");
         $("#afui").bind("touchstart", function(e) {
             openState=0;
-            if (!$.ui.isSideMenuEnabled()) return true;
+            if (!$.ui.isSideMenuEnabled() && !$.ui.isAsideMenuEnabled()) return true;
             if(e.touches.length>1) return;
             startX = e.touches[0].pageX;
             startY = e.touches[0].pageY;
@@ -53,11 +53,14 @@
         $("#afui").bind("touchmove", function(e) {
             
             if(e.touches.length>1) return;
-            if (!$.ui.isSideMenuEnabled()) return true;
+            if (!$.ui.isSideMenuEnabled() && !$.ui.isAsideMenuEnabled()) return true;
             if (!$.ui.slideSideMenu||keepOpen) return true;
 
             dx = e.touches[0].pageX;
             dy = e.touches[0].pageY;
+            
+            if (!$.ui.isSideMenuEnabled() && (dx > startX)) return true;
+            if (!$.ui.isAsideMenuEnabled() && (dx < startX)) return true;
 
             if (Math.abs(dy - startY) > Math.abs(dx - startX)) return true;  
             
@@ -122,7 +125,7 @@
             e.stopPropagation();        
         });
         $("#afui").bind("touchend", function(e) {
-            if (!$.ui.isSideMenuEnabled()) return true;
+            if (!$.ui.isSideMenuEnabled() && !$.ui.isAsideMenuEnabled()) return true;
 
             if (doMenu && checking&&!keepOpen) {
                 $.ui.toggleSideMenu(showHideThresh, function(){
