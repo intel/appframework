@@ -602,7 +602,7 @@
             if ((!this.isSideMenuEnabled()&&!this.isAsideMenuEnabled()) || this.togglingSideMenu) return;
 
             if(!aside&&!this.isSideMenuEnabled()) return;
-            if(!aside&&$.ui.splitview) return;
+            if(!aside&&$.ui.splitview && window.innerWidth >= $.ui.handheldMinWidth) return;
             var that = this;
             var menu = $.query("#menu");
             var asideMenu= $.query("#aside_menu");
@@ -610,7 +610,7 @@
             var panelMask = $.query(".afui_panel_mask");
             time = time || this.transitionTime;
             var open = this.isSideMenuOn();
-            var toX=aside?"-"+that.sideMenuWidth:that.sideMenuWidth;
+            var toX=aside?"-"+asideMenu.width():menu.width();
             // add panel mask to block when side menu is open for phone devices
             if(panelMask.length === 0 && window.innerWidth < $.ui.handheldMinWidth){
                  els.append('<div class="afui_panel_mask"></div>');
@@ -2006,6 +2006,7 @@
                         $.query("#afui #content").addClass("hasMenu"+splitViewClass);
                         $.query("#afui #navbar").addClass("hasMenu"+splitViewClass);
                         $.query("#afui #menu").addClass("hasMenu"+splitViewClass);
+                        $.query("#afui #aside_menu").addClass(splitViewClass);
                         
                     }
                     if($.query("aside").length > 0) {
@@ -2014,7 +2015,7 @@
                     $.query("#afui #menu").addClass("tabletMenu");
                     //go to activeDiv
 
-                     if($.ui.splitview&&window.innerWidth>parseInt($.ui.handheldMinWidth)){                        
+                     if($.ui.splitview&&window.innerWidth>=parseInt($.ui.handheldMinWidth)){                        
                         $.ui.sideMenuWidth=$("#menu").width()+"px";                    
                     }
 
