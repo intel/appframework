@@ -39,9 +39,7 @@
     font-size:14px;
 }
 
-#afui.win8 > #header #menubadge {
-	display:none;
-}
+
 
 #afui.win8 #backButton.pressed {
     background:inherit;
@@ -239,9 +237,16 @@
 }
 
 #afui.win8 > #menu {
-    border-right:1px solid rgba(128,128,128,0.5);
+  border-right:1px solid rgba(128,128,128,0.5);
 	color:inherit;
 	background:inherit;
+}
+
+#afui.win8 > #aside_menu {
+  border-left:1px solid rgba(128,128,128,0.5);
+  color:inherit;
+  background:inherit;
+  border-right:0;
 }
 
 #afui.win8 #menu .list .divider {
@@ -320,27 +325,35 @@
     border-color: #111;
 }
 
-#afui.win8 #menu {
-  display: none;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  z-index: 1000;
-  width:100%;
-  height: 150px;
-  font-size:20px;
-  top:auto;
-  background:inherit;
-  color:inherit;
-  -webkit-transition-timing-function: linear;
-  transition-timing-function: linear;
-  -webkit-transform:translate3d(0,150px,0);
-  transform:translate3d(0,150px,0);
-}
-#afui.win8 .hasMenu,#afui.win8 .hasMenu.on{
+/** 
+ * code specific to WP8
+ */
+@media handheld, only screen and (max-width: 768px){
+  #afui.win8 #menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    width:100%;
+    height: 150px;
+    font-size:20px;
+    top:auto;
+    background:inherit;
+    color:inherit;
+    -webkit-transition-timing-function: linear;
+    transition-timing-function: linear;
+    -webkit-transform:translate3d(0,150px,0);
+    transform:translate3d(0,150px,0);
+  }
+  #afui.win8 .hasMenu,#afui.win8 .hasMenu.on{
 
- -webkit-transform:translate3d(0,0,0);
-  transform:translate3d(0,0,0);
+   -webkit-transform:translate3d(0,0,0);
+    transform:translate3d(0,0,0);
+  }
+  #afui.win8 > #header #menubadge {
+    display:none;
+  }
 }
 
 #afui.win8 .afPopup {
@@ -419,13 +432,16 @@
 		display:none;
 	}
 	#afui.win8 #navbar {
-		-webkit-transform:translate3d(0,0,0) !important;
-		transform:translate(0,0) !important;
+		-webkit-transform:translate3d(0,0,0);
+		transform:translate(0,0);
 	}
 	#afui.win8 #menu  {
 		background:inherit;
-        color:inherit;
-        font-size:18px;
+    color:inherit;
+    font-size:18px;
+    left:0;
+    top:0;
+    width:200px;
 	}
     #afui.win8 #menu .list > li > a:after{
         margin-top:-11px;
