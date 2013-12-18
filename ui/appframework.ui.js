@@ -1999,6 +1999,7 @@
                         $.query("#afui #header").addClass("hasMenu"+splitViewClass);
                         $.query("#afui #content").addClass("hasMenu"+splitViewClass);
                         $.query("#afui #navbar").addClass("hasMenu"+splitViewClass);
+                        $.query("#afui #menu").addClass("hasMenu"+splitViewClass);
                         
                     }
                     if($.query("aside").length > 0) {
