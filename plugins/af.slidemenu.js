@@ -26,6 +26,7 @@
         var openState=0;
         var showHideThresh=false;
         var $cnt=$.query("#content");
+        var asideShown=false;
         $("#afui").bind("touchstart", function(e) {
             openState=0;
             if (!$.ui.isSideMenuEnabled() && !$.ui.isAsideMenuEnabled()) return true;
@@ -48,10 +49,11 @@
                 openState=1;
             else if(sidePos<0)
                 openState=2;
+            asideShown=$("#aside").css("display")==="block";
         });
         
         $("#afui").bind("touchmove", function(e) {
-            
+            var sidePos=$.ui.getSideMenuPosition();
             if(e.touches.length>1) return;
             if (!$.ui.isSideMenuEnabled() && !$.ui.isAsideMenuEnabled()) return true;
             if (!$.ui.slideSideMenu||keepOpen) return true;
@@ -59,6 +61,9 @@
             dx = e.touches[0].pageX;
             dy = e.touches[0].pageY;
             
+            //splitview stuff  
+
+            if($.ui.splitview&&window.innerWidth>=parseInt($.ui.handheldMinWidth)&& (dx > startX)&&sidePos>=0) return true;
             if (!$.ui.isSideMenuEnabled() && (dx > startX)) return true;
             if (!$.ui.isAsideMenuEnabled() && (dx < startX)) return true;
 
@@ -76,6 +81,7 @@
             if(openState==0){
                 if(thePlace<0){
                     $("#aside_menu").show();
+                    if(!$.ui.splitview)
                     $("#menu").hide();
                 } else {
                     $("#menu").show();

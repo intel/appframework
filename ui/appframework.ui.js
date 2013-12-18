@@ -601,7 +601,7 @@
             if ((!this.isSideMenuEnabled()&&!this.isAsideMenuEnabled()) || this.togglingSideMenu) return;
 
             if(!aside&&!this.isSideMenuEnabled()) return;
-
+            if(!aside&&$.ui.splitview) return;
             var that = this;
             var menu = $.query("#menu");
             var asideMenu= $.query("#aside_menu");
@@ -629,7 +629,7 @@
             if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
                 this.togglingSideMenu = true;
                 if(!aside)
-                    menu.show()
+                    menu.show();
                 else
                     asideMenu.show();
                 that.css3animate(els, {
@@ -656,7 +656,8 @@
                         els.vendorCss("Transform", "");
                         that.togglingSideMenu = false;
                         if (callback) callback(canceled);
-                        menu.hide();
+                        if(!$.ui.splitview)
+                            menu.hide();
                         asideMenu.hide();
                         if(panelMask.length !== 0 && window.innerWidth < $.ui.handheldMinWidth){
                             panelMask.hide();
@@ -776,8 +777,8 @@
          * @title $.ui.disableSplitView();
          */
         disableSplitView:function(){
-            $.query("#content, #header, #navbar, #menu").removeClass("splitview");
-            this.splitView=false;
+            $.query("#content, #header, #navbar, #menu").removeClass("splitview");            
+            this.splitview=false;
         },
 
 
@@ -1782,8 +1783,8 @@
                     }
                 });
             }
-
-
+            
+           
             //elements setup
             if (!this.navbar) {
                 this.navbar = $.create("div", {
@@ -1832,6 +1833,7 @@
                 });
                 if ($.feat.nativeTouchScroll) $.query("#aside_menu_scroller").css("height", "100%");
             }
+
 
             if (!this.content) {
                 this.content = $.create("div", {
@@ -2007,6 +2009,11 @@
                     }
                     $.query("#afui #menu").addClass("tabletMenu");
                     //go to activeDiv
+
+                     if($.ui.splitview&&window.innerWidth>parseInt($.ui.handheldMinWidth)){                        
+                        $.ui.sideMenuWidth=$("#menu").width()+"px";                    
+                    }
+
                     var firstPanelId = that.getPanelId(defaultHash);
                     //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
                     var isFirstPanel = !!(firstPanelId == "#" + that.firstDiv.id);
