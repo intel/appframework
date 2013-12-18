@@ -153,29 +153,34 @@
     background: #313f66;
 }
 
+#afui.tizen > #aside_menu,
 #afui.tizen > #menu {
     border-right: 1px solid rgba(128,128,128,0.5);
     color:inherit;
     background:inherit;
 }
 
+#afui.tizen #aside_menu .list li,
 #afui.tizen #menu .list li {
     box-shadow:none;
     border-color:#ccc;
 }
 
+#afui.tizen #aside_menu .list .divider,
 #afui.tizen #menu .list .divider {
     background:inherit;
     color:inherit;
     font-size: 1em;
 }
 
+#afui.tizen #aside_menu .list > li > a,
 #afui.tizen #menu .list > li > a {
     background:inherit;
     color:inherit;
     font-size: 1em;
 }
 
+#afui.tizen #aside_menu .list,
 #afui.tizen #menu .list {
     font-weight: normal;
 }

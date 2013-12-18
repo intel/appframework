@@ -163,28 +163,33 @@
     background: #33B5E5;
 }
 
+#afui > #aside_menu,
 #afui > #menu.tabletMenu {
     color:white;
     background:#00AEEF;
     border-right:1px solid #006BA4;
 }
 
+#afui #aside_menu .list li,#afui #aside_menu .list .divider,#afui #aside_menu .list li:last-child,
 #afui #menu .list li,#afui #menu .list .divider,#afui #menu .list li:last-child {
     border-color: #4CC6F4;
 }
 
+#afui #aside_menu .list .divider,
 #afui #menu .list .divider {
     background:#0088D1;
     color:inherit;
     font-size: 1em;
 }
 
+#afui #aside_menu .list > li > a,
 #afui #menu .list > li > a {
     background:inherit;
     color:inherit;
     font-size: 1em;
 }
 
+#afui #aside_menu .list,
 #afui #menu .list {
     font-weight: normal;
 }

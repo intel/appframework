@@ -137,29 +137,34 @@
 	background: #33B5E5;
 }
 
+#afui.android > #aside_menu,
 #afui.android > #menu {
     border-right:1px solid rgba(128,128,128,0.5);
 	color:inherit;
 	background:inherit;
 }
 
+#afui.android #aside_menu .list li,
 #afui.android #menu .list li {
     box-shadow:none;
     border-color:#ccc;
 }
 
+#afui.android #aside_menu .list .divider,
 #afui.android #menu .list .divider {
 	background:inherit;
 	color:inherit;
 	font-size: 1em;
 }
 
+#afui.android #aside_menu .list > li > a,
 #afui.android #menu .list > li > a {
     background:inherit;
     color:inherit;
     font-size: 1em;
 }
 
+#afui.android #aside_menu .list,
 #afui.android #menu .list {
 	font-weight: normal;
 }

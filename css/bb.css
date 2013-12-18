@@ -137,16 +137,19 @@
     color: white;
 }
 
+#afui.bb #aside_menu,
 #afui.bb #menu {
     border-right:1px solid #bbb;
     background: #fff;
     color: #000;
 }
 
+#afui.bb #aside_menu .list > li > a,
 #afui.bb #menu .list > li > a {
     color:inherit;
 }
 
+#afui.bb #aside_menu .list .divider,
 #afui.bb #menu .list .divider {
     background:#fafafa;
     color:black;
@@ -159,6 +162,7 @@
     border-bottom: 1px solid #0aa9dc !important;
 }
 
+#afui.bb #aside_menu .list li, #afui.bb #aside_menu .list .divider, #afui.bb #aside_menu .list li:first-child, #afui.bb #aside_menu .list li:last-child,
 #afui.bb #menu .list li, #afui.bb #menu .list .divider, #afui.bb #menu .list li:first-child, #afui.bb #menu .list li:last-child {
     border-bottom-color :#ccc;
 }
