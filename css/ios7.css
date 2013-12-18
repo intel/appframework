@@ -59,18 +59,21 @@
     font-weight:normal;
 }
 
+#afui.ios7 > #aside_menu,
 #afui.ios7 > #menu {
     border-right:1px solid #bbb;
     background:rgba(238,238,238,255);
     color:black;
 }
 
+#afui.ios7 #aside_menu .list li,#afui.ios7 #aside_menu .list .divider,#afui.ios7 #aside_menu .list li:first-child,#afui.ios7 #aside_menu .list li:last-child,
 #afui.ios7 #menu .list li,#afui.ios7 #menu .list .divider,#afui.ios7 #menu .list li:first-child,#afui.ios7 #menu .list li:last-child {
     border-color:rgb(215,215,215);
     font-weight:normal;
     box-shadow:none;
 }
 
+#afui.ios7 #aside_menu .list .divider,
 #afui.ios7 #menu .list .divider {
     background:rgba(238,238,238,255);
     color:inherit;
@@ -79,10 +82,12 @@
     color:black;
 }
 
+#afui.ios7 #aside_menu .list a,
 #afui.ios7 #menu .list a {
     color:black;
 }
 
+#afui.ios7 #aside_menu .list,
 #afui.ios7 #menu .list {
     background:white;
     font-weight: normal;

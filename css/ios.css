@@ -49,6 +49,7 @@
     color:#3a9de2;
 }
 
+#afui.ios > #aside_menu,
 #afui.ios > #menu.tabletMenu {
    border-right:none;
     background:#000;
@@ -104,6 +105,10 @@
     background-image:linear-gradient(to bottom, #6E84A2 0%, #476999 50%, #274979 51%);
 }
 
+#afui.ios #aside_menu .list li, 
+#afui.ios #aside_menu .list .divider, 
+#afui.ios #aside_menu .list li:first-child, 
+#afui.ios #aside_menu  .list li:last-child,
 #afui.ios #menu .list li, 
 #afui.ios #menu .list .divider, 
 #afui.ios #menu .list li:first-child, 
@@ -113,10 +118,12 @@
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
 }
 
+#afui.ios #aside_menu .list > li > a,
 #afui.ios #menu .list > li > a {
     color:#ccc;   
 }
 
+#afui.ios #aside_menu .list .divider,
 #afui.ios #menu .list .divider {
     background:#333;
     color:#fff;   
