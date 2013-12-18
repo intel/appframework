@@ -1,7 +1,8 @@
 /**
  * af.scrollScreen - Widget to hide the header/footer when scrolling to go "full screen"
  * Copyright 2013 - Intel
- */;
+ */
+ /* global af*/
 (function($) {
     "use strict";
 
@@ -31,7 +32,7 @@
         var startY=0;
         var prevY=0;
         var hdrHeight;
-        var ftrHeight;        
+        var ftrHeight;
         var scrollSetup=false;
 
         for(var j in $.ui.scrollingDivs){
@@ -66,12 +67,12 @@
             if(!startY) startY=pos.y;
 
             //scrolling down
+            var hdr,ftr;
             if(pos.y<prevY&&((Math.abs(pos.y)-Math.abs(startY))>80))
-            //&&!headerShown)
-            {            
+            {
                 if($.ui._hideHeaderOnScroll&&!headerShown){
                     headerShown=true;
-                    var hdr=$("#header");
+                    hdr=$("#header");
                     hdrHeight=hdr.css("height");
                     hdr.vendorCss("TransitionDuration","200ms");
                     hdr.css("height","0px");
@@ -79,7 +80,7 @@
                 }
                 if($.ui._hideFooterOnScroll&&!footerShown){
                     footerShown=true;
-                    var ftr=$("#navbar");
+                    ftr=$("#navbar");
                     ftrHeight=ftr.css("height");
                     ftr.vendorCss("TransitionDuration","200ms");
                     ftr.css("height","0px");
@@ -92,15 +93,15 @@
             {
                 if(headerShown&&$.ui._hideHeaderOnScroll){
                     headerShown=false;
-                    var hdr=$("#header");
+                    hdr=$("#header");
                     hdr.css("height",hdrHeight);
                     startY=pos.y;
                 }
                 if(footerShown&&$.ui._hideFooterOnScroll){
                     footerShown=false;
-                    var ftr=$("#navbar");
+                    ftr=$("#navbar");
                     ftr.css("height",ftrHeight);
-                    startY=pos.y;   
+                    startY=pos.y;
                 }
             }
 

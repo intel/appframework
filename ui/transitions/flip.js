@@ -1,8 +1,8 @@
-
-
+/* global af*/
 (function ($ui) {
-
+    "use strict";
     function flipTransition(oldDiv, currDiv, back) {
+        /*jshint validthis:true */
         oldDiv.style.display = "block";
         currDiv.style.display = "block";
         var that = this;

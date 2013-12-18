@@ -4,7 +4,12 @@
  * @copyright 2011 Intel
  * @author Intel
  * @version 2.0
- */ (function($) {
+ */
+ /* global af*/
+ /* global numOnly*/
+ /* global intel*/
+ /* jshint camelcase:false*/
+(function($) {
     "use strict";
 
     var hasLaunched = false;
@@ -24,7 +29,7 @@
            */
 
         this.availableTransitions = {};
-        this.availableTransitions['default'] = this.availableTransitions.none = this.noTransition;
+        this.availableTransitions["default"] = this.availableTransitions.none = this.noTransition;
         //setup the menu and boot touchLayer
 
 
@@ -38,7 +43,7 @@
                 that.autoBoot();
             else{
                 $(window).one("afui:init", function() {
-        		  that.autoBoot();
+                    that.autoBoot();
                 });
             }
         } else $(document).ready(function() {
@@ -51,10 +56,13 @@
                 }
             }, false);
 
-        
-        if (!("intel" in window)) window.intel = {xdk:{}}, window.intel.xdk.webRoot = "";
 
-         $(document).ready(function() {
+        if (!("intel" in window)){
+            window.intel = {xdk:{}};
+            window.intel.xdk.webRoot = "";
+        }
+
+        $(document).ready(function() {
             //boot touchLayer
             //create afui element if it still does not exist
             var afui = document.getElementById("afui");
@@ -67,7 +75,7 @@
                 }
                 $(document.body).prepend(afui);
             }
-            that.isIntel="intel" in window&&intel&&intel.xdk&&intel.xdk.app;
+            that.isIntel="intel" in window&&window.intel&&window.intel.xdk&&window.intel.xdk.app;
             if ($.os.supportsTouch) $.touchLayer(afui);
             setupCustomTheme();
 
@@ -98,7 +106,7 @@
                     }));
                 } else if ($.os.blackberry||$.os.blackberry10||$.os.playbook) {
                     $("#afui").addClass("bb");
-                    that.backButtonText = "Back";                
+                    that.backButtonText = "Back";
                 } else if ($.os.ios7)
                     $("#afui").addClass("ios7");
                 else if ($.os.ios)
@@ -451,9 +459,9 @@
             //push into the browser history
             try {
                 if (!this.manageHistory) return;
-                window.history.pushState(newPage, newPage, startPath + '#' + newPage + hashExtras);
+                window.history.pushState(newPage, newPage, startPath + "#" + newPage + hashExtras);
                 $(window).trigger("hashchange", null, {
-                    newUrl: startPath + '#' + newPage + hashExtras,
+                    newUrl: startPath + "#" + newPage + hashExtras,
                     oldURL: startPath + previousPage
                 });
             } catch (e) {}
@@ -469,7 +477,7 @@
          */
         updateHash: function(newHash) {
             if (!this.manageHistory) return;
-            newHash = newHash.indexOf('#') == -1 ? '#' + newHash : newHash; //force having the # in the begginning as a standard
+            newHash = newHash.indexOf("#") == -1 ? "#" + newHash : newHash; //force having the # in the begginning as a standard
             previousTarget = newHash;
 
             var previousHash = window.location.hash;
@@ -484,7 +492,7 @@
         },
         /*gets the panel name from an hash*/
         getPanelId: function(hash) {
-            var firstSlash = hash.indexOf('/');
+            var firstSlash = hash.indexOf("/");
             return firstSlash == -1 ? hash : hash.substring(0, firstSlash);
         },
 
@@ -495,7 +503,7 @@
             br = bottom right
             tr = top right (default)
            ```
-           $.ui.updateBadge('#mydiv','3','bl','green');
+           $.ui.updateBadge("#mydiv","3","bl","green");
            ```
          * @param {String} target
          * @param {String} Value
@@ -532,7 +540,7 @@
         /**
          * Removes a badge from the selected target.
            ```
-           $.ui.removeBadge('#mydiv');
+           $.ui.removeBadge("#mydiv");
            ```
          * @param {String} target
          * @title $.ui.removeBadge(target)
@@ -613,11 +621,11 @@
             var toX=aside?"-"+that.sideMenuWidth:that.sideMenuWidth;
             // add panel mask to block when side menu is open for phone devices
             if(panelMask.length === 0 && window.innerWidth < $.ui.handheldMinWidth){
-                 els.append('<div class="afui_panel_mask"></div>');
-                 panelMask = $.query(".afui_panel_mask");
-                 $(".afui_panel_mask").bind("click", function(){
-                     $.ui.toggleSideMenu(false, null, null, aside);
-                 });
+                els.append("<div class='afui_panel_mask'></div>");
+                panelMask = $.query(".afui_panel_mask");
+                $(".afui_panel_mask").bind("click", function(){
+                    $.ui.toggleSideMenu(false, null, null, aside);
+                });
             }
             //Here we need to check if we are toggling the left to right, or right to left
             var menuPos=this.getSideMenuPosition();
@@ -639,7 +647,7 @@
                     complete: function(canceled) {
                         that.togglingSideMenu = false;
                         els.vendorCss("Transition", "");
-                        if (callback) callback(canceled); 
+                        if (callback) callback(canceled);
                         if(panelMask.length !== 0 && window.innerWidth < $.ui.handheldMinWidth){
                             panelMask.show();
                         }
@@ -662,7 +670,7 @@
                         asideMenu.hide();
                         if(panelMask.length !== 0 && window.innerWidth < $.ui.handheldMinWidth){
                             panelMask.hide();
-                        }                        
+                        }
                     }
                 });
             }
@@ -688,7 +696,7 @@
                 this.toggleSideMenu(false, function(canceled) {
                     if (!canceled) els.removeClass("hasMenu");
                 });
-            } else els.removeClass("hasMenu");            
+            } else els.removeClass("hasMenu");
         },
         /**
          * Enables the side menu if it has been disabled
@@ -698,7 +706,7 @@
         * @title $.ui.enableSideMenu();
         */
         enableLeftSideMenu: function() {
-            $.query("#content, #header, #navbar").addClass("hasMenu");            
+            $.query("#content, #header, #navbar").addClass("hasMenu");
         },
         enableSideMenu:function(){
             return this.enableLeftSideMenu();
@@ -728,8 +736,8 @@
         * @title $.ui.enableRightSideMenu();
         */
         enableRightSideMenu: function() {
-            $.query("#content, #header, #navbar").addClass("hasMenu");            
-        },        
+            $.query("#content, #header, #navbar").addClass("hasMenu");
+        },
         /**
          *
          * @title $.ui.isSideMenuEnabled();
@@ -778,7 +786,7 @@
          * @title $.ui.disableSplitView();
          */
         disableSplitView:function(){
-            $.query("#content, #header, #navbar, #menu").removeClass("splitview");            
+            $.query("#content, #header, #navbar, #menu").removeClass("splitview");
             this.splitview=false;
         },
 
@@ -917,7 +925,7 @@
 
             if (!$.is$(elems)) elems = $.query("#" + elems);
 
-            nb.html('');
+            nb.html("");
             nb.append(elems);
             this.prevAsideMenu = elems;
             //Move the scroller to the top and hide it
@@ -930,7 +938,7 @@
          */
         updateSideMenu: function(elems) {
             return this.updateSideMenuElements(elems);
-        },        
+        },
         /**
          * Updates the elements in the side menu
            ```
@@ -940,10 +948,10 @@
          * @title $.ui.updateSideMenuElements(Elements)
          */
         updateSideMenuElements: function() {
-           return this.updateLeftSideMenuElements.apply(this,arguments);
+            return this.updateLeftSideMenuElements.apply(this,arguments);
         },
         updateLeftSideMenuElements:function(elems) {
-             var that = this;
+            var that = this;
             if (elems === undefined || elems === null) return;
             var nb = $.query("#menu_scroller");
 
@@ -954,14 +962,14 @@
 
             if (!$.is$(elems)) elems = $.query("#" + elems);
 
-            nb.html('');
+            nb.html("");
             nb.append(elems);
             this.prevMenu = elems;
             //Move the scroller to the top and hide it
             this.scrollingDivs.menu_scroller.hideScrollbars();
             this.scrollingDivs.menu_scroller.scrollToTop();
         },
-        
+
         /**
          * Set the title of the current panel
            ```
@@ -1066,7 +1074,7 @@
                     this.scrollingDivs.modal_container.disable();
                 }
 
-                this.scrollToTop('modal');
+                this.scrollToTop("modal");
                 modalDiv.data("panel", id);
                 var myPanel=$panel.get(0);
                 var fnc = myPanel.getAttribute("data-load");
@@ -1100,7 +1108,7 @@
                 window[fnc](tmp.get(0));
             }
             tmp.trigger("unloadpanel");
-            setTimeout(function(){                
+            setTimeout(function(){
                 if($.feat.nativeTouchScroll || !useScroller){
                     self.modalReference_.append($cnt.contents());
                 }
@@ -1128,7 +1136,7 @@
             var newDiv = $.create("div", {
                 html: content
             });
-            if (newDiv.children('.panel') && newDiv.children('.panel').length > 0) newDiv = newDiv.children('.panel').get(0);
+            if (newDiv.children(".panel") && newDiv.children(".panel").length > 0) newDiv = newDiv.children(".panel").get(0);
             else newDiv = newDiv.get(0);
 
 
@@ -1171,7 +1179,7 @@
                 newDiv = $.create("div", {
                     html: content
                 });
-                if (newDiv.children('.panel') && newDiv.children('.panel').length > 0) newDiv = newDiv.children('.panel').get(0);
+                if (newDiv.children(".panel") && newDiv.children(".panel").length > 0) newDiv = newDiv.children(".panel").get(0);
                 else newDiv = newDiv.get(0);
 
                 if (!newDiv.getAttribute("data-title") && title) newDiv.setAttribute("data-title",title);
@@ -1202,7 +1210,7 @@
             var jsScroll = false,
                 scrollEl;
             var overflowStyle = tmp.style.overflow;
-            var hasScroll = overflowStyle != 'hidden' && overflowStyle != 'visible';
+            var hasScroll = overflowStyle != "hidden" && overflowStyle != "visible";
 
             container = container || this.content;
             //sets up scroll when required and not supported
@@ -1227,13 +1235,13 @@
             if (!jsScroll||$.os.desktop) {
                 container.appendChild(tmp);
                 scrollEl = tmp;
-                tmp.style['-webkit-overflow-scrolling'] = "none";
+                tmp.style["-webkit-overflow-scrolling"] = "none";
             } else {
                 //WE need to clone the div so we keep events
                 scrollEl = tmp.cloneNode(false);
 
 
-                tmp.title = null;                
+                tmp.title = null;
                 tmp.id = null;
                 var $tmp = $(tmp);
                 $tmp.removeAttr("data-footer data-aside data-nav data-header selected data-load data-unload data-tab data-crc title data-title");
@@ -1262,13 +1270,11 @@
                     autoEnable: false //dont enable the events unnecessarilly
                 }));
                 //backwards compatibility
-                if (refreshFunc) $.bind(this.scrollingDivs[scrollEl.id], 'refresh-release', function(trigger) {
+                if (refreshFunc) $.bind(this.scrollingDivs[scrollEl.id], "refresh-release", function(trigger) {
                         if (trigger) refreshFunc();
                     });
             }
             return scrollEl.id;
-            tmp = null;
-            scrollEl = null;
         },
 
         /**
@@ -1412,8 +1418,7 @@
             }
             $(what).trigger("loadpanel");
             if (this.isSideMenuOn()) {
-                var that = this;
-                that.toggleSideMenu(false);               
+                that.toggleSideMenu(false);
             }
         },
         /**
@@ -1446,7 +1451,7 @@
             }
             if (target.length === 0) return;
 
-            
+
             var what = null;
             var loadAjax = true;
             anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
@@ -1457,7 +1462,7 @@
                     loadAjax = false;
                 } else if (crcCheck.length > 0) {
                     loadAjax = false;
-                    if (anchor.getAttribute("data-refresh-ajax") === 'true' || (anchor.refresh && anchor.refresh === true || this.isAjaxApp)) {
+                    if (anchor.getAttribute("data-refresh-ajax") === "true" || (anchor.refresh && anchor.refresh === true || this.isAjaxApp)) {
                         loadAjax = true;
                     } else {
                         target = "#" + crcCheck.get(0).id;
@@ -1466,7 +1471,7 @@
 
                     //ajax div already exists.  Let's see if we should be refreshing it.
                     loadAjax = false;
-                    if (anchor.getAttribute("data-refresh-ajax") === 'true' || (anchor.refresh && anchor.refresh === true || this.isAjaxApp)) {
+                    if (anchor.getAttribute("data-refresh-ajax") === "true" || (anchor.refresh && anchor.refresh === true || this.isAjaxApp)) {
                         loadAjax = true;
                     } else target = "#" + urlHash;
                 }
@@ -1494,7 +1499,7 @@
             var that = this;
             var what = target.replace("#", "");
 
-            var slashIndex = what.indexOf('/');
+            var slashIndex = what.indexOf("/");
             var hashLink = "";
             if (slashIndex != -1) {
                 // Ignore everything after the slash for loading
@@ -1534,7 +1539,7 @@
             }
 
 
-            previousTarget = '#' + what.id + hashLink;
+            previousTarget = "#" + what.id + hashLink;
 
 
             this.doingTransition = true;
@@ -1574,7 +1579,7 @@
             if (back) {
                 if (this.history.length > 0) {
                     val = this.history[this.history.length - 1];
-                    slashIndex = val.target.indexOf('/');
+                    slashIndex = val.target.indexOf("/");
                     if (slashIndex != -1) {
                         prevId = val.target.substr(0, slashIndex);
                     } else prevId = val.target;
@@ -1625,7 +1630,7 @@
             var that = this;
             if (target.indexOf("http") == -1) target = intel.xdk.webRoot + target;
             var xmlhttp = new XMLHttpRequest();
-        
+
             if (anchor && typeof(anchor) !== "object") {
                 anchor = document.createElement("a");
                 anchor.setAttribute("data-persist-ajax", true);
@@ -1644,7 +1649,7 @@
                         retainDiv.get(0).setAttribute("data-title",anchor.title ? anchor.title : target);
                     } else if (anchor.getAttribute("data-persist-ajax") || that.isAjaxApp) {
 
-                        var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
+                        var refresh = (anchor.getAttribute("data-pull-scroller") === "true") ? true : false;
                         refreshFunction = refresh ? function() {
                             anchor.refresh = true;
                             that.loadContent(target, newTab, back, transition, anchor);
@@ -1652,7 +1657,7 @@
                         } : null;
                         //that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
                         var contents = $(xmlhttp.responseText);
-                        
+
                         if (contents.hasClass("panel"))
                         {
                             urlHash=contents.attr("id");
@@ -1690,9 +1695,9 @@
                 }
             };
             this.ajaxUrl = target;
-            var newtarget = this.useAjaxCacheBuster ? target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000 : target;
+            var newtarget = this.useAjaxCacheBuster ? target + (target.split("?")[1] ? "&" : "?") + "cache=" + Math.random() * 10000000000000000 : target;
             xmlhttp.open("GET", newtarget, true);
-            xmlhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
             xmlhttp.send();
             // show Ajax Mask
             if (this.showLoading) this.showMask();
@@ -1706,7 +1711,7 @@
          * @title $.ui.runTransition(transition,oldDiv,currDiv,back)
          */
         runTransition: function(transition, oldDiv, currWhat, back) {
-            if (!this.availableTransitions[transition]) transition = 'default';
+            if (!this.availableTransitions[transition]) transition = "default";
             this.availableTransitions[transition].call(this, oldDiv, currWhat, back);
         },
 
@@ -1725,12 +1730,12 @@
                 this.hasLaunched = true;
                 return;
             }
-            if(this.isLaunching) 
+            if(this.isLaunching)
                 return true;
             this.isLaunching=true;
 
             var that = this;
-            
+
             this.viewportContainer = af.query("#afui");
             this.navbar = af.query("#navbar").get(0);
             this.content = af.query("#content").get(0);
@@ -1748,11 +1753,11 @@
             var enterEditEl = null;
 
             //on enter-edit keep a reference of the actioned element
-            $.bind($.touchLayer, 'enter-edit', function(el) {
+            $.bind($.touchLayer, "enter-edit", function(el) {
                 enterEditEl = el;
             });
             //enter-edit-reshape panel padding and scroll adjust
-            $.bind($.touchLayer, 'enter-edit-reshape', function() {
+            $.bind($.touchLayer, "enter-edit-reshape", function() {
                 //onReshape UI fixes
                 //check if focused element is within active panel
                 var jQel = $(enterEditEl);
@@ -1775,20 +1780,20 @@
                         var containerPos = jQactive.offset();
                         if (elPos.bottom > containerPos.bottom && elPos.height < containerPos.height) {
                             //apply fix
-                            that.scrollingDivs[that.activeDiv.id].scrollToItem(jQel, 'bottom');
+                            that.scrollingDivs[that.activeDiv.id].scrollToItem(jQel, "bottom");
                         }
                     }
                 }
             });
             if ($.os.ios) {
-                $.bind($.touchLayer, 'exit-edit-reshape', function() {
+                $.bind($.touchLayer, "exit-edit-reshape", function() {
                     if (that.activeDiv && that.activeDiv.id && that.scrollingDivs.hasOwnProperty(that.activeDiv.id)) {
                         that.scrollingDivs[that.activeDiv.id].setPaddings(0, 0);
                     }
                 });
             }
-            
-           
+
+
             //elements setup
             if (!this.navbar) {
                 this.navbar = $.create("div", {
@@ -1805,7 +1810,7 @@
             if (!this.menu) {
                 this.menu = $.create("div", {
                     id: "menu",
-                    html: '<div id="menu_scroller"></div>'
+                    html: "<div id='menu_scroller'></div>"
                 }).get(0);
                 this.viewportContainer.append(this.menu);
                 this.menu.style.overflow = "hidden";
@@ -1822,7 +1827,7 @@
 
                 this.asideMenu = $.create("div", {
                     id: "aside_menu",
-                    html: '<div id="aside_menu_scroller"></div>'
+                    html: "<div id='aside_menu_scroller'></div>"
                 }).get(0);
                 this.viewportContainer.append(this.asideMenu);
                 this.asideMenu.style.overflow = "hidden";
@@ -1847,7 +1852,7 @@
             }
 
             //insert backbutton (should optionally be left to developer..)
-            $(this.header).html('<a id="backButton" class="button"></a> <h1 id="pageTitle"></h1>' + this.header.innerHTML);
+            $(this.header).html("<a id='backButton' class='button'></a> <h1 id='pageTitle'></h1>" + this.header.innerHTML);
             this.backButton = $.query("#header #backButton").css("visibility", "hidden");
             $(document).on("click", "#header #backButton", function(e) {
                 e.preventDefault();
@@ -1864,7 +1869,7 @@
                 className: "ui-loader",
                 html: "<span class='ui-icon ui-icon-loading spin'></span><h1>Loading Content</h1>"
             }).css({
-                'z-index': 20000,
+                "z-index": 20000,
                 display: "none"
             });
             document.body.appendChild(maskDiv.get(0));
@@ -1874,7 +1879,7 @@
             }).get(0);
 
             modalDiv.appendChild($.create("div", {
-                id: 'modalContainer'
+                id: "modalContainer"
             }).get(0));
             this.modalTransContainer = $.create("div", {
                 id: "modalTransContainer"
@@ -1921,35 +1926,36 @@
             contentDivs = null;
             var loadingDefer = false;
             var toLoad = Object.keys(defer).length;
+            var loadDeferred=function(j){
+                $.ajax({
+                    url: intel.xdk.webRoot + defer[j],
+                    success: function(data) {
+                        if (data.length > 0) {
+                            that.updatePanel(j, data);
+                            that.parseScriptTags($.query("#" + j).get(0));
+                        }
+                        loaded++;
+                        if (loaded >= toLoad) {
+                            loadingDefer = false;
+                            $(document).trigger("defer:loaded");
+                        }
+                    },
+                    error: function(msg) {
+                        //still trigger the file as being loaded to not block $.ui.ready
+                        console.log("Error with deferred load " + intel.xdk.webRoot + defer[j]);
+                        loaded++;
+                        if (loaded >= toLoad) {
+                            loadingDefer = false;
+                            $(document).trigger("defer:loaded");
+                        }
+                    }
+                });
+            };
             if (toLoad > 0) {
                 loadingDefer = true;
                 var loaded = 0;
                 for (var j in defer) {
-                    (function(j) {
-                        $.ajax({
-                            url: intel.xdk.webRoot + defer[j],
-                            success: function(data) {
-                                if (data.length > 0) {
-                                    that.updatePanel(j, data);
-                                    that.parseScriptTags($.query("#" + j).get(0));
-                                }
-                                loaded++;
-                                if (loaded >= toLoad) {
-                                    loadingDefer = false;
-                                    $(document).trigger("defer:loaded");
-                                }
-                            },
-                            error: function(msg) {
-                                //still trigger the file as being loaded to not block $.ui.ready
-                                console.log("Error with deferred load " + intel.xdk.webRoot + defer[j]);
-                                loaded++;
-                                if (loaded >= toLoad) {
-                                    loadingDefer = false;
-                                    $(document).trigger("defer:loaded");
-                                }
-                            }
-                        });
-                    })(j);
+                    loadDeferred(j);
                 }
             }
             if (this.firstDiv) {
@@ -1962,7 +1968,7 @@
 
 
                     $.query("#navbar").append($.create("footer", {
-                        id: 'defaultNav'
+                        id: "defaultNav"
                     }).append($.query("#navbar").children()));
                     that.defaultFooter = "defaultNav";
                     that.prevFooter = $.query("#defaultNav");
@@ -1983,7 +1989,7 @@
                     //get default header
                     that.defaultHeader = "defaultHeader";
                     $.query("#header").append($.create("header", {
-                        id: 'defaultHeader'
+                        id: "defaultHeader"
                     }).append($.query("#header").children()));
                     that.prevHeader = $.query("#defaultHeader");
 
@@ -2001,12 +2007,12 @@
 
                     //There is a bug in chrome with @media queries where the header was not getting repainted
                     if ($.query("nav").length > 0) {
-                        var splitViewClass=that.splitview?" splitview":""
+                        var splitViewClass=that.splitview?" splitview":"";
                         $.query("#afui #header").addClass("hasMenu"+splitViewClass);
                         $.query("#afui #content").addClass("hasMenu"+splitViewClass);
                         $.query("#afui #navbar").addClass("hasMenu"+splitViewClass);
                         $.query("#afui #menu").addClass("hasMenu"+splitViewClass);
-                        
+
                     }
                     if($.query("aside").length > 0) {
                         $.query("#afui #header, #afui #content, #afui #navbar").addClass("hasAside");
@@ -2014,15 +2020,15 @@
                     $.query("#afui #menu").addClass("tabletMenu");
                     //go to activeDiv
 
-                     if($.ui.splitview&&window.innerWidth>parseInt($.ui.handheldMinWidth)){                        
-                        $.ui.sideMenuWidth=$("#menu").width()+"px";                    
+                    if($.ui.splitview&&window.innerWidth>parseInt($.ui.handheldMinWidth,10)){
+                        $.ui.sideMenuWidth=$("#menu").width()+"px";
                     }
 
                     var firstPanelId = that.getPanelId(defaultHash);
                     //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
-                    var isFirstPanel = !!(firstPanelId == "#" + that.firstDiv.id);
+                    var isFirstPanel = (firstPanelId!==null&&firstPanelId == "#" + that.firstDiv.id);
                     if (firstPanelId.length > 0 && that.loadDefaultHash && !isFirstPanel) {
-                        that.loadContent(defaultHash, true, false, 'none'); //load the active page as a newTab with no transition
+                        that.loadContent(defaultHash, true, false, "none"); //load the active page as a newTab with no transition
                     }
 
                     else {
@@ -2045,8 +2051,8 @@
                     $.query("#afui #splashscreen").remove();
                     setTimeout(function(){
                         $(document).trigger("afui:ready");
-                    })
-                    
+                    });
+
                 };
                 if (loadingDefer) {
                     $(document).one("defer:loaded", loadFirstDiv);
@@ -2105,7 +2111,7 @@
          * @title $.ui.finishTransition(oldDiv)
          */
         finishTransition: function(oldDiv, currDiv) {
-            oldDiv.style.display = 'none';
+            oldDiv.style.display = "none";
             this.doingTransition = false;
             if (currDiv) this.clearAnimations(currDiv);
             if (oldDiv) this.clearAnimations(oldDiv);
@@ -2119,8 +2125,8 @@
          * @title $.ui.finishTransition(oldDiv)
          */
         clearAnimations: function(inViewDiv) {
-            inViewDiv.style[$.feat.cssPrefix + 'Transform'] = "none";
-            inViewDiv.style[$.feat.cssPrefix + 'Transition'] = "none";
+            inViewDiv.style[$.feat.cssPrefix + "Transform"] = "none";
+            inViewDiv.style[$.feat.cssPrefix + "Transition"] = "none";
         }
 
         /**
@@ -2132,7 +2138,7 @@
 
     //lookup for a clicked anchor recursively and fire UI own actions when applicable
     var checkAnchorClick = function(e, theTarget) {
-
+        var afui = document.getElementById("afui");
         if (theTarget == (afui)) {
             return;
         }
@@ -2205,8 +2211,8 @@
 
     $.ui = new ui();
     $.ui.init=true;
-    $(window).trigger('afui:preinit');
-    $(window).trigger('afui:init'); 
+    $(window).trigger("afui:preinit");
+    $(window).trigger("afui:init");
 
 })(af);
 
@@ -2214,10 +2220,12 @@
 
 //The following functions are utilitiy functions for afui within intel xdk.
 
-(function() {
+(function($) {
+    "use strict";
     $(document).one("intel.xdk.device.ready", function() { //in intel xdk, we need to undo the height stuff since it causes issues.
+
         setTimeout(function() {
-            document.getElementById('afui').style.height = "100%";
+            document.getElementById("afui").style.height = "100%";
             document.body.style.height = "100%";
             document.documentElement.style.minHeight = window.innerHeight;
         }, 300);
@@ -2237,4 +2245,4 @@
             }
         });
     }
-})();
+})(af);

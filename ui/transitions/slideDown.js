@@ -1,6 +1,8 @@
+/* global af*/
 (function ($ui) {
-
+    "use strict";
     function slideDownTransition(oldDiv, currDiv, back) {
+        /*jshint validthis:true */
         oldDiv.style.display = "block";
         currDiv.style.display = "block";
         var that = this;

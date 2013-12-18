@@ -3,7 +3,13 @@
  * @description:  This script will replace all drop downs with friendly select controls.  Users can still interact
  * with the old drop down box as normal with javascript, and this will be reflected
  */
+ /* global af*/
+ /* global numOnly*/
 (function($) {
+    /*jshint camelcase: false,
+    validthis:true
+    */
+    "use strict";
     function updateOption(prop, oldValue, newValue) {
         if (newValue === true) {
             if (!this.getAttribute("multiple"))
@@ -28,18 +34,18 @@
         delete el.linker;
         e.stopPropagation();
     }
-    $['selectBox'] = {
+    $.selectBox = {
         scroller: null,
         currLinker: null,
         getOldSelects: function(elID) {
             if (!$.os.android || $.os.androidICS) return;
-            if (!$.fn['scroller']) {
-                alert("This library requires af.scroller");
+            if (!$.fn.scroller) {
+                window.alert("This library requires af.scroller");
                 return;
             }
             var container = elID && document.getElementById(elID) ? document.getElementById(elID) : document;
             if (!container) {
-                alert("Could not find container element for af.selectBox " + elID);
+                window.alert("Could not find container element for af.selectBox " + elID);
                 return;
             }
             var sels = container.getElementsByTagName("select");
@@ -208,7 +214,7 @@
                     var $e=$(e.target);
                     if($e.closest("#afSelectBoxContainer").length===0)
                         that.hideDropDown();
-                })
+                });
 
                 $("#afSelectBoxfix").on("click", "li", function(e) {
                     var $el = $(e.target);

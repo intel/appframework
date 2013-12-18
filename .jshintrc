@@ -22,10 +22,12 @@
     "jQuery": false
   },
 
-  "unused": true,
+  "unused": false,
   "browser": true,
   "strict": true,
   "trailing": true,
-  "maxdepth": 4,
-  "newcap": false
+  "maxdepth": 5,
+  "newcap": false,
+  "expr": true,
+  "scripturl": true
 }

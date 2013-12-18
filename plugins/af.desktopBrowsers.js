@@ -1,8 +1,9 @@
 //desktopBrowsers contributed by Carlos Ouro @ Badoo
 //translates desktop browsers events to touch events and prevents defaults
 //It can be used independently in other apps but it is required for using the touchLayer in the desktop
-
-;(function ($) {
+/* global af*/
+(function ($) {
+    "use strict";
     var cancelClickMove = false;
     var preventAll = function (e) {
         e.preventDefault();
@@ -25,7 +26,7 @@
 
         touchevt.initEvent(type, true, true);
         touchevt.initMouseEvent(type, true, true, window, originalEvent.detail, originalEvent.screenX, originalEvent.screenY, originalEvent.clientX, originalEvent.clientY, originalEvent.ctrlKey, originalEvent.shiftKey, originalEvent.altKey, originalEvent.metaKey, originalEvent.button, originalEvent.relatedTarget);
-        if (type != 'touchend') {
+        if (type !== "touchend") {
             touchevt.touches = [];
             touchevt.touches[0] = {};
             touchevt.touches[0].pageX = originalEvent.pageX;
@@ -53,8 +54,8 @@
 
     var mouseDown = false,
         lastTarget = null,
-        firstMove = false;
-        prevX=0,prevY=0;
+        prevX=0,
+        prevY=0;
     if (!window.navigator.msPointerEnabled) {
 
         document.addEventListener("mousedown", function (e) {
@@ -76,7 +77,7 @@
         }, true);
 
         document.addEventListener("mousemove", function (e) {
-             if(e.clientX==prevX&&e.clientY==prevY) return;
+            if(e.clientX==prevX&&e.clientY==prevY) return;
             if (!mouseDown) return;
             redirectMouseToTouch("touchmove", e, lastTarget);
             e.preventDefault();
@@ -145,4 +146,4 @@
         document.dispatchEvent(touchevt);
     }, false);
 
-})(jq);
+})(af);
