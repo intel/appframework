@@ -15,7 +15,7 @@ describe("attr", function () {
     it("should select a single element by ID", function () {
         var elt = $("#single1");
         elt.size().should.equal(1);
-        elt.get().id.should.equal("single1");
+        elt.get(0).id.should.equal("single1");
     });
 
     it("should select multiple elements", function () {
@@ -25,16 +25,16 @@ describe("attr", function () {
 
     it("should wrap native DOM elements", function () {
         var elt = document.createElement("div");
-        $(elt).get().should.equal(elt);
+        $(elt).get(0).should.equal(elt);
     });
 
     it("should not wrap af objects more than once", function () {
-        var elt = $("#single1").get();
-        $($("#single1")).get().should.equal(elt);
+        var elt = $("#single1").get(0);
+        $($("#single1")).get(0).should.equal(elt);
     });
 
     it("should create elements", function () {
-        var elt = $("<div id=\"foobar\"></div>").get();
+        var elt = $("<div id=\"foobar\"></div>").get(0);
         elt.id.should.equal("foobar");
     });
 

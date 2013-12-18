@@ -13,14 +13,14 @@ describe("clone", function () {
     });
 
     it("should shallow clone with no children", function () {
-        var cloned = $("#foo").clone(false).get();
+        var cloned = $("#foo").clone(false).get(0);
         cloned.childNodes.length.should.equal(0);
         cloned.id.should.equal(document.getElementById("foo").id);
     });
 
     it("should deep clone including children", function () {
         var original = document.getElementById("foo");
-        var cloned = $("#foo").clone(true).get();
+        var cloned = $("#foo").clone(true).get(0);
         cloned.childNodes.length.should.equal(original.childNodes.length);
         cloned.id.should.equal(original.id);
     });

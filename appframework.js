@@ -265,15 +265,16 @@ if (!window.af || typeof(af) !== "function") {
 
         * @param {Array|Object} elements
         * @param {Function} callback
-        * @return {Object} appframework object with elements in it
+        * @return {array} array with elements
         * @title $.map(elements,callback)
         */
         $.map = function(elements, callback) {
             var value, values = [],
-                i, key;
+                i, key;                
             if ($.isArray(elements)){
+
                 for (i = 0; i < elements.length; i++) {
-                    value = callback.apply(elements[i],[i,elements[i]]);
+                    value = callback.apply(elements[i],[elements[i],i]); 
                     if (value !== nundefined)
                         values.push(value);
                 }
@@ -281,12 +282,12 @@ if (!window.af || typeof(af) !== "function") {
                 for (key in elements) {
                     if (!elements.hasOwnProperty(key) || key == "length")
                         continue;
-                    value = callback(elements[key],[key,elements[key]]);
+                    value = callback(elements[key],[elements[key],key]);
                     if (value !== nundefined)
                         values.push(value);
                 }
             }
-            return af(values);
+            return values;
         };
 
         /**
@@ -1169,9 +1170,16 @@ if (!window.af || typeof(af) !== "function") {
             * @title $().get([index])
             */
             get: function(index) {
-                index = index == nundefined ? 0 : index;
+                index = index == nundefined ? null : index;
                 if (index < 0)
                     index += this.length;
+                if(index===null){
+                    var elems=[];
+                    for(var i=0;i<this.length;i++){
+                        elems.push(this[i]);
+                    }
+                    return elems;
+                }
                 return (this[index]) ? this[index] : undefined;
             },
             /**

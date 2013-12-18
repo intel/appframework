@@ -19,7 +19,7 @@ describe("map", function () {
         var actual2 = $.map($("div"), function (elt, index) {
             count += 1;
             return elt.id;
-        }).get().join(",");
+        }).join(",");
 
         // bug https://github.com/01org/appframework/issues/348
         // count.should.equal(3);
@@ -36,7 +36,7 @@ describe("map", function () {
         var actual = $.map(["a", "b", "c"], function (elt, index) {
             count += 1;
             return elt + index;
-        }).get().join(",");
+        }).join(",");
 
         actual.should.equal(expected);
         count.should.equal(3);
@@ -52,7 +52,7 @@ describe("map", function () {
             else {
                 return undefined;
             }
-        }).get().join(",");
+        }).join(",");
 
         actual.should.equal(expected);
     });
