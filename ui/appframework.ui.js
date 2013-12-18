@@ -151,6 +151,7 @@
         scrollingDivs: {},
         firstDiv: "",
         hasLaunched: false,
+        isLaunching:false,
         launchCompleted: false,
         activeDiv: "",
         customClickHandler: "",
@@ -1724,6 +1725,9 @@
                 this.hasLaunched = true;
                 return;
             }
+            if(this.isLaunching) 
+                return true;
+            this.isLaunching=true;
 
             var that = this;
             
