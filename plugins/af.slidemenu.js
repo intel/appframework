@@ -57,7 +57,7 @@
         });
 
         $("#afui").bind("touchmove", function(e) {
-            var sidePos=$.ui.getSideMenuPosition();
+        //    var sidePos=$.ui.getSideMenuPosition();
             if(e.touches.length>1) return;
             if (!$.ui.isSideMenuEnabled() && !$.ui.isAsideMenuEnabled()) return true;
             if (!$.ui.slideSideMenu||keepOpen) return true;
@@ -67,9 +67,10 @@
 
             //splitview stuff  
 
-            if($.ui.splitview&&window.innerWidth>=parseInt($.ui.handheldMinWidth,10)&& (dx > startX)&&sidePos>=0) return true;
-            if (!$.ui.isSideMenuEnabled() && (dx > startX)) return true;
-            if (!$.ui.isAsideMenuEnabled() && (dx < startX)) return true;
+            if($.ui.splitview&&window.innerWidth>=parseInt($.ui.handheldMinWidth)&& (dx > startX)&&openState==0) return true;
+            if (!$.ui.isSideMenuEnabled() && (dx > startX) && openState==0) return true;
+            if (!$.ui.isAsideMenuEnabled() && (dx < startX) && openState==0) return true;
+
 
             if (Math.abs(dy - startY) > Math.abs(dx - startX)) return true;
 

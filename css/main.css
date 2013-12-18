@@ -592,7 +592,7 @@ body {
         width: calc(100% - 256px);
     }
 
-    #afui > #aside_menu {
+    #afui > #aside_menu.splitview {
         width:256px;
     }
     
