@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-12-17 */
+/*! intel-appframework - v2.1.0 - 2013-12-19 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -587,26 +587,30 @@ body {
         right:0px;
         margin-left:256px;
         -webkit-transition: transform 0ms;
-        -webkit-transform:none!important;
+        -webkit-transform:none;
         transition:transform 0ms;
-        transform:none !important; 
+        transform:none ; 
         width: -webkit-calc(100% - 256px);
         width: calc(100% - 256px);
+    }
+
+    #afui > #aside_menu.splitview {
+        width:256px;
     }
     
         
     #afui > #menu.tabletMenu.splitview {
-        z-index:200 !important;
-        width:256px !important;
+        z-index:1;
+        width:256px;
         bottom:0;
-        height:100% !important;
-        display:block !important;
-        position:absolute !important; top:0;
+        height:100% ;
+        display:block;
+        position:absolute ; top:0;
         left:0px;
-        -webkit-transform:none !important;
-        -webkit-transition:none !important;
-        transform:none !important;
-        transition:none !important;        
+        -webkit-transform:none;
+        -webkit-transition:none;
+        transform:none;
+        transition:none;        
     }
     
     #afui .splitview .menuButton { display:none;    }
@@ -794,28 +798,33 @@ body {
     background: #33B5E5;
 }
 
+#afui > #aside_menu,
 #afui > #menu.tabletMenu {
     color:white;
     background:#00AEEF;
     border-right:1px solid #006BA4;
 }
 
+#afui #aside_menu .list li,#afui #aside_menu .list .divider,#afui #aside_menu .list li:last-child,
 #afui #menu .list li,#afui #menu .list .divider,#afui #menu .list li:last-child {
     border-color: #4CC6F4;
 }
 
+#afui #aside_menu .list .divider,
 #afui #menu .list .divider {
     background:#0088D1;
     color:inherit;
     font-size: 1em;
 }
 
+#afui #aside_menu .list > li > a,
 #afui #menu .list > li > a {
     background:inherit;
     color:inherit;
     font-size: 1em;
 }
 
+#afui #aside_menu .list,
 #afui #menu .list {
     font-weight: normal;
 }
@@ -1634,29 +1643,34 @@ body {
 	background: #33B5E5;
 }
 
+#afui.android > #aside_menu,
 #afui.android > #menu {
     border-right:1px solid rgba(128,128,128,0.5);
 	color:inherit;
 	background:inherit;
 }
 
+#afui.android #aside_menu .list li,
 #afui.android #menu .list li {
     box-shadow:none;
     border-color:#ccc;
 }
 
+#afui.android #aside_menu .list .divider,
 #afui.android #menu .list .divider {
 	background:inherit;
 	color:inherit;
 	font-size: 1em;
 }
 
+#afui.android #aside_menu .list > li > a,
 #afui.android #menu .list > li > a {
     background:inherit;
     color:inherit;
     font-size: 1em;
 }
 
+#afui.android #aside_menu .list,
 #afui.android #menu .list {
 	font-weight: normal;
 }
@@ -1850,9 +1864,7 @@ body {
     font-size:14px;
 }
 
-#afui.win8 > #header #menubadge {
-	display:none;
-}
+
 
 #afui.win8 #backButton.pressed {
     background:inherit;
@@ -2050,9 +2062,16 @@ body {
 }
 
 #afui.win8 > #menu {
-    border-right:1px solid rgba(128,128,128,0.5);
+  border-right:1px solid rgba(128,128,128,0.5);
 	color:inherit;
 	background:inherit;
+}
+
+#afui.win8 > #aside_menu {
+  border-left:1px solid rgba(128,128,128,0.5);
+  color:inherit;
+  background:inherit;
+  border-right:0;
 }
 
 #afui.win8 #menu .list .divider {
@@ -2131,27 +2150,35 @@ body {
     border-color: #111;
 }
 
-#afui.win8 #menu {
-  display: none;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  z-index: 1000;
-  width:100%;
-  height: 150px;
-  font-size:20px;
-  top:auto;
-  background:inherit;
-  color:inherit;
-  -webkit-transition-timing-function: linear;
-  transition-timing-function: linear;
-  -webkit-transform:translate3d(0,150px,0);
-  transform:translate3d(0,150px,0);
-}
-#afui.win8 .hasMenu,#afui.win8 .hasMenu.on{
+/** 
+ * code specific to WP8
+ */
+@media handheld, only screen and (max-width: 768px){
+  #afui.win8 #menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    width:100%;
+    height: 150px;
+    font-size:20px;
+    top:auto;
+    background:inherit;
+    color:inherit;
+    -webkit-transition-timing-function: linear;
+    transition-timing-function: linear;
+    -webkit-transform:translate3d(0,150px,0);
+    transform:translate3d(0,150px,0);
+  }
+  #afui.win8 .hasMenu,#afui.win8 .hasMenu.on{
 
- -webkit-transform:translate3d(0,0,0);
-  transform:translate3d(0,0,0);
+   -webkit-transform:translate3d(0,0,0);
+    transform:translate3d(0,0,0);
+  }
+  #afui.win8 > #header #menubadge {
+    display:none;
+  }
 }
 
 #afui.win8 .afPopup {
@@ -2230,13 +2257,16 @@ body {
 		display:none;
 	}
 	#afui.win8 #navbar {
-		-webkit-transform:translate3d(0,0,0) !important;
-		transform:translate(0,0) !important;
+		-webkit-transform:translate3d(0,0,0);
+		transform:translate(0,0);
 	}
 	#afui.win8 #menu  {
 		background:inherit;
-        color:inherit;
-        font-size:18px;
+    color:inherit;
+    font-size:18px;
+    left:0;
+    top:0;
+    width:200px;
 	}
     #afui.win8 #menu .list > li > a:after{
         margin-top:-11px;
@@ -2382,16 +2412,19 @@ body {
     color: white;
 }
 
+#afui.bb #aside_menu,
 #afui.bb #menu {
     border-right:1px solid #bbb;
     background: #fff;
     color: #000;
 }
 
+#afui.bb #aside_menu .list > li > a,
 #afui.bb #menu .list > li > a {
     color:inherit;
 }
 
+#afui.bb #aside_menu .list .divider,
 #afui.bb #menu .list .divider {
     background:#fafafa;
     color:black;
@@ -2404,6 +2437,7 @@ body {
     border-bottom: 1px solid #0aa9dc !important;
 }
 
+#afui.bb #aside_menu .list li, #afui.bb #aside_menu .list .divider, #afui.bb #aside_menu .list li:first-child, #afui.bb #aside_menu .list li:last-child,
 #afui.bb #menu .list li, #afui.bb #menu .list .divider, #afui.bb #menu .list li:first-child, #afui.bb #menu .list li:last-child {
     border-bottom-color :#ccc;
 }
@@ -2540,18 +2574,21 @@ body {
     font-weight:normal;
 }
 
+#afui.ios7 > #aside_menu,
 #afui.ios7 > #menu {
     border-right:1px solid #bbb;
     background:rgba(238,238,238,255);
     color:black;
 }
 
+#afui.ios7 #aside_menu .list li,#afui.ios7 #aside_menu .list .divider,#afui.ios7 #aside_menu .list li:first-child,#afui.ios7 #aside_menu .list li:last-child,
 #afui.ios7 #menu .list li,#afui.ios7 #menu .list .divider,#afui.ios7 #menu .list li:first-child,#afui.ios7 #menu .list li:last-child {
     border-color:rgb(215,215,215);
     font-weight:normal;
     box-shadow:none;
 }
 
+#afui.ios7 #aside_menu .list .divider,
 #afui.ios7 #menu .list .divider {
     background:rgba(238,238,238,255);
     color:inherit;
@@ -2560,10 +2597,12 @@ body {
     color:black;
 }
 
+#afui.ios7 #aside_menu .list a,
 #afui.ios7 #menu .list a {
     color:black;
 }
 
+#afui.ios7 #aside_menu .list,
 #afui.ios7 #menu .list {
     background:white;
     font-weight: normal;
@@ -2912,6 +2951,7 @@ body {
     color:#3a9de2;
 }
 
+#afui.ios > #aside_menu,
 #afui.ios > #menu.tabletMenu {
    border-right:none;
     background:#000;
@@ -2967,6 +3007,10 @@ body {
     background-image:linear-gradient(to bottom, #6E84A2 0%, #476999 50%, #274979 51%);
 }
 
+#afui.ios #aside_menu .list li, 
+#afui.ios #aside_menu .list .divider, 
+#afui.ios #aside_menu .list li:first-child, 
+#afui.ios #aside_menu  .list li:last-child,
 #afui.ios #menu .list li, 
 #afui.ios #menu .list .divider, 
 #afui.ios #menu .list li:first-child, 
@@ -2976,10 +3020,12 @@ body {
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
 }
 
+#afui.ios #aside_menu .list > li > a,
 #afui.ios #menu .list > li > a {
     color:#ccc;   
 }
 
+#afui.ios #aside_menu .list .divider,
 #afui.ios #menu .list .divider {
     background:#333;
     color:#fff;   

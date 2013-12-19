@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-12-17 */
+/*! intel-appframework - v2.1.0 - 2013-12-19 */
 
 /**
  * appframework.ui - A User Interface library for App Framework applications
@@ -6,7 +6,12 @@
  * @copyright 2011 Intel
  * @author Intel
  * @version 2.0
- */ (function($) {
+ */
+ /* global af*/
+ /* global numOnly*/
+ /* global intel*/
+ /* jshint camelcase:false*/
+(function($) {
     "use strict";
 
     var hasLaunched = false;
@@ -26,7 +31,7 @@
            */
 
         this.availableTransitions = {};
-        this.availableTransitions['default'] = this.availableTransitions.none = this.noTransition;
+        this.availableTransitions["default"] = this.availableTransitions.none = this.noTransition;
         //setup the menu and boot touchLayer
 
 
@@ -40,7 +45,7 @@
                 that.autoBoot();
             else{
                 $(window).one("afui:init", function() {
-        		  that.autoBoot();
+                    that.autoBoot();
                 });
             }
         } else $(document).ready(function() {
@@ -53,10 +58,13 @@
                 }
             }, false);
 
-        
-        if (!("intel" in window)) window.intel = {xdk:{}}, window.intel.xdk.webRoot = "";
 
-         $(document).ready(function() {
+        if (!("intel" in window)){
+            window.intel = {xdk:{}};
+            window.intel.xdk.webRoot = "";
+        }
+
+        $(document).ready(function() {
             //boot touchLayer
             //create afui element if it still does not exist
             var afui = document.getElementById("afui");
@@ -69,7 +77,7 @@
                 }
                 $(document.body).prepend(afui);
             }
-            that.isIntel="intel" in window&&intel&&intel.xdk&&intel.xdk.app;
+            that.isIntel="intel" in window&&window.intel&&window.intel.xdk&&window.intel.xdk.app;
             if ($.os.supportsTouch) $.touchLayer(afui);
             setupCustomTheme();
 
@@ -100,7 +108,7 @@
                     }));
                 } else if ($.os.blackberry||$.os.blackberry10||$.os.playbook) {
                     $("#afui").addClass("bb");
-                    that.backButtonText = "Back";                
+                    that.backButtonText = "Back";
                 } else if ($.os.ios7)
                     $("#afui").addClass("ios7");
                 else if ($.os.ios)
@@ -153,6 +161,7 @@
         scrollingDivs: {},
         firstDiv: "",
         hasLaunched: false,
+        isLaunching:false,
         launchCompleted: false,
         activeDiv: "",
         customClickHandler: "",
@@ -212,7 +221,7 @@
             width = width + "";
             width = width.replace("px", "") + "px";
             $("head").find("style#afui_asideMenuWidth").remove();
-            $("head").append("<style id='afui_asideMenuWidth'>#afui #asid_menu {width:" + width + "  !important}</style>");
+            $("head").append("<style id='afui_asideMenuWidth'>#afui #aside_menu {width:" + width + "  !important}</style>");
         },
 
 
@@ -452,9 +461,9 @@
             //push into the browser history
             try {
                 if (!this.manageHistory) return;
-                window.history.pushState(newPage, newPage, startPath + '#' + newPage + hashExtras);
+                window.history.pushState(newPage, newPage, startPath + "#" + newPage + hashExtras);
                 $(window).trigger("hashchange", null, {
-                    newUrl: startPath + '#' + newPage + hashExtras,
+                    newUrl: startPath + "#" + newPage + hashExtras,
                     oldURL: startPath + previousPage
                 });
             } catch (e) {}
@@ -470,7 +479,7 @@
          */
         updateHash: function(newHash) {
             if (!this.manageHistory) return;
-            newHash = newHash.indexOf('#') == -1 ? '#' + newHash : newHash; //force having the # in the begginning as a standard
+            newHash = newHash.indexOf("#") == -1 ? "#" + newHash : newHash; //force having the # in the begginning as a standard
             previousTarget = newHash;
 
             var previousHash = window.location.hash;
@@ -485,7 +494,7 @@
         },
         /*gets the panel name from an hash*/
         getPanelId: function(hash) {
-            var firstSlash = hash.indexOf('/');
+            var firstSlash = hash.indexOf("/");
             return firstSlash == -1 ? hash : hash.substring(0, firstSlash);
         },
 
@@ -496,7 +505,7 @@
             br = bottom right
             tr = top right (default)
            ```
-           $.ui.updateBadge('#mydiv','3','bl','green');
+           $.ui.updateBadge("#mydiv","3","bl","green");
            ```
          * @param {String} target
          * @param {String} Value
@@ -533,7 +542,7 @@
         /**
          * Removes a badge from the selected target.
            ```
-           $.ui.removeBadge('#mydiv');
+           $.ui.removeBadge("#mydiv");
            ```
          * @param {String} target
          * @title $.ui.removeBadge(target)
@@ -586,7 +595,7 @@
             this.toggleRightSideMenu.apply(this,arguments);
         },
         toggleRightSideMenu:function(force,callback,time){
-            
+            if(!this.isAsideMenuEnabled()) return;
             return this.toggleLeftSideMenu(force,callback,time,true);
         },
         /**
@@ -600,8 +609,10 @@
          * @title $.ui.toggleSideMenu([force],[callback],[time])
          */
         toggleLeftSideMenu: function(force, callback, time, aside) {
-            if (!this.isSideMenuEnabled() || this.togglingSideMenu) return;
+            if ((!this.isSideMenuEnabled()&&!this.isAsideMenuEnabled()) || this.togglingSideMenu) return;
 
+            if(!aside&&!this.isSideMenuEnabled()) return;
+            if(!aside&&$.ui.splitview && window.innerWidth >= $.ui.handheldMinWidth) return;
             var that = this;
             var menu = $.query("#menu");
             var asideMenu= $.query("#aside_menu");
@@ -609,14 +620,14 @@
             var panelMask = $.query(".afui_panel_mask");
             time = time || this.transitionTime;
             var open = this.isSideMenuOn();
-            var toX=aside?"-"+that.sideMenuWidth:that.sideMenuWidth;
+            var toX=aside?"-"+asideMenu.width():menu.width();
             // add panel mask to block when side menu is open for phone devices
             if(panelMask.length === 0 && window.innerWidth < $.ui.handheldMinWidth){
-                 els.append('<div class="afui_panel_mask"></div>');
-                 panelMask = $.query(".afui_panel_mask");
-                 $(".afui_panel_mask").bind("click", function(){
-                     $.ui.toggleSideMenu(false);
-                 });
+                els.append("<div class='afui_panel_mask'></div>");
+                panelMask = $.query(".afui_panel_mask");
+                $(".afui_panel_mask").bind("click", function(){
+                    $.ui.toggleSideMenu(false, null, null, aside);
+                });
             }
             //Here we need to check if we are toggling the left to right, or right to left
             var menuPos=this.getSideMenuPosition();
@@ -624,10 +635,12 @@
                 open=false;
             else if(open&&aside&&menuPos>0)
                 open=false;
+
+
             if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
                 this.togglingSideMenu = true;
                 if(!aside)
-                    menu.show()
+                    menu.show();
                 else
                     asideMenu.show();
                 that.css3animate(els, {
@@ -636,7 +649,7 @@
                     complete: function(canceled) {
                         that.togglingSideMenu = false;
                         els.vendorCss("Transition", "");
-                        if (callback) callback(canceled); 
+                        if (callback) callback(canceled);
                         if(panelMask.length !== 0 && window.innerWidth < $.ui.handheldMinWidth){
                             panelMask.show();
                         }
@@ -654,11 +667,12 @@
                         els.vendorCss("Transform", "");
                         that.togglingSideMenu = false;
                         if (callback) callback(canceled);
-                        menu.hide();
+                        if(!$.ui.splitview)
+                            menu.hide();
                         asideMenu.hide();
                         if(panelMask.length !== 0 && window.innerWidth < $.ui.handheldMinWidth){
                             panelMask.hide();
-                        }                        
+                        }
                     }
                 });
             }
@@ -684,7 +698,7 @@
                 this.toggleSideMenu(false, function(canceled) {
                     if (!canceled) els.removeClass("hasMenu");
                 });
-            } else els.removeClass("hasMenu");            
+            } else els.removeClass("hasMenu");
         },
         /**
          * Enables the side menu if it has been disabled
@@ -694,7 +708,7 @@
         * @title $.ui.enableSideMenu();
         */
         enableLeftSideMenu: function() {
-            $.query("#content, #header, #navbar").addClass("hasMenu");            
+            $.query("#content, #header, #navbar").addClass("hasMenu");
         },
         enableSideMenu:function(){
             return this.enableLeftSideMenu();
@@ -724,15 +738,23 @@
         * @title $.ui.enableRightSideMenu();
         */
         enableRightSideMenu: function() {
-            $.query("#content, #header, #navbar").addClass("hasMenu");            
-        },        
+            $.query("#content, #header, #navbar").addClass("hasMenu");
+        },
         /**
          *
-         * @title $.ui.enableSideMenu();
+         * @title $.ui.isSideMenuEnabled();
          * @api private
          */
         isSideMenuEnabled: function() {
             return $.query("#content").hasClass("hasMenu");
+        },
+        /**
+         *
+         * @title $.ui.isAsideMenuEnabled();
+         * @api private
+         */
+        isAsideMenuEnabled: function() {
+            return $.query("#content").hasClass("hasAside");
         },
         /**
          *
@@ -741,7 +763,7 @@
          */
         isSideMenuOn: function() {
             var menu = this.getSideMenuPosition() !==0 ? true : false;
-            return this.isSideMenuEnabled() && menu;
+            return (this.isSideMenuEnabled()||this.isAsideMenuEnabled) && menu;
         },
         /**
          * @title $.ui.getSideMenuPosition();
@@ -767,7 +789,7 @@
          */
         disableSplitView:function(){
             $.query("#content, #header, #navbar, #menu").removeClass("splitview");
-            this.splitView=false;
+            this.splitview=false;
         },
 
 
@@ -905,7 +927,7 @@
 
             if (!$.is$(elems)) elems = $.query("#" + elems);
 
-            nb.html('');
+            nb.html("");
             nb.append(elems);
             this.prevAsideMenu = elems;
             //Move the scroller to the top and hide it
@@ -918,7 +940,7 @@
          */
         updateSideMenu: function(elems) {
             return this.updateSideMenuElements(elems);
-        },        
+        },
         /**
          * Updates the elements in the side menu
            ```
@@ -928,10 +950,10 @@
          * @title $.ui.updateSideMenuElements(Elements)
          */
         updateSideMenuElements: function() {
-           return this.updateLeftSideMenuElements.apply(this,arguments);
+            return this.updateLeftSideMenuElements.apply(this,arguments);
         },
         updateLeftSideMenuElements:function(elems) {
-             var that = this;
+            var that = this;
             if (elems === undefined || elems === null) return;
             var nb = $.query("#menu_scroller");
 
@@ -942,14 +964,14 @@
 
             if (!$.is$(elems)) elems = $.query("#" + elems);
 
-            nb.html('');
+            nb.html("");
             nb.append(elems);
             this.prevMenu = elems;
             //Move the scroller to the top and hide it
             this.scrollingDivs.menu_scroller.hideScrollbars();
             this.scrollingDivs.menu_scroller.scrollToTop();
         },
-        
+
         /**
          * Set the title of the current panel
            ```
@@ -1054,7 +1076,7 @@
                     this.scrollingDivs.modal_container.disable();
                 }
 
-                this.scrollToTop('modal');
+                this.scrollToTop("modal");
                 modalDiv.data("panel", id);
                 var myPanel=$panel.get(0);
                 var fnc = myPanel.getAttribute("data-load");
@@ -1088,7 +1110,7 @@
                 window[fnc](tmp.get(0));
             }
             tmp.trigger("unloadpanel");
-            setTimeout(function(){                
+            setTimeout(function(){
                 if($.feat.nativeTouchScroll || !useScroller){
                     self.modalReference_.append($cnt.contents());
                 }
@@ -1116,7 +1138,7 @@
             var newDiv = $.create("div", {
                 html: content
             });
-            if (newDiv.children('.panel') && newDiv.children('.panel').length > 0) newDiv = newDiv.children('.panel').get(0);
+            if (newDiv.children(".panel") && newDiv.children(".panel").length > 0) newDiv = newDiv.children(".panel").get(0);
             else newDiv = newDiv.get(0);
 
 
@@ -1159,7 +1181,7 @@
                 newDiv = $.create("div", {
                     html: content
                 });
-                if (newDiv.children('.panel') && newDiv.children('.panel').length > 0) newDiv = newDiv.children('.panel').get(0);
+                if (newDiv.children(".panel") && newDiv.children(".panel").length > 0) newDiv = newDiv.children(".panel").get(0);
                 else newDiv = newDiv.get(0);
 
                 if (!newDiv.getAttribute("data-title") && title) newDiv.setAttribute("data-title",title);
@@ -1190,7 +1212,7 @@
             var jsScroll = false,
                 scrollEl;
             var overflowStyle = tmp.style.overflow;
-            var hasScroll = overflowStyle != 'hidden' && overflowStyle != 'visible';
+            var hasScroll = overflowStyle != "hidden" && overflowStyle != "visible";
 
             container = container || this.content;
             //sets up scroll when required and not supported
@@ -1215,13 +1237,13 @@
             if (!jsScroll||$.os.desktop) {
                 container.appendChild(tmp);
                 scrollEl = tmp;
-                tmp.style['-webkit-overflow-scrolling'] = "none";
+                tmp.style["-webkit-overflow-scrolling"] = "none";
             } else {
                 //WE need to clone the div so we keep events
                 scrollEl = tmp.cloneNode(false);
 
 
-                tmp.title = null;                
+                tmp.title = null;
                 tmp.id = null;
                 var $tmp = $(tmp);
                 $tmp.removeAttr("data-footer data-aside data-nav data-header selected data-load data-unload data-tab data-crc title data-title");
@@ -1250,13 +1272,11 @@
                     autoEnable: false //dont enable the events unnecessarilly
                 }));
                 //backwards compatibility
-                if (refreshFunc) $.bind(this.scrollingDivs[scrollEl.id], 'refresh-release', function(trigger) {
+                if (refreshFunc) $.bind(this.scrollingDivs[scrollEl.id], "refresh-release", function(trigger) {
                         if (trigger) refreshFunc();
                     });
             }
             return scrollEl.id;
-            tmp = null;
-            scrollEl = null;
         },
 
         /**
@@ -1400,8 +1420,7 @@
             }
             $(what).trigger("loadpanel");
             if (this.isSideMenuOn()) {
-                var that = this;
-                that.toggleSideMenu(false);               
+                that.toggleSideMenu(false);
             }
         },
         /**
@@ -1434,7 +1453,7 @@
             }
             if (target.length === 0) return;
 
-            
+
             var what = null;
             var loadAjax = true;
             anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
@@ -1445,7 +1464,7 @@
                     loadAjax = false;
                 } else if (crcCheck.length > 0) {
                     loadAjax = false;
-                    if (anchor.getAttribute("data-refresh-ajax") === 'true' || (anchor.refresh && anchor.refresh === true || this.isAjaxApp)) {
+                    if (anchor.getAttribute("data-refresh-ajax") === "true" || (anchor.refresh && anchor.refresh === true || this.isAjaxApp)) {
                         loadAjax = true;
                     } else {
                         target = "#" + crcCheck.get(0).id;
@@ -1454,7 +1473,7 @@
 
                     //ajax div already exists.  Let's see if we should be refreshing it.
                     loadAjax = false;
-                    if (anchor.getAttribute("data-refresh-ajax") === 'true' || (anchor.refresh && anchor.refresh === true || this.isAjaxApp)) {
+                    if (anchor.getAttribute("data-refresh-ajax") === "true" || (anchor.refresh && anchor.refresh === true || this.isAjaxApp)) {
                         loadAjax = true;
                     } else target = "#" + urlHash;
                 }
@@ -1482,7 +1501,7 @@
             var that = this;
             var what = target.replace("#", "");
 
-            var slashIndex = what.indexOf('/');
+            var slashIndex = what.indexOf("/");
             var hashLink = "";
             if (slashIndex != -1) {
                 // Ignore everything after the slash for loading
@@ -1522,7 +1541,7 @@
             }
 
 
-            previousTarget = '#' + what.id + hashLink;
+            previousTarget = "#" + what.id + hashLink;
 
 
             this.doingTransition = true;
@@ -1562,7 +1581,7 @@
             if (back) {
                 if (this.history.length > 0) {
                     val = this.history[this.history.length - 1];
-                    slashIndex = val.target.indexOf('/');
+                    slashIndex = val.target.indexOf("/");
                     if (slashIndex != -1) {
                         prevId = val.target.substr(0, slashIndex);
                     } else prevId = val.target;
@@ -1613,7 +1632,7 @@
             var that = this;
             if (target.indexOf("http") == -1) target = intel.xdk.webRoot + target;
             var xmlhttp = new XMLHttpRequest();
-        
+
             if (anchor && typeof(anchor) !== "object") {
                 anchor = document.createElement("a");
                 anchor.setAttribute("data-persist-ajax", true);
@@ -1632,7 +1651,7 @@
                         retainDiv.get(0).setAttribute("data-title",anchor.title ? anchor.title : target);
                     } else if (anchor.getAttribute("data-persist-ajax") || that.isAjaxApp) {
 
-                        var refresh = (anchor.getAttribute("data-pull-scroller") === 'true') ? true : false;
+                        var refresh = (anchor.getAttribute("data-pull-scroller") === "true") ? true : false;
                         refreshFunction = refresh ? function() {
                             anchor.refresh = true;
                             that.loadContent(target, newTab, back, transition, anchor);
@@ -1640,7 +1659,7 @@
                         } : null;
                         //that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
                         var contents = $(xmlhttp.responseText);
-                        
+
                         if (contents.hasClass("panel"))
                         {
                             urlHash=contents.attr("id");
@@ -1678,9 +1697,9 @@
                 }
             };
             this.ajaxUrl = target;
-            var newtarget = this.useAjaxCacheBuster ? target + (target.split('?')[1] ? '&' : '?') + "cache=" + Math.random() * 10000000000000000 : target;
+            var newtarget = this.useAjaxCacheBuster ? target + (target.split("?")[1] ? "&" : "?") + "cache=" + Math.random() * 10000000000000000 : target;
             xmlhttp.open("GET", newtarget, true);
-            xmlhttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
             xmlhttp.send();
             // show Ajax Mask
             if (this.showLoading) this.showMask();
@@ -1694,7 +1713,7 @@
          * @title $.ui.runTransition(transition,oldDiv,currDiv,back)
          */
         runTransition: function(transition, oldDiv, currWhat, back) {
-            if (!this.availableTransitions[transition]) transition = 'default';
+            if (!this.availableTransitions[transition]) transition = "default";
             this.availableTransitions[transition].call(this, oldDiv, currWhat, back);
         },
 
@@ -1713,9 +1732,12 @@
                 this.hasLaunched = true;
                 return;
             }
+            if(this.isLaunching)
+                return true;
+            this.isLaunching=true;
 
             var that = this;
-            
+
             this.viewportContainer = af.query("#afui");
             this.navbar = af.query("#navbar").get(0);
             this.content = af.query("#content").get(0);
@@ -1733,11 +1755,11 @@
             var enterEditEl = null;
 
             //on enter-edit keep a reference of the actioned element
-            $.bind($.touchLayer, 'enter-edit', function(el) {
+            $.bind($.touchLayer, "enter-edit", function(el) {
                 enterEditEl = el;
             });
             //enter-edit-reshape panel padding and scroll adjust
-            $.bind($.touchLayer, 'enter-edit-reshape', function() {
+            $.bind($.touchLayer, "enter-edit-reshape", function() {
                 //onReshape UI fixes
                 //check if focused element is within active panel
                 var jQel = $(enterEditEl);
@@ -1760,13 +1782,13 @@
                         var containerPos = jQactive.offset();
                         if (elPos.bottom > containerPos.bottom && elPos.height < containerPos.height) {
                             //apply fix
-                            that.scrollingDivs[that.activeDiv.id].scrollToItem(jQel, 'bottom');
+                            that.scrollingDivs[that.activeDiv.id].scrollToItem(jQel, "bottom");
                         }
                     }
                 }
             });
             if ($.os.ios) {
-                $.bind($.touchLayer, 'exit-edit-reshape', function() {
+                $.bind($.touchLayer, "exit-edit-reshape", function() {
                     if (that.activeDiv && that.activeDiv.id && that.scrollingDivs.hasOwnProperty(that.activeDiv.id)) {
                         that.scrollingDivs[that.activeDiv.id].setPaddings(0, 0);
                     }
@@ -1790,7 +1812,7 @@
             if (!this.menu) {
                 this.menu = $.create("div", {
                     id: "menu",
-                    html: '<div id="menu_scroller"></div>'
+                    html: "<div id='menu_scroller'></div>"
                 }).get(0);
                 this.viewportContainer.append(this.menu);
                 this.menu.style.overflow = "hidden";
@@ -1807,7 +1829,7 @@
 
                 this.asideMenu = $.create("div", {
                     id: "aside_menu",
-                    html: '<div id="aside_menu_scroller"></div>'
+                    html: "<div id='aside_menu_scroller'></div>"
                 }).get(0);
                 this.viewportContainer.append(this.asideMenu);
                 this.asideMenu.style.overflow = "hidden";
@@ -1823,6 +1845,7 @@
                 if ($.feat.nativeTouchScroll) $.query("#aside_menu_scroller").css("height", "100%");
             }
 
+
             if (!this.content) {
                 this.content = $.create("div", {
                     id: "content"
@@ -1831,7 +1854,7 @@
             }
 
             //insert backbutton (should optionally be left to developer..)
-            $(this.header).html('<a id="backButton" class="button"></a> <h1 id="pageTitle"></h1>' + this.header.innerHTML);
+            $(this.header).html("<a id='backButton' class='button'></a> <h1 id='pageTitle'></h1>" + this.header.innerHTML);
             this.backButton = $.query("#header #backButton").css("visibility", "hidden");
             $(document).on("click", "#header #backButton", function(e) {
                 e.preventDefault();
@@ -1848,7 +1871,7 @@
                 className: "ui-loader",
                 html: "<span class='ui-icon ui-icon-loading spin'></span><h1>Loading Content</h1>"
             }).css({
-                'z-index': 20000,
+                "z-index": 20000,
                 display: "none"
             });
             document.body.appendChild(maskDiv.get(0));
@@ -1858,7 +1881,7 @@
             }).get(0);
 
             modalDiv.appendChild($.create("div", {
-                id: 'modalContainer'
+                id: "modalContainer"
             }).get(0));
             this.modalTransContainer = $.create("div", {
                 id: "modalTransContainer"
@@ -1905,35 +1928,36 @@
             contentDivs = null;
             var loadingDefer = false;
             var toLoad = Object.keys(defer).length;
+            var loadDeferred=function(j){
+                $.ajax({
+                    url: intel.xdk.webRoot + defer[j],
+                    success: function(data) {
+                        if (data.length > 0) {
+                            that.updatePanel(j, data);
+                            that.parseScriptTags($.query("#" + j).get(0));
+                        }
+                        loaded++;
+                        if (loaded >= toLoad) {
+                            loadingDefer = false;
+                            $(document).trigger("defer:loaded");
+                        }
+                    },
+                    error: function(msg) {
+                        //still trigger the file as being loaded to not block $.ui.ready
+                        console.log("Error with deferred load " + intel.xdk.webRoot + defer[j]);
+                        loaded++;
+                        if (loaded >= toLoad) {
+                            loadingDefer = false;
+                            $(document).trigger("defer:loaded");
+                        }
+                    }
+                });
+            };
             if (toLoad > 0) {
                 loadingDefer = true;
                 var loaded = 0;
                 for (var j in defer) {
-                    (function(j) {
-                        $.ajax({
-                            url: intel.xdk.webRoot + defer[j],
-                            success: function(data) {
-                                if (data.length > 0) {
-                                    that.updatePanel(j, data);
-                                    that.parseScriptTags($.query("#" + j).get(0));
-                                }
-                                loaded++;
-                                if (loaded >= toLoad) {
-                                    loadingDefer = false;
-                                    $(document).trigger("defer:loaded");
-                                }
-                            },
-                            error: function(msg) {
-                                //still trigger the file as being loaded to not block $.ui.ready
-                                console.log("Error with deferred load " + intel.xdk.webRoot + defer[j]);
-                                loaded++;
-                                if (loaded >= toLoad) {
-                                    loadingDefer = false;
-                                    $(document).trigger("defer:loaded");
-                                }
-                            }
-                        });
-                    })(j);
+                    loadDeferred(j);
                 }
             }
             if (this.firstDiv) {
@@ -1946,7 +1970,7 @@
 
 
                     $.query("#navbar").append($.create("footer", {
-                        id: 'defaultNav'
+                        id: "defaultNav"
                     }).append($.query("#navbar").children()));
                     that.defaultFooter = "defaultNav";
                     that.prevFooter = $.query("#defaultNav");
@@ -1967,7 +1991,7 @@
                     //get default header
                     that.defaultHeader = "defaultHeader";
                     $.query("#header").append($.create("header", {
-                        id: 'defaultHeader'
+                        id: "defaultHeader"
                     }).append($.query("#header").children()));
                     that.prevHeader = $.query("#defaultHeader");
 
@@ -1985,19 +2009,29 @@
 
                     //There is a bug in chrome with @media queries where the header was not getting repainted
                     if ($.query("nav").length > 0) {
-                        var splitViewClass=that.splitview?" splitview":""
+                        var splitViewClass=that.splitview?" splitview":"";
                         $.query("#afui #header").addClass("hasMenu"+splitViewClass);
                         $.query("#afui #content").addClass("hasMenu"+splitViewClass);
                         $.query("#afui #navbar").addClass("hasMenu"+splitViewClass);
-                        
+                        $.query("#afui #menu").addClass("hasMenu"+splitViewClass);
+                        $.query("#afui #aside_menu").addClass(splitViewClass);
+                    }
+                    if($.query("aside").length > 0) {
+                        $.query("#afui #header, #afui #content, #afui #navbar").addClass("hasAside");
                     }
                     $.query("#afui #menu").addClass("tabletMenu");
                     //go to activeDiv
+
+
+                    if($.ui.splitview&&window.innerWidth>parseInt($.ui.handheldMinWidth,10)){
+                        $.ui.sideMenuWidth=$("#menu").width()+"px";
+                    }
+
                     var firstPanelId = that.getPanelId(defaultHash);
                     //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
-                    var isFirstPanel = !!(firstPanelId == "#" + that.firstDiv.id);
+                    var isFirstPanel = (firstPanelId!==null&&firstPanelId == "#" + that.firstDiv.id);
                     if (firstPanelId.length > 0 && that.loadDefaultHash && !isFirstPanel) {
-                        that.loadContent(defaultHash, true, false, 'none'); //load the active page as a newTab with no transition
+                        that.loadContent(defaultHash, true, false, "none"); //load the active page as a newTab with no transition
                     }
 
                     else {
@@ -2020,8 +2054,8 @@
                     $.query("#afui #splashscreen").remove();
                     setTimeout(function(){
                         $(document).trigger("afui:ready");
-                    })
-                    
+                    });
+
                 };
                 if (loadingDefer) {
                     $(document).one("defer:loaded", loadFirstDiv);
@@ -2080,7 +2114,7 @@
          * @title $.ui.finishTransition(oldDiv)
          */
         finishTransition: function(oldDiv, currDiv) {
-            oldDiv.style.display = 'none';
+            oldDiv.style.display = "none";
             this.doingTransition = false;
             if (currDiv) this.clearAnimations(currDiv);
             if (oldDiv) this.clearAnimations(oldDiv);
@@ -2094,8 +2128,8 @@
          * @title $.ui.finishTransition(oldDiv)
          */
         clearAnimations: function(inViewDiv) {
-            inViewDiv.style[$.feat.cssPrefix + 'Transform'] = "none";
-            inViewDiv.style[$.feat.cssPrefix + 'Transition'] = "none";
+            inViewDiv.style[$.feat.cssPrefix + "Transform"] = "none";
+            inViewDiv.style[$.feat.cssPrefix + "Transition"] = "none";
         }
 
         /**
@@ -2107,7 +2141,7 @@
 
     //lookup for a clicked anchor recursively and fire UI own actions when applicable
     var checkAnchorClick = function(e, theTarget) {
-
+        var afui = document.getElementById("afui");
         if (theTarget == (afui)) {
             return;
         }
@@ -2180,8 +2214,8 @@
 
     $.ui = new ui();
     $.ui.init=true;
-    $(window).trigger('afui:preinit');
-    $(window).trigger('afui:init'); 
+    $(window).trigger("afui:preinit");
+    $(window).trigger("afui:init");
 
 })(af);
 
@@ -2189,10 +2223,12 @@
 
 //The following functions are utilitiy functions for afui within intel xdk.
 
-(function() {
+(function($) {
+    "use strict";
     $(document).one("intel.xdk.device.ready", function() { //in intel xdk, we need to undo the height stuff since it causes issues.
+
         setTimeout(function() {
-            document.getElementById('afui').style.height = "100%";
+            document.getElementById("afui").style.height = "100%";
             document.body.style.height = "100%";
             document.documentElement.style.minHeight = window.innerHeight;
         }, 300);
@@ -2212,78 +2248,81 @@
             }
         });
     }
-})();
+})(af);
 
+/* global af*/
 (function($ui){
-        function fadeTransition (oldDiv, currDiv, back) {
-            oldDiv.style.display = "block";
-            currDiv.style.display = "block";
-            var that = this;
-            if (back) {
-                currDiv.style.zIndex = 1;
-                oldDiv.style.zIndex = 2;
-                that.clearAnimations(currDiv);
-                that.css3animate(oldDiv, {
-                    x: "0%",
-                    time: $ui.transitionTime,
-                    opacity: 0.1,
-                    complete: function(canceled) {
-                        if(canceled) {
-                            that.finishTransition(oldDiv, currDiv);
-                            return;
+    "use strict";
+    function fadeTransition (oldDiv, currDiv, back) {
+        /*jshint validthis:true */
+        oldDiv.style.display = "block";
+        currDiv.style.display = "block";
+        var that = this;
+        if (back) {
+            currDiv.style.zIndex = 1;
+            oldDiv.style.zIndex = 2;
+            that.clearAnimations(currDiv);
+            that.css3animate(oldDiv, {
+                x: "0%",
+                time: $ui.transitionTime,
+                opacity: 0.1,
+                complete: function(canceled) {
+                    if(canceled) {
+                        that.finishTransition(oldDiv, currDiv);
+                        return;
+                    }
+
+                    that.css3animate(oldDiv, {
+                        x: "-100%",
+                        opacity: 1,
+                        complete: function() {
+                            that.finishTransition(oldDiv);
                         }
 
-                        that.css3animate(oldDiv, {
-                            x: "-100%",
-                            opacity: 1,
-                            complete: function() {
-                                that.finishTransition(oldDiv);
+                    });
+                    currDiv.style.zIndex = 2;
+                    oldDiv.style.zIndex = 1;
+                }
+            });
+        } else {
+            oldDiv.style.zIndex = 1;
+            currDiv.style.zIndex = 2;
+            currDiv.style.opacity = 0;
+            that.css3animate(currDiv, {
+                x: "0%",
+                opacity: 0.1,
+                complete: function() {
+                    that.css3animate(currDiv, {
+                        x: "0%",
+                        time: $ui.transitionTime,
+                        opacity: 1,
+                        complete:function(canceled){
+                            if(canceled) {
+                                that.finishTransition(oldDiv, currDiv);
+                                return;
                             }
 
-                        });
-                        currDiv.style.zIndex = 2;
-                        oldDiv.style.zIndex = 1;
-                    }
-                });
-            } else {
-                oldDiv.style.zIndex = 1;
-                currDiv.style.zIndex = 2;
-                currDiv.style.opacity = 0;
-                that.css3animate(currDiv, {
-                    x: "0%",
-                    opacity: 0.1,
-                    complete: function() {
-                        that.css3animate(currDiv, {
-                            x: "0%",
-                            time: $ui.transitionTime,
-                            opacity: 1,
-                            complete:function(canceled){
-                                if(canceled) {
-                                    that.finishTransition(oldDiv, currDiv);
-                                    return;
+                            that.clearAnimations(currDiv);
+                            that.css3animate(oldDiv, {
+                                x: "-100%",
+                                y: 0,
+                                complete: function() {
+                                    that.finishTransition(oldDiv);
                                 }
-
-                                that.clearAnimations(currDiv);
-                                that.css3animate(oldDiv, {
-                                    x: "-100%",
-                                    y: 0,
-                                    complete: function() {
-                                        that.finishTransition(oldDiv);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
+                            });
+                        }
+                    });
+                }
+            });
         }
-        $ui.availableTransitions.fade = fadeTransition;
+    }
+    $ui.availableTransitions.fade = fadeTransition;
 })(af.ui);
-
-
+/* global af*/
 (function ($ui) {
-
+    "use strict";
     function flipTransition(oldDiv, currDiv, back) {
+        /*jshint validthis:true */
         oldDiv.style.display = "block";
         currDiv.style.display = "block";
         var that = this;
@@ -2365,9 +2404,11 @@
     }
     $ui.availableTransitions.flip = flipTransition;
 })(af.ui);
+/* global af*/
 (function ($ui) {
-
+    "use strict";
     function popTransition(oldDiv, currDiv, back) {
+        /*jshint validthis:true */
         oldDiv.style.display = "block";
         currDiv.style.display = "block";
         var that = this;
@@ -2435,8 +2476,9 @@
     }
     $ui.availableTransitions.pop = popTransition;
 })(af.ui);
+/* global af*/
 (function ($ui) {
-
+    "use strict";
     /**
      * Initiate a sliding transition.  This is a sample to show how transitions are implemented.  These are registered in $ui.availableTransitions and take in three parameters.
      * @param {Object} previous panel
@@ -2445,7 +2487,7 @@
      * @title $ui.slideTransition(previousPanel,currentPanel,goBack);
      */
     function slideTransition(oldDiv, currDiv, back) {
-
+        /*jshint validthis:true */
         oldDiv.style.display = "block";
         currDiv.style.display = "block";
         var that = this;
@@ -2492,11 +2534,13 @@
         }
     }
     $ui.availableTransitions.slide = slideTransition;
-    $ui.availableTransitions['default'] = slideTransition;
+    $ui.availableTransitions["default"] = slideTransition;
 })(af.ui);
+/* global af*/
 (function ($ui) {
-
+    "use strict";
     function slideDownTransition(oldDiv, currDiv, back) {
+        /*jshint validthis:true */
         oldDiv.style.display = "block";
         currDiv.style.display = "block";
         var that = this;
@@ -2537,376 +2581,11 @@
     }
     $ui.availableTransitions.down = slideDownTransition;
 })(af.ui);
+/* global af*/
 (function ($ui) {
-
+    "use strict";
     function slideUpTransition(oldDiv, currDiv, back) {
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
-        var that = this;
-        if (back) {
-            oldDiv.style.zIndex = 2;
-            currDiv.style.zIndex = 1;
-            that.css3animate(oldDiv, {
-                y: "0%",
-                x: "0%",
-                complete: function () {
-                    that.css3animate(oldDiv, {
-                        y: "100%",
-                        time: $ui.transitionTime,
-                        complete: function () {
-                            that.finishTransition(oldDiv, currDiv);
-                        }
-                    });
-                }
-            });
-        } else {
-            oldDiv.style.zIndex = 1;
-            currDiv.style.zIndex = 2;
-            that.css3animate(currDiv, {
-                y: "100%",
-                x: "0%",
-                time:"10ms",
-                complete: function () {
-                    that.css3animate(currDiv, {
-                        y: "0%",
-                        time: $ui.transitionTime,
-                        complete: function () {
-                            that.finishTransition(oldDiv, currDiv);
-                        }
-                    });
-                }
-            });
-        }
-    }
-    $ui.availableTransitions.up = slideUpTransition;
-})(af.ui);
-
-(function($ui){
-        function fadeTransition (oldDiv, currDiv, back) {
-            oldDiv.style.display = "block";
-            currDiv.style.display = "block";
-            var that = this;
-            if (back) {
-                currDiv.style.zIndex = 1;
-                oldDiv.style.zIndex = 2;
-                that.clearAnimations(currDiv);
-                that.css3animate(oldDiv, {
-                    x: "0%",
-                    time: $ui.transitionTime,
-                    opacity: 0.1,
-                    complete: function(canceled) {
-                        if(canceled) {
-                            that.finishTransition(oldDiv, currDiv);
-                            return;
-                        }
-
-                        that.css3animate(oldDiv, {
-                            x: "-100%",
-                            opacity: 1,
-                            complete: function() {
-                                that.finishTransition(oldDiv);
-                            }
-
-                        });
-                        currDiv.style.zIndex = 2;
-                        oldDiv.style.zIndex = 1;
-                    }
-                });
-            } else {
-                oldDiv.style.zIndex = 1;
-                currDiv.style.zIndex = 2;
-                currDiv.style.opacity = 0;
-                that.css3animate(currDiv, {
-                    x: "0%",
-                    opacity: 0.1,
-                    complete: function() {
-                        that.css3animate(currDiv, {
-                            x: "0%",
-                            time: $ui.transitionTime,
-                            opacity: 1,
-                            complete:function(canceled){
-                                if(canceled) {
-                                    that.finishTransition(oldDiv, currDiv);
-                                    return;
-                                }
-
-                                that.clearAnimations(currDiv);
-                                that.css3animate(oldDiv, {
-                                    x: "-100%",
-                                    y: 0,
-                                    complete: function() {
-                                        that.finishTransition(oldDiv);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        }
-        $ui.availableTransitions.fade = fadeTransition;
-})(af.ui);
-
-
-(function ($ui) {
-
-    function flipTransition(oldDiv, currDiv, back) {
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
-        var that = this;
-        if (back) {
-            that.css3animate(currDiv, {
-                x: "100%",
-                scale: 0.8,
-                rotateY: "180deg",
-                complete: function () {
-                    that.css3animate(currDiv, {
-                        x: "0%",
-                        scale: 1,
-                        time: $ui.transitionTime,
-                        rotateY: "0deg",
-                        complete: function () {
-                            that.clearAnimations(currDiv);
-                        }
-                    });
-                }
-            });
-            that.css3animate(oldDiv, {
-                x: "100%",
-                time: $ui.transitionTime,
-                scale: 0.8,
-                rotateY: "180deg",
-                complete: function () {
-                    that.css3animate(oldDiv, {
-                        x: "-100%",
-                        opacity: 1,
-                        scale: 1,
-                        rotateY: "0deg",
-                        complete: function () {
-                            that.finishTransition(oldDiv);
-                        }
-                    });
-                    currDiv.style.zIndex = 2;
-                    oldDiv.style.zIndex = 1;
-                }
-            });
-        } else {
-            oldDiv.style.zIndex = 1;
-            currDiv.style.zIndex = 2;
-            that.css3animate(currDiv, {
-                x: "100%",
-                scale: 0.8,
-                rotateY: "180deg",
-                complete: function () {
-                    that.css3animate(currDiv, {
-                        x: "0%",
-                        scale: 1,
-                        time: $ui.transitionTime,
-                        rotateY: "0deg",
-                        complete: function () {
-                            that.clearAnimations(currDiv);
-                        }
-                    });
-                }
-            });
-            that.css3animate(oldDiv, {
-                x: "100%",
-                time: $ui.transitionTime,
-                scale: 0.8,
-                rotateY: "180deg",
-                complete: function () {
-                    that.css3animate(oldDiv, {
-                        x: "-100%",
-                        opacity: 1,
-                        scale: 1,
-                        rotateY: "0deg",
-                        complete: function () {
-                            that.finishTransition(oldDiv);
-                        }
-                    });
-                    currDiv.style.zIndex = 2;
-                    oldDiv.style.zIndex = 1;
-                }
-            });
-        }
-    }
-    $ui.availableTransitions.flip = flipTransition;
-})(af.ui);
-(function ($ui) {
-
-    function popTransition(oldDiv, currDiv, back) {
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
-        var that = this;
-        if (back) {
-            currDiv.style.zIndex = 1;
-            oldDiv.style.zIndex = 2;
-            that.clearAnimations(currDiv);
-            that.css3animate(oldDiv, {
-                x:"0%",
-                time: $ui.transitionTime,
-                opacity: 0.1,
-                scale: 0.2,
-                origin:"50% 50%",
-                complete: function (canceled) {
-                    if (canceled) {
-                        that.finishTransition(oldDiv);
-                        return;
-                    }
-
-                    that.css3animate(oldDiv, {
-                        x: "-100%",
-                        complete: function () {
-                            that.finishTransition(oldDiv);
-                        }
-                    });
-                    currDiv.style.zIndex = 2;
-                    oldDiv.style.zIndex = 1;
-                }
-            });
-        } else {
-            oldDiv.style.zIndex = 1;
-            currDiv.style.zIndex = 2;
-            that.css3animate(currDiv, {
-                x: "0%",
-                scale: 0.2,
-                origin: "50%" + " 50%",
-                opacity: 0.1,
-                time:"0ms",
-                complete: function () {
-                    that.css3animate(currDiv, {
-                        x: "0%",
-                        time: $ui.transitionTime,
-                        scale: 1,
-                        opacity: 1,
-                        origin: "0%" + " 0%",
-                        complete: function (canceled) {
-                            if (canceled) {
-                                that.finishTransition(oldDiv, currDiv);
-                                return;
-                            }
-
-                            that.clearAnimations(currDiv);
-                            that.css3animate(oldDiv, {
-                                x: "100%",
-                                y: 0,
-                                complete: function () {
-                                    that.finishTransition(oldDiv);
-                                }
-                            });
-                        }
-                    });
-                }
-            });
-        }
-    }
-    $ui.availableTransitions.pop = popTransition;
-})(af.ui);
-(function ($ui) {
-
-    /**
-     * Initiate a sliding transition.  This is a sample to show how transitions are implemented.  These are registered in $ui.availableTransitions and take in three parameters.
-     * @param {Object} previous panel
-     * @param {Object} current panel
-     * @param {Boolean} go back
-     * @title $ui.slideTransition(previousPanel,currentPanel,goBack);
-     */
-    function slideTransition(oldDiv, currDiv, back) {
-
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
-        var that = this;
-        if (back) {
-            that.css3animate(oldDiv, {
-                x: "0%",
-                y: "0%",
-                complete: function () {
-                    that.css3animate(oldDiv, {
-                        x: "100%",
-                        time: $ui.transitionTime,
-                        complete: function () {
-                            that.finishTransition(oldDiv, currDiv);
-                        }
-                    }).link(currDiv, {
-                        x: "0%",
-                        time: $ui.transitionTime
-                    });
-                }
-            }).link(currDiv, {
-                x: "-100%",
-                y: "0%"
-            });
-        } else {
-            that.css3animate(oldDiv, {
-                x: "0%",
-                y: "0%",
-                complete: function () {
-                    that.css3animate(oldDiv, {
-                        x: "-100%",
-                        time: $ui.transitionTime,
-                        complete: function () {
-                            that.finishTransition(oldDiv, currDiv);
-                        }
-                    }).link(currDiv, {
-                        x: "0%",
-                        time: $ui.transitionTime
-                    });
-                }
-            }).link(currDiv, {
-                x: "100%",
-                y: "0%"
-            });
-        }
-    }
-    $ui.availableTransitions.slide = slideTransition;
-    $ui.availableTransitions['default'] = slideTransition;
-})(af.ui);
-(function ($ui) {
-
-    function slideDownTransition(oldDiv, currDiv, back) {
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
-        var that = this;
-        if (back) {
-            oldDiv.style.zIndex = 2;
-            currDiv.style.zIndex = 1;
-            that.css3animate(oldDiv, {
-                y: "0%",
-                x: "0%",
-                complete: function () {
-                    that.css3animate(oldDiv, {
-                        y: "-100%",
-                        time: $ui.transitionTime,
-                        complete: function () {
-                            that.finishTransition(oldDiv, currDiv);
-                        }
-                    });
-                }
-            });
-        } else {
-            oldDiv.style.zIndex = 1;
-            currDiv.style.zIndex = 2;
-            that.css3animate(currDiv, {
-                y: "-100%",
-                x: "0%",
-                time:"10ms",
-                complete: function () {
-                    that.css3animate(currDiv, {
-                        y: "0%",
-                        time: $ui.transitionTime,
-                        complete: function () {
-                            that.finishTransition(oldDiv, currDiv);
-                        }
-                    });
-                }
-            });
-        }
-    }
-    $ui.availableTransitions.down = slideDownTransition;
-})(af.ui);
-(function ($ui) {
-
-    function slideUpTransition(oldDiv, currDiv, back) {
+        /*jshint validthis:true */
         oldDiv.style.display = "block";
         currDiv.style.display = "block";
         var that = this;
@@ -2950,7 +2629,11 @@
 /**
  * af.css3animate - a css3 animation library that supports chaning/callbacks
  * Copyright 2013 - Intel
- */ (function($) {
+ */
+ /* global af*/
+ /* global numOnly*/
+(function($) {
+    "use strict";
     var cache = [];
     var objId = function(obj) {
         if (!obj.afCSS3AnimateId) obj.afCSS3AnimateId = $.uuid();
@@ -2978,7 +2661,7 @@
         }
         return tmp;
     };
-    $.fn["css3Animate"] = function(opts) {
+    $.fn.css3Animate = function(opts) {
         //keep old callback system - backwards compatibility - should be deprecated in future versions
         if (!opts.complete && opts.callback) opts.complete = opts.callback;
         //first on
@@ -2993,7 +2676,7 @@
     };
 
 
-    $["css3AnimateQueue"] = function() {
+    $.css3AnimateQueue = function() {
         return new css3Animate.queue();
     };
     var translateOpen = $.feat.cssTransformStart;
@@ -3014,14 +2697,14 @@
             this.countStack = 0;
             this.isActive = false;
             this.el = elID;
-            this.linkFinishedProxy_ = $.proxy(this.linkFinished, this);
+            this.linkFinishedProxy = $.proxy(this.linkFinished, this);
 
             if (!this.el) return;
 
             this.animate(options);
 
             var that = this;
-            af(this.el).bind('destroy', function() {
+            af(this.el).bind("destroy", function() {
                 var id = that.el.afCSS3AnimateId;
                 that.callbacksStack = [];
                 if (cache[id]) delete cache[id];
@@ -3035,44 +2718,44 @@
                 this.isActive = true;
 
                 if (!options) {
-                    alert("Please provide configuration options for animation of " + this.el.id);
+                    window.alert("Please provide configuration options for animation of " + this.el.id);
                     return;
                 }
 
-                var classMode = !! options["addClass"];
+                var classMode = !! options.addClass;
                 var scale, time;
-                var timeNum = numOnly(options["time"]);
+                var timeNum = numOnly(options.time);
                 if (classMode) {
                     //class defines properties being changed
-                    if (options["removeClass"]) {
-                        af(this.el).replaceClass(options["removeClass"], options["addClass"]);
+                    if (options.removeClass) {
+                        af(this.el).replaceClass(options.removeClass, options.addClass);
                     } else {
-                        af(this.el).addClass(options["addClass"]);
+                        af(this.el).addClass(options.addClass);
                     }
 
                 } else {
                     //property by property
 
-                    if (timeNum === 0) options["time"] = 0;
+                    if (timeNum === 0) options.time = 0;
 
-                    if (!options["y"]) options["y"] = 0;
-                    if (!options["x"]) options["x"] = 0;
-                    if (options["previous"]) {
+                    if (!options.y) options.y = 0;
+                    if (!options.x) options.x = 0;
+                    if (options.previous) {
                         var cssMatrix = new $.getCssMatrix(this.el);
                         options.y += numOnly(cssMatrix.f);
                         options.x += numOnly(cssMatrix.e);
                     }
-                    if (!options["origin"]) options.origin = "0% 0%";
+                    if (!options.origin) options.origin = "0% 0%";
 
-                    if (!options["scale"]) options.scale = "1";
+                    if (!options.scale) options.scale = "1";
 
-                    if (!options["rotateY"]) options.rotateY = "0";
-                    if (!options["rotateX"]) options.rotateX = "0";
-                    if (!options["skewY"]) options.skewY = "0";
-                    if (!options["skewX"]) options.skewX = "0";
+                    if (!options.rotateY) options.rotateY = "0";
+                    if (!options.rotateX) options.rotateX = "0";
+                    if (!options.skewY) options.skewY = "0";
+                    if (!options.skewX) options.skewX = "0";
 
 
-                    if (!options["timingFunction"]) options["timingFunction"] = "linear";
+                    if (!options.timingFunction) options.timingFunction = "linear";
 
                     //check for percent or numbers
                     if (typeof(options.x) == "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x, 10) + "px";
@@ -3085,36 +2768,36 @@
                     this.el.style[$.feat.cssPrefix + "Transform"] = trans;
                     this.el.style[$.feat.cssPrefix + "BackfaceVisibility"] = "hidden";
                     var properties = $.feat.cssPrefix + "Transform";
-                    if (options["opacity"] !== undefined) {
-                        this.el.style.opacity = options["opacity"];
+                    if (options.opacity !== undefined) {
+                        this.el.style.opacity = options.opacity;
                         properties += ", opacity";
                     }
-                    if (options["width"]) {
-                        this.el.style.width = options["width"];
+                    if (options.width) {
+                        this.el.style.width = options.width;
                         properties = "all";
                     }
-                    if (options["height"]) {
-                        this.el.style.height = options["height"];
+                    if (options.height) {
+                        this.el.style.height = options.height;
                         properties = "all";
                     }
                     this.el.style[$.feat.cssPrefix + "TransitionProperty"] = "all";
 
-                    if (("" + options["time"]).indexOf("s") === -1) {
-                        scale = 'ms';
-                        time = options["time"] + scale;
-                    } else if (options["time"].indexOf("ms") !== -1) {
-                        scale = 'ms';
-                        time = options["time"];
+                    if (("" + options.time).indexOf("s") === -1) {
+                        scale = "ms";
+                        time = options.time + scale;
+                    } else if (options.time.indexOf("ms") !== -1) {
+                        scale = "ms";
+                        time = options.time;
                     } else {
-                        scale = 's';
-                        time = options["time"] + scale;
+                        scale = "s";
+                        time = options.time + scale;
                     }
                     if (options.delay) {
                         this.el.style[$.feat.cssPrefix + "TransitionDelay"] = options.delay;
                     }
 
                     this.el.style[$.feat.cssPrefix + "TransitionDuration"] = time;
-                    this.el.style[$.feat.cssPrefix + "TransitionTimingFunction"] = options["timingFunction"];
+                    this.el.style[$.feat.cssPrefix + "TransitionTimingFunction"] = options.timingFunction;
                     this.el.style[$.feat.cssPrefix + "TransformOrigin"] = options.origin;
 
                 }
@@ -3122,9 +2805,9 @@
                 //add callback to the stack
 
                 this.callbacksStack.push({
-                    complete: options["complete"],
-                    success: options["success"],
-                    failure: options["failure"]
+                    complete: options.complete,
+                    success: options.success,
+                    failure: options.failure
                 });
                 this.countStack++;
 
@@ -3135,17 +2818,17 @@
                     //get the duration
                     duration = style[$.feat.cssPrefix + "TransitionDuration"];
                     timeNum = numOnly(duration);
-                    options["time"] = timeNum;
+                    options.time = timeNum;
                     if (duration.indexOf("ms") !== -1) {
-                        scale = 'ms';
+                        scale = "ms";
                     } else {
-                        scale = 's';
-                        options["time"] *= 1000;
+                        scale = "s";
+                        options.time *= 1000;
                     }
                 }
 
                 //finish asap
-                if (timeNum === 0 || (scale == 'ms' && timeNum < 5) || style.display == 'none') {
+                if (timeNum === 0 || (scale == "ms" && timeNum < 5) || style.display == "none") {
                     //the duration is nearly 0 or the element is not displayed, finish immediatly
                     $.asap($.proxy(this.finishAnimation, this, [false]));
                     //this.finishAnimation();
@@ -3158,7 +2841,7 @@
                         that.finishAnimation(event);
                         that.el.removeEventListener(transitionEnd, that.activeEvent, false);
                     };
-                    that.timeout = setTimeout(this.activeEvent, numOnly(options["time"]) + 50);
+                    that.timeout = setTimeout(this.activeEvent, numOnly(options.time) + 50);
                     this.el.addEventListener(transitionEnd, this.activeEvent, false);
 
                 }
@@ -3167,7 +2850,7 @@
             addCallbackHook: function(callback) {
                 if (callback) this.callbacksStack.push(callback);
                 this.countStack++;
-                return this.linkFinishedProxy_;
+                return this.linkFinishedProxy;
             },
             linkFinished: function(canceled) {
                 if (canceled) this.cancel();
@@ -3193,9 +2876,9 @@
 
                 //fire all callbacks
                 for (var i = 0; i < callbacks.length; i++) {
-                    var complete = callbacks[i]['complete'];
-                    var success = callbacks[i]['success'];
-                    var failure = callbacks[i]['failure'];
+                    var complete = callbacks[i].complete;
+                    var success = callbacks[i].success;
+                    var failure = callbacks[i].failure;
                     //fire callbacks
                     if (complete && typeof(complete) == "function") complete(canceled);
                     //success/failure
@@ -3258,9 +2941,11 @@
                 }
                 if (this.elements.length === 0) return;
                 var params = this.shift();
-                if (this.elements.length > 0) params.complete = function(canceled) {
+                if (this.elements.length > 0) {
+                    params.complete = function(canceled) {
                         if (!canceled) that.run();
-                };
+                    };
+                }
                 css3Animate(document.getElementById(params.id), params);
             },
             shift: function() {
@@ -3274,11 +2959,8 @@
 
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
 // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
- 
 // requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
- 
 // MIT license
- 
 // Adapted from https://gist.github.com/paulirish/1579671 which derived from 
 // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
 // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
@@ -3289,18 +2971,20 @@
 // MIT license
 
 if (!Date.now)
-    Date.now = function() { return new Date().getTime(); };
+    Date.now = function() {
+        "use strict";
+        return new Date().getTime();
+    };
 
 (function() {
-    var vendors = ['webkit', 'moz','ms'];
+    "use strict";
+    var vendors = ["webkit", "moz","ms"];
     for (var i = 0; i < vendors.length && !window.requestAnimationFrame; ++i) {
         var vp = vendors[i];
-        window.requestAnimationFrame = window[vp+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = (window[vp+'CancelAnimationFrame']
-                                   || window[vp+'CancelRequestAnimationFrame']);
+        window.requestAnimationFrame = window[vp+"RequestAnimationFrame"];
+        window.cancelAnimationFrame = (window[vp+"CancelAnimationFrame"] || window[vp+"CancelRequestAnimationFrame"]);
     }
-    if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) // iOS6 is buggy
-        || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
+    if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
         var lastTime = 0;
         window.requestAnimationFrame = function(callback) {
             var now = Date.now();
@@ -3317,9 +3001,10 @@ if (!Date.now)
  * af.animate  - an experimental animation library that uses matrices and requestAnimationFrame
  * Only supports x/y now and is used by the scroller library
  * Copyright 2013 - Intel
- */ 
+ */
 
- (function($) {
+(function($) {
+    "use strict";
     var cache = [];
     var objId = function(obj) {
         if (!obj.afAnimateId) obj.afAnimateId = $.uuid();
@@ -3348,8 +3033,8 @@ if (!Date.now)
         }
         return tmp;
     };
-    $.fn["animate"] = function(opts) {
-         var tmp = getAnimate(this[0], opts);     
+    $.fn.animate = function(opts) {
+        var tmp = getAnimate(this[0], opts);
         return tmp;
     };
 
@@ -3366,7 +3051,7 @@ if (!Date.now)
             this.animate(options);
 
         var that = this;
-        af(this.el).bind('destroy', function() {
+        af(this.el).bind("destroy", function() {
             var id = that.el.afAnimateId;
             if (cache[id]) delete cache[id];
         });
@@ -3388,26 +3073,28 @@ if (!Date.now)
         animateOpts:{},
         updateCb:null,
         animate: function(options) {
-            var that=this;            
-            if(that.isAnimating) return;            
+            var that=this;
+            if(that.isAnimating) return;
             that.isAnimating=true;
             window.cancelAnimationFrame(that.animationTimer);
             if (!options) {
-              options={
-                x:0,y:0,duration:0
-              };
+                options={
+                    x:0,
+                    y:0,
+                    duration:0
+                };
             }
             this.easingFn=options.easing||"linear";
 
             this.completeCB=options.complete||null;
             this.updateCB=options.update||null;
-            this.runTime=numOnly(options.duration);                 
+            this.runTime=numOnly(options.duration);
             options.complete&&(delete options.complete);
             this.animateOpts=options;
             this.startTime=Date.now();
-            this.startMatrix=$.getCssMatrix(this.el);            
-            
-            if(this.runTime==0)
+            this.startMatrix=$.getCssMatrix(this.el);
+
+            if(this.runTime===0)
                 this.doAnimate();
         },
         start:function(){
@@ -3415,11 +3102,11 @@ if (!Date.now)
         },
         doAnimate:function(){
             var now = Date.now(), nextX, nextY,easeStep,that=this;
-            
+
             if (this.runTime===0||(now >= this.startTime + this.runTime)) {
                 that.setPosition(this.animateOpts.x,this.animateOpts.y);
                 that.isAnimating = false;
-                if(this.updateCB)            
+                if(this.updateCB)
                     this.updateCB({x:this.animateOpts.x,y:this.animateOpts.y});
                 if(this.completeCB)
                     this.completeCB();
@@ -3432,25 +3119,25 @@ if (!Date.now)
             nextX = (this.animateOpts.x - this.startMatrix.e) * easeStep + this.startMatrix.e;
             nextY = (this.animateOpts.y - this.startMatrix.f) * easeStep + this.startMatrix.f;
             this.setPosition(nextX,nextY);
-            if(this.updateCB)            
+            if(this.updateCB)
                 this.updateCB({x:nextX,y:nextY});
 
-            if (this.isAnimating) 
-                this.animationTimer = window.requestAnimationFrame(function(){that.doAnimate()});
+            if (this.isAnimating)
+                this.animationTimer = window.requestAnimationFrame(function(){that.doAnimate();});
         },
-        setPosition:function(x,y,z){                        
+        setPosition:function(x,y){
             this.el.style[$.feat.cssPrefix+"Transform"]="matrix3d( 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, "+x+", "+y+", 0, 1 )";
             this.currX=x;
             this.currY=y;
         },
         stop:function(){
-             this.isAnimating=false;
-             window.cancelAnimationFrame(this.animationTimer);
-             this.pauseTime=Date.now()-this.startTime;
+            this.isAnimating=false;
+            window.cancelAnimationFrame(this.animationTimer);
+            this.pauseTime=Date.now()-this.startTime;
         },
         resume:function(){
             this.isAnimating=true;
-            this.startTime=Date.now()-this.pauseTime;            
+            this.startTime=Date.now()-this.pauseTime;
             this.doAnimate();
         }
     };
@@ -3461,9 +3148,9 @@ if (!Date.now)
             return k;
         },
         easeOutSine:function (k) {
-             return Math.sin(k * Math.PI / 2 );
+            return Math.sin(k * Math.PI / 2 );
         }
-    }
+    };
 })(af);
 /**
  * af.scroller 
@@ -3471,14 +3158,18 @@ if (!Date.now)
  * Supports iOS native touch scrolling
  * Optimizations and bug improvements by Intel
  * @copyright Intel
- */ (function ($) {
+ */
+ /* global af*/
+ /* global numOnly*/
+(function ($) {
+    "use strict";
     var HIDE_REFRESH_TIME = 325; // hide animation of pull2ref duration in ms
     var cache = [];
     var objId = function (obj) {
         if (!obj.afScrollerId) obj.afScrollerId = $.uuid();
         return obj.afScrollerId;
     };
-    $.fn["scroller"] = function (opts) {
+    $.fn.scroller = function (opts) {
         var tmp, id;
         for (var i = 0; i < this.length; i++) {
             //cache system
@@ -3510,7 +3201,7 @@ if (!Date.now)
         if (af.os.android && !af.os.chrome && af.os.webkit) {
             var androidFixOn = false;
             //connect to touchLayer to detect editMode
-            $.bind($.touchLayer, ['cancel-enter-edit', 'exit-edit'], function (focusEl) {
+            $.bind($.touchLayer, ["cancel-enter-edit", "exit-edit"], function () {
                 if (androidFixOn) {
                     androidFixOn = false;
                     //dehactivate on scroller
@@ -3522,8 +3213,6 @@ if (!Date.now)
         boundTouchLayer = true;
     }
     var scroller = (function () {
-        var translateOpen = $.feat.cssTransformStart;
-        var translateClose = $.feat.cssTransformEnd;
         var jsScroller, nativeScroller;
 
         //initialize and js/native mode selector
@@ -3539,7 +3228,7 @@ if (!Date.now)
                 el = elID;
             }
             if (!el) {
-                alert("Could not find element for scroller " + elID);
+                window.alert("Could not find element for scroller " + elID);
                 return;
             }
             if (af.os.desktop)
@@ -3627,7 +3316,7 @@ if (!Date.now)
             hideScrollbars: function () {},
             addPullToRefresh: function () {},
             /**
-             * We do step animations for 'native' - iOS is acceptable and desktop browsers are fine
+             * We do step animations for "native" - iOS is acceptable and desktop browsers are fine
              * instead of css3
              */
             _scrollToTop: function (time) {
@@ -3663,14 +3352,14 @@ if (!Date.now)
                     //no need to readjust if disabled...
                     if (that.eventsActive&&!$.feat.nativeTouchScroll) that.adjustScroll();
                 };
-                this.afEl.bind('destroy', function () {
+                this.afEl.bind("destroy", function () {
                     that.disable(true); //with destroy notice
                     var id = that.el.afScrollerId;
                     if (cache[id]) delete cache[id];
-                    $.unbind($.touchLayer, 'orientationchange-reshape', orientationChangeProxy);
+                    $.unbind($.touchLayer, "orientationchange-reshape", orientationChangeProxy);
                 });
-                $.bind($.touchLayer, 'orientationchange-reshape', orientationChangeProxy);
-                $(window).bind('resize', orientationChangeProxy);
+                $.bind($.touchLayer, "orientationchange-reshape", orientationChangeProxy);
+                $(window).bind("resize", orientationChangeProxy);
             },
             needsFormsFix: function (focusEl) {
                 return this.useJsScroll && this.isEnabled() && this.el.style.display != "none" && $(focusEl).closest(this.afEl).size() > 0;
@@ -3678,28 +3367,28 @@ if (!Date.now)
             handleEvent: function (e) {
                 if (!this.scrollingLocked) {
                     switch (e.type) {
-                        case 'touchstart':
-                            clearInterval(this.scrollTopInterval);
-                            this.preventHideRefresh = !this.refreshRunning; // if it's not running why prevent it xD
-                            this.moved = false;
-                            this.onTouchStart(e);
-                            if(!this.bubbles)
-                                e.stopPropagation();
-                            break;
-                        case 'touchmove':
+                    case "touchstart":
+                        clearInterval(this.scrollTopInterval);
+                        this.preventHideRefresh = !this.refreshRunning; // if it's not running why prevent it xD
+                        this.moved = false;
+                        this.onTouchStart(e);
+                        if(!this.bubbles)
+                            e.stopPropagation();
+                        break;
+                    case "touchmove":
 
-                            this.onTouchMove(e);
-                            if(!this.bubbles)
-                                e.stopPropagation();
-                            break;
-                        case 'touchend':
-                            this.onTouchEnd(e);
-                            if(!this.bubbles)
-                                e.stopPropagation();
-                            break;
-                        case 'scroll':
-                            this.onScroll(e);
-                            break;
+                        this.onTouchMove(e);
+                        if(!this.bubbles)
+                            e.stopPropagation();
+                        break;
+                    case "touchend":
+                        this.onTouchEnd(e);
+                        if(!this.bubbles)
+                            e.stopPropagation();
+                        break;
+                    case "scroll":
+                        this.onScroll(e);
+                        break;
                     }
                 }
             },
@@ -3720,14 +3409,14 @@ if (!Date.now)
                 }
                 var el = afEl.get(0);
 
-                this.refreshContainer = af('<div style="overflow:hidden;height:0;width:100%;display:none;"></div>');
-                $(this.el).prepend(this.refreshContainer.append(el, 'top'));
+                this.refreshContainer = af("<div style='overflow:hidden;height:0;width:100%;display:none;'></div>");
+                $(this.el).prepend(this.refreshContainer.append(el, "top"));
                 this.refreshContainer = this.refreshContainer[0];
             },
-            fireRefreshRelease: function (triggered, allowHide) {
+            fireRefreshRelease: function (triggered) {
                 if (!this.refresh || !triggered) return;
                 this.setRefreshContent("Refreshing...");
-                var autoCancel = $.trigger(this, 'refresh-release', [triggered]) !== false;
+                var autoCancel = $.trigger(this, "refresh-release", [triggered]) !== false;
                 this.preventHideRefresh = false;
                 this.refreshRunning = true;
                 if (autoCancel) {
@@ -3758,7 +3447,7 @@ if (!Date.now)
             scrollToItem: function (el, where) { //TODO: add functionality for x position
                 if (!$.is$(el)) el = $(el);
                 var newTop,itemPos,panelTop,itemTop;
-                if (where == 'bottom') {
+                if (where == "bottom") {
                     itemPos = el.offset();
                     newTop = itemPos.top - this.afEl.offset().bottom + itemPos.height;
                     newTop += 4; //add a small space
@@ -3779,8 +3468,8 @@ if (!Date.now)
             },
             setPaddings: function (top, bottom) {
                 var el = $(this.el);
-                var curTop = numOnly(el.css('paddingTop'));
-                el.css('paddingTop', top + "px").css('paddingBottom', bottom + "px");
+                var curTop = numOnly(el.css("paddingTop"));
+                el.css("paddingTop", top + "px").css("paddingBottom", bottom + "px");
                 //don't let padding mess with scroll
                 this.scrollBy({
                     y: top - curTop,
@@ -3815,7 +3504,7 @@ if (!Date.now)
             this.container.afScrollerId = el.afScrollerId;
             this.afEl = $(this.container);
 
-            if (this.container.style.overflow != 'hidden') this.container.style.overflow = 'hidden';
+            if (this.container.style.overflow != "hidden") this.container.style.overflow = "hidden";
 
             this.addPullToRefresh(null, true);
             if (this.autoEnable) this.enable(true);
@@ -3826,7 +3515,7 @@ if (!Date.now)
                 scrollDiv.style.top = "0px";
                 if (this.vScrollCSS) scrollDiv.className = this.vScrollCSS;
                 //scrollDiv.style.opacity = "0";
-                scrollDiv.style.display='none';
+                scrollDiv.style.display="none";
                 this.container.appendChild(scrollDiv);
                 this.vscrollBar = scrollDiv;
                 scrollDiv = null;
@@ -3839,29 +3528,27 @@ if (!Date.now)
 
                 if (this.hScrollCSS) scrollDiv.className = this.hScrollCSS;
                 //scrollDiv.style.opacity = "0";
-                scrollDiv.style.display='none';
+                scrollDiv.style.display="none";
                 this.container.appendChild(scrollDiv);
                 this.hscrollBar = scrollDiv;
                 scrollDiv = null;
             }
-            if (this.horizontalScroll) this.el.style['float'] = "left";
+            if (this.horizontalScroll) this.el.style.cssFloat = "left";
 
             this.el.hasScroller = true;
 
         };
         nativeScroller = function (el, opts) {
-           
             if(opts.nativeParent){
                 el=el.parentNode;
             }
             this.init(el, opts);
-            
             var $el = $(el);
 
             if (opts.noParent !== true) {
                 var oldParent = $el.parent();
 
-                $el.css('height', oldParent.height()).css("width", oldParent.width());
+                $el.css("height", oldParent.height()).css("width", oldParent.width());
                 $el.insertBefore($el.parent());
                 //$el.parent().parent().append($el);
                 oldParent.remove();
@@ -3887,8 +3574,8 @@ if (!Date.now)
             this.loggedPcentY = 0;
             this.loggedPcentX = 0;
             var that = this;
-            this.adjustScrollOverflowProxy_ = function () {
-                that.afEl.css('overflow', 'auto');
+            this.adjustScrollOverflowProxy = function () {
+                that.afEl.css("overflow", "auto");
                 that.afEl.parent().css("overflow","hidden");
             };
         };
@@ -3896,14 +3583,14 @@ if (!Date.now)
             if (this.eventsActive) return;
             this.eventsActive = true;
             //unlock overflow
-            this.el.style.overflow = 'auto';
+            this.el.style.overflow = "auto";
             this.el.parentNode.style.overflow="hidden";
             //set current scroll
 
             if (!firstExecution) this.adjustScroll();
             //set events
-            this.el.addEventListener('touchstart', this, false);
-            this.el.addEventListener('scroll', this, false);
+            this.el.addEventListener("touchstart", this, false);
+            this.el.addEventListener("scroll", this, false);
         };
         nativeScroller.prototype.disable = function (destroy) {
             if (!this.eventsActive) return;
@@ -3911,18 +3598,18 @@ if (!Date.now)
             this.logPos(this.el.scrollLeft, this.el.scrollTop);
             //lock overflow
             if (!destroy) {
-                this.el.style.overflow = 'hidden';
+                this.el.style.overflow = "hidden";
             }
             //remove events
-            this.el.removeEventListener('touchstart', this, false);
-            this.el.removeEventListener('touchmove', this, false);
-            this.el.removeEventListener('touchend', this, false);
-            this.el.removeEventListener('scroll', this, false);
+            this.el.removeEventListener("touchstart", this, false);
+            this.el.removeEventListener("touchmove", this, false);
+            this.el.removeEventListener("touchend", this, false);
+            this.el.removeEventListener("scroll", this, false);
             this.eventsActive = false;
         };
         nativeScroller.prototype.addPullToRefresh = function (el, leaveRefresh) {
-            this.el.removeEventListener('touchstart', this, false);
-            this.el.addEventListener('touchstart', this, false);
+            this.el.removeEventListener("touchstart", this, false);
+            this.el.addEventListener("touchstart", this, false);
             if (!leaveRefresh) this.refresh = true;
             if (this.refresh && this.refresh === true) {
                 this.coreAddPullToRefresh(el);
@@ -3933,8 +3620,6 @@ if (!Date.now)
             }
         };
         nativeScroller.prototype.onTouchStart = function (e) {
-            
-
             this.lastScrollInfo= {
                 top:0
             };
@@ -3942,7 +3627,7 @@ if (!Date.now)
                 this.el.scrollTop=1;
             if(this.el.scrollTop===(this.el.scrollHeight - this.el.clientHeight))
                 this.el.scrollTop-=1;
-            
+
             if(this.horizontalScroll){
                 if(this.el.scrollLeft===0)
                     this.el.scrollLeft=1;
@@ -3951,7 +3636,7 @@ if (!Date.now)
             }
             if (this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
             //get refresh ready
-            this.el.addEventListener('touchmove', this,false);
+            this.el.addEventListener("touchmove", this,false);
             this.dY = e.touches[0].pageY;
             if (this.refresh || this.infinite) {
 
@@ -3961,10 +3646,8 @@ if (!Date.now)
 
                 }
             }
-           
         };
         nativeScroller.prototype.onTouchMove = function (e) {
-           
             var newcY = e.touches[0].pageY - this.dY;
             var newcX = e.touches[0].pageX - this.dX;
             if(this.hasVertScroll&&this.el.clientHeight==this.el.scrollHeight){
@@ -3979,12 +3662,10 @@ if (!Date.now)
             if (!this.moved) {
                 $.trigger(this, "scrollstart", [this.el,{x:newcX,y:newcY}]);
                 $.trigger($.touchLayer, "scrollstart", [this.el,{x:newcX,y:newcY}]);
-                this.el.addEventListener('touchend', this, false);
+                this.el.addEventListener("touchend", this, false);
                 this.moved = true;
             }
 
-            var difY = newcY - this.cY;
-            var difX = newcX-this.cX;
 
             //check for trigger
             if (this.refresh && (this.el.scrollTop < -this.refreshHeight)) {
@@ -3996,7 +3677,7 @@ if (!Date.now)
                 if (this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
                 this.hideRefresh(false);
                 this.setRefreshContent("Pull to Refresh");
-                $.trigger(this, 'refresh-cancel');
+                $.trigger(this, "refresh-cancel");
             //check for cancel when refresh is not running
             } else if (this.refresh && this.refreshTriggered && !this.refreshRunning && (this.el.scrollTop > -this.refreshHeight)) {
                 this.refreshTriggered = false;
@@ -4004,7 +3685,7 @@ if (!Date.now)
                 if (this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
                 this.hideRefresh(false);
                 this.setRefreshContent("Pull to Refresh");
-                $.trigger(this, 'refresh-cancel');
+                $.trigger(this, "refresh-cancel");
             }
 
             this.cY = newcY;
@@ -4012,8 +3693,8 @@ if (!Date.now)
             this.lastScrollInfo.top=this.cY;
 
             if(this.initScrollProgress){
-                $.trigger(this,'scroll',[{x:-this.el.scrollLeft,y:-this.el.scrollTop}]);
-                $.trigger($.touchLayer,'scroll',[{x:-this.el.scrollLeft,y:-this.el.scrollTop}]);
+                $.trigger(this,"scroll",[{x:-this.el.scrollLeft,y:-this.el.scrollTop}]);
+                $.trigger($.touchLayer,"scroll",[{x:-this.el.scrollLeft,y:-this.el.scrollTop}]);
             }
 
         };
@@ -4021,7 +3702,7 @@ if (!Date.now)
             if (!this.refreshTriggered) {
                 this.refreshTriggered = true;
                 this.setRefreshContent("Release to Refresh");
-                $.trigger(this, 'refresh-trigger');
+                $.trigger(this, "refresh-trigger");
             }
         };
         nativeScroller.prototype.onTouchEnd = function (e) {
@@ -4036,8 +3717,8 @@ if (!Date.now)
             }
 
             //this.dY = this.cY = 0;
-            this.el.removeEventListener('touchmove', this, false);
-            this.el.removeEventListener('touchend', this, false);
+            this.el.removeEventListener("touchmove", this, false);
+            this.el.removeEventListener("touchend", this, false);
             this.infiniteEndCheck = true;
             if (this.infinite && !this.infiniteTriggered && (Math.abs(this.el.scrollTop) >= (this.el.scrollHeight - this.el.clientHeight))) {
                 this.infiniteTriggered = true;
@@ -4045,7 +3726,7 @@ if (!Date.now)
                 this.infiniteEndCheck = true;
             }
             this.touchEndFired = true;
-            //pollyfil for scroll end since webkit doesn't give any events during the "flick"
+            //pollyfil for scroll end since webkit doesn"t give any events during the "flick"
             var max = 200;
             var self = this;
             var currPos = {
@@ -4056,32 +3737,31 @@ if (!Date.now)
             clearInterval(self.nativePolling);
             self.nativePolling = setInterval(function () {
                 counter++;
-                
-                if(counter==parseInt(max/8)){
+
+                if(counter==parseInt(max/8,10)){
                     if(self.initScrollProgress){
-                        $.trigger(self,'scroll',[{x:-self.el.scrollLeft+self.cX,y:-self.el.scrollTop+self.cY}]);
-                        $.trigger($.touchLayer,'scroll',[{x:-self.el.scrollLeft+self.cX,y:-self.el.scrollTop+self.cY}]);
+                        $.trigger(self,"scroll",[{x:-self.el.scrollLeft+self.cX,y:-self.el.scrollTop+self.cY}]);
+                        $.trigger($.touchLayer,"scroll",[{x:-self.el.scrollLeft+self.cX,y:-self.el.scrollTop+self.cY}]);
                     }
                 }
                 if (counter >= max) {
                     clearInterval(self.nativePolling);
                     if(self.initScrollProgress){
-                        $.trigger(self,'scroll',[{x:-self.el.scrollLeft,y:-self.el.scrollTop}]);
-                        $.trigger($.touchLayer,'scroll',[{x:-self.el.scrollLeft,y:-self.el.scrollTop}]);
+                        $.trigger(self,"scroll",[{x:-self.el.scrollLeft,y:-self.el.scrollTop}]);
+                        $.trigger($.touchLayer,"scroll",[{x:-self.el.scrollLeft,y:-self.el.scrollTop}]);
                     }
-                    
+
                     return;
                 }
                 if (self.el.scrollTop != currPos.top || self.el.scrollLeft != currPos.left) {
                     clearInterval(self.nativePolling);
-                    $.trigger($.touchLayer, 'scrollend', [self.el]); //notify touchLayer of this elements scrollend
+                    $.trigger($.touchLayer, "scrollend", [self.el]); //notify touchLayer of this elements scrollend
                     $.trigger(self, "scrollend", [self.el]);
                     if(self.initScrollProgress){
-                        $.trigger(self,'scroll',[{x:-self.el.scrollLeft,y:-self.el.scrollTop}]);
-                        $.trigger($.touchLayer,'scroll',[{x:-self.el.scrollLeft,y:-self.el.scrollTop}]);
+                        $.trigger(self,"scroll",[{x:-self.el.scrollLeft,y:-self.el.scrollTop}]);
+                        $.trigger($.touchLayer,"scroll",[{x:-self.el.scrollLeft,y:-self.el.scrollTop}]);
                     }
                 }
-                
 
             }, 20);
         };
@@ -4116,7 +3796,7 @@ if (!Date.now)
                 });
             }
             this.refreshTriggered = false;
-            //this.el.addEventListener('touchend', this, false);
+            //this.el.addEventListener("touchend", this, false);
         };
         nativeScroller.prototype.hideScrollbars = function () {};
         nativeScroller.prototype.scrollTo = function (pos, time) {
@@ -4177,7 +3857,7 @@ if (!Date.now)
 
         };
         nativeScroller.prototype.adjustScroll = function () {
-            this.adjustScrollOverflowProxy_();
+            this.adjustScrollOverflowProxy();
 
             this.el.scrollLeft = this.loggedPcentX * (this.el.scrollWidth);
             this.el.scrollTop = this.loggedPcentY * (this.el.scrollHeight);
@@ -4217,13 +3897,13 @@ if (!Date.now)
 
         function createScrollBar(width, height) {
             var scrollDiv = document.createElement("div");
-            scrollDiv.style.position = 'absolute';
+            scrollDiv.style.position = "absolute";
             scrollDiv.style.width = width + "px";
             scrollDiv.style.height = height + "px";
-            scrollDiv.style[$.feat.cssPrefix + 'BorderRadius'] = "2px";
+            scrollDiv.style[$.feat.cssPrefix + "BorderRadius"] = "2px";
             scrollDiv.style.borderRadius = "2px";
             scrollDiv.style.display="none";
-            scrollDiv.className = 'scrollBar';
+            scrollDiv.className = "scrollBar";
             scrollDiv.style.background = "black";
             return scrollDiv;
         }
@@ -4237,9 +3917,9 @@ if (!Date.now)
                     y: 0
                 }, 0);
             //add listeners
-            this.container.addEventListener('touchstart', this, false);
-            this.container.addEventListener('touchmove', this, false);
-            this.container.addEventListener('touchend', this, false);
+            this.container.addEventListener("touchstart", this, false);
+            this.container.addEventListener("touchmove", this, false);
+            this.container.addEventListener("touchend", this, false);
 
         };
         jsScroller.prototype.adjustScroll = function () {
@@ -4256,32 +3936,32 @@ if (!Date.now)
             var cssMatrix = this.getCSSMatrix(this.el);
             this.logPos((numOnly(cssMatrix.e) - numOnly(this.container.scrollLeft)), (numOnly(cssMatrix.f) - numOnly(this.container.scrollTop)));
             //remove event listeners
-            this.container.removeEventListener('touchstart', this, false);
-            this.container.removeEventListener('touchmove', this, false);
-            this.container.removeEventListener('touchend', this, false);
+            this.container.removeEventListener("touchstart", this, false);
+            this.container.removeEventListener("touchmove", this, false);
+            this.container.removeEventListener("touchend", this, false);
             this.eventsActive = false;
         };
         jsScroller.prototype.addPullToRefresh = function (el, leaveRefresh) {
             if (!leaveRefresh) this.refresh = true;
             if (this.refresh && this.refresh === true) {
                 this.coreAddPullToRefresh(el);
-                this.el.style.overflow = 'visible';
+                this.el.style.overflow = "visible";
             }
         };
         jsScroller.prototype.hideScrollbars = function () {
             if (this.hscrollBar) {
                 this.hscrollBar.style.display="none";
-                this.hscrollBar.style[$.feat.cssPrefix + 'TransitionDuration'] = "0ms";
+                this.hscrollBar.style[$.feat.cssPrefix + "TransitionDuration"] = "0ms";
             }
             if (this.vscrollBar) {
                 this.vscrollBar.style.display="none";
-                this.vscrollBar.style[$.feat.cssPrefix + 'TransitionDuration'] = "0ms";
+                this.vscrollBar.style[$.feat.cssPrefix + "TransitionDuration"] = "0ms";
             }
         };
 
         jsScroller.prototype.getViewportSize = function () {
             var style = window.getComputedStyle(this.container);
-            if (isNaN(numOnly(style.paddingTop))) alert((typeof style.paddingTop) + '::' + style.paddingTop + ':');
+            if (isNaN(numOnly(style.paddingTop))) window.alert((typeof style.paddingTop) + "::" + style.paddingTop + ":");
             return {
                 h: (this.container.clientHeight > window.innerHeight ? window.innerHeight : this.container.clientHeight - numOnly(style.paddingTop) - numOnly(style.paddingBottom)),
                 w: (this.container.clientWidth > window.innerWidth ? window.innerWidth : this.container.clientWidth - numOnly(style.paddingLeft) - numOnly(style.paddingRight))
@@ -4312,7 +3992,6 @@ if (!Date.now)
             // Allow interaction to legit calls, like select boxes, etc.
             if (event.touches[0].target && event.touches[0].target.type !== undefined) {
                 var tagname = event.touches[0].target.tagName.toLowerCase();
-                var tagtype=event.touches[0].target.type.toLowerCase();
 
                 if (tagname == "select" ) // stuff we need to allow
                 // access to legit calls
@@ -4371,12 +4050,12 @@ if (!Date.now)
             if (this.refresh && scrollInfo.top === 0) {
                 this.refreshContainer.style.display = "block";
                 this.refreshHeight = this.refreshContainer.firstChild.clientHeight;
-                this.refreshContainer.firstChild.style.top = (-this.refreshHeight) + 'px';
-                this.refreshContainer.style.overflow = 'visible';
+                this.refreshContainer.firstChild.style.top = (-this.refreshHeight) + "px";
+                this.refreshContainer.style.overflow = "visible";
                 this.preventPullToRefresh = false;
             } else if (scrollInfo.top < 0) {
                 this.preventPullToRefresh = true;
-                if (this.refresh) this.refreshContainer.style.overflow = 'hidden';
+                if (this.refresh) this.refreshContainer.style.overflow = "hidden";
             }
 
             //set target
@@ -4389,8 +4068,8 @@ if (!Date.now)
                     this.vscrollBar.style.right =  "0px";
                 else
                     this.vscrollBar.style.right = "0px";
-                this.vscrollBar.style[$.feat.cssPrefix + "Transition"] = '';
-                $(this.vscrollBar).animate().stop();            
+                this.vscrollBar.style[$.feat.cssPrefix + "Transition"] = "";
+                $(this.vscrollBar).animate().stop();
             }
 
             //horizontal scroll
@@ -4399,7 +4078,7 @@ if (!Date.now)
                     this.hscrollBar.style.top = (window.innerHeight - numOnly(this.hscrollBar.style.height)) + "px";
                 else
                     this.hscrollBar.style.bottom = numOnly(this.hscrollBar.style.height);
-                this.hscrollBar.style[$.feat.cssPrefix + "Transition"] = '';
+                this.hscrollBar.style[$.feat.cssPrefix + "Transition"] = "";
                 $(this.hscrollBar).animate().stop();
             }
 
@@ -4407,7 +4086,7 @@ if (!Date.now)
             this.lastScrollInfo = scrollInfo;
             this.hasMoved = false;
 
-           if(this.elementInfo.maxTop==0&&this.elementInfo.maxLeft==0&&this.lockBounce)
+            if(this.elementInfo.maxTop===0&&this.elementInfo.maxLeft===0&&this.lockBounce)
                 this.currentScrollingObject=null;
             else
                 this.scrollerMoveCSS(this.lastScrollInfo, 0);
@@ -4502,12 +4181,12 @@ if (!Date.now)
             if (this.refresh && scrollInfo.top === 0) {
                 this.refreshContainer.style.display = "block";
                 this.refreshHeight = this.refreshContainer.firstChild.clientHeight;
-                this.refreshContainer.firstChild.style.top = (-this.refreshHeight) + 'px';
-                this.refreshContainer.style.overflow = 'visible';
+                this.refreshContainer.firstChild.style.top = (-this.refreshHeight) + "px";
+                this.refreshContainer.style.overflow = "visible";
                 this.preventPullToRefresh = false;
             } else if (scrollInfo.top < 0) {
                 this.preventPullToRefresh = true;
-                if (this.refresh) this.refreshContainer.style.overflow = 'hidden';
+                if (this.refresh) this.refreshContainer.style.overflow = "hidden";
             }
 
 
@@ -4533,12 +4212,13 @@ if (!Date.now)
 
             var positiveOverflow = this.lastScrollInfo.y > 0 && this.lastScrollInfo.deltaY > 0;
             var negativeOverflow = this.lastScrollInfo.y < -this.elementInfo.maxTop && this.lastScrollInfo.deltaY < 0;
+            var overflow,pcent,baseTop;
             if (positiveOverflow || negativeOverflow) {
-                var overflow = positiveOverflow ? this.lastScrollInfo.y : -this.lastScrollInfo.y - this.elementInfo.maxTop;
-                var pcent = (this.container.clientHeight - overflow) / this.container.clientHeight;
+                overflow = positiveOverflow ? this.lastScrollInfo.y : -this.lastScrollInfo.y - this.elementInfo.maxTop;
+                pcent = (this.container.clientHeight - overflow) / this.container.clientHeight;
                 if (pcent < 0.5) pcent = 0.5;
                 //cur top, maxTop or 0?
-                var baseTop = 0;
+                baseTop = 0;
                 if ((positiveOverflow && this.lastScrollInfo.top > 0) || (negativeOverflow && this.lastScrollInfo.top < -this.elementInfo.maxTop)) {
                     baseTop = this.lastScrollInfo.top;
                 } else if (negativeOverflow) {
@@ -4554,11 +4234,11 @@ if (!Date.now)
                 positiveOverflow = this.lastScrollInfo.x > 0 && this.lastScrollInfo.deltaX > 0;
                 negativeOverflow = this.lastScrollInfo.x < -this.elementInfo.maxLeft && this.lastScrollInfo.deltaX < 0;
                 if (positiveOverflow || negativeOverflow) {
-                    var overflow = positiveOverflow ? this.lastScrollInfo.x : -this.lastScrollInfo.x - this.elementInfo.maxLeft;
-                    var pcent = (this.container.clientWidth - overflow) / this.container.clientWidth;
+                    overflow = positiveOverflow ? this.lastScrollInfo.x : -this.lastScrollInfo.x - this.elementInfo.maxLeft;
+                    pcent = (this.container.clientWidth - overflow) / this.container.clientWidth;
                     if (pcent < 0.5) pcent = 0.5;
                 //cur top, maxTop or 0?
-                    var baseTop = 0;
+                    baseTop = 0;
                     if ((positiveOverflow && this.lastScrollInfo.left > 0) || (negativeOverflow && this.lastScrollInfo.left < -this.elementInfo.maxLeft)) {
                         baseTop = this.lastScrollInfo.left;
                     } else if (negativeOverflow) {
@@ -4592,11 +4272,11 @@ if (!Date.now)
                 if (!this.refreshTriggered && this.lastScrollInfo.top > this.refreshHeight) {
                     this.refreshTriggered = true;
                     this.setRefreshContent("Release to Refresh");
-                    $.trigger(this, 'refresh-trigger');
+                    $.trigger(this, "refresh-trigger");
                 } else if (this.refreshTriggered && this.lastScrollInfo.top < this.refreshHeight) {
                     this.refreshTriggered = false;
                     this.setRefreshContent("Pull to Refresh");
-                    $.trigger(this, 'refresh-cancel');
+                    $.trigger(this, "refresh-cancel");
                 }
             }
 
@@ -4609,7 +4289,7 @@ if (!Date.now)
 
         };
 
-       
+
 
         jsScroller.prototype.calculateMovement = function (event, last) {
             //default variables
@@ -4663,7 +4343,7 @@ if (!Date.now)
 
             var minLeft=this.container.clientWidth/2;
             var maxLeft=this.elementInfo.maxLeft+minLeft;
-            
+
             if (scrollInfo.x > minLeft) scrollInfo.x = minLeft;
             else if (-scrollInfo.x > maxLeft) scrollInfo.x = -maxLeft;
             else return;
@@ -4674,7 +4354,7 @@ if (!Date.now)
             //recalculate delta
             var oldAbsDeltaY = Math.abs(scrollInfo.deltaY);
             scrollInfo.deltaY = scrollInfo.y - scrollInfo.top;
-            newAbsDeltaY = Math.abs(scrollInfo.deltaY);
+            var newAbsDeltaY = Math.abs(scrollInfo.deltaY);
             //recalculate duration at same speed
             scrollInfo.duration = scrollInfo.duration * newAbsDeltaY / oldAbsDeltaY;
 
@@ -4683,7 +4363,7 @@ if (!Date.now)
             //recalculate delta
             var oldAbsDeltaX = Math.abs(scrollInfo.deltaX);
             scrollInfo.deltaX = scrollInfo.x - scrollInfo.left;
-            newAbsDeltaX = Math.abs(scrollInfo.deltaX);
+            var newAbsDeltaX = Math.abs(scrollInfo.deltaX);
             //recalculate duration at same speed
             scrollInfo.duration = scrollInfo.duration * newAbsDeltaX / oldAbsDeltaX;
 
@@ -4692,7 +4372,6 @@ if (!Date.now)
         jsScroller.prototype.hideRefresh = function (animate) {
             var that = this;
             if (this.preventHideRefresh) return;
-            var that = this;
             var endAnimationCb = function () {
                 that.setRefreshContent("Pull to Refresh");
                 $.trigger(that, "refresh-finish");
@@ -4706,7 +4385,7 @@ if (!Date.now)
                     complete: endAnimationCb
                 });
             }
-            this.refreshTriggered = false;            
+            this.refreshTriggered = false;
         };
 
         jsScroller.prototype.setMomentum = function (scrollInfo) {
@@ -4785,7 +4464,6 @@ if (!Date.now)
                 if (-scrollInfo.top > this.elementInfo.maxTop) scrollInfo.duration = HIDE_REFRESH_TIME;
                 //all others
             }
-            ;
             if(this.elementInfo.hasHorScroll){
                 if(scrollInfo.x>=0)
                 {
@@ -4820,7 +4498,7 @@ if (!Date.now)
             var that = this;
             this.scrollingFinishCB = setTimeout(function () {
                 that.hideScrollbars();
-                $.trigger($.touchLayer, 'scrollend', [that.el]); //notify touchLayer of this elements scrollend
+                $.trigger($.touchLayer, "scrollend", [that.el]); //notify touchLayer of this elements scrollend
                 $.trigger(that, "scrollend", [that.el]);
                 that.isScrolling = false;
                 that.elementInfo = null; //reset elementInfo when idle)
@@ -4877,7 +4555,7 @@ if (!Date.now)
             this.el.style[$.feat.cssPrefix + "Perspective"] = 1000;
             this.el.style.marginTop = 0;
             this.el.style.marginLeft = 0;
-            this.el.style[$.feat.cssPrefix + "Transition"] = '0ms linear'; //reactivate transitions
+            this.el.style[$.feat.cssPrefix + "Transition"] = "0ms linear"; //reactivate transitions
             //set position
             this.scrollerMoveCSS({
                 x: numOnly(cssMatrix.e),
@@ -4922,10 +4600,10 @@ if (!Date.now)
                         };
 
                         if(self.initScrollProgress){
-                            opts['update']=function(pos){
-                                $.trigger(self,'scroll',[pos]);
-                                $.trigger($.touchLayer,'scroll',[pos]);
-                            }
+                            opts.update=function(pos){
+                                $.trigger(self,"scroll",[pos]);
+                                $.trigger($.touchLayer,"scroll",[pos]);
+                            };
                         }
                         $(this.el).animate(opts).start();
                     }
@@ -4999,7 +4677,7 @@ if (!Date.now)
  *
  */
 /* EXAMPLE
- $.query('body').popup({
+ $.query("body").popup({
         title:"Alert! Alert!",
         message:"This is a test of the emergency alert system!! Don't PANIC!",
         cancelText:"Cancel me",
@@ -5009,19 +4687,20 @@ if (!Date.now)
         cancelOnly:false,
         doneClass:'button',
         cancelClass:'button',
-        onShow:function(){console.log('showing popup');}
+        onShow:function(){console.log("showing popup");}
         autoCloseDone:true, //default is true will close the popup when done is clicked.
         suppressTitle:false //Do not show the title if set to true
   });
 
   You can programatically trigger a close by dispatching a "close" event to it.
 
- $.query('body').popup({title:'Alert',id:'myTestPopup'});
-  $("#myTestPopup").trigger("close");
+ $.query("body").popup({title:'Alert',id:'myTestPopup'});
+$("#myTestPopup").trigger("close");
 
  */
+/* global af */
 (function ($) {
-
+    "use strict";
     $.fn.popup = function (opts) {
         return new popup(this[0], opts);
     };
@@ -5035,7 +4714,7 @@ if (!Date.now)
                 this.container = containerEl;
             }
             if (!this.container) {
-                alert("Error finding container for popup " + containerEl);
+                window.alert("Error finding container for popup " + containerEl);
                 return;
             }
 
@@ -5045,9 +4724,8 @@ if (!Date.now)
                         message: opts,
                         cancelOnly: "true",
                         cancelText: "OK"
-                };
-                this.id = id = opts.id = opts.id || $.uuid(); //opts is passed by reference
-                var self = this;
+                    };
+                this.id = opts.id = opts.id || $.uuid(); //opts is passed by reference
                 this.addCssClass = opts.addCssClass ? opts.addCssClass : "";
                 this.title = opts.suppressTitle ? "" : (opts.title || "Alert");
                 this.message = opts.message || "";
@@ -5055,7 +4733,7 @@ if (!Date.now)
                 this.cancelCallback = opts.cancelCallback || function () {};
                 this.cancelClass = opts.cancelClass || "button";
                 this.doneText = opts.doneText || "Done";
-                this.doneCallback = opts.doneCallback || function (self) {
+                this.doneCallback = opts.doneCallback || function () {
                     // no action by default
                 };
                 this.doneClass = opts.doneClass || "button";
@@ -5089,30 +4767,30 @@ if (!Date.now)
             supressTitle: false,
             show: function () {
                 var self = this;
-                var markup = '<div id="' + this.id + '" class="afPopup hidden '+ this.addCssClass + '">'+
-                            '<header>' + this.title + '</header>'+
-                             '<div>' + this.message + '</div>'+
-                             '<footer>'+
-                                 '<a href="javascript:;" class="' + this.cancelClass + '" id="cancel">' + this.cancelText + '</a>'+
-                                 '<a href="javascript:;" class="' + this.doneClass + '" id="action">' + this.doneText + '</a>'+
-                                 '<div style="clear:both"></div>'+
-                            ' </footer>'+
-                         '</div>';
+                var markup = "<div id='" + this.id + "' class='afPopup hidden "+ this.addCssClass + "'>"+
+                            "<header>" + this.title + "</header>"+
+                            "<div>" + this.message + "</div>"+
+                            "<footer>"+
+                                 "<a href='javascript:;' class='" + this.cancelClass + "' id='cancel'>" + this.cancelText + "</a>"+
+                                 "<a href='javascript:;' class='" + this.doneClass + "' id='action'>" + this.doneText + "</a>"+
+                                 "<div style='clear:both'></div>"+
+                            "</footer>"+
+                            "</div>";
+                console.log(this.container);
                 $(this.container).append($(markup));
-
                 var $el = $.query("#" + this.id);
                 $el.bind("close", function () {
                     self.hide();
                 });
 
                 if (this.cancelOnly) {
-                    $el.find('A#action').hide();
-                    $el.find('A#cancel').addClass('center');
+                    $el.find("A#action").hide();
+                    $el.find("A#cancel").addClass("center");
                 }
-                $el.find('A').each(function () {
+                $el.find("A").each(function () {
                     var button = $(this);
-                    button.bind('click', function (e) {
-                        if (button.attr('id') == 'cancel') {
+                    button.bind("click", function (e) {
+                        if (button.attr("id") == "cancel") {
                             self.cancelCallback.call(self.cancelCallback, self);
                             self.hide();
                         } else {
@@ -5134,14 +4812,14 @@ if (!Date.now)
                 $el.find("header").show();
                 $el.find("footer").show();
                 setTimeout(function(){
-                    $el.removeClass('hidden');
+                    $el.removeClass("hidden");
                     self.onShow(self);
                 },50);
             },
 
             hide: function () {
                 var self = this;
-                $.query('#' + self.id).addClass('hidden');
+                $.query("#" + self.id).addClass("hidden");
                 $.unblockUI();
                 if(!$.os.ie&&!$.os.android){
                     setTimeout(function () {
@@ -5156,8 +4834,8 @@ if (!Date.now)
                 var self = this;
                 var $el = $.query("#" + self.id);
                 $el.unbind("close");
-                $el.find('BUTTON#action').unbind('click');
-                $el.find('BUTTON#cancel').unbind('click');
+                $el.find("BUTTON#action").unbind("click");
+                $el.find("BUTTON#cancel").unbind("click");
                 $el.unbind("orientationchange").remove();
                 queue.splice(0, 1);
                 if (queue.length > 0)
@@ -5165,7 +4843,8 @@ if (!Date.now)
             },
 
             positionPopup: function () {
-                var popup = $.query('#' + this.id);
+                var popup = $.query("#" + this.id);
+
                 popup.css("top", ((window.innerHeight / 2.5) + window.pageYOffset) - (popup[0].clientHeight / 2) + "px");
                 popup.css("left", (window.innerWidth / 2) - (popup[0].clientWidth / 2) + "px");
             }
@@ -5178,11 +4857,11 @@ if (!Date.now)
         if (uiBlocked)
             return;
         opacity = opacity ? " style='opacity:" + opacity + ";'" : "";
-        $.query('BODY').prepend($("<div id='mask'" + opacity + "></div>"));
-        $.query('BODY DIV#mask').bind("touchstart", function (e) {
+        $.query("BODY").prepend($("<div id='mask'" + opacity + "></div>"));
+        $.query("BODY DIV#mask").bind("touchstart", function (e) {
             e.preventDefault();
         });
-        $.query('BODY DIV#mask').bind("touchmove", function (e) {
+        $.query("BODY DIV#mask").bind("touchmove", function (e) {
             e.preventDefault();
         });
         uiBlocked = true;
@@ -5190,8 +4869,8 @@ if (!Date.now)
 
     $.unblockUI = function () {
         uiBlocked = false;
-        $.query('BODY DIV#mask').unbind("touchstart");
-        $.query('BODY DIV#mask').unbind("touchmove");
+        $.query("BODY DIV#mask").unbind("touchstart");
+        $.query("BODY DIV#mask").unbind("touchmove");
         $("BODY DIV#mask").remove();
     };
 
@@ -5200,8 +4879,10 @@ if (!Date.now)
  * af.actionsheet - an actionsheet for html5 mobile apps
  * Copyright 2012 - Intel
  */
+ /* global af*/
 (function($) {
-    $.fn["actionsheet"] = function(opts) {
+    "use strict";
+    $.fn.actionsheet = function(opts) {
         var tmp;
         for (var i = 0; i < this.length; i++) {
             tmp = new actionsheet(this[i], opts);
@@ -5216,7 +4897,7 @@ if (!Date.now)
                 this.el = elID;
             }
             if (!this.el) {
-                alert("Could not find element for actionsheet " + elID);
+                window.alert("Could not find element for actionsheet " + elID);
                 return;
             }
 
@@ -5232,9 +4913,10 @@ if (!Date.now)
 
             //  try {
             var that = this;
-            var markStart = '<div id="af_actionsheet"><div style="width:100%">';
-            var markEnd = '</div></div>';
+            var markStart = "<div id='af_actionsheet'><div style='width:100%'>";
+            var markEnd = "</div></div>";
             var markup;
+            var noop=function(){};
             if (typeof opts == "string") {
                 markup = $(markStart + opts + "<a href='javascript:;' class='cancel'>Cancel</a>" + markEnd);
             } else if (typeof opts == "object") {
@@ -5245,8 +4927,8 @@ if (!Date.now)
                     cssClasses: "cancel"
                 });
                 for (var i = 0; i < opts.length; i++) {
-                    var item = $('<a href="javascript:;" >' + (opts[i].text || "TEXT NOT ENTERED") + '</a>');
-                    item[0].onclick = (opts[i].handler || function() {});
+                    var item = $("<a href='javascript:;'>" + (opts[i].text || "TEXT NOT ENTERED") + "</a>");
+                    item[0].onclick = (opts[i].handler || noop);
                     if (opts[i].cssClasses && opts[i].cssClasses.length > 0)
                         item.addClass(opts[i].cssClasses);
                     container.append(item);
@@ -5254,7 +4936,7 @@ if (!Date.now)
             }
             $(elID).find("#af_actionsheet").remove();
             $(elID).find("#af_action_mask").remove();
-            actionsheetEl = $(elID).append(markup);
+            $(elID).append(markup);
 
             markup.vendorCss("Transition", "all 0ms");
             markup.cssTranslate("0,0");
@@ -5265,11 +4947,15 @@ if (!Date.now)
                 return false;
             });
             this.activeSheet = markup;
-            $(elID).append('<div id="af_action_mask" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px;z-index:9998;background:rgba(0,0,0,.4)"/>');
+            $(elID).append("<div id='af_action_mask' style='position:absolute;top:0px;left:0px;right:0px;bottom:0px;z-index:9998;background:rgba(0,0,0,.4)'/>");
             setTimeout(function() {
                 markup.vendorCss("Transition", "all 300ms");
                 markup.cssTranslate("0," + (-(markup.height())) + "px");
             }, 10);
+            $("#af_action_mask").bind("touchstart touchmove touchend click",function(e){
+                e.preventDefault();
+                e.stopPropagation();
+            });
 
         };
         actionsheet.prototype = {
@@ -5279,7 +4965,7 @@ if (!Date.now)
                 this.activeSheet.off("click", "a", function() {
                     that.hideSheet();
                 });
-                $(this.el).find("#af_action_mask").remove();
+                $(this.el).find("#af_action_mask").unbind("click").remove();
                 this.activeSheet.vendorCss("Transition", "all 0ms");
                 var markup = this.activeSheet;
                 var theEl = this.el;
@@ -5301,9 +4987,10 @@ if (!Date.now)
  * af.passwordBox - password box replacement for html5 mobile apps on android due to a bug with CSS3 translate3d
  * @copyright 2011 - Intel
  */
+ /* global af*/
 (function ($) {
-    $["passwordBox"] = function () {
-
+    "use strict";
+    $.passwordBox = function () {
         return new passwordBox();
     };
 
@@ -5316,12 +5003,10 @@ if (!Date.now)
          //   if ($.os.android == false) return; -  iOS users seem to want this too, so we'll let everyone join the party
             var container = elID && document.getElementById(elID) ? document.getElementById(elID) : document;
             if (!container) {
-                alert("Could not find container element for passwordBox " + elID);
+                window.alert("Could not find container element for passwordBox " + elID);
                 return;
             }
             var sels = container.getElementsByTagName("input");
-
-            var that = this;
             for (var i = 0; i < sels.length; i++) {
                 if (sels[i].type != "password") continue;
 
@@ -5338,7 +5023,6 @@ if (!Date.now)
 
             if (what == 1) { //show
                 $(theEl).vendorCss("TextSecurity","none");
-                
             } else {
                 $(theEl).vendorCss("TextSecurity","disc");
             }
@@ -5357,7 +5041,13 @@ if (!Date.now)
  * @description:  This script will replace all drop downs with friendly select controls.  Users can still interact
  * with the old drop down box as normal with javascript, and this will be reflected
  */
+ /* global af*/
+ /* global numOnly*/
 (function($) {
+    /*jshint camelcase: false,
+    validthis:true
+    */
+    "use strict";
     function updateOption(prop, oldValue, newValue) {
         if (newValue === true) {
             if (!this.getAttribute("multiple"))
@@ -5382,18 +5072,18 @@ if (!Date.now)
         delete el.linker;
         e.stopPropagation();
     }
-    $['selectBox'] = {
+    $.selectBox = {
         scroller: null,
         currLinker: null,
         getOldSelects: function(elID) {
             if (!$.os.android || $.os.androidICS) return;
-            if (!$.fn['scroller']) {
-                alert("This library requires af.scroller");
+            if (!$.fn.scroller) {
+                window.alert("This library requires af.scroller");
                 return;
             }
             var container = elID && document.getElementById(elID) ? document.getElementById(elID) : document;
             if (!container) {
-                alert("Could not find container element for af.selectBox " + elID);
+                window.alert("Could not find container element for af.selectBox " + elID);
                 return;
             }
             var sels = container.getElementsByTagName("select");
@@ -5562,7 +5252,7 @@ if (!Date.now)
                     var $e=$(e.target);
                     if($e.closest("#afSelectBoxContainer").length===0)
                         that.hideDropDown();
-                })
+                });
 
                 $("#afSelectBoxfix").on("click", "li", function(e) {
                     var $el = $(e.target);
@@ -5632,33 +5322,35 @@ if (!Date.now)
     }
 })(af);
 //Touch events are from zepto/touch.js
+/* global af*/
 (function($) {
+    "use strict";
     var touch = {}, touchTimeout;
 
     function parentIfText(node) {
-        return 'tagName' in node ? node : node.parentNode;
+        return "tagName" in node ? node : node.parentNode;
     }
 
     function swipeDirection(x1, x2, y1, y2) {
         var xDelta = Math.abs(x1 - x2), yDelta = Math.abs(y1 - y2);
         if (xDelta >= yDelta) {
-            return (x1 - x2 > 0 ? 'Left' : 'Right');
+            return (x1 - x2 > 0 ? "Left" : "Right");
         } else {
-            return (y1 - y2 > 0 ? 'Up' : 'Down');
+            return (y1 - y2 > 0 ? "Up" : "Down");
         }
     }
 
     var longTapDelay = 750;
     function longTap() {
         if (touch.last && (Date.now() - touch.last >= longTapDelay)) {
-            touch.el.trigger('longTap');
+            touch.el.trigger("longTap");
             touch = {};
         }
     }
     var longTapTimer;
     $(document).ready(function() {
         var prevEl;
-        $(document.body).bind('touchstart', function(e) {
+        $(document.body).bind("touchstart", function(e) {
             if(e.originalEvent)
                 e=e.originalEvent;
             if(!e.touches||e.touches.length===0) return;
@@ -5672,20 +5364,20 @@ if (!Date.now)
             if (delta > 0 && delta <= 250)
                 touch.isDoubleTap = true;
             touch.last = now;
-           longTapTimer=setTimeout(longTap, longTapDelay);
-           
+            longTapTimer=setTimeout(longTap, longTapDelay);
+
             if ($.ui.useAutoPressed && !touch.el.data("ignore-pressed"))
                 touch.el.addClass("pressed");
             if(prevEl && $.ui.useAutoPressed && !prevEl.data("ignore-pressed")&&prevEl[0]!=touch.el[0])
                 prevEl.removeClass("pressed");
             prevEl=touch.el;
-        }).bind('touchmove', function(e) {
+        }).bind("touchmove", function(e) {
             if(e.originalEvent)
                 e=e.originalEvent;
             touch.x2 = e.touches[0].pageX;
             touch.y2 = e.touches[0].pageY;
             clearTimeout(longTapTimer);
-        }).bind('touchend', function(e) {
+        }).bind("touchend", function(e) {
             if(e.originalEvent)
                 e=e.originalEvent;
             if (!touch.el)
@@ -5693,23 +5385,23 @@ if (!Date.now)
             if ($.ui.useAutoPressed && !touch.el.data("ignore-pressed"))
                 touch.el.removeClass("pressed");
             if (touch.isDoubleTap) {
-                touch.el.trigger('doubleTap');
+                touch.el.trigger("doubleTap");
                 touch = {};
             } else if (touch.x2 > 0 || touch.y2 > 0) {
                 (Math.abs(touch.x1 - touch.x2) > 30 || Math.abs(touch.y1 - touch.y2) > 30) &&
-                touch.el.trigger('swipe') &&
-                touch.el.trigger('swipe' + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)));
+                touch.el.trigger("swipe") &&
+                touch.el.trigger("swipe" + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)));
                 touch.x1 = touch.x2 = touch.y1 = touch.y2 = touch.last = 0;
-            } else if ('last' in touch) {
-                touch.el.trigger('tap');
+            } else if ("last" in touch) {
+                touch.el.trigger("tap");
                 touchTimeout = setTimeout(function() {
                     touchTimeout = null;
                     if (touch.el)
-                        touch.el.trigger('singleTap');
+                        touch.el.trigger("singleTap");
                     touch = {};
                 }, 250);
             }
-        }).bind('touchcancel', function() {
+        }).bind("touchcancel", function() {
             if(touch.el && $.ui.useAutoPressed && !touch.el.data("ignore-pressed"))
                 touch.el.removeClass("pressed");
             touch = {};
@@ -5718,7 +5410,7 @@ if (!Date.now)
         });
     });
 
-    ['swipe', 'swipeLeft', 'swipeRight', 'swipeUp', 'swipeDown', 'doubleTap', 'tap', 'singleTap', 'longTap'].forEach(function(m) {
+    ["swipe", "swipeLeft", "swipeRight", "swipeUp", "swipeDown", "doubleTap", "tap", "singleTap", "longTap"].forEach(function(m) {
         $.fn[m] = function(callback) {
             return this.bind(m, callback);
         };
@@ -5745,8 +5437,11 @@ if (!Date.now)
 //Other
 //orientationchange-reshape - resize event due to an orientationchange action
 //reshape - window.resize/window.scroll event (ignores onfocus "shaking") - general reshape notice
+/* global af*/
+/* global numOnly*/
+/* jshint camelcase:false */
 (function($) {
-
+    "use strict";
     //singleton
     $.touchLayer = function(el) {
         //	if(af.os.desktop||!af.os.webkit) return;
@@ -5754,8 +5449,8 @@ if (!Date.now)
         return $.touchLayer;
     };
     //configuration stuff
-    var inputElements = ['input', 'select', 'textarea'];
-    var autoBlurInputTypes = ['button', 'radio', 'checkbox', 'range', 'date'];
+    var inputElements = ["input", "select", "textarea"];
+    var autoBlurInputTypes = ["button", "radio", "checkbox", "range", "date"];
     var requiresJSFocus = $.os.ios; //devices which require .focus() on dynamic click events
     var verySensitiveTouch = $.os.blackberry; //devices which have a very sensitive touch and touchmove is easily fired even on simple taps
     var inputElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android && !$.os.chrome); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
@@ -5774,12 +5469,12 @@ if (!Date.now)
     }
     var touchLayer = function(el) {
         this.clearTouchVars();
-        el.addEventListener('touchstart', this, false);
-        el.addEventListener('touchmove', this, false);
-        el.addEventListener('touchend', this, false);
-        el.addEventListener('click', this, false);
+        el.addEventListener("touchstart", this, false);
+        el.addEventListener("touchmove", this, false);
+        el.addEventListener("touchend", this, false);
+        el.addEventListener("click", this, false);
         el.addEventListener("focusin", this, false);
-        document.addEventListener('scroll', this, false);
+        document.addEventListener("scroll", this, false);
         window.addEventListener("resize", this, false);
         window.addEventListener("orientationchange", this, false);
         this.layer = el;
@@ -5790,21 +5485,21 @@ if (!Date.now)
         var that = this;
         this.scrollTimeoutExpireProxy_ = function() {
             that.scrollTimeout_ = null;
-            that.scrollTimeoutEl_.addEventListener('scroll', that.scrollEndedProxy_, false);
+            that.scrollTimeoutEl_.addEventListener("scroll", that.scrollEndedProxy_, false);
         };
         this.retestAndFixUIProxy_ = function() {
-            if (af.os.android) that.layer.style.height = '100%';
+            if (af.os.android) that.layer.style.height = "100%";
             $.asap(that.testAndFixUI, that, arguments);
         };
         //iPhone double clicks workaround
-        document.addEventListener('click', function(e) {
-        
+        document.addEventListener("click", function(e) {
+
             if (cancelClick) {
                 e.preventDefault();
                 e.stopPropagation();
                 return false;
             }
-            if (e.clientX !== undefined && that.lastTouchStartX != null) {
+            if (e.clientX !== undefined && that.lastTouchStartX !== null) {
                 if (2 > Math.abs(that.lastTouchStartX - e.clientX) && 2 > Math.abs(that.lastTouchStartY - e.clientY)) {
                     e.preventDefault();
                     e.stopPropagation();
@@ -5812,18 +5507,18 @@ if (!Date.now)
             }
         }, true);
         //js scrollers self binding
-        $.bind(this, 'scrollstart', function(el) {
+        $.bind(this, "scrollstart", function(el) {
             that.isScrolling = true;
             that.scrollingEl_ = el;
             if (!$.feat.nativeTouchScroll)
                 that.scrollerIsScrolling = true;
-            that.fireEvent('UIEvents', 'scrollstart', el, false, false);
+            that.fireEvent("UIEvents", "scrollstart", el, false, false);
         });
-        $.bind(this, 'scrollend', function(el) {
+        $.bind(this, "scrollend", function(el) {
             that.isScrolling = false;
             if (!$.feat.nativeTouchScroll)
                 that.scrollerIsScrolling = false;
-            that.fireEvent('UIEvents', 'scrollend', el, false, false);
+            that.fireEvent("UIEvents", "scrollend", el, false, false);
         });
         //fix layer positioning
         this.launchFixUI(5); //try a lot to set page into place
@@ -5870,33 +5565,33 @@ if (!Date.now)
 
         handleEvent: function(e) {
             switch (e.type) {
-                case 'touchstart':
-                    this.onTouchStart(e);
-                    break;
-                case 'touchmove':
-                    this.onTouchMove(e);
-                    break;
-                case 'touchend':
-                    this.onTouchEnd(e);
-                    break;
-                case 'click':
-                    this.onClick(e);
-                    break;
-                case 'blur':
-                    this.onBlur(e);
-                    break;
-                case 'scroll':
-                    this.onScroll(e);
-                    break;
-                case 'orientationchange':
-                    this.onOrientationChange(e);
-                    break;
-                case 'resize':
-                    this.onResize(e);
-                    break;
-                case 'focusin':
-                    this.onFocusIn(e);
-                    break;
+            case "touchstart":
+                this.onTouchStart(e);
+                break;
+            case "touchmove":
+                this.onTouchMove(e);
+                break;
+            case "touchend":
+                this.onTouchEnd(e);
+                break;
+            case "click":
+                this.onClick(e);
+                break;
+            case "blur":
+                this.onBlur(e);
+                break;
+            case "scroll":
+                this.onScroll(e);
+                break;
+            case "orientationchange":
+                this.onOrientationChange(e);
+                break;
+            case "resize":
+                this.onResize(e);
+                break;
+            case "focusin":
+                this.onFocusIn(e);
+                break;
             }
         },
         launchFixUI: function(maxTries) {
@@ -5930,17 +5625,17 @@ if (!Date.now)
             }
 
             //this.log("hiding address bar");
-            if (af.os.desktop || af.os.chrome) {
+            if (af.os.desktop || af.os.chrome||af.os.kindle) {
                 this.layer.style.height = "100%";
             } else if (af.os.android) {
                 //on some phones its immediate
                 window.scrollTo(1, 1);
-                this.layer.style.height = this.isFocused_ || window.innerHeight > window.outerHeight ? (window.innerHeight) + "px" : ((window.outerHeight) / window.devicePixelRatio) + 'px';
+                this.layer.style.height = this.isFocused_ || window.innerHeight > window.outerHeight ? (window.innerHeight) + "px" : ((window.outerHeight) / window.devicePixelRatio) + "px";
                 //sometimes android devices are stubborn
-                that = this;
+                var that = this;
                 //re-test in a bit (some androids (SII, Nexus S, etc) fail to resize on first try)
                 var nextTry = retry + 1;
-                this.reHideAddressBarTimeout_ = setTimeout(this.retestAndFixUIProxy_, 250 * nextTry, [nextTry, maxTries]); //each fix is progressibily longer (slower phones fix)
+                this.reHideAddressBarTimeout_ = setTimeout(that.retestAndFixUIProxy_, 250 * nextTry, [nextTry, maxTries]); //each fix is progressibily longer (slower phones fix)
             } else if (!this.isFocused_) {
                 document.documentElement.style.height = "5000px";
                 window.scrollTo(0, 0);
@@ -5964,49 +5659,49 @@ if (!Date.now)
             //this.log("orientationchange");
             //if a resize already happened, fire the orientationchange
             if (!this.holdingReshapeType_ && this.reshapeTimeout_) {
-                this.fireReshapeEvent('orientationchange');
-            } else this.previewReshapeEvent('orientationchange');
+                this.fireReshapeEvent("orientationchange");
+            } else this.previewReshapeEvent("orientationchange");
         },
         onResize: function(e) {
             //avoid infinite loop on iPhone
             if (this.ignoreNextResize_) {
-                //this.log('ignored resize');
+                //this.log("ignored resize");
                 this.ignoreNextResize_ = false;
                 return;
             }
-            //this.logInfo('resize');
+            //this.logInfo("resize");
             if (this.launchFixUI()) {
                 this.reshapeAction();
             }
         },
         onClick: function(e) {
             //handle forms
-            var tag = e.target && e.target.tagName !== undefined ? e.target.tagName.toLowerCase() : '';
-            
+            var tag = e.target && e.target.tagName !== undefined ? e.target.tagName.toLowerCase() : "";
+
             //this.log("click on "+tag);
             if (inputElements.indexOf(tag) !== -1 && (!this.isFocused_ || e.target !== (this.focusedElement))) {
-                var type = e.target && e.target.type !== undefined ? e.target.type.toLowerCase() : '';
+                var type = e.target && e.target.type !== undefined ? e.target.type.toLowerCase() : "";
                 var autoBlur = autoBlurInputTypes.indexOf(type) !== -1;
 
                 //focus
                 if (!autoBlur) {
                     //remove previous blur event if this keeps focus
                     if (this.isFocused_) {
-                        this.focusedElement.removeEventListener('blur', this, false);
+                        this.focusedElement.removeEventListener("blur", this, false);
                     }
                     this.focusedElement = e.target;
-                    this.focusedElement.addEventListener('blur', this, false);
+                    this.focusedElement.addEventListener("blur", this, false);
                     //android bug workaround for UI
                     if (!this.isFocused_ && !this.justBlurred_) {
                         //this.log("enter edit mode");
-                        $.trigger(this, 'enter-edit', [e.target]);
+                        $.trigger(this, "enter-edit", [e.target]);
                         //fire / preview reshape event
                         if ($.os.ios) {
                             var that = this;
                             setTimeout(function() {
-                                that.fireReshapeEvent('enter-edit');
+                                that.fireReshapeEvent("enter-edit");
                             }, 300); //TODO: get accurate reading from window scrolling motion and get rid of timeout
-                        } else this.previewReshapeEvent('enter-edit');
+                        } else this.previewReshapeEvent("enter-edit");
                     }
                     this.isFocused_ = true;
                 } else {
@@ -6022,14 +5717,12 @@ if (!Date.now)
 
                 //BB10 needs to be preventDefault on touchstart and thus need manual blur on click
             } else if ($.os.blackberry10 && this.isFocused_) {
-                
-
                 this.focusedElement.blur();
             }
         },
         previewReshapeEvent: function(ev) {
             //a reshape event of this type should fire within the next 750 ms, otherwise fire it yourself
-            that = this;
+            var that = this;
             this.reshapeTimeout_ = setTimeout(function() {
                 that.fireReshapeEvent(ev);
                 that.reshapeTimeout_ = null;
@@ -6038,9 +5731,9 @@ if (!Date.now)
             this.holdingReshapeType_ = ev;
         },
         fireReshapeEvent: function(ev) {
-            //this.log(ev?ev+'-reshape':'unknown-reshape');
-            $.trigger(this, 'reshape'); //trigger a general reshape notice
-            $.trigger(this, ev ? ev + '-reshape' : 'unknown-reshape'); //trigger the specific reshape
+            //this.log(ev?ev+"-reshape":"unknown-reshape");
+            $.trigger(this, "reshape"); //trigger a general reshape notice
+            $.trigger(this, ev ? ev + "-reshape" : "unknown-reshape"); //trigger the specific reshape
         },
         reshapeAction: function() {
             if (this.reshapeTimeout_) {
@@ -6060,7 +5753,7 @@ if (!Date.now)
 
             this.isFocused_ = false;
             //just in case...
-            if (this.focusedElement) this.focusedElement.removeEventListener('blur', this, false);
+            if (this.focusedElement) this.focusedElement.removeEventListener("blur", this, false);
             this.focusedElement = null;
             //make sure this blur is not followed by another focus
             this.justBlurred_ = true;
@@ -6070,16 +5763,16 @@ if (!Date.now)
             this.justBlurred_ = false;
             if (!this.isFocused_) {
                 //this.log("exit edit mode");
-                $.trigger(this, 'exit-edit', [el]);
+                $.trigger(this, "exit-edit", [el]);
                 //do not allow scroll anymore
                 this.allowDocumentScroll_ = false;
                 //fire / preview reshape event
                 if ($.os.ios) {
                     var that = this;
                     setTimeout(function() {
-                        that.fireReshapeEvent('exit-edit');
+                        that.fireReshapeEvent("exit-edit");
                     }, 300); //TODO: get accurate reading from window scrolling motion and get rid of timeout
-                } else this.previewReshapeEvent('exit-edit');
+                } else this.previewReshapeEvent("exit-edit");
             }
         },
         onScroll: function(e) {
@@ -6158,7 +5851,7 @@ if (!Date.now)
                 var tag = e.target.tagName.toLowerCase();
                 if (inputElements.indexOf(tag) !== -1) {
                     //notify scrollers (android forms bug), except for selects
-                    //if(tag != 'select') $.trigger(this, 'pre-enter-edit', [e.target]);
+                    //if(tag != "select") $.trigger(this, "pre-enter-edit", [e.target]);
                     this.requiresNativeTap = true;
                 }
             } else if (e.target && e.target.tagName !== undefined && e.target.tagName.toLowerCase() == "input" && e.target.type == "range") {
@@ -6169,7 +5862,7 @@ if (!Date.now)
             if (!this.isPanning_ && !this.requiresNativeTap) {
                 if ((this.isScrolling && !$.feat.nativeTouchScroll) || (!this.isScrolling))
                     e.preventDefault();
-                //demand vertical scroll (don't let it pan the page)
+                //demand vertical scroll (don"t let it pan the page)
             } else if (this.isScrollingVertical_) {
                 this.demandVerticalScroll();
             }
@@ -6193,21 +5886,21 @@ if (!Date.now)
         //set rules here to ignore scrolling check on these elements
         //consider forcing user to use scroller object to assess these... might be causing bugs
         ignoreScrolling: function(el) {
-            if (el['scrollWidth'] === undefined || el['clientWidth'] === undefined) return true;
-            if (el['scrollHeight'] === undefined || el['clientHeight'] === undefined) return true;
+            if (el.scrollWidth === undefined || el.clientWidth === undefined) return true;
+            if (el.scrollHeight === undefined || el.clientHeight === undefined) return true;
             return false;
         },
 
         allowsVerticalScroll: function(el, styles) {
             var overflowY = styles.overflowY;
-            if (overflowY == 'scroll') return true;
-            if (overflowY == 'auto' && el['scrollHeight'] > el['clientHeight']) return true;
+            if (overflowY == "scroll") return true;
+            if (overflowY == "auto" && el.scrollHeight > el.clientHeight) return true;
             return false;
         },
         allowsHorizontalScroll: function(el, styles) {
             var overflowX = styles.overflowX;
-            if (overflowX == 'scroll') return true;
-            if (overflowX == 'auto' && el['scrollWidth'] > el['clientWidth']) return true;
+            if (overflowX == "scroll") return true;
+            if (overflowX == "auto" && el.scrollWidth > el.clientWidth) return true;
             return false;
         },
 
@@ -6251,8 +5944,8 @@ if (!Date.now)
         scrollEnded: function(e) {
             //this.log("scrollEnded");
             if (this.scrollTimeoutEl_ === null) { return; }
-            if (e) this.scrollTimeoutEl_.removeEventListener('scroll', this.scrollEndedProxy_, false);
-            this.fireEvent('UIEvents', 'scrollend', this.scrollTimeoutEl_, false, false);
+            if (e) this.scrollTimeoutEl_.removeEventListener("scroll", this.scrollEndedProxy_, false);
+            this.fireEvent("UIEvents", "scrollend", this.scrollTimeoutEl_, false, false);
             this.scrollTimeoutEl_ = null;
         },
 
@@ -6275,7 +5968,7 @@ if (!Date.now)
 
                 if (!wasMoving) {
                     //this.log("scrollstart");
-                    this.fireEvent('UIEvents', 'scrollstart', this.scrollingEl_, false, false);
+                    this.fireEvent("UIEvents", "scrollstart", this.scrollingEl_, false, false);
                 }
                 //if(this.isScrollingVertical_) {
                 this.speedY = (this.lastY - e.touches[0].pageY) / (e.timeStamp - this.lastTimestamp);
@@ -6327,7 +6020,7 @@ if (!Date.now)
                 if (!this.blockClicks && !this.blockPossibleClick_) {
                     var theTarget = e.target;
                     if (theTarget.nodeType == 3) theTarget = theTarget.parentNode;
-                    this.fireEvent('Event', 'click', theTarget, true, e.mouseToTouch, e.changedTouches[0]);
+                    this.fireEvent("Event", "click", theTarget, true, e.mouseToTouch, e.changedTouches[0]);
                     this.lastTouchStartX = this.dX;
                     this.lastTouchStartY = this.dY;
                 }
@@ -6348,14 +6041,14 @@ if (!Date.now)
                 }
                 //trigger cancel-enter-edit on inputs
                 if (this.requiresNativeTap) {
-                    if (!this.isFocused_) $.trigger(this, 'cancel-enter-edit', [e.target]);
+                    if (!this.isFocused_) $.trigger(this, "cancel-enter-edit", [e.target]);
                 }
             }
             if($.os.blackberry10) {
                 this.lastTouchStartX = this.dX;
                 this.lastTouchStartY = this.dY;
             }
-            
+
             this.clearTouchVars();
         },
 
@@ -6376,10 +6069,10 @@ if (!Date.now)
             //create the event and set the options
             var theEvent = document.createEvent(eventType);
             theEvent.initEvent(eventName, bubbles, true);
-            theEvent.target = target;
+            //theEvent.target = target;
             if (data) {
                 $.each(data, function(key, val) {
-                    theEvent[key] = val;
+                    theEvent.key = val;
                 });
             }
             //af.DesktopBrowsers flag
@@ -6392,95 +6085,164 @@ if (!Date.now)
 /**
  * af.8tiles - Provides a WP8 theme and handles showing the menu
  * Copyright 2012 - Intel
- */;
+ */
+ /* global af*/
+
 (function($) {
-	"use strict";
+    "use strict";
 
-	if (!$) {
-		throw "This plugin requires jqUi";
-	}
+    if (!$) {
+        throw "This plugin requires jqUi";
+    }
 
-	function wire8Tiles() {
-		$.ui.isWin8 = true;
-		if (!$.os.ie) return;
+    function wire8Tiles() {
+        $.ui.isWin8 = true;
+        if (!$.os.ie) return;
 
-		$.ui.ready(function() {
+        $.ui.ready(function() {
 
-			if ($.ui.slideSideMenu) $.ui.slideSideMenu = false;
-			//we need to make sure the menu button shows up in the bottom navbar
-			$.query("#afui #navbar footer").append("<a id='metroMenu' onclick='$.ui.toggleSideMenu()'>•••</a>");
-			var tmpAnchors = $.query("#afui #navbar").find("a");
-			if (tmpAnchors.length > 0) {
-				tmpAnchors.data("ignore-pressed", "true").data("resetHistory", "true");
-				var width = parseFloat(100 / tmpAnchors.length);
-				tmpAnchors.css("width", width + "%");
-			}
-			var oldUpdate = $.ui.updateNavbarElements;
-			$.ui.updateNavbarElements = function() {
-				oldUpdate.apply($.ui, arguments);
-				if ($.query("#afui #navbar #metroMenu").length == 1) return;
-				$.query("#afui #navbar footer").append("<a id='metroMenu' onclick='$.ui.toggleSideMenu()'>•••</a>");
-			};
+            if(window.innerWidth>$.ui.handheldMinWidth) return true;
 
-			var oldToggle = $.ui.toggleSideMenu;
-			$.ui.isSideMenuOn = function() {
+            if ($.ui.slideSideMenu) $.ui.slideSideMenu = false;
+            //we need to make sure the menu button shows up in the bottom navbar
+            $.query("#afui #navbar footer").append("<a id='metroMenu' onclick='$.ui.toggleSideMenu()'>•••</a>");
+            var tmpAnchors = $.query("#afui #navbar").find("a");
+            if (tmpAnchors.length > 0) {
+                tmpAnchors.data("ignore-pressed", "true").data("resetHistory", "true");
+                var width = parseFloat(100 / tmpAnchors.length);
+                tmpAnchors.css("width", width + "%");
+            }
+            var oldUpdate = $.ui.updateNavbarElements;
+            $.ui.updateNavbarElements = function() {
+                oldUpdate.apply($.ui, arguments);
+                if ($.query("#afui #navbar #metroMenu").length == 1) return;
+                $.query("#afui #navbar footer").append("<a id='metroMenu' onclick='$.ui.toggleSideMenu()'>•••</a>");
+            };
+            $.ui.isSideMenuOn = function() {
 
-				var menu = parseInt($.getCssMatrix($("#navbar")).f) < 0 ? true : false;
-				return this.isSideMenuEnabled() && menu;
-			};
-			$.ui.toggleSideMenu = function(force, callback) {
-				if (!this.isSideMenuEnabled() || this.togglingSideMenu) return;
-				this.togglingSideMenu = true;
-				var that = this;
-				var menu = $.query("#menu");
-				var els = $.query("#navbar");
-				var open = this.isSideMenuOn();
-
-				if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
-					menu.show();
-
-					that.css3animate(els, {
-						y: "-150px",
-						time: $.ui.transitionTime,
-						complete: function(canceled) {
-							that.togglingSideMenu = false;
-
-							if (callback) callback(true);
-
-						}
-					});
-					that.css3animate(menu, {
-						y: "0px",
-						time: $.ui.transitionTime
-					});
-
-				} else if (force === undefined || (force !== undefined && force === false)) {
-
-					that.css3animate(els, {
-						y: "0",
-						time: $.ui.transitionTime,
-						complete: function(canceled) {
+                var menu = parseInt($.getCssMatrix($("#navbar")).f,10) < 0 ? true : false;
+                return this.isSideMenuEnabled() && menu;
+            };
+            $.ui.toggleRightSideMenu=function(force,callback,time) {
+                if ((!this.isAsideMenuEnabled()) || this.togglingAsideMenu) return;
+                var aside=true;
+                if(!aside&&!this.isSideMenuEnabled()) return;
+                if(!aside&&$.ui.splitview) return;
+                var that = this;
+                var menu=$("#menu");
+                var asideMenu= $.query("#aside_menu");
+                var els = $.query("#content,  #header, #navbar");
+                var panelMask = $.query(".afui_panel_mask");
+                time = time || this.transitionTime;
+                var open = $("#aside_menu").css("display")==="block";
+                var toX=aside?"-"+that.sideMenuWidth:that.sideMenuWidth;
+                // add panel mask to block when side menu is open for phone devices
+                if(panelMask.length === 0 && window.innerWidth < $.ui.handheldMinWidth){
+                    els.append("<div class='afui_panel_mask'></div>");
+                    panelMask = $.query(".afui_panel_mask");
+                    $(".afui_panel_mask").bind("click", function(){
+                        $.ui.toggleSideMenu(false, null, null, aside);
+                    });
+                }
+                //Here we need to check if we are toggling the left to right, or right to left
+                var menuPos=this.getSideMenuPosition();
+                if(open&&!aside&&menuPos<0)
+                    open=false;
+                else if(open&&aside&&menuPos>0)
+                    open=false;
 
 
-							that.togglingSideMenu = false;
-							if (callback) callback(true);
-							menu.hide();
-						}
-					});
-					that.css3animate(menu, {
-						y: "150px",
-						time: $.ui.transitionTime
-					});
-				}
-			};
-		});
-	}
+                if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
+                    this.togglingSideMenu = true;
+                    if(!aside)
+                        menu.show();
+                    else
+                        asideMenu.show();
+                    that.css3animate(els, {
+                        x: toX,
+                        time: time,
+                        complete: function(canceled) {
+                            that.togglingSideMenu = false;
+                            els.vendorCss("Transition", "");
+                            if (callback) callback(canceled);
+                            if(panelMask.length !== 0 && window.innerWidth < $.ui.handheldMinWidth){
+                                panelMask.show();
+                            }
+                        }
+                    });
 
-	if (!$.ui) {
-		$(document).ready(function() {
-			wire8Tiles();
-		});
-	} else {
-		wire8Tiles();
-	}
+                } else if (force === undefined || (force !== undefined && force === false)) {
+                    this.togglingSideMenu = true;
+                    that.css3animate(els, {
+                        x: "0px",
+                        time: time,
+                        complete: function(canceled) {
+                            // els.removeClass("on");
+                            els.vendorCss("Transition", "");
+                            els.vendorCss("Transform", "");
+                            that.togglingSideMenu = false;
+                            if (callback) callback(canceled);
+                            if(!$.ui.splitview)
+                                menu.hide();
+                            asideMenu.hide();
+                            if(panelMask.length !== 0 && window.innerWidth < $.ui.handheldMinWidth){
+                                panelMask.hide();
+                            }
+                        }
+                    });
+                }
+            };
+            $.ui.toggleLeftSideMenu = function(force, callback) {
+                if (!this.isSideMenuEnabled() || this.togglingSideMenu) return;
+                this.togglingSideMenu = true;
+                var that = this;
+                var menu = $.query("#menu");
+                var els = $.query("#navbar");
+                var open = this.isSideMenuOn();
+
+                if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
+                    menu.show();
+
+                    that.css3animate(els, {
+                        y: "-150px",
+                        time: $.ui.transitionTime,
+                        complete: function() {
+                            that.togglingSideMenu = false;
+
+                            if (callback) callback(true);
+
+                        }
+                    });
+                    that.css3animate(menu, {
+                        y: "0px",
+                        time: $.ui.transitionTime
+                    });
+
+                } else if (force === undefined || (force !== undefined && force === false)) {
+
+                    that.css3animate(els, {
+                        y: "0",
+                        time: $.ui.transitionTime,
+                        complete: function() {
+                            that.togglingSideMenu = false;
+                            if (callback) callback(true);
+                            menu.hide();
+                        }
+                    });
+                    that.css3animate(menu, {
+                        y: "150px",
+                        time: $.ui.transitionTime
+                    });
+                }
+            };
+        });
+    }
+
+    if (!$.ui) {
+        $(document).ready(function() {
+            wire8Tiles();
+        });
+    } else {
+        wire8Tiles();
+    }
 })(af);
