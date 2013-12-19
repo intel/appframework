@@ -214,4 +214,5 @@ module.exports = function (grunt) {
     grunt.registerTask("test", ["mochaccino:unit"]);
     grunt.registerTask("cov", ["clean", "mochaccino:cov"]);
     grunt.registerTask("rebuild" , ["cssmin","concat","closure-compiler","usebanner"]);
+    grunt.registerTask("hint" , ["jshint"]);
 };

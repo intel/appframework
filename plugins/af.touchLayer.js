@@ -650,10 +650,10 @@
             //create the event and set the options
             var theEvent = document.createEvent(eventType);
             theEvent.initEvent(eventName, bubbles, true);
-            theEvent.target = target;
+            //theEvent.target = target;
             if (data) {
                 $.each(data, function(key, val) {
-                    theEvent[key] = val;
+                    theEvent.key = val;
                 });
             }
             //af.DesktopBrowsers flag

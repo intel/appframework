@@ -36,8 +36,8 @@
 
             //  try {
             var that = this;
-            var markStart = '<div id="af_actionsheet"><div style="width:100%">';
-            var markEnd = '</div></div>';
+            var markStart = "<div id='af_actionsheet'><div style='width:100%'>";
+            var markEnd = "</div></div>";
             var markup;
             var noop=function(){};
             if (typeof opts == "string") {
@@ -50,7 +50,7 @@
                     cssClasses: "cancel"
                 });
                 for (var i = 0; i < opts.length; i++) {
-                    var item = $('<a href="javascript:;" >' + (opts[i].text || "TEXT NOT ENTERED") + '</a>');
+                    var item = $("<a href='javascript:;'>" + (opts[i].text || "TEXT NOT ENTERED") + "</a>");
                     item[0].onclick = (opts[i].handler || noop);
                     if (opts[i].cssClasses && opts[i].cssClasses.length > 0)
                         item.addClass(opts[i].cssClasses);
@@ -70,7 +70,7 @@
                 return false;
             });
             this.activeSheet = markup;
-            $(elID).append('<div id="af_action_mask" style="position:absolute;top:0px;left:0px;right:0px;bottom:0px;z-index:9998;background:rgba(0,0,0,.4)"/>');
+            $(elID).append("<div id='af_action_mask' style='position:absolute;top:0px;left:0px;right:0px;bottom:0px;z-index:9998;background:rgba(0,0,0,.4)'/>");
             setTimeout(function() {
                 markup.vendorCss("Transition", "all 300ms");
                 markup.cssTranslate("0," + (-(markup.height())) + "px");

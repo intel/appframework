@@ -270,11 +270,11 @@ if (!window.af || typeof(af) !== "function") {
         */
         $.map = function(elements, callback) {
             var value, values = [],
-                i, key;                
+                i, key;
             if ($.isArray(elements)){
 
                 for (i = 0; i < elements.length; i++) {
-                    value = callback.apply(elements[i],[elements[i],i]); 
+                    value = callback.apply(elements[i],[elements[i],i]);
                     if (value !== nundefined)
                         values.push(value);
                 }

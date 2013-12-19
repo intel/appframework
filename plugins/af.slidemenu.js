@@ -67,9 +67,9 @@
 
             //splitview stuff  
 
-            if($.ui.splitview&&window.innerWidth>=parseInt($.ui.handheldMinWidth)&& (dx > startX)&&openState==0) return true;
-            if (!$.ui.isSideMenuEnabled() && (dx > startX) && openState==0) return true;
-            if (!$.ui.isAsideMenuEnabled() && (dx < startX) && openState==0) return true;
+            if($.ui.splitview&&window.innerWidth>=parseInt($.ui.handheldMinWidth,10)&& (dx > startX)&&openState===0) return true;
+            if (!$.ui.isSideMenuEnabled() && (dx > startX) && openState===0) return true;
+            if (!$.ui.isAsideMenuEnabled() && (dx < startX) && openState===0) return true;
 
 
             if (Math.abs(dy - startY) > Math.abs(dx - startX)) return true;
