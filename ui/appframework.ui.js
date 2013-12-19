@@ -219,7 +219,7 @@
             width = width + "";
             width = width.replace("px", "") + "px";
             $("head").find("style#afui_asideMenuWidth").remove();
-            $("head").append("<style id='afui_asideMenuWidth'>#afui #asid_menu {width:" + width + "  !important}</style>");
+            $("head").append("<style id='afui_asideMenuWidth'>#afui #aside_menu {width:" + width + "  !important}</style>");
         },
 
 
