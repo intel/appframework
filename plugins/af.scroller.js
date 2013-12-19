@@ -379,7 +379,7 @@
                 this.hscrollBar = scrollDiv;
                 scrollDiv = null;
             }
-            if (this.horizontalScroll) this.el.style.float = "left";
+            if (this.horizontalScroll) this.el.style.cssFloat = "left";
 
             this.el.hasScroller = true;
 

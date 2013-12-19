@@ -95,7 +95,7 @@ $("#myTestPopup").trigger("close");
             supressTitle: false,
             show: function () {
                 var self = this;
-                var markup = "<div id='" + this.id + " class='afPopup hidden "+ this.addCssClass + "'>"+
+                var markup = "<div id='" + this.id + "' class='afPopup hidden "+ this.addCssClass + "'>"+
                             "<header>" + this.title + "</header>"+
                             "<div>" + this.message + "</div>"+
                             "<footer>"+
@@ -104,8 +104,8 @@ $("#myTestPopup").trigger("close");
                                  "<div style='clear:both'></div>"+
                             "</footer>"+
                             "</div>";
+                console.log(this.container);
                 $(this.container).append($(markup));
-
                 var $el = $.query("#" + this.id);
                 $el.bind("close", function () {
                     self.hide();
@@ -172,6 +172,7 @@ $("#myTestPopup").trigger("close");
 
             positionPopup: function () {
                 var popup = $.query("#" + this.id);
+
                 popup.css("top", ((window.innerHeight / 2.5) + window.pageYOffset) - (popup[0].clientHeight / 2) + "px");
                 popup.css("left", (window.innerWidth / 2) - (popup[0].clientWidth / 2) + "px");
             }
