@@ -2000,6 +2000,7 @@ if (!window.af || typeof(af) !== "function") {
             $.os.ieTouch = $.os.ie && userAgent.toLowerCase().match(/touch/i) ? true : false;
             $.os.tizen = userAgent.match(/Tizen/i)?true:false;
             $.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || "ontouchstart" in window);
+            $.os.kindle=userAgent.match(/Silk-Accelerated/)?true:false;
             //features
             $.feat = {};
             var head = document.documentElement.getElementsByTagName("head")[0];

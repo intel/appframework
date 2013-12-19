@@ -203,7 +203,7 @@
             }
 
             //this.log("hiding address bar");
-            if (af.os.desktop || af.os.chrome) {
+            if (af.os.desktop || af.os.chrome||af.os.kindle) {
                 this.layer.style.height = "100%";
             } else if (af.os.android) {
                 //on some phones its immediate
