@@ -12,14 +12,16 @@ describe("map", function () {
         // test $(selector).map(callback)
         var actual1 = $("div").map(function (index, elt) {
             return elt.id;
-        }).get().join(",");
+        });
+        actual1 = Array.prototype.join.call(actual1, ",");
 
         // test $.map(collection, callback)
         var count = 0;
         var actual2 = $.map($("div"), function (elt, index) {
             count += 1;
             return elt.id;
-        }).get().join(",");
+        });
+        actual2 = Array.prototype.join.call(actual2, ",");
 
         // bug https://github.com/01org/appframework/issues/348
         // count.should.equal(3);
@@ -36,7 +38,8 @@ describe("map", function () {
         var actual = $.map(["a", "b", "c"], function (elt, index) {
             count += 1;
             return elt + index;
-        }).get().join(",");
+        });
+        actual = Array.prototype.join.call(actual, ",");
 
         actual.should.equal(expected);
         count.should.equal(3);
@@ -52,7 +55,8 @@ describe("map", function () {
             else {
                 return undefined;
             }
-        }).get().join(",");
+        });
+        actual = Array.prototype.join.call(actual, ",");
 
         actual.should.equal(expected);
     });
