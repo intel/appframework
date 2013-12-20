@@ -200,7 +200,15 @@
             width = width + "";
             width = width.replace("px", "") + "px";
             $("head").find("style#afui_sideMenuWidth").remove();
-            $("head").append("<style id='afui_sideMenuWidth'>#afui #menu {width:" + width + "  !important}</style>");
+            var css="@media handheld, only screen and (min-width: 768px) {"+
+                        "#afui > #navbar.hasMenu.splitview, #afui > #header.hasMenu.splitview, #afui > #content.hasMenu.splitview  {"+
+                        "    margin-left:"+width+" !important;"+
+                        "    width: -webkit-calc(100% -"+width+") !important;"+
+                        "    width: calc(100% - "+width+") !important;"+
+                        "}"+
+                    "}"+
+                    "#afui #menu {width:" + width + "  !important}";
+            $("head").append("<style id='afui_sideMenuWidth'>"+css+"</style>");
         },
         setSideMenuWidth:function(){
             this.setLeftSideMenuWidth.apply(this,arguments);
