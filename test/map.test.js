@@ -17,7 +17,7 @@ describe("map", function () {
 
         // test $.map(collection, callback)
         var count = 0;
-        var actual2 = $.map($("div"), function (elt, index) {
+        var actual2 = $.map($("div"), function (index, elt) {
             count += 1;
             return elt.id;
         });
