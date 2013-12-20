@@ -12,14 +12,16 @@ describe("map", function () {
         // test $(selector).map(callback)
         var actual1 = $("div").map(function (index, elt) {
             return elt.id;
-        }).get().join(",");
+        });
+        actual1 = Array.prototype.join.call(actual1, ",");
 
         // test $.map(collection, callback)
         var count = 0;
-        var actual2 = $.map($("div"), function (elt, index) {
+        var actual2 = $.map($("div"), function (index, elt) {
             count += 1;
             return elt.id;
-        }).get().join(",");
+        });
+        actual2 = Array.prototype.join.call(actual2, ",");
 
         // bug https://github.com/01org/appframework/issues/348
         // count.should.equal(3);
@@ -33,10 +35,11 @@ describe("map", function () {
 
         var count = 0;
 
-        var actual = $.map(["a", "b", "c"], function (elt, index) {
+        var actual = $.map(["a", "b", "c"], function (index, elt) {
             count += 1;
             return elt + index;
-        }).get().join(",");
+        });
+        actual = Array.prototype.join.call(actual, ",");
 
         actual.should.equal(expected);
         count.should.equal(3);
@@ -45,14 +48,15 @@ describe("map", function () {
     it("should ignore undefined values returned by the callback", function () {
         var expected = "a,c";
 
-        var actual = $.map(["a", "b", "c"], function (elt) {
+        var actual = $.map(["a", "b", "c"], function (index, elt) {
             if (elt !== "b") {
                 return elt;
             }
             else {
                 return undefined;
             }
-        }).get().join(",");
+        });
+        actual = Array.prototype.join.call(actual, ",");
 
         actual.should.equal(expected);
     });

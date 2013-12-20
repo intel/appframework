@@ -279,7 +279,7 @@ if (!window.af || typeof(af) !== "function") {
                 for (key in elements) {
                     if (!elements.hasOwnProperty(key) || key == "length")
                         continue;
-                    value = callback(elements[key],[key,elements[key]]);
+                    value = callback.apply(elements[key],[key,elements[key]]);
                     if (value !== nundefined)
                         values.push(value);
             }
