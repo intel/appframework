@@ -35,7 +35,7 @@ describe("map", function () {
 
         var count = 0;
 
-        var actual = $.map(["a", "b", "c"], function (elt, index) {
+        var actual = $.map(["a", "b", "c"], function (index, elt) {
             count += 1;
             return elt + index;
         });
@@ -48,7 +48,7 @@ describe("map", function () {
     it("should ignore undefined values returned by the callback", function () {
         var expected = "a,c";
 
-        var actual = $.map(["a", "b", "c"], function (elt) {
+        var actual = $.map(["a", "b", "c"], function (index, elt) {
             if (elt !== "b") {
                 return elt;
             }
