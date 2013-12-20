@@ -25,6 +25,10 @@
     color:inherit;
     border-color:#33B5E5;
 }
+#afui.android > #header h1 {
+    color:inherit;
+}
+
 
 #afui.android #header .button {
     color: inherit;
