@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-12-19 */
+/*! intel-appframework - v2.1.0 - 2013-12-30 */
 
 /**
  * appframework.ui - A User Interface library for App Framework applications
@@ -202,7 +202,15 @@
             width = width + "";
             width = width.replace("px", "") + "px";
             $("head").find("style#afui_sideMenuWidth").remove();
-            $("head").append("<style id='afui_sideMenuWidth'>#afui #menu {width:" + width + "  !important}</style>");
+            var css="@media handheld, only screen and (min-width: 768px) {"+
+                        "#afui > #navbar.hasMenu.splitview, #afui > #header.hasMenu.splitview, #afui > #content.hasMenu.splitview  {"+
+                        "    margin-left:"+width+" !important;"+
+                        "    width: -webkit-calc(100% -"+width+") !important;"+
+                        "    width: calc(100% - "+width+") !important;"+
+                        "}"+
+                    "}"+
+                    "#afui #menu {width:" + width + "  !important}";
+            $("head").append("<style id='afui_sideMenuWidth'>"+css+"</style>");
         },
         setSideMenuWidth:function(){
             this.setLeftSideMenuWidth.apply(this,arguments);
@@ -3410,7 +3418,7 @@ if (!Date.now)
                 var el = afEl.get(0);
 
                 this.refreshContainer = af("<div style='overflow:hidden;height:0;width:100%;display:none;'></div>");
-                $(this.el).prepend(this.refreshContainer.append(el, "top"));
+                $(this.el).prepend(this.refreshContainer.prepend(el));
                 this.refreshContainer = this.refreshContainer[0];
             },
             fireRefreshRelease: function (triggered) {

@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-12-19 */
+/*! intel-appframework - v2.1.0 - 2013-12-30 */
 
 /**
  * App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -1048,18 +1048,19 @@ if (!window.af || typeof(af) !== "function") {
                 ```
 
             * @param {String|Object} Element/string to add
+            * @param {String|Object} Element/string to add
             * @param {Boolean} [insert] insert or append
             * @return {Object} appframework object
-            * @title $().append(element,[insert])
+            * @title $().append(element,[insert],[content])
             */
-            append: function(element, insert) {
+            append: function(element, content,insert) {
                 if (element && element.length != nundefined && element.length === 0)
                     return this;
                 if ($.isArray(element) || $.isObject(element))
                     element = $(element);
                 var i, node;
-
-
+                if(content)
+                    $(this).add(content);
                 for (i = 0; i < this.length; i++) {
                     if (element.length && typeof element != "string") {
                         element = $(element);
@@ -1111,7 +1112,7 @@ if (!window.af || typeof(af) !== "function") {
             */
             prependTo: function(selector) {
                 var tmp = $(selector);
-                tmp.append(this, true);
+                tmp.append(this, null,true);
                 return this;
             },
             /**
@@ -1127,7 +1128,7 @@ if (!window.af || typeof(af) !== "function") {
             * @title $().prepend(element)
             */
             prepend: function(element) {
-                return this.append(element, 1);
+                return this.append(element,null, 1);
             },
             /**
              * Inserts collection before the target (adjacent)
@@ -1582,14 +1583,30 @@ if (!window.af || typeof(af) !== "function") {
               ```
               $().is(selector)
               ```
-             * param {String|Object} selector to act upon
+             * @param {String|Object} selector to act upon
              * @return boolean
              * @title $().is(selector)
              */
             is: function(selector) {
                 return !!selector && this.filter(selector).length > 0;
+            },
+            /**
+             * adds a result to an existing AF collection
+             ```
+             $().add(selector)
+             ```
+             * @param {String|Object} selector to act upon
+             * @return {object} appframework object
+             * @title $().add(selector)
+             */
+            add:function(selector){
+                var els=$(selector);
+                var i,len=els.length;
+                for(i=0;i<len;i++){
+                    this[this.length++]=els[i];
+                }
+                return this;
             }
-
         };
 
 
