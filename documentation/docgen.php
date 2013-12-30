@@ -165,15 +165,17 @@ $data=ob_start();
     <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
 
     <link rel="stylesheet" type="text/css" href="af.ui.css" />
- <link rel="stylesheet" type="text/css" href="icons.css" />
+    <link rel="stylesheet" type="text/css" href="icons.css" />
 
-    <!--<script type="text/javascript" charset="utf-8" src="appframework.ui.min.js"></script>-->
-    <script src="../appframework.js"></script>
-    <script src="../ui/appframework.ui.js"></script>
+    <script type="text/javascript" charset="utf-8" src="appframework.ui.min.js"></script>
     <script>
     function aj(obj){
-      console.log(obj);
-      alert(JSON.stringify(obj));
+      var tmp=obj;
+      console.log(tmp);
+      try{
+        alert(JSON.stringify(tmp));
+      }
+      catch(e)
     }
     if(!$.os.ios&&!$.os.android){
       $.os.desktop=true;

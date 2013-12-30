@@ -8,15 +8,14 @@
     <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
 
     <link rel="stylesheet" type="text/css" href="af.ui.css" />
- <link rel="stylesheet" type="text/css" href="icons.css" />
+    <link rel="stylesheet" type="text/css" href="icons.css" />
 
-    <!--<script type="text/javascript" charset="utf-8" src="appframework.ui.min.js"></script>-->
-    <script src="appframework.js"></script>
-    <script src="appframework.ui.js"></script>
+    <script type="text/javascript" charset="utf-8" src="appframework.ui.min.js"></script>
     <script>
     function aj(obj){
-      console.log(obj);
-      alert(JSON.stringify(obj));
+      var tmp=obj;
+      console.log(tmp);
+      alert(JSON.stringify(tmp));
     }
     if(!$.os.ios&&!$.os.android){
       $.os.desktop=true;
@@ -197,6 +196,7 @@
 <li><a data-persist-ajax='true' href='#_parents'>.parents</a></li>
 <li><a data-persist-ajax='true' href='#_children'>.children</a></li>
 <li><a data-persist-ajax='true' href='#_siblings'>.siblings</a></li>
+<li><a data-persist-ajax='true' href='#_contents'>.contents</a></li>
 <li><a data-persist-ajax='true' href='#_closest'>.closest</a></li>
 <li><a data-persist-ajax='true' href='#_filter'>.filter</a></li>
 <li><a data-persist-ajax='true' href='#_not'>.not</a></li>
@@ -208,6 +208,7 @@
 <li><a data-persist-ajax='true' href='#_eq'>.eq</a></li>
 <li><a data-persist-ajax='true' href='#_index'>.index</a></li>
 <li><a data-persist-ajax='true' href='#_is'>.is</a></li>
+<li><a data-persist-ajax='true' href='#_add'>.add</a></li>
 <li><a data-persist-ajax='true' href='#$_jsonP'>$.jsonP</a></li>
 <li><a data-persist-ajax='true' href='#$_ajax'>$.ajax</a></li>
 <li><a data-persist-ajax='true' href='#$_get'>$.get</a></li>
@@ -235,7 +236,8 @@
 <li><a data-persist-ajax='true' href='#$_cleanUpContent'>$.cleanUpContent</a></li>
 <li><a data-persist-ajax='true' href='#$_parseJS'>$.parseJS</a></li>
 </ul></div>
-<div id='af_ui' title='af.ui'  class='panel' data-nav='nav_af_ui'><ul class='list'><li><a data-persist-ajax='true' href='#$_ui_setSideMenuWidth'>$.ui.setSideMenuWidth</a></li>
+<div id='af_ui' title='af.ui'  class='panel' data-nav='nav_af_ui'><ul class='list'><li><a data-persist-ajax='true' href='#$_ui_setLeftSideMenuWidth'>$.ui.setLeftSideMenuWidth</a></li>
+<li><a data-persist-ajax='true' href='#$_ui_setRightSideMenuWidth'>$.ui.setRightSideMenuWidth</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_disableNativeScrolling'>$.ui.disableNativeScrolling</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_manageHistory'>$.ui.manageHistory</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_loadDefaultHash'>$.ui.loadDefaultHash</a></li>
@@ -260,6 +262,9 @@
 <li><a data-persist-ajax='true' href='#$_ui_toggleSideMenu'>$.ui.toggleSideMenu</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_disableSideMenu'>$.ui.disableSideMenu</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_enableSideMenu'>$.ui.enableSideMenu</a></li>
+<li><a data-persist-ajax='true' href='#$_ui_enableRightSideMenu'>$.ui.enableRightSideMenu</a></li>
+<li><a data-persist-ajax='true' href='#$_ui_splitview'>$.ui.splitview</a></li>
+<li><a data-persist-ajax='true' href='#$_ui_disableSplitView'>$.ui.disableSplitView</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_updateNavbarElements'>$.ui.updateNavbarElements</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_updateHeaderElements'>$.ui.updateHeaderElements</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_updateSideMenuElements'>$.ui.updateSideMenuElements</a></li>
@@ -296,7 +301,7 @@
 
 
 
-          <section class='description'><p>Checks to see if the parameter is a $afm object<br />                        var foo=$('#header');<br />            $.is$(foo);<br />            </p></section>
+          <section class='description'><p>Checks to see if the parameter is a $afm object<br />                        var foo=$("#header");<br />            $.is$(foo);<br />            </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -351,20 +356,23 @@ Test it on the following.  <input type='button' onclick="testIs(true)" value="tm
             $.map = function(elements, callback) {
             var value, values = [],
                 i, key;
-            if ($.isArray(elements))
+            if ($.isArray(elements)){
+
                 for (i = 0; i &lt; elements.length; i++) {
-                    value = callback.apply(elements[i],[i,elements[i]]);
+                    value = callback.apply(elements[i],[elements[i],i]);
                     if (value !== nundefined)
                         values.push(value);
-            } else if ($.isObject(elements))
+                }
+            } else if ($.isObject(elements)){
                 for (key in elements) {
                     if (!elements.hasOwnProperty(key) || key == "length")
                         continue;
-                    value = callback(elements[key],[key,elements[key]]);
+                    value = callback(elements[key],[elements[key],key]);
                     if (value !== nundefined)
                         values.push(value);
+                }
             }
-            return af(values);
+            return values;
         };
             </code></pre>
              </div>
@@ -382,7 +390,7 @@ Test it on the following.  <input type='button' onclick="testIs(true)" value="tm
 </ol>
              <div class='spacer'></div>
              <h2>Returns</h2>
-             <div style='padding-left:30px;line-height:20px;'>Object - appframework object with elements in it</div>
+             <div style='padding-left:30px;line-height:20px;'>array - array with elements</div>
              <div class='spacer'></div>
              <div class='markdown'>
 
@@ -438,16 +446,18 @@ function testMap(){
             <pre style='padding-left:25px'><code>
             $.each = function(elements, callback) {
             var i, key;
-            if ($.isArray(elements))
+            if ($.isArray(elements)){
                 for (i = 0; i &lt; elements.length; i++) {
                     if (callback(i, elements[i]) === false)
                         return elements;
-            } else if ($.isObject(elements))
+                }
+            } else if ($.isObject(elements)){
                 for (key in elements) {
                     if (!elements.hasOwnProperty(key) || key == "length")
                         continue;
                     if (callback(key, elements[key]) === false)
                         return elements;
+                }
             }
             return elements;
         };
@@ -535,7 +545,7 @@ function testSum(){
 
 
 
-          <section class='description'><p>Extends an object with additional arguments<br />                        $.extend({foo:'bar'});<br />            $.extend(element,{foo:'bar'});<br />            </p></section>
+          <section class='description'><p>Extends an object with additional arguments<br />                        $.extend({foo:"bar"});<br />            $.extend(element,{foo:"bar"});<br />            </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -606,7 +616,7 @@ function testExtend(){
             <div class='viewsource' id='source_$_isArray' style='display:none'>
             <pre style='padding-left:25px'><code>
             $.isArray = function(obj) {
-            return obj instanceof Array && obj.push != nundefined; //ios 3.1.3 doesn't have Array.isArray
+            return obj instanceof Array && obj.push != nundefined; //ios 3.1.3 doesn"t have Array.isArray
         };
             </code></pre>
              </div>
@@ -743,7 +753,7 @@ function testisFunction(pass){
 
 
 
-          <section class='description'><p>Checks to see if the parameter is a object<br />                        var foo={bar:'bar'};<br />            $.isObject(foo);<br />            </p></section>
+          <section class='description'><p>Checks to see if the parameter is a object<br />                        var foo={bar:"bar"};<br />            $.isObject(foo);<br />            </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -959,7 +969,7 @@ $('#equalize').bind("click",function(){
 
 
 
-          <section class='description'><p>This is executed when DOMContentLoaded happens, or after if you've registered for it.<br />                                $(document).ready(function(){console.log('I'm ready');});<br />                </p></section>
+          <section class='description'><p>This is executed when DOMContentLoaded happens, or after if you"ve registered for it.<br />                                $(document).ready(function(){console.log("I'm ready");});<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -1027,7 +1037,7 @@ $(document).ready(function(){
 
 
 
-          <section class='description'><p>Searches through the collection and reduces them to elements that match the selector<br />                                $("#foo").find('.bar');<br />                $("#foo").find($('.bar'));<br />                $("#foo").find($('.bar').get(0));<br />                </p></section>
+          <section class='description'><p>Searches through the collection and reduces them to elements that match the selector<br />                                $("#foo").find(".bar");<br />                $("#foo").find($(".bar"));<br />                $("#foo").find($(".bar").get(0));<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -1093,6 +1103,9 @@ function findTest(){
             <div class='viewsource' id='source__html' style='display:none'>
             <pre style='padding-left:25px'><code>
             html: function(html, cleanup) {
+                var msFix=function(){
+                    item.innerHTML=html;
+                };
                 if (this.length === 0)
                     return this;
                 if (html === nundefined)
@@ -1103,9 +1116,7 @@ function findTest(){
                         $.cleanUpContent(this[i], false, true);
                     if (isWin8) {
                         var item=this[i];
-                        MSApp.execUnsafeLocalFunction(function() {
-                            item.innerHTML = html;
-                        });
+                        MSApp.execUnsafeLocalFunction(msFix);
                     } else
                         this[i].innerHTML = html;
                 }
@@ -1118,7 +1129,7 @@ function findTest(){
 
 
 
-          <section class='description'><p>Gets or sets the innerHTML for the collection.<br />If used as a get, the first elements innerHTML is returned<br />                                $("#foo").html(); //gets the first elements html<br />                $("#foo").html('new html');//sets the html<br />                $("#foo").html('new html',false); //Do not do memory management cleanup<br />                </p></section>
+          <section class='description'><p>Gets or sets the innerHTML for the collection.<br />If used as a get, the first elements innerHTML is returned<br />                                $("#foo").html(); //gets the first elements html<br />                $("#foo").html("new html");//sets the html<br />                $("#foo").html("new html",false); //Do not do memory management cleanup<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -1189,7 +1200,7 @@ function findTest(){
 
 
 
-          <section class='description'><p>Gets or sets the innerText for the collection.<br />If used as a get, the first elements innerText is returned<br />                                $("#foo").text(); //gets the first elements text;<br />                $("#foo").text('new text'); //sets the text<br />                </p></section>
+          <section class='description'><p>Gets or sets the innerText for the collection.<br />If used as a get, the first elements innerText is returned<br />                                $("#foo").text(); //gets the first elements text;<br />                $("#foo").text("new text"); //sets the text<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -1342,7 +1353,7 @@ function findTest(){
             <pre style='padding-left:25px'><code>
             computedStyle: function(val) {
                 if (this.length === 0 || val == nundefined) return;
-                return window.getComputedStyle(this[0], '')[val];
+                return window.getComputedStyle(this[0], "")[val];
             },
             </code></pre>
              </div>
@@ -1396,7 +1407,7 @@ function findTest(){
             empty: function() {
                 for (var i = 0; i &lt; this.length; i++) {
                     $.cleanUpContent(this[i], false, true);
-                    this[i].textContent = '';
+                    this[i].textContent = "";
                 }
                 return this;
             },
@@ -1518,7 +1529,7 @@ function findTest(){
                     return this;
                 for (var i = 0; i &lt; this.length; i++) {
                     if (this.css("display", null, this[i]) == "none") {
-                        this[i].style.display = this[i].getAttribute("afmOldStyle") ? this[i].getAttribute("afmOldStyle") : 'block';
+                        this[i].style.display = this[i].getAttribute("afmOldStyle") ? this[i].getAttribute("afmOldStyle") : "block";
                         this[i].removeAttribute("afmOldStyle");
                     }
                 }
@@ -1578,13 +1589,13 @@ function findTest(){
             toggle: function(show) {
                 if(this.length === 0)
                     return this;
-                var show2 = !!(show === true);
+                var show2 = show===true;
                 for (var i = 0; i &lt; this.length; i++) {
                     if (this.css("display", null, this[i]) != "none" && (show == nundefined || show2 === false)) {
                         this[i].setAttribute("afmOldStyle", this.css("display", null, this[i]));
                         this[i].style.display = "none";
                     } else if (this.css("display", null, this[i]) == "none" && (show == nundefined || show2 === true)) {
-                        this[i].style.display = this[i].getAttribute("afmOldStyle") ? this[i].getAttribute("afmOldStyle") : 'block';
+                        this[i].style.display = this[i].getAttribute("afmOldStyle") ? this[i].getAttribute("afmOldStyle") : "block";
                         this[i].removeAttribute("afmOldStyle");
                     }
                 }
@@ -1742,7 +1753,7 @@ function findTest(){
 
 
 
-          <section class='description'><p>Gets or sets an attribute on an element<br />If used as a getter, we return the first elements value.  If nothing is in the collection, we return undefined<br />                                $().attr("foo"); //Gets the first elements 'foo' attribute<br />                $().attr("foo","bar");//Sets the elements 'foo' attribute to 'bar'<br />                $().attr("foo",{bar:'bar'}) //Adds the object to an internal cache<br />                </p></section>
+          <section class='description'><p>Gets or sets an attribute on an element<br />If used as a getter, we return the first elements value.  If nothing is in the collection, we return undefined<br />                                $().attr("foo"); //Gets the first elements "foo" attribute<br />                $().attr("foo","bar");//Sets the elements "foo" attribute to "bar"<br />                $().attr("foo",{bar:"bar"}) //Adds the object to an internal cache<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -1793,13 +1804,14 @@ function findTest(){
             <div class='viewsource' id='source__removeAttr' style='display:none'>
             <pre style='padding-left:25px'><code>
             removeAttr: function(attr) {
+                var removeFixer=function(param) {
+                    that[i].removeAttribute(param);
+                    if (that[i].afmCacheId && _attrCache[that[i].afmCacheId][attr])
+                        delete _attrCache[that[i].afmCacheId][attr];
+                };
                 var that = this;
                 for (var i = 0; i &lt; this.length; i++) {
-                    attr.split(/\s+/g).forEach(function(param) {
-                        that[i].removeAttribute(param);
-                        if (that[i].afmCacheId && _attrCache[that[i].afmCacheId][attr])
-                            delete _attrCache[that[i].afmCacheId][attr];
-                    });
+                    attr.split(/\s+/g).forEach(removeFixer);
                 }
                 return this;
             },
@@ -1895,7 +1907,7 @@ function findTest(){
 
 
 
-          <section class='description'><p>Gets or sets a property on an element<br />If used as a getter, we return the first elements value.  If nothing is in the collection, we return undefined<br />                                $().prop("foo"); //Gets the first elements 'foo' property<br />                $().prop("foo","bar");//Sets the elements 'foo' property to 'bar'<br />                $().prop("foo",{bar:'bar'}) //Adds the object to an internal cache<br />                </p></section>
+          <section class='description'><p>Gets or sets a property on an element<br />If used as a getter, we return the first elements value.  If nothing is in the collection, we return undefined<br />                                $().prop("foo"); //Gets the first elements "foo" property<br />                $().prop("foo","bar");//Sets the elements "foo" property to "bar"<br />                $().prop("foo",{bar:"bar"}) //Adds the object to an internal cache<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -1946,15 +1958,16 @@ function findTest(){
             <div class='viewsource' id='source__removeProp' style='display:none'>
             <pre style='padding-left:25px'><code>
             removeProp: function(prop) {
+                var removePropFn=function(param) {
+                    if (that[i][param])
+                        that[i][param] = undefined;
+                    if (that[i].afmCacheId && _propCache[that[i].afmCacheId][prop]) {
+                        delete _propCache[that[i].afmCacheId][prop];
+                    }
+                };
                 var that = this;
                 for (var i = 0; i &lt; this.length; i++) {
-                    prop.split(/\s+/g).forEach(function(param) {
-                        if (that[i][param])
-                            that[i][param] = undefined;
-                        if (that[i].afmCacheId && _propCache[that[i].afmCacheId][prop]) {
-                            delete _propCache[that[i].afmCacheId][prop];
-                        }
-                    });
+                    prop.split(/\s+/g).forEach(removePropFn);
                 }
                 return this;
             },
@@ -2079,15 +2092,16 @@ function findTest(){
             <div class='viewsource' id='source__addClass' style='display:none'>
             <pre style='padding-left:25px'><code>
             addClass: function(name) {
+                var addClassLoop=function(cname) {
+                    if (!that.hasClass(cname, that[i]))
+                        classList.push(cname);
+                };
                 if (name == nundefined) return this;
                 for (var i = 0; i &lt; this.length; i++) {
                     var cls = this[i].className;
                     var classList = [];
                     var that = this;
-                    name.split(/\s+/g).forEach(function(cname) {
-                        if (!that.hasClass(cname, that[i]))
-                            classList.push(cname);
-                    });
+                    name.split(/\s+/g).forEach(addClassLoop);
 
                     this[i].className += (cls ? " " : "") + classList.join(" ");
                     this[i].className = this[i].className.trim();
@@ -2146,19 +2160,20 @@ function findTest(){
             <pre style='padding-left:25px'><code>
             removeClass: function(name) {
                 if (name == nundefined) return this;
+                var removeClassLoop=function(cname) {
+                    classList = classList.replace(classRE(cname), " ");
+                };
                 for (var i = 0; i &lt; this.length; i++) {
                     if (name == nundefined) {
-                        this[i].className = '';
+                        this[i].className = "";
                         return this;
                     }
                     var classList = this[i].className;
-					//SGV LINK EVENT
-					if (typeof this[i].className == "object") {
-						classList = " ";
-					}
-                    name.split(/\s+/g).forEach(function(cname) {
-                        classList = classList.replace(classRE(cname), " ");
-                    });
+                    //SGV LINK EVENT
+                    if (typeof this[i].className == "object") {
+                        classList = " ";
+                    }
+                    name.split(/\s+/g).forEach(removeClassLoop);
                     if (classList.length &gt; 0)
                         this[i].className = classList.trim();
                     else
@@ -2222,7 +2237,7 @@ function findTest(){
                     if (typeof state != "boolean") {
                         state = this.hasClass(name, this[i]);
                     }
-                    $(this[i])[state ? 'removeClass' : 'addClass'](name);
+                    $(this[i])[state ? "removeClass" : "addClass"](name);
                 }
                 return this;
             },
@@ -2262,15 +2277,16 @@ function findTest(){
             <pre style='padding-left:25px'><code>
             replaceClass: function(name, newName) {
                 if (name == nundefined || newName == nundefined) return this;
+                var replaceClassFn=function(cname) {
+                    classList = classList.replace(classRE(cname), " ");
+                };
                 for (var i = 0; i &lt; this.length; i++) {
                     if (name == nundefined) {
                         this[i].className = newName;
                         continue;
                     }
                     var classList = this[i].className;
-                    name.split(/\s+/g).concat(newName.split(/\s+/g)).forEach(function(cname) {
-                        classList = classList.replace(classRE(cname), " ");
-                    });
+                    name.split(/\s+/g).concat(newName.split(/\s+/g)).forEach(replaceClassFn);
                     classList = classList.trim();
                     if (classList.length &gt; 0) {
                         this[i].className = (classList + " " + newName).trim();
@@ -2343,7 +2359,7 @@ function findTest(){
 
 
 
-          <section class='description'><p>Checks to see if an element has a class.<br />                                $().hasClass('foo');<br />                $().hasClass('foo',element);<br />                </p></section>
+          <section class='description'><p>Checks to see if an element has a class.<br />                                $().hasClass("foo");<br />                $().hasClass("foo",element);<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -2382,33 +2398,38 @@ function findTest(){
           </article>
        </div>
 
-       <div id='_append' title='$().append(element,[insert])' data-nav='nav_appframework' class='panel'>
+       <div id='_append' title='$().append(element,[insert],[content])' data-nav='nav_appframework' class='panel'>
        <div class='source'>
           <h3><a class='collapsed' onclick='toggleSource("_append",this)'>Show Source</a></h3>
 
             <div class='viewsource' id='source__append' style='display:none'>
             <pre style='padding-left:25px'><code>
-            append: function(element, insert) {
+            append: function(element, content,insert) {
                 if (element && element.length != nundefined && element.length === 0)
                     return this;
                 if ($.isArray(element) || $.isObject(element))
                     element = $(element);
-                var i;
-
-
+                var i, node;
+                if(content)
+                    $(this).add(content);
                 for (i = 0; i &lt; this.length; i++) {
                     if (element.length && typeof element != "string") {
                         element = $(element);
                         _insertFragments(element, this[i], insert);
                     } else {
-                        var obj = fragmentRE.test(element) ? $(element) : undefined;                        
+                        var obj = fragmentRE.test(element) ? $(element) : undefined;
                         if (obj == nundefined || obj.length === 0) {
                             obj = document.createTextNode(element);
                         }
-                        if (obj.nodeName != nundefined && obj.nodeName.toLowerCase() == "script" && (!obj.type || obj.type.toLowerCase() === 'text/javascript')) {
-                            window['eval'](obj.innerHTML);
-                        } else if (obj instanceof $afm) {
-                            _insertFragments(obj, this[i], insert);
+                        if (obj instanceof $afm) {
+                            for (var k=0,lenk=obj.length; k&lt;lenk; k++) {
+                                node = obj[k];
+                                if (node.nodeName != nundefined && node.nodeName.toLowerCase() == "script" && (!node.type || node.type.toLowerCase() === "text/javascript")) {
+                                    window["eval"](node.innerHTML);
+                                } else {
+                                    _insertFragments($(node), this[i], insert);
+                                }
+                            }
                         } else {
                             insert != nundefined ? this[i].insertBefore(obj, this[i].firstChild) : this[i].appendChild(obj);
                         }
@@ -2419,7 +2440,7 @@ function findTest(){
             </code></pre>
              </div>
       </div>
-          <h2>$().append(element,[insert])</h2>
+          <h2>$().append(element,[insert],[content])</h2>
 
 
 
@@ -2539,7 +2560,7 @@ function findTest(){
             <pre style='padding-left:25px'><code>
             prependTo: function(selector) {
                 var tmp = $(selector);
-                tmp.append(this, true);
+                tmp.append(this, null,true);
                 return this;
             },
             </code></pre>
@@ -2607,7 +2628,7 @@ function findTest(){
             <div class='viewsource' id='source__prepend' style='display:none'>
             <pre style='padding-left:25px'><code>
             prepend: function(element) {
-                return this.append(element, 1);
+                return this.append(element,null, 1);
             },
             </code></pre>
              </div>
@@ -2790,9 +2811,16 @@ function findTest(){
             <div class='viewsource' id='source__get' style='display:none'>
             <pre style='padding-left:25px'><code>
             get: function(index) {
-                index = index == nundefined ? 0 : index;
+                index = index == nundefined ? null : index;
                 if (index &lt; 0)
                     index += this.length;
+                if(index===null){
+                    var elems=[];
+                    for(var i=0;i&lt;this.length;i++){
+                        elems.push(this[i]);
+                    }
+                    return elems;
+                }
                 return (this[index]) ? this[index] : undefined;
             },
             </code></pre>
@@ -2862,7 +2890,7 @@ function findTest(){
                         bottom: 0,
                         width: window.innerWidth,
                         height: window.innerHeight
-                };
+                    };
                 else
                     obj = this[0].getBoundingClientRect();
                 return {
@@ -2945,13 +2973,13 @@ function findTest(){
                 if (val != nundefined)
                     return this.css("height", val);
                 if (this[0] == this[0].window)
-                    return window.innerHeight;
+                    return window.innerHeight + "";
                 if (this[0].nodeType == this[0].DOCUMENT_NODE)
                     return this[0].documentElement.offsetheight;
                 else {
                     var tmpVal = this.css("height").replace("px", "");
                     if (tmpVal)
-                        return tmpVal;
+                        return +tmpVal;
                     else
                         return this.offset().height;
                 }
@@ -3028,7 +3056,7 @@ function findTest(){
                 else {
                     var tmpVal = this.css("width").replace("px", "");
                     if (tmpVal)
-                        return tmpVal;
+                        return +tmpVal;
                     else
                         return this.offset().width;
                 }
@@ -3116,7 +3144,7 @@ function findTest(){
 
 
 
-          <section class='description'><p>Returns the parent nodes of the elements based off the selector<br />                                $("#foo").parent('.bar');<br />                $("#foo").parent($('.bar'));<br />                $("#foo").parent($('.bar').get(0));<br />                </p></section>
+          <section class='description'><p>Returns the parent nodes of the elements based off the selector<br />                                $("#foo").parent(".bar");<br />                $("#foo").parent($(".bar"));<br />                $("#foo").parent($(".bar").get(0));<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -3189,7 +3217,7 @@ function getParent(){
 
 
 
-          <section class='description'><p>Returns the parents of the elements based off the selector (traversing up until html document)<br />                                $("#foo").parents('.bar');<br />                $("#foo").parents($('.bar'));<br />                $("#foo").parents($('.bar').get(0));<br />                </p></section>
+          <section class='description'><p>Returns the parents of the elements based off the selector (traversing up until html document)<br />                                $("#foo").parents(".bar");<br />                $("#foo").parents($(".bar"));<br />                $("#foo").parents($(".bar").get(0));<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -3291,7 +3319,7 @@ This test will not include "parent2", since gcs is a single element</p>
 
 
 
-          <section class='description'><p>Returns the child nodes of the elements based off the selector<br />                                $("#foo").children('.bar'); //Selector<br />                $("#foo").children($('.bar')); //Objects<br />                $("#foo").children($('.bar').get(0)); //Single element<br />                </p></section>
+          <section class='description'><p>Returns the child nodes of the elements based off the selector<br />                                $("#foo").children(".bar"); //Selector<br />                $("#foo").children($(".bar")); //Objects<br />                $("#foo").children($(".bar").get(0)); //Single element<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -3387,7 +3415,7 @@ this will only have "gctest" since there is only one child of both childtest div
 
 
 
-          <section class='description'><p>Returns the siblings of the element based off the selector<br />                                $("#foo").siblings('.bar'); //Selector<br />                $("#foo").siblings($('.bar')); //Objects<br />                $("#foo").siblings($('.bar').get(0)); //Single element<br />                </p></section>
+          <section class='description'><p>Returns the siblings of the element based off the selector<br />                                $("#foo").siblings(".bar"); //Selector<br />                $("#foo").siblings($(".bar")); //Objects<br />                $("#foo").siblings($(".bar").get(0)); //Single element<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -3462,6 +3490,50 @@ this will be empty since there are no other elements in the div</p>
           </article>
        </div>
 
+       <div id='_contents' title='$().contents(selector)' data-nav='nav_appframework' class='panel'>
+       <div class='source'>
+          <h3><a class='collapsed' onclick='toggleSource("_contents",this)'>Show Source</a></h3>
+
+            <div class='viewsource' id='source__contents' style='display:none'>
+            <pre style='padding-left:25px'><code>
+            contents:function(selector){
+                if (this.length === 0)
+                    return this;
+                var elems = [];
+                for (var i = 0; i &lt; this.length; i++) {
+                    if (this[i].parentNode)
+                        //elems = elems.concat(this[i].childNodes);
+                        _shimNodes(this[i].childNodes,elems);
+                }
+                return this.setupOld($(elems).filter(selector));
+            },
+            </code></pre>
+             </div>
+      </div>
+          <h2>$().contents(selector)</h2>
+
+
+
+          <section class='description'><p>Returns the child nodes of the elements based off the selector and includes text nodes<br />                                $("#foo").contents(".bar"); //Selector<br />                $("#foo").contents($(".bar")); //Objects<br />                $("#foo").contents($(".bar").get(0)); //Single element<br />                </p></section>
+          <article>
+          <div class='spacer'></div>
+             <h2>Params</h2>
+             <ol><li style='padding-left:15px;line-height:20px'>[selector] - String|Array|Object</li>
+</ol>
+             <div class='spacer'></div>
+             <h2>Returns</h2>
+             <div style='padding-left:30px;line-height:20px;'>Object - appframework object with unique children</div>
+             <div class='spacer'></div>
+             <div class='markdown'>
+
+             <h2>Example</h2>
+              <div class='markdowncontents'>
+              
+              </div>
+             </div>
+          </article>
+       </div>
+
        <div id='_closest' title='$().closest(selector,[context]);' data-nav='nav_appframework' class='panel'>
        <div class='source'>
           <h3><a class='collapsed' onclick='toggleSource("_closest",this)'>Show Source</a></h3>
@@ -3490,7 +3562,7 @@ this will be empty since there are no other elements in the div</p>
 
 
 
-          <section class='description'><p>Returns the closest element based off the selector and optional context<br />                                $("#foo").closest('.bar'); //Selector<br />                $("#foo").closest($('.bar')); //Objects<br />                $("#foo").closest($('.bar').get(0)); //Single element<br />                </p></section>
+          <section class='description'><p>Returns the closest element based off the selector and optional context<br />                                $("#foo").closest(".bar"); //Selector<br />                $("#foo").closest($(".bar")); //Objects<br />                $("#foo").closest($(".bar").get(0)); //Single element<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -3593,7 +3665,7 @@ This will traverse up to .grandparent from all the .closest class divs<br />
 
 
 
-          <section class='description'><p>Filters elements based off the selector<br />                                $("#foo").filter('.bar'); //Selector<br />                $("#foo").filter($('.bar')); //Objects<br />                $("#foo").filter($('.bar').get(0)); //Single element<br />                </p></section>
+          <section class='description'><p>Filters elements based off the selector<br />                                $("#foo").filter(".bar"); //Selector<br />                $("#foo").filter($(".bar")); //Objects<br />                $("#foo").filter($(".bar").get(0)); //Single element<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -3668,7 +3740,7 @@ This will traverse up to .grandparent from all the .closest class divs<br />
 
 
 
-          <section class='description'><p>Basically the reverse of filter.  Return all elements that do NOT match the selector<br />                                $("#foo").not('.bar'); //Selector<br />                $("#foo").not($('.bar')); //Objects<br />                $("#foo").not($('.bar').get(0)); //Single element<br />                </p></section>
+          <section class='description'><p>Basically the reverse of filter.  Return all elements that do NOT match the selector<br />                                $("#foo").not(".bar"); //Selector<br />                $("#foo").not($(".bar")); //Objects<br />                $("#foo").not($(".bar").get(0)); //Single element<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -3726,7 +3798,7 @@ This will traverse up to .grandparent from all the .closest class divs<br />
             <div class='viewsource' id='source__data' style='display:none'>
             <pre style='padding-left:25px'><code>
             data: function(key, value) {
-                return this.attr('data-' + key, value);
+                return this.attr("data-" + key, value);
             },
             </code></pre>
              </div>
@@ -3735,7 +3807,7 @@ This will traverse up to .grandparent from all the .closest class divs<br />
 
 
 
-          <section class='description'><p>Gets or set data-* attribute parameters on elements (when a string)<br />When used as a getter, it's only the first element<br />                                $().data("foo"); //Gets the data-foo attribute for the first element<br />                $().data("foo","bar"); //Sets the data-foo attribute for all elements<br />                $().data("foo",{bar:'bar'});//object as the data<br />                </p></section>
+          <section class='description'><p>Gets or set data-* attribute parameters on elements (when a string)<br />When used as a getter, it"s only the first element<br />                                $().data("foo"); //Gets the data-foo attribute for the first element<br />                $().data("foo","bar"); //Sets the data-foo attribute for all elements<br />                $().data("foo",{bar:"bar"});//object as the data<br />                </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -3951,23 +4023,24 @@ function cloneTest(){
             serialize: function() {
                 if (this.length === 0)
                     return "";
+                var serializeFn=function(elem) {
+                    var type = elem.getAttribute("type");
+                    if (elem.nodeName.toLowerCase() != "fieldset" && !elem.disabled && type != "submit" && type != "reset" && type != "button" && ((type != "radio" && type != "checkbox") || elem.checked)) {
+
+                        if (elem.getAttribute("name")) {
+                            if (elem.type == "select-multiple") {
+                                for (var j = 0; j &lt; elem.options.length; j++) {
+                                    if (elem.options[j].selected)
+                                        params.push(elem.getAttribute("name") + "=" + encodeURIComponent(elem.options[j].value));
+                                }
+                            } else
+                                params.push(elem.getAttribute("name") + "=" + encodeURIComponent(elem.value));
+                        }
+                    }
+                };
                 var params = [];
                 for (var i = 0; i &lt; this.length; i++) {
-                    this.slice.call(this[i].elements).forEach(function(elem) {
-                        var type = elem.getAttribute("type");
-                        if (elem.nodeName.toLowerCase() != "fieldset" && !elem.disabled && type != "submit" && type != "reset" && type != "button" && ((type != "radio" && type != "checkbox") || elem.checked)) {
-
-                            if (elem.getAttribute("name")) {
-                                if (elem.type == "select-multiple") {
-                                    for (var j = 0; j &lt; elem.options.length; j++) {
-                                        if (elem.options[j].selected)
-                                            params.push(elem.getAttribute("name") + "=" + encodeURIComponent(elem.options[j].value));
-                                    }
-                                } else
-                                    params.push(elem.getAttribute("name") + "=" + encodeURIComponent(elem.value));
-                            }
-                        }
-                    });
+                    this.slice.call(this[i].elements).forEach(serializeFn);
                 }
                 return params.join("&");
             },
@@ -4174,9 +4247,7 @@ function serializeForm() {
             <pre style='padding-left:25px'><code>
             is: function(selector) {
                 return !!selector && this.filter(selector).length &gt; 0;
-            }
-
-        };
+            },
             </code></pre>
              </div>
       </div>
@@ -4184,11 +4255,12 @@ function serializeForm() {
 
 
 
-          <section class='description'><p>Returns boolean if the object is a type of the selector<br />                            $().is(selector)<br />              <br />param {String|Object} selector to act upon</p></section>
+          <section class='description'><p>Returns boolean if the object is a type of the selector<br />                            $().is(selector)<br />              </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
-             <ol></ol>
+             <ol><li style='padding-left:15px;line-height:20px'>selector - String|Object</li>
+</ol>
              <div class='spacer'></div>
              <h2>Returns</h2>
              <div style='padding-left:30px;line-height:20px;'>boolean - </div>
@@ -4234,6 +4306,68 @@ function serializeForm() {
           </article>
        </div>
 
+       <div id='_add' title='$().add(selector)' data-nav='nav_appframework' class='panel'>
+       <div class='source'>
+          <h3><a class='collapsed' onclick='toggleSource("_add",this)'>Show Source</a></h3>
+
+            <div class='viewsource' id='source__add' style='display:none'>
+            <pre style='padding-left:25px'><code>
+            add:function(selector){
+                var els=$(selector);
+                var i,len=els.length;
+                for(i=0;i&lt;len;i++){
+                    this[this.length++]=els[i];
+                }
+                return this;
+            }
+        };
+            </code></pre>
+             </div>
+      </div>
+          <h2>$().add(selector)</h2>
+
+
+
+          <section class='description'><p>adds a result to an existing AF collection<br />                          $().add(selector)<br />             </p></section>
+          <article>
+          <div class='spacer'></div>
+             <h2>Params</h2>
+             <ol><li style='padding-left:15px;line-height:20px'>selector - String|Object</li>
+</ol>
+             <div class='spacer'></div>
+             <h2>Returns</h2>
+             <div style='padding-left:30px;line-height:20px;'>object - appframework object</div>
+             <div class='spacer'></div>
+             <div class='markdown'>
+
+             <h2>Example</h2>
+              <div class='markdowncontents'>
+              <p>$().add(select) adds additional objects to an existing App Framework collection</p>
+
+<p>Assume there is an existing collection of divs</p>
+
+<pre><code class="language-js"><span class='linenumber'>var divs=$("div");</span>
+</code></pre>
+
+<p>then using $().add(selector) we can add other elements to the collection based off the selector</p>
+
+<pre><code class="language-js"><span class='linenumber'>var divandspan=$("div").add("span");</span>
+</code></pre>
+
+<p></br></p>
+
+<div style='border:1px solid black' id="adddiv_content">This is a div content</div>
+
+<div style='border:1px solid black' id="addspan_content">This is a span content</div>
+
+<p><input type="button" value="Get Div" onclick='alert($("#adddiv_content").length)'><br />
+<input type="button" value="Get Div and add span" onclick='alert($("#adddiv_content").add("#addspan_content").length)'></p>
+
+              </div>
+             </div>
+          </article>
+       </div>
+
        <div id='$_jsonP' title='$.jsonP(options)' data-nav='nav_appframework' class='panel'>
        <div class='source'>
           <h3><a class='collapsed' onclick='toggleSource("$_jsonP",this)'>Show Source</a></h3>
@@ -4246,9 +4380,9 @@ function serializeForm() {
                 options.dataType = null;
                 return $.get(options);
             }
-            var callbackName = 'jsonp_callback' + (++_jsonPID);
+            var callbackName = "jsonp_callback" + (++_jsonPID);
             var abortTimeout = "",
-                context;
+                context, callback;
             var script = document.createElement("script");
             var abort = function() {
                 $(script).remove();
@@ -4261,17 +4395,28 @@ function serializeForm() {
                 delete window[callbackName];
                 options.success.call(context, data);
             };
-            script.src = options.url.replace(/=\?/, '=' + callbackName);
+            if (options.url.indexOf("callback=?") !== -1) {
+                script.src = options.url.replace(/=\?/, "=" + callbackName);
+            } else {
+                callback = options.jsonp ? options.jsonp : "callback";
+                if (options.url.indexOf("?") === -1) {
+                    options.url += ("?" + callback + "=" + callbackName);
+                }
+                else {
+                    options.url += ("&" + callback + "=" + callbackName);
+                }
+                script.src = options.url;
+            }
             if (options.error) {
                 script.onerror = function() {
                     clearTimeout(abortTimeout);
-                    options.error.call(context, "", 'error');
+                    options.error.call(context, "", "error");
                 };
             }
-            $('head').append(script);
+            $("head").append(script);
             if (options.timeout &gt; 0)
                 abortTimeout = setTimeout(function() {
-                    options.error.call(context, "", 'timeout');
+                    options.error.call(context, "", "timeout");
                 }, options.timeout);
             return {};
         };
@@ -4282,7 +4427,7 @@ function serializeForm() {
 
 
 
-          <section class='description'><p>Execute a jsonP call, allowing cross domain scripting<br />options.url - URL to call<br />options.success - Success function to call<br />options.error - Error function to call<br />                        $.jsonP({url:'mysite.php?callback=?&amp;foo=bar',success:function(){},error:function(){}});<br />            </p></section>
+          <section class='description'><p>Execute a jsonP call, allowing cross domain scripting<br />options.url - URL to call<br />options.success - Success function to call<br />options.error - Error function to call<br />                        $.jsonP({url:"mysite.php?callback=?&amp;foo=bar",success:function(){},error:function(){}});<br />            </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -4314,7 +4459,7 @@ function serializeForm() {
 
                 var settings = opts || {};
                 for (var key in $.ajaxSettings) {
-                    if (typeof(settings[key]) == 'undefined')
+                    if (typeof(settings[key]) == "undefined")
                         settings[key] = $.ajaxSettings[key];
                 }
 
@@ -4325,35 +4470,9 @@ function serializeForm() {
                 if (!settings.headers)
                     settings.headers = {};
 
-                if (!('async' in settings) || settings.async !== false)
+                if (!("async" in settings) || settings.async !== false)
                     settings.async = true;
 
-                if (!settings.dataType)
-                    settings.dataType = "text/html";
-                else {
-                    switch (settings.dataType) {
-                        case "script":
-                            settings.dataType = 'text/javascript, application/javascript';
-                            break;
-                        case "json":
-                            settings.dataType = 'application/json';
-                            break;
-                        case "xml":
-                            settings.dataType = 'application/xml, text/xml';
-                            break;
-                        case "html":
-                            settings.dataType = 'text/html';
-                            break;
-                        case "text":
-                            settings.dataType = 'text/plain';
-                            break;
-                        default:
-                            settings.dataType = "text/html";
-                            break;
-                        case "jsonp":
-                            return $.jsonP(opts);
-                    }
-                }
                 if ($.isObject(settings.data))
                     settings.data = $.param(settings.data);
                 if (settings.type.toLowerCase() === "get" && settings.data) {
@@ -4362,6 +4481,33 @@ function serializeForm() {
                     else
                         settings.url += "&" + settings.data;
                 }
+                if (!settings.dataType)
+                    settings.dataType = "text/html";
+                else {
+                    switch (settings.dataType) {
+                    case "script":
+                        settings.dataType = "text/javascript, application/javascript";
+                        break;
+                    case "json":
+                        settings.dataType = "application/json";
+                        break;
+                    case "xml":
+                        settings.dataType = "application/xml, text/xml";
+                        break;
+                    case "html":
+                        settings.dataType = "text/html";
+                        break;
+                    case "text":
+                        settings.dataType = "text/plain";
+                        break;
+                    case "jsonp":
+                        return $.jsonP(opts);
+                    default:
+                        settings.dataType = "text/html";
+                        break;
+                    }
+                }
+
 
                 if (/=\?/.test(settings.url)) {
                     return $.jsonP(settings);
@@ -4371,7 +4517,7 @@ function serializeForm() {
 
                 if (!settings.crossDomain)
                     settings.headers = $.extend({
-                        'X-Requested-With': 'XMLHttpRequest'
+                        "X-Requested-With": "XMLHttpRequest"
                     }, settings.headers);
                 var abortTimeout;
                 var context = settings.context;
@@ -4386,42 +4532,42 @@ function serializeForm() {
                     if (xhr.readyState === 4) {
                         clearTimeout(abortTimeout);
                         var result, error = false;
-                        if ((xhr.status &gt;= 200 && xhr.status &lt; 300) || xhr.status === 0 && protocol == 'file:') {
-                            if (mime === 'application/json' && !(/^\s*$/.test(xhr.responseText))) {
+                        if ((xhr.status &gt;= 200 && xhr.status &lt; 300) || xhr.status === 0 && protocol == "file:") {
+                            if (mime === "application/json" && !(/^\s*$/.test(xhr.responseText))) {
                                 try {
                                     result = JSON.parse(xhr.responseText);
                                 } catch (e) {
                                     error = e;
                                 }
-                            } else if (mime === 'application/xml, text/xml') {
+                            } else if (mime === "application/xml, text/xml") {
                                 result = xhr.responseXML;
                             } else if (mime == "text/html") {
                                 result = xhr.responseText;
                                 $.parseJS(result);
                             } else
                                 result = xhr.responseText;
-                            //If we're looking at a local file, we assume that no response sent back means there was an error
+                            //If we"re looking at a local file, we assume that no response sent back means there was an error
                             if (xhr.status === 0 && result.length === 0)
                                 error = true;
                             if (error)
-                                settings.error.call(context, xhr, 'parsererror', error);
+                                settings.error.call(context, xhr, "parsererror", error);
                             else {
-                                settings.success.call(context, result, 'success', xhr);
+                                settings.success.call(context, result, "success", xhr);
                             }
                         } else {
                             error = true;
-                            settings.error.call(context, xhr, 'error');
+                            settings.error.call(context, xhr, "error");
                         }
-                        settings.complete.call(context, xhr, error ? 'error' : 'success');
+                        settings.complete.call(context, xhr, error ? "error" : "success");
                     }
                 };
                 xhr.open(settings.type, settings.url, settings.async);
                 if (settings.withCredentials) xhr.withCredentials = true;
 
                 if (settings.contentType)
-                    settings.headers['Content-Type'] = settings.contentType;
+                    settings.headers["Content-Type"] = settings.contentType;
                 for (var name in settings.headers)
-                    if (typeof settings.headers[name] === 'string')
+                    if (typeof settings.headers[name] === "string")
                         xhr.setRequestHeader(name, settings.headers[name]);
                 if (settings.beforeSend.call(context, xhr, settings) === false) {
                     xhr.abort();
@@ -4432,13 +4578,13 @@ function serializeForm() {
                     abortTimeout = setTimeout(function() {
                         xhr.onreadystatechange = empty;
                         xhr.abort();
-                        settings.error.call(context, xhr, 'timeout');
+                        settings.error.call(context, xhr, "timeout");
                     }, settings.timeout);
                 xhr.send(settings.data);
             } catch (e) {
                 // General errors (e.g. access denied) should also be sent to the error callback
                 console.log(e);
-                settings.error.call(context, xhr, 'error', e);
+                settings.error.call(context, xhr, "error", e);
             }
             return xhr;
         };
@@ -4449,7 +4595,7 @@ function serializeForm() {
 
 
 
-          <section class='description'><p>Execute an Ajax call with the given options<br />options.type - Type of request<br />options.beforeSend - function to execute before sending the request<br />options.success - success callback<br />options.error - error callback<br />options.complete - complete callback - callled with a success or error<br />options.timeout - timeout to wait for the request<br />options.url - URL to make request against<br />options.contentType - HTTP Request Content Type<br />options.headers - Object of headers to set<br />options.dataType - Data type of request<br />options.data - data to pass into request.  $.param is called on objects<br />                        var opts={<br />            type:"GET",<br />            success:function(data){},<br />            url:"mypage.php",<br />            data:{bar:'bar'},<br />            }<br />            $.ajax(opts);<br />            </p></section>
+          <section class='description'><p>Execute an Ajax call with the given options<br />options.type - Type of request<br />options.beforeSend - function to execute before sending the request<br />options.success - success callback<br />options.error - error callback<br />options.complete - complete callback - callled with a success or error<br />options.timeout - timeout to wait for the request<br />options.url - URL to make request against<br />options.contentType - HTTP Request Content Type<br />options.headers - Object of headers to set<br />options.dataType - Data type of request<br />options.data - data to pass into request.  $.param is called on objects<br />                        var opts={<br />            type:"GET",<br />            success:function(data){},<br />            url:"mypage.php",<br />            data:{bar:"bar"},<br />            }<br />            $.ajax(opts);<br />            </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -4596,7 +4742,7 @@ function serializeForm() {
 
 
 
-          <section class='description'><p>Shorthand call to an Ajax POST request<br />                        $.post("mypage.php",{bar:'bar'},function(data){});<br />            </p></section>
+          <section class='description'><p>Shorthand call to an Ajax POST request<br />                        $.post("mypage.php",{bar:"bar"},function(data){});<br />            </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -4655,7 +4801,7 @@ function serializeForm() {
 
 
 
-          <section class='description'><p>Shorthand call to an Ajax request that expects a JSON response<br />                        $.getJSON("mypage.php",{bar:'bar'},function(data){});<br />            </p></section>
+          <section class='description'><p>Shorthand call to an Ajax request that expects a JSON response<br />                        $.getJSON("mypage.php",{bar:"bar"},function(data){});<br />            </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -4721,7 +4867,7 @@ function serializeForm() {
 
 
 
-          <section class='description'><p>Converts an object into a key/value par with an optional prefix.  Used for converting objects to a query string<br />                        var obj={<br />            foo:'foo',<br />            bar:'bar'<br />            }<br />            var kvp=$.param(obj,'data');<br />            </p></section>
+          <section class='description'><p>Converts an object into a key/value par with an optional prefix.  Used for converting objects to a query string<br />                        var obj={<br />            foo:"foo",<br />            bar:"bar"<br />            }<br />            var kvp=$.param(obj,"data");<br />            </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -4917,8 +5063,10 @@ var objParse=$.parseJSON("{\"foo\":\"bar\"}");
             var elem;
             var f = new $afm();
             if (props || type[0] !== "&lt;") {
-                if (props.html)
-                    props.innerHTML = props.html, delete props.html;
+                if (props.html){
+                    props.innerHTML = props.html;
+                    delete props.html;
+                }
 
                 elem = document.createElement(type);
                 for (var j in props) {
@@ -4929,7 +5077,7 @@ var objParse=$.parseJSON("{\"foo\":\"bar\"}");
                 elem = document.createElement("div");
                 if (isWin8) {
                     MSApp.execUnsafeLocalFunction(function() {
-                        elem.innerHTML = selector.trim();
+                        elem.innerHTML = type.trim();
                     });
                 } else
                     elem.innerHTML = type;
@@ -4944,7 +5092,7 @@ var objParse=$.parseJSON("{\"foo\":\"bar\"}");
 
 
 
-          <section class='description'><p>$.create - a faster alertnative to $("this is some text");<br />                    $.create("div",{id:'main',innerHTML:'this is some text'});<br />          $.create("this is some text");<br />          </p></section>
+          <section class='description'><p>$.create - a faster alertnative to $("this is some text");<br />                    $.create("div",{id:"main",innerHTML:"this is some text"});<br />          $.create("this is some text");<br />          </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -5051,7 +5199,7 @@ var slower=$.create("<div id='test'>Test HTML</div>");
             <div class='viewsource' id='source__bind' style='display:none'>
             <pre style='padding-left:25px'><code>
             $.fn.bind = function(event, callback) {
-            for (var i = 0; i &lt; this.length; i++) {
+            for (var i = 0, len = this.length; i &lt; len; i++) {
                 add(this[i], event, callback);
             }
             return this;
@@ -5063,7 +5211,7 @@ var slower=$.create("<div id='test'>Test HTML</div>");
 
 
 
-          <section class='description'><p>Binds an event to each element in the collection and executes the callback<br />                        $().bind('click',function(){console.log('I clicked '+this.id);});<br />            </p></section>
+          <section class='description'><p>Binds an event to each element in the collection and executes the callback<br />                        $().bind("click",function(){console.log("I clicked "+this.id);});<br />            </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -5119,7 +5267,7 @@ $("#bindTest li").bind("click",function(event){alert(this.innerHTML)});
             <div class='viewsource' id='source__unbind' style='display:none'>
             <pre style='padding-left:25px'><code>
             $.fn.unbind = function(event, callback) {
-            for (var i = 0; i &lt; this.length; i++) {
+            for (var i = 0, len = this.length; i &lt; len; i++) {
                 remove(this[i], event, callback);
             }
             return this;
@@ -5131,7 +5279,7 @@ $("#bindTest li").bind("click",function(event){alert(this.innerHTML)});
 
 
 
-          <section class='description'><p>Unbinds an event to each element in the collection.  If a callback is passed in, we remove just that one, otherwise we remove all callbacks for those events<br />                        $().unbind('click'); //Unbinds all click events<br />            $().unbind('click',myFunc); //Unbinds myFunc<br />            </p></section>
+          <section class='description'><p>Unbinds an event to each element in the collection.  If a callback is passed in, we remove just that one, otherwise we remove all callbacks for those events<br />                        $().unbind("click"); //Unbinds all click events<br />            $().unbind("click",myFunc); //Unbinds myFunc<br />            </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -5224,7 +5372,7 @@ function unbindTest(){
 
 
 
-          <section class='description'><p>Binds an event to each element in the collection that will only execute once.  When it executes, we remove the event listener then right away so it no longer happens<br />                        $().one('click',function(){console.log('I was clicked once');});<br />            </p></section>
+          <section class='description'><p>Binds an event to each element in the collection that will only execute once.  When it executes, we remove the event listener then right away so it no longer happens<br />                        $().one("click",function(){console.log("I was clicked once");});<br />            </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -5259,46 +5407,52 @@ $("#testAnchor").one("click",function(){alert("Submitting form")});
           </article>
        </div>
 
-       <div id='_delegate' title='$().delegate(selector,event,callback)' data-nav='nav_appframework' class='panel'>
+       <div id='_delegate' title='$().delegate(selector,event,[data],callback)' data-nav='nav_appframework' class='panel'>
        <div class='source'>
           <h3><a class='collapsed' onclick='toggleSource("_delegate",this)'>Show Source</a></h3>
 
             <div class='viewsource' id='source__delegate' style='display:none'>
             <pre style='padding-left:25px'><code>
-            function addDelegate(element,event,callback,selector){
+            function addDelegate(element,event,callback,selector,data){
             add(element, event, callback, selector, function(fn) {
                     return function(e) {
                         var evt, match = $(e.target).closest(selector, element).get(0);
                         if (match) {
                             evt = $.extend(createProxy(e), {
                                 currentTarget: match,
-                                liveFired: element
+                                liveFired: element,
+                                delegateTarget:element,
+                                data:data
                             });
                             return fn.apply(match, [evt].concat([].slice.call(arguments, 1)));
                         }
                     };
                 });
         }
-        $.fn.delegate = function(selector, event, callback) {
-
-            for (var i = 0; i &lt; this.length; i++) {
-                addDelegate(this[i],event,callback,selector)
+        $.fn.delegate = function(selector, event, data, callback) {
+            if ($.isFunction(data)) {
+                callback = data;
+                data = null;
+            }
+            for (var i = 0, len = this.length; i &lt; len; i++) {
+                addDelegate(this[i],event,callback,selector,data);
             }
             return this;
         };
             </code></pre>
              </div>
       </div>
-          <h2>$().delegate(selector,event,callback)</h2>
+          <h2>$().delegate(selector,event,[data],callback)</h2>
 
 
 
-          <section class='description'><p>Delegate an event based off the selector.  The event will be registered at the parent level, but executes on the selector.<br />                        $("#div").delegate("p",'click',callback);<br />            </p></section>
+          <section class='description'><p>Delegate an event based off the selector.  The event will be registered at the parent level, but executes on the selector.<br />                        $("#div").delegate("p","click",callback);<br />            </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
              <ol><li style='padding-left:15px;line-height:20px'>selector - String|Array|Object</li>
 <li style='padding-left:15px;line-height:20px'>event - String|Object</li>
+<li style='padding-left:15px;line-height:20px'>data - Object</li>
 <li style='padding-left:15px;line-height:20px'>callback - Function</li>
 </ol>
              <div class='spacer'></div>
@@ -5323,7 +5477,7 @@ $("#testAnchor").one("click",function(){alert("Submitting form")});
             <div class='viewsource' id='source__undelegate' style='display:none'>
             <pre style='padding-left:25px'><code>
             $.fn.undelegate = function(selector, event, callback) {
-            for (var i = 0; i &lt; this.length; i++) {
+            for (var i = 0, len = this.length; i &lt; len; i++) {
                 remove(this[i], event, callback, selector);
             }
             return this;
@@ -5335,7 +5489,7 @@ $("#testAnchor").one("click",function(){alert("Submitting form")});
 
 
 
-          <section class='description'><p>Unbinds events that were registered through delegate.  It acts upon the selector and event.  If a callback is specified, it will remove that one, otherwise it removes all of them.<br />                        $("#div").undelegate("p",'click',callback);//Undelegates callback for the click event<br />            $("#div").undelegate("p",'click');//Undelegates all click events<br />            </p></section>
+          <section class='description'><p>Unbinds events that were registered through delegate.  It acts upon the selector and event.  If a callback is specified, it will remove that one, otherwise it removes all of them.<br />                        $("#div").undelegate("p","click",callback);//Undelegates callback for the click event<br />            $("#div").undelegate("p","click");//Undelegates all click events<br />            </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -5358,19 +5512,24 @@ $("#testAnchor").one("click",function(){alert("Submitting form")});
           </article>
        </div>
 
-       <div id='_on' title='$().on(event,selector,callback);' data-nav='nav_appframework' class='panel'>
+       <div id='_on' title='$().on(event,selector,[data],callback);' data-nav='nav_appframework' class='panel'>
        <div class='source'>
           <h3><a class='collapsed' onclick='toggleSource("_on",this)'>Show Source</a></h3>
 
             <div class='viewsource' id='source__on' style='display:none'>
             <pre style='padding-left:25px'><code>
-            $.fn.on = function(event, selector, callback) {
-            return selector === nundefined || $.isFunction(selector) ? this.bind(event, selector) : this.delegate(selector, event, callback);
+            $.fn.on = function(event, selector, data, callback) {
+            if ($.isFunction(data)) {
+                callback = data;
+                data = null;
+            }
+
+            return selector === nundefined || $.isFunction(selector) ? this.bind(event, selector) : this.delegate(selector, event, data,callback);
         };
             </code></pre>
              </div>
       </div>
-          <h2>$().on(event,selector,callback);</h2>
+          <h2>$().on(event,selector,[data],callback);</h2>
 
 
 
@@ -5380,6 +5539,7 @@ $("#testAnchor").one("click",function(){alert("Submitting form")});
              <h2>Params</h2>
              <ol><li style='padding-left:15px;line-height:20px'>selector - String|Array|Object</li>
 <li style='padding-left:15px;line-height:20px'>event - String|Object</li>
+<li style='padding-left:15px;line-height:20px'>data - Object</li>
 <li style='padding-left:15px;line-height:20px'>callback - Function</li>
 </ol>
              <div class='spacer'></div>
@@ -5449,7 +5609,7 @@ $("#onTest").on("click","li",function(){alert(this.innerHTML)});
 
 
 
-          <section class='description'><p>Removes event listeners for .on()<br />If selector is undefined or a function, we call unbind, otherwise it's undelegate<br />                        $().off("click","p",callback); //Remove callback function for click events<br />            $().off("click","p") //Remove all click events<br />            </p></section>
+          <section class='description'><p>Removes event listeners for .on()<br />If selector is undefined or a function, we call unbind, otherwise it"s undelegate<br />                        $().off("click","p",callback); //Remove callback function for click events<br />            $().off("click","p") //Remove all click events<br />            </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -5526,10 +5686,10 @@ function offTest(){
             <div class='viewsource' id='source__trigger' style='display:none'>
             <pre style='padding-left:25px'><code>
             $.fn.trigger = function(event, data, props) {
-            if (typeof event == 'string')
+            if (typeof event == "string")
                 event = $.Event(event, props);
             event.data = data;
-            for (var i = 0; i &lt; this.length; i++) {
+            for (var i = 0, len = this.length; i &lt; len; i++) {
                 this[i].dispatchEvent(event);
             }
             return this;
@@ -5541,7 +5701,7 @@ function offTest(){
 
 
 
-          <section class='description'><p>This triggers an event to be dispatched.  Usefull for emulating events, etc.<br />                $().trigger("click",{foo:'bar'});//Trigger the click event and pass in data<br />        </p></section>
+          <section class='description'><p>This triggers an event to be dispatched.  Usefull for emulating events, etc.<br />                $().trigger("click",{foo:"bar"});//Trigger the click event and pass in data<br />        </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -5593,11 +5753,11 @@ function triggerIt(){
             <div class='viewsource' id='source_$_Event' style='display:none'>
             <pre style='padding-left:25px'><code>
             $.Event = function(type, props) {
-            var event = document.createEvent('Events'),
+            var event = document.createEvent("Events"),
                 bubbles = true;
             if (props)
                 for (var name in props)
-                    (name == 'bubbles') ? (bubbles = !! props[name]) : (event[name] = props[name]);
+                    (name == "bubbles") ? (bubbles = !! props[name]) : (event[name] = props[name]);
             event.initEvent(type, bubbles, true, null, null, null, null, null, null, null, null, null, null, null, null);
             return event;
         };
@@ -5651,7 +5811,7 @@ function triggerIt(){
 
 
 
-          <section class='description'><p>Bind an event to an object instead of a DOM Node<br />                      $.bind(this,'event',function(){});<br />           </p></section>
+          <section class='description'><p>Bind an event to an object instead of a DOM Node<br />                      $.bind(this,"event",function(){});<br />           </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -5707,7 +5867,7 @@ function triggerIt(){
 
 
 
-          <section class='description'><p>Trigger an event to an object instead of a DOM Node<br />                      $.trigger(this,'event',arguments);<br />           </p></section>
+          <section class='description'><p>Trigger an event to an object instead of a DOM Node<br />                      $.trigger(this,"event",arguments);<br />           </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -5759,7 +5919,7 @@ function triggerIt(){
 
 
 
-          <section class='description'><p>Unbind an event to an object instead of a DOM Node<br />                      $.unbind(this,'event',function(){});<br />           </p></section>
+          <section class='description'><p>Unbind an event to an object instead of a DOM Node<br />                      $.unbind(this,"event",function(){});<br />           </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -5804,7 +5964,7 @@ function triggerIt(){
 
 
 
-          <section class='description'><p>Creates a proxy function so you can change the 'this' context in the function<br />Update: now also allows multiple argument call or for you to pass your own arguments<br />           ```<br />            var newObj={foo:bar}<br />            $("#main").bind("click",$.proxy(function(evt){console.log(this)},newObj);</p></section>
+          <section class='description'><p>Creates a proxy function so you can change the "this" context in the function<br />Update: now also allows multiple argument call or for you to pass your own arguments<br />           ```<br />            var newObj={foo:bar}<br />            $("#main").bind("click",$.proxy(function(evt){console.log(this)},newObj);</p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -5955,11 +6115,11 @@ $("#proxyTest").bind("click",$.proxy(function(){alert(this.foo);},obj));
                     var doc = document.createElement("script");
                     doc.type = scripts[i].type;
                     doc.src = scripts[i].src;
-                    document.getElementsByTagName('head')[0].appendChild(doc);
+                    document.getElementsByTagName("head")[0].appendChild(doc);
                     remoteJSPages[scripts[i].src] = 1;
                     doc = null;
                 } else {
-                    window['eval'](scripts[i].innerHTML);
+                    window["eval"](scripts[i].innerHTML);
                 }
             }
         };
@@ -6006,30 +6166,41 @@ function doParseJS(){
           </article>
        </div>
 
-       <div id='$_ui_setSideMenuWidth' title='$.ui.setSideMenuWidth' data-nav='nav_af_ui' class='panel'>
+       <div id='$_ui_setLeftSideMenuWidth' title='$.ui.setLeftSideMenuWidth' data-nav='nav_af_ui' class='panel'>
        <div class='source'>
-          <h3><a class='collapsed' onclick='toggleSource("$_ui_setSideMenuWidth",this)'>Show Source</a></h3>
+          <h3><a class='collapsed' onclick='toggleSource("$_ui_setLeftSideMenuWidth",this)'>Show Source</a></h3>
 
-            <div class='viewsource' id='source_$_ui_setSideMenuWidth' style='display:none'>
+            <div class='viewsource' id='source_$_ui_setLeftSideMenuWidth' style='display:none'>
             <pre style='padding-left:25px'><code>
-            setSideMenuWidth: function(width) {
+            setLeftSideMenuWidth: function(width) {
             this.sideMenuWidth = width;
             //override the css style
             width = width + "";
             width = width.replace("px", "") + "px";
-            $("head").find("#styleWidth").remove();
-            $("head").append("&lt;style id='styleWidth'&gt;#afui #menu {width:" + width + "  !important}&lt;/style&gt;");
+            $("head").find("style#afui_sideMenuWidth").remove();
+            var css="@media handheld, only screen and (min-width: 768px) {"+
+                        "#afui &gt; #navbar.hasMenu.splitview, #afui &gt; #header.hasMenu.splitview, #afui &gt; #content.hasMenu.splitview  {"+
+                        "    margin-left:"+width+" !important;"+
+                        "    width: -webkit-calc(100% -"+width+") !important;"+
+                        "    width: calc(100% - "+width+") !important;"+
+                        "}"+
+                    "}"+
+                    "#afui #menu {width:" + width + "  !important}";
+            $("head").append("&lt;style id='afui_sideMenuWidth'&gt;"+css+"&lt;/style&gt;");
+        },
+        setSideMenuWidth:function(){
+            this.setLeftSideMenuWidth.apply(this,arguments);
         },
             </code></pre>
              </div>
       </div>
-          <h2>$.ui.setSideMenuWidth</h2>
+          <h2>$.ui.setLeftSideMenuWidth</h2>
 
 
 
           <section class='description'><p>This changes the side menu width</p>
 
-           $.ui.setSideMenuWidth('300px');
+           $.ui.setLeftSideMenuWidth('300px');
            </section>
           <article>
           <div class='spacer'></div>
@@ -6043,18 +6214,50 @@ function doParseJS(){
 
              <h2>Example</h2>
               <div class='markdowncontents'>
-              <p>$.ui.setSideMenuWidth(width) - This is a new API for 2.0.  This allows you to programatically set the width of your side menu.</p>
+              
+              </div>
+             </div>
+          </article>
+       </div>
 
-<p>This overrides the default CSS style.  This is used for animation and swiping to reveal.</p>
+       <div id='$_ui_setRightSideMenuWidth' title='$.ui.setRightSideMenuWidth' data-nav='nav_af_ui' class='panel'>
+       <div class='source'>
+          <h3><a class='collapsed' onclick='toggleSource("$_ui_setRightSideMenuWidth",this)'>Show Source</a></h3>
 
-<pre><code class="language-js"><span class='linenumber'>$.ui.setSideMenuWidth("200px"); //static 200px</span>
-</code></pre>
+            <div class='viewsource' id='source_$_ui_setRightSideMenuWidth' style='display:none'>
+            <pre style='padding-left:25px'><code>
+            setRightSideMenuWidth: function(width) {
+            this.sideMenuWidth = width;
+            //override the css style
+            width = width + "";
+            width = width.replace("px", "") + "px";
+            $("head").find("style#afui_asideMenuWidth").remove();
+            $("head").append("&lt;style id='afui_asideMenuWidth'&gt;#afui #aside_menu {width:" + width + "  !important}&lt;/style&gt;");
+        },
+            </code></pre>
+             </div>
+      </div>
+          <h2>$.ui.setRightSideMenuWidth</h2>
 
-<p>Here we will set the width so only 50px of the main screen is available</p>
 
-<pre><code class="language-js"><span class='linenumber'>$.ui.setSideMenuWidth(($("#content").width()-50)+"px");</span>
-</code></pre>
 
+          <section class='description'><p>This changes the side menu width</p>
+
+           $.ui.setRightSideMenuWidth('300px');
+           </section>
+          <article>
+          <div class='spacer'></div>
+             <h2>Params</h2>
+             <ol></ol>
+             <div class='spacer'></div>
+             <h2>Returns</h2>
+             <div style='padding-left:30px;line-height:20px;'>null</div>
+             <div class='spacer'></div>
+             <div class='markdown'>
+
+             <h2>Example</h2>
+              <div class='markdowncontents'>
+              
               </div>
              </div>
           </article>
@@ -6171,7 +6374,7 @@ function doParseJS(){
               <div class='markdowncontents'>
               <p>$.ui.loadDefaultHash is a boolean value you set before $.ui.launch happens.  This tells the browser to load the first panel off the hash/URL being loaded.</p>
 
-<pre><code class="language-js"><span class='linenumber'>$.ui.loadHash=true;</span>
+<pre><code class="language-js"><span class='linenumber'>$.ui.loadDefaultHash=true;</span>
 <span class='linenumber'>$.ui.launch();</span>
 </code></pre>
 
@@ -6377,7 +6580,7 @@ $.ui.popup( {
 
              <h2>Example</h2>
               <div class='markdowncontents'>
-              <p>$.ui.blockUI is a short cut to $.blockUI from the popup plugin.</p>
+              <p>$.ui.blockUI is a shortcut to $.blockUI from the popup plugin.</p>
 
 <p>This function throws up a mask on the screen and is used with plugins like the popup plugin.</p>
 
@@ -6432,7 +6635,7 @@ function blockUI(){
 
              <h2>Example</h2>
               <div class='markdowncontents'>
-              <p>$.ui.unblockUI is a short cut to $.unblockUI from the popup plugin.</p>
+              <p>$.ui.unblockUI is a shortcut to $.unblockUI from the popup plugin.</p>
 
 <p>This function clears the mask that was created by $.blockUI</p>
 
@@ -6449,7 +6652,7 @@ function blockUI(){
             <pre style='padding-left:25px'><code>
             removeFooterMenu: function() {
             $.query("#navbar").hide();
-            $.query("#content").css("bottom", "0px");
+            //$.query("#content").css("bottom", "0px");
             this.showNavMenu = false;
         },
             </code></pre>
@@ -6587,7 +6790,11 @@ function blockUI(){
 
              <h2>Example</h2>
               <div class='markdowncontents'>
-              
+              <p>$.ui.backButtonText will override the back button text everywhere in the application.</p>
+
+<pre><code class="language-js"><span class='linenumber'>$.ui.backButtonText='Back';</span>
+</code></pre>
+
               </div>
              </div>
           </article>
@@ -6864,7 +7071,7 @@ function blockUI(){
 
 
 
-          <section class='description'><p>Update a badge on the selected target.  Position can be<br />            bl = bottom left<br />            tl = top left<br />            br = bottom right<br />            tr = top right (default)<br />                      $.ui.updateBadge('#mydiv','3','bl','green');<br />           </p></section>
+          <section class='description'><p>Update a badge on the selected target.  Position can be<br />            bl = bottom left<br />            tl = top left<br />            br = bottom right<br />            tr = top right (default)<br />                      $.ui.updateBadge("#mydiv","3","bl","green");<br />           </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -6930,7 +7137,7 @@ function badge2(){
 
 
 
-          <section class='description'><p>Removes a badge from the selected target.<br />                      $.ui.removeBadge('#mydiv');<br />           </p></section>
+          <section class='description'><p>Removes a badge from the selected target.<br />                      $.ui.removeBadge("#mydiv");<br />           </p></section>
           <article>
           <div class='spacer'></div>
              <h2>Params</h2>
@@ -6982,11 +7189,11 @@ function removeBadge() {
             toggleNavMenu: function(force) {
             if (!this.showNavMenu) return;
             if ($.query("#navbar").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
-                $.query("#content").css("bottom", "0px");
+               // $.query("#content").css("bottom", "0px");
                 $.query("#navbar").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
                 $.query("#navbar").show();
-                $.query("#content").css("bottom", $.query("#navbar").css("height"));
+              //  $.query("#content").css("bottom", $.query("#navbar").css("height"));
 
             }
         },
@@ -7013,9 +7220,9 @@ function removeBadge() {
               <div class='markdowncontents'>
               <p>$.ui.toggleNavMenu(force) - will toggle the nav (footer) menu for your app.</p>
 
-<p>If you specify false for "force", it will always hide the navbar when you call it with "false"</p>
+<p>If you specify false for "force", it will always hide the navbar.</p>
 
-<p>If you specify true for "force", it will always show the navbar when you call it with "true"</p>
+<p>If you specify true for "force", it will always show the navbar.</p>
 
 <p><input type="button" onclick="$.ui.toggleNavMenu()" value="Toggle"> <input type="button" onclick="$.ui.toggleNavMenu(false)" value="Hide"> <input type="button" onclick="$.ui.toggleNavMenu(true)" value="Show"></p>
 
@@ -7032,11 +7239,11 @@ function removeBadge() {
             <pre style='padding-left:25px'><code>
             toggleHeaderMenu: function(force) {
             if ($.query("#header").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
-                $.query("#content").css("top", "0px");
+               // $.query("#content").css("top", "0px");
                 $.query("#header").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
                 $.query("#header").show();
-                $.query("#content").css("top", $.query("#header").css("height"));
+               // $.query("#content").css("top", $.query("#header").css("height"));
             }
         },
             </code></pre>
@@ -7062,9 +7269,9 @@ function removeBadge() {
               <div class='markdowncontents'>
               <p>$.ui.toggleHeaderMenu(force) - will toggle the header menu for your app.</p>
 
-<p>If you specify false for "force", it will always hide the header when you call it with "false"</p>
+<p>If you specify false for "force", it will always hide the header.</p>
 
-<p>If you specify true for "force", it will always show the header when you call it with "true"</p>
+<p>If you specify true for "force", it will always show the header.</p>
 
 <p><input type="button" onclick="$.ui.toggleHeaderMenu()" value="Toggle"> <input type="button" onclick="$.ui.toggleHeaderMenu(false)" value="Hide"> <input type="button" onclick="$.ui.toggleHeaderMenu(true)" value="Show"></p>
 
@@ -7079,25 +7286,51 @@ function removeBadge() {
 
             <div class='viewsource' id='source_$_ui_toggleSideMenu' style='display:none'>
             <pre style='padding-left:25px'><code>
-            toggleSideMenu: function(force, callback, time) {
-            if (!this.isSideMenuEnabled() || this.togglingSideMenu) return;
+            toggleLeftSideMenu: function(force, callback, time, aside) {
+            if ((!this.isSideMenuEnabled()&&!this.isAsideMenuEnabled()) || this.togglingSideMenu) return;
 
+            if(!aside&&!this.isSideMenuEnabled()) return;
+            if(!aside&&$.ui.splitview && window.innerWidth &gt;= $.ui.handheldMinWidth) return;
             var that = this;
             var menu = $.query("#menu");
+            var asideMenu= $.query("#aside_menu");
             var els = $.query("#content,  #header, #navbar");
+            var panelMask = $.query(".afui_panel_mask");
             time = time || this.transitionTime;
             var open = this.isSideMenuOn();
+            var toX=aside?"-"+asideMenu.width():menu.width();
+            // add panel mask to block when side menu is open for phone devices
+            if(panelMask.length === 0 && window.innerWidth &lt; $.ui.handheldMinWidth){
+                els.append("&lt;div class='afui_panel_mask'&gt;&lt;/div&gt;");
+                panelMask = $.query(".afui_panel_mask");
+                $(".afui_panel_mask").bind("click", function(){
+                    $.ui.toggleSideMenu(false, null, null, aside);
+                });
+            }
+            //Here we need to check if we are toggling the left to right, or right to left
+            var menuPos=this.getSideMenuPosition();
+            if(open&&!aside&&menuPos&lt;0)
+                open=false;
+            else if(open&&aside&&menuPos&gt;0)
+                open=false;
+
 
             if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
                 this.togglingSideMenu = true;
-                menu.show();
+                if(!aside)
+                    menu.show();
+                else
+                    asideMenu.show();
                 that.css3animate(els, {
-                    x: that.sideMenuWidth,
+                    x: toX,
                     time: time,
                     complete: function(canceled) {
                         that.togglingSideMenu = false;
                         els.vendorCss("Transition", "");
                         if (callback) callback(canceled);
+                        if(panelMask.length !== 0 && window.innerWidth &lt; $.ui.handheldMinWidth){
+                            panelMask.show();
+                        }
                     }
                 });
 
@@ -7112,10 +7345,19 @@ function removeBadge() {
                         els.vendorCss("Transform", "");
                         that.togglingSideMenu = false;
                         if (callback) callback(canceled);
-                        menu.hide();
+                        if(!$.ui.splitview)
+                            menu.hide();
+                        asideMenu.hide();
+                        if(panelMask.length !== 0 && window.innerWidth &lt; $.ui.handheldMinWidth){
+                            panelMask.hide();
+                        }
                     }
                 });
             }
+        },
+        toggleSideMenu:function(){
+
+            this.toggleLeftSideMenu.apply(this,arguments);
         },
             </code></pre>
              </div>
@@ -7142,11 +7384,11 @@ function removeBadge() {
               <div class='markdowncontents'>
               <p>$.ui.toggleSideMenu(force) - will toggle the Side menu for your app.</p>
 
-<p><em>note</em> On tablets and desktops, we always show the side menu so resize your browser to test this</p>
+<p><strong>note</strong> On tablets and desktops, we always show the side menu so resize your browser to test this.</p>
 
-<p>If you specify false for "force", it will always hide the Side when you call it with "false"</p>
+<p>If you specify false for "force", it will always hide the Side Menu.</p>
 
-<p>If you specify true for "force", it will always show the Side when you call it with "true"</p>
+<p>If you specify true for "force", it will always show the Side Menu.</p>
 
 <p><input type="button" onclick="$.ui.toggleSideMenu()" value="Toggle"> <input type="button" onclick="$.ui.toggleSideMenu(false)" value="Hide"> <input type="button" onclick="$.ui.toggleSideMenu(true)" value="Show"></p>
 
@@ -7161,7 +7403,7 @@ function removeBadge() {
 
             <div class='viewsource' id='source_$_ui_disableSideMenu' style='display:none'>
             <pre style='padding-left:25px'><code>
-            disableSideMenu: function() {
+            disableRightSideMenu:function(){
             var that = this;
             var els = $.query("#content, #header, #navbar");
             if (this.isSideMenuOn()) {
@@ -7169,7 +7411,6 @@ function removeBadge() {
                     if (!canceled) els.removeClass("hasMenu");
                 });
             } else els.removeClass("hasMenu");
-            $.query("#menu").removeClass("tabletMenu");
         },
             </code></pre>
              </div>
@@ -7210,9 +7451,11 @@ function removeBadge() {
 
             <div class='viewsource' id='source_$_ui_enableSideMenu' style='display:none'>
             <pre style='padding-left:25px'><code>
-            enableSideMenu: function() {
+            enableLeftSideMenu: function() {
             $.query("#content, #header, #navbar").addClass("hasMenu");
-            $.query("#menu").addClass("tabletMenu");
+        },
+        enableSideMenu:function(){
+            return this.enableLeftSideMenu();
         },
             </code></pre>
              </div>
@@ -7242,6 +7485,110 @@ function removeBadge() {
 
 <p><input type="button" onclick="$.ui.enableSideMenu()" value="Enable Side Menu"></p>
 
+              </div>
+             </div>
+          </article>
+       </div>
+
+       <div id='$_ui_enableRightSideMenu' title='$.ui.enableRightSideMenu();' data-nav='nav_af_ui' class='panel'>
+       <div class='source'>
+          <h3><a class='collapsed' onclick='toggleSource("$_ui_enableRightSideMenu",this)'>Show Source</a></h3>
+
+            <div class='viewsource' id='source_$_ui_enableRightSideMenu' style='display:none'>
+            <pre style='padding-left:25px'><code>
+            enableRightSideMenu: function() {
+            $.query("#content, #header, #navbar").addClass("hasMenu");
+        },
+            </code></pre>
+             </div>
+      </div>
+          <h2>$.ui.enableRightSideMenu();</h2>
+
+
+
+          <section class='description'><p>Enables the side menu if it has been disabled<br />                      $.ui.enableRightSideMenu();<br />           </p></section>
+          <article>
+          <div class='spacer'></div>
+             <h2>Params</h2>
+             <ol></ol>
+             <div class='spacer'></div>
+             <h2>Returns</h2>
+             <div style='padding-left:30px;line-height:20px;'>null</div>
+             <div class='spacer'></div>
+             <div class='markdown'>
+
+             <h2>Example</h2>
+              <div class='markdowncontents'>
+              
+              </div>
+             </div>
+          </article>
+       </div>
+
+       <div id='$_ui_splitview' title='$.ui.splitview' data-nav='nav_af_ui' class='panel'>
+       <div class='source'>
+          <h3><a class='collapsed' onclick='toggleSource("$_ui_splitview",this)'>Show Source</a></h3>
+
+            <div class='viewsource' id='source_$_ui_splitview' style='display:none'>
+            <pre style='padding-left:25px'><code>
+            splitview:true,
+            </code></pre>
+             </div>
+      </div>
+          <h2>$.ui.splitview</h2>
+
+
+
+          <section class='description'><p>Boolean that will disable the splitview before launch<br />                      $.ui.splitView=false;<br />           </p></section>
+          <article>
+          <div class='spacer'></div>
+             <h2>Params</h2>
+             <ol></ol>
+             <div class='spacer'></div>
+             <h2>Returns</h2>
+             <div style='padding-left:30px;line-height:20px;'>null</div>
+             <div class='spacer'></div>
+             <div class='markdown'>
+
+             <h2>Example</h2>
+              <div class='markdowncontents'>
+              
+              </div>
+             </div>
+          </article>
+       </div>
+
+       <div id='$_ui_disableSplitView' title='$.ui.disableSplitView();' data-nav='nav_af_ui' class='panel'>
+       <div class='source'>
+          <h3><a class='collapsed' onclick='toggleSource("$_ui_disableSplitView",this)'>Show Source</a></h3>
+
+            <div class='viewsource' id='source_$_ui_disableSplitView' style='display:none'>
+            <pre style='padding-left:25px'><code>
+            disableSplitView:function(){
+            $.query("#content, #header, #navbar, #menu").removeClass("splitview");
+            this.splitview=false;
+        },
+            </code></pre>
+             </div>
+      </div>
+          <h2>$.ui.disableSplitView();</h2>
+
+
+
+          <section class='description'><p>Disables the split view on tablets<br />                      $.ui.disableSplitView();<br />           </p></section>
+          <article>
+          <div class='spacer'></div>
+             <h2>Params</h2>
+             <ol></ol>
+             <div class='spacer'></div>
+             <h2>Returns</h2>
+             <div style='padding-left:30px;line-height:20px;'>null</div>
+             <div class='spacer'></div>
+             <div class='markdown'>
+
+             <h2>Example</h2>
+              <div class='markdowncontents'>
+              
               </div>
              </div>
           </article>
@@ -7426,7 +7773,10 @@ $(afui).ready(function(){
 
             <div class='viewsource' id='source_$_ui_updateSideMenuElements' style='display:none'>
             <pre style='padding-left:25px'><code>
-            updateSideMenuElements: function(elems) {
+            updateSideMenuElements: function() {
+            return this.updateLeftSideMenuElements.apply(this,arguments);
+        },
+        updateLeftSideMenuElements:function(elems) {
             var that = this;
             if (elems === undefined || elems === null) return;
             var nb = $.query("#menu_scroller");
@@ -7438,7 +7788,7 @@ $(afui).ready(function(){
 
             if (!$.is$(elems)) elems = $.query("#" + elems);
 
-            nb.html('');
+            nb.html("");
             nb.append(elems);
             this.prevMenu = elems;
             //Move the scroller to the top and hide it
@@ -7545,7 +7895,7 @@ $(afui).ready(function(){
             <pre style='padding-left:25px'><code>
             setBackButtonText: function(text) {
             if(this._currentHeaderID!=="defaultHeader") return;
-            if (this.trimBackButtonText)
+            if (this.trimBackButtonText && text.length &gt;= 7)
                 text = text.substring(0, 5) + "...";
             if (this.backButtonText.length &gt; 0) $.query("#header header:not(.ignore) #backButton").html(this.backButtonText);
             else $.query("#header header:not(.ignore)  #backButton").html(text);
@@ -7692,9 +8042,20 @@ function testShowMask(){
             if (typeof(id) === "string")
                 id = "#" + id.replace("#", "");
             var $panel = $.query(id);
+            this.modalReference_=$panel;
+
             if ($panel.length) {
-                var useScroller = this.scrollingDivs.hasOwnProperty( $panel.attr("id") );
-                modalDiv.html($.feat.nativeTouchScroll || !useScroller ? $.query(id).html() : $.query(id).get(0).childNodes[0].innerHTML + '', true);
+                var useScroller = this.scrollingDivs.hasOwnProperty($panel.attr("id"));
+                //modalDiv.html($.feat.nativeTouchScroll || !useScroller ? $.query(id).html() : $.query(id).get(0).childNodes[0].innerHTML + '', true);
+                modalDiv.empty();
+                var elemsToCopy;
+                if($.feat.nativeTouchScroll || !useScroller ){
+                    elemsToCopy=$panel.contents();
+                }
+                else {
+                    elemsToCopy=$($panel.get(0).childNodes[0]).contents();
+                }
+                modalDiv.append(elemsToCopy);
                 modalDiv.append("&lt;a onclick='$.ui.hideModal();' class='closebutton modalbutton'&gt;&lt;/a&gt;");
                 that.modalWindow.style.display = "block";
 
@@ -7707,7 +8068,7 @@ function testShowMask(){
                     this.scrollingDivs.modal_container.disable();
                 }
 
-                this.scrollToTop('modal');
+                this.scrollToTop("modal");
                 modalDiv.data("panel", id);
                 var myPanel=$panel.get(0);
                 var fnc = myPanel.getAttribute("data-load");
@@ -7764,19 +8125,29 @@ function testShowMask(){
             <pre style='padding-left:25px'><code>
             hideModal: function() {
             var self = this;
-            $.query("#modalContainer").html("", true);
+            var $cnt=$.query("#modalContainer");
+            $cnt.find("#closebutton.modalbutton").remove();
+            var useScroller = this.scrollingDivs.hasOwnProperty(this.modalReference_.attr("id"));
+
 
             this.runTransition(self.modalTransition, self.modalWindow, self.modalTransContainer, true);
-
             this.scrollingDivs.modal_container.disable();
 
-            var tmp = $.query($.query("#modalContainer").data("panel"));
+            var tmp = $.query($cnt.data("panel"));
             var fnc = tmp.data("unload");
             if (typeof fnc == "string" && window[fnc]) {
                 window[fnc](tmp.get(0));
             }
             tmp.trigger("unloadpanel");
-
+            setTimeout(function(){
+                if($.feat.nativeTouchScroll || !useScroller){
+                    self.modalReference_.append($cnt.contents());
+                }
+                else {
+                    $(self.modalReference_.get(0).childNodes[0]).append($cnt.contents());
+                }
+                $cnt.html("", true);
+            },this.transitionTime);
         },
             </code></pre>
              </div>
@@ -7819,7 +8190,7 @@ function testShowMask(){
             var newDiv = $.create("div", {
                 html: content
             });
-            if (newDiv.children('.panel') && newDiv.children('.panel').length &gt; 0) newDiv = newDiv.children('.panel').get(0);
+            if (newDiv.children(".panel") && newDiv.children(".panel").length &gt; 0) newDiv = newDiv.children(".panel").get(0);
             else newDiv = newDiv.get(0);
 
 
@@ -7919,7 +8290,7 @@ function testShowMask(){
                 newDiv = $.create("div", {
                     html: content
                 });
-                if (newDiv.children('.panel') && newDiv.children('.panel').length &gt; 0) newDiv = newDiv.children('.panel').get(0);
+                if (newDiv.children(".panel") && newDiv.children(".panel").length &gt; 0) newDiv = newDiv.children(".panel").get(0);
                 else newDiv = newDiv.get(0);
 
                 if (!newDiv.getAttribute("data-title") && title) newDiv.setAttribute("data-title",title);
@@ -8082,6 +8453,7 @@ function addPanel(obj){
             }
             if (target.length === 0) return;
 
+
             var what = null;
             var loadAjax = true;
             anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
@@ -8092,7 +8464,7 @@ function addPanel(obj){
                     loadAjax = false;
                 } else if (crcCheck.length &gt; 0) {
                     loadAjax = false;
-                    if (anchor.getAttribute("data-refresh-ajax") === 'true' || (anchor.refresh && anchor.refresh === true || this.isAjaxApp)) {
+                    if (anchor.getAttribute("data-refresh-ajax") === "true" || (anchor.refresh && anchor.refresh === true || this.isAjaxApp)) {
                         loadAjax = true;
                     } else {
                         target = "#" + crcCheck.get(0).id;
@@ -8101,7 +8473,7 @@ function addPanel(obj){
 
                     //ajax div already exists.  Let's see if we should be refreshing it.
                     loadAjax = false;
-                    if (anchor.getAttribute("data-refresh-ajax") === 'true' || (anchor.refresh && anchor.refresh === true || this.isAjaxApp)) {
+                    if (anchor.getAttribute("data-refresh-ajax") === "true" || (anchor.refresh && anchor.refresh === true || this.isAjaxApp)) {
                         loadAjax = true;
                     } else target = "#" + urlHash;
                 }
@@ -8167,9 +8539,12 @@ function addPanel(obj){
                 this.hasLaunched = true;
                 return;
             }
+            if(this.isLaunching)
+                return true;
+            this.isLaunching=true;
 
             var that = this;
-            this.isIntel = (window.AppMobi && typeof(AppMobi) == "object" && AppMobi.app !== undefined) ? true : false;
+
             this.viewportContainer = af.query("#afui");
             this.navbar = af.query("#navbar").get(0);
             this.content = af.query("#content").get(0);
@@ -8177,7 +8552,8 @@ function addPanel(obj){
             this.menu = af.query("#menu").get(0);
             //set anchor click handler for UI
             this.viewportContainer.on("click", "a", function(e) {
-                checkAnchorClick(e, e.currentTarget);
+                if(that.useInteralRouting)
+                    checkAnchorClick(e, e.currentTarget);
             });
 
 
@@ -8186,11 +8562,11 @@ function addPanel(obj){
             var enterEditEl = null;
 
             //on enter-edit keep a reference of the actioned element
-            $.bind($.touchLayer, 'enter-edit', function(el) {
+            $.bind($.touchLayer, "enter-edit", function(el) {
                 enterEditEl = el;
             });
             //enter-edit-reshape panel padding and scroll adjust
-            $.bind($.touchLayer, 'enter-edit-reshape', function() {
+            $.bind($.touchLayer, "enter-edit-reshape", function() {
                 //onReshape UI fixes
                 //check if focused element is within active panel
                 var jQel = $(enterEditEl);
@@ -8213,13 +8589,13 @@ function addPanel(obj){
                         var containerPos = jQactive.offset();
                         if (elPos.bottom &gt; containerPos.bottom && elPos.height &lt; containerPos.height) {
                             //apply fix
-                            that.scrollingDivs[that.activeDiv.id].scrollToItem(jQel, 'bottom');
+                            that.scrollingDivs[that.activeDiv.id].scrollToItem(jQel, "bottom");
                         }
                     }
                 }
             });
             if ($.os.ios) {
-                $.bind($.touchLayer, 'exit-edit-reshape', function() {
+                $.bind($.touchLayer, "exit-edit-reshape", function() {
                     if (that.activeDiv && that.activeDiv.id && that.scrollingDivs.hasOwnProperty(that.activeDiv.id)) {
                         that.scrollingDivs[that.activeDiv.id].setPaddings(0, 0);
                     }
@@ -8243,7 +8619,7 @@ function addPanel(obj){
             if (!this.menu) {
                 this.menu = $.create("div", {
                     id: "menu",
-                    html: '&lt;div id="menu_scroller"&gt;&lt;/div&gt;'
+                    html: "&lt;div id='menu_scroller'&gt;&lt;/div&gt;"
                 }).get(0);
                 this.viewportContainer.append(this.menu);
                 this.menu.style.overflow = "hidden";
@@ -8260,11 +8636,11 @@ function addPanel(obj){
 
                 this.asideMenu = $.create("div", {
                     id: "aside_menu",
-                    html: '&lt;div id="aside_menu_scroller"&gt;&lt;/div&gt;'
+                    html: "&lt;div id='aside_menu_scroller'&gt;&lt;/div&gt;"
                 }).get(0);
                 this.viewportContainer.append(this.asideMenu);
                 this.asideMenu.style.overflow = "hidden";
-                this.scrollingDivs.menu_scroller = $.query("#aside_menu_scroller").scroller({
+                this.scrollingDivs.aside_menu_scroller = $.query("#aside_menu_scroller").scroller({
                     scrollBars: true,
                     verticalScroll: true,
                     vScrollCSS: "afScrollbar",
@@ -8276,6 +8652,7 @@ function addPanel(obj){
                 if ($.feat.nativeTouchScroll) $.query("#aside_menu_scroller").css("height", "100%");
             }
 
+
             if (!this.content) {
                 this.content = $.create("div", {
                     id: "content"
@@ -8284,7 +8661,7 @@ function addPanel(obj){
             }
 
             //insert backbutton (should optionally be left to developer..)
-            $(this.header).html('&lt;a id="backButton" class="button"&gt;&lt;/a&gt; &lt;h1 id="pageTitle"&gt;&lt;/h1&gt;' + header.innerHTML);
+            $(this.header).html("&lt;a id='backButton' class='button'&gt;&lt;/a&gt; &lt;h1 id='pageTitle'&gt;&lt;/h1&gt;" + this.header.innerHTML);
             this.backButton = $.query("#header #backButton").css("visibility", "hidden");
             $(document).on("click", "#header #backButton", function(e) {
                 e.preventDefault();
@@ -8301,7 +8678,7 @@ function addPanel(obj){
                 className: "ui-loader",
                 html: "&lt;span class='ui-icon ui-icon-loading spin'&gt;&lt;/span&gt;&lt;h1&gt;Loading Content&lt;/h1&gt;"
             }).css({
-                'z-index': 20000,
+                "z-index": 20000,
                 display: "none"
             });
             document.body.appendChild(maskDiv.get(0));
@@ -8311,7 +8688,7 @@ function addPanel(obj){
             }).get(0);
 
             modalDiv.appendChild($.create("div", {
-                id: 'modalContainer'
+                id: "modalContainer"
             }).get(0));
             this.modalTransContainer = $.create("div", {
                 id: "modalTransContainer"
@@ -8358,35 +8735,36 @@ function addPanel(obj){
             contentDivs = null;
             var loadingDefer = false;
             var toLoad = Object.keys(defer).length;
+            var loadDeferred=function(j){
+                $.ajax({
+                    url: intel.xdk.webRoot + defer[j],
+                    success: function(data) {
+                        if (data.length &gt; 0) {
+                            that.updatePanel(j, data);
+                            that.parseScriptTags($.query("#" + j).get(0));
+                        }
+                        loaded++;
+                        if (loaded &gt;= toLoad) {
+                            loadingDefer = false;
+                            $(document).trigger("defer:loaded");
+                        }
+                    },
+                    error: function(msg) {
+                        //still trigger the file as being loaded to not block $.ui.ready
+                        console.log("Error with deferred load " + intel.xdk.webRoot + defer[j]);
+                        loaded++;
+                        if (loaded &gt;= toLoad) {
+                            loadingDefer = false;
+                            $(document).trigger("defer:loaded");
+                        }
+                    }
+                });
+            };
             if (toLoad &gt; 0) {
                 loadingDefer = true;
                 var loaded = 0;
                 for (var j in defer) {
-                    (function(j) {
-                        $.ajax({
-                            url: AppMobi.webRoot + defer[j],
-                            success: function(data) {
-                                if (data.length === 0) return;
-                                that.updatePanel(j, data);
-                                that.parseScriptTags($.query("#" + j).get(0));
-                                loaded++;
-                                if (loaded &gt;= toLoad) {
-                                    $(document).trigger("defer:loaded");
-                                    loadingDefer = false;
-
-                                }
-                            },
-                            error: function(msg) {
-                                //still trigger the file as being loaded to not block $.ui.ready
-                                console.log("Error with deferred load " + AppMobi.webRoot + defer[j]);
-                                loaded++;
-                                if (loaded &gt;= toLoad) {
-                                    $(document).trigger("defer:loaded");
-                                    loadingDefer = false;
-                                }
-                            }
-                        });
-                    })(j);
+                    loadDeferred(j);
                 }
             }
             if (this.firstDiv) {
@@ -8399,7 +8777,7 @@ function addPanel(obj){
 
 
                     $.query("#navbar").append($.create("footer", {
-                        id: 'defaultNav'
+                        id: "defaultNav"
                     }).append($.query("#navbar").children()));
                     that.defaultFooter = "defaultNav";
                     that.prevFooter = $.query("#defaultNav");
@@ -8411,10 +8789,16 @@ function addPanel(obj){
                         that.updateSideMenuElements(that.defaultMenu);
                         that.prevMenu = that.defaultMenu;
                     }
+                    var firstAside = $.query("aside").get(0);
+                    if(firstAside) {
+                        that.defaultAside=$(firstAside);
+                        that.updateAsideElements(that.defaultAside);
+                        that.prevAsideMenu=that.defaultAside;
+                    }
                     //get default header
                     that.defaultHeader = "defaultHeader";
                     $.query("#header").append($.create("header", {
-                        id: 'defaultHeader'
+                        id: "defaultHeader"
                     }).append($.query("#header").children()));
                     that.prevHeader = $.query("#defaultHeader");
 
@@ -8432,17 +8816,29 @@ function addPanel(obj){
 
                     //There is a bug in chrome with @media queries where the header was not getting repainted
                     if ($.query("nav").length &gt; 0) {
-                        $.query("#afui #header").addClass("hasMenu");
-                        $.query("#afui #content").addClass("hasMenu");
-                        $.query("#afui #navbar").addClass("hasMenu");
-                        $.query("#afui #menu").addClass("tabletMenu");
+                        var splitViewClass=that.splitview?" splitview":"";
+                        $.query("#afui #header").addClass("hasMenu"+splitViewClass);
+                        $.query("#afui #content").addClass("hasMenu"+splitViewClass);
+                        $.query("#afui #navbar").addClass("hasMenu"+splitViewClass);
+                        $.query("#afui #menu").addClass("hasMenu"+splitViewClass);
+                        $.query("#afui #aside_menu").addClass(splitViewClass);
                     }
+                    if($.query("aside").length &gt; 0) {
+                        $.query("#afui #header, #afui #content, #afui #navbar").addClass("hasAside");
+                    }
+                    $.query("#afui #menu").addClass("tabletMenu");
                     //go to activeDiv
+
+
+                    if($.ui.splitview&&window.innerWidth&gt;parseInt($.ui.handheldMinWidth,10)){
+                        $.ui.sideMenuWidth=$("#menu").width()+"px";
+                    }
+
                     var firstPanelId = that.getPanelId(defaultHash);
                     //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
-                    var isFirstPanel = !!(firstPanelId == "#" + that.firstDiv.id);
+                    var isFirstPanel = (firstPanelId!==null&&firstPanelId == "#" + that.firstDiv.id);
                     if (firstPanelId.length &gt; 0 && that.loadDefaultHash && !isFirstPanel) {
-                        that.loadContent(defaultHash, true, false, 'none'); //load the active page as a newTab with no transition
+                        that.loadContent(defaultHash, true, false, "none"); //load the active page as a newTab with no transition
                     }
 
                     else {
@@ -8462,8 +8858,11 @@ function addPanel(obj){
 
                     that.launchCompleted = true;
                     //trigger ui ready
-                    $(document).trigger("afui:ready");
                     $.query("#afui #splashscreen").remove();
+                    setTimeout(function(){
+                        $(document).trigger("afui:ready");
+                    });
+
                 };
                 if (loadingDefer) {
                     $(document).one("defer:loaded", loadFirstDiv);
@@ -8479,7 +8878,6 @@ function addPanel(obj){
                 this.blockPageScroll();
             }
             this.topClickScroll();
-
         },
             </code></pre>
              </div>
@@ -8524,8 +8922,8 @@ function addPanel(obj){
             <div class='viewsource' id='source_$_ui_finishTransition' style='display:none'>
             <pre style='padding-left:25px'><code>
             clearAnimations: function(inViewDiv) {
-            inViewDiv.style[$.feat.cssPrefix + 'Transform'] = "none";
-            inViewDiv.style[$.feat.cssPrefix + 'Transition'] = "none";
+            inViewDiv.style[$.feat.cssPrefix + "Transform"] = "none";
+            inViewDiv.style[$.feat.cssPrefix + "Transition"] = "none";
         }
             </code></pre>
              </div>
@@ -8612,6 +9010,7 @@ function addPanel(obj){
 <li><a data-persist-ajax='true' href='#_parents'>.parents</a></li>
 <li><a data-persist-ajax='true' href='#_children'>.children</a></li>
 <li><a data-persist-ajax='true' href='#_siblings'>.siblings</a></li>
+<li><a data-persist-ajax='true' href='#_contents'>.contents</a></li>
 <li><a data-persist-ajax='true' href='#_closest'>.closest</a></li>
 <li><a data-persist-ajax='true' href='#_filter'>.filter</a></li>
 <li><a data-persist-ajax='true' href='#_not'>.not</a></li>
@@ -8623,6 +9022,7 @@ function addPanel(obj){
 <li><a data-persist-ajax='true' href='#_eq'>.eq</a></li>
 <li><a data-persist-ajax='true' href='#_index'>.index</a></li>
 <li><a data-persist-ajax='true' href='#_is'>.is</a></li>
+<li><a data-persist-ajax='true' href='#_add'>.add</a></li>
 <li><a data-persist-ajax='true' href='#$_jsonP'>$.jsonP</a></li>
 <li><a data-persist-ajax='true' href='#$_ajax'>$.ajax</a></li>
 <li><a data-persist-ajax='true' href='#$_get'>$.get</a></li>
@@ -8649,7 +9049,8 @@ function addPanel(obj){
 <li><a data-persist-ajax='true' href='#$_proxy'>$.proxy</a></li>
 <li><a data-persist-ajax='true' href='#$_cleanUpContent'>$.cleanUpContent</a></li>
 <li><a data-persist-ajax='true' href='#$_parseJS'>$.parseJS</a></li>
-</ul></nav><nav id='nav_af_ui' ><div class='title'>af.ui</div><ul class='list'><li><a data-persist-ajax='true' href='#$_ui_setSideMenuWidth'>$.ui.setSideMenuWidth</a></li>
+</ul></nav><nav id='nav_af_ui' ><div class='title'>af.ui</div><ul class='list'><li><a data-persist-ajax='true' href='#$_ui_setLeftSideMenuWidth'>$.ui.setLeftSideMenuWidth</a></li>
+<li><a data-persist-ajax='true' href='#$_ui_setRightSideMenuWidth'>$.ui.setRightSideMenuWidth</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_disableNativeScrolling'>$.ui.disableNativeScrolling</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_manageHistory'>$.ui.manageHistory</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_loadDefaultHash'>$.ui.loadDefaultHash</a></li>
@@ -8674,6 +9075,9 @@ function addPanel(obj){
 <li><a data-persist-ajax='true' href='#$_ui_toggleSideMenu'>$.ui.toggleSideMenu</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_disableSideMenu'>$.ui.disableSideMenu</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_enableSideMenu'>$.ui.enableSideMenu</a></li>
+<li><a data-persist-ajax='true' href='#$_ui_enableRightSideMenu'>$.ui.enableRightSideMenu</a></li>
+<li><a data-persist-ajax='true' href='#$_ui_splitview'>$.ui.splitview</a></li>
+<li><a data-persist-ajax='true' href='#$_ui_disableSplitView'>$.ui.disableSplitView</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_updateNavbarElements'>$.ui.updateNavbarElements</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_updateHeaderElements'>$.ui.updateHeaderElements</a></li>
 <li><a data-persist-ajax='true' href='#$_ui_updateSideMenuElements'>$.ui.updateSideMenuElements</a></li>
