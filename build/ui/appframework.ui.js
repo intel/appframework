@@ -3605,7 +3605,7 @@ if (!Date.now)
             //log current scroll
             this.logPos(this.el.scrollLeft, this.el.scrollTop);
             //lock overflow
-            if (!destroy) {
+            if (!destroy&&!$.ui) {
                 this.el.style.overflow = "hidden";
             }
             //remove events
