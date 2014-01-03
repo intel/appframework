@@ -80,6 +80,13 @@ module.exports = function (grunt) {
                         "plugins/css/af.selectbox.css"
                     ]
                 }
+            },
+            icons: {
+                files: {
+                    "build/ui/icons.min.css": [
+                        "css/icons.css"
+                    ]
+                }
             }
         },
         concat: {
@@ -141,8 +148,15 @@ module.exports = function (grunt) {
             },
             af:{
                 files:{
-                    "build/appframework.js":[
-                    "appframework.js"
+                    "build/appframework.js": [
+                        "appframework.js"
+                    ]
+                }
+            },
+            icons:{
+                files:{
+                    "build/css/icons.css": [
+                        "css/icons.css"
                     ]
                 }
             }
