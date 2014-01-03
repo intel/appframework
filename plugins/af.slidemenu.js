@@ -27,9 +27,9 @@
         var openState=0;
         var showHideThresh=false;
         var $menu = $.query("#menu");
-        var $aside_menu = $.query("#aside_menu");
-        var menu_width = $menu.width();
-        var aside_width = $aside_menu.width();
+        var $asideMenu = $.query("#aside_menu");
+        var menuWidth = $menu.width();
+        var asideWidth = $asideMenu.width();
         $("#afui").bind("touchstart", function(e) {
             openState=0;
             if (!$.ui.isSideMenuEnabled() && !$.ui.isAsideMenuEnabled()) return true;
@@ -51,10 +51,10 @@
             var sidePos=$.ui.getSideMenuPosition();
             if(sidePos>0){
                 openState=1;
-                max = menu_width;
+                max = menuWidth;
             } else if(sidePos<0){
                 openState=2;
-                max = aside_width;
+                max = asideWidth;
             }
         });
 
@@ -85,14 +85,14 @@
             var thePlace = (dx - startX);
             if(openState===0){
                 if(thePlace<0){
-                    max = aside_width;
-                    $aside_menu.show();
+                    max = asideWidth;
+                    $asideMenu.show();
                     if(!$.ui.splitview)
                         $menu.hide();
                 } else {
-                    max = menu_width;
+                    max = menuWidth;
                     $menu.show();
-                    $aside_menu.hide();
+                    $asideMenu.hide();
                 }
             }
             
