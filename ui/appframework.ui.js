@@ -1246,7 +1246,10 @@
                 tmp.style["-webkit-overflow-scrolling"] = "none";
             } else {
                 //WE need to clone the div so we keep events
-                scrollEl = tmp.cloneNode(false);
+                var scrollEl=tmp;
+                container.appendChild(tmp);
+                $(tmp).addClass("afScrollPanel");
+                /*scrollEl = tmp.cloneNode(false);
 
 
                 tmp.title = null;
@@ -1259,6 +1262,7 @@
                 scrollEl.appendChild(tmp);
 
                 container.appendChild(scrollEl);
+                */
 
                 if (this.selectBox !== false) this.selectBox.getOldSelects(scrollEl.id);
                 if (this.passwordBox !== false) this.passwordBox.getOldPasswords(scrollEl.id);
@@ -1829,7 +1833,8 @@
                     useJsScroll: !$.feat.nativeTouchScroll,
                     noParent: $.feat.nativeTouchScroll,
                     autoEnable: true,
-                    lockBounce: this.lockPageBounce
+                    lockBounce: this.lockPageBounce,
+                    hasParent:true
                 });
                 if ($.feat.nativeTouchScroll) $.query("#menu_scroller").css("height", "100%");
 
@@ -1846,7 +1851,8 @@
                     useJsScroll: !$.feat.nativeTouchScroll,
                     noParent: $.feat.nativeTouchScroll,
                     autoEnable: true,
-                    lockBounce: this.lockPageBounce
+                    lockBounce: this.lockPageBounce,
+                    hasParent:true
                 });
                 if ($.feat.nativeTouchScroll) $.query("#aside_menu_scroller").css("height", "100%");
             }

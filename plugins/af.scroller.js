@@ -344,9 +344,17 @@
         //extend to jsScroller and nativeScroller (constructs)
         jsScroller = function (el, opts) {
             this.init(el, opts);
-            //test
-            //this.refresh=true;
-            this.container = this.el.parentNode;
+
+            if(opts.hasParent)
+                this.container = this.el.parentNode;
+            else {
+                //copy/etc
+                var $div=$.create("div",{});
+                $div.append($(this.el).contents());
+                $(this.el).append($div);
+                this.container=this.el;
+                this.el=$div.get(0);
+            }
             this.container.afScrollerId = el.afScrollerId;
             this.afEl = $(this.container);
 
@@ -1100,18 +1108,18 @@
 
                 if(this.lastScrollInfo.x>0){
                     this.lastScrollInfo.x=0;
-                    this.hscrollBar.style.display="none";
+                  //  this.hscrollBar.style.display="none";
                 }
                 else if(this.lastScrollInfo.x*-1>this.elementInfo.maxLeft){
                     this.lastScrollInfo.x=this.elementInfo.maxLeft*-1;
-                    this.hscrollBar.style.display="none";
+                   // this.hscrollBar.style.display="none";
                 }
                 if(this.lastScrollInfo.y>0){
                     this.lastScrollInfo.y=0;
-                    this.vscrollBar.style.display="none";
+                    //this.vscrollBar.style.display="none";
                 }
                 else if(this.lastScrollInfo.y*-1>this.elementInfo.maxTop){
-                    this.vscrollBar.style.display="none";
+                   // this.vscrollBar.style.display="none";
                     this.lastScrollInfo.y=this.elementInfo.maxTop*-1;
                 }
             }
@@ -1280,6 +1288,7 @@
 
 
             if (this.currentScrollingObject === null || !this.moved) return;
+
             //event.preventDefault();
             this.finishScrollingObject = this.currentScrollingObject;
             this.currentScrollingObject = null;
@@ -1323,14 +1332,15 @@
                 if(scrollInfo.x>=0)
                 {
                     scrollInfo.x=0;
-                    if(scrollInfo.left>=0) scrollInfo.duration=HIDE_REFRESH_TIME;
+                    if(scrollInfo.left>=0&&this.refresh) scrollInfo.duration=HIDE_REFRESH_TIME;
                 }
                 else if(-scrollInfo.x>this.elementInfo.maxLeft||this.elementInfo.maxLeft===0){
                     scrollInfo.x=-this.elementInfo.maxLeft;
-                    if(-scrollInfo.left>this.elementInfo.maxLeft) scrollInfo.duration=HIDE_REFRESH_TIME;
+                    if(-scrollInfo.left>this.elementInfo.maxLeft&&this.refresh) scrollInfo.duration=HIDE_REFRESH_TIME;
                 }
             }
-
+            if(scrollInfo.x==scrollInfo.left&&scrollInfo.y==scrollInfo.top)
+                scrollInfo.duration=0;
             if (this.androidFormsMode) scrollInfo.duration = 0;
 
             this.scrollerMoveCSS(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
