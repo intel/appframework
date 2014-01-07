@@ -823,7 +823,7 @@
             }
             $.query("#navbar").append(elems);
             this.prevFooter = elems;
-            var tmpAnchors = $.query("#navbar a");
+            var tmpAnchors = $.query("#navbar > footer > a");
             if (tmpAnchors.length > 0) {
                 tmpAnchors.data("ignore-pressed", "true").data("resetHistory", "true");
                 var width = parseFloat(100 / tmpAnchors.length);
@@ -1567,11 +1567,16 @@
             this.loadContentData(what, newTab, back, transition);
 
             //this fixes a bug in iOS where a div flashes when the the overflow property is changed from auto to hidden
-            setTimeout(function() {
-                if (that.scrollingDivs[oldDiv.id]) {
-                    that.scrollingDivs[oldDiv.id].disable();
-                }
-            }, numOnly(that.transitionTime) + 50);
+            if($.feat.nativeTouchScroll) {
+                setTimeout(function() {
+                    if (that.scrollingDivs[oldDiv.id]) {
+                        that.scrollingDivs[oldDiv.id].disable();
+                    }
+                }, numOnly(that.transitionTime) + 50);
+            }
+            else
+                that.scrollingDivs[oldDiv.id].disable();
+
 
         },
         /**
@@ -2013,11 +2018,7 @@
                         $(e.currentTarget).addClass("pressed");
                     });
 
-                    //update the width
-                    var footerLinks = $.query("#navbar a");
-                    if (footerLinks.length > 0) {
-                        footerLinks.css("width", (100 / footerLinks.length) + "%");
-                    }
+                  
 
                     //There is a bug in chrome with @media queries where the header was not getting repainted
                     if ($.query("nav").length > 0) {
