@@ -83,16 +83,16 @@
     box-shadow:none;
 }
 
-#afui #navbar a {
+#afui #navbar>footer>a:not(.button) {
  
 }
 
-#afui #navbar a.pressed {
+#afui #navbar>footer>a.pressed:not(.button) {
     border-radius:0;    
     background:#00AEEF;
 }
 
-#afui #navbar .icon.pressed:before {
+#afui #navbar>footer>a.icon.pressed:before:not(.button) {
     color:inherit;
 }
 

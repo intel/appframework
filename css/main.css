@@ -200,9 +200,7 @@ body {
 **********************************************************/
 /* Nav bar appears locked to the bottom of the screen. It is the primary navigation. can contain text or graphical navigation */
 
-#afui #navbar {
-    
-    
+#afui #navbar {  
     z-index:180;
     height:49px;
     display:block;
@@ -213,7 +211,7 @@ body {
 }
 
 
-#afui #navbar a {
+#afui #navbar>footer>a:not(.button) {
     -webkit-box-sizing:border-box;
     box-sizing: border-box;
     top: 3px;
@@ -234,13 +232,13 @@ body {
 }
 
 
-#afui #navbar .af-badge {
+#afui #navbar>footer>a.af-badge:not(.button) {
     right:auto;
     margin-left:-16px;
 }
 
 
-#afui #navbar .icon:before {
+#afui #navbar>footer>a.icon:before:not(.button) {
     position:absolute;
     top:2px;
     left:0;
@@ -250,12 +248,12 @@ body {
 }
 
 
-#afui #navbar a.pressed {
+#afui #navbar>footer>a.pressed:not(.button) {
     
 }
 
 
-#afui #navbar .icon.pressed:before {
+#afui #navbar>footer>a.icon.pressed:before:not(.button) {
     
 }
 

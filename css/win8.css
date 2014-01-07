@@ -104,7 +104,7 @@
     color:black;
 }
 
-#afui.win8 #navbar a {
+#afui.win8 #navbar>footer>a:not(.button) {
   position: relative;
   width: 56px !important;
   height: 56px;
@@ -120,15 +120,15 @@
   -webkit-perspective: 1000;
 }
 
-#afui.win8.light #navbar a {
+#afui.win8.light #navbar>footer>a:not(.button) {
   text-shadow: 0 0 rgba(0, 0, 0, 0);  
 }
 
-#afui.win8 #navbar .icon.pressed:before {
+#afui.win8 #navbar>footer>a.icon.pressed:before:not(.button) {
 	background-color: #00ABA9;
 }
 
-#afui.win8 #navbar .icon:before {
+#afui.win8 #navbar>footer>a.icon:before:not(.button) {
     top: 0px;
     left: 10px;
     font-size:19px;
@@ -138,11 +138,11 @@
     border-radius: 20px;
 }
 
-#afui.win8.light #navbar .icon:before {
+#afui.win8.light #navbar>footer>a.icon:before:not(.button) {
     border: 3px solid #000;
 }
 
-#afui.win8 #navbar a:not(:last-of-type){
+#afui.win8 #navbar>rakf1@footer>a:not(:last-of-type):not(.button){
   	border:none;
 }
 

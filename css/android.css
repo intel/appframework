@@ -54,19 +54,19 @@
     padding:0;
 }
 
-#afui.android #navbar a {
+#afui.android #navbar>footer>a:not(.button) {
 	color:inherit;
     top:0px;
 }
 
-#afui.android #navbar a.pressed {
+#afui.android #navbar>footer>a.pressed:not(.button) {
  	border:0px;
  	border-top:4px solid #33B5E5;
  	border-radius:0px;
  	background:none;
 }
 
-#afui.android #navbar .icon.pressed:before {
+#afui.android #navbar>footer>a.icon.pressed:before:not(.button) {
 	color:inherit;
 }
 
