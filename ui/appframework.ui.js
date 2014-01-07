@@ -823,7 +823,7 @@
             }
             $.query("#navbar").append(elems);
             this.prevFooter = elems;
-            var tmpAnchors = $.query("#navbar > footer > a");
+            var tmpAnchors = $.query("#navbar > footer > a:not(.button)");
             if (tmpAnchors.length > 0) {
                 tmpAnchors.data("ignore-pressed", "true").data("resetHistory", "true");
                 var width = parseFloat(100 / tmpAnchors.length);
@@ -1388,7 +1388,7 @@
             }
             //check if the panel has a footer
             if (what.getAttribute("data-tab")) { //Allow the dev to force the footer menu
-                $.query("#navbar a").removeClass("pressed");
+                $.query("#navbar>a:not(.button)").removeClass("pressed");
                 $.query("#navbar #" + what.getAttribute("data-tab")).addClass("pressed");
             }
 
@@ -2013,8 +2013,8 @@
                     that.prevHeader = $.query("#defaultHeader");
 
                     //
-                    $.query("#navbar").on("click", "a", function(e) {
-                        $.query("#navbar a").not(e.currentTarget).removeClass("pressed");
+                    $.query("#navbar").on("click", "footer>a:not(.button)", function(e) {
+                        $.query("#navbar>footer>a").not(e.currentTarget).removeClass("pressed");
                         $(e.currentTarget).addClass("pressed");
                     });
 
