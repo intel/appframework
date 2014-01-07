@@ -14,6 +14,7 @@
     function wire8Tiles() {
         $.ui.isWin8 = true;
         if (!$.os.ie) return;
+        if (!$.ui.isSideMenuEnabled()) return;
 
         $.ui.ready(function() {
 
@@ -22,7 +23,7 @@
             if ($.ui.slideSideMenu) $.ui.slideSideMenu = false;
             //we need to make sure the menu button shows up in the bottom navbar
             $.query("#afui #navbar footer").append("<a id='metroMenu' onclick='$.ui.toggleSideMenu()'>•••</a>");
-            var tmpAnchors = $.query("#afui #navbar").find("a");
+            var tmpAnchors = $.query("#afui #navbar").find("a").not(".button");
             if (tmpAnchors.length > 0) {
                 tmpAnchors.data("ignore-pressed", "true").data("resetHistory", "true");
                 var width = parseFloat(100 / tmpAnchors.length);
