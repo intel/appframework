@@ -226,7 +226,7 @@ body {
 }
 
 
-#afui #navbar>footer>a.af-badge:not(.button) {
+#afui #navbar>footer>a:not(.button) .af-badge {
     right:auto;
     margin-left:-16px;
 }
