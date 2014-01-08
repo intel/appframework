@@ -56,7 +56,7 @@
     background:#313f66;
 }
 
-#afui.tizen #navbar>footer>a.icon.pressed:before:not(.button) {
+#afui.tizen #navbar>footer>a.icon.pressed:not(.button):before {
     color:inherit;
 }
 

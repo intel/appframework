@@ -278,7 +278,7 @@
     color:#f44;
 }
 
-#afui.ios7 #navbar>footer>a.pressed:not(.button),#navbar>footer>a.icon.pressed:before:not(.button)  {
+#afui.ios7 #navbar>footer>a.pressed:not(.button),#navbar>footer>a.icon.pressed:not(.button):before  {
     color:rgba(82,155,234,255);
 }
 

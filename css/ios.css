@@ -45,7 +45,7 @@
     border-radius:6px;
 }
 
-#afui.ios #navbar>footer>a.icon.pressed:before:not(.button) {
+#afui.ios #navbar>footer>a.icon.pressed:not(.button):before {
     color:#3a9de2;
 }
 

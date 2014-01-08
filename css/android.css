@@ -66,7 +66,7 @@
  	background:none;
 }
 
-#afui.android #navbar>footer>a.icon.pressed:before:not(.button) {
+#afui.android #navbar>footer>a.icon.pressed:not(.button):before {
 	color:inherit;
 }
 

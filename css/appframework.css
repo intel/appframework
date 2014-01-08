@@ -92,7 +92,7 @@
     background:#00AEEF;
 }
 
-#afui #navbar>footer>a.icon.pressed:before:not(.button) {
+#afui #navbar>footer>a.icon.pressed:not(.button):before {
     color:inherit;
 }
 

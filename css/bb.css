@@ -133,7 +133,7 @@
     border-right:1px solid black;
 }
 
-#afui.bb #navbar>footer>a.icon.pressed:before:not(.button) {
+#afui.bb #navbar>footer>a.icon.pressed:not(.button):before {
     color: white;
 }
 

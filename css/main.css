@@ -238,7 +238,7 @@ body {
 }
 
 
-#afui #navbar>footer>a.icon:before:not(.button) {
+#afui #navbar>footer>a.icon:not(.button):before {
     position:absolute;
     top:2px;
     left:0;
@@ -253,7 +253,7 @@ body {
 }
 
 
-#afui #navbar>footer>a.icon.pressed:before:not(.button) {
+#afui #navbar>footer>a.icon.pressed:not(.button):before {
     
 }
 

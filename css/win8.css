@@ -124,11 +124,11 @@
   text-shadow: 0 0 rgba(0, 0, 0, 0);  
 }
 
-#afui.win8 #navbar>footer>a.icon.pressed:before:not(.button) {
+#afui.win8 #navbar>footer>a.icon.pressed:not(.button):before {
 	background-color: #00ABA9;
 }
 
-#afui.win8 #navbar>footer>a.icon:before:not(.button) {
+#afui.win8 #navbar>footer>a.icon:not(.button):before {
     top: 0px;
     left: 10px;
     font-size:19px;
@@ -138,7 +138,7 @@
     border-radius: 20px;
 }
 
-#afui.win8.light #navbar>footer>a.icon:before:not(.button) {
+#afui.win8.light #navbar>footer>a.icon:not(.button):before {
     border: 3px solid #000;
 }
 
