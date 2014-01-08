@@ -142,7 +142,7 @@
     border: 3px solid #000;
 }
 
-#afui.win8 #navbar>rakf1@footer>a:not(:last-of-type):not(.button){
+#afui.win8 #navbar>footer>a:not(:last-of-type):not(.button){
   	border:none;
 }
 
