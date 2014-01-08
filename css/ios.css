@@ -40,12 +40,12 @@
     border-top:1px solid #000;
 }
 
-#afui.ios #navbar a.pressed {
+#afui.ios #navbar>footer>a.pressed:not(.button) {
     background:rgba(255, 255, 255, 0.13);
     border-radius:6px;
 }
 
-#afui.ios #navbar .icon.pressed:before {
+#afui.ios #navbar>footer>a.icon.pressed:not(.button):before {
     color:#3a9de2;
 }
 
@@ -103,6 +103,19 @@
 
 #afui.ios #header .button.pressed {
     background-image:linear-gradient(to bottom, #6E84A2 0%, #476999 50%, #274979 51%);
+}
+
+#afui.ios #navbar .button {
+    color:#fff;
+    text-shadow:0 -1px 0 #333;
+    background-color:#444;
+    border:1px solid #222;
+    box-shadow:0 1px 0 #222;
+    background-image:linear-gradient(to bottom, #555 0%, #333 50%, #111 51%);
+}
+
+#afui.ios #navbar .button.pressed {
+    background-image:linear-gradient(to bottom, #444 0%, #222 50%, #000 51%);
 }
 
 #afui.ios #aside_menu .list li, 

@@ -43,7 +43,7 @@
     padding:0;
 }
 
-#afui.tizen #navbar a {
+#afui.tizen #navbar>footer>a:not(.button) {
     color: inherit;
     height:49px;
     top:0px;
@@ -51,12 +51,12 @@
     background:#414f6e;
 }
 
-#afui.tizen #navbar a.pressed {
+#afui.tizen #navbar>footer>a.pressed:not(.button) {
     border-top:4px solid #316fc6;
     background:#313f66;
 }
 
-#afui.tizen #navbar .icon.pressed:before {
+#afui.tizen #navbar>footer>a.icon.pressed:not(.button):before {
     color:inherit;
 }
 
@@ -64,12 +64,12 @@
     border-color: #fff;
 }
 
-#afui.tizen.light #navbar a {
+#afui.tizen.light #navbar>footer>a:not(.button) {
     border-top:4px solid #dedcd5;
     background:#dedcd5;
 }
 
-#afui.tizen.light #navbar a.pressed {
+#afui.tizen.light #navbar>footer>a.pressed:not(.button) {
     border-top:4px solid #ceccc5;
     background:#e9e6df;
 }

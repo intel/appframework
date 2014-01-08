@@ -42,11 +42,11 @@
     box-shadow:none;
 }
 
-#afui.ios7 #navbar a {
+#afui.ios7 #navbar>footer>a:not(.button) {
     color:rgba(96,96,96,255);
 }
 
-#afui.ios7 #navbar a.pressed {
+#afui.ios7 #navbar>footer>a.pressed:not(.button) {
     border-radius:0;    
     background:transparent;
 }
@@ -278,7 +278,7 @@
     color:#f44;
 }
 
-#afui.ios7 #navbar a.pressed,#navbar .icon.pressed:before  {
+#afui.ios7 #navbar>footer>a.pressed:not(.button),#navbar>footer>a.icon.pressed:not(.button):before  {
     color:rgba(82,155,234,255);
 }
 
