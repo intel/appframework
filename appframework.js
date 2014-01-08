@@ -596,14 +596,14 @@ if (!window.af || typeof(af) !== "function") {
              * Gets or sets css vendor specific css properties
             * If used as a get, the first elements css property is returned
                 ```
-                $().css("background"); // Gets the first elements background
-                $().css("background","red")  //Sets the elements background to red
+                $().vendorCss("transform"); // Gets the first elements background
+                $().vendorCss("transform","Translate3d(0,40,0)")  //Sets the elements background to red
                 ```
 
             * @param {String} attribute to get
             * @param {String} value to set as
             * @return {Object} an appframework object
-            * @title $().css(attribute,[value])
+            * @title $().vendorCss(attribute,[value])
             */
             vendorCss: function(attribute, value, obj) {
                 return this.css($.feat.cssPrefix + attribute, value, obj);
@@ -616,7 +616,7 @@ if (!window.af || typeof(af) !== "function") {
              ```
              * @param {String} Transform values
              * @return {Object} an appframework object
-             * @title $().vendorCss(value)
+             * @title $().cssTranslate(value)
              */
             cssTranslate: function(val) {
                 return this.vendorCss("Transform", "translate" + $.feat.cssTransformStart + val + $.feat.cssTransformEnd);

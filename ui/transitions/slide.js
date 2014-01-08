@@ -9,9 +9,7 @@
      * @title $ui.slideTransition(previousPanel,currentPanel,goBack);
      */
     function slideTransition(oldDiv, currDiv, back) {
-        /*jshint validthis:true */
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
+        /*jshint validthis:true */        
         var that = this;
         if (back) {
             that.css3animate(oldDiv, {

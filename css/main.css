@@ -47,27 +47,55 @@ body {
 
 
 #afui #afui_modal {
+    background: inherit;
+    color:inherit;
     -webkit-backface-visibility: hidden;
     z-index:9999 !important;
     width:100%;
     height:100%;
     display:none;
     position:absolute; top:0;
-    overflow:hidden;
-    background:rgba(29,29,28,1) !important;
-    -webkit-perspective: 1000;
-    color:white;
-    
+    overflow:hidden;    
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    display: -ms-flexbox;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    -ms-box-orient: vertical;
+    box-orient: vertical;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
 }
 
 
-#afui #modalContainer { width:100%; }
+#afui #modalContainer { 
+    z-index: 180;
+    position: relative;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    -ms-box-flex: 1;
+    box-flex: 1;
+    -webkit-flex: 1;
+    -moz-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    overflow: hidden;
+    background:inherit;
+    color:inherit;
+}
 
 #afui #modalContainer > * {
     -webkit-backface-visibility: hidden;
     -webkit-perspective: 1000;
-    background: black;
-    color:white;
+    background:inherit;
+    color:inherit;
 }
 
 
@@ -80,7 +108,10 @@ body {
     top:0;
     bottom:0;
     overflow:hidden;
-    display: -webkit-box;
+}
+
+#afui ,.flexContainer {
+       display: -webkit-box;
     display:    -moz-box;
     display:         box;
     display: -ms-flexbox;
@@ -122,7 +153,7 @@ body {
 /**********************************************************
     header
 **********************************************************/
-#afui > #header {
+#afui .header {
     position:relative;
     overflow: hidden;
     display:block;
@@ -136,7 +167,7 @@ body {
 
 
 
-#afui #header h1 {
+#afui .header h1 {
     
     position:absolute;
     width:45%;
@@ -200,7 +231,7 @@ body {
 **********************************************************/
 /* Nav bar appears locked to the bottom of the screen. It is the primary navigation. can contain text or graphical navigation */
 
-#afui #navbar {  
+#afui .footer {  
     z-index:180;
     height:49px;
     display:block;
@@ -211,7 +242,7 @@ body {
 }
 
 
-#afui #navbar>footer>a:not(.button) {
+#afui .footer>footer>a:not(.button) {
     -webkit-box-sizing:border-box;
     box-sizing: border-box;
     top: 3px;
@@ -232,13 +263,13 @@ body {
 }
 
 
-#afui #navbar>footer>a:not(.button) .af-badge {
+#afui .footer>footer>a:not(.button) .af-badge {
     right:auto;
     margin-left:-16px;
 }
 
 
-#afui #navbar>footer>a.icon:not(.button):before {
+#afui .footer>footer>a.icon:not(.button):before {
     position:absolute;
     top:2px;
     left:0;
@@ -248,12 +279,12 @@ body {
 }
 
 
-#afui #navbar>footer>a.pressed:not(.button) {
+#afui .footer>footer>a.pressed:not(.button) {
     
 }
 
 
-#afui #navbar>footer>a.icon.pressed:not(.button):before {
+#afui .footer>footer>a.icon.pressed:not(.button):before {
     
 }
 
@@ -261,7 +292,7 @@ body {
 #afui footer, #afui header, #afui nav, #afui aside {    display:none; }
 
 /* Show the active header/footer/navs */
-#afui #navbar footer, #afui #menu nav, #afui #header header, #afui #aside_menu aside {display:block;}
+#afui .footer footer, #afui #menu nav, #afui .header header, #afui #aside_menu aside {display:block;}
 
 #afui > #menu.tabletMenu {
     z-index:1;
@@ -578,7 +609,7 @@ body {
 
 
 @media handheld, only screen and (min-width: 768px) {
-    #afui > #navbar.hasMenu.splitview, #afui > #header.hasMenu.splitview, #afui > #content.hasMenu.splitview  {
+    #afui .footer.hasMenu.splitview, #afui .header.hasMenu.splitview, #afui  #content.hasMenu.splitview  {
         position:relative;        
         right:0px;
         margin-left:256px;

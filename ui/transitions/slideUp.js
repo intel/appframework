@@ -3,8 +3,6 @@
     "use strict";
     function slideUpTransition(oldDiv, currDiv, back) {
         /*jshint validthis:true */
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
         var that = this;
         if (back) {
             oldDiv.style.zIndex = 2;

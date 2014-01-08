@@ -20,13 +20,13 @@
 	color:#000;
 }
 
-#afui.android > #header {
+#afui.android  .header {
     background:inherit;
     color:inherit;
     border-color:#33B5E5;
 }
 
-#afui.android #header .button {
+#afui.android .header .button {
     color: inherit;
     background:none;
     font-size:14px;
@@ -46,7 +46,7 @@
     border-color:black;
 }
 
-#afui.android > #navbar {
+#afui.android .footer {
     box-shadow: none;
  	background:inherit;
  	border-top:2px solid #33B5E5;
@@ -54,19 +54,19 @@
     padding:0;
 }
 
-#afui.android #navbar>footer>a:not(.button) {
+#afui.android .footer>footer>a:not(.button) {
 	color:inherit;
     top:0px;
 }
 
-#afui.android #navbar>footer>a.pressed:not(.button) {
+#afui.android .footer>footer>a.pressed:not(.button) {
  	border:0px;
  	border-top:4px solid #33B5E5;
  	border-radius:0px;
  	background:none;
 }
 
-#afui.android #navbar>footer>a.icon.pressed:not(.button):before {
+#afui.android .footer>footer>a.icon.pressed:not(.button):before {
 	color:inherit;
 }
 
@@ -74,7 +74,7 @@
 	border:none;
 }
 
-#afui.android #content,#afui.android #content > .panel {
+#afui.android .panel, #afui.android #modalContainer {
  	background:inherit;
  	color:inherit;
 }
@@ -185,7 +185,7 @@
 }
 
 #afui.android .button.pressed,
-#afui.android > #header .button-grouped > .button.pressed {
+#afui.android  .header .button-grouped > .button.pressed {
 	background:#33B5E5;
 	border-color:#33B5E5;
 }
@@ -208,7 +208,7 @@
     border-color:transparent;
 }
 
-#afui.android > #header .button-grouped > .button {
+#afui.android  .header .button-grouped > .button {
     border-color:#777;
 }
 

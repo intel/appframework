@@ -14,36 +14,36 @@
     color:#000;
 }
 
-#afui.tizen > #header {
+#afui.tizen  .header {
     background:#313f66;
     color:inherit;
     border-color:#313f66;
 }
 
-#afui.tizen.light > #header {
+#afui.tizen.light  .header {
     background:#e9e6df;
     color:inherit;
     border-color:#e9e6df;
 }
 
-#afui.tizen #header .button {
+#afui.tizen .header .button {
     color: inherit;
     border-color:transparent;
     font-size:14px;
 }
 
-#afui.tizen #header .button-grouped>.button {
+#afui.tizen .header .button-grouped>.button {
     border-color:#aaa;
 }
 
-#afui.tizen > #navbar {
+#afui.tizen  .footer {
     box-shadow: none;
     background: none;
     border-color: #000;
     padding:0;
 }
 
-#afui.tizen #navbar>footer>a:not(.button) {
+#afui.tizen .footer>footer>a:not(.button) {
     color: inherit;
     height:49px;
     top:0px;
@@ -51,25 +51,25 @@
     background:#414f6e;
 }
 
-#afui.tizen #navbar>footer>a.pressed:not(.button) {
+#afui.tizen .footer>footer>a.pressed:not(.button) {
     border-top:4px solid #316fc6;
     background:#313f66;
 }
 
-#afui.tizen #navbar>footer>a.icon.pressed:not(.button):before {
+#afui.tizen .footer>footer>a.icon.pressed:not(.button):before {
     color:inherit;
 }
 
-#afui.tizen.light > #navbar {
+#afui.tizen.light .footer {
     border-color: #fff;
 }
 
-#afui.tizen.light #navbar>footer>a:not(.button) {
+#afui.tizen.light .footer>footer>a:not(.button) {
     border-top:4px solid #dedcd5;
     background:#dedcd5;
 }
 
-#afui.tizen.light #navbar>footer>a.pressed:not(.button) {
+#afui.tizen.light .footer>footer>a.pressed:not(.button) {
     border-top:4px solid #ceccc5;
     background:#e9e6df;
 }
@@ -91,9 +91,9 @@
     border:none;
 }
 
-#afui.tizen #content,#afui.tizen #content > .panel {
-    background:inherit;
-    color:inherit;
+#afui.tizen .panel, #afui.tizen #modalContainer {
+    background:#000;
+    color:#fff;
 }
 
 #afui.tizen .list {

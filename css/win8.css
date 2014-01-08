@@ -10,9 +10,6 @@
 @-ms-viewport{
   width: device-width;
 }
- #afui.win8 {
-
- }
 @font-face {
   font-family: 'win8back';
   src: url(data:application/x-font-woff;charset=utf-8;base64,d09GRk9UVE8AAARUAAsAAAAABmgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABDRkYgAAABCAAAAS4AAAGZpdvO1kZGVE0AAAI4AAAAGgAAABxnmGDwR0RFRgAAAlQAAAAdAAAAIAAwAARPUy8yAAACdAAAAEsAAABgL9zcQGNtYXAAAALAAAAAOgAAAVLgE/LMaGVhZAAAAvwAAAAuAAAANvx5/t1oaGVhAAADLAAAAB4AAAAkBBD/5GhtdHgAAANMAAAADAAAAAwEAAACbWF4cAAAA1gAAAAGAAAABgADUABuYW1lAAADYAAAAOgAAAGPgxEkPHBvc3QAAARIAAAADAAAACAAAwAAeJxtTj1PAkEUnD0WQbwAEomYnEdlDxbGQu0Ua+2sULFAEhIEY0WiNJisITE5G2lo6Iw1/gULKxMTSypLCz+2UMe7A6+ymTczb2bfCkgJIcTkSbm6vLe7X4EwILCm5w1th3RGKjOkTGnHMLedolIBMSOqoh3dCFtoJSwgaaE9bSFqicsUpPdGFAnMIntcLa/ncjl3bLjj70xwDhBtcY6Q1zDwIRD/dPRRmrgo3BK1wRbZcRnrHqsH8h/PD49qQTfwsvyxTyGJZt8mDp6HY/Bls18krxf8RY9s7Qw96HlecQy+9BajiB92a1nyceWGYuL7zf3yw5RB3oWeyPz72QRxeL9KXi1Jstt9UWRtkCQ6m3kXCq8eWyRKpYwKx5VuyC9HO5G4dmZUWpmxXzJhtKEAAHicY2BgYGQAgjO2i86D6LNr4wVgNABJKQZOAAB4nGNgZGBg4ANiCQYQYGJgBEIQyQLmMQAABGAANQAAAHicY2BmYmCcwMDKwMHow5jGwMDgDqW/MkgytDAwMDGwMjPAgQCCyRCQ5prC4PCA4QMD44P/Dxj0GB8wKDQwMDDCFSgAISMAEEIMHwB4nGNgYGBmgGAZBkYGEPAB8hjBfBYGAyDNAYRMIIkHDB8Y/v9HZikwCjBBdYEBIxsDMndEAgDJXAiuAAB4nGNgZGBgAGK+Bx4V8fw2Xxm4mRhA4OzaeAEE/f8BEwPjAyCXgwEsDQAU3gn7AAB4nGNgZGBgfPD/AYMeEwMDwz8GIAkUQQHMAG3nA/YAAAIAAAACAAACAAAAAAAAUAAAAwAAeJx9jjFOw0AQRZ8TJ4BACFHQ0KxEiWzZRomiHMAHSJHeiVaWRWRLm0QpuActZ6DlGByAM3AEvsPQUGSl0b79+2fmA1e8EtGfiHNujQec8Wg85IEX41ied+MRl3waj6V/yxnFF1Jujl09D7jm3nhIyZNxLM+b8Yg7PozH0r840NAyY0XFmmc4NO1sVa1FCzw1ezb6Cnr6er+pBCWdWnbHO8jhcRSkZLrnqv8jf9UpCRNVIV+ucJRduyu7UHtXpJmbu7/FwmkySYosl+lEvKUWB7Yy9HGchvYRWPqwbbrW5Wl2qv0H0Z06yHicY2BmwAsAAH0ABA==) format('woff'),
@@ -24,7 +21,8 @@
 
 #afui.win8 {
 	font:14px  "Segoe UI Semilight", "HelveticaNeue-light", Helvetica, Arial, sans-serif;
- 	background:#000;
+  font-size:14px;
+ 	background-color:#000;
  	color:#fff;
 }
 
@@ -33,7 +31,7 @@
     color:#000;
 }
 
-#afui.win8 #header .button {
+#afui.win8 .header .button {
     color: inherit;
     border-color:transparent;
     font-size:14px;
@@ -78,19 +76,19 @@
   transform:none;
 }
 
-#afui.win8 > #header h1 {
+#afui.win8 .header h1 {
 	text-align: left;
     color:inherit;
 }
 
-#afui.win8 > #header{
+#afui.win8 .header{
     border:0px;
 	background: inherit;
 	border-bottom:inherit;
     color:inherit;
 }
 
-#afui.win8 > #navbar {
+#afui.win8 .footer {
     padding:0px;
  	background:inherit;
  	text-align: center;
@@ -99,12 +97,12 @@
     border-top:none;
 }
  
-#afui.win8.light > #navbar{
+#afui.win8.light .footer{
     background:#F2F2F2;
     color:black;
 }
 
-#afui.win8 #navbar>footer>a:not(.button) {
+#afui.win8 .footer>footer>a:not(.button) {
   position: relative;
   width: 56px !important;
   height: 56px;
@@ -120,15 +118,15 @@
   -webkit-perspective: 1000;
 }
 
-#afui.win8.light #navbar>footer>a:not(.button) {
+#afui.win8.light .footer>footer>a:not(.button) {
   text-shadow: 0 0 rgba(0, 0, 0, 0);  
 }
 
-#afui.win8 #navbar>footer>a.icon.pressed:not(.button):before {
+#afui.win8 .footer>footer>a.icon.pressed:not(.button):before {
 	background-color: #00ABA9;
 }
 
-#afui.win8 #navbar>footer>a.icon:not(.button):before {
+#afui.win8 .footer>footer>a.icon:not(.button):before {
     top: 0px;
     left: 10px;
     font-size:19px;
@@ -138,11 +136,11 @@
     border-radius: 20px;
 }
 
-#afui.win8.light #navbar>footer>a.icon:not(.button):before {
+#afui.win8.light .footer>footer>a.icon:not(.button):before {
     border: 3px solid #000;
 }
 
-#afui.win8 #navbar>footer>a:not(:last-of-type):not(.button){
+#afui.win8 .footer>footer>a:not(:last-of-type):not(.button){
   	border:none;
 }
 
@@ -311,17 +309,17 @@
     border-bottom:3px solid #fff;
 }
 
-#afui.win8 > #header .button-grouped > .button{
+#afui.win8 .header .button-grouped > .button{
     border-color: #fff;
 }
 
-#afui.win8 > #header .button-grouped > .button.pressed{
+#afui.win8  .header .button-grouped > .button.pressed{
     background:#00ABA9;
 }
 
 #afui.win8.light .button-grouped > .button, 
 #afui.win8.light .button-grouped.vertical > .button, 
-#afui.win8.light > #header .button-grouped > .button{
+#afui.win8.light .header .button-grouped > .button{
     border-color: #111;
 }
 
@@ -351,7 +349,7 @@
    -webkit-transform:translate3d(0,0,0);
     transform:translate3d(0,0,0);
   }
-  #afui.win8 > #header #menubadge {
+  #afui.win8 .header #menubadge {
     display:none;
   }
 }
@@ -428,10 +426,10 @@
 
 @media handheld, only screen and (min-width: 768px){
 
-	#afui.win8 #navbar footer #metroMenu {
+	#afui.win8 .footer footer #metroMenu {
 		display:none;
 	}
-	#afui.win8 #navbar {
+	#afui.win8 .footer {
 		-webkit-transform:translate3d(0,0,0);
 		transform:translate(0,0);
 	}

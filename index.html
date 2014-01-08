@@ -1597,12 +1597,17 @@ The parent id for this div is "content". Let's verify it.
                 <div title="Fade" id="transition6" class="panel splashscreen" data-footer='footerui' style="padding-left:0px">
                     <div style="text-align:center;width:100%;color:white;font-size:40px">App Framework Fade Transition</div>
                 </div>
-                <div title="Modal" id="transition7" class="panel" data-modal="true" data-unload="unloadedPanel">I'm a modal window...woot woot
+                <div title="Modal" id="transition7" class="panel" data-modal="true" data-unload="unloadedPanel">
+                    <header><h1>Test</h1></header>
+                    I'm a modal window...woot woot
                     <br>
                     <br>
                     <br>Check the input box out below.
                     <br>
                     <input type="text" class="af-ui-forms" id="modal_test">
+                    <footer>
+                        <a href="#" onclick='$.ui.hideModal()' class="icon home">Test</a>
+                    </footer> 
                 </div>
                 <!-- ------------------------------------------ -->
                 <!-- ------------------------------------------ -->

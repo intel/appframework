@@ -1057,29 +1057,53 @@
                 id = "#" + id.replace("#", "");
             var $panel = $.query(id);
             this.modalReference_=$panel;
-
+            var modalParent=$.query("#afui_modal");
             if ($panel.length) {
-                var useScroller = this.scrollingDivs.hasOwnProperty($panel.attr("id"));
+                var useScroller = this.scrollingDivs.hasOwnProperty($panel.attr("id"));                
                 //modalDiv.html($.feat.nativeTouchScroll || !useScroller ? $.query(id).html() : $.query(id).get(0).childNodes[0].innerHTML + '', true);
-                modalDiv.empty();
+
                 var elemsToCopy;
                 if($.feat.nativeTouchScroll || !useScroller ){
                     elemsToCopy=$panel.contents();
+                    modalDiv.append(elemsToCopy);
                 }
                 else {
                     elemsToCopy=$($panel.get(0).childNodes[0]).contents();
+                    //modalDiv.append(elemsToCopy);
+                    modalDiv.children().eq(0).append(elemsToCopy);
                 }
-                modalDiv.append(elemsToCopy);
-                modalDiv.append("<a onclick='$.ui.hideModal();' class='closebutton modalbutton'></a>");
-                that.modalWindow.style.display = "block";
+
 
                 this.runTransition(this.modalTransition, that.modalTransContainer, that.modalWindow, false);
-
+                $(that.modalWindow).css("display","");
+                $(that.modalWindow).addClass("display","flexContainer");
                 if (useScroller) {
                     this.scrollingDivs.modal_container.enable(that.resetScrollers);
                 }
                 else {
                     this.scrollingDivs.modal_container.disable();
+                }
+                //move header
+                if(elemsToCopy.filter("header").length>0){
+                    modalParent.find("#modalHeader").append(elemsToCopy.filter("header"));
+                }
+                //move footer
+                if(elemsToCopy.filter("footer").length>0){
+                    
+                    modalParent.find("#modalFooter").append(elemsToCopy.filter("footer"));
+                    var tmpAnchors = $.query("#modalFooter > footer > a:not(.button)");
+                    if (tmpAnchors.length > 0) {
+                        var width = parseFloat(100 / tmpAnchors.length);
+                        tmpAnchors.css("width", width + "%");
+                    }
+                    var nodes = $.query("#modalFooter footer");
+                    if (nodes.length === 0) return;
+                    nodes = nodes.get(0).childNodes;
+                    for (var i = 0; i < nodes.length; i++) {
+                        if (nodes[i].nodeType === 3) {
+                            nodes[i].parentNode.removeChild(nodes[i]);
+                        }
+                    }
                 }
 
                 this.scrollToTop("modal");
@@ -1103,7 +1127,7 @@
         hideModal: function() {
             var self = this;
             var $cnt=$.query("#modalContainer");
-            $cnt.find("#closebutton.modalbutton").remove();
+
             var useScroller = this.scrollingDivs.hasOwnProperty(this.modalReference_.attr("id"));
 
 
@@ -1118,12 +1142,17 @@
             tmp.trigger("unloadpanel");
             setTimeout(function(){
                 if($.feat.nativeTouchScroll || !useScroller){
+                    self.modalReference_.append($("#modalHeader header"));
                     self.modalReference_.append($cnt.contents());
+                    self.modalReference_.append($("#modalFooter footer"));
                 }
                 else {
-                    $(self.modalReference_.get(0).childNodes[0]).append($cnt.contents());
+                    self.modalReference_.children().eq(0).append($("#modalHeader header"));
+                    $(self.modalReference_.get(0).childNodes[0]).append($cnt.children().eq(0).contents());
+                    self.modalReference_.children().eq(0).append($("#modalFooter footer"));
                 }
-                $cnt.html("", true);
+
+               // $cnt.html("", true);
             },this.transitionTime);
         },
 
@@ -1730,6 +1759,10 @@
          */
         runTransition: function(transition, oldDiv, currWhat, back) {
             if (!this.availableTransitions[transition]) transition = "default";
+            if(oldDiv.style.display==="none")
+                oldDiv.style.display = "block";
+            if(currWhat.style.display==="none")
+                currWhat.style.display = "block";
             this.availableTransitions[transition].call(this, oldDiv, currWhat, back);
         },
 
@@ -1897,10 +1930,17 @@
             var modalDiv = $.create("div", {
                 id: "afui_modal"
             }).get(0);
-
+            $(modalDiv).hide();
+            modalDiv.appendChild($.create("div",{
+                id:"modalHeader",className:"header"
+            }).get(0));
             modalDiv.appendChild($.create("div", {
                 id: "modalContainer"
             }).get(0));
+            modalDiv.appendChild($.create("div",{
+                id:"modalFooter",className:"footer"
+            }).get(0));
+
             this.modalTransContainer = $.create("div", {
                 id: "modalTransContainer"
             }).appendTo(modalDiv).get(0);
@@ -2012,7 +2052,8 @@
                         id: "defaultHeader"
                     }).append($.query("#header").children()));
                     that.prevHeader = $.query("#defaultHeader");
-
+                    $.query("#header").addClass("header");
+                    $.query("#navbar").addClass("footer");
                     //
                     $.query("#navbar").on("click", "footer>a:not(.button)", function(e) {
                         $.query("#navbar>footer>a").not(e.currentTarget).removeClass("pressed");

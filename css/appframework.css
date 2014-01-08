@@ -11,14 +11,14 @@
     color:#53575E;
 }
 
-#afui > #header{
+#afui .header{
     background:#0088D1;
     border:none;
     border-bottom:1px solid #0088D1;
     color:white;
 }
 
-#afui  #header h1 {
+#afui  .header h1 {
     text-shadow:none;
     width:45%;
 }
@@ -76,23 +76,23 @@
     background-color: transparent;
 }
 
-#afui > #navbar {
+#afui  .footer {
      background:#0088D1;
     border:none;
     border-top:1px solid #0088D1;
     box-shadow:none;
 }
 
-#afui #navbar>footer>a:not(.button) {
+#afui .footer>footer>a:not(.button) {
  
 }
 
-#afui #navbar>footer>a.pressed:not(.button) {
+#afui .footer>footer>a.pressed:not(.button) {
     border-radius:0;    
     background:#00AEEF;
 }
 
-#afui #navbar>footer>a.icon.pressed:not(.button):before {
+#afui .footer>footer>a.icon.pressed:not(.button):before {
     color:inherit;
 }
 
@@ -113,9 +113,9 @@
 
 #afui .list .divider { color:black; }
 
-#afui .panel {
+#afui .panel, #afui #modalContainer, #afui #modal {
     color:inherit;
-    background:white;
+    background:inherit;
 }
 
 #afui .panel h2 { color:#0088D1;}
