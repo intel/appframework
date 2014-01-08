@@ -105,6 +105,19 @@
     background-image:linear-gradient(to bottom, #6E84A2 0%, #476999 50%, #274979 51%);
 }
 
+#afui.ios #navbar .button {
+    color:#fff;
+    text-shadow:0 -1px 0 #333;
+    background-color:#444;
+    border:1px solid #222;
+    box-shadow:0 1px 0 #222;
+    background-image:linear-gradient(to bottom, #555 0%, #333 50%, #111 51%);
+}
+
+#afui.ios #navbar .button.pressed {
+    background-image:linear-gradient(to bottom, #444 0%, #222 50%, #000 51%);
+}
+
 #afui.ios #aside_menu .list li, 
 #afui.ios #aside_menu .list .divider, 
 #afui.ios #aside_menu .list li:first-child, 
