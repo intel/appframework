@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-01-03 */
+/*! intel-appframework - v2.1.0 - 2014-01-08 */
 
 /**
  * appframework.ui - A User Interface library for App Framework applications
@@ -825,7 +825,7 @@
             }
             $.query("#navbar").append(elems);
             this.prevFooter = elems;
-            var tmpAnchors = $.query("#navbar a");
+            var tmpAnchors = $.query("#navbar > footer > a:not(.button)");
             if (tmpAnchors.length > 0) {
                 tmpAnchors.data("ignore-pressed", "true").data("resetHistory", "true");
                 var width = parseFloat(100 / tmpAnchors.length);
@@ -1248,7 +1248,9 @@
                 tmp.style["-webkit-overflow-scrolling"] = "none";
             } else {
                 //WE need to clone the div so we keep events
-                scrollEl = tmp.cloneNode(false);
+                scrollEl=tmp;
+                container.appendChild(tmp);                
+                /*scrollEl = tmp.cloneNode(false);
 
 
                 tmp.title = null;
@@ -1261,6 +1263,7 @@
                 scrollEl.appendChild(tmp);
 
                 container.appendChild(scrollEl);
+                */
 
                 if (this.selectBox !== false) this.selectBox.getOldSelects(scrollEl.id);
                 if (this.passwordBox !== false) this.passwordBox.getOldPasswords(scrollEl.id);
@@ -1282,7 +1285,10 @@
                 //backwards compatibility
                 if (refreshFunc) $.bind(this.scrollingDivs[scrollEl.id], "refresh-release", function(trigger) {
                         if (trigger) refreshFunc();
-                    });
+                });
+                if(jsScroll){
+                    $(tmp).children().eq(0).addClass("afScrollPanel");
+                }
             }
             return scrollEl.id;
         },
@@ -1386,7 +1392,7 @@
             }
             //check if the panel has a footer
             if (what.getAttribute("data-tab")) { //Allow the dev to force the footer menu
-                $.query("#navbar a").removeClass("pressed");
+                $.query("#navbar>footer>a:not(.button)").removeClass("pressed");
                 $.query("#navbar #" + what.getAttribute("data-tab")).addClass("pressed");
             }
 
@@ -1565,11 +1571,16 @@
             this.loadContentData(what, newTab, back, transition);
 
             //this fixes a bug in iOS where a div flashes when the the overflow property is changed from auto to hidden
-            setTimeout(function() {
-                if (that.scrollingDivs[oldDiv.id]) {
-                    that.scrollingDivs[oldDiv.id].disable();
-                }
-            }, numOnly(that.transitionTime) + 50);
+            if($.feat.nativeTouchScroll) {
+                setTimeout(function() {
+                    if (that.scrollingDivs[oldDiv.id]) {
+                        that.scrollingDivs[oldDiv.id].disable();
+                    }
+                }, numOnly(that.transitionTime) + 50);
+            }
+            else
+                that.scrollingDivs[oldDiv.id].disable();
+
 
         },
         /**
@@ -1831,7 +1842,8 @@
                     useJsScroll: !$.feat.nativeTouchScroll,
                     noParent: $.feat.nativeTouchScroll,
                     autoEnable: true,
-                    lockBounce: this.lockPageBounce
+                    lockBounce: this.lockPageBounce,
+                    hasParent:true
                 });
                 if ($.feat.nativeTouchScroll) $.query("#menu_scroller").css("height", "100%");
 
@@ -1848,7 +1860,8 @@
                     useJsScroll: !$.feat.nativeTouchScroll,
                     noParent: $.feat.nativeTouchScroll,
                     autoEnable: true,
-                    lockBounce: this.lockPageBounce
+                    lockBounce: this.lockPageBounce,
+                    hasParent:true
                 });
                 if ($.feat.nativeTouchScroll) $.query("#aside_menu_scroller").css("height", "100%");
             }
@@ -2004,16 +2017,12 @@
                     that.prevHeader = $.query("#defaultHeader");
 
                     //
-                    $.query("#navbar").on("click", "a", function(e) {
-                        $.query("#navbar a").not(e.currentTarget).removeClass("pressed");
+                    $.query("#navbar").on("click", "footer>a:not(.button)", function(e) {
+                        $.query("#navbar>footer>a").not(e.currentTarget).removeClass("pressed");
                         $(e.currentTarget).addClass("pressed");
                     });
 
-                    //update the width
-                    var footerLinks = $.query("#navbar a");
-                    if (footerLinks.length > 0) {
-                        footerLinks.css("width", (100 / footerLinks.length) + "%");
-                    }
+                  
 
                     //There is a bug in chrome with @media queries where the header was not getting repainted
                     if ($.query("nav").length > 0) {
@@ -3506,9 +3515,17 @@ if (!Date.now)
         //extend to jsScroller and nativeScroller (constructs)
         jsScroller = function (el, opts) {
             this.init(el, opts);
-            //test
-            //this.refresh=true;
-            this.container = this.el.parentNode;
+
+            if(opts.hasParent)
+                this.container = this.el.parentNode;
+            else {
+                //copy/etc
+                var $div=$.create("div",{});
+                $div.append($(this.el).contents());
+                $(this.el).append($div);
+                this.container=this.el;
+                this.el=$div.get(0);
+            }
             this.container.afScrollerId = el.afScrollerId;
             this.afEl = $(this.container);
 
@@ -4262,18 +4279,18 @@ if (!Date.now)
 
                 if(this.lastScrollInfo.x>0){
                     this.lastScrollInfo.x=0;
-                    this.hscrollBar.style.display="none";
+                  //  this.hscrollBar.style.display="none";
                 }
                 else if(this.lastScrollInfo.x*-1>this.elementInfo.maxLeft){
                     this.lastScrollInfo.x=this.elementInfo.maxLeft*-1;
-                    this.hscrollBar.style.display="none"
+                   // this.hscrollBar.style.display="none";
                 }
                 if(this.lastScrollInfo.y>0){
                     this.lastScrollInfo.y=0;
-                    this.vscrollBar.style.display="none"
+                    //this.vscrollBar.style.display="none";
                 }
                 else if(this.lastScrollInfo.y*-1>this.elementInfo.maxTop){
-                    this.vscrollBar.style.display="none"
+                   // this.vscrollBar.style.display="none";
                     this.lastScrollInfo.y=this.elementInfo.maxTop*-1;
                 }
             }
@@ -4442,6 +4459,7 @@ if (!Date.now)
 
 
             if (this.currentScrollingObject === null || !this.moved) return;
+
             //event.preventDefault();
             this.finishScrollingObject = this.currentScrollingObject;
             this.currentScrollingObject = null;
@@ -4485,14 +4503,15 @@ if (!Date.now)
                 if(scrollInfo.x>=0)
                 {
                     scrollInfo.x=0;
-                    if(scrollInfo.left>=0) scrollInfo.duration=HIDE_REFRESH_TIME;
+                    if(scrollInfo.left>=0&&this.refresh) scrollInfo.duration=HIDE_REFRESH_TIME;
                 }
                 else if(-scrollInfo.x>this.elementInfo.maxLeft||this.elementInfo.maxLeft===0){
                     scrollInfo.x=-this.elementInfo.maxLeft;
-                    if(-scrollInfo.left>this.elementInfo.maxLeft) scrollInfo.duration=HIDE_REFRESH_TIME;
+                    if(-scrollInfo.left>this.elementInfo.maxLeft&&this.refresh) scrollInfo.duration=HIDE_REFRESH_TIME;
                 }
             }
-
+            if(scrollInfo.x==scrollInfo.left&&scrollInfo.y==scrollInfo.top)
+                scrollInfo.duration=0;
             if (this.androidFormsMode) scrollInfo.duration = 0;
 
             this.scrollerMoveCSS(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
@@ -6115,6 +6134,7 @@ $("#myTestPopup").trigger("close");
     function wire8Tiles() {
         $.ui.isWin8 = true;
         if (!$.os.ie) return;
+        if (!$.ui.isSideMenuEnabled()) return;
 
         $.ui.ready(function() {
 
@@ -6123,7 +6143,7 @@ $("#myTestPopup").trigger("close");
             if ($.ui.slideSideMenu) $.ui.slideSideMenu = false;
             //we need to make sure the menu button shows up in the bottom navbar
             $.query("#afui #navbar footer").append("<a id='metroMenu' onclick='$.ui.toggleSideMenu()'>•••</a>");
-            var tmpAnchors = $.query("#afui #navbar").find("a");
+            var tmpAnchors = $.query("#afui #navbar").find("a").not(".button");
             if (tmpAnchors.length > 0) {
                 tmpAnchors.data("ignore-pressed", "true").data("resetHistory", "true");
                 var width = parseFloat(100 / tmpAnchors.length);

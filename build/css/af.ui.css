@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2013-12-19 */
+/*! intel-appframework - v2.1.0 - 2014-01-08 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -202,9 +202,7 @@ body {
 **********************************************************/
 /* Nav bar appears locked to the bottom of the screen. It is the primary navigation. can contain text or graphical navigation */
 
-#afui #navbar {
-    
-    
+#afui #navbar {  
     z-index:180;
     height:49px;
     display:block;
@@ -215,7 +213,7 @@ body {
 }
 
 
-#afui #navbar a {
+#afui #navbar>footer>a:not(.button) {
     -webkit-box-sizing:border-box;
     box-sizing: border-box;
     top: 3px;
@@ -236,13 +234,13 @@ body {
 }
 
 
-#afui #navbar .af-badge {
+#afui #navbar>footer>a.af-badge:not(.button) {
     right:auto;
     margin-left:-16px;
 }
 
 
-#afui #navbar .icon:before {
+#afui #navbar>footer>a.icon:not(.button):before {
     position:absolute;
     top:2px;
     left:0;
@@ -252,12 +250,12 @@ body {
 }
 
 
-#afui #navbar a.pressed {
+#afui #navbar>footer>a.pressed:not(.button) {
     
 }
 
 
-#afui #navbar .icon.pressed:before {
+#afui #navbar>footer>a.icon.pressed:not(.button):before {
     
 }
 
@@ -718,16 +716,16 @@ body {
     box-shadow:none;
 }
 
-#afui #navbar a {
+#afui #navbar>footer>a:not(.button) {
  
 }
 
-#afui #navbar a.pressed {
+#afui #navbar>footer>a.pressed:not(.button) {
     border-radius:0;    
     background:#00AEEF;
 }
 
-#afui #navbar .icon.pressed:before {
+#afui #navbar>footer>a.icon.pressed:not(.button):before {
     color:inherit;
 }
 
@@ -1560,19 +1558,19 @@ body {
     padding:0;
 }
 
-#afui.android #navbar a {
+#afui.android #navbar>footer>a:not(.button) {
 	color:inherit;
     top:0px;
 }
 
-#afui.android #navbar a.pressed {
+#afui.android #navbar>footer>a.pressed:not(.button) {
  	border:0px;
  	border-top:4px solid #33B5E5;
  	border-radius:0px;
  	background:none;
 }
 
-#afui.android #navbar .icon.pressed:before {
+#afui.android #navbar>footer>a.icon.pressed:not(.button):before {
 	color:inherit;
 }
 
@@ -1929,7 +1927,7 @@ body {
     color:black;
 }
 
-#afui.win8 #navbar a {
+#afui.win8 #navbar>footer>a:not(.button) {
   position: relative;
   width: 56px !important;
   height: 56px;
@@ -1945,15 +1943,15 @@ body {
   -webkit-perspective: 1000;
 }
 
-#afui.win8.light #navbar a {
+#afui.win8.light #navbar>footer>a:not(.button) {
   text-shadow: 0 0 rgba(0, 0, 0, 0);  
 }
 
-#afui.win8 #navbar .icon.pressed:before {
+#afui.win8 #navbar>footer>a.icon.pressed:not(.button):before {
 	background-color: #00ABA9;
 }
 
-#afui.win8 #navbar .icon:before {
+#afui.win8 #navbar>footer>a.icon:not(.button):before {
     top: 0px;
     left: 10px;
     font-size:19px;
@@ -1963,11 +1961,11 @@ body {
     border-radius: 20px;
 }
 
-#afui.win8.light #navbar .icon:before {
+#afui.win8.light #navbar>footer>a.icon:not(.button):before {
     border: 3px solid #000;
 }
 
-#afui.win8 #navbar a:not(:last-of-type){
+#afui.win8 #navbar>rakf1@footer>a:not(:last-of-type):not(.button){
   	border:none;
 }
 
@@ -2389,14 +2387,14 @@ body {
     box-shadow: none;
 }
 
-#afui.bb #navbar a {
+#afui.bb #navbar>footer>a:not(.button) {
     height:49px;
     top:0px;
     border-top:4px solid #000;
     background:#1e1e1e;
 }
 
-#afui.bb #navbar a.pressed {
+#afui.bb #navbar>footer>a.pressed:not(.button) {
     border:0px;
     border-top:4px solid #0aa9dc;
     border-radius:0px;
@@ -2404,11 +2402,11 @@ body {
     color:white;
 }
 
-#afui.bb #navbar a:not(:last-of-type):not(.pressed){
+#afui.bb #navbar>footer>a:not(:last-of-type):not(.pressed):not(.button){
     border-right:1px solid black;
 }
 
-#afui.bb #navbar .icon.pressed:before {
+#afui.bb #navbar>footer>a.icon.pressed:not(.button):before {
     color: white;
 }
 
@@ -2557,11 +2555,11 @@ body {
     box-shadow:none;
 }
 
-#afui.ios7 #navbar a {
+#afui.ios7 #navbar>footer>a:not(.button) {
     color:rgba(96,96,96,255);
 }
 
-#afui.ios7 #navbar a.pressed {
+#afui.ios7 #navbar>footer>a.pressed:not(.button) {
     border-radius:0;    
     background:transparent;
 }
@@ -2793,7 +2791,7 @@ body {
     color:#f44;
 }
 
-#afui.ios7 #navbar a.pressed,#navbar .icon.pressed:before  {
+#afui.ios7 #navbar>footer>a.pressed:not(.button),#navbar>footer>a.icon.pressed:not(.button):before  {
     color:rgba(82,155,234,255);
 }
 
@@ -2942,12 +2940,12 @@ body {
     border-top:1px solid #000;
 }
 
-#afui.ios #navbar a.pressed {
+#afui.ios #navbar>footer>a.pressed:not(.button) {
     background:rgba(255, 255, 255, 0.13);
     border-radius:6px;
 }
 
-#afui.ios #navbar .icon.pressed:before {
+#afui.ios #navbar>footer>a.icon.pressed:not(.button):before {
     color:#3a9de2;
 }
 
@@ -3005,6 +3003,19 @@ body {
 
 #afui.ios #header .button.pressed {
     background-image:linear-gradient(to bottom, #6E84A2 0%, #476999 50%, #274979 51%);
+}
+
+#afui.ios #navbar .button {
+    color:#fff;
+    text-shadow:0 -1px 0 #333;
+    background-color:#444;
+    border:1px solid #222;
+    box-shadow:0 1px 0 #222;
+    background-image:linear-gradient(to bottom, #555 0%, #333 50%, #111 51%);
+}
+
+#afui.ios #navbar .button.pressed {
+    background-image:linear-gradient(to bottom, #444 0%, #222 50%, #000 51%);
 }
 
 #afui.ios #aside_menu .list li, 

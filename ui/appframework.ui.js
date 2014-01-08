@@ -1246,9 +1246,8 @@
                 tmp.style["-webkit-overflow-scrolling"] = "none";
             } else {
                 //WE need to clone the div so we keep events
-                var scrollEl=tmp;
-                container.appendChild(tmp);
-                $(tmp).addClass("afScrollPanel");
+                scrollEl=tmp;
+                container.appendChild(tmp);                
                 /*scrollEl = tmp.cloneNode(false);
 
 
@@ -1284,7 +1283,10 @@
                 //backwards compatibility
                 if (refreshFunc) $.bind(this.scrollingDivs[scrollEl.id], "refresh-release", function(trigger) {
                         if (trigger) refreshFunc();
-                    });
+                });
+                if(jsScroll){
+                    $(tmp).children().eq(0).addClass("afScrollPanel");
+                }
             }
             return scrollEl.id;
         },
