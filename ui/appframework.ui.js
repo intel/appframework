@@ -1388,7 +1388,7 @@
             }
             //check if the panel has a footer
             if (what.getAttribute("data-tab")) { //Allow the dev to force the footer menu
-                $.query("#navbar>a:not(.button)").removeClass("pressed");
+                $.query("#navbar>footer>a:not(.button)").removeClass("pressed");
                 $.query("#navbar #" + what.getAttribute("data-tab")).addClass("pressed");
             }
 
