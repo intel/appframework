@@ -1576,9 +1576,8 @@
                     }
                 }, numOnly(that.transitionTime) + 50);
             }
-            else
+            else if (typeof that.scrollingDivs[oldDiv.id] !== 'undefined')
                 that.scrollingDivs[oldDiv.id].disable();
-
 
         },
         /**
