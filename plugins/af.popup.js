@@ -104,7 +104,7 @@ $("#myTestPopup").trigger("close");
                                  "<div style='clear:both'></div>"+
                             "</footer>"+
                             "</div>";
-                console.log(this.container);
+
                 $(this.container).append($(markup));
                 var $el = $.query("#" + this.id);
                 $el.bind("close", function () {
