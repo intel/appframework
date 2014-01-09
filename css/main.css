@@ -206,6 +206,9 @@ body {
                 flex: 1;
     overflow:hidden;
 
+    min-height:275px;
+    background:inherit;
+    color:inherit;
 } /* Accounts for positioning of the content area, which is everything below the header and above the navbar. */
 
 
