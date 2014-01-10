@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-01-08 */
+/*! intel-appframework - v2.1.0 - 2014-01-10 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -49,27 +49,39 @@ body {
 
 
 #afui #afui_modal {
+    background: inherit;
+    color:inherit;
     -webkit-backface-visibility: hidden;
     z-index:9999 !important;
     width:100%;
     height:100%;
     display:none;
     position:absolute; top:0;
-    overflow:hidden;
-    background:rgba(29,29,28,1) !important;
-    -webkit-perspective: 1000;
-    color:white;
-    
+    overflow:hidden;    
+    display: -webkit-box;
+    display: -moz-box;
+    display: box;
+    display: -ms-flexbox;
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+    -ms-box-orient: vertical;
+    box-orient: vertical;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
 }
 
-
-#afui #modalContainer { width:100%; }
 
 #afui #modalContainer > * {
     -webkit-backface-visibility: hidden;
     -webkit-perspective: 1000;
-    background: black;
-    color:white;
+    background:inherit;
+    color:inherit;
 }
 
 
@@ -82,7 +94,10 @@ body {
     top:0;
     bottom:0;
     overflow:hidden;
-    display: -webkit-box;
+}
+
+#afui ,.flexContainer {
+       display: -webkit-box;
     display:    -moz-box;
     display:         box;
     display: -ms-flexbox;
@@ -124,7 +139,7 @@ body {
 /**********************************************************
     header
 **********************************************************/
-#afui > #header {
+#afui .header {
     position:relative;
     overflow: hidden;
     display:block;
@@ -138,7 +153,7 @@ body {
 
 
 
-#afui #header h1 {
+#afui .header h1 {
     
     position:absolute;
     width:45%;
@@ -160,7 +175,7 @@ body {
     CONTENT AREA
 **********************************************************/
 
-#afui #content {
+#afui #content, #afui_modal #modalContainer {
     z-index:180;
     
     position:relative;
@@ -177,6 +192,8 @@ body {
                 flex: 1;
     overflow:hidden;
 
+    background:inherit;
+    color:inherit;
 } /* Accounts for positioning of the content area, which is everything below the header and above the navbar. */
 
 
@@ -202,7 +219,7 @@ body {
 **********************************************************/
 /* Nav bar appears locked to the bottom of the screen. It is the primary navigation. can contain text or graphical navigation */
 
-#afui #navbar {  
+#afui .footer {  
     z-index:180;
     height:49px;
     display:block;
@@ -213,7 +230,7 @@ body {
 }
 
 
-#afui #navbar>footer>a:not(.button) {
+#afui .footer>footer>a:not(.button) {
     -webkit-box-sizing:border-box;
     box-sizing: border-box;
     top: 3px;
@@ -234,13 +251,13 @@ body {
 }
 
 
-#afui #navbar>footer>a.af-badge:not(.button) {
+#afui .footer>footer>a:not(.button) .af-badge {
     right:auto;
     margin-left:-16px;
 }
 
 
-#afui #navbar>footer>a.icon:not(.button):before {
+#afui .footer>footer>a.icon:not(.button):before {
     position:absolute;
     top:2px;
     left:0;
@@ -250,12 +267,12 @@ body {
 }
 
 
-#afui #navbar>footer>a.pressed:not(.button) {
+#afui .footer>footer>a.pressed:not(.button) {
     
 }
 
 
-#afui #navbar>footer>a.icon.pressed:not(.button):before {
+#afui .footer>footer>a.icon.pressed:not(.button):before {
     
 }
 
@@ -263,7 +280,7 @@ body {
 #afui footer, #afui header, #afui nav, #afui aside {    display:none; }
 
 /* Show the active header/footer/navs */
-#afui #navbar footer, #afui #menu nav, #afui #header header, #afui #aside_menu aside {display:block;}
+#afui .footer footer, #afui #menu nav, #afui .header header, #afui #aside_menu aside {display:block;}
 
 #afui > #menu.tabletMenu {
     z-index:1;
@@ -580,7 +597,7 @@ body {
 
 
 @media handheld, only screen and (min-width: 768px) {
-    #afui > #navbar.hasMenu.splitview, #afui > #header.hasMenu.splitview, #afui > #content.hasMenu.splitview  {
+    #afui .footer.hasMenu.splitview, #afui .header.hasMenu.splitview, #afui  #content.hasMenu.splitview  {
         position:relative;        
         right:0px;
         margin-left:256px;
@@ -644,14 +661,14 @@ body {
     color:#53575E;
 }
 
-#afui > #header{
+#afui .header{
     background:#0088D1;
     border:none;
     border-bottom:1px solid #0088D1;
     color:white;
 }
 
-#afui  #header h1 {
+#afui  .header h1 {
     text-shadow:none;
     width:45%;
 }
@@ -709,23 +726,23 @@ body {
     background-color: transparent;
 }
 
-#afui > #navbar {
+#afui  .footer {
      background:#0088D1;
     border:none;
     border-top:1px solid #0088D1;
     box-shadow:none;
 }
 
-#afui #navbar>footer>a:not(.button) {
+#afui .footer>footer>a:not(.button) {
  
 }
 
-#afui #navbar>footer>a.pressed:not(.button) {
+#afui .footer>footer>a.pressed:not(.button) {
     border-radius:0;    
     background:#00AEEF;
 }
 
-#afui #navbar>footer>a.icon.pressed:not(.button):before {
+#afui .footer>footer>a.icon.pressed:not(.button):before {
     color:inherit;
 }
 
@@ -746,9 +763,9 @@ body {
 
 #afui .list .divider { color:black; }
 
-#afui .panel {
+#afui .panel, #afui #modalContainer, #afui #modal {
     color:inherit;
-    background:white;
+    background:inherit;
 }
 
 #afui .panel h2 { color:#0088D1;}
@@ -1524,13 +1541,13 @@ body {
 	color:#000;
 }
 
-#afui.android > #header {
+#afui.android  .header {
     background:inherit;
     color:inherit;
     border-color:#33B5E5;
 }
 
-#afui.android #header .button {
+#afui.android .header .button {
     color: inherit;
     background:none;
     font-size:14px;
@@ -1550,7 +1567,7 @@ body {
     border-color:black;
 }
 
-#afui.android > #navbar {
+#afui.android .footer {
     box-shadow: none;
  	background:inherit;
  	border-top:2px solid #33B5E5;
@@ -1558,19 +1575,19 @@ body {
     padding:0;
 }
 
-#afui.android #navbar>footer>a:not(.button) {
+#afui.android .footer>footer>a:not(.button) {
 	color:inherit;
     top:0px;
 }
 
-#afui.android #navbar>footer>a.pressed:not(.button) {
+#afui.android .footer>footer>a.pressed:not(.button) {
  	border:0px;
  	border-top:4px solid #33B5E5;
  	border-radius:0px;
  	background:none;
 }
 
-#afui.android #navbar>footer>a.icon.pressed:not(.button):before {
+#afui.android .footer>footer>a.icon.pressed:not(.button):before {
 	color:inherit;
 }
 
@@ -1578,7 +1595,7 @@ body {
 	border:none;
 }
 
-#afui.android #content,#afui.android #content > .panel {
+#afui.android .panel, #afui.android #modalContainer {
  	background:inherit;
  	color:inherit;
 }
@@ -1689,7 +1706,7 @@ body {
 }
 
 #afui.android .button.pressed,
-#afui.android > #header .button-grouped > .button.pressed {
+#afui.android  .header .button-grouped > .button.pressed {
 	background:#33B5E5;
 	border-color:#33B5E5;
 }
@@ -1712,7 +1729,7 @@ body {
     border-color:transparent;
 }
 
-#afui.android > #header .button-grouped > .button {
+#afui.android  .header .button-grouped > .button {
     border-color:#777;
 }
 
@@ -1833,9 +1850,6 @@ body {
 @-ms-viewport{
   width: device-width;
 }
- #afui.win8 {
-
- }
 @font-face {
   font-family: 'win8back';
   src: url(data:application/x-font-woff;charset=utf-8;base64,d09GRk9UVE8AAARUAAsAAAAABmgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABDRkYgAAABCAAAAS4AAAGZpdvO1kZGVE0AAAI4AAAAGgAAABxnmGDwR0RFRgAAAlQAAAAdAAAAIAAwAARPUy8yAAACdAAAAEsAAABgL9zcQGNtYXAAAALAAAAAOgAAAVLgE/LMaGVhZAAAAvwAAAAuAAAANvx5/t1oaGVhAAADLAAAAB4AAAAkBBD/5GhtdHgAAANMAAAADAAAAAwEAAACbWF4cAAAA1gAAAAGAAAABgADUABuYW1lAAADYAAAAOgAAAGPgxEkPHBvc3QAAARIAAAADAAAACAAAwAAeJxtTj1PAkEUnD0WQbwAEomYnEdlDxbGQu0Ua+2sULFAEhIEY0WiNJisITE5G2lo6Iw1/gULKxMTSypLCz+2UMe7A6+ymTczb2bfCkgJIcTkSbm6vLe7X4EwILCm5w1th3RGKjOkTGnHMLedolIBMSOqoh3dCFtoJSwgaaE9bSFqicsUpPdGFAnMIntcLa/ncjl3bLjj70xwDhBtcY6Q1zDwIRD/dPRRmrgo3BK1wRbZcRnrHqsH8h/PD49qQTfwsvyxTyGJZt8mDp6HY/Bls18krxf8RY9s7Qw96HlecQy+9BajiB92a1nyceWGYuL7zf3yw5RB3oWeyPz72QRxeL9KXi1Jstt9UWRtkCQ6m3kXCq8eWyRKpYwKx5VuyC9HO5G4dmZUWpmxXzJhtKEAAHicY2BgYGQAgjO2i86D6LNr4wVgNABJKQZOAAB4nGNgZGBg4ANiCQYQYGJgBEIQyQLmMQAABGAANQAAAHicY2BmYmCcwMDKwMHow5jGwMDgDqW/MkgytDAwMDGwMjPAgQCCyRCQ5prC4PCA4QMD44P/Dxj0GB8wKDQwMDDCFSgAISMAEEIMHwB4nGNgYGBmgGAZBkYGEPAB8hjBfBYGAyDNAYRMIIkHDB8Y/v9HZikwCjBBdYEBIxsDMndEAgDJXAiuAAB4nGNgZGBgAGK+Bx4V8fw2Xxm4mRhA4OzaeAEE/f8BEwPjAyCXgwEsDQAU3gn7AAB4nGNgZGBgfPD/AYMeEwMDwz8GIAkUQQHMAG3nA/YAAAIAAAACAAACAAAAAAAAUAAAAwAAeJx9jjFOw0AQRZ8TJ4BACFHQ0KxEiWzZRomiHMAHSJHeiVaWRWRLm0QpuActZ6DlGByAM3AEvsPQUGSl0b79+2fmA1e8EtGfiHNujQec8Wg85IEX41ied+MRl3waj6V/yxnFF1Jujl09D7jm3nhIyZNxLM+b8Yg7PozH0r840NAyY0XFmmc4NO1sVa1FCzw1ezb6Cnr6er+pBCWdWnbHO8jhcRSkZLrnqv8jf9UpCRNVIV+ucJRduyu7UHtXpJmbu7/FwmkySYosl+lEvKUWB7Yy9HGchvYRWPqwbbrW5Wl2qv0H0Z06yHicY2BmwAsAAH0ABA==) format('woff'),
@@ -1847,7 +1861,8 @@ body {
 
 #afui.win8 {
 	font:14px  "Segoe UI Semilight", "HelveticaNeue-light", Helvetica, Arial, sans-serif;
- 	background:#000;
+  font-size:14px;
+ 	background-color:#000;
  	color:#fff;
 }
 
@@ -1856,7 +1871,7 @@ body {
     color:#000;
 }
 
-#afui.win8 #header .button {
+#afui.win8 .header .button {
     color: inherit;
     border-color:transparent;
     font-size:14px;
@@ -1901,19 +1916,19 @@ body {
   transform:none;
 }
 
-#afui.win8 > #header h1 {
+#afui.win8 .header h1 {
 	text-align: left;
     color:inherit;
 }
 
-#afui.win8 > #header{
+#afui.win8 .header{
     border:0px;
 	background: inherit;
 	border-bottom:inherit;
     color:inherit;
 }
 
-#afui.win8 > #navbar {
+#afui.win8 .footer {
     padding:0px;
  	background:inherit;
  	text-align: center;
@@ -1922,12 +1937,12 @@ body {
     border-top:none;
 }
  
-#afui.win8.light > #navbar{
+#afui.win8.light .footer{
     background:#F2F2F2;
     color:black;
 }
 
-#afui.win8 #navbar>footer>a:not(.button) {
+#afui.win8 .footer>footer>a:not(.button) {
   position: relative;
   width: 56px !important;
   height: 56px;
@@ -1943,15 +1958,15 @@ body {
   -webkit-perspective: 1000;
 }
 
-#afui.win8.light #navbar>footer>a:not(.button) {
+#afui.win8.light .footer>footer>a:not(.button) {
   text-shadow: 0 0 rgba(0, 0, 0, 0);  
 }
 
-#afui.win8 #navbar>footer>a.icon.pressed:not(.button):before {
+#afui.win8 .footer>footer>a.icon.pressed:not(.button):before {
 	background-color: #00ABA9;
 }
 
-#afui.win8 #navbar>footer>a.icon:not(.button):before {
+#afui.win8 .footer>footer>a.icon:not(.button):before {
     top: 0px;
     left: 10px;
     font-size:19px;
@@ -1961,11 +1976,11 @@ body {
     border-radius: 20px;
 }
 
-#afui.win8.light #navbar>footer>a.icon:not(.button):before {
+#afui.win8.light .footer>footer>a.icon:not(.button):before {
     border: 3px solid #000;
 }
 
-#afui.win8 #navbar>rakf1@footer>a:not(:last-of-type):not(.button){
+#afui.win8 .footer>footer>a:not(:last-of-type):not(.button){
   	border:none;
 }
 
@@ -2134,17 +2149,17 @@ body {
     border-bottom:3px solid #fff;
 }
 
-#afui.win8 > #header .button-grouped > .button{
+#afui.win8 .header .button-grouped > .button{
     border-color: #fff;
 }
 
-#afui.win8 > #header .button-grouped > .button.pressed{
+#afui.win8  .header .button-grouped > .button.pressed{
     background:#00ABA9;
 }
 
 #afui.win8.light .button-grouped > .button, 
 #afui.win8.light .button-grouped.vertical > .button, 
-#afui.win8.light > #header .button-grouped > .button{
+#afui.win8.light .header .button-grouped > .button{
     border-color: #111;
 }
 
@@ -2174,7 +2189,7 @@ body {
    -webkit-transform:translate3d(0,0,0);
     transform:translate3d(0,0,0);
   }
-  #afui.win8 > #header #menubadge {
+  #afui.win8 .header #menubadge {
     display:none;
   }
 }
@@ -2251,10 +2266,10 @@ body {
 
 @media handheld, only screen and (min-width: 768px){
 
-	#afui.win8 #navbar footer #metroMenu {
+	#afui.win8 .footer footer #metroMenu {
 		display:none;
 	}
-	#afui.win8 #navbar {
+	#afui.win8 .footer {
 		-webkit-transform:translate3d(0,0,0);
 		transform:translate(0,0);
 	}
@@ -2521,26 +2536,26 @@ body {
      font-family:'HelveticaNeue', 'Helvetica Neue',Helvetica, Arial, sans-serif;
 }
 
-#afui.ios7 #header {
+#afui.ios7 .header {
     background:rgb(249,249,249);
     color:inherit;
     border:none;
     border-bottom:1px solid rgba(158,158,158,255);
 }
 
-#afui.ios7 #header .button {
+#afui.ios7 .header .button {
     color:rgba(82,155,234,255);
     border-color:transparent;
     font-size:14px;
     font-weight:normal;
 }
 
-#afui.ios7 #header h1 {
+#afui.ios7 .header h1 {
     color:inherit;
     text-shadow:none;
 }
 
-#afui.ios7 .panel {
+#afui.ios7 .panel, #afui.ios7 #modalContainer {
     background:rgba(238,238,238,255);    
 }
 
@@ -2548,18 +2563,18 @@ body {
     color:inherit;
 }
 
-#afui.ios7 #navbar {
+#afui.ios7 .footer {
     background:rgb(249,249,249);
     color:black;
     border-top:1px solid rgba(158,158,158,255);
     box-shadow:none;
 }
 
-#afui.ios7 #navbar>footer>a:not(.button) {
+#afui.ios7 .footer>footer>a:not(.button) {
     color:rgba(96,96,96,255);
 }
 
-#afui.ios7 #navbar>footer>a.pressed:not(.button) {
+#afui.ios7 .footer>footer>a.pressed:not(.button) {
     border-radius:0;    
     background:transparent;
 }
@@ -2688,12 +2703,12 @@ body {
 #afui.ios7 .button-grouped >  .button:first-child,
 #afui.ios7 .button-grouped.vertical * ,
 #afui.ios7 .button-grouped.vertical >  .button:last-child, 
-#afui.ios7 #header .button-grouped > .button {
+#afui.ios7 .header .button-grouped > .button {
     border-color:rgba(82,155,234,255);
 }
 
 #afui.ios7 .button-grouped > .button.pressed ,
-#afui.ios7 #header .button-grouped > .button.pressed{
+#afui.ios7 .header .button-grouped > .button.pressed{
     color:white;
     background:rgba(82,155,234,255);
 }
@@ -2791,7 +2806,7 @@ body {
     color:#f44;
 }
 
-#afui.ios7 #navbar>footer>a.pressed:not(.button),#navbar>footer>a.icon.pressed:not(.button):before  {
+#afui.ios7 .footer>footer>a.pressed:not(.button),.footer>footer>a.icon.pressed:not(.button):before  {
     color:rgba(82,155,234,255);
 }
 
@@ -2903,7 +2918,7 @@ body {
     color:black;
 }
 
-#afui.ios > #header { 
+#afui.ios  .header { 
     background-color:#889BB3;
     background-image:-ms-linear-gradient(top, #B3BECD 0%, #889BB3 50%, #6E84A2 51%);
     background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0, #B3BECD), color-stop(.5, #889BB3), color-stop(.51, #6E84A2));
@@ -2914,7 +2929,7 @@ body {
     color:white;
 } 
 
-#afui.ios #header h1 {
+#afui.ios .header h1 {
     text-shadow: rgba(0,0,0,0.8) 0 -1px 0;
 }
 
@@ -2923,13 +2938,13 @@ body {
     box-shadow:0 1px 2px #555;
     line-height:18px;
 }
-#afui.ios .panel {
+#afui.ios .panel, #afui.ios #modalContainer {
     background:#e7e7e7;
 }
 
 #afui.ios .panel h2 { color:inherit;}
 
-#afui.ios > #navbar {
+#afui.ios  .footer {
     background-color:#000;
     background-image:-ms-linear-gradient(top, #222 0%, #111 50%, #000 51%);
     background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0, #222), color-stop(0.5, #111), color-stop(.51, #000));
@@ -2940,12 +2955,12 @@ body {
     border-top:1px solid #000;
 }
 
-#afui.ios #navbar>footer>a.pressed:not(.button) {
+#afui.ios .footer>footer>a.pressed:not(.button) {
     background:rgba(255, 255, 255, 0.13);
     border-radius:6px;
 }
 
-#afui.ios #navbar>footer>a.icon.pressed:not(.button):before {
+#afui.ios .footer>footer>a.icon.pressed:not(.button):before {
     color:#3a9de2;
 }
 
@@ -2992,7 +3007,7 @@ body {
     -ms-transform:rotate(45deg); -moz-transform:rotate(45deg); -webkit-transform:rotate(45deg); transform:rotate(45deg);
 }
 
-#afui.ios #header .button {
+#afui.ios .header .button {
     color:#fff;
     text-shadow:0 -1px 0 #333;
     background-color:#476999;
@@ -3001,11 +3016,11 @@ body {
     background-image:linear-gradient(to bottom, #9CABC0 0%, #6E84A2 50%, #476999 51%);
 }
 
-#afui.ios #header .button.pressed {
+#afui.ios .header .button.pressed {
     background-image:linear-gradient(to bottom, #6E84A2 0%, #476999 50%, #274979 51%);
 }
 
-#afui.ios #navbar .button {
+#afui.ios .footer .button {
     color:#fff;
     text-shadow:0 -1px 0 #333;
     background-color:#444;
@@ -3014,7 +3029,7 @@ body {
     background-image:linear-gradient(to bottom, #555 0%, #333 50%, #111 51%);
 }
 
-#afui.ios #navbar .button.pressed {
+#afui.ios .footer .button.pressed {
     background-image:linear-gradient(to bottom, #444 0%, #222 50%, #000 51%);
 }
 

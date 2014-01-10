@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-01-08 */
+/*! intel-appframework - v2.1.0 - 2014-01-10 */
 
 /**
  * appframework.ui - A User Interface library for App Framework applications
@@ -1059,29 +1059,53 @@
                 id = "#" + id.replace("#", "");
             var $panel = $.query(id);
             this.modalReference_=$panel;
-
+            var modalParent=$.query("#afui_modal");
             if ($panel.length) {
                 var useScroller = this.scrollingDivs.hasOwnProperty($panel.attr("id"));
                 //modalDiv.html($.feat.nativeTouchScroll || !useScroller ? $.query(id).html() : $.query(id).get(0).childNodes[0].innerHTML + '', true);
-                modalDiv.empty();
+
                 var elemsToCopy;
                 if($.feat.nativeTouchScroll || !useScroller ){
                     elemsToCopy=$panel.contents();
+                    modalDiv.append(elemsToCopy);
                 }
                 else {
                     elemsToCopy=$($panel.get(0).childNodes[0]).contents();
+                    //modalDiv.append(elemsToCopy);
+                    modalDiv.children().eq(0).append(elemsToCopy);
                 }
-                modalDiv.append(elemsToCopy);
-                modalDiv.append("<a onclick='$.ui.hideModal();' class='closebutton modalbutton'></a>");
-                that.modalWindow.style.display = "block";
+
 
                 this.runTransition(this.modalTransition, that.modalTransContainer, that.modalWindow, false);
-
+                $(that.modalWindow).css("display","");
+                $(that.modalWindow).addClass("display","flexContainer");
                 if (useScroller) {
                     this.scrollingDivs.modal_container.enable(that.resetScrollers);
                 }
                 else {
                     this.scrollingDivs.modal_container.disable();
+                }
+                //move header
+                if(elemsToCopy.filter("header").length>0){
+                    modalParent.find("#modalHeader").append(elemsToCopy.filter("header"));
+                }
+                //move footer
+                if(elemsToCopy.filter("footer").length>0){
+                    
+                    modalParent.find("#modalFooter").append(elemsToCopy.filter("footer"));
+                    var tmpAnchors = $.query("#modalFooter > footer > a:not(.button)");
+                    if (tmpAnchors.length > 0) {
+                        var width = parseFloat(100 / tmpAnchors.length);
+                        tmpAnchors.css("width", width + "%");
+                    }
+                    var nodes = $.query("#modalFooter footer");
+                    if (nodes.length === 0) return;
+                    nodes = nodes.get(0).childNodes;
+                    for (var i = 0; i < nodes.length; i++) {
+                        if (nodes[i].nodeType === 3) {
+                            nodes[i].parentNode.removeChild(nodes[i]);
+                        }
+                    }
                 }
 
                 this.scrollToTop("modal");
@@ -1105,7 +1129,7 @@
         hideModal: function() {
             var self = this;
             var $cnt=$.query("#modalContainer");
-            $cnt.find("#closebutton.modalbutton").remove();
+
             var useScroller = this.scrollingDivs.hasOwnProperty(this.modalReference_.attr("id"));
 
 
@@ -1120,12 +1144,17 @@
             tmp.trigger("unloadpanel");
             setTimeout(function(){
                 if($.feat.nativeTouchScroll || !useScroller){
+                    self.modalReference_.append($("#modalHeader header"));
                     self.modalReference_.append($cnt.contents());
+                    self.modalReference_.append($("#modalFooter footer"));
                 }
                 else {
-                    $(self.modalReference_.get(0).childNodes[0]).append($cnt.contents());
+                    self.modalReference_.children().eq(0).append($("#modalHeader header"));
+                    $(self.modalReference_.get(0).childNodes[0]).append($cnt.children().eq(0).contents());
+                    self.modalReference_.children().eq(0).append($("#modalFooter footer"));
                 }
-                $cnt.html("", true);
+
+               // $cnt.html("", true);
             },this.transitionTime);
         },
 
@@ -1156,8 +1185,12 @@
             } else {
                 $.cleanUpContent(el, false, true);
                 $(el).html(content);
+                var scr=this.scrollingDivs[el.id];
+                if(scr&&scr.refresh)
+                    scr.addPullToRefresh();
             }
-            if (newDiv.getAttribute("data-title")) el.setAttribute("data-title",newDiv.getAttribute("data-title"));
+            if (newDiv.getAttribute("data-title"))
+                el.setAttribute("data-title",newDiv.getAttribute("data-title"));
         },
         /**
          * Same as $.ui.updatePanel.  kept for backwards compatibility
@@ -1249,7 +1282,7 @@
             } else {
                 //WE need to clone the div so we keep events
                 scrollEl=tmp;
-                container.appendChild(tmp);                
+                container.appendChild(tmp);
                 /*scrollEl = tmp.cloneNode(false);
 
 
@@ -1283,9 +1316,10 @@
                     autoEnable: false //dont enable the events unnecessarilly
                 }));
                 //backwards compatibility
-                if (refreshFunc) $.bind(this.scrollingDivs[scrollEl.id], "refresh-release", function(trigger) {
+                if (refreshFunc)
+                    $.bind(this.scrollingDivs[scrollEl.id], "refresh-release", function(trigger) {
                         if (trigger) refreshFunc();
-                });
+                    });
                 if(jsScroll){
                     $(tmp).children().eq(0).addClass("afScrollPanel");
                 }
@@ -1578,9 +1612,8 @@
                     }
                 }, numOnly(that.transitionTime) + 50);
             }
-            else
+            else if (typeof that.scrollingDivs[oldDiv.id] !== "undefined")
                 that.scrollingDivs[oldDiv.id].disable();
-
 
         },
         /**
@@ -1733,6 +1766,10 @@
          */
         runTransition: function(transition, oldDiv, currWhat, back) {
             if (!this.availableTransitions[transition]) transition = "default";
+            if(oldDiv.style.display==="none")
+                oldDiv.style.display = "block";
+            if(currWhat.style.display==="none")
+                currWhat.style.display = "block";
             this.availableTransitions[transition].call(this, oldDiv, currWhat, back);
         },
 
@@ -1900,10 +1937,19 @@
             var modalDiv = $.create("div", {
                 id: "afui_modal"
             }).get(0);
-
+            $(modalDiv).hide();
+            modalDiv.appendChild($.create("div",{
+                id:"modalHeader",
+                className:"header"
+            }).get(0));
             modalDiv.appendChild($.create("div", {
                 id: "modalContainer"
             }).get(0));
+            modalDiv.appendChild($.create("div",{
+                id:"modalFooter",
+                className:"footer"
+            }).get(0));
+
             this.modalTransContainer = $.create("div", {
                 id: "modalTransContainer"
             }).appendTo(modalDiv).get(0);
@@ -2015,7 +2061,8 @@
                         id: "defaultHeader"
                     }).append($.query("#header").children()));
                     that.prevHeader = $.query("#defaultHeader");
-
+                    $.query("#header").addClass("header");
+                    $.query("#navbar").addClass("footer");
                     //
                     $.query("#navbar").on("click", "footer>a:not(.button)", function(e) {
                         $.query("#navbar>footer>a").not(e.currentTarget).removeClass("pressed");
@@ -2256,12 +2303,15 @@
         document.addEventListener("orientationchange", function(e) {
             if ($.ui.scrollingDivs[$.ui.activeDiv.id]) {
                 var tmpscroller = $.ui.scrollingDivs[$.ui.activeDiv.id];
+                if(!tmpscroller) return;
                 if (tmpscroller.el.scrollTop === 0) {
                     tmpscroller.disable();
                     setTimeout(function() {
                         tmpscroller.enable();
                     }, 300);
                 }
+                if(tmpscroller.refresh)
+                    tmpscroller.updateP2rHackPosition();
             }
         });
     }
@@ -2272,8 +2322,6 @@
     "use strict";
     function fadeTransition (oldDiv, currDiv, back) {
         /*jshint validthis:true */
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
         var that = this;
         if (back) {
             currDiv.style.zIndex = 1;
@@ -2340,8 +2388,6 @@
     "use strict";
     function flipTransition(oldDiv, currDiv, back) {
         /*jshint validthis:true */
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
         var that = this;
         if (back) {
             that.css3animate(currDiv, {
@@ -2426,8 +2472,6 @@
     "use strict";
     function popTransition(oldDiv, currDiv, back) {
         /*jshint validthis:true */
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
         var that = this;
         if (back) {
             currDiv.style.zIndex = 1;
@@ -2505,8 +2549,6 @@
      */
     function slideTransition(oldDiv, currDiv, back) {
         /*jshint validthis:true */
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
         var that = this;
         if (back) {
             that.css3animate(oldDiv, {
@@ -2558,8 +2600,6 @@
     "use strict";
     function slideDownTransition(oldDiv, currDiv, back) {
         /*jshint validthis:true */
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
         var that = this;
         if (back) {
             oldDiv.style.zIndex = 2;
@@ -2603,8 +2643,6 @@
     "use strict";
     function slideUpTransition(oldDiv, currDiv, back) {
         /*jshint validthis:true */
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
         var that = this;
         if (back) {
             oldDiv.style.zIndex = 2;
@@ -3426,7 +3464,7 @@ if (!Date.now)
                 }
                 var el = afEl.get(0);
 
-                this.refreshContainer = af("<div style='overflow:hidden;height:0;width:100%;display:none;'></div>");
+                this.refreshContainer = af("<div style='overflow:hidden;height:0;width:100%;display:none;background:inherit;'></div>");
                 $(this.el).prepend(this.refreshContainer.prepend(el));
                 this.refreshContainer = this.refreshContainer[0];
             },
@@ -3509,7 +3547,8 @@ if (!Date.now)
             },
             scrollTo:function (pos, time) {
                 return this._scrollTo(pos, time);
-            }
+            },
+            updateP2rHackPosition:function(){}
         };
 
         //extend to jsScroller and nativeScroller (constructs)
@@ -3616,6 +3655,7 @@ if (!Date.now)
             //set events
             this.el.addEventListener("touchstart", this, false);
             this.el.addEventListener("scroll", this, false);
+            this.updateP2rHackPosition();
         };
         nativeScroller.prototype.disable = function (destroy) {
             if (!this.eventsActive) return;
@@ -3633,8 +3673,6 @@ if (!Date.now)
             this.eventsActive = false;
         };
         nativeScroller.prototype.addPullToRefresh = function (el, leaveRefresh) {
-            this.el.removeEventListener("touchstart", this, false);
-            this.el.addEventListener("touchstart", this, false);
             if (!leaveRefresh) this.refresh = true;
             if (this.refresh && this.refresh === true) {
                 this.coreAddPullToRefresh(el);
@@ -3642,7 +3680,19 @@ if (!Date.now)
                 this.refreshContainer.style.top = "-60px";
                 this.refreshContainer.style.height = "60px";
                 this.refreshContainer.style.display = "block";
+                this.updateP2rHackPosition();
             }
+        };
+        nativeScroller.prototype.updateP2rHackPosition=function(){
+            if(!this.refresh)
+                return $(this.el).find(".p2rhack").remove();
+            var el=$(this.el).find(".p2rhack");
+            if(el.length===0){
+                $(this.el).append("<div class='p2rhack' style='position:absolute;width:1px;height:1px;opacity:0;background:transparent;z-index:-1;-webkit-transform:translate3d(-1px,0,0);'></div>");
+                el=$(this.el).find(".p2rhack");
+            }
+
+            el.css("top",this.el.scrollHeight+this.refreshHeight+1+"px");
         };
         nativeScroller.prototype.onTouchStart = function (e) {
             this.lastScrollInfo= {
@@ -3681,7 +3731,6 @@ if (!Date.now)
             }
             if(this.hasHorScroll&&this.el.clientWidth==this.el.scrollWidth){
                 e.preventDefault();
-
             }
 
             if (!this.moved) {
@@ -3733,19 +3782,27 @@ if (!Date.now)
         nativeScroller.prototype.onTouchEnd = function (e) {
 
             var triggered = this.el.scrollTop <= -(this.refreshHeight);
-
+            var that=this;
             this.fireRefreshRelease(triggered, true);
             if (triggered&&this.refresh) {
                 //lock in place
-                this.refreshContainer.style.position = "relative";
-                this.refreshContainer.style.top = "0px";
+                //that.refreshContainer.style.position = "";
+                //iOS has a bug that it will jump when scrolling back up, so we add a fake element while we reset the pull to refresh position
+                //then we remove it right away
+                var tmp=$.create("<div style='height:"+this.el.clientHeight+this.refreshHeight+"px;width:1px;-webkit-transform:translated3d(-1px,0,0)'></div>");
+                $(this.el).append(tmp);
+                that.refreshContainer.style.top = "0px";
+                that.refreshContainer.style.position="";
+                setTimeout(function(){
+                    tmp.remove();
+                });
             }
 
             //this.dY = this.cY = 0;
             this.el.removeEventListener("touchmove", this, false);
             this.el.removeEventListener("touchend", this, false);
             this.infiniteEndCheck = true;
-            if (this.infinite && !this.infiniteTriggered && (Math.abs(this.el.scrollTop) >= (this.el.scrollHeight - this.el.clientHeight))) {
+            if (this.infinite && !this.infiniteTriggered && ((this.el.scrollTop) >= (this.el.scrollHeight - this.el.clientHeight))) {
                 this.infiniteTriggered = true;
                 $.trigger(this, "infinite-scroll");
                 this.infiniteEndCheck = true;
@@ -3850,9 +3907,9 @@ if (!Date.now)
                 this.scrollSkip = false;
                 return;
             }
-
             if (this.infinite) {
-                if (!this.infiniteTriggered && (Math.abs(this.el.scrollTop) >= (this.el.scrollHeight - this.el.clientHeight))) {
+
+                if (!this.infiniteTriggered && (this.el.scrollTop >= (this.el.scrollHeight - this.el.clientHeight))) {
                     this.infiniteTriggered = true;
                     $.trigger(this, "infinite-scroll");
                     this.infiniteEndCheck = true;
@@ -4812,7 +4869,7 @@ $("#myTestPopup").trigger("close");
                                  "<div style='clear:both'></div>"+
                             "</footer>"+
                             "</div>";
-                console.log(this.container);
+
                 $(this.container).append($(markup));
                 var $el = $.query("#" + this.id);
                 $el.bind("close", function () {
@@ -4911,6 +4968,7 @@ $("#myTestPopup").trigger("close");
     };
 
 })(af);
+
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
  * Copyright 2012 - Intel
