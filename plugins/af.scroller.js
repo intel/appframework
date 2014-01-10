@@ -577,8 +577,16 @@
             this.fireRefreshRelease(triggered, true);
             if (triggered&&this.refresh) {
                 //lock in place
-                that.refreshContainer.style.position = "";
+                //that.refreshContainer.style.position = "";
+                //iOS has a bug that it will jump when scrolling back up, so we add a fake element while we reset the pull to refresh position
+                //then we remove it right away
+                var tmp=$.create("<div style='height:"+this.el.clientHeight+this.refreshHeight+"px;width:1px;-webkit-transform:translated3d(-1px,0,0)'></div>");
+                $(this.el).append(tmp);
                 that.refreshContainer.style.top = "0px";
+                that.refreshContainer.style.position="";
+                setTimeout(function(){
+                    tmp.remove();
+                });
             }
 
             //this.dY = this.cY = 0;
