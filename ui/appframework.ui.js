@@ -1059,7 +1059,7 @@
             this.modalReference_=$panel;
             var modalParent=$.query("#afui_modal");
             if ($panel.length) {
-                var useScroller = this.scrollingDivs.hasOwnProperty($panel.attr("id"));                
+                var useScroller = this.scrollingDivs.hasOwnProperty($panel.attr("id"));
                 //modalDiv.html($.feat.nativeTouchScroll || !useScroller ? $.query(id).html() : $.query(id).get(0).childNodes[0].innerHTML + '', true);
 
                 var elemsToCopy;
@@ -1187,8 +1187,8 @@
                 if(scr&&scr.refresh)
                     scr.addPullToRefresh();
             }
-            if (newDiv.getAttribute("data-title")) 
-                el.setAttribute("data-title",newDiv.getAttribute("data-title"));            
+            if (newDiv.getAttribute("data-title"))
+                el.setAttribute("data-title",newDiv.getAttribute("data-title"));
         },
         /**
          * Same as $.ui.updatePanel.  kept for backwards compatibility
@@ -1280,7 +1280,7 @@
             } else {
                 //WE need to clone the div so we keep events
                 scrollEl=tmp;
-                container.appendChild(tmp);                
+                container.appendChild(tmp);
                 /*scrollEl = tmp.cloneNode(false);
 
 
@@ -1314,9 +1314,10 @@
                     autoEnable: false //dont enable the events unnecessarilly
                 }));
                 //backwards compatibility
-                if (refreshFunc) $.bind(this.scrollingDivs[scrollEl.id], "refresh-release", function(trigger) {
+                if (refreshFunc)
+                    $.bind(this.scrollingDivs[scrollEl.id], "refresh-release", function(trigger) {
                         if (trigger) refreshFunc();
-                });
+                    });
                 if(jsScroll){
                     $(tmp).children().eq(0).addClass("afScrollPanel");
                 }
@@ -1609,7 +1610,7 @@
                     }
                 }, numOnly(that.transitionTime) + 50);
             }
-            else if (typeof that.scrollingDivs[oldDiv.id] !== 'undefined')
+            else if (typeof that.scrollingDivs[oldDiv.id] !== "undefined")
                 that.scrollingDivs[oldDiv.id].disable();
 
         },
@@ -1936,13 +1937,15 @@
             }).get(0);
             $(modalDiv).hide();
             modalDiv.appendChild($.create("div",{
-                id:"modalHeader",className:"header"
+                id:"modalHeader",
+                className:"header"
             }).get(0));
             modalDiv.appendChild($.create("div", {
                 id: "modalContainer"
             }).get(0));
             modalDiv.appendChild($.create("div",{
-                id:"modalFooter",className:"footer"
+                id:"modalFooter",
+                className:"footer"
             }).get(0));
 
             this.modalTransContainer = $.create("div", {

@@ -470,7 +470,7 @@
                 this.refreshContainer.style.position = "absolute";
                 this.refreshContainer.style.top = "-60px";
                 this.refreshContainer.style.height = "60px";
-                this.refreshContainer.style.display = "block";                
+                this.refreshContainer.style.display = "block";
                 this.updateP2rHackPosition();
             }
         };
@@ -479,12 +479,12 @@
                 return $(this.el).find(".p2rhack").remove();
             var el=$(this.el).find(".p2rhack");
             if(el.length===0){
-                $(this.el).append("<div class='p2rhack' style='position:absolute;width:1px;height:1px;opacity:0;background:transparent;z-index:-1'></div>");
+                $(this.el).append("<div class='p2rhack' style='position:absolute;width:1px;height:1px;opacity:0;background:transparent;z-index:-1;-webkit-transform:translate3d(-1px,0,0);'></div>");
                 el=$(this.el).find(".p2rhack");
             }
 
             el.css("top",this.el.scrollHeight+this.refreshHeight+1+"px");
-        }
+        };
         nativeScroller.prototype.onTouchStart = function (e) {
             this.lastScrollInfo= {
                 top:0
@@ -522,7 +522,6 @@
             }
             if(this.hasHorScroll&&this.el.clientWidth==this.el.scrollWidth){
                 e.preventDefault();
-
             }
 
             if (!this.moved) {
@@ -578,8 +577,8 @@
             this.fireRefreshRelease(triggered, true);
             if (triggered&&this.refresh) {
                 //lock in place
-                    that.refreshContainer.style.position = "";
-                    that.refreshContainer.style.top = "0px";
+                that.refreshContainer.style.position = "";
+                that.refreshContainer.style.top = "0px";
             }
 
             //this.dY = this.cY = 0;
