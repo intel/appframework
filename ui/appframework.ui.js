@@ -1183,8 +1183,12 @@
             } else {
                 $.cleanUpContent(el, false, true);
                 $(el).html(content);
+                var scr=this.scrollingDivs[el.id];
+                if(scr&&scr.refresh)
+                    scr.addPullToRefresh();
             }
-            if (newDiv.getAttribute("data-title")) el.setAttribute("data-title",newDiv.getAttribute("data-title"));
+            if (newDiv.getAttribute("data-title")) 
+                el.setAttribute("data-title",newDiv.getAttribute("data-title"));            
         },
         /**
          * Same as $.ui.updatePanel.  kept for backwards compatibility
@@ -2294,12 +2298,15 @@
         document.addEventListener("orientationchange", function(e) {
             if ($.ui.scrollingDivs[$.ui.activeDiv.id]) {
                 var tmpscroller = $.ui.scrollingDivs[$.ui.activeDiv.id];
+                if(!tmpscroller) return;
                 if (tmpscroller.el.scrollTop === 0) {
                     tmpscroller.disable();
                     setTimeout(function() {
                         tmpscroller.enable();
                     }, 300);
                 }
+                if(tmpscroller.refresh)
+                    tmpscroller.updateP2rHackPosition();
             }
         });
     }

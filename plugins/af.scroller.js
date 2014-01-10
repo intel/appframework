@@ -338,7 +338,8 @@
             },
             scrollTo:function (pos, time) {
                 return this._scrollTo(pos, time);
-            }
+            },
+            updateP2rHackPosition:function(){}
         };
 
         //extend to jsScroller and nativeScroller (constructs)
@@ -445,6 +446,7 @@
             //set events
             this.el.addEventListener("touchstart", this, false);
             this.el.addEventListener("scroll", this, false);
+            this.updateP2rHackPosition();
         };
         nativeScroller.prototype.disable = function (destroy) {
             if (!this.eventsActive) return;
@@ -462,17 +464,27 @@
             this.eventsActive = false;
         };
         nativeScroller.prototype.addPullToRefresh = function (el, leaveRefresh) {
-            this.el.removeEventListener("touchstart", this, false);
-            this.el.addEventListener("touchstart", this, false);
             if (!leaveRefresh) this.refresh = true;
             if (this.refresh && this.refresh === true) {
                 this.coreAddPullToRefresh(el);
                 this.refreshContainer.style.position = "absolute";
                 this.refreshContainer.style.top = "-60px";
                 this.refreshContainer.style.height = "60px";
-                this.refreshContainer.style.display = "block";
+                this.refreshContainer.style.display = "block";                
+                this.updateP2rHackPosition();
             }
         };
+        nativeScroller.prototype.updateP2rHackPosition=function(){
+            if(!this.refresh)
+                return $(this.el).find(".p2rhack").remove();
+            var el=$(this.el).find(".p2rhack");
+            if(el.length===0){
+                $(this.el).append("<div class='p2rhack' style='position:absolute;width:1px;height:1px;opacity:0;background:transparent;z-index:-1'></div>");
+                el=$(this.el).find(".p2rhack");
+            }
+
+            el.css("top",this.el.scrollHeight+this.refreshHeight+1+"px");
+        }
         nativeScroller.prototype.onTouchStart = function (e) {
             this.lastScrollInfo= {
                 top:0
@@ -562,19 +574,19 @@
         nativeScroller.prototype.onTouchEnd = function (e) {
 
             var triggered = this.el.scrollTop <= -(this.refreshHeight);
-
+            var that=this;
             this.fireRefreshRelease(triggered, true);
             if (triggered&&this.refresh) {
                 //lock in place
-                this.refreshContainer.style.position = "relative";
-                this.refreshContainer.style.top = "0px";
+                    that.refreshContainer.style.position = "";
+                    that.refreshContainer.style.top = "0px";
             }
 
             //this.dY = this.cY = 0;
             this.el.removeEventListener("touchmove", this, false);
             this.el.removeEventListener("touchend", this, false);
             this.infiniteEndCheck = true;
-            if (this.infinite && !this.infiniteTriggered && (Math.abs(this.el.scrollTop) >= (this.el.scrollHeight - this.el.clientHeight))) {
+            if (this.infinite && !this.infiniteTriggered && ((this.el.scrollTop) >= (this.el.scrollHeight - this.el.clientHeight))) {
                 this.infiniteTriggered = true;
                 $.trigger(this, "infinite-scroll");
                 this.infiniteEndCheck = true;
@@ -679,9 +691,9 @@
                 this.scrollSkip = false;
                 return;
             }
-
             if (this.infinite) {
-                if (!this.infiniteTriggered && (Math.abs(this.el.scrollTop) >= (this.el.scrollHeight - this.el.clientHeight))) {
+
+                if (!this.infiniteTriggered && (this.el.scrollTop >= (this.el.scrollHeight - this.el.clientHeight))) {
                     this.infiniteTriggered = true;
                     $.trigger(this, "infinite-scroll");
                     this.infiniteEndCheck = true;
