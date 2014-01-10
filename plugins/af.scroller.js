@@ -255,7 +255,7 @@
                 }
                 var el = afEl.get(0);
 
-                this.refreshContainer = af("<div style='overflow:hidden;height:0;width:100%;display:none;'></div>");
+                this.refreshContainer = af("<div style='overflow:hidden;height:0;width:100%;display:none;background:inherit;'></div>");
                 $(this.el).prepend(this.refreshContainer.prepend(el));
                 this.refreshContainer = this.refreshContainer[0];
             },
