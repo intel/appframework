@@ -960,7 +960,7 @@
             this.hasMoved = false;
 
             if(this.elementInfo.maxTop===0&&this.elementInfo.maxLeft===0&&this.lockBounce)
-                this.currentScrollingObject=null;
+                this.scrollTop(0);
             else
                 this.scrollerMoveCSS(this.lastScrollInfo, 0);
 
