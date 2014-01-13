@@ -115,7 +115,11 @@
                 else if($.os.tizen)
                     $("#afui").addClass("tizen");
             }
-            if ($.os.anroid&&!$.os.androidICS){
+            if($.os.ios){
+                $("head").find("#iosBlurrHack").remove();
+                $("head").append("<style id='iosBlurrHack'>#afui .panel > * {-webkit-backface-visibility: hidden;}</style>");
+            }
+            else if ($.os.anroid&&!$.os.androidICS){
                 $.ui.transitionTime="150ms";
             }
 
