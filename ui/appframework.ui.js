@@ -62,6 +62,7 @@
             window.intel.xdk.webRoot = "";
         }
 
+
         $(document).ready(function() {
             //boot touchLayer
             //create afui element if it still does not exist
@@ -114,11 +115,7 @@
                 else if($.os.tizen)
                     $("#afui").addClass("tizen");
             }
-            if($.os.ios){
-                $("head").find("#iosBlurrHack").remove();
-                $("head").append("<style id='iosBlurrHack'>#afui .panel > * {-webkit-backface-visibility: hidden;-webkit-perspective: 1000;}</style>");
-            }
-            else if ($.os.anroid&&!$.os.androidICS){
+            if ($.os.anroid&&!$.os.androidICS){
                 $.ui.transitionTime="150ms";
             }
 
