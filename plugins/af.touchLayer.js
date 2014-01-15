@@ -102,6 +102,7 @@
             that.fireEvent("UIEvents", "scrollend", el, false, false);
         });
         //fix layer positioning
+        this.hideAddressBar(0,1);
         this.launchFixUI(5); //try a lot to set page into place
     };
 
