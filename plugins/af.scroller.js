@@ -194,9 +194,11 @@
                 }
                 //assign self destruct
                 var that = this;
-                var orientationChangeProxy = function () {
-                    //no need to readjust if disabled...
-                    if (that.eventsActive&&!$.feat.nativeTouchScroll) that.adjustScroll();
+                var orientationChangeProxy = function (e) {
+                    //no need to readjust if disabled...                
+                    if (that.eventsActive&&!$.feat.nativeTouchScroll&&(!af.ui||(af.ui.activeDiv==that.container))) {
+                        //that.adjustScroll();
+                    }
                 };
                 this.afEl.bind("destroy", function () {
                     that.disable(true); //with destroy notice
