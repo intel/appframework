@@ -69,7 +69,7 @@
             that.scrollTimeoutEl_.addEventListener("scroll", that.scrollEndedProxy_, false);
         };
         this.retestAndFixUIProxy_ = function() {
-            if (af.os.android) that.layer.style.height = "100%";
+            if (af.os.android&&!af.os.chrome) that.layer.style.height = "100%";
             $.asap(that.testAndFixUI, that, arguments);
         };
         //iPhone double clicks workaround
@@ -102,6 +102,7 @@
             that.fireEvent("UIEvents", "scrollend", el, false, false);
         });
         //fix layer positioning
+        this.hideAddressBar(0,1);
         this.launchFixUI(5); //try a lot to set page into place
     };
 
@@ -206,7 +207,7 @@
             }
 
             //this.log("hiding address bar");
-            if (af.os.desktop || af.os.chrome||af.os.kindle) {
+            if (af.os.desktop ||af.os.kindle) {
                 this.layer.style.height = "100%";
             } else if (af.os.android) {
                 //on some phones its immediate
@@ -237,11 +238,22 @@
         onOrientationChange: function(e) {
             //this.log("orientationchange");
             //if a resize already happened, fire the orientationchange
-            if(this.focusedElement)
+            var self=this;
+            var didBlur=false;
+            if(this.focusedElement){
+                didBlur=true;
                 this.focusedElement.blur();
+            }
             if (!this.holdingReshapeType_ && this.reshapeTimeout_) {
                 this.fireReshapeEvent("orientationchange");
             } else this.previewReshapeEvent("orientationchange");
+            if(af.os.android&&af.os.chrome){
+                this.layer.style.height="100%";
+                var time=didBlur?600:0;
+                setTimeout(function(){
+                    self.hideAddressBar(0,1);
+                },time);
+            }
         },
         onResize: function(e) {
             //avoid infinite loop on iPhone
