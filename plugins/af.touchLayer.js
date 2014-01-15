@@ -211,7 +211,7 @@
             } else if (af.os.android) {
                 //on some phones its immediate
                 window.scrollTo(1, 1);
-                this.layer.style.height = this.isFocused_ || window.innerHeight > window.outerHeight ? (window.innerHeight) + "px" : ((window.outerHeight) / window.devicePixelRatio) + "px";
+                this.layer.style.height = this.isFocused_ || window.innerHeight >= window.outerHeight ? (window.innerHeight) + "px" : (window.outerHeight) + "px";
                 //sometimes android devices are stubborn
                 var that = this;
                 //re-test in a bit (some androids (SII, Nexus S, etc) fail to resize on first try)
@@ -226,9 +226,7 @@
         },
         getReferenceHeight: function() {
             //the height the page should be at
-            if (af.os.android) {
-                return Math.ceil(window.outerHeight / window.devicePixelRatio);
-            } else return window.innerHeight;
+            return window.innerHeight;
         },
         getCurrentHeight: function() {
             //the height the page really is at
