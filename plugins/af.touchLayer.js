@@ -216,7 +216,7 @@
                 var that = this;
                 //re-test in a bit (some androids (SII, Nexus S, etc) fail to resize on first try)
                 var nextTry = retry + 1;
-                this.reHideAddressBarTimeout_ = setTimeout(that.retestAndFixUIProxy_, 250 * nextTry, [nextTry, maxTries]); //each fix is progressibily longer (slower phones fix)
+                this.reHideAddressBarTimeout_ = setTimeout(that.retestAndFixUIProxy_, 250 * nextTry, nextTry, maxTries); //each fix is progressibily longer (slower phones fix)
             } else if (!this.isFocused_) {
                 document.documentElement.style.height = "5000px";
                 window.scrollTo(0, 0);
