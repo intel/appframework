@@ -237,6 +237,8 @@
         onOrientationChange: function(e) {
             //this.log("orientationchange");
             //if a resize already happened, fire the orientationchange
+            if(this.focusedElement)
+                this.focusedElement.blur();
             if (!this.holdingReshapeType_ && this.reshapeTimeout_) {
                 this.fireReshapeEvent("orientationchange");
             } else this.previewReshapeEvent("orientationchange");
