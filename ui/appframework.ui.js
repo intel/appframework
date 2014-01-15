@@ -122,6 +122,12 @@
             else if ($.os.anroid&&!$.os.androidICS){
                 $.ui.transitionTime="150ms";
             }
+            else if($.os.fennec){
+                $.ui.ready(function(){
+                    var tmpH=numOnly($("#header").height())+numOnly($("#navbar").height());
+                    $("#content").css("height",window.innerHeight-tmpH);                    
+                });
+            }
 
         }
     };
