@@ -211,7 +211,7 @@ if (!window.af || typeof(af) !== "function") {
 
             selector = selector.trim();
 
-            if (selector[0] === "#" && selector.indexOf(".") == -1 &&selector.indexOf(",") == -1 && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
+            if (selector[0] === "#" && selector.indexOf(".") === -1 &&selector.indexOf(",") === -1 && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
                 if (what == document)
                     _shimNodes(what.getElementById(selector.replace("#", "")), this);
                 else
@@ -1399,7 +1399,7 @@ if (!window.af || typeof(af) !== "function") {
                 var start = $(selector, context);
                 if (start.length === 0)
                     return $();
-                while (cur && start.indexOf(cur) == -1) {
+                while (cur && start.indexOf(cur) === -1) {
                     cur = cur !== context && cur !== document && cur.parentNode;
                 }
                 return $(cur);
@@ -1449,7 +1449,7 @@ if (!window.af || typeof(af) !== "function") {
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     var val = this[i];
-                    if (val.parentNode && $(selector, val.parentNode).indexOf(val) == -1)
+                    if (val.parentNode && $(selector, val.parentNode).indexOf(val) === -1)
                         elems.push(val);
                 }
                 return this.setupOld($(unique(elems)));
