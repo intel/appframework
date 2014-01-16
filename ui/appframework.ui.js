@@ -492,7 +492,7 @@
          */
         updateHash: function(newHash) {
             if (!this.manageHistory) return;
-            newHash = newHash.indexOf("#") == -1 ? "#" + newHash : newHash; //force having the # in the begginning as a standard
+            newHash = newHash.indexOf("#") === -1 ? "#" + newHash : newHash; //force having the # in the begginning as a standard
             previousTarget = newHash;
 
             var previousHash = window.location.hash;
@@ -508,7 +508,7 @@
         /*gets the panel name from an hash*/
         getPanelId: function(hash) {
             var firstSlash = hash.indexOf("/");
-            return firstSlash == -1 ? hash : hash.substring(0, firstSlash);
+            return firstSlash === -1 ? hash : hash.substring(0, firstSlash);
         },
 
         /**
@@ -1220,7 +1220,7 @@
          * @title $.ui.addContentDiv(id,content,title);
          */
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
-            el = typeof(el) !== "string" ? el : el.indexOf("#") == -1 ? "#" + el : el;
+            el = typeof(el) !== "string" ? el : el.indexOf("#") === -1 ? "#" + el : el;
             var myEl = $.query(el).get(0);
             var newDiv, newId;
             if (!myEl) {
@@ -1510,7 +1510,7 @@
             var what = null;
             var loadAjax = true;
             anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
-            if (target.indexOf("#") == -1) {
+            if (target.indexOf("#") === -1) {
                 var urlHash = "url" + crc32(target); //Ajax urls
                 var crcCheck = $.query("div.panel[data-crc='" + urlHash + "']");
                 if ($.query("#" + target).length > 0) {
@@ -1531,7 +1531,7 @@
                     } else target = "#" + urlHash;
                 }
             }
-            if (target.indexOf("#") == -1 && loadAjax) {
+            if (target.indexOf("#") === -1 && loadAjax) {
                 this.loadAjax(target, newTab, back, transition, anchor);
             } else {
                 this.loadDiv(target, newTab, back, transition);
@@ -1556,7 +1556,7 @@
 
             var slashIndex = what.indexOf("/");
             var hashLink = "";
-            if (slashIndex != -1) {
+            if (slashIndex !== -1) {
                 // Ignore everything after the slash for loading
                 hashLink = what.substr(slashIndex);
                 what = what.substr(0, slashIndex);
@@ -1639,7 +1639,7 @@
                 if (this.history.length > 0) {
                     val = this.history[this.history.length - 1];
                     slashIndex = val.target.indexOf("/");
-                    if (slashIndex != -1) {
+                    if (slashIndex !== -1) {
                         prevId = val.target.substr(0, slashIndex);
                     } else prevId = val.target;
                     el = $.query(prevId).get(0);
@@ -1687,7 +1687,7 @@
             if (this.activeDiv.id == "afui_ajax" && target == this.ajaxUrl) return;
             var urlHash = "url" + crc32(target); //Ajax urls
             var that = this;
-            if (target.indexOf("http") == -1) target = intel.xdk.webRoot + target;
+            if (target.indexOf("http") === -1) target = intel.xdk.webRoot + target;
             var xmlhttp = new XMLHttpRequest();
 
             if (anchor && typeof(anchor) !== "object") {
