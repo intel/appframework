@@ -103,7 +103,7 @@
             }
             $("#afModalMask").show();
             try {
-                if (foundInd > 0 && el.getAttribute("multiple") != "multiple") {
+                if (foundInd > 0 && el.getAttribute("multiple") !== "multiple") {
                     var scrollToPos = 0;
                     var scrollThreshold = numOnly($list.find("li").computedStyle("height"));
                     var theHeight = numOnly($("#afSelectBoxContainer").computedStyle("height"));
@@ -117,7 +117,7 @@
                 console.log("error init dropdown" + e);
             }
 
-            var selClose = $("#afSelectClose").css("display") == "block" ? numOnly($("#afSelectClose").height()) : 0;
+            var selClose = $("#afSelectClose").css("display") === "block" ? numOnly($("#afSelectClose").height()) : 0;
             $("#afSelectWrapper").height((numOnly($("#afSelectBoxContainer").height()) - selClose) + "px");
 
         },
@@ -171,7 +171,7 @@
                         return;
                     that.currLinker = this;
 
-                    if (this.linker.getAttribute("multiple") == "multiple")
+                    if (this.linker.getAttribute("multiple") === "multiple")
                         $("#afSelectClose").show();
                     else
                         $("#afSelectClose").hide();
@@ -212,7 +212,7 @@
 
                 $("#afModalMask").on("click",function(e){
                     var $e=$(e.target);
-                    if($e.closest("#afSelectBoxContainer").length===0)
+                    if($e.closest("#afSelectBoxContainer").length === 0)
                         that.hideDropDown();
                 });
 
@@ -221,7 +221,7 @@
                     that.setDropDownValue(that.currLinker.linker, $el.data("ind"));
                 });
                 $("#afSelectBoxContainer").on("click", "a", function(e) {
-                    if (e.target.id == "afSelectCancel")
+                    if (e.target.id === "afSelectCancel")
                         return that.hideDropDown();
                     var $sel = $(that.currLinker.linker);
                     $sel.find("option").prop("selected", false);
