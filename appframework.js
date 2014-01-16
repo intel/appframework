@@ -125,7 +125,7 @@ if (!window.af || typeof(af) !== "function") {
                 return elems;
 
             for (; nodes; nodes = nodes.nextSibling) {
-                if (nodes.nodeType == 1 && nodes !== element) {
+                if (nodes.nodeType === 1 && nodes !== element) {
                     elems.push(nodes);
                 }
             }
