@@ -70,7 +70,7 @@ $("#myTestPopup").trigger("close");
                 this.autoCloseDone = opts.autoCloseDone !== undefined ? opts.autoCloseDone : true;
 
                 queue.push(this);
-                if (queue.length == 1)
+                if (queue.length === 1)
                     this.show();
             } catch (e) {
                 console.log("error adding popup " + e);
@@ -118,7 +118,7 @@ $("#myTestPopup").trigger("close");
                 $el.find("A").each(function () {
                     var button = $(this);
                     button.bind("click", function (e) {
-                        if (button.attr("id") == "cancel") {
+                        if (button.attr("id") === "cancel") {
                             self.cancelCallback.call(self.cancelCallback, self);
                             self.hide();
                         } else {
