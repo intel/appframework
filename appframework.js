@@ -96,14 +96,13 @@ if (!window.af || typeof(af) !== "function") {
 
         /**
          * Internal function that returns a array of unique elements
-         * @param {Array} array to compare against
+         * @param {Array} arr array to compare against
          * @return {Array} array of unique elements
          * @api private
          */
-
         function unique(arr) {
             for (var i = 0; i < arr.length; i++) {
-                if (arr.indexOf(arr[i]) != i) {
+                if (arr.indexOf(arr[i]) !== i) {
                     arr.splice(i, 1);
                     i--;
                 }
