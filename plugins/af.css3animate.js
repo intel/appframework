@@ -252,10 +252,10 @@
                     var success = callbacks[i].success;
                     var failure = callbacks[i].failure;
                     //fire callbacks
-                    if (complete && typeof(complete) === "function") complete(canceled);
+                    if (typeof(complete) === "function") complete(canceled);
                     //success/failure
-                    if (canceled && failure && typeof(failure) === "function") failure();
-                    else if (success && typeof(success) === "function") success();
+                    if (canceled && typeof(failure) === "function") failure();
+                    else if (typeof(success) === "function") success();
                 }
             },
             cancel: function() {
