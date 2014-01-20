@@ -406,7 +406,8 @@
          */
         ready: function(param) {
 
-            if (this.launchCompleted) param();
+            if (this.launchCompleted)
+                param();
             else {
                 $(document).on("afui:ready", function(e) {
                     param();
@@ -422,7 +423,8 @@
          * @title $.ui.setBackButtonStyle(class)
          */
         setBackButtonStyle: function(className) {
-            $.query("#backButton").replaceClass(null, className);
+            $.query("#header #backButton").get(0).className=className;
+
         },
         /**
          * Initiate a back transition
