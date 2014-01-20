@@ -117,7 +117,12 @@
             }
             if($.os.ios){
                 $("head").find("#iosBlurrHack").remove();
-                $("head").append("<style id='iosBlurrHack'>#afui .panel > * {-webkit-backface-visibility: hidden;}</style>");
+                var hackStyle="-webkit-backface-visibility: hidden;";
+                //ios webview still has issues
+                if(navigator.userAgent.indexOf("Safari") === -1) {
+                    hackStyle+="-webkit-perspective:1000;";
+                }
+                $("head").append("<style id='iosBlurrHack'>#afui .panel > * {"+hackStyle+"}</style>");
             }
             else if ($.os.anroid&&!$.os.androidICS){
                 $.ui.transitionTime="150ms";
@@ -1754,6 +1759,9 @@
                     if (that.showLoading) that.hideMask();
                     return null;
                 }
+                else if(xmlhttp.readyState === 4) {
+                    $.ui.hideMask();
+                }
             };
             this.ajaxUrl = target;
             var newtarget = this.useAjaxCacheBuster ? target + (target.split("?")[1] ? "&" : "?") + "cache=" + Math.random() * 10000000000000000 : target;
@@ -2232,8 +2240,6 @@
             }
 
 
-            if (theTarget.href.indexOf("tel:") === 0) return false;
-
             //external links
             if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) {
                 if (theTarget.href.toLowerCase().indexOf("javascript:") !== 0) {
@@ -2258,7 +2264,12 @@
             if (href == "#" || (href.indexOf("#") === href.length - 1) || (href.length === 0 && theTarget.hash.length === 0)) return e.preventDefault();
 
             //internal links
-            e.preventDefault();
+            //http urls
+            var urlRegex=/^((http|https):\/\/)/;
+            //only call prevent default on http urls.  If it's a protocol handler, do not call prevent default.
+            //It will fall through to the ajax call and fail
+            if(!theTarget.href.indexOf(":") !== -1 &&urlRegex.test(theTarget.href))
+                e.preventDefault();            
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
             resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
