@@ -23,7 +23,7 @@
             }
             var sels = container.getElementsByTagName("input");
             for (var i = 0; i < sels.length; i++) {
-                if (sels[i].type != "password") continue;
+                if (sels[i].type !== "password") continue;
 
                 if($.os.webkit){
                     sels[i].type = "text";
@@ -36,13 +36,13 @@
             what = parseInt(what,10);
             var theEl = document.getElementById(id);
 
-            if (what == 1) { //show
+            if (what === 1) { //show
                 $(theEl).vendorCss("TextSecurity","none");
             } else {
                 $(theEl).vendorCss("TextSecurity","disc");
             }
             if(!$.os.webkit) {
-                if(what==1)
+                if(what === 1)
                     theEl.type="text";
                 else
                     theEl.type="password";

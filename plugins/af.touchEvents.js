@@ -30,9 +30,9 @@
         $(document.body).bind("touchstart", function(e) {
             if(e.originalEvent)
                 e=e.originalEvent;
-            if(!e.touches||e.touches.length===0) return;
+            if(!e.touches || e.touches.length === 0) return;
             var now = Date.now(), delta = now - (touch.last || now);
-            if(!e.touches||e.touches.length===0) return;
+            if(!e.touches || e.touches.length === 0) return;
             touch.el = $(parentIfText(e.touches[0].target));
             touchTimeout && clearTimeout(touchTimeout);
             touch.x1 =  e.touches[0].pageX;
@@ -45,7 +45,7 @@
 
             if ($.ui.useAutoPressed && !touch.el.data("ignore-pressed"))
                 touch.el.addClass("pressed");
-            if(prevEl && $.ui.useAutoPressed && !prevEl.data("ignore-pressed")&&prevEl[0]!=touch.el[0])
+            if(prevEl && $.ui.useAutoPressed && !prevEl.data("ignore-pressed") && prevEl[0] != touch.el[0])
                 prevEl.removeClass("pressed");
             prevEl=touch.el;
         }).bind("touchmove", function(e) {
