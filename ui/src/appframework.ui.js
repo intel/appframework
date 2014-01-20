@@ -382,7 +382,7 @@
          * @title $.ui.setBackButtonStyle(class)
          */
         setBackButtonStyle: function(className) {
-            $.query("#backButton").replaceClass(null, className);
+            $.query("#header #backButton").get(0).className = className;
         },
         /**
          * Initiate a back transition

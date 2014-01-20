@@ -1236,6 +1236,7 @@
             }else{
                 this.scrollerMoveCSS(this.lastScrollInfo, 0);
             }
+
         };
         jsScroller.prototype.getCSSMatrix = function (el) {
             if (this.androidFormsMode) {
@@ -3580,7 +3581,7 @@
          * @title $.ui.setBackButtonStyle(class)
          */
         setBackButtonStyle: function(className) {
-            $.query("#backButton").replaceClass(null, className);
+            $.query("#header #backButton").get(0).className = className;
         },
         /**
          * Initiate a back transition
