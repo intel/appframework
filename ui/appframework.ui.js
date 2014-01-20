@@ -739,9 +739,9 @@
             var els = $.query("#content, #header, #navbar");
             if (this.isSideMenuOn()) {
                 this.toggleSideMenu(false, function(canceled) {
-                    if (!canceled) els.removeClass("hasMenu");
+                    if (!canceled) els.removeClass("hasAside");
                 });
-            } else els.removeClass("hasMenu");
+            } else els.removeClass("hasAside");
         },
         /**
          * Enables the side menu if it has been disabled
@@ -751,7 +751,7 @@
         * @title $.ui.enableRightSideMenu();
         */
         enableRightSideMenu: function() {
-            $.query("#content, #header, #navbar").addClass("hasMenu");
+            $.query("#content, #header, #navbar").addClass("hasAside");
         },
         /**
          *
