@@ -119,10 +119,10 @@
                 $("head").find("#iosBlurrHack").remove();
                 var hackStyle="-webkit-backface-visibility: hidden;";
                 //ios webview still has issues
-                if(navigator.userAgent.indexOf("Safari") === -1) {
-                    hackStyle+="-webkit-perspective:1000;";
-                }
-                $("head").append("<style id='iosBlurrHack'>#afui .panel > * {"+hackStyle+"}</style>");
+                //if(navigator.userAgent.indexOf("Safari") === -1) {
+                hackStyle+="-webkit-perspective:1000;";
+                //}
+                $("head").append("<style id='iosBlurrHack'>#afui .panel  {"+hackStyle+"} #afui .panel > * {-webkit-backface-visibility:hidden;}</style>");
             }
             else if ($.os.anroid&&!$.os.androidICS){
                 $.ui.transitionTime="150ms";
