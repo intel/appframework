@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-01-10 */
+/*! intel-appframework - v2.1.0 - 2014-01-21 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -168,6 +168,8 @@ body {
     text-shadow:rgba(0,0,0,0.8) 0 -1px 0;
     text-align:center;
     white-space:nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 } /* This is text that appears in the header at the top of the screen */
 
 
@@ -1579,13 +1581,13 @@ body {
 }
 
 
-BODY>DIV#mask{
+#mask{
     display:block;
     width:100%;
     height:100%;
     background:#000;
     z-index: 999999;
-    position:absolute;
+    position:fixed;
     top:0;
     left:0;
 }

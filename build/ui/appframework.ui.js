@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-01-10 */
+/*! intel-appframework - v2.1.0 - 2014-01-21 */
 
 /**
  * appframework.ui - A User Interface library for App Framework applications
@@ -64,6 +64,7 @@
             window.intel.xdk.webRoot = "";
         }
 
+
         $(document).ready(function() {
             //boot touchLayer
             //create afui element if it still does not exist
@@ -118,10 +119,21 @@
             }
             if($.os.ios){
                 $("head").find("#iosBlurrHack").remove();
-                $("head").append("<style id='iosBlurrHack'>#afui .panel > * {-webkit-backface-visibility: hidden;-webkit-perspective: 1000;}</style>");
+                var hackStyle="-webkit-backface-visibility: hidden;";
+                //ios webview still has issues
+                //if(navigator.userAgent.indexOf("Safari") === -1) {
+                hackStyle+="-webkit-perspective:1000;";
+                //}
+                $("head").append("<style id='iosBlurrHack'>#afui .panel  {"+hackStyle+"} #afui .panel > * {-webkit-backface-visibility:hidden;}</style>");
             }
             else if ($.os.anroid&&!$.os.androidICS){
                 $.ui.transitionTime="150ms";
+            }
+            else if($.os.fennec){
+                $.ui.ready(function(){
+                    var tmpH=numOnly($("#header").height())+numOnly($("#navbar").height());
+                    $("#content").css("height",window.innerHeight-tmpH);
+                });
             }
 
         }
@@ -401,7 +413,8 @@
          */
         ready: function(param) {
 
-            if (this.launchCompleted) param();
+            if (this.launchCompleted)
+                param();
             else {
                 $(document).on("afui:ready", function(e) {
                     param();
@@ -417,7 +430,8 @@
          * @title $.ui.setBackButtonStyle(class)
          */
         setBackButtonStyle: function(className) {
-            $.query("#backButton").replaceClass(null, className);
+            $.query("#header #backButton").get(0).className=className;
+
         },
         /**
          * Initiate a back transition
@@ -734,9 +748,9 @@
             var els = $.query("#content, #header, #navbar");
             if (this.isSideMenuOn()) {
                 this.toggleSideMenu(false, function(canceled) {
-                    if (!canceled) els.removeClass("hasMenu");
+                    if (!canceled) els.removeClass("hasAside");
                 });
-            } else els.removeClass("hasMenu");
+            } else els.removeClass("hasAside");
         },
         /**
          * Enables the side menu if it has been disabled
@@ -746,7 +760,7 @@
         * @title $.ui.enableRightSideMenu();
         */
         enableRightSideMenu: function() {
-            $.query("#content, #header, #navbar").addClass("hasMenu");
+            $.query("#content, #header, #navbar").addClass("hasAside");
         },
         /**
          *
@@ -1747,6 +1761,9 @@
                     if (that.showLoading) that.hideMask();
                     return null;
                 }
+                else if(xmlhttp.readyState === 4) {
+                    $.ui.hideMask();
+                }
             };
             this.ajaxUrl = target;
             var newtarget = this.useAjaxCacheBuster ? target + (target.split("?")[1] ? "&" : "?") + "cache=" + Math.random() * 10000000000000000 : target;
@@ -2225,8 +2242,6 @@
             }
 
 
-            if (theTarget.href.indexOf("tel:") === 0) return false;
-
             //external links
             if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) {
                 if (theTarget.href.toLowerCase().indexOf("javascript:") !== 0) {
@@ -2251,7 +2266,12 @@
             if (href == "#" || (href.indexOf("#") === href.length - 1) || (href.length === 0 && theTarget.hash.length === 0)) return e.preventDefault();
 
             //internal links
-            e.preventDefault();
+            //http urls
+            var urlRegex=/^((http|https):\/\/)/;
+            //only call prevent default on http urls.  If it's a protocol handler, do not call prevent default.
+            //It will fall through to the ajax call and fail
+            if(theTarget.href.indexOf(":") !== -1 &&urlRegex.test(theTarget.href))
+                e.preventDefault();
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
             resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
@@ -3403,9 +3423,11 @@ if (!Date.now)
                 }
                 //assign self destruct
                 var that = this;
-                var orientationChangeProxy = function () {
-                    //no need to readjust if disabled...
-                    if (that.eventsActive&&!$.feat.nativeTouchScroll) that.adjustScroll();
+                var orientationChangeProxy = function (e) {
+                    //no need to readjust if disabled...                
+                    if (that.eventsActive&&!$.feat.nativeTouchScroll&&(!af.ui||(af.ui.activeDiv==that.container))) {
+                        that.adjustScroll();
+                    }
                 };
                 this.afEl.bind("destroy", function () {
                     that.disable(true); //with destroy notice
@@ -4169,7 +4191,7 @@ if (!Date.now)
             this.hasMoved = false;
 
             if(this.elementInfo.maxTop===0&&this.elementInfo.maxLeft===0&&this.lockBounce)
-                this.currentScrollingObject=null;
+                this.scrollTop(0);
             else
                 this.scrollerMoveCSS(this.lastScrollInfo, 0);
 
@@ -5582,7 +5604,7 @@ $("#myTestPopup").trigger("close");
             that.scrollTimeoutEl_.addEventListener("scroll", that.scrollEndedProxy_, false);
         };
         this.retestAndFixUIProxy_ = function() {
-            if (af.os.android) that.layer.style.height = "100%";
+            if (af.os.android&&!af.os.chrome) that.layer.style.height = "100%";
             $.asap(that.testAndFixUI, that, arguments);
         };
         //iPhone double clicks workaround
@@ -5615,6 +5637,7 @@ $("#myTestPopup").trigger("close");
             that.fireEvent("UIEvents", "scrollend", el, false, false);
         });
         //fix layer positioning
+        this.hideAddressBar(0,1);
         this.launchFixUI(5); //try a lot to set page into place
     };
 
@@ -5719,17 +5742,17 @@ $("#myTestPopup").trigger("close");
             }
 
             //this.log("hiding address bar");
-            if (af.os.desktop || af.os.chrome||af.os.kindle) {
+            if (af.os.desktop ||af.os.kindle) {
                 this.layer.style.height = "100%";
             } else if (af.os.android) {
                 //on some phones its immediate
                 window.scrollTo(1, 1);
-                this.layer.style.height = this.isFocused_ || window.innerHeight > window.outerHeight ? (window.innerHeight) + "px" : ((window.outerHeight) / window.devicePixelRatio) + "px";
+                this.layer.style.height = this.isFocused_ || window.innerHeight >= window.outerHeight ? (window.innerHeight) + "px" : (window.outerHeight) + "px";
                 //sometimes android devices are stubborn
                 var that = this;
                 //re-test in a bit (some androids (SII, Nexus S, etc) fail to resize on first try)
                 var nextTry = retry + 1;
-                this.reHideAddressBarTimeout_ = setTimeout(that.retestAndFixUIProxy_, 250 * nextTry, [nextTry, maxTries]); //each fix is progressibily longer (slower phones fix)
+                this.reHideAddressBarTimeout_ = setTimeout(that.retestAndFixUIProxy_, 250 * nextTry, nextTry, maxTries); //each fix is progressibily longer (slower phones fix)
             } else if (!this.isFocused_) {
                 document.documentElement.style.height = "5000px";
                 window.scrollTo(0, 0);
@@ -5739,9 +5762,7 @@ $("#myTestPopup").trigger("close");
         },
         getReferenceHeight: function() {
             //the height the page should be at
-            if (af.os.android) {
-                return Math.ceil(window.outerHeight / window.devicePixelRatio);
-            } else return window.innerHeight;
+            return window.innerHeight;
         },
         getCurrentHeight: function() {
             //the height the page really is at
@@ -5752,9 +5773,22 @@ $("#myTestPopup").trigger("close");
         onOrientationChange: function(e) {
             //this.log("orientationchange");
             //if a resize already happened, fire the orientationchange
+            var self=this;
+            var didBlur=false;
+            if(this.focusedElement){
+                didBlur=true;
+                this.focusedElement.blur();
+            }
             if (!this.holdingReshapeType_ && this.reshapeTimeout_) {
                 this.fireReshapeEvent("orientationchange");
             } else this.previewReshapeEvent("orientationchange");
+            if(af.os.android&&af.os.chrome){
+                this.layer.style.height="100%";
+                var time=didBlur?600:0;
+                setTimeout(function(){
+                    self.hideAddressBar(0,1);
+                },time);
+            }
         },
         onResize: function(e) {
             //avoid infinite loop on iPhone
