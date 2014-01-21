@@ -83,7 +83,7 @@ module.exports = function (grunt) {
             },
             icons: {
                 files: {
-                    "build/ui/icons.min.css": [
+                    "build/css/icons.min.css": [
                         "css/icons.css"
                     ]
                 }
