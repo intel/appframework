@@ -197,7 +197,7 @@
                 var orientationChangeProxy = function (e) {
                     //no need to readjust if disabled...                
                     if (that.eventsActive&&!$.feat.nativeTouchScroll&&(!af.ui||(af.ui.activeDiv==that.container))) {
-                        //that.adjustScroll();
+                        that.adjustScroll();
                     }
                 };
                 this.afEl.bind("destroy", function () {

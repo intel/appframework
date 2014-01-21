@@ -130,7 +130,7 @@
             else if($.os.fennec){
                 $.ui.ready(function(){
                     var tmpH=numOnly($("#header").height())+numOnly($("#navbar").height());
-                    $("#content").css("height",window.innerHeight-tmpH);                    
+                    $("#content").css("height",window.innerHeight-tmpH);
                 });
             }
 
@@ -2268,8 +2268,8 @@
             var urlRegex=/^((http|https):\/\/)/;
             //only call prevent default on http urls.  If it's a protocol handler, do not call prevent default.
             //It will fall through to the ajax call and fail
-            if(!theTarget.href.indexOf(":") !== -1 &&urlRegex.test(theTarget.href))
-                e.preventDefault();            
+            if(theTarget.href.indexOf(":") !== -1 &&urlRegex.test(theTarget.href))
+                e.preventDefault();
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
             resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
