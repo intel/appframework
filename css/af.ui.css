@@ -1546,13 +1546,13 @@ body {
 /*../plugins/css/af.popup.css*/
 
 
-BODY>DIV#mask{
+#mask{
     display:block;
     width:100%;
     height:100%;
     background:#000;
     z-index: 999999;
-    position:absolute;
+    position:fixed;
     top:0;
     left:0;
 }
@@ -1762,6 +1762,10 @@ color:inherit;
     color:inherit;
     border-color:#33B5E5;
 }
+#afui.android > #header h1 {
+    color:inherit;
+}
+
 
 #afui.android #header .button {
     color: inherit;
