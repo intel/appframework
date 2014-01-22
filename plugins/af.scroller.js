@@ -412,7 +412,8 @@
             }
             this.container = this.el;
             $el.css("-webkit-overflow-scrolling", "touch");
-            if(opts.autoEnable)
+
+            if(!opts.autoEnable||opts.autoEnable===true)
                 this.enable();
         };
         nativeScroller.prototype = new scrollerCore();
@@ -491,10 +492,12 @@
             this.lastScrollInfo= {
                 top:0
             };
-            if(this.el.scrollTop===0)
-                this.el.scrollTop=1;
-            if(this.el.scrollTop===(this.el.scrollHeight - this.el.clientHeight))
-                this.el.scrollTop-=1;
+            if(this.hasVertScroll){
+                if(this.el.scrollTop===0)
+                    this.el.scrollTop=1;
+                if(this.el.scrollTop===(this.el.scrollHeight - this.el.clientHeight))
+                    this.el.scrollTop-=1;
+            }
 
             if(this.horizontalScroll){
                 if(this.el.scrollLeft===0)
