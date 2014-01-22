@@ -1,4 +1,16 @@
 //Touch events are from zepto/touch.js
+/**
+ * Simply include this in your project to get access to the following touch events on an element
+ * tap
+ * doubleTap
+ * singleTap
+ * longPress
+ * swipe
+ * swipeLeft
+ * swipeRight
+ * swipeUp
+ * swipeDown
+ */
 /* global af*/
 (function($) {
     "use strict";

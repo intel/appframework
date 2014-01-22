@@ -2,6 +2,39 @@
  * af.css3animate - a css3 animation library that supports chaning/callbacks
  * Copyright 2013 - Intel
  */
+ /*  EXAMPLE
+
+  $("#animate").css3Animate({
+        width: "100px",
+        height: "100px",
+        x: "20%",
+        y: "30%",
+        time: "1000ms",
+        opacity: .5,
+        callback: function () {
+            //execute when finished
+        }
+    });
+
+    //Chain animations
+    $("#animate").css3Animate({
+        x: 20,
+        y: 30,
+        time: "300ms",
+        callback: function () {
+            $("#animate").css3Animate({
+                x: 20,
+                y: 30,
+                time: "500ms",
+                previous: true,
+                callback: function () {
+                    reset();
+                }
+            });
+        }
+    });
+ */
+
  /* global af*/
  /* global numOnly*/
 (function($) {

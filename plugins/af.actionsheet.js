@@ -2,6 +2,39 @@
  * af.actionsheet - an actionsheet for html5 mobile apps
  * Copyright 2012 - Intel
  */
+/* EXAMPLE
+  You can pass in an HTML string that will get rendered
+
+  $(document.body).actionsheet('<a >Back</a><a onclick="alert(\'hi\');" >Show Alert 3</a><a onclick="alert(\'goodbye\');">Show Alert 4</a>');
+
+  You can also use an arra of objects to show each item.  There are three propertyes
+    text - the text to display
+    cssClasses - extra css classes
+    handler - click handler function
+
+  $(document.body).actionsheet(
+    [{
+        text: 'back',
+        cssClasses: 'red',
+        handler: function () {
+            $.ui.goBack();
+        }
+    }, {
+        text: 'show alert 5',
+        cssClasses: 'blue',
+        handler: function () {
+            alert("hi");
+        }
+    }, {
+        text: 'show alert 6',
+        cssClasses: '',
+        handler: function () {
+            alert("goodbye");
+        }
+    }]
+  );
+
+ */
  /* global af*/
 (function($) {
     "use strict";
