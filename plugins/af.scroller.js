@@ -364,6 +364,8 @@
             if (this.container.style.overflow != "hidden") this.container.style.overflow = "hidden";
 
             this.addPullToRefresh(null, true);
+            if(opts.autoEnable)
+                this.autoEnable=opts.autoEnable;
             if (this.autoEnable) this.enable(true);
             var scrollDiv;
             //create vertical scroll
@@ -413,7 +415,9 @@
             this.container = this.el;
             $el.css("-webkit-overflow-scrolling", "touch");
 
-            if(!opts.autoEnable||opts.autoEnable===true)
+            if(opts.autoEnable)
+                this.autoEnable=opts.autoEnable;
+            if(this.autoEnable)
                 this.enable();
         };
         nativeScroller.prototype = new scrollerCore();
