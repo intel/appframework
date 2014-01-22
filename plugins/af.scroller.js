@@ -404,14 +404,14 @@
             this.init(el, opts);
             var $el = $(el);
 
-            if (opts.noParent !== true) {
+            if (opts.replaceParent === true) {
                 var oldParent = $el.parent();
 
                 $el.css("height", oldParent.height()).css("width", oldParent.width());
                 $el.insertBefore($el.parent());
                 //$el.parent().parent().append($el);
                 oldParent.remove();
-            }
+            }            
             this.container = this.el;
             $el.css("-webkit-overflow-scrolling", "touch");
 

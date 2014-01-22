@@ -1323,7 +1323,6 @@
                     vScrollCSS: "afScrollbar",
                     refresh: refreshPull,
                     useJsScroll: jsScroll,
-                    noParent: !jsScroll,
                     lockBounce: this.lockPageBounce,
                     autoEnable: false //dont enable the events unnecessarilly
                 }));
@@ -1892,7 +1891,6 @@
                     verticalScroll: true,
                     vScrollCSS: "afScrollbar",
                     useJsScroll: !$.feat.nativeTouchScroll,
-                    noParent: $.feat.nativeTouchScroll,
                     autoEnable: true,
                     lockBounce: this.lockPageBounce,
                     hasParent:true
@@ -1910,7 +1908,6 @@
                     verticalScroll: true,
                     vScrollCSS: "afScrollbar",
                     useJsScroll: !$.feat.nativeTouchScroll,
-                    noParent: $.feat.nativeTouchScroll,
                     autoEnable: true,
                     lockBounce: this.lockPageBounce,
                     hasParent:true
@@ -1973,7 +1970,6 @@
                 scrollBars: true,
                 vertical: true,
                 vScrollCSS: "afScrollbar",
-                noParent: true,
                 lockBounce: this.lockPageBounce
             });
             this.modalWindow = modalDiv;
