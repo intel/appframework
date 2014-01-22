@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-01-21 */
+/*! intel-appframework - v2.1.0 - 2014-01-22 */
 
 /**
  * appframework.ui - A User Interface library for App Framework applications
@@ -2705,6 +2705,39 @@
  * af.css3animate - a css3 animation library that supports chaning/callbacks
  * Copyright 2013 - Intel
  */
+ /*  EXAMPLE
+
+  $("#animate").css3Animate({
+        width: "100px",
+        height: "100px",
+        x: "20%",
+        y: "30%",
+        time: "1000ms",
+        opacity: .5,
+        callback: function () {
+            //execute when finished
+        }
+    });
+
+    //Chain animations
+    $("#animate").css3Animate({
+        x: 20,
+        y: 30,
+        time: "300ms",
+        callback: function () {
+            $("#animate").css3Animate({
+                x: 20,
+                y: 30,
+                time: "500ms",
+                previous: true,
+                callback: function () {
+                    reset();
+                }
+            });
+        }
+    });
+ */
+
  /* global af*/
  /* global numOnly*/
 (function($) {
@@ -3593,6 +3626,8 @@ if (!Date.now)
             if (this.container.style.overflow != "hidden") this.container.style.overflow = "hidden";
 
             this.addPullToRefresh(null, true);
+            if(opts.autoEnable)
+                this.autoEnable=opts.autoEnable;
             if (this.autoEnable) this.enable(true);
             var scrollDiv;
             //create vertical scroll
@@ -3641,7 +3676,10 @@ if (!Date.now)
             }
             this.container = this.el;
             $el.css("-webkit-overflow-scrolling", "touch");
+
             if(opts.autoEnable)
+                this.autoEnable=opts.autoEnable;
+            if(this.autoEnable)
                 this.enable();
         };
         nativeScroller.prototype = new scrollerCore();
@@ -3720,10 +3758,12 @@ if (!Date.now)
             this.lastScrollInfo= {
                 top:0
             };
-            if(this.el.scrollTop===0)
-                this.el.scrollTop=1;
-            if(this.el.scrollTop===(this.el.scrollHeight - this.el.clientHeight))
-                this.el.scrollTop-=1;
+            if(this.hasVertScroll){
+                if(this.el.scrollTop===0)
+                    this.el.scrollTop=1;
+                if(this.el.scrollTop===(this.el.scrollHeight - this.el.clientHeight))
+                    this.el.scrollTop-=1;
+            }
 
             if(this.horizontalScroll){
                 if(this.el.scrollLeft===0)
@@ -4810,7 +4850,7 @@ if (!Date.now)
   You can programatically trigger a close by dispatching a "close" event to it.
 
  $.query("body").popup({title:'Alert',id:'myTestPopup'});
-$("#myTestPopup").trigger("close");
+ $("#myTestPopup").trigger("close");
 
  */
 /* global af */
@@ -4994,6 +5034,39 @@ $("#myTestPopup").trigger("close");
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
  * Copyright 2012 - Intel
+ */
+/* EXAMPLE
+  You can pass in an HTML string that will get rendered
+
+  $(document.body).actionsheet('<a >Back</a><a onclick="alert(\'hi\');" >Show Alert 3</a><a onclick="alert(\'goodbye\');">Show Alert 4</a>');
+
+  You can also use an arra of objects to show each item.  There are three propertyes
+    text - the text to display
+    cssClasses - extra css classes
+    handler - click handler function
+
+  $(document.body).actionsheet(
+    [{
+        text: 'back',
+        cssClasses: 'red',
+        handler: function () {
+            $.ui.goBack();
+        }
+    }, {
+        text: 'show alert 5',
+        cssClasses: 'blue',
+        handler: function () {
+            alert("hi");
+        }
+    }, {
+        text: 'show alert 6',
+        cssClasses: '',
+        handler: function () {
+            alert("goodbye");
+        }
+    }]
+  );
+
  */
  /* global af*/
 (function($) {
@@ -5438,6 +5511,18 @@ $("#myTestPopup").trigger("close");
     }
 })(af);
 //Touch events are from zepto/touch.js
+/**
+ * Simply include this in your project to get access to the following touch events on an element
+ * tap
+ * doubleTap
+ * singleTap
+ * longPress
+ * swipe
+ * swipeLeft
+ * swipeRight
+ * swipeUp
+ * swipeDown
+ */
 /* global af*/
 (function($) {
     "use strict";
@@ -6213,6 +6298,7 @@ $("#myTestPopup").trigger("close");
 /**
  * af.8tiles - Provides a WP8 theme and handles showing the menu
  * Copyright 2012 - Intel
+ * This plugin is meant to be used inside App Framework UI
  */
  /* global af*/
 
