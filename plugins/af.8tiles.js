@@ -1,6 +1,7 @@
 /**
  * af.8tiles - Provides a WP8 theme and handles showing the menu
  * Copyright 2012 - Intel
+ * This plugin is meant to be used inside App Framework UI
  */
  /* global af*/
 

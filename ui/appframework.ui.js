@@ -117,7 +117,12 @@
             }
             if($.os.ios){
                 $("head").find("#iosBlurrHack").remove();
-                $("head").append("<style id='iosBlurrHack'>#afui .panel > * {-webkit-backface-visibility: hidden;}</style>");
+                var hackStyle="-webkit-backface-visibility: hidden;";
+                //ios webview still has issues
+                //if(navigator.userAgent.indexOf("Safari") === -1) {
+                hackStyle+="-webkit-perspective:1000;";
+                //}
+                $("head").append("<style id='iosBlurrHack'>#afui .panel  {"+hackStyle+"} #afui .panel > * {-webkit-backface-visibility:hidden;}</style>");
             }
             else if ($.os.anroid&&!$.os.androidICS){
                 $.ui.transitionTime="150ms";
@@ -125,7 +130,7 @@
             else if($.os.fennec){
                 $.ui.ready(function(){
                     var tmpH=numOnly($("#header").height())+numOnly($("#navbar").height());
-                    $("#content").css("height",window.innerHeight-tmpH);                    
+                    $("#content").css("height",window.innerHeight-tmpH);
                 });
             }
 
@@ -406,7 +411,8 @@
          */
         ready: function(param) {
 
-            if (this.launchCompleted) param();
+            if (this.launchCompleted)
+                param();
             else {
                 $(document).on("afui:ready", function(e) {
                     param();
@@ -422,7 +428,8 @@
          * @title $.ui.setBackButtonStyle(class)
          */
         setBackButtonStyle: function(className) {
-            $.query("#backButton").replaceClass(null, className);
+            $.query("#header #backButton").get(0).className=className;
+
         },
         /**
          * Initiate a back transition
@@ -1316,7 +1323,6 @@
                     vScrollCSS: "afScrollbar",
                     refresh: refreshPull,
                     useJsScroll: jsScroll,
-                    noParent: !jsScroll,
                     lockBounce: this.lockPageBounce,
                     autoEnable: false //dont enable the events unnecessarilly
                 }));
@@ -1752,6 +1758,9 @@
                     if (that.showLoading) that.hideMask();
                     return null;
                 }
+                else if(xmlhttp.readyState === 4) {
+                    $.ui.hideMask();
+                }
             };
             this.ajaxUrl = target;
             var newtarget = this.useAjaxCacheBuster ? target + (target.split("?")[1] ? "&" : "?") + "cache=" + Math.random() * 10000000000000000 : target;
@@ -1882,7 +1891,6 @@
                     verticalScroll: true,
                     vScrollCSS: "afScrollbar",
                     useJsScroll: !$.feat.nativeTouchScroll,
-                    noParent: $.feat.nativeTouchScroll,
                     autoEnable: true,
                     lockBounce: this.lockPageBounce,
                     hasParent:true
@@ -1900,7 +1908,6 @@
                     verticalScroll: true,
                     vScrollCSS: "afScrollbar",
                     useJsScroll: !$.feat.nativeTouchScroll,
-                    noParent: $.feat.nativeTouchScroll,
                     autoEnable: true,
                     lockBounce: this.lockPageBounce,
                     hasParent:true
@@ -1963,7 +1970,6 @@
                 scrollBars: true,
                 vertical: true,
                 vScrollCSS: "afScrollbar",
-                noParent: true,
                 lockBounce: this.lockPageBounce
             });
             this.modalWindow = modalDiv;
@@ -2230,8 +2236,6 @@
             }
 
 
-            if (theTarget.href.indexOf("tel:") === 0) return false;
-
             //external links
             if (theTarget.hash.indexOf("#") === -1 && theTarget.target.length > 0) {
                 if (theTarget.href.toLowerCase().indexOf("javascript:") !== 0) {
@@ -2256,7 +2260,12 @@
             if (href == "#" || (href.indexOf("#") === href.length - 1) || (href.length === 0 && theTarget.hash.length === 0)) return e.preventDefault();
 
             //internal links
-            e.preventDefault();
+            //http urls
+            var urlRegex=/^((http|https):\/\/)/;
+            //only call prevent default on http urls.  If it's a protocol handler, do not call prevent default.
+            //It will fall through to the ajax call and fail
+            if(theTarget.href.indexOf(":") !== -1 &&urlRegex.test(theTarget.href))
+                e.preventDefault();
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
             resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;

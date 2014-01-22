@@ -1,8 +1,9 @@
 /**
  * Slide menu plugin for App Framework UI
  * @copyright Intel
- *
+ *  simply include this plugin to allow sliding of your app to reveal the left and right hand menus.
  */
+
  /* global af*/
  /* global numOnly*/
 (function($) {

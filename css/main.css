@@ -166,6 +166,8 @@ body {
     text-shadow:rgba(0,0,0,0.8) 0 -1px 0;
     text-align:center;
     white-space:nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 } /* This is text that appears in the header at the top of the screen */
 
 

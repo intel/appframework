@@ -23,7 +23,7 @@
   You can programatically trigger a close by dispatching a "close" event to it.
 
  $.query("body").popup({title:'Alert',id:'myTestPopup'});
-$("#myTestPopup").trigger("close");
+ $("#myTestPopup").trigger("close");
 
  */
 /* global af */

@@ -197,7 +197,7 @@
                 var orientationChangeProxy = function (e) {
                     //no need to readjust if disabled...                
                     if (that.eventsActive&&!$.feat.nativeTouchScroll&&(!af.ui||(af.ui.activeDiv==that.container))) {
-                        //that.adjustScroll();
+                        that.adjustScroll();
                     }
                 };
                 this.afEl.bind("destroy", function () {
@@ -364,6 +364,8 @@
             if (this.container.style.overflow != "hidden") this.container.style.overflow = "hidden";
 
             this.addPullToRefresh(null, true);
+            if(opts.autoEnable)
+                this.autoEnable=opts.autoEnable;
             if (this.autoEnable) this.enable(true);
             var scrollDiv;
             //create vertical scroll
@@ -402,17 +404,20 @@
             this.init(el, opts);
             var $el = $(el);
 
-            if (opts.noParent !== true) {
+            if (opts.replaceParent === true) {
                 var oldParent = $el.parent();
 
                 $el.css("height", oldParent.height()).css("width", oldParent.width());
                 $el.insertBefore($el.parent());
                 //$el.parent().parent().append($el);
                 oldParent.remove();
-            }
+            }            
             this.container = this.el;
             $el.css("-webkit-overflow-scrolling", "touch");
+
             if(opts.autoEnable)
+                this.autoEnable=opts.autoEnable;
+            if(this.autoEnable)
                 this.enable();
         };
         nativeScroller.prototype = new scrollerCore();
@@ -446,6 +451,7 @@
 
             if (!firstExecution) this.adjustScroll();
             //set events
+
             this.el.addEventListener("touchstart", this, false);
             this.el.addEventListener("scroll", this, false);
             this.updateP2rHackPosition();
@@ -491,10 +497,12 @@
             this.lastScrollInfo= {
                 top:0
             };
-            if(this.el.scrollTop===0)
-                this.el.scrollTop=1;
-            if(this.el.scrollTop===(this.el.scrollHeight - this.el.clientHeight))
-                this.el.scrollTop-=1;
+            if(this.verticalScroll){
+                if(this.el.scrollTop===0)
+                    this.el.scrollTop=1;
+                if(this.el.scrollTop===(this.el.scrollHeight - this.el.clientHeight))
+                    this.el.scrollTop-=1;
+            }
 
             if(this.horizontalScroll){
                 if(this.el.scrollLeft===0)
@@ -518,11 +526,11 @@
         nativeScroller.prototype.onTouchMove = function (e) {
             var newcY = e.touches[0].pageY - this.dY;
             var newcX = e.touches[0].pageX - this.dX;
-            if(this.hasVertScroll&&this.el.clientHeight==this.el.scrollHeight){
+            if(this.verticalScroll&&this.el.clientHeight==this.el.scrollHeight){
                 e.preventDefault();
 
             }
-            if(this.hasHorScroll&&this.el.clientWidth==this.el.scrollWidth){
+            if(this.horizontalScroll&&this.el.clientWidth==this.el.scrollWidth){
                 e.preventDefault();
             }
 
@@ -908,6 +916,7 @@
             this.elementInfo.hasHorScroll = this.elementInfo.maxLeft > 0;
             this.elementInfo.requiresVScrollBar = this.vscrollBar && this.elementInfo.hasVertScroll;
             this.elementInfo.requiresHScrollBar = this.hscrollBar && this.elementInfo.hasHorScroll;
+
 
             //save event
             this.saveEventInfo(event);
