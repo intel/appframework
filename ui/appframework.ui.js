@@ -3240,34 +3240,7 @@
             $(document).bind("DOMNodeInserted", checkNodeInserted);
         }
 
-
-
-        if ("intel" in window){ 
-            document.addEventListener("intel.xdk.device.ready", function() {
-                that.autoBoot();
-            },true);
-        }
-        else if (document.readyState == "complete" || document.readyState == "loaded") {
-            if(that.init)
-                that.autoBoot();
-            else{
-                $(window).one("afui:init", function() {
-        		  that.autoBoot();  
-                });
-            }
-        } else $(document).ready(function() {
-                if(that.init)
-                    that.autoBoot();
-                else{
-                    $(window).one("afui:init", function() {
-                        that.autoBoot();
-                    });
-                }
-            }, false);
-
-        if (!("intel" in window)) window.intel = {xdk:{}}, window.intel.xdk.webRoot = "";
-
-         $(document).ready(function() {
+        var checkAFDom=function() {
             //boot touchLayer
             //create afui element if it still does not exist
             var afui = document.getElementById("afui");
@@ -3283,7 +3256,38 @@
             if ($.os.supportsTouch) $.touchLayer(afui);
             setupCustomTheme();
 
-        });
+        };
+
+        if ("intel" in window){ 
+
+            document.addEventListener("intel.xdk.device.ready", function() {
+                checkAFDom();
+                that.autoBoot();
+            },true);
+        }
+        else if (document.readyState == "complete" || document.readyState == "loaded") {
+            checkAFDom();
+            if(that.init)
+                that.autoBoot();
+            else{
+                $(window).one("afui:init", function() {
+        		  that.autoBoot();  
+                });
+            }
+        } else $(document).ready(function() {
+            checkAFDom();
+                if(that.init)
+                    that.autoBoot();
+                else{
+                    $(window).one("afui:init", function() {
+                        that.autoBoot();
+                    });
+                }
+            }, false);
+
+        if (!("intel" in window)) window.intel = {xdk:{}}, window.intel.xdk.webRoot = "";
+
+         
         //click back event
         window.addEventListener("popstate", function() {
             if(!that.useInteralRouting) return;
