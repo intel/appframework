@@ -212,6 +212,20 @@ body {
 } /* This class is applied to the divs that contain the various "views" or pages of the app. */
 
 
+/**********************************************************
+    scroller CSS
+**********************************************************/
+.y-scroll {
+    overflow-x:hidden;
+    overflow-y:auto;
+}   
+.x-scroll {
+    overflow-x:auto;
+    overflow-y:hidden;
+}
+.no-scroll {
+    overflow:hidden;
+}
 
 
 /**********************************************************

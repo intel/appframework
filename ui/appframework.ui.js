@@ -1315,9 +1315,9 @@
                 if (this.selectBox !== false) this.selectBox.getOldSelects(scrollEl.id);
                 if (this.passwordBox !== false) this.passwordBox.getOldPasswords(scrollEl.id);
 
-            });
-            
-            
+            }
+
+
             if (hasScroll) {
                 this.scrollingDivs[scrollEl.id] = ($(tmp).scroller({
                     scrollBars: true,
