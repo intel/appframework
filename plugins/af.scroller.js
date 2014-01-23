@@ -418,7 +418,7 @@
                 $el.insertBefore($el.parent());
                 //$el.parent().parent().append($el);
                 oldParent.remove();
-            }            
+            }
             this.container = this.el;
             $el.css("-webkit-overflow-scrolling", "touch");
 

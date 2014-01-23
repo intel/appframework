@@ -132,17 +132,17 @@ module.exports = function (grunt) {
             afui:{
                 files: {
                     "build/ui/appframework.ui.js": [
-                        "ui/appframework.ui.js",
-                        "ui/transitions/**/*.js",
-                        "plugins/af.css3animate.js",
-                        "plugins/af.scroller.js",
-                        "plugins/af.popup.js",
                         "plugins/af.actionsheet.js",
+                        "plugins/af.css3animate.js",
                         "plugins/af.passwordBox.js",
-                        "plugins/af.selectBox.js",
+                        "plugins/af.scroller.js",
+                        "plugins/af.selectBox.js",                                                
                         "plugins/af.touchEvents.js",
                         "plugins/af.touchLayer.js",
-                        "plugins/af.8tiles.js"
+                        "plugins/af.popup.js",
+                        "plugins/af.8tiles.js",
+                        "ui/appframework.ui.js",
+                        "ui/transitions/**/*.js"
                     ]
                 }
             },

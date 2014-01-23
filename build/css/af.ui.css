@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-01-22 */
+/*! intel-appframework - v2.1.0 - 2014-01-23 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -208,12 +208,26 @@ body {
     overflow-y:auto;
     overflow-x:hidden;
     -webkit-overflow-scrolling:touch;
-    -webkit-backface-visibility: visible;   
+    -webkit-backface-visibility: hidden;   
     padding:10px;
     padding-top:0px;
 } /* This class is applied to the divs that contain the various "views" or pages of the app. */
 
 
+/**********************************************************
+    scroller CSS
+**********************************************************/
+#afui .y-scroll, #afui .panel.y-scroll {
+    overflow-x:hidden;
+    overflow-y:auto;
+}   
+#afui .x-scroll, #afui .panel.x-scroll {
+    overflow-x:auto;
+    overflow-y:hidden;
+}
+#afui .no-scroll, #afui .panel.no-scroll {
+    overflow:hidden;
+}
 
 
 /**********************************************************
