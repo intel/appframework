@@ -612,8 +612,9 @@
                 //fire click
                 if (!this.blockClicks && !this.blockPossibleClick_) {
                     var theTarget = e.target;
+                    var changedTouches = e.changedTouches ? e.changedTouches[0] : e.touches[0];
                     if (theTarget.nodeType == 3) theTarget = theTarget.parentNode;
-                    this.fireEvent("Event", "click", theTarget, true, e.mouseToTouch, e.changedTouches[0]);
+                    this.fireEvent("Event", "click", theTarget, true, e.mouseToTouch, changedTouches);
                     this.lastTouchStartX = this.dX;
                     this.lastTouchStartY = this.dY;
                 }

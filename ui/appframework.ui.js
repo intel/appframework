@@ -1281,9 +1281,7 @@
             tmp.setAttribute("data-title",title);
 
 
-            if($(tmp).hasClass("no-scroll"))
-                hasScroll=false;
-            if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") == "no") {
+            if($(tmp).hasClass("no-scroll") || (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") == "no")) {
                 hasScroll = false;
                 jsScroll = false;
                 tmp.removeAttribute("js-scrolling");
