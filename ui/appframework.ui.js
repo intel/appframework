@@ -1098,14 +1098,25 @@
                 else {
                     this.scrollingDivs.modal_container.disable();
                 }
-                //move header
-                if(elemsToCopy.filter("header").length>0){
-                    modalParent.find("#modalHeader").append(elemsToCopy.filter("header"));
+                modalDiv.addClass("panel").show();
+                //modal header
+                if($panel.data("header") == "none"){ // no header
+                    modalParent.find("#modalHeader").hide();
+                } else if(elemsToCopy.filter("header").length>0){ // custom header
+                    modalParent.find("#modalHeader").append(elemsToCopy.filter("header")).show();
+                } else { // add default header with close
+                    modalParent.find("#modalHeader").append(
+                        $.create("header", {className:"header"}).append(
+                            $.create("h1", {html:$panel.data("title")}).get(0))
+                        .append(
+                            $.create("a", {className:"button icon close"}).attr("onclick","$.ui.hideModal()").get(0)
+                        )).show();
                 }
-                //move footer
-                if(elemsToCopy.filter("footer").length>0){
-                    
-                    modalParent.find("#modalFooter").append(elemsToCopy.filter("footer"));
+                //modal footer
+                if($panel.data("footer") == "none"){ // no footer
+                    modalParent.find("#modalFooter").hide();
+                } else if(elemsToCopy.filter("footer").length>0){ // custom footer
+                    modalParent.find("#modalFooter").append(elemsToCopy.filter("footer")).show();
                     var tmpAnchors = $.query("#modalFooter > footer > a:not(.button)");
                     if (tmpAnchors.length > 0) {
                         var width = parseFloat(100 / tmpAnchors.length);
@@ -1119,6 +1130,8 @@
                             nodes[i].parentNode.removeChild(nodes[i]);
                         }
                     }
+                } else { // no default footer
+                    modalParent.find("#modalFooter").hide();
                 }
 
                 this.scrollToTop("modal");
