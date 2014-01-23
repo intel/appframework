@@ -123,7 +123,7 @@
                 hackStyle+="-webkit-perspective:1000;";
                 //}
                 //$("head").append("<style id='iosBlurrHack'>#afui .panel  {"+hackStyle+"} #afui .panel > * {-webkit-backface-visibility:hidden;}</style>");
-                $("head").append("<style id='iosBlurrHack'>#afui .panel > * {"+hackStyle+"}</style>");
+                $("head").append("<style id='iosBlurrHack'>#afui .y-scroll > *, #afui .x-scroll > * {"+hackStyle+"}</style>");
             }
             else if ($.os.anroid&&!$.os.androidICS){
                 $.ui.transitionTime="150ms";
@@ -1330,6 +1330,9 @@
                     autoEnable: false //dont enable the events unnecessarilly
                 }));
                 //backwards compatibility
+                $(tmp).addClass("y-scroll");
+                if(self.horizontalScroll)
+                    $(tmp).addClass("x-scroll");
                 if (refreshFunc)
                     $.bind(this.scrollingDivs[scrollEl.id], "refresh-release", function(trigger) {
                         if (trigger) refreshFunc();
