@@ -215,15 +215,15 @@ body {
 /**********************************************************
     scroller CSS
 **********************************************************/
-.y-scroll {
+#afui .y-scroll, #afui .panel.y-scroll {
     overflow-x:hidden;
     overflow-y:auto;
 }   
-.x-scroll {
+#afui .x-scroll, #afui .panel.x-scroll {
     overflow-x:auto;
     overflow-y:hidden;
 }
-.no-scroll {
+#afui .no-scroll, #afui .panel.no-scroll {
     overflow:hidden;
 }
 
