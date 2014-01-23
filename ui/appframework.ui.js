@@ -122,7 +122,8 @@
                 //if(navigator.userAgent.indexOf("Safari") === -1) {
                 hackStyle+="-webkit-perspective:1000;";
                 //}
-                $("head").append("<style id='iosBlurrHack'>#afui .panel  {"+hackStyle+"} #afui .panel > * {-webkit-backface-visibility:hidden;}</style>");
+                //$("head").append("<style id='iosBlurrHack'>#afui .panel  {"+hackStyle+"} #afui .panel > * {-webkit-backface-visibility:hidden;}</style>");
+                $("head").append("<style id='iosBlurrHack'>#afui .panel > * {"+hackStyle+"}</style>");
             }
             else if ($.os.anroid&&!$.os.androidICS){
                 $.ui.transitionTime="150ms";
@@ -1265,7 +1266,7 @@
             var jsScroll = false,
                 scrollEl;
             var overflowStyle = tmp.style.overflow;
-            var hasScroll = overflowStyle != "hidden" && overflowStyle != "visible";
+            var hasScroll = overflowStyle !== "hidden" && overflowStyle !== "visible";
 
             container = container || this.content;
             //sets up scroll when required and not supported
@@ -1280,7 +1281,8 @@
             tmp.setAttribute("data-title",title);
 
 
-
+            if($(tmp).hasClass("no-scroll"))
+                hasScroll=false;
             if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") == "no") {
                 hasScroll = false;
                 jsScroll = false;
@@ -1314,6 +1316,7 @@
                 if (this.passwordBox !== false) this.passwordBox.getOldPasswords(scrollEl.id);
 
             }
+
 
             if (hasScroll) {
                 this.scrollingDivs[scrollEl.id] = ($(tmp).scroller({

@@ -77,6 +77,13 @@
                 window.alert("Could not find element for scroller " + elID);
                 return;
             }
+            var checkClassEl=$(el);
+            if(opts.hasParent)
+                checkClassEl=checkClassEl.parent();
+            if(checkClassEl.hasClass("x-scroll"))
+                opts.horizontalScroll=true;
+            if(checkClassEl.hasClass("y-scroll"))
+                opts.verticalScroll=true;
             if (af.os.desktop)
                 return new scrollerCore(el, opts);
             else if (opts.useJsScroll) return new jsScroller(el, opts);
@@ -446,7 +453,7 @@
             this.eventsActive = true;
             //unlock overflow
             this.el.style.overflow = "auto";
-            this.el.parentNode.style.overflow="hidden";
+            //this.el.parentNode.style.overflow="hidden";
             //set current scroll
 
             if (!firstExecution) this.adjustScroll();
@@ -514,6 +521,7 @@
             //get refresh ready
             this.el.addEventListener("touchmove", this,false);
             this.dY = e.touches[0].pageY;
+            this.dX = e.touches[0].pageX;
             if (this.refresh || this.infinite) {
 
 
@@ -541,6 +549,11 @@
                 this.moved = true;
             }
 
+            if(this.horizontalScroll){
+                if(Math.abs(newcY)>Math.abs(newcX)){
+                    e.preventDefault();
+                }
+            }
 
             //check for trigger
             if (this.refresh && (this.el.scrollTop < -this.refreshHeight)) {
