@@ -395,6 +395,7 @@
                 if (skipTouchEnd === e.touches[0].identifier) {
                     cancelClick = true;
                     e.preventDefault();
+                    skipTouchEnd=false;
                     return false;
                 }
                 skipTouchEnd = e.touches[0].identifier;
