@@ -66,7 +66,7 @@
 	box-shadow:none;
 }
 
-#afui #header .button-grouped>.button {
+#afui .header .button-grouped>.button {
 	margin:0;
     border-color:#fff;
 }
@@ -189,7 +189,7 @@
 	border-color:#666;
 }
 
-#afui #header .button {
+#afui .header .button {
     color: #fff;
     background:none;
     border-color: transparent;
@@ -201,7 +201,7 @@
     white-space: nowrap;
 }
  
-#header .button.icon:before{
+.header .button.icon:before{
     padding-left:6px;
 }
  

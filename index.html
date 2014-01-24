@@ -1162,7 +1162,10 @@ The parent id for this div is "content". Let's verify it.
                             <a href="#transition6" data-transition="fade">Fade</a>
                         </li>
                         <li>
-                            <a href="#transition7">Modal</a>
+                            <a href="#transition7">Default Modal</a>
+                        </li>
+                        <li>
+                            <a href="#transition8">Custom Modal</a>
                         </li>
                     </ul>
                     <br/>
@@ -1598,8 +1601,19 @@ The parent id for this div is "content". Let's verify it.
                     <div style="text-align:center;width:100%;color:white;font-size:40px">App Framework Fade Transition</div>
                 </div>
                 <div title="Modal" id="transition7" class="panel" data-modal="true" data-unload="unloadedPanel">
-                    <header><h1>Test</h1></header>
-                    I'm a modal window...woot woot
+                    I'm a default modal window, with no footer and header with a close button
+                </div>
+                <div title="Modal" id="transition8" class="panel" data-modal="true" data-unload="unloadedPanel">
+                    <header>
+                        <h1>Custom Modal</h1>
+                    </header>
+                    I'm a custom modal window
+                    <br>
+                    <br>
+                    A button with onclick='$.ui.hideModal()' can to be added on modal to close.
+                    <br>
+                    <br>
+                    data-header="none" on the panel will hide the header in modal
                     <br>
                     <br>
                     <br>Check the input box out below.
@@ -1607,8 +1621,8 @@ The parent id for this div is "content". Let's verify it.
                     <input type="text" class="af-ui-forms" id="modal_test">
                     <footer>
                         <a href="#" onclick='$.ui.hideModal()' class="icon home">Test</a>
-                    </footer> 
-                </div>
+                    </footer>
+                </div>                        
                 <!-- ------------------------------------------ -->
                 <!-- ------------------------------------------ -->
                 <!-- Plugins -->
@@ -2148,7 +2162,7 @@ The parent id for this div is "content". Let's verify it.
             <header id="testheader">
                 <a id="backButton" onclick="$.ui.goBack()" class='button'>Back</a>
                 	<h1>Custom Header</h1>
-
+                <a class="button icon settings" style="float:right">Button</a>
             </header>
             <!-- ------------------------------------------ -->
             <nav>
