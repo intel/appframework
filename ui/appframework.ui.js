@@ -66,16 +66,18 @@
                     that.autoBoot();
                 });
             }
-        } else $(document).ready(function() {
-            setupAFDom();
-            if(that.init)
-                that.autoBoot();
-            else{
-                $(window).one("afui:init", function() {
+        } else $(document).ready(
+            function() {
+                setupAFDom();
+                if(that.init)
                     that.autoBoot();
-                });
-            }
-        }, false);
+                else{
+                    $(window).one("afui:init", function() {
+                        that.autoBoot();
+                    });
+                }
+            },
+        false);
 
 
 
@@ -201,6 +203,19 @@
         css3animate: function(el, opts) {
             el = $(el);
             return el.css3Animate(opts);
+        },
+        dispatchPanelEvent:function(fnc,myPanel){
+            if (typeof fnc == "string" && window[fnc]) {
+                return window[fnc](myPanel);
+            }
+            else if(fnc.indexOf(".")!==-1){
+                var scope=window,items=fnc.split("."),len=items.length,i=0;
+                for(i;i<len-1;i++){
+                    scope=scope[items[i]];
+                    if(scope===undefined) return;
+                }
+                return scope[items[i]](myPanel);
+            }
         },
         /**
          * This changes the side menu width
@@ -1141,9 +1156,8 @@
                 modalDiv.data("panel", id);
                 var myPanel=$panel.get(0);
                 var fnc = myPanel.getAttribute("data-load");
-                if (typeof fnc == "string" && window[fnc]) {
-                    window[fnc](myPanel);
-                }
+                if(fnc)
+                    this.dispatchPanelEvent(fnc,myPanel);
                 $panel.trigger("loadpanel");
 
             }
@@ -1167,9 +1181,8 @@
 
             var tmp = $.query($cnt.data("panel"));
             var fnc = tmp.data("unload");
-            if (typeof fnc == "string" && window[fnc]) {
-                window[fnc](tmp.get(0));
-            }
+            if(fnc)
+                this.dispatchPanelEvent(fnc,tmp.get(0));
             tmp.trigger("unloadpanel");
             setTimeout(function(){
                 if($.feat.nativeTouchScroll || !useScroller){
@@ -1488,15 +1501,13 @@
 
             if (oldDiv) {
                 fnc = oldDiv.getAttribute("data-unload");
-                if (typeof fnc == "string" && window[fnc]) {
-                    window[fnc](oldDiv);
-                }
+                if(fnc)
+                    this.dispatchPanelEvent(fnc,oldDiv);
                 $(oldDiv).trigger("unloadpanel");
             }
             var fnc = what.getAttribute("data-load");
-            if (typeof fnc == "string" && window[fnc]) {
-                window[fnc](what);
-            }
+            if(fnc)
+                this.dispatchPanelEvent(fnc,what);
             $(what).trigger("loadpanel");
             if (this.isSideMenuOn()) {
                 that.toggleSideMenu(false);
