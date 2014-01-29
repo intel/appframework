@@ -14,7 +14,7 @@
 #afui input[type="url"],
 #afui input[type="tel"],
 #afui input[type="color"],
-#afui .input-group {
+#afui .input-group {  
   width: 100%;
   height: 40px;
   padding: 10px;
@@ -226,3 +226,9 @@
   color: inherit;
   margin: 16px 0 8px;
 }
+
+
+#afui input[type=button],
+#afui input[type=submit], #afui button {
+  font-size:inherit;
+} 

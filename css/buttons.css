@@ -24,7 +24,7 @@
 
 	margin-left:16px;
 	padding-left:6px;
-	border-color:#666 #666 #666 transparent !important;
+	border-color:#666 #666 transparent transparent !important;
 }
 #afui .button.next {
 	border-color:#666 transparent #666 #666 !important;
