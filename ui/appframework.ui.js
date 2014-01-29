@@ -2292,8 +2292,8 @@
 
             //internal links
             //http urls
-            var urlRegex=/^((http|https):\/\/)/;
-            //only call prevent default on http urls.  If it's a protocol handler, do not call prevent default.
+            var urlRegex=/^((http|https|file):\/\/)/;
+            //only call prevent default on http/fileurls.  If it's a protocol handler, do not call prevent default.
             //It will fall through to the ajax call and fail
             if(theTarget.href.indexOf(":") !== -1 &&urlRegex.test(theTarget.href))
                 e.preventDefault();
