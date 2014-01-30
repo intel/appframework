@@ -505,9 +505,9 @@
                 top:0
             };
             if(this.verticalScroll){
-                if(this.el.scrollTop===0)
+                if(this.el.scrollTop===0&&this.refresh)
                     this.el.scrollTop=1;
-                if(this.el.scrollTop===(this.el.scrollHeight - this.el.clientHeight))
+                if(this.el.scrollTop===(this.el.scrollHeight - this.el.clientHeight)&&this.infinite)
                     this.el.scrollTop-=1;
             }
 
@@ -522,6 +522,8 @@
             this.el.addEventListener("touchmove", this,false);
             this.dY = e.touches[0].pageY;
             this.dX = e.touches[0].pageX;
+            this.startTop=this.el.scrollTop;
+            this.startLeft=this.el.scrollLeft;
             if (this.refresh || this.infinite) {
 
 
@@ -534,11 +536,24 @@
         nativeScroller.prototype.onTouchMove = function (e) {
             var newcY = e.touches[0].pageY - this.dY;
             var newcX = e.touches[0].pageX - this.dX;
-            if(this.verticalScroll&&this.el.clientHeight==this.el.scrollHeight){
+
+            //var scorllTop
+            var atTop=(this.el.scrollHeight-this.el.scrollTop)===this.el.clientHeight&&newcY<0;
+            var atRight=(this.el.scrollWidth-this.el.scrollLeft)===this.el.clientWidth&&newcX<0;
+
+            if(this.verticalScroll){
+                if(this.startTop===0&&this.el.scrollTop===0&&newcY>0)
+                    e.preventDefault();            
+            }
+            if(this.horizontalScroll&&this.startTop===0&&this.el.scrollLeft===0&&newcX>0){
+                e.preventDefault();
+            }
+
+            if(this.verticalScroll&&atTop){
                 e.preventDefault();
 
             }
-            if(this.horizontalScroll&&this.el.clientWidth==this.el.scrollWidth){
+            if(this.horizontalScroll&&atRight){
                 e.preventDefault();
             }
 
