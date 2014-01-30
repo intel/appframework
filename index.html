@@ -113,13 +113,13 @@
             
             var webRoot = "./";
             // $.os.android=true;
-            $.ui.autoLaunch = false;
+            //$.ui.autoLaunch = false;
             $.ui.openLinksNewTab = false;
             $.ui.splitview=false;
             
 
             $(document).ready(function(){
-                   $.ui.launch();
+                  // $.ui.launch();
 
             });
             
@@ -1255,8 +1255,8 @@ The parent id for this div is "content". Let's verify it.
                         <a class="button">Test</a>
                     </div>
                     <br><br>
-                    Grouped flexbox<br><br>
-                    <div class="button-grouped flex">
+                    Grouped flexbox and tabbed (tabbed keeps pressed state)<br><br>
+                    <div class="button-grouped flex tabbed">
                         <a class="button icon cloud">App Framework Button Groups</a>
                         <a class="button">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</a>
                         <a class="button">Test</a>
