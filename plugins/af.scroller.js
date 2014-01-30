@@ -30,7 +30,7 @@
                 tmp = cache[id];
             }
         }
-        return this.length == 1 ? tmp : this;
+        return this.length === 1 ? tmp : this;
     };
     var boundTouchLayer = false;
 
@@ -217,7 +217,7 @@
                 $(window).bind("resize", orientationChangeProxy);
             },
             needsFormsFix: function (focusEl) {
-                return this.useJsScroll && this.isEnabled() && this.el.style.display != "none" && $(focusEl).closest(this.afEl).size() > 0;
+                return this.useJsScroll && this.isEnabled() && this.el.style.display !== "none" && $(focusEl).closest(this.afEl).size() > 0;
             },
             handleEvent: function (e) {
                 if (!this.scrollingLocked) {
@@ -368,7 +368,7 @@
             this.container.afScrollerId = el.afScrollerId;
             this.afEl = $(this.container);
 
-            if (this.container.style.overflow != "hidden") this.container.style.overflow = "hidden";
+            if (this.container.style.overflow !== "hidden") this.container.style.overflow = "hidden";
 
             this.addPullToRefresh(null, true);
             if(opts.autoEnable)
@@ -493,7 +493,7 @@
             if(!this.refresh)
                 return $(this.el).find(".p2rhack").remove();
             var el=$(this.el).find(".p2rhack");
-            if(el.length===0){
+            if(el.length === 0){
                 $(this.el).append("<div class='p2rhack' style='position:absolute;width:1px;height:1px;opacity:0;background:transparent;z-index:-1;-webkit-transform:translate3d(-1px,0,0);'></div>");
                 el=$(this.el).find(".p2rhack");
             }
@@ -898,7 +898,7 @@
 
 
             //disable if locked
-            if (event.touches.length != 1 || this.boolScrollLock) return;
+            if (event.touches.length !== 1 || this.boolScrollLock) return;
 
             // Allow interaction to legit calls, like select boxes, etc.
             if (event.touches[0].target && event.touches[0].target.type !== undefined) {

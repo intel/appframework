@@ -15,9 +15,9 @@
         var theTarget = newTarget ? newTarget : originalEvent.target;
 
         //stop propagation, and remove default behavior for everything but INPUT, TEXTAREA & SELECT fields
-        if (theTarget.tagName.toUpperCase().indexOf("SELECT") == -1 &&
-            theTarget.tagName.toUpperCase().indexOf("TEXTAREA") == -1 &&
-            theTarget.tagName.toUpperCase().indexOf("INPUT") == -1) //SELECT, TEXTAREA & INPUT
+        if (theTarget.tagName.toUpperCase().indexOf("SELECT") === -1 &&
+            theTarget.tagName.toUpperCase().indexOf("TEXTAREA") === -1 &&
+            theTarget.tagName.toUpperCase().indexOf("INPUT") === -1) //SELECT, TEXTAREA & INPUT
         {
             preventAll(originalEvent);
         }
@@ -61,7 +61,7 @@
         document.addEventListener("mousedown", function (e) {
             mouseDown = true;
             lastTarget = e.target;
-            if (e.target.nodeName.toLowerCase() == "a" && e.target.href.toLowerCase() == "javascript:;")
+            if (e.target.nodeName.toLowerCase() === "a" && e.target.href.toLowerCase() === "javascript:;")
                 e.target.href = "#";
             redirectMouseToTouch("touchstart", e);
             cancelClickMove = false;
@@ -90,7 +90,7 @@
 
             mouseDown = true;
             lastTarget = e.target;
-            if (e.target.nodeName.toLowerCase() == "a" && e.target.href.toLowerCase() == "javascript:;")
+            if (e.target.nodeName.toLowerCase() === "a" && e.target.href.toLowerCase() === "javascript:;")
                 e.target.href = "";
             redirectMouseToTouch("touchstart", e);
             cancelClickMove = false;

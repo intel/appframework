@@ -432,7 +432,7 @@
 
 
             // We allow forcing native tap in android devices (required in special cases)
-            var forceNativeTap = (af.os.android && e && e.target && e.target.getAttribute && e.target.getAttribute("data-touchlayer") == "ignore");
+            var forceNativeTap = (af.os.android && e && e.target && e.target.getAttribute && e.target.getAttribute("data-touchlayer") === "ignore");
 
             //if on edit mode, allow all native touches
             //(BB10 must still be prevented, always clicks even after move)
@@ -448,7 +448,7 @@
                     //if(tag != "select") $.trigger(this, "pre-enter-edit", [e.target]);
                     this.requiresNativeTap = true;
                 }
-            } else if (e.target && e.target.tagName !== undefined && e.target.tagName.toLowerCase() == "input" && e.target.type == "range") {
+            } else if (e.target && e.target.tagName !== undefined && e.target.tagName.toLowerCase() === "input" && e.target.type === "range") {
                 this.requiresNativeTap = true;
             }
 
@@ -487,14 +487,14 @@
 
         allowsVerticalScroll: function(el, styles) {
             var overflowY = styles.overflowY;
-            if (overflowY == "scroll") return true;
-            if (overflowY == "auto" && el.scrollHeight > el.clientHeight) return true;
+            if (overflowY === "scroll") return true;
+            if (overflowY === "auto" && el.scrollHeight > el.clientHeight) return true;
             return false;
         },
         allowsHorizontalScroll: function(el, styles) {
             var overflowX = styles.overflowX;
-            if (overflowX == "scroll") return true;
-            if (overflowX == "auto" && el.scrollWidth > el.clientWidth) return true;
+            if (overflowX === "scroll") return true;
+            if (overflowX === "auto" && el.scrollWidth > el.clientWidth) return true;
             return false;
         },
 
@@ -614,8 +614,8 @@
                 if (!this.blockClicks && !this.blockPossibleClick_) {
                     var theTarget = e.target;
                     var changedTouches = e.changedTouches ? e.changedTouches[0] : e.touches[0];
-                    if (theTarget.nodeType == 3) theTarget = theTarget.parentNode;
-                    this.fireEvent("Event", "click", theTarget, true, e.mouseToTouch, changedTouches);
+                    if (theTarget.nodeType === 3) theTarget = theTarget.parentNode;
+                    this.fireEvent("Event", "click", theTarget, true, e.mouseToTouch, changedTouches[0]);
                     this.lastTouchStartX = this.dX;
                     this.lastTouchStartY = this.dY;
                 }

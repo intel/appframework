@@ -57,7 +57,7 @@
         };
 
 
-        if (document.readyState == "complete" || document.readyState == "loaded") {
+        if (document.readyState === "complete" || document.readyState === "loaded") {
             setupAFDom();
             if(that.init)
                 that.autoBoot();
@@ -85,19 +85,19 @@
             window.intel = {xdk:{}};
             window.intel.xdk.webRoot = "";
         }
-       
+
         //click back event
         window.addEventListener("popstate", function() {
             if(!that.useInteralRouting) return;
             var id = that.getPanelId(document.location.hash);
             var hashChecker = document.location.href.replace(document.location.origin + "/", "");
             //make sure we allow hash changes outside afui
-            if (hashChecker == "#") return;
+            if (hashChecker === "#") return;
             if (id === "" && that.history.length === 1) //Fix going back to first panel and an empty hash
                 id = "#" + that.firstDiv.id;
             if (id === "") return;
             if (af(id).filter(".panel").length === 0) return;
-            if (id != "#" + that.activeDiv.id) that.goBack();
+            if (id !== "#" + that.activeDiv.id) that.goBack();
         }, false);
 
         function setupCustomTheme() {
@@ -131,7 +131,7 @@
                 $("head").append("<style id='iosBlurrHack'>#afui .y-scroll > *, #afui .x-scroll > * {"+hackStyle+"}</style>");
             }
             else if ($.os.anroid&&!$.os.androidICS){
-                $.ui.transitionTime="150ms";
+                $.ui.transitionTime = "150ms";
             }
             else if($.os.fennec){
                 $.ui.ready(function(){
@@ -260,7 +260,7 @@
             width = width + "";
             width = width.replace("px", "") + "px";
             $("head").find("style#afui_sideMenuWidth").remove();
-            var css="@media handheld, only screen and (min-width: 768px) {"+
+            var css = "@media handheld, only screen and (min-width: 768px) {"+
                         "#afui > #navbar.hasMenu.splitview, #afui > #header.hasMenu.splitview, #afui > #content.hasMenu.splitview  {"+
                         "    margin-left:"+width+" !important;"+
                         "    width: -webkit-calc(100% -"+width+") !important;"+
@@ -547,7 +547,7 @@
          */
         updateHash: function(newHash) {
             if (!this.manageHistory) return;
-            newHash = newHash.indexOf("#") == -1 ? "#" + newHash : newHash; //force having the # in the begginning as a standard
+            newHash = newHash.indexOf("#") === -1 ? "#" + newHash : newHash; //force having the # in the begginning as a standard
             previousTarget = newHash;
 
             var previousHash = window.location.hash;
@@ -563,7 +563,7 @@
         /*gets the panel name from an hash*/
         getPanelId: function(hash) {
             var firstSlash = hash.indexOf("/");
-            return firstSlash == -1 ? hash : hash.substring(0, firstSlash);
+            return firstSlash === -1 ? hash : hash.substring(0, firstSlash);
         },
 
         /**
@@ -588,7 +588,7 @@
             var badge = $target.find("span.af-badge");
 
             if (badge.length === 0) {
-                if ($target.css("position") != "absolute") $target.css("position", "relative");
+                if ($target.css("position") !== "absolute") $target.css("position", "relative");
                 badge = $.create("span", {
                     className: "af-badge " + position,
                     html: value
@@ -629,7 +629,7 @@
          */
         toggleNavMenu: function(force) {
             if (!this.showNavMenu) return;
-            if ($.query("#navbar").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
+            if ($.query("#navbar").css("display") !== "none" && ((force !== undefined && force !== true) || force === undefined)) {
                // $.query("#content").css("bottom", "0px");
                 $.query("#navbar").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
@@ -647,7 +647,7 @@
          * @title $.ui.toggleHeaderMenu([force])
          */
         toggleHeaderMenu: function(force) {
-            if ($.query("#header").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
+            if ($.query("#header").css("display") !== "none" && ((force !== undefined && force !== true) || force === undefined)) {
                // $.query("#content").css("top", "0px");
                 $.query("#header").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
@@ -1050,7 +1050,7 @@
          * @title $.ui.setTitle(value)
          */
         setTitle: function(val) {
-            if(this._currentHeaderID!=="defaultHeader") return;
+            if(this._currentHeaderID !== "defaultHeader") return;
             $.query("#header header:not(.ignore)  #pageTitle").html(val);
         },
         /**
@@ -1063,7 +1063,7 @@
          * @title $.ui.setBackButtonText(value)
          */
         setBackButtonText: function(text) {
-            if(this._currentHeaderID!=="defaultHeader") return;
+            if(this._currentHeaderID !== "defaultHeader") return;
             if (this.trimBackButtonText && text.length >= 7)
                 text = text.substring(0, 5) + "...";
             if (this.backButtonText.length > 0) $.query("#header header:not(.ignore) #backButton").html(this.backButtonText);
@@ -1250,7 +1250,7 @@
             else newDiv = newDiv.get(0);
 
 
-            if (el.getAttribute("js-scrolling") && (el.getAttribute("js-scrolling").toLowerCase() == "yes" || el.getAttribute("js-scrolling").toLowerCase() == "true")) {
+            if (el.getAttribute("js-scrolling") && (el.getAttribute("js-scrolling").toLowerCase() === "yes" || el.getAttribute("js-scrolling").toLowerCase() === "true")) {
                 $.cleanUpContent(el.childNodes[0], false, true);
                 $(el.childNodes[0]).html(content);
             } else {
@@ -1286,7 +1286,7 @@
          * @title $.ui.addContentDiv(id,content,title);
          */
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
-            el = typeof(el) !== "string" ? el : el.indexOf("#") == -1 ? "#" + el : el;
+            el = typeof(el) !== "string" ? el : el.indexOf("#") === -1 ? "#" + el : el;
             var myEl = $.query(el).get(0);
             var newDiv, newId;
             if (!myEl) {
@@ -1330,12 +1330,12 @@
             //sets up scroll when required and not supported
             if (!$.feat.nativeTouchScroll && hasScroll) tmp.setAttribute("js-scrolling", "true");
 
-            if (tmp.getAttribute("js-scrolling") && (tmp.getAttribute("js-scrolling").toLowerCase() == "yes" || tmp.getAttribute("js-scrolling").toLowerCase() == "true")) {
+            if (tmp.getAttribute("js-scrolling") && (tmp.getAttribute("js-scrolling").toLowerCase() === "yes" || tmp.getAttribute("js-scrolling").toLowerCase() === "true")) {
                 jsScroll = true;
                 hasScroll = true;
             }
-            var title=tmp.getAttribute("data-title")||tmp.title;
-            tmp.title="";
+            var title = tmp.getAttribute("data-title")||tmp.title;
+            tmp.title = "";
             tmp.setAttribute("data-title",title);
 
 
@@ -1345,7 +1345,7 @@
                 tmp.removeAttribute("js-scrolling");
             }
 
-            if (!jsScroll||$.os.desktop) {
+            if (!jsScroll || $.os.desktop) {
                 container.appendChild(tmp);
                 scrollEl = tmp;
                 tmp.style["-webkit-overflow-scrolling"] = "none";
@@ -1450,7 +1450,7 @@
             var hasHeader = what.getAttribute("data-header");
 
             //$asap removed since animations are fixed in css3animate
-            if (hasFooter && hasFooter.toLowerCase() == "none") {
+            if (hasFooter && hasFooter.toLowerCase() === "none") {
                 that.toggleNavMenu(false);
                 hasFooter = false;
             } else {
@@ -1463,7 +1463,7 @@
                 if (that.customFooter) that.updateNavbarElements(that.defaultFooter);
                 that.customFooter = false;
             }
-            if (hasHeader && hasHeader.toLowerCase() == "none") {
+            if (hasHeader && hasHeader.toLowerCase() === "none") {
                 that.toggleHeaderMenu(false);
                 hasHeader=false;
             } else {
@@ -1576,7 +1576,7 @@
             var what = null;
             var loadAjax = true;
             anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
-            if (target.indexOf("#") == -1) {
+            if (target.indexOf("#") === -1) {
                 var urlHash = "url" + crc32(target); //Ajax urls
                 var crcCheck = $.query("div.panel[data-crc='" + urlHash + "']");
                 if ($.query("#" + target).length > 0) {
@@ -1597,7 +1597,7 @@
                     } else target = "#" + urlHash;
                 }
             }
-            if (target.indexOf("#") == -1 && loadAjax) {
+            if (target.indexOf("#") === -1 && loadAjax) {
                 this.loadAjax(target, newTab, back, transition, anchor);
             } else {
                 this.loadDiv(target, newTab, back, transition);
@@ -1622,7 +1622,7 @@
 
             var slashIndex = what.indexOf("/");
             var hashLink = "";
-            if (slashIndex != -1) {
+            if (slashIndex !== -1) {
                 // Ignore everything after the slash for loading
                 hashLink = what.substr(slashIndex);
                 what = what.substr(0, slashIndex);
@@ -1643,7 +1643,7 @@
             var oldDiv = this.activeDiv;
             var currWhat = what;
 
-            if (what.getAttribute("data-modal") == "true" || what.getAttribute("modal") == "true") {
+            if (what.getAttribute("data-modal") === "true" || what.getAttribute("modal") === "true") {
                 return this.showModal(what.id);
             }
 
@@ -1705,7 +1705,7 @@
                 if (this.history.length > 0) {
                     val = this.history[this.history.length - 1];
                     slashIndex = val.target.indexOf("/");
-                    if (slashIndex != -1) {
+                    if (slashIndex !== -1) {
                         prevId = val.target.substr(0, slashIndex);
                     } else prevId = val.target;
                     el = $.query(prevId).get(0);
@@ -1750,10 +1750,10 @@
          */
         loadAjax: function(target, newTab, back, transition, anchor) {
             // XML Request
-            if (this.activeDiv.id == "afui_ajax" && target == this.ajaxUrl) return;
+            if (this.activeDiv.id === "afui_ajax" && target == this.ajaxUrl) return;
             var urlHash = "url" + crc32(target); //Ajax urls
             var that = this;
-            if (target.indexOf("http") == -1) target = intel.xdk.webRoot + target;
+            if (target.indexOf("http") === -1) target = intel.xdk.webRoot + target;
             var xmlhttp = new XMLHttpRequest();
 
             if (anchor && typeof(anchor) !== "object") {
@@ -2041,7 +2041,7 @@
                 var tmp = el;
                 var id;
                 var prevSibling = el.previousSibling;
-                if (el.parentNode && el.parentNode.id != "content") {
+                if (el.parentNode && el.parentNode.id !== "content") {
 
                     el.parentNode.removeChild(el);
                     id = el.id;
@@ -2164,7 +2164,7 @@
 
                     var firstPanelId = that.getPanelId(defaultHash);
                     //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
-                    var isFirstPanel = (firstPanelId!==null&&firstPanelId == "#" + that.firstDiv.id);
+                    var isFirstPanel = (firstPanelId!==null&&firstPanelId === "#" + that.firstDiv.id);
                     if (firstPanelId.length > 0 && that.loadDefaultHash && !isFirstPanel) {
                         that.loadContent(defaultHash, true, false, "none"); //load the active page as a newTab with no transition
                     }
@@ -2179,7 +2179,7 @@
                         that.loadContentData(that.firstDiv);
 
                         $.query("#header #backButton").css("visibility", "hidden");
-                        if (that.firstDiv.getAttribute("data-modal") == "true" || that.firstDiv.getAttribute("modal") == "true") {
+                        if (that.firstDiv.getAttribute("data-modal") === "true" || that.firstDiv.getAttribute("modal") === "true") {
                             that.showModal(that.firstDiv.id);
                         }
                     }
@@ -2214,7 +2214,7 @@
         topClickScroll: function() {
             var that = this;
             document.getElementById("header").addEventListener("click", function(e) {
-                if (e.clientY <= 15 && e.target.nodeName.toLowerCase() == "h1") //hack - the title spans the whole width of the header
+                if (e.clientY <= 15 && e.target.nodeName.toLowerCase() === "h1") //hack - the title spans the whole width of the header
                     that.scrollingDivs[that.activeDiv.id].scrollToTop("100");
             });
 
@@ -2283,11 +2283,11 @@
         }
 
         //this technique fails when considerable content exists inside anchor, should be recursive ?
-        if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode) return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
+        if (theTarget.tagName.toLowerCase() !== "a" && theTarget.parentNode) return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
         //anchors
-        if (theTarget.tagName !== "undefined" && theTarget.tagName.toLowerCase() == "a") {
+        if (theTarget.tagName !== "undefined" && theTarget.tagName.toLowerCase() === "a") {
 
-            var custom = (typeof $.ui.customClickHandler == "function") ? $.ui.customClickHandler : false;
+            var custom = (typeof $.ui.customClickHandler === "function") ? $.ui.customClickHandler : false;
             if (custom !== false) {
                 if ($.ui.customClickHandler(theTarget,e)) return e.preventDefault();
 
@@ -2318,7 +2318,7 @@
                 href = href.substring(prefix.length);
             }
             //empty links
-            if (href == "#" || (href.indexOf("#") === href.length - 1) || (href.length === 0 && theTarget.hash.length === 0)) return e.preventDefault();
+            if (href === "#" || (href.indexOf("#") === href.length - 1) || (href.length === 0 && theTarget.hash.length === 0)) return e.preventDefault();
 
             //internal links
             //http urls
@@ -2329,7 +2329,7 @@
                 e.preventDefault();
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
-            resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
+            resetHistory = resetHistory && resetHistory.toLowerCase() === "true" ? true : false;
             href = theTarget.hash.length > 0 ? theTarget.hash : href;
             $.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
             return;

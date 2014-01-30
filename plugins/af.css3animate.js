@@ -45,7 +45,7 @@
         return obj.afCSS3AnimateId;
     };
     var getEl = function(elID) {
-        if (typeof elID == "string" || elID instanceof String) {
+        if (typeof elID === "string" || elID instanceof String) {
             return document.getElementById(elID);
         } else if ($.is$(elID)) {
             return elID[0];
@@ -163,8 +163,8 @@
                     if (!options.timingFunction) options.timingFunction = "linear";
 
                     //check for percent or numbers
-                    if (typeof(options.x) == "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x, 10) + "px";
-                    if (typeof(options.y) == "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y, 10) + "px";
+                    if (typeof(options.x) === "number" || (options.x.indexOf("%") === -1 && options.x.toLowerCase().indexOf("px") === -1 && options.x.toLowerCase().indexOf("deg") === -1)) options.x = parseInt(options.x, 10) + "px";
+                    if (typeof(options.y) === "number" || (options.y.indexOf("%") === -1 && options.y.toLowerCase().indexOf("px") === -1 && options.y.toLowerCase().indexOf("deg") === -1)) options.y = parseInt(options.y, 10) + "px";
 
                     var trans = "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ")";
                     if (!$.os.opera)
@@ -233,7 +233,7 @@
                 }
 
                 //finish asap
-                if (timeNum === 0 || (scale == "ms" && timeNum < 5) || style.display == "none") {
+                if (timeNum === 0 || (scale === "ms" && timeNum < 5) || style.display === "none") {
                     //the duration is nearly 0 or the element is not displayed, finish immediatly
                     $.asap($.proxy(this.finishAnimation, this, [false]));
                     //this.finishAnimation();
@@ -285,10 +285,10 @@
                     var success = callbacks[i].success;
                     var failure = callbacks[i].failure;
                     //fire callbacks
-                    if (complete && typeof(complete) == "function") complete(canceled);
+                    if (typeof(complete) === "function") complete(canceled);
                     //success/failure
-                    if (canceled && failure && typeof(failure) == "function") failure();
-                    else if (success && typeof(success) == "function") success();
+                    if (canceled && typeof(failure) === "function") failure();
+                    else if (typeof(success) === "function") success();
                 }
             },
             cancel: function() {
@@ -340,7 +340,7 @@
             run: function() {
                 var that = this;
                 if (this.elements.length === 0) return;
-                if (typeof(this.elements[0]) == "function") {
+                if (typeof(this.elements[0]) === "function") {
                     var func = this.shift();
                     func();
                 }
@@ -416,7 +416,7 @@ if (!Date.now)
         return obj.afAnimateId;
     };
     var getEl = function(elID) {
-        if (typeof elID == "string" || elID instanceof String) {
+        if (typeof elID === "string" || elID instanceof String) {
             return document.getElementById(elID);
         } else if ($.is$(elID)) {
             return elID[0];

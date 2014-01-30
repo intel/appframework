@@ -33,7 +33,7 @@
             var oldUpdate = $.ui.updateNavbarElements;
             $.ui.updateNavbarElements = function() {
                 oldUpdate.apply($.ui, arguments);
-                if ($.query("#afui #navbar #metroMenu").length == 1) return;
+                if ($.query("#afui #navbar #metroMenu").length === 1) return;
                 $.query("#afui #navbar footer").append("<a id='metroMenu' onclick='$.ui.toggleSideMenu()'>•••</a>");
             };
             $.ui.isSideMenuOn = function() {

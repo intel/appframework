@@ -43,11 +43,11 @@
         for (var i = 0; i < this.length; i++) {
             tmp = new actionsheet(this[i], opts);
         }
-        return this.length == 1 ? tmp : this;
+        return this.length === 1 ? tmp : this;
     };
     var actionsheet = (function() {
         var actionsheet = function(elID, opts) {
-            if (typeof elID == "string" || elID instanceof String) {
+            if (typeof elID === "string" || elID instanceof String) {
                 this.el = document.getElementById(elID);
             } else {
                 this.el = elID;
@@ -58,7 +58,7 @@
             }
 
             if (this instanceof actionsheet) {
-                if (typeof(opts) == "object") {
+                if (typeof(opts) === "object") {
                     for (var j in opts) {
                         this[j] = opts[j];
                     }
@@ -73,9 +73,9 @@
             var markEnd = "</div></div>";
             var markup;
             var noop=function(){};
-            if (typeof opts == "string") {
+            if (typeof opts === "string") {
                 markup = $(markStart + opts + "<a href='javascript:;' class='cancel'>Cancel</a>" + markEnd);
-            } else if (typeof opts == "object") {
+            } else if (typeof opts === "object") {
                 markup = $(markStart + markEnd);
                 var container = $(markup.children().get(0));
                 opts.push({
