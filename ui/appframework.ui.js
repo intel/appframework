@@ -218,6 +218,35 @@
             }
         },
         /**
+         * This enables the tab bar ability to keep pressed states on elements
+         * ```
+           $.ui.enableTabBar();
+           ```
+           @title $.ui.enableTabBar
+         */
+        enableTabBar:function(e){
+            $(document).on("click",".button-grouped.tabbed",function(e){
+                var $el=$(e.target);
+                $el.closest(".tabbed").find(".button").data("ignore-pressed","true").removeClass("pressed");
+                //this is a hack, but the touchEvents plugn will remove pressed
+                $el.closest(".button").addClass("pressed");
+                setTimeout(function(){
+                    $el.closest(".button").addClass("pressed");
+                });
+            });
+        },
+         /**
+         * This disables the tab bar ability to keep pressed states on elements
+         * ```
+           $.ui.disableTabBar();
+           ```
+           @title $.ui.disableTabBar
+         */
+        disableTabBar:function(e){
+            $(document).off("click",".button-grouped.tabbed");
+            $(".button-grouped.tabbed .button").removeAttr("data-ignore-pressed");
+        },
+        /**
          * This changes the side menu width
          * ```
            $.ui.setLeftSideMenuWidth('300px');
@@ -2176,6 +2205,7 @@
             if (window.navigator.standalone||this.isIntel) {
                 this.blockPageScroll();
             }
+            this.enableTabBar();
             this.topClickScroll();
         },
         /**
