@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-01-23 */
+/*! intel-appframework - v2.1.0 - 2014-01-30 */
 
 /**
  * App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -98,14 +98,13 @@ if (!window.af || typeof(af) !== "function") {
 
         /**
          * Internal function that returns a array of unique elements
-         * @param {Array} array to compare against
+         * @param {Array} arr array to compare against
          * @return {Array} array of unique elements
          * @api private
          */
-
         function unique(arr) {
             for (var i = 0; i < arr.length; i++) {
-                if (arr.indexOf(arr[i]) != i) {
+                if (arr.indexOf(arr[i]) !== i) {
                     arr.splice(i, 1);
                     i--;
                 }
@@ -128,7 +127,7 @@ if (!window.af || typeof(af) !== "function") {
                 return elems;
 
             for (; nodes; nodes = nodes.nextSibling) {
-                if (nodes.nodeType == 1 && nodes !== element) {
+                if (nodes.nodeType === 1 && nodes !== element) {
                     elems.push(nodes);
                 }
             }
@@ -213,7 +212,7 @@ if (!window.af || typeof(af) !== "function") {
 
             selector = selector.trim();
 
-            if (selector[0] === "#" && selector.indexOf(".") == -1 &&selector.indexOf(",") == -1 && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
+            if (selector[0] === "#" && selector.indexOf(".") === -1 &&selector.indexOf(",") === -1 && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
                 if (what == document)
                     _shimNodes(what.getElementById(selector.replace("#", "")), this);
                 else
@@ -282,7 +281,7 @@ if (!window.af || typeof(af) !== "function") {
                 }
             } else if ($.isObject(elements)){
                 for (key in elements) {
-                    if (!elements.hasOwnProperty(key) || key == "length")
+                    if (!elements.hasOwnProperty(key) || key === "length")
                         continue;
                     value = callback(elements[key],[elements[key],key]);
                     if (value !== nundefined)
@@ -312,7 +311,7 @@ if (!window.af || typeof(af) !== "function") {
                 }
             } else if ($.isObject(elements)){
                 for (key in elements) {
-                    if (!elements.hasOwnProperty(key) || key == "length")
+                    if (!elements.hasOwnProperty(key) || key === "length")
                         continue;
                     if (callback(key, elements[key]) === false)
                         return elements;
@@ -667,7 +666,7 @@ if (!window.af || typeof(af) !== "function") {
                 if (this.length === 0)
                     return this;
                 for (var i = 0; i < this.length; i++) {
-                    if (this.css("display", null, this[i]) != "none") {
+                    if (this.css("display", null, this[i]) !== "none") {
                         this[i].setAttribute("afmOldStyle", this.css("display", null, this[i]));
                         this[i].style.display = "none";
                     }
@@ -688,7 +687,7 @@ if (!window.af || typeof(af) !== "function") {
                 if (this.length === 0)
                     return this;
                 for (var i = 0; i < this.length; i++) {
-                    if (this.css("display", null, this[i]) == "none") {
+                    if (this.css("display", null, this[i]) === "none") {
                         this[i].style.display = this[i].getAttribute("afmOldStyle") ? this[i].getAttribute("afmOldStyle") : "block";
                         this[i].removeAttribute("afmOldStyle");
                     }
@@ -711,10 +710,10 @@ if (!window.af || typeof(af) !== "function") {
                     return this;
                 var show2 = show===true;
                 for (var i = 0; i < this.length; i++) {
-                    if (this.css("display", null, this[i]) != "none" && (show == nundefined || show2 === false)) {
+                    if (this.css("display", null, this[i]) !== "none" && (show == nundefined || show2 === false)) {
                         this[i].setAttribute("afmOldStyle", this.css("display", null, this[i]));
                         this[i].style.display = "none";
-                    } else if (this.css("display", null, this[i]) == "none" && (show == nundefined || show2 === true)) {
+                    } else if (this.css("display", null, this[i]) === "none" && (show == nundefined || show2 === true)) {
                         this[i].style.display = this[i].getAttribute("afmOldStyle") ? this[i].getAttribute("afmOldStyle") : "block";
                         this[i].removeAttribute("afmOldStyle");
                     }
@@ -955,7 +954,7 @@ if (!window.af || typeof(af) !== "function") {
                     }
                     var classList = this[i].className;
                     //SGV LINK EVENT
-                    if (typeof this[i].className == "object") {
+                    if (typeof this[i].className === "object") {
                         classList = " ";
                     }
                     name.split(/\s+/g).forEach(removeClassLoop);
@@ -980,7 +979,7 @@ if (!window.af || typeof(af) !== "function") {
             toggleClass: function(name, state) {
                 if (name == nundefined) return this;
                 for (var i = 0; i < this.length; i++) {
-                    if (typeof state != "boolean") {
+                    if (typeof state !== "boolean") {
                         state = this.hasClass(name, this[i]);
                     }
                     $(this[i])[state ? "removeClass" : "addClass"](name);
@@ -1062,7 +1061,7 @@ if (!window.af || typeof(af) !== "function") {
                 if(content)
                     $(this).add(content);
                 for (i = 0; i < this.length; i++) {
-                    if (element.length && typeof element != "string") {
+                    if (element.length && typeof element !== "string") {
                         element = $(element);
                         _insertFragments(element, this[i], insert);
                     } else {
@@ -1073,7 +1072,7 @@ if (!window.af || typeof(af) !== "function") {
                         if (obj instanceof $afm) {
                             for (var k=0,lenk=obj.length; k<lenk; k++) {
                                 node = obj[k];
-                                if (node.nodeName != nundefined && node.nodeName.toLowerCase() == "script" && (!node.type || node.type.toLowerCase() === "text/javascript")) {
+                                if (node.nodeName != nundefined && node.nodeName.toLowerCase() === "script" && (!node.type || node.type.toLowerCase() === "text/javascript")) {
                                     window["eval"](node.innerHTML);
                                 } else {
                                     _insertFragments($(node), this[i], insert);
@@ -1401,7 +1400,7 @@ if (!window.af || typeof(af) !== "function") {
                 var start = $(selector, context);
                 if (start.length === 0)
                     return $();
-                while (cur && start.indexOf(cur) == -1) {
+                while (cur && start.indexOf(cur) === -1) {
                     cur = cur !== context && cur !== document && cur.parentNode;
                 }
                 return $(cur);
@@ -1451,7 +1450,7 @@ if (!window.af || typeof(af) !== "function") {
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     var val = this[i];
-                    if (val.parentNode && $(selector, val.parentNode).indexOf(val) == -1)
+                    if (val.parentNode && $(selector, val.parentNode).indexOf(val) === -1)
                         elems.push(val);
                 }
                 return this.setupOld($(unique(elems)));
@@ -1533,10 +1532,10 @@ if (!window.af || typeof(af) !== "function") {
                     return "";
                 var serializeFn=function(elem) {
                     var type = elem.getAttribute("type");
-                    if (elem.nodeName.toLowerCase() != "fieldset" && !elem.disabled && type != "submit" && type != "reset" && type != "button" && ((type != "radio" && type != "checkbox") || elem.checked)) {
+                    if (elem.nodeName.toLowerCase() !== "fieldset" && !elem.disabled && type !== "submit" && type !== "reset" && type !== "button" && ((type !== "radio" && type !== "checkbox") || elem.checked)) {
 
                         if (elem.getAttribute("name")) {
-                            if (elem.type == "select-multiple") {
+                            if (elem.type === "select-multiple") {
                                 for (var j = 0; j < elem.options.length; j++) {
                                     if (elem.options[j].selected)
                                         params.push(elem.getAttribute("name") + "=" + encodeURIComponent(elem.options[j].value));
@@ -1714,7 +1713,7 @@ if (!window.af || typeof(af) !== "function") {
 
                 var settings = opts || {};
                 for (var key in $.ajaxSettings) {
-                    if (typeof(settings[key]) == "undefined")
+                    if (typeof(settings[key]) === "undefined")
                         settings[key] = $.ajaxSettings[key];
                 }
 
@@ -1787,7 +1786,7 @@ if (!window.af || typeof(af) !== "function") {
                     if (xhr.readyState === 4) {
                         clearTimeout(abortTimeout);
                         var result, error = false;
-                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0 && protocol == "file:") {
+                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0 && protocol === "file:") {
                             if (mime === "application/json" && !(/^\s*$/.test(xhr.responseText))) {
                                 try {
                                     result = JSON.parse(xhr.responseText);
@@ -1796,7 +1795,7 @@ if (!window.af || typeof(af) !== "function") {
                                 }
                             } else if (mime === "application/xml, text/xml") {
                                 result = xhr.responseXML;
-                            } else if (mime == "text/html") {
+                            } else if (mime === "text/html") {
                                 result = xhr.responseText;
                                 $.parseJS(result);
                             } else
@@ -2399,7 +2398,7 @@ if (!window.af || typeof(af) !== "function") {
             $.each(eventMethods, function(name, predicate) {
                 proxy[name] = function() {
                     this[predicate] = returnTrue;
-                    if (name == "stopImmediatePropagation" || name == "stopPropagation") {
+                    if (name === "stopImmediatePropagation" || name === "stopPropagation") {
                         event.cancelBubble = true;
                         if (!event[name])
                             return;
@@ -2523,7 +2522,7 @@ if (!window.af || typeof(af) !== "function") {
         * @title $().trigger(event,data);
         */
         $.fn.trigger = function(event, data, props) {
-            if (typeof event == "string")
+            if (typeof event === "string")
                 event = $.Event(event, props);
             event.data = data;
             for (var i = 0, len = this.length; i < len; i++) {
@@ -2545,7 +2544,7 @@ if (!window.af || typeof(af) !== "function") {
                 bubbles = true;
             if (props)
                 for (var name in props)
-                    (name == "bubbles") ? (bubbles = !! props[name]) : (event[name] = props[name]);
+                    (name === "bubbles") ? (bubbles = !! props[name]) : (event[name] = props[name]);
             event.initEvent(type, bubbles, true, null, null, null, null, null, null, null, null, null, null, null, null);
             return event;
         };
@@ -2742,7 +2741,7 @@ if (!window.af || typeof(af) !== "function") {
             window.postMessage("afm-asap", "*");
         };
         window.addEventListener("message", function(event) {
-            if (event.source == window && event.data == "afm-asap") {
+            if (event.source == window && event.data === "afm-asap") {
                 event.stopPropagation();
                 if (timeouts.length > 0) { //just in case...
                     (timeouts.shift()).apply(contexts.shift(), params.shift());
@@ -2762,7 +2761,7 @@ if (!window.af || typeof(af) !== "function") {
         $.parseJS = function(div) {
             if (!div)
                 return;
-            if (typeof(div) == "string") {
+            if (typeof(div) === "string") {
                 var elem = document.createElement("div");
                 if (isWin8) {
                     MSApp.execUnsafeLocalFunction(function() {

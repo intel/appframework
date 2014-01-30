@@ -543,7 +543,7 @@
 
             if(this.verticalScroll){
                 if(this.startTop===0&&this.el.scrollTop===0&&newcY>0)
-                    e.preventDefault();            
+                    e.preventDefault();
             }
             if(this.horizontalScroll&&this.startTop===0&&this.el.scrollLeft===0&&newcX>0){
                 e.preventDefault();

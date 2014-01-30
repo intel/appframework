@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-01-23 */
+/*! intel-appframework - v2.1.0 - 2014-01-30 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -45,11 +45,11 @@
         for (var i = 0; i < this.length; i++) {
             tmp = new actionsheet(this[i], opts);
         }
-        return this.length == 1 ? tmp : this;
+        return this.length === 1 ? tmp : this;
     };
     var actionsheet = (function() {
         var actionsheet = function(elID, opts) {
-            if (typeof elID == "string" || elID instanceof String) {
+            if (typeof elID === "string" || elID instanceof String) {
                 this.el = document.getElementById(elID);
             } else {
                 this.el = elID;
@@ -60,7 +60,7 @@
             }
 
             if (this instanceof actionsheet) {
-                if (typeof(opts) == "object") {
+                if (typeof(opts) === "object") {
                     for (var j in opts) {
                         this[j] = opts[j];
                     }
@@ -75,9 +75,9 @@
             var markEnd = "</div></div>";
             var markup;
             var noop=function(){};
-            if (typeof opts == "string") {
+            if (typeof opts === "string") {
                 markup = $(markStart + opts + "<a href='javascript:;' class='cancel'>Cancel</a>" + markEnd);
-            } else if (typeof opts == "object") {
+            } else if (typeof opts === "object") {
                 markup = $(markStart + markEnd);
                 var container = $(markup.children().get(0));
                 opts.push({
@@ -141,6 +141,7 @@
         return actionsheet;
     })();
 })(af);
+
 /**
  * af.css3animate - a css3 animation library that supports chaning/callbacks
  * Copyright 2013 - Intel
@@ -188,7 +189,7 @@
         return obj.afCSS3AnimateId;
     };
     var getEl = function(elID) {
-        if (typeof elID == "string" || elID instanceof String) {
+        if (typeof elID === "string" || elID instanceof String) {
             return document.getElementById(elID);
         } else if ($.is$(elID)) {
             return elID[0];
@@ -306,8 +307,8 @@
                     if (!options.timingFunction) options.timingFunction = "linear";
 
                     //check for percent or numbers
-                    if (typeof(options.x) == "number" || (options.x.indexOf("%") == -1 && options.x.toLowerCase().indexOf("px") == -1 && options.x.toLowerCase().indexOf("deg") == -1)) options.x = parseInt(options.x, 10) + "px";
-                    if (typeof(options.y) == "number" || (options.y.indexOf("%") == -1 && options.y.toLowerCase().indexOf("px") == -1 && options.y.toLowerCase().indexOf("deg") == -1)) options.y = parseInt(options.y, 10) + "px";
+                    if (typeof(options.x) === "number" || (options.x.indexOf("%") === -1 && options.x.toLowerCase().indexOf("px") === -1 && options.x.toLowerCase().indexOf("deg") === -1)) options.x = parseInt(options.x, 10) + "px";
+                    if (typeof(options.y) === "number" || (options.y.indexOf("%") === -1 && options.y.toLowerCase().indexOf("px") === -1 && options.y.toLowerCase().indexOf("deg") === -1)) options.y = parseInt(options.y, 10) + "px";
 
                     var trans = "translate" + translateOpen + (options.x) + "," + (options.y) + translateClose + " scale(" + parseFloat(options.scale) + ") rotate(" + options.rotateX + ")";
                     if (!$.os.opera)
@@ -376,7 +377,7 @@
                 }
 
                 //finish asap
-                if (timeNum === 0 || (scale == "ms" && timeNum < 5) || style.display == "none") {
+                if (timeNum === 0 || (scale === "ms" && timeNum < 5) || style.display === "none") {
                     //the duration is nearly 0 or the element is not displayed, finish immediatly
                     $.asap($.proxy(this.finishAnimation, this, [false]));
                     //this.finishAnimation();
@@ -428,10 +429,10 @@
                     var success = callbacks[i].success;
                     var failure = callbacks[i].failure;
                     //fire callbacks
-                    if (complete && typeof(complete) == "function") complete(canceled);
+                    if (typeof(complete) === "function") complete(canceled);
                     //success/failure
-                    if (canceled && failure && typeof(failure) == "function") failure();
-                    else if (success && typeof(success) == "function") success();
+                    if (canceled && typeof(failure) === "function") failure();
+                    else if (typeof(success) === "function") success();
                 }
             },
             cancel: function() {
@@ -483,7 +484,7 @@
             run: function() {
                 var that = this;
                 if (this.elements.length === 0) return;
-                if (typeof(this.elements[0]) == "function") {
+                if (typeof(this.elements[0]) === "function") {
                     var func = this.shift();
                     func();
                 }
@@ -559,7 +560,7 @@ if (!Date.now)
         return obj.afAnimateId;
     };
     var getEl = function(elID) {
-        if (typeof elID == "string" || elID instanceof String) {
+        if (typeof elID === "string" || elID instanceof String) {
             return document.getElementById(elID);
         } else if ($.is$(elID)) {
             return elID[0];
@@ -700,6 +701,7 @@ if (!Date.now)
         }
     };
 })(af);
+
 /**
  * af.passwordBox - password box replacement for html5 mobile apps on android due to a bug with CSS3 translate3d
  * @copyright 2011 - Intel
@@ -725,7 +727,7 @@ if (!Date.now)
             }
             var sels = container.getElementsByTagName("input");
             for (var i = 0; i < sels.length; i++) {
-                if (sels[i].type != "password") continue;
+                if (sels[i].type !== "password") continue;
 
                 if($.os.webkit){
                     sels[i].type = "text";
@@ -738,13 +740,13 @@ if (!Date.now)
             what = parseInt(what,10);
             var theEl = document.getElementById(id);
 
-            if (what == 1) { //show
+            if (what === 1) { //show
                 $(theEl).vendorCss("TextSecurity","none");
             } else {
                 $(theEl).vendorCss("TextSecurity","disc");
             }
             if(!$.os.webkit) {
-                if(what==1)
+                if(what === 1)
                     theEl.type="text";
                 else
                     theEl.type="password";
@@ -753,6 +755,7 @@ if (!Date.now)
         }
     };
 })(af);
+
 /**
  * af.scroller 
  * created by appMobi with modifications by Carlos Ouro @ Badoo and Intel
@@ -785,7 +788,7 @@ if (!Date.now)
                 tmp = cache[id];
             }
         }
-        return this.length == 1 ? tmp : this;
+        return this.length === 1 ? tmp : this;
     };
     var boundTouchLayer = false;
 
@@ -972,7 +975,7 @@ if (!Date.now)
                 $(window).bind("resize", orientationChangeProxy);
             },
             needsFormsFix: function (focusEl) {
-                return this.useJsScroll && this.isEnabled() && this.el.style.display != "none" && $(focusEl).closest(this.afEl).size() > 0;
+                return this.useJsScroll && this.isEnabled() && this.el.style.display !== "none" && $(focusEl).closest(this.afEl).size() > 0;
             },
             handleEvent: function (e) {
                 if (!this.scrollingLocked) {
@@ -1123,7 +1126,7 @@ if (!Date.now)
             this.container.afScrollerId = el.afScrollerId;
             this.afEl = $(this.container);
 
-            if (this.container.style.overflow != "hidden") this.container.style.overflow = "hidden";
+            if (this.container.style.overflow !== "hidden") this.container.style.overflow = "hidden";
 
             this.addPullToRefresh(null, true);
             if(opts.autoEnable)
@@ -1248,7 +1251,7 @@ if (!Date.now)
             if(!this.refresh)
                 return $(this.el).find(".p2rhack").remove();
             var el=$(this.el).find(".p2rhack");
-            if(el.length===0){
+            if(el.length === 0){
                 $(this.el).append("<div class='p2rhack' style='position:absolute;width:1px;height:1px;opacity:0;background:transparent;z-index:-1;-webkit-transform:translate3d(-1px,0,0);'></div>");
                 el=$(this.el).find(".p2rhack");
             }
@@ -1260,9 +1263,9 @@ if (!Date.now)
                 top:0
             };
             if(this.verticalScroll){
-                if(this.el.scrollTop===0)
+                if(this.el.scrollTop===0&&this.refresh)
                     this.el.scrollTop=1;
-                if(this.el.scrollTop===(this.el.scrollHeight - this.el.clientHeight))
+                if(this.el.scrollTop===(this.el.scrollHeight - this.el.clientHeight)&&this.infinite)
                     this.el.scrollTop-=1;
             }
 
@@ -1277,6 +1280,8 @@ if (!Date.now)
             this.el.addEventListener("touchmove", this,false);
             this.dY = e.touches[0].pageY;
             this.dX = e.touches[0].pageX;
+            this.startTop=this.el.scrollTop;
+            this.startLeft=this.el.scrollLeft;
             if (this.refresh || this.infinite) {
 
 
@@ -1289,11 +1294,24 @@ if (!Date.now)
         nativeScroller.prototype.onTouchMove = function (e) {
             var newcY = e.touches[0].pageY - this.dY;
             var newcX = e.touches[0].pageX - this.dX;
-            if(this.verticalScroll&&this.el.clientHeight==this.el.scrollHeight){
+
+            //var scorllTop
+            var atTop=(this.el.scrollHeight-this.el.scrollTop)===this.el.clientHeight&&newcY<0;
+            var atRight=(this.el.scrollWidth-this.el.scrollLeft)===this.el.clientWidth&&newcX<0;
+
+            if(this.verticalScroll){
+                if(this.startTop===0&&this.el.scrollTop===0&&newcY>0)
+                    e.preventDefault();
+            }
+            if(this.horizontalScroll&&this.startTop===0&&this.el.scrollLeft===0&&newcX>0){
+                e.preventDefault();
+            }
+
+            if(this.verticalScroll&&atTop){
                 e.preventDefault();
 
             }
-            if(this.horizontalScroll&&this.el.clientWidth==this.el.scrollWidth){
+            if(this.horizontalScroll&&atRight){
                 e.preventDefault();
             }
 
@@ -1638,7 +1656,7 @@ if (!Date.now)
 
 
             //disable if locked
-            if (event.touches.length != 1 || this.boolScrollLock) return;
+            if (event.touches.length !== 1 || this.boolScrollLock) return;
 
             // Allow interaction to legit calls, like select boxes, etc.
             if (event.touches[0].target && event.touches[0].target.type !== undefined) {
@@ -2333,6 +2351,7 @@ if (!Date.now)
         return scroller;
     })();
 })(af);
+
 /**
  * @copyright: 2011 Intel
  * @description:  This script will replace all drop downs with friendly select controls.  Users can still interact
@@ -2438,7 +2457,7 @@ if (!Date.now)
             }
             $("#afModalMask").show();
             try {
-                if (foundInd > 0 && el.getAttribute("multiple") != "multiple") {
+                if (foundInd > 0 && el.getAttribute("multiple") !== "multiple") {
                     var scrollToPos = 0;
                     var scrollThreshold = numOnly($list.find("li").computedStyle("height"));
                     var theHeight = numOnly($("#afSelectBoxContainer").computedStyle("height"));
@@ -2452,7 +2471,7 @@ if (!Date.now)
                 console.log("error init dropdown" + e);
             }
 
-            var selClose = $("#afSelectClose").css("display") == "block" ? numOnly($("#afSelectClose").height()) : 0;
+            var selClose = $("#afSelectClose").css("display") === "block" ? numOnly($("#afSelectClose").height()) : 0;
             $("#afSelectWrapper").height((numOnly($("#afSelectBoxContainer").height()) - selClose) + "px");
 
         },
@@ -2506,7 +2525,7 @@ if (!Date.now)
                         return;
                     that.currLinker = this;
 
-                    if (this.linker.getAttribute("multiple") == "multiple")
+                    if (this.linker.getAttribute("multiple") === "multiple")
                         $("#afSelectClose").show();
                     else
                         $("#afSelectClose").hide();
@@ -2547,7 +2566,7 @@ if (!Date.now)
 
                 $("#afModalMask").on("click",function(e){
                     var $e=$(e.target);
-                    if($e.closest("#afSelectBoxContainer").length===0)
+                    if($e.closest("#afSelectBoxContainer").length === 0)
                         that.hideDropDown();
                 });
 
@@ -2556,7 +2575,7 @@ if (!Date.now)
                     that.setDropDownValue(that.currLinker.linker, $el.data("ind"));
                 });
                 $("#afSelectBoxContainer").on("click", "a", function(e) {
-                    if (e.target.id == "afSelectCancel")
+                    if (e.target.id === "afSelectCancel")
                         return that.hideDropDown();
                     var $sel = $(that.currLinker.linker);
                     $sel.find("option").prop("selected", false);
@@ -2618,6 +2637,7 @@ if (!Date.now)
         };
     }
 })(af);
+
 //Touch events are from zepto/touch.js
 /**
  * Simply include this in your project to get access to the following touch events on an element
@@ -2662,9 +2682,9 @@ if (!Date.now)
         $(document.body).bind("touchstart", function(e) {
             if(e.originalEvent)
                 e=e.originalEvent;
-            if(!e.touches||e.touches.length===0) return;
+            if(!e.touches || e.touches.length === 0) return;
             var now = Date.now(), delta = now - (touch.last || now);
-            if(!e.touches||e.touches.length===0) return;
+            if(!e.touches || e.touches.length === 0) return;
             touch.el = $(parentIfText(e.touches[0].target));
             touchTimeout && clearTimeout(touchTimeout);
             touch.x1 =  e.touches[0].pageX;
@@ -2677,7 +2697,7 @@ if (!Date.now)
 
             if ($.ui.useAutoPressed && !touch.el.data("ignore-pressed"))
                 touch.el.addClass("pressed");
-            if(prevEl && $.ui.useAutoPressed && !prevEl.data("ignore-pressed")&&prevEl[0]!=touch.el[0])
+            if(prevEl && $.ui.useAutoPressed && !prevEl.data("ignore-pressed") && prevEl[0] != touch.el[0])
                 prevEl.removeClass("pressed");
             prevEl=touch.el;
         }).bind("touchmove", function(e) {
@@ -3123,6 +3143,7 @@ if (!Date.now)
                 if (skipTouchEnd === e.touches[0].identifier) {
                     cancelClick = true;
                     e.preventDefault();
+                    skipTouchEnd=false;
                     return false;
                 }
                 skipTouchEnd = e.touches[0].identifier;
@@ -3159,7 +3180,7 @@ if (!Date.now)
 
 
             // We allow forcing native tap in android devices (required in special cases)
-            var forceNativeTap = (af.os.android && e && e.target && e.target.getAttribute && e.target.getAttribute("data-touchlayer") == "ignore");
+            var forceNativeTap = (af.os.android && e && e.target && e.target.getAttribute && e.target.getAttribute("data-touchlayer") === "ignore");
 
             //if on edit mode, allow all native touches
             //(BB10 must still be prevented, always clicks even after move)
@@ -3175,7 +3196,7 @@ if (!Date.now)
                     //if(tag != "select") $.trigger(this, "pre-enter-edit", [e.target]);
                     this.requiresNativeTap = true;
                 }
-            } else if (e.target && e.target.tagName !== undefined && e.target.tagName.toLowerCase() == "input" && e.target.type == "range") {
+            } else if (e.target && e.target.tagName !== undefined && e.target.tagName.toLowerCase() === "input" && e.target.type === "range") {
                 this.requiresNativeTap = true;
             }
 
@@ -3214,14 +3235,14 @@ if (!Date.now)
 
         allowsVerticalScroll: function(el, styles) {
             var overflowY = styles.overflowY;
-            if (overflowY == "scroll") return true;
-            if (overflowY == "auto" && el.scrollHeight > el.clientHeight) return true;
+            if (overflowY === "scroll") return true;
+            if (overflowY === "auto" && el.scrollHeight > el.clientHeight) return true;
             return false;
         },
         allowsHorizontalScroll: function(el, styles) {
             var overflowX = styles.overflowX;
-            if (overflowX == "scroll") return true;
-            if (overflowX == "auto" && el.scrollWidth > el.clientWidth) return true;
+            if (overflowX === "scroll") return true;
+            if (overflowX === "auto" && el.scrollWidth > el.clientWidth) return true;
             return false;
         },
 
@@ -3340,8 +3361,9 @@ if (!Date.now)
                 //fire click
                 if (!this.blockClicks && !this.blockPossibleClick_) {
                     var theTarget = e.target;
-                    if (theTarget.nodeType == 3) theTarget = theTarget.parentNode;
-                    this.fireEvent("Event", "click", theTarget, true, e.mouseToTouch, e.changedTouches[0]);
+                    var changedTouches = e.changedTouches ? e.changedTouches[0] : e.touches[0];
+                    if (theTarget.nodeType === 3) theTarget = theTarget.parentNode;
+                    this.fireEvent("Event", "click", theTarget, true, e.mouseToTouch, changedTouches[0]);
                     this.lastTouchStartX = this.dX;
                     this.lastTouchStartY = this.dY;
                 }
@@ -3403,6 +3425,7 @@ if (!Date.now)
     };
 
 })(af);
+
 /**
  * af.popup - a popup/alert library for html5 mobile apps
  * @copyright Indiepath 2011 - Tim Fisher
@@ -3475,7 +3498,7 @@ if (!Date.now)
                 this.autoCloseDone = opts.autoCloseDone !== undefined ? opts.autoCloseDone : true;
 
                 queue.push(this);
-                if (queue.length == 1)
+                if (queue.length === 1)
                     this.show();
             } catch (e) {
                 console.log("error adding popup " + e);
@@ -3523,7 +3546,7 @@ if (!Date.now)
                 $el.find("A").each(function () {
                     var button = $(this);
                     button.bind("click", function (e) {
-                        if (button.attr("id") == "cancel") {
+                        if (button.attr("id") === "cancel") {
                             self.cancelCallback.call(self.cancelCallback, self);
                             self.hide();
                         } else {
@@ -3644,7 +3667,7 @@ if (!Date.now)
             var oldUpdate = $.ui.updateNavbarElements;
             $.ui.updateNavbarElements = function() {
                 oldUpdate.apply($.ui, arguments);
-                if ($.query("#afui #navbar #metroMenu").length == 1) return;
+                if ($.query("#afui #navbar #metroMenu").length === 1) return;
                 $.query("#afui #navbar footer").append("<a id='metroMenu' onclick='$.ui.toggleSideMenu()'>•••</a>");
             };
             $.ui.isSideMenuOn = function() {
@@ -3775,6 +3798,7 @@ if (!Date.now)
         wire8Tiles();
     }
 })(af);
+
 /**
  * appframework.ui - A User Interface library for App Framework applications
  *
@@ -3834,7 +3858,7 @@ if (!Date.now)
         };
 
 
-        if (document.readyState == "complete" || document.readyState == "loaded") {
+        if (document.readyState === "complete" || document.readyState === "loaded") {
             setupAFDom();
             if(that.init)
                 that.autoBoot();
@@ -3843,16 +3867,18 @@ if (!Date.now)
                     that.autoBoot();
                 });
             }
-        } else $(document).ready(function() {
-            setupAFDom();
-            if(that.init)
-                that.autoBoot();
-            else{
-                $(window).one("afui:init", function() {
+        } else $(document).ready(
+            function() {
+                setupAFDom();
+                if(that.init)
                     that.autoBoot();
-                });
-            }
-        }, false);
+                else{
+                    $(window).one("afui:init", function() {
+                        that.autoBoot();
+                    });
+                }
+            },
+        false);
 
 
 
@@ -3860,19 +3886,19 @@ if (!Date.now)
             window.intel = {xdk:{}};
             window.intel.xdk.webRoot = "";
         }
-       
+
         //click back event
         window.addEventListener("popstate", function() {
             if(!that.useInteralRouting) return;
             var id = that.getPanelId(document.location.hash);
             var hashChecker = document.location.href.replace(document.location.origin + "/", "");
             //make sure we allow hash changes outside afui
-            if (hashChecker == "#") return;
+            if (hashChecker === "#") return;
             if (id === "" && that.history.length === 1) //Fix going back to first panel and an empty hash
                 id = "#" + that.firstDiv.id;
             if (id === "") return;
             if (af(id).filter(".panel").length === 0) return;
-            if (id != "#" + that.activeDiv.id) that.goBack();
+            if (id !== "#" + that.activeDiv.id) that.goBack();
         }, false);
 
         function setupCustomTheme() {
@@ -3906,7 +3932,7 @@ if (!Date.now)
                 $("head").append("<style id='iosBlurrHack'>#afui .y-scroll > *, #afui .x-scroll > * {"+hackStyle+"}</style>");
             }
             else if ($.os.anroid&&!$.os.androidICS){
-                $.ui.transitionTime="150ms";
+                $.ui.transitionTime = "150ms";
             }
             else if($.os.fennec){
                 $.ui.ready(function(){
@@ -3979,6 +4005,48 @@ if (!Date.now)
             el = $(el);
             return el.css3Animate(opts);
         },
+        dispatchPanelEvent:function(fnc,myPanel){
+            if (typeof fnc == "string" && window[fnc]) {
+                return window[fnc](myPanel);
+            }
+            else if(fnc.indexOf(".")!==-1){
+                var scope=window,items=fnc.split("."),len=items.length,i=0;
+                for(i;i<len-1;i++){
+                    scope=scope[items[i]];
+                    if(scope===undefined) return;
+                }
+                return scope[items[i]](myPanel);
+            }
+        },
+        /**
+         * This enables the tab bar ability to keep pressed states on elements
+         * ```
+           $.ui.enableTabBar();
+           ```
+           @title $.ui.enableTabBar
+         */
+        enableTabBar:function(e){
+            $(document).on("click",".button-grouped.tabbed",function(e){
+                var $el=$(e.target);
+                $el.closest(".tabbed").find(".button").data("ignore-pressed","true").removeClass("pressed");
+                //this is a hack, but the touchEvents plugn will remove pressed
+                $el.closest(".button").addClass("pressed");
+                setTimeout(function(){
+                    $el.closest(".button").addClass("pressed");
+                });
+            });
+        },
+         /**
+         * This disables the tab bar ability to keep pressed states on elements
+         * ```
+           $.ui.disableTabBar();
+           ```
+           @title $.ui.disableTabBar
+         */
+        disableTabBar:function(e){
+            $(document).off("click",".button-grouped.tabbed");
+            $(".button-grouped.tabbed .button").removeAttr("data-ignore-pressed");
+        },
         /**
          * This changes the side menu width
          * ```
@@ -3993,7 +4061,7 @@ if (!Date.now)
             width = width + "";
             width = width.replace("px", "") + "px";
             $("head").find("style#afui_sideMenuWidth").remove();
-            var css="@media handheld, only screen and (min-width: 768px) {"+
+            var css = "@media handheld, only screen and (min-width: 768px) {"+
                         "#afui > #navbar.hasMenu.splitview, #afui > #header.hasMenu.splitview, #afui > #content.hasMenu.splitview  {"+
                         "    margin-left:"+width+" !important;"+
                         "    width: -webkit-calc(100% -"+width+") !important;"+
@@ -4280,7 +4348,7 @@ if (!Date.now)
          */
         updateHash: function(newHash) {
             if (!this.manageHistory) return;
-            newHash = newHash.indexOf("#") == -1 ? "#" + newHash : newHash; //force having the # in the begginning as a standard
+            newHash = newHash.indexOf("#") === -1 ? "#" + newHash : newHash; //force having the # in the begginning as a standard
             previousTarget = newHash;
 
             var previousHash = window.location.hash;
@@ -4296,7 +4364,7 @@ if (!Date.now)
         /*gets the panel name from an hash*/
         getPanelId: function(hash) {
             var firstSlash = hash.indexOf("/");
-            return firstSlash == -1 ? hash : hash.substring(0, firstSlash);
+            return firstSlash === -1 ? hash : hash.substring(0, firstSlash);
         },
 
         /**
@@ -4321,7 +4389,7 @@ if (!Date.now)
             var badge = $target.find("span.af-badge");
 
             if (badge.length === 0) {
-                if ($target.css("position") != "absolute") $target.css("position", "relative");
+                if ($target.css("position") !== "absolute") $target.css("position", "relative");
                 badge = $.create("span", {
                     className: "af-badge " + position,
                     html: value
@@ -4362,7 +4430,7 @@ if (!Date.now)
          */
         toggleNavMenu: function(force) {
             if (!this.showNavMenu) return;
-            if ($.query("#navbar").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
+            if ($.query("#navbar").css("display") !== "none" && ((force !== undefined && force !== true) || force === undefined)) {
                // $.query("#content").css("bottom", "0px");
                 $.query("#navbar").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
@@ -4380,7 +4448,7 @@ if (!Date.now)
          * @title $.ui.toggleHeaderMenu([force])
          */
         toggleHeaderMenu: function(force) {
-            if ($.query("#header").css("display") != "none" && ((force !== undefined && force !== true) || force === undefined)) {
+            if ($.query("#header").css("display") !== "none" && ((force !== undefined && force !== true) || force === undefined)) {
                // $.query("#content").css("top", "0px");
                 $.query("#header").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
@@ -4783,7 +4851,7 @@ if (!Date.now)
          * @title $.ui.setTitle(value)
          */
         setTitle: function(val) {
-            if(this._currentHeaderID!=="defaultHeader") return;
+            if(this._currentHeaderID !== "defaultHeader") return;
             $.query("#header header:not(.ignore)  #pageTitle").html(val);
         },
         /**
@@ -4796,7 +4864,7 @@ if (!Date.now)
          * @title $.ui.setBackButtonText(value)
          */
         setBackButtonText: function(text) {
-            if(this._currentHeaderID!=="defaultHeader") return;
+            if(this._currentHeaderID !== "defaultHeader") return;
             if (this.trimBackButtonText && text.length >= 7)
                 text = text.substring(0, 5) + "...";
             if (this.backButtonText.length > 0) $.query("#header header:not(.ignore) #backButton").html(this.backButtonText);
@@ -4878,14 +4946,25 @@ if (!Date.now)
                 else {
                     this.scrollingDivs.modal_container.disable();
                 }
-                //move header
-                if(elemsToCopy.filter("header").length>0){
-                    modalParent.find("#modalHeader").append(elemsToCopy.filter("header"));
+                modalDiv.addClass("panel").show();
+                //modal header
+                if($panel.data("header") == "none"){ // no header
+                    modalParent.find("#modalHeader").hide();
+                } else if(elemsToCopy.filter("header").length>0){ // custom header
+                    modalParent.find("#modalHeader").append(elemsToCopy.filter("header")).show();
+                } else { // add default header with close
+                    modalParent.find("#modalHeader").append(
+                        $.create("header", {className:"header"}).append(
+                            $.create("h1", {html:$panel.data("title")}).get(0))
+                        .append(
+                            $.create("a", {className:"button icon close"}).attr("onclick","$.ui.hideModal()").get(0)
+                        )).show();
                 }
-                //move footer
-                if(elemsToCopy.filter("footer").length>0){
-                    
-                    modalParent.find("#modalFooter").append(elemsToCopy.filter("footer"));
+                //modal footer
+                if($panel.data("footer") == "none"){ // no footer
+                    modalParent.find("#modalFooter").hide();
+                } else if(elemsToCopy.filter("footer").length>0){ // custom footer
+                    modalParent.find("#modalFooter").append(elemsToCopy.filter("footer")).show();
                     var tmpAnchors = $.query("#modalFooter > footer > a:not(.button)");
                     if (tmpAnchors.length > 0) {
                         var width = parseFloat(100 / tmpAnchors.length);
@@ -4899,15 +4978,16 @@ if (!Date.now)
                             nodes[i].parentNode.removeChild(nodes[i]);
                         }
                     }
+                } else { // no default footer
+                    modalParent.find("#modalFooter").hide();
                 }
 
                 this.scrollToTop("modal");
                 modalDiv.data("panel", id);
                 var myPanel=$panel.get(0);
                 var fnc = myPanel.getAttribute("data-load");
-                if (typeof fnc == "string" && window[fnc]) {
-                    window[fnc](myPanel);
-                }
+                if(fnc)
+                    this.dispatchPanelEvent(fnc,myPanel);
                 $panel.trigger("loadpanel");
 
             }
@@ -4931,9 +5011,8 @@ if (!Date.now)
 
             var tmp = $.query($cnt.data("panel"));
             var fnc = tmp.data("unload");
-            if (typeof fnc == "string" && window[fnc]) {
-                window[fnc](tmp.get(0));
-            }
+            if(fnc)
+                this.dispatchPanelEvent(fnc,tmp.get(0));
             tmp.trigger("unloadpanel");
             setTimeout(function(){
                 if($.feat.nativeTouchScroll || !useScroller){
@@ -4972,7 +5051,7 @@ if (!Date.now)
             else newDiv = newDiv.get(0);
 
 
-            if (el.getAttribute("js-scrolling") && (el.getAttribute("js-scrolling").toLowerCase() == "yes" || el.getAttribute("js-scrolling").toLowerCase() == "true")) {
+            if (el.getAttribute("js-scrolling") && (el.getAttribute("js-scrolling").toLowerCase() === "yes" || el.getAttribute("js-scrolling").toLowerCase() === "true")) {
                 $.cleanUpContent(el.childNodes[0], false, true);
                 $(el.childNodes[0]).html(content);
             } else {
@@ -5008,7 +5087,7 @@ if (!Date.now)
          * @title $.ui.addContentDiv(id,content,title);
          */
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
-            el = typeof(el) !== "string" ? el : el.indexOf("#") == -1 ? "#" + el : el;
+            el = typeof(el) !== "string" ? el : el.indexOf("#") === -1 ? "#" + el : el;
             var myEl = $.query(el).get(0);
             var newDiv, newId;
             if (!myEl) {
@@ -5052,24 +5131,22 @@ if (!Date.now)
             //sets up scroll when required and not supported
             if (!$.feat.nativeTouchScroll && hasScroll) tmp.setAttribute("js-scrolling", "true");
 
-            if (tmp.getAttribute("js-scrolling") && (tmp.getAttribute("js-scrolling").toLowerCase() == "yes" || tmp.getAttribute("js-scrolling").toLowerCase() == "true")) {
+            if (tmp.getAttribute("js-scrolling") && (tmp.getAttribute("js-scrolling").toLowerCase() === "yes" || tmp.getAttribute("js-scrolling").toLowerCase() === "true")) {
                 jsScroll = true;
                 hasScroll = true;
             }
-            var title=tmp.getAttribute("data-title")||tmp.title;
-            tmp.title="";
+            var title = tmp.getAttribute("data-title")||tmp.title;
+            tmp.title = "";
             tmp.setAttribute("data-title",title);
 
 
-            if($(tmp).hasClass("no-scroll"))
-                hasScroll=false;
-            if (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") == "no") {
+            if($(tmp).hasClass("no-scroll") || (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") == "no")) {
                 hasScroll = false;
                 jsScroll = false;
                 tmp.removeAttribute("js-scrolling");
             }
 
-            if (!jsScroll||$.os.desktop) {
+            if (!jsScroll || $.os.desktop) {
                 container.appendChild(tmp);
                 scrollEl = tmp;
                 tmp.style["-webkit-overflow-scrolling"] = "none";
@@ -5174,7 +5251,7 @@ if (!Date.now)
             var hasHeader = what.getAttribute("data-header");
 
             //$asap removed since animations are fixed in css3animate
-            if (hasFooter && hasFooter.toLowerCase() == "none") {
+            if (hasFooter && hasFooter.toLowerCase() === "none") {
                 that.toggleNavMenu(false);
                 hasFooter = false;
             } else {
@@ -5187,7 +5264,7 @@ if (!Date.now)
                 if (that.customFooter) that.updateNavbarElements(that.defaultFooter);
                 that.customFooter = false;
             }
-            if (hasHeader && hasHeader.toLowerCase() == "none") {
+            if (hasHeader && hasHeader.toLowerCase() === "none") {
                 that.toggleHeaderMenu(false);
                 hasHeader=false;
             } else {
@@ -5254,15 +5331,13 @@ if (!Date.now)
 
             if (oldDiv) {
                 fnc = oldDiv.getAttribute("data-unload");
-                if (typeof fnc == "string" && window[fnc]) {
-                    window[fnc](oldDiv);
-                }
+                if(fnc)
+                    this.dispatchPanelEvent(fnc,oldDiv);
                 $(oldDiv).trigger("unloadpanel");
             }
             var fnc = what.getAttribute("data-load");
-            if (typeof fnc == "string" && window[fnc]) {
-                window[fnc](what);
-            }
+            if(fnc)
+                this.dispatchPanelEvent(fnc,what);
             $(what).trigger("loadpanel");
             if (this.isSideMenuOn()) {
                 that.toggleSideMenu(false);
@@ -5302,7 +5377,7 @@ if (!Date.now)
             var what = null;
             var loadAjax = true;
             anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
-            if (target.indexOf("#") == -1) {
+            if (target.indexOf("#") === -1) {
                 var urlHash = "url" + crc32(target); //Ajax urls
                 var crcCheck = $.query("div.panel[data-crc='" + urlHash + "']");
                 if ($.query("#" + target).length > 0) {
@@ -5323,7 +5398,7 @@ if (!Date.now)
                     } else target = "#" + urlHash;
                 }
             }
-            if (target.indexOf("#") == -1 && loadAjax) {
+            if (target.indexOf("#") === -1 && loadAjax) {
                 this.loadAjax(target, newTab, back, transition, anchor);
             } else {
                 this.loadDiv(target, newTab, back, transition);
@@ -5348,7 +5423,7 @@ if (!Date.now)
 
             var slashIndex = what.indexOf("/");
             var hashLink = "";
-            if (slashIndex != -1) {
+            if (slashIndex !== -1) {
                 // Ignore everything after the slash for loading
                 hashLink = what.substr(slashIndex);
                 what = what.substr(0, slashIndex);
@@ -5369,7 +5444,7 @@ if (!Date.now)
             var oldDiv = this.activeDiv;
             var currWhat = what;
 
-            if (what.getAttribute("data-modal") == "true" || what.getAttribute("modal") == "true") {
+            if (what.getAttribute("data-modal") === "true" || what.getAttribute("modal") === "true") {
                 return this.showModal(what.id);
             }
 
@@ -5431,7 +5506,7 @@ if (!Date.now)
                 if (this.history.length > 0) {
                     val = this.history[this.history.length - 1];
                     slashIndex = val.target.indexOf("/");
-                    if (slashIndex != -1) {
+                    if (slashIndex !== -1) {
                         prevId = val.target.substr(0, slashIndex);
                     } else prevId = val.target;
                     el = $.query(prevId).get(0);
@@ -5476,10 +5551,10 @@ if (!Date.now)
          */
         loadAjax: function(target, newTab, back, transition, anchor) {
             // XML Request
-            if (this.activeDiv.id == "afui_ajax" && target == this.ajaxUrl) return;
+            if (this.activeDiv.id === "afui_ajax" && target == this.ajaxUrl) return;
             var urlHash = "url" + crc32(target); //Ajax urls
             var that = this;
-            if (target.indexOf("http") == -1) target = intel.xdk.webRoot + target;
+            if (target.indexOf("http") === -1) target = intel.xdk.webRoot + target;
             var xmlhttp = new XMLHttpRequest();
 
             if (anchor && typeof(anchor) !== "object") {
@@ -5767,7 +5842,7 @@ if (!Date.now)
                 var tmp = el;
                 var id;
                 var prevSibling = el.previousSibling;
-                if (el.parentNode && el.parentNode.id != "content") {
+                if (el.parentNode && el.parentNode.id !== "content") {
 
                     el.parentNode.removeChild(el);
                     id = el.id;
@@ -5890,7 +5965,7 @@ if (!Date.now)
 
                     var firstPanelId = that.getPanelId(defaultHash);
                     //that.history=[{target:'#'+that.firstDiv.id}];   //set the first id as origin of path
-                    var isFirstPanel = (firstPanelId!==null&&firstPanelId == "#" + that.firstDiv.id);
+                    var isFirstPanel = (firstPanelId!==null&&firstPanelId === "#" + that.firstDiv.id);
                     if (firstPanelId.length > 0 && that.loadDefaultHash && !isFirstPanel) {
                         that.loadContent(defaultHash, true, false, "none"); //load the active page as a newTab with no transition
                     }
@@ -5905,7 +5980,7 @@ if (!Date.now)
                         that.loadContentData(that.firstDiv);
 
                         $.query("#header #backButton").css("visibility", "hidden");
-                        if (that.firstDiv.getAttribute("data-modal") == "true" || that.firstDiv.getAttribute("modal") == "true") {
+                        if (that.firstDiv.getAttribute("data-modal") === "true" || that.firstDiv.getAttribute("modal") === "true") {
                             that.showModal(that.firstDiv.id);
                         }
                     }
@@ -5931,6 +6006,7 @@ if (!Date.now)
             if (window.navigator.standalone||this.isIntel) {
                 this.blockPageScroll();
             }
+            this.enableTabBar();
             this.topClickScroll();
         },
         /**
@@ -5939,7 +6015,7 @@ if (!Date.now)
         topClickScroll: function() {
             var that = this;
             document.getElementById("header").addEventListener("click", function(e) {
-                if (e.clientY <= 15 && e.target.nodeName.toLowerCase() == "h1") //hack - the title spans the whole width of the header
+                if (e.clientY <= 15 && e.target.nodeName.toLowerCase() === "h1") //hack - the title spans the whole width of the header
                     that.scrollingDivs[that.activeDiv.id].scrollToTop("100");
             });
 
@@ -6008,11 +6084,11 @@ if (!Date.now)
         }
 
         //this technique fails when considerable content exists inside anchor, should be recursive ?
-        if (theTarget.tagName.toLowerCase() != "a" && theTarget.parentNode) return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
+        if (theTarget.tagName.toLowerCase() !== "a" && theTarget.parentNode) return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
         //anchors
-        if (theTarget.tagName !== "undefined" && theTarget.tagName.toLowerCase() == "a") {
+        if (theTarget.tagName !== "undefined" && theTarget.tagName.toLowerCase() === "a") {
 
-            var custom = (typeof $.ui.customClickHandler == "function") ? $.ui.customClickHandler : false;
+            var custom = (typeof $.ui.customClickHandler === "function") ? $.ui.customClickHandler : false;
             if (custom !== false) {
                 if ($.ui.customClickHandler(theTarget,e)) return e.preventDefault();
 
@@ -6043,18 +6119,18 @@ if (!Date.now)
                 href = href.substring(prefix.length);
             }
             //empty links
-            if (href == "#" || (href.indexOf("#") === href.length - 1) || (href.length === 0 && theTarget.hash.length === 0)) return e.preventDefault();
+            if (href === "#" || (href.indexOf("#") === href.length - 1) || (href.length === 0 && theTarget.hash.length === 0)) return e.preventDefault();
 
             //internal links
             //http urls
-            var urlRegex=/^((http|https):\/\/)/;
-            //only call prevent default on http urls.  If it's a protocol handler, do not call prevent default.
+            var urlRegex=/^((http|https|file):\/\/)/;
+            //only call prevent default on http/fileurls.  If it's a protocol handler, do not call prevent default.
             //It will fall through to the ajax call and fail
             if(theTarget.href.indexOf(":") !== -1 &&urlRegex.test(theTarget.href))
                 e.preventDefault();
             var mytransition = theTarget.getAttribute("data-transition");
             var resetHistory = theTarget.getAttribute("data-resetHistory");
-            resetHistory = resetHistory && resetHistory.toLowerCase() == "true" ? true : false;
+            resetHistory = resetHistory && resetHistory.toLowerCase() === "true" ? true : false;
             href = theTarget.hash.length > 0 ? theTarget.hash : href;
             $.ui.loadContent(href, resetHistory, 0, mytransition, theTarget);
             return;

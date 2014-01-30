@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-01-23 */
+/*! intel-appframework - v2.1.0 - 2014-01-30 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -1053,7 +1053,7 @@ body {
 #afui input[type="url"],
 #afui input[type="tel"],
 #afui input[type="color"],
-#afui .input-group {
+#afui .input-group {  
   width: 100%;
   height: 40px;
   padding: 10px;
@@ -1266,6 +1266,11 @@ body {
   margin: 16px 0 8px;
 }
 
+
+#afui input[type=button],
+#afui input[type=submit], #afui button {
+  font-size:inherit;
+} 
 #afui .button {
 	position:relative;
 	display:inline-block;
@@ -1292,7 +1297,7 @@ body {
 
 	margin-left:16px;
 	padding-left:6px;
-	border-color:#666 #666 #666 transparent !important;
+	border-color:#666 #666 transparent transparent !important;
 }
 #afui .button.next {
 	border-color:#666 transparent #666 #666 !important;
@@ -1334,7 +1339,7 @@ body {
 	box-shadow:none;
 }
 
-#afui #header .button-grouped>.button {
+#afui .header .button-grouped>.button {
 	margin:0;
     border-color:#fff;
 }
@@ -1457,7 +1462,7 @@ body {
 	border-color:#666;
 }
 
-#afui #header .button {
+#afui .header .button {
     color: #fff;
     background:none;
     border-color: transparent;
@@ -1469,7 +1474,7 @@ body {
     white-space: nowrap;
 }
  
-#header .button.icon:before{
+.header .button.icon:before{
     padding-left:6px;
 }
  
