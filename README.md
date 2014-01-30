@@ -24,6 +24,14 @@ You can make changes to the following files.
 
 We use Grunt to build our compiled files.  When you have made a change, run "grunt rebuild" to compile new source and minified files to include in your PR.
 
+grunt-closure-compiler requires the closure compiler jar file.  The path is set in Gruntfile.js, but by default should exist in a directory called "closure" parallel to App Framework
+
+```
+  -- appframework
+  -- closure
+    -- build
+      -- compiler.jar
+```
 
 # Pull Requests
 
