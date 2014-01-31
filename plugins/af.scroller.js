@@ -6,7 +6,6 @@
  * @copyright Intel
  * @param {function} $ Intel App Framework (af)
  */
- /* global af*/
  /* global numOnly*/
 (function ($) {
     "use strict";
