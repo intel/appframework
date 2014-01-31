@@ -4,8 +4,8 @@
  * Supports iOS native touch scrolling
  * Optimizations and bug improvements by Intel
  * @copyright Intel
+ * @param {function} $ Intel App Framework (af)
  */
- /* global af*/
  /* global numOnly*/
 (function ($) {
     "use strict";
@@ -44,7 +44,7 @@
 
     function bindTouchLayer() {
         //use a single bind for all scrollers
-        if (af.os.android && !af.os.chrome && af.os.webkit) {
+        if ($.os.android && !$.os.chrome && $.os.webkit) {
             var androidFixOn = false;
             //connect to touchLayer to detect editMode
             $.bind($.touchLayer, ["cancel-enter-edit", "exit-edit"], function () {
@@ -68,7 +68,7 @@
 
             if (!boundTouchLayer && $.touchLayer && $.isObject($.touchLayer)) bindTouchLayer();
             else if (!$.touchLayer || !$.isObject($.touchLayer)) $.touchLayer = {};
-            if (typeof elID == "string" || elID instanceof String) {
+            if (typeof elID === "string" || elID instanceof String) {
                 el = document.getElementById(elID);
             } else {
                 el = elID;
@@ -84,7 +84,7 @@
                 opts.horizontalScroll=true;
             if(checkClassEl.hasClass("y-scroll"))
                 opts.verticalScroll=true;
-            if (af.os.desktop)
+            if ($.os.desktop)
                 return new scrollerCore(el, opts);
             else if (opts.useJsScroll) return new jsScroller(el, opts);
             return new nativeScroller(el, opts);
@@ -202,8 +202,8 @@
                 //assign self destruct
                 var that = this;
                 var orientationChangeProxy = function (e) {
-                    //no need to readjust if disabled...                
-                    if (that.eventsActive&&!$.feat.nativeTouchScroll&&(!af.ui||(af.ui.activeDiv==that.container))) {
+                    //no need to readjust if disabled...
+                    if (that.eventsActive && !$.feat.nativeTouchScroll&&(!$.ui || ($.ui.activeDiv === that.container)) ) {
                         that.adjustScroll();
                     }
                 };
@@ -255,16 +255,16 @@
                 if (this.refreshElement === null) {
                     var orginalEl = document.getElementById(this.container.id + "_pulldown");
                     if (orginalEl !== null) {
-                        afEl = af(orginalEl);
+                        afEl = $(orginalEl);
                     } else {
-                        afEl = af("<div id='" + this.container.id + "_pulldown' class='afscroll_refresh' style='position:relative;height:60px;text-align:center;line-height:60px;font-weight:bold;'>" + this.refreshContent + "</div>");
+                        afEl = $("<div id='" + this.container.id + "_pulldown' class='afscroll_refresh' style='position:relative;height:60px;text-align:center;line-height:60px;font-weight:bold;'>" + this.refreshContent + "</div>");
                     }
                 } else {
-                    afEl = af(this.refreshElement);
+                    afEl = $(this.refreshElement);
                 }
                 var el = afEl.get(0);
 
-                this.refreshContainer = af("<div style='overflow:hidden;height:0;width:100%;display:none;background:inherit;-webkit-backface-visibility: hidden !important;'></div>");
+                this.refreshContainer = $("<div style='overflow:hidden;height:0;width:100%;display:none;background:inherit;-webkit-backface-visibility: hidden !important;'></div>");
                 $(this.el).prepend(this.refreshContainer.prepend(el));
                 this.refreshContainer = this.refreshContainer[0];
             },
@@ -282,7 +282,7 @@
                 }
             },
             setRefreshContent: function (content) {
-                af(this.container).find(".afscroll_refresh").html(content);
+                $(this.container).find(".afscroll_refresh").html(content);
             },
             lock: function () {
                 if (this.scrollingLocked) return;
@@ -302,7 +302,7 @@
             scrollToItem: function (el, where) { //TODO: add functionality for x position
                 if (!$.is$(el)) el = $(el);
                 var newTop,itemPos,panelTop,itemTop;
-                if (where == "bottom") {
+                if (where === "bottom") {
                     itemPos = el.offset();
                     newTop = itemPos.top - this.afEl.offset().bottom + itemPos.height;
                     newTop += 4; //add a small space
@@ -391,7 +391,6 @@
                 scrollDiv = createScrollBar(20, 5);
                 scrollDiv.style.bottom = "0px";
 
-
                 if (this.hScrollCSS) scrollDiv.className = this.hScrollCSS;
                 //scrollDiv.style.opacity = "0";
                 scrollDiv.style.display="none";
@@ -402,7 +401,6 @@
             if (this.horizontalScroll) this.el.style.cssFloat = "left";
 
             this.el.hasScroller = true;
-
         };
         nativeScroller = function (el, opts) {
             if(opts.nativeParent){
@@ -429,9 +427,6 @@
         };
         nativeScroller.prototype = new scrollerCore();
         jsScroller.prototype = new scrollerCore();
-
-
-
 
         ///Native scroller
         nativeScroller.prototype.defaultProperties = function () {
@@ -648,8 +643,7 @@
             clearInterval(self.nativePolling);
             self.nativePolling = setInterval(function () {
                 counter++;
-
-                if(counter==parseInt(max/8,10)){
+                if(counter === parseInt(max/8,10)) {
                     if(self.initScrollProgress){
                         $.trigger(self,"scroll",[{x:-self.el.scrollLeft+self.cX,y:-self.el.scrollTop+self.cY}]);
                         $.trigger($.touchLayer,"scroll",[{x:-self.el.scrollLeft+self.cX,y:-self.el.scrollTop+self.cY}]);
@@ -664,7 +658,7 @@
 
                     return;
                 }
-                if (self.el.scrollTop != currPos.top || self.el.scrollLeft != currPos.left) {
+                if (self.el.scrollTop !== currPos.top || self.el.scrollLeft !== currPos.left) {
                     clearInterval(self.nativePolling);
                     $.trigger($.touchLayer, "scrollend", [self.el]); //notify touchLayer of this elements scrollend
                     $.trigger(self, "scrollend", [self.el]);
@@ -745,7 +739,6 @@
                 }
             }
 
-
             var that = this;
             if (this.infinite && this.infiniteEndCheck && this.infiniteTriggered) {
 
@@ -754,7 +747,6 @@
             }
         };
         nativeScroller.prototype.logPos = function (x, y) {
-
 
             this.loggedPcentX = this.divide(x, (this.el.scrollWidth));
             this.loggedPcentY = this.divide(y, (this.el.scrollHeight));
@@ -775,11 +767,8 @@
             this.logPos(this.el.scrollLeft, this.el.scrollTop);
         };
 
-
-
         //JS scroller
         jsScroller.prototype.defaultProperties = function () {
-
             this.boolScrollLock = false;
             this.currentScrollingObject = null;
             this.elementInfo = null;
@@ -796,14 +785,12 @@
             this.isScrolling = false;
             this.androidFormsMode = false;
             this.refreshSafeKeep = false;
-
             this.lastScrollbar = "";
             this.finishScrollingObject = null;
             this.container = null;
             this.scrollingFinishCB = null;
             this.loggedPcentY = 0;
             this.loggedPcentX = 0;
-
         };
 
         function createScrollBar(width, height) {
@@ -818,6 +805,7 @@
             scrollDiv.style.background = "black";
             return scrollDiv;
         }
+		
         jsScroller.prototype.enable = function (firstExecution) {
             if (this.eventsActive) return;
             this.eventsActive = true;
@@ -896,7 +884,6 @@
                 this.scrollingFinishCB = null;
             }
 
-
             //disable if locked
             if (event.touches.length !== 1 || this.boolScrollLock) return;
 
@@ -904,10 +891,9 @@
             if (event.touches[0].target && event.touches[0].target.type !== undefined) {
                 var tagname = event.touches[0].target.tagName.toLowerCase();
 
-                if (tagname == "select" ) // stuff we need to allow
+                if (tagname === "select" ) // stuff we need to allow
                 // access to legit calls
                     return;
-
             }
 
             //default variables
@@ -944,7 +930,6 @@
             this.elementInfo.hasHorScroll = this.elementInfo.maxLeft > 0;
             this.elementInfo.requiresVScrollBar = this.vscrollBar && this.elementInfo.hasVertScroll;
             this.elementInfo.requiresHScrollBar = this.hscrollBar && this.elementInfo.hasHorScroll;
-
 
             //save event
             this.saveEventInfo(event);
@@ -998,7 +983,7 @@
             this.lastScrollInfo = scrollInfo;
             this.hasMoved = false;
 
-            if(this.elementInfo.maxTop===0&&this.elementInfo.maxLeft===0&&this.lockBounce)
+            if(this.elementInfo.maxTop === 0 && this.elementInfo.maxLeft === 0 && this.lockBounce)
                 this.scrollTop(0);
             else
                 this.scrollerMoveCSS(this.lastScrollInfo, 0);
@@ -1039,17 +1024,17 @@
             };
         };
         jsScroller.prototype.setVScrollBar = function (scrollInfo, time, timingFunction) {
-
             if (!this.elementInfo.requiresVScrollBar) return false;
             var newHeight = (parseFloat(this.elementInfo.bottomMargin / this.elementInfo.divHeight) * this.elementInfo.bottomMargin) + "px";
-            if(numOnly(newHeight)>this.elementInfo.bottomMargin)
-                newHeight=this.elementInfo.bottomMargin+"px";
-            if (newHeight != this.vscrollBar.style.height) this.vscrollBar.style.height = newHeight;
+            if(numOnly(newHeight) > this.elementInfo.bottomMargin)
+                newHeight = this.elementInfo.bottomMargin+"px";
+            if (newHeight !== this.vscrollBar.style.height) 
+				this.vscrollBar.style.height = newHeight;
 
             var pos = (this.elementInfo.bottomMargin - numOnly(this.vscrollBar.style.height)) - (((this.elementInfo.maxTop + scrollInfo.y) / this.elementInfo.maxTop) * (this.elementInfo.bottomMargin - numOnly(this.vscrollBar.style.height)));
             if (pos > this.elementInfo.bottomMargin) pos = this.elementInfo.bottomMargin;
-
             if (pos < 0) pos = 0;
+			
             this.scrollbarMoveCSS(this.vscrollBar, {
                 x: 0,
                 y: pos
@@ -1059,9 +1044,10 @@
         jsScroller.prototype.setHScrollBar = function (scrollInfo, time, timingFunction) {
             if (!this.elementInfo.requiresHScrollBar) return false;
             var newWidth = (parseFloat(this.elementInfo.rightMargin / this.elementInfo.divWidth) * this.elementInfo.rightMargin) + "px";
-            if (newWidth != this.hscrollBar.style.width) this.hscrollBar.style.width = newWidth;
+            if (newWidth !== this.hscrollBar.style.width) 
+				this.hscrollBar.style.width = newWidth;
+			
             var pos = (this.elementInfo.rightMargin - numOnly(this.hscrollBar.style.width)) - (((this.elementInfo.maxLeft + scrollInfo.x) / this.elementInfo.maxLeft) * (this.elementInfo.rightMargin - numOnly(this.hscrollBar.style.width)));
-
             if (pos > this.elementInfo.rightMargin) pos = this.elementInfo.rightMargin;
             if (pos < 0) pos = 0;
 
@@ -1073,7 +1059,6 @@
         };
 
         jsScroller.prototype.onTouchMove = function (event) {
-
 
             if (this.currentScrollingObject === null) return;
             //event.preventDefault();
@@ -1121,7 +1106,6 @@
 
 
             //pull to refresh elastic
-
             var positiveOverflow = this.lastScrollInfo.y > 0 && this.lastScrollInfo.deltaY > 0;
             var negativeOverflow = this.lastScrollInfo.y < -this.elementInfo.maxTop && this.lastScrollInfo.deltaY < 0;
             var overflow,pcent,baseTop;
@@ -1209,8 +1193,6 @@
             }
 
         };
-
-
 
         jsScroller.prototype.calculateMovement = function (event, last) {
             //default variables
@@ -1322,7 +1304,6 @@
             scrollInfo.absDeltaY = Math.abs(scrollInfo.deltaY);
             scrollInfo.absDeltaX = Math.abs(scrollInfo.deltaX);
 
-
             //set momentum
             if (scrollInfo.absDeltaY > 0) {
                 scrollInfo.deltaY = (scrollInfo.deltaY < 0 ? -1 : 1) * (scrollInfo.absSpeedY * scrollInfo.absSpeedY) / (2 * deceleration);
@@ -1341,9 +1322,7 @@
             } else scrollInfo.duration = 0;
         };
 
-
         jsScroller.prototype.onTouchEnd = function (event) {
-
 
             if (this.currentScrollingObject === null || !this.moved) return;
 
@@ -1397,9 +1376,8 @@
                     if(-scrollInfo.left>this.elementInfo.maxLeft&&this.refresh) scrollInfo.duration=HIDE_REFRESH_TIME;
                 }
             }
-            if(scrollInfo.x==scrollInfo.left&&scrollInfo.y==scrollInfo.top)
-                scrollInfo.duration=0;
-            if (this.androidFormsMode) scrollInfo.duration = 0;
+            if ((scrollInfo.x === scrollInfo.left && scrollInfo.y === scrollInfo.top) || this.androidFormsMode)
+                scrollInfo.duration = 0;
 
             this.scrollerMoveCSS(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
             this.setVScrollBar(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
@@ -1407,7 +1385,7 @@
             this.setFinishCalback(scrollInfo.duration);
             if (this.infinite && !this.infiniteTriggered) {
                 if ((Math.abs(scrollInfo.y) >= (this.el.clientHeight - this.container.clientHeight))) {
-                    var self=this;
+                    var self = this;
                     setTimeout(function(){
                         self.infiniteTriggered = true;
                         $.trigger(self, "infinite-scroll");
@@ -1465,7 +1443,6 @@
                 this.hscrollBar.style[$.feat.cssPrefix + "Perspective"] = "none";
                 this.hscrollBar.style[$.feat.cssPrefix + "BackfaceVisibility"] = "visible";
             }
-
         };
         jsScroller.prototype.stopFormsMode = function () {
             if (this.blockFormsFix) return;
@@ -1496,10 +1473,7 @@
                 this.hscrollBar.style[$.feat.cssPrefix + "Perspective"] = 1000;
                 this.hscrollBar.style[$.feat.cssPrefix + "BackfaceVisibility"] = "hidden";
             }
-
         };
-
-
 
         jsScroller.prototype.scrollerMoveCSS = function (distanceToMove, time, timingFunction) {
             if (!time) time = 0;
