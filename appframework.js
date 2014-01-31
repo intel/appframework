@@ -212,7 +212,7 @@ if (!window.af || typeof(af) !== "function") {
             selector = selector.trim();
 
             if (selector[0] === "#" && selector.indexOf(".") === -1 &&selector.indexOf(",") === -1 && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
-                if (what == document)
+                if (what === document)
                     _shimNodes(what.getElementById(selector.replace("#", "")), this);
                 else
                     _shimNodes(_selectorAll(selector, what), this);
@@ -568,9 +568,9 @@ if (!window.af || typeof(af) !== "function") {
                 $().css("background","red")  //Sets the elements background to red
                 ```
 
-            * @param {String} attribute to get
-            * @param {String} value to set as
-            * @return {Object} an appframework object
+            * @param {String} attribute The attribute to get
+            * @param {String} value Value to set as
+            * @return {Object} obj An appframework object
             * @title $().css(attribute,[value])
             */
             css: function(attribute, value, obj) {
@@ -1196,7 +1196,7 @@ if (!window.af || typeof(af) !== "function") {
                 var obj;
                 if (this.length === 0)
                     return this;
-                if (this[0] == window)
+                if (this[0] === window)
                     return {
                         left: 0,
                         top: 0,
@@ -1229,9 +1229,9 @@ if (!window.af || typeof(af) !== "function") {
                     return this;
                 if (val != nundefined)
                     return this.css("height", val);
-                if (this[0] == this[0].window)
+                if (this[0] === this[0].window)
                     return window.innerHeight + "";
-                if (this[0].nodeType == this[0].DOCUMENT_NODE)
+                if (this[0].nodeType === this[0].DOCUMENT_NODE)
                     return this[0].documentElement.offsetheight;
                 else {
                     var tmpVal = this.css("height").replace("px", "");
@@ -1254,9 +1254,9 @@ if (!window.af || typeof(af) !== "function") {
                     return this;
                 if (val != nundefined)
                     return this.css("width", val);
-                if (this[0] == this[0].window)
+                if (this[0] === this[0].window)
                     return window.innerWidth;
-                if (this[0].nodeType == this[0].DOCUMENT_NODE)
+                if (this[0].nodeType === this[0].DOCUMENT_NODE)
                     return this[0].documentElement.offsetwidth;
                 else {
                     var tmpVal = this.css("width").replace("px", "");
@@ -1557,7 +1557,7 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                $().eq(index)
                ```
-             * @param {Int} index - Index to filter by. If negative, it will go back from the end
+             * @param {Int} ind Index to filter by. If negative, it will go back from the end
              * @return {Object} appframework object
              * @title $().eq(index)
              */
@@ -1569,7 +1569,7 @@ if (!window.af || typeof(af) !== "function") {
                ```
                $().index(elem)
                ```
-             * @param {String|Object} element to look for.  Can be a selector or object
+             * @param {String|Object} elem The element to look for. Can be a selector or object
              * @return integer - index of selected element
              * @title $().index(elem)
              */
@@ -1703,7 +1703,7 @@ if (!window.af || typeof(af) !== "function") {
             $.ajax(opts);
             ```
 
-        * @param {Object} options
+        * @param {Object} opts Options
         * @title $.ajax(options)
         */
         $.ajax = function(opts) {
