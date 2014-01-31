@@ -9,6 +9,7 @@
  * @copyright Intel
  * @api private
  */
+ /* jshint eqeqeq:false */
 if (!window.af || typeof(af) !== "function") {
 
     /**
@@ -1283,7 +1284,7 @@ if (!window.af || typeof(af) !== "function") {
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     var tmp = this[i];
-                    while (tmp.parentNode && tmp.parentNode != document) {
+                    while (tmp.parentNode && tmp.parentNode !== document) {
                         elems.push(tmp.parentNode);
                         if (tmp.parentNode)
                             tmp = tmp.parentNode;
@@ -1765,7 +1766,7 @@ if (!window.af || typeof(af) !== "function") {
                     return $.jsonP(settings);
                 }
                 if (settings.crossDomain === null) settings.crossDomain = /^([\w-]+:)?\/\/([^\/]+)/.test(settings.url) &&
-                        RegExp.$2 != window.location.host;
+                        RegExp.$2 !== window.location.host;
 
                 if (!settings.crossDomain)
                     settings.headers = $.extend({
@@ -2197,7 +2198,7 @@ if (!window.af || typeof(af) !== "function") {
             if (event.ns)
                 var matcher = matcherFor(event.ns);
             return (handlers[afmid(element)] || []).filter(function(handler) {
-                return handler && (!event.e || handler.e == event.e) && (!event.ns || matcher.test(handler.ns)) && (!fn || handler.fn == fn || (typeof handler.fn === "function" && typeof fn === "function" && handler.fn === fn)) && (!selector || handler.sel == selector);
+                return handler && (!event.e || handler.e === event.e) && (!event.ns || matcher.test(handler.ns)) && (!fn || handler.fn === fn || (typeof handler.fn === "function" && typeof fn === "function" && handler.fn === fn)) && (!selector || handler.sel === selector);
             });
         }
         /**
@@ -2613,7 +2614,7 @@ if (!window.af || typeof(af) !== "function") {
                     for (var j = 0; j < evts.length; j++) {
                         if (f == nundefined)
                             delete evts[j];
-                        if (evts[j] == f) {
+                        if (evts[j] === f) {
                             evts.splice(j, 1);
                             break;
                         }
@@ -2739,7 +2740,7 @@ if (!window.af || typeof(af) !== "function") {
             window.postMessage("afm-asap", "*");
         };
         window.addEventListener("message", function(event) {
-            if (event.source == window && event.data === "afm-asap") {
+            if (event.source === window && event.data === "afm-asap") {
                 event.stopPropagation();
                 if (timeouts.length > 0) { //just in case...
                     (timeouts.shift()).apply(contexts.shift(), params.shift());
