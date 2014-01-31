@@ -40,29 +40,29 @@
     $(document).ready(function() {
         var prevEl;
         $(document.body).bind("touchstart", function(e) {
-            if(e.originalEvent)
-                e=e.originalEvent;
-            if(!e.touches || e.touches.length === 0) return;
+            if (e.originalEvent)
+                e = e.originalEvent;
+            if (!e.touches || e.touches.length === 0) return;
             var now = Date.now(), delta = now - (touch.last || now);
-            if(!e.touches || e.touches.length === 0) return;
+            if (!e.touches || e.touches.length === 0) return;
             touch.el = $(parentIfText(e.touches[0].target));
             touchTimeout && clearTimeout(touchTimeout);
-            touch.x1 =  e.touches[0].pageX;
+            touch.x1 = e.touches[0].pageX;
             touch.y1 = e.touches[0].pageY;
-            touch.x2=touch.y2=0;
+            touch.x2 = touch.y2 = 0;
             if (delta > 0 && delta <= 250)
                 touch.isDoubleTap = true;
             touch.last = now;
-            longTapTimer=setTimeout(longTap, longTapDelay);
+            longTapTimer = setTimeout(longTap, longTapDelay);
 
             if ($.ui.useAutoPressed && !touch.el.data("ignore-pressed"))
                 touch.el.addClass("pressed");
-            if(prevEl && $.ui.useAutoPressed && !prevEl.data("ignore-pressed") && prevEl[0] != touch.el[0])
+            if (prevEl && $.ui.useAutoPressed && !prevEl.data("ignore-pressed") && prevEl[0] !== touch.el[0])
                 prevEl.removeClass("pressed");
-            prevEl=touch.el;
+            prevEl = touch.el;
         }).bind("touchmove", function(e) {
             if(e.originalEvent)
-                e=e.originalEvent;
+                e = e.originalEvent;
             touch.x2 = e.touches[0].pageX;
             touch.y2 = e.touches[0].pageY;
             clearTimeout(longTapTimer);
@@ -95,7 +95,6 @@
                 touch.el.removeClass("pressed");
             touch = {};
             clearTimeout(longTapTimer);
-
         });
     });
 
