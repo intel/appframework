@@ -48,7 +48,7 @@
             }
             else
                 doMenu = true;
-            
+
             var sidePos=$.ui.getSideMenuPosition();
             if(sidePos>0){
                 openState=1;
@@ -96,7 +96,6 @@
                     $asideMenu.hide();
                 }
             }
-            
             if (Math.abs(thePlace) > max) return true;
 
             slideOver=max/3;

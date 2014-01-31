@@ -205,7 +205,7 @@
             return el.css3Animate(opts);
         },
         dispatchPanelEvent:function(fnc,myPanel){
-            if (typeof fnc == "string" && window[fnc]) {
+            if (typeof fnc === "string" && window[fnc]) {
                 return window[fnc](myPanel);
             }
             else if(fnc.indexOf(".")!==-1){
@@ -921,7 +921,7 @@
             {
                 elems = $.query("#" + elems);
             }
-            if (elems == this.prevHeader) return;
+            if (elems === this.prevHeader) return;
             this._currentHeaderID=elems.prop("id");
             if (this.prevHeader) {
                 //Let's slide them out
@@ -1147,7 +1147,7 @@
                 }
                 modalDiv.addClass("panel").show();
                 //modal header
-                if($panel.data("header") == "none"){ // no header
+                if($panel.data("header") === "none"){ // no header
                     modalParent.find("#modalHeader").hide();
                 } else if(elemsToCopy.filter("header").length>0){ // custom header
                     modalParent.find("#modalHeader").append(elemsToCopy.filter("header")).show();
@@ -1160,7 +1160,7 @@
                         )).show();
                 }
                 //modal footer
-                if($panel.data("footer") == "none"){ // no footer
+                if($panel.data("footer") === "none"){ // no footer
                     modalParent.find("#modalFooter").hide();
                 } else if(elemsToCopy.filter("footer").length>0){ // custom footer
                     modalParent.find("#modalFooter").append(elemsToCopy.filter("footer")).show();
@@ -1299,7 +1299,7 @@
                 if (!newDiv.getAttribute("data-title") && title) newDiv.setAttribute("data-title",title);
                 newId = (newDiv.id) ? newDiv.id : el.replace("#", ""); //figure out the new id - either the id from the loaded div.panel or the crc32 hash
                 newDiv.id = newId;
-                if (newDiv.id != el) newDiv.setAttribute("data-crc", el.replace("#", ""));
+                if (newDiv.id !== el) newDiv.setAttribute("data-crc", el.replace("#", ""));
             } else {
                 newDiv = myEl;
             }
@@ -1339,7 +1339,7 @@
             tmp.setAttribute("data-title",title);
 
 
-            if($(tmp).hasClass("no-scroll") || (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") == "no")) {
+            if($(tmp).hasClass("no-scroll") || (tmp.getAttribute("scrolling") && tmp.getAttribute("scrolling") === "no")) {
                 hasScroll = false;
                 jsScroll = false;
                 tmp.removeAttribute("js-scrolling");
@@ -1456,10 +1456,10 @@
             } else {
                 that.toggleNavMenu(true);
             }
-            if (hasFooter && that.customFooter != hasFooter) {
+            if (hasFooter && that.customFooter !== hasFooter) {
                 that.customFooter = hasFooter;
                 that.updateNavbarElements(hasFooter);
-            } else if (hasFooter != that.customFooter) {
+            } else if (hasFooter !== that.customFooter) {
                 if (that.customFooter) that.updateNavbarElements(that.defaultFooter);
                 that.customFooter = false;
             }
@@ -1470,10 +1470,10 @@
                 that.toggleHeaderMenu(true);
             }
 
-            if (hasHeader && that.customHeader != hasHeader) {
+            if (hasHeader && that.customHeader !== hasHeader) {
                 that.customHeader = hasHeader;
                 that.updateHeaderElements(hasHeader, goBack);
-            } else if (hasHeader != that.customHeader) {
+            } else if (hasHeader !== that.customHeader) {
                 if (that.customHeader) {
                     that.updateHeaderElements(that.defaultHeader, goBack);
                     //that.setTitle(that.activeDiv.title);
@@ -1504,10 +1504,10 @@
             }
 
             var hasMenu = what.getAttribute("data-nav");
-            if (hasMenu && this.customMenu != hasMenu) {
+            if (hasMenu && this.customMenu !== hasMenu) {
                 this.customMenu = hasMenu;
                 this.updateSideMenuElements(hasMenu);
-            } else if (hasMenu != this.customMenu) {
+            } else if (hasMenu !== this.customMenu) {
                 if (this.customMenu) {
                     this.updateSideMenuElements(this.defaultMenu);
                 }
@@ -1516,11 +1516,11 @@
 
 
             var hasAside = what.getAttribute("data-aside");
-            if(hasAside && this.customAside!=hasAside){
+            if(hasAside && this.customAside !== hasAside){
                 this.customAside= hasAside;
                 this.updateAsideElements(hasAside);
             }
-            else if(hasAside != this.customAside) {
+            else if(hasAside !== this.customAside) {
                 if(this.customAside){
                     this.updateAsideElements(this.defaultAside);
                 }
@@ -1634,7 +1634,7 @@
                 $(document).trigger("missingpanel", null, {missingTarget: target});
                 return;
             }
-            if (what == this.activeDiv && !back) {
+            if (what === this.activeDiv && !back) {
                 //toggle the menu if applicable
                 if (this.isSideMenuOn()) this.toggleSideMenu(false);
                 return;
@@ -1649,7 +1649,7 @@
 
 
 
-            if (oldDiv == currWhat) //prevent it from going to itself
+            if (oldDiv === currWhat) //prevent it from going to itself
                 return;
 
             if (newTab) {
@@ -1720,7 +1720,7 @@
             }
             if (newTab) {
                 this.setBackButtonText(this.firstDiv.getAttribute("data-title"));
-                if (what == this.firstDiv) {
+                if (what === this.firstDiv) {
                     this.history.length = 0;
                 }
             }
@@ -1750,7 +1750,7 @@
          */
         loadAjax: function(target, newTab, back, transition, anchor) {
             // XML Request
-            if (this.activeDiv.id === "afui_ajax" && target == this.ajaxUrl) return;
+            if (this.activeDiv.id === "afui_ajax" && target === this.ajaxUrl) return;
             var urlHash = "url" + crc32(target); //Ajax urls
             var that = this;
             if (target.indexOf("http") === -1) target = intel.xdk.webRoot + target;
@@ -1763,7 +1763,7 @@
 
             anchor = anchor || document.createElement("a");
             xmlhttp.onreadystatechange = function() {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
                     this.doingTransition = false;
                     var refreshFunction;
                     var doReturn = false;
@@ -2140,8 +2140,6 @@
                         $(e.currentTarget).addClass("pressed");
                     });
 
-                  
-
                     //There is a bug in chrome with @media queries where the header was not getting repainted
                     if ($.query("nav").length > 0) {
                         var splitViewClass=that.splitview?" splitview":"";
@@ -2278,7 +2276,7 @@
     //lookup for a clicked anchor recursively and fire UI own actions when applicable
     var checkAnchorClick = function(e, theTarget) {
         var afui = document.getElementById("afui");
-        if (theTarget == (afui)) {
+        if (theTarget === (afui)) {
             return;
         }
 

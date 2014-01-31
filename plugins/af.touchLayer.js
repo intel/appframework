@@ -232,7 +232,7 @@
             //the height the page really is at
             if ($.os.android) {
                 return window.innerHeight;
-            } else 
+            } else
 				return numOnly(document.documentElement.style.height); //TODO: works well on iPhone, test BB
         },
         onOrientationChange: function(e) {
@@ -474,7 +474,7 @@
                 }
             }
         },
-		
+
         //set rules here to ignore scrolling check on these elements
         //consider forcing user to use scroller object to assess these... might be causing bugs
         ignoreScrolling: function(el) {
@@ -505,7 +505,7 @@
                 this.isPanning_ = true;
                 return;
             }
-			
+
             //check native scroll
             if ($.feat.nativeTouchScroll) {
 

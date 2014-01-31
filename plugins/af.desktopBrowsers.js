@@ -77,7 +77,7 @@
         }, true);
 
         document.addEventListener("mousemove", function (e) {
-            if(e.clientX==prevX&&e.clientY==prevY) return;
+            if(e.clientX===prevX&&e.clientY===prevY) return;
             if (!mouseDown) return;
             redirectMouseToTouch("touchmove", e, lastTarget);
             e.preventDefault();
@@ -108,7 +108,7 @@
         }, true);
 
         document.addEventListener("MSPointerMove", function (e) {
-            if(e.clientX==prevX&&e.clientY==prevY) return;
+            if(e.clientX===prevX&&e.clientY===prevY) return;
             if (!mouseDown) return;
             redirectMouseToTouch("touchmove", e, lastTarget);
             e.preventDefault();
@@ -130,7 +130,7 @@
     document.addEventListener("drop", preventAll, true);
     document.addEventListener("selectstart", preventAll, true);
     document.addEventListener("click", function (e) {
-        if (!e.mouseToTouch && e.target == lastTarget) {
+        if (!e.mouseToTouch && e.target === lastTarget) {
             preventAll(e);
         }
         if (cancelClickMove) {

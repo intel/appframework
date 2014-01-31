@@ -805,7 +805,7 @@
             scrollDiv.style.background = "black";
             return scrollDiv;
         }
-		
+
         jsScroller.prototype.enable = function (firstExecution) {
             if (this.eventsActive) return;
             this.eventsActive = true;
@@ -1028,13 +1028,13 @@
             var newHeight = (parseFloat(this.elementInfo.bottomMargin / this.elementInfo.divHeight) * this.elementInfo.bottomMargin) + "px";
             if(numOnly(newHeight) > this.elementInfo.bottomMargin)
                 newHeight = this.elementInfo.bottomMargin+"px";
-            if (newHeight !== this.vscrollBar.style.height) 
+            if (newHeight !== this.vscrollBar.style.height)
 				this.vscrollBar.style.height = newHeight;
 
             var pos = (this.elementInfo.bottomMargin - numOnly(this.vscrollBar.style.height)) - (((this.elementInfo.maxTop + scrollInfo.y) / this.elementInfo.maxTop) * (this.elementInfo.bottomMargin - numOnly(this.vscrollBar.style.height)));
             if (pos > this.elementInfo.bottomMargin) pos = this.elementInfo.bottomMargin;
             if (pos < 0) pos = 0;
-			
+
             this.scrollbarMoveCSS(this.vscrollBar, {
                 x: 0,
                 y: pos
@@ -1044,9 +1044,9 @@
         jsScroller.prototype.setHScrollBar = function (scrollInfo, time, timingFunction) {
             if (!this.elementInfo.requiresHScrollBar) return false;
             var newWidth = (parseFloat(this.elementInfo.rightMargin / this.elementInfo.divWidth) * this.elementInfo.rightMargin) + "px";
-            if (newWidth !== this.hscrollBar.style.width) 
+            if (newWidth !== this.hscrollBar.style.width)
 				this.hscrollBar.style.width = newWidth;
-			
+
             var pos = (this.elementInfo.rightMargin - numOnly(this.hscrollBar.style.width)) - (((this.elementInfo.maxLeft + scrollInfo.x) / this.elementInfo.maxLeft) * (this.elementInfo.rightMargin - numOnly(this.hscrollBar.style.width)));
             if (pos > this.elementInfo.rightMargin) pos = this.elementInfo.rightMargin;
             if (pos < 0) pos = 0;
