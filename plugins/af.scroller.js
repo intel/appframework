@@ -520,7 +520,7 @@
                 }
                 if(this.el.scrollLeft===(this.el.scrollWidth-this.el.clientWidth)){
                     this.el.scrollLeft-=1;
-                    this.yReset=1;
+                    this.xReset=1;
                 }
             }
             if (this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
