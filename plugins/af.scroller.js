@@ -437,6 +437,8 @@
             this.cancelPropagation = false;
             this.loggedPcentY = 0;
             this.loggedPcentX = 0;
+            this.xReset=0;
+            this.yReset=0;
             var that = this;
             this.adjustScrollOverflowProxy = function () {
                 that.afEl.css("overflow", "auto");
@@ -499,21 +501,33 @@
             this.lastScrollInfo= {
                 top:0
             };
+            this.xReset=this.yReset=0;
             if(this.verticalScroll){
-                if(this.el.scrollTop===0&&this.refresh)
+                if(this.el.scrollTop===0&&this.refresh){
                     this.el.scrollTop=1;
-                if(this.el.scrollTop===(this.el.scrollHeight - this.el.clientHeight)&&this.infinite)
+                    this.yReset=-1;
+                }
+                if(this.el.scrollTop===(this.el.scrollHeight - this.el.clientHeight)&&this.infinite){
                     this.el.scrollTop-=1;
+                    this.yReset=1;
+                }
             }
 
             if(this.horizontalScroll){
-                if(this.el.scrollLeft===0)
+                if(this.el.scrollLeft===0){
                     this.el.scrollLeft=1;
-                if(this.el.scrollLeft===(this.el.scrollWidth-this.el.clientWidth))
+                    this.xReset=-1;
+                }
+                if(this.el.scrollLeft===(this.el.scrollWidth-this.el.clientWidth)){
                     this.el.scrollLeft-=1;
+                    this.yReset=1;
+                }
             }
             if (this.refreshCancelCB) clearTimeout(this.refreshCancelCB);
             //get refresh ready
+            if(this.refresh)
+                this.el.addEventListener("touchend",this,false);
+
             this.el.addEventListener("touchmove", this,false);
             this.dY = e.touches[0].pageY;
             this.dX = e.touches[0].pageX;
@@ -555,7 +569,8 @@
             if (!this.moved) {
                 $.trigger(this, "scrollstart", [this.el,{x:newcX,y:newcY}]);
                 $.trigger($.touchLayer, "scrollstart", [this.el,{x:newcX,y:newcY}]);
-                this.el.addEventListener("touchend", this, false);
+                if(!this.refresh)
+                    this.el.addEventListener("touchend", this, false);
                 this.moved = true;
             }
 
@@ -608,6 +623,10 @@
             var triggered = this.el.scrollTop <= -(this.refreshHeight);
             var that=this;
             this.fireRefreshRelease(triggered, true);
+            if(!this.moved){
+                this.el.scrollTop+=this.yReset;
+                this.el.scrollLeft+=this.xReset;
+            }
             if (triggered&&this.refresh) {
                 //lock in place
                 //that.refreshContainer.style.position = "";
