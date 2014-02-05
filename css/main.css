@@ -94,7 +94,7 @@ body {
     overflow:hidden;
 }
 
-#afui ,.flexContainer {
+#afui,.flexContainer {
        display: -webkit-box;
     display:    -moz-box;
     display:         box;
@@ -244,7 +244,7 @@ body {
 }
 
 
-#afui .footer>footer>a:not(.button) {
+#afui footer>a:not(.button) {
     -webkit-box-sizing:border-box;
     box-sizing: border-box;
     top: 3px;
@@ -265,13 +265,13 @@ body {
 }
 
 
-#afui .footer>footer>a:not(.button) .af-badge {
+#afui footer>a:not(.button) .af-badge {
     right:auto;
     margin-left:-16px;
 }
 
 
-#afui .footer>footer>a.icon:not(.button):before {
+#afui footer>a.icon:not(.button):before {
     position:absolute;
     top:2px;
     left:0;
@@ -281,12 +281,12 @@ body {
 }
 
 
-#afui .footer>footer>a.pressed:not(.button) {
+#afui footer>a.pressed:not(.button) {
     
 }
 
 
-#afui .footer>footer>a.icon.pressed:not(.button):before {
+#afui footer>a.icon.pressed:not(.button):before {
     
 }
 

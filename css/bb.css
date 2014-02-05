@@ -105,7 +105,7 @@
     border-color:transparent;
 }
 
-#afui.bb #navbar {
+#afui.bb .footer {
     border:none;
     border-radius:0px;
     background:none;
@@ -114,14 +114,14 @@
     box-shadow: none;
 }
 
-#afui.bb #navbar>footer>a:not(.button) {
+#afui.bb .footer>footer>a:not(.button) {
     height:49px;
     top:0px;
     border-top:4px solid #000;
     background:#1e1e1e;
 }
 
-#afui.bb #navbar>footer>a.pressed:not(.button) {
+#afui.bb .footer>footer>a.pressed:not(.button) {
     border:0px;
     border-top:4px solid #0aa9dc;
     border-radius:0px;
@@ -129,11 +129,11 @@
     color:white;
 }
 
-#afui.bb #navbar>footer>a:not(:last-of-type):not(.pressed):not(.button){
+#afui.bb .footer>footer>a:not(:last-of-type):not(.pressed):not(.button){
     border-right:1px solid black;
 }
 
-#afui.bb #navbar>footer>a.icon.pressed:not(.button):before {
+#afui.bb .footer>footer>a.icon.pressed:not(.button):before {
     color: white;
 }
 

@@ -83,16 +83,16 @@
     box-shadow:none;
 }
 
-#afui .footer>footer>a:not(.button) {
+#afui footer>a:not(.button) {
  
 }
 
-#afui .footer>footer>a.pressed:not(.button) {
+#afui footer>a.pressed:not(.button) {
     border-radius:0;    
     background:#00AEEF;
 }
 
-#afui .footer>footer>a.icon.pressed:not(.button):before {
+#afui footer>a.icon.pressed:not(.button):before {
     color:inherit;
 }
 
