@@ -4417,12 +4417,10 @@ if (!Date.now)
          */
         toggleNavMenu: function(force) {
             if (!this.showNavMenu) return;
-            if ($.query("#navbar").css("display") !== "none" && ((force !== undefined && force !== true) || force === undefined)) {
-               // $.query("$").css("bottom", "0px");
+            if ($.query("#navbar").css("display") !== "none" && ((force !== undefined && force !== true) || force === undefined)) {               
                 $.query("#navbar").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
                 $.query("#navbar").show();
-              //  $.query("#content").css("bottom", $.query("#navbar").css("height"));
 
             }
         },
@@ -4436,11 +4434,9 @@ if (!Date.now)
          */
         toggleHeaderMenu: function(force) {
             if ($.query("#header").css("display") !== "none" && ((force !== undefined && force !== true) || force === undefined)) {
-               // $.query("#content").css("top", "0px");
                 $.query("#header").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
                 $.query("#header").show();
-               // $.query("#content").css("top", $.query("#header").css("height"));
             }
         },
 
@@ -5825,26 +5821,22 @@ if (!Date.now)
             //get first div, defer
             var defer = {};
             var contentDivs = this.viewportContainer.get(0).querySelectorAll(".panel");
+
             for (var i = 0; i < contentDivs.length; i++) {
                 var el = contentDivs[i];
                 var tmp = el;
                 var id;
                 var prevSibling = el.previousSibling;
-                
                 if (el.parentNode && el.parentNode.id !== "content") {
-
-                    el.parentNode.removeChild(el);
-                    id = el.id;
-                    if (tmp.getAttribute("selected")) this.firstDiv = $.query("#" + id).get(0);
+                    console.log("Called");
+                    if (tmp.getAttribute("selected")) this.firstDiv = el;
                     this.addDivAndScroll(tmp);
-                    $.query("#" + id).insertAfter(prevSibling);
+                    $.query("#content").append(el);
                 } else if (!el.parsedContent) {
                     el.parsedContent = 1;
-                    el.parentNode.removeChild(el);
-                    id = el.id;
-                    if (tmp.getAttribute("selected")) this.firstDiv = $.query("#" + id).get(0);
-                    this.addDivAndScroll(tmp);
-                    $.query("#" + id).insertAfter(prevSibling);
+                    if (tmp.getAttribute("selected")) this.firstDiv = el;
+                    this.addDivAndScroll(el);
+                    $(el).insertAfter(prevSibling);
                 }
                 if (el.getAttribute("data-defer")) {
                     defer[id] = el.getAttribute("data-defer");
