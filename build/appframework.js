@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-01-30 */
+/*! intel-appframework - v2.1.0 - 2014-02-05 */
 
 /**
  * App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -11,6 +11,7 @@
  * @copyright Intel
  * @api private
  */
+ /* jshint eqeqeq:false */
 if (!window.af || typeof(af) !== "function") {
 
     /**
@@ -213,7 +214,7 @@ if (!window.af || typeof(af) !== "function") {
             selector = selector.trim();
 
             if (selector[0] === "#" && selector.indexOf(".") === -1 &&selector.indexOf(",") === -1 && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
-                if (what == document)
+                if (what === document)
                     _shimNodes(what.getElementById(selector.replace("#", "")), this);
                 else
                     _shimNodes(_selectorAll(selector, what), this);
@@ -569,9 +570,9 @@ if (!window.af || typeof(af) !== "function") {
                 $().css("background","red")  //Sets the elements background to red
                 ```
 
-            * @param {String} attribute to get
-            * @param {String} value to set as
-            * @return {Object} an appframework object
+            * @param {String} attribute The attribute to get
+            * @param {String} value Value to set as
+            * @return {Object} obj An appframework object
             * @title $().css(attribute,[value])
             */
             css: function(attribute, value, obj) {
@@ -1197,7 +1198,7 @@ if (!window.af || typeof(af) !== "function") {
                 var obj;
                 if (this.length === 0)
                     return this;
-                if (this[0] == window)
+                if (this[0] === window)
                     return {
                         left: 0,
                         top: 0,
@@ -1230,9 +1231,9 @@ if (!window.af || typeof(af) !== "function") {
                     return this;
                 if (val != nundefined)
                     return this.css("height", val);
-                if (this[0] == this[0].window)
+                if (this[0] === this[0].window)
                     return window.innerHeight + "";
-                if (this[0].nodeType == this[0].DOCUMENT_NODE)
+                if (this[0].nodeType === this[0].DOCUMENT_NODE)
                     return this[0].documentElement.offsetheight;
                 else {
                     var tmpVal = this.css("height").replace("px", "");
@@ -1255,9 +1256,9 @@ if (!window.af || typeof(af) !== "function") {
                     return this;
                 if (val != nundefined)
                     return this.css("width", val);
-                if (this[0] == this[0].window)
+                if (this[0] === this[0].window)
                     return window.innerWidth;
-                if (this[0].nodeType == this[0].DOCUMENT_NODE)
+                if (this[0].nodeType === this[0].DOCUMENT_NODE)
                     return this[0].documentElement.offsetwidth;
                 else {
                     var tmpVal = this.css("width").replace("px", "");
@@ -1285,7 +1286,7 @@ if (!window.af || typeof(af) !== "function") {
                 var elems = [];
                 for (var i = 0; i < this.length; i++) {
                     var tmp = this[i];
-                    while (tmp.parentNode && tmp.parentNode != document) {
+                    while (tmp.parentNode && tmp.parentNode !== document) {
                         elems.push(tmp.parentNode);
                         if (tmp.parentNode)
                             tmp = tmp.parentNode;
@@ -1558,7 +1559,7 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                $().eq(index)
                ```
-             * @param {Int} index - Index to filter by. If negative, it will go back from the end
+             * @param {Int} ind Index to filter by. If negative, it will go back from the end
              * @return {Object} appframework object
              * @title $().eq(index)
              */
@@ -1570,7 +1571,7 @@ if (!window.af || typeof(af) !== "function") {
                ```
                $().index(elem)
                ```
-             * @param {String|Object} element to look for.  Can be a selector or object
+             * @param {String|Object} elem The element to look for. Can be a selector or object
              * @return integer - index of selected element
              * @title $().index(elem)
              */
@@ -1704,7 +1705,7 @@ if (!window.af || typeof(af) !== "function") {
             $.ajax(opts);
             ```
 
-        * @param {Object} options
+        * @param {Object} opts Options
         * @title $.ajax(options)
         */
         $.ajax = function(opts) {
@@ -1767,7 +1768,7 @@ if (!window.af || typeof(af) !== "function") {
                     return $.jsonP(settings);
                 }
                 if (settings.crossDomain === null) settings.crossDomain = /^([\w-]+:)?\/\/([^\/]+)/.test(settings.url) &&
-                        RegExp.$2 != window.location.host;
+                        RegExp.$2 !== window.location.host;
 
                 if (!settings.crossDomain)
                     settings.headers = $.extend({
@@ -2028,6 +2029,11 @@ if (!window.af || typeof(af) !== "function") {
             $.feat.cssTransformEnd = !$.os.opera ? ",0)" : ")";
             if ($.os.android && !$.os.webkit)
                 $.os.android = false;
+            var items=["Webkit","Moz","ms","O"];
+            for(var j=0;j<items.length;j++){
+                if(document.documentElement.style[items[j]+"Transform"]==="")
+                    $.feat.cssPrefix=items[j];
+            }
 
         }
 
@@ -2199,7 +2205,7 @@ if (!window.af || typeof(af) !== "function") {
             if (event.ns)
                 var matcher = matcherFor(event.ns);
             return (handlers[afmid(element)] || []).filter(function(handler) {
-                return handler && (!event.e || handler.e == event.e) && (!event.ns || matcher.test(handler.ns)) && (!fn || handler.fn == fn || (typeof handler.fn === "function" && typeof fn === "function" && handler.fn === fn)) && (!selector || handler.sel == selector);
+                return handler && (!event.e || handler.e === event.e) && (!event.ns || matcher.test(handler.ns)) && (!fn || handler.fn === fn || (typeof handler.fn === "function" && typeof fn === "function" && handler.fn === fn)) && (!selector || handler.sel === selector);
             });
         }
         /**
@@ -2615,7 +2621,7 @@ if (!window.af || typeof(af) !== "function") {
                     for (var j = 0; j < evts.length; j++) {
                         if (f == nundefined)
                             delete evts[j];
-                        if (evts[j] == f) {
+                        if (evts[j] === f) {
                             evts.splice(j, 1);
                             break;
                         }
@@ -2741,7 +2747,7 @@ if (!window.af || typeof(af) !== "function") {
             window.postMessage("afm-asap", "*");
         };
         window.addEventListener("message", function(event) {
-            if (event.source == window && event.data === "afm-asap") {
+            if (event.source === window && event.data === "afm-asap") {
                 event.stopPropagation();
                 if (timeouts.length > 0) { //just in case...
                     (timeouts.shift()).apply(contexts.shift(), params.shift());

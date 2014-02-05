@@ -5,6 +5,7 @@
  * @description A plugin to allow jQuery developers to use App Framework UI
  */
 /* global jquery*/
+/* jshint eqeqeq:false */
 (function($,window){
     "use strict";
     var nundefined, document = window.document,classCache = {},isWin8=(typeof(MSApp)==="object"),jsonPHandlers = [],_jsonPID = 1;
@@ -310,7 +311,7 @@
                 for (var j = 0; j < evts.length; j++) {
                     if (f ==nundefined)
                         delete evts[j];
-                    if (evts[j] == f) {
+                    if (evts[j] === f) {
                         evts.splice(j, 1);
                         break;
                     }
@@ -343,7 +344,7 @@
     $.parseJS = function (div) {
         if (!div)
             return;
-        if (typeof (div) == "string") {
+        if (typeof (div) === "string") {
             var elem = document.createElement("div");
             if(isWin8){
                 MSApp.execUnsafeLocalFunction(function(){

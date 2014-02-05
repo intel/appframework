@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-01-30 */
+/*! intel-appframework - v2.1.0 - 2014-02-05 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -96,7 +96,7 @@ body {
     overflow:hidden;
 }
 
-#afui ,.flexContainer {
+#afui,.flexContainer {
        display: -webkit-box;
     display:    -moz-box;
     display:         box;
@@ -246,7 +246,7 @@ body {
 }
 
 
-#afui .footer>footer>a:not(.button) {
+#afui footer>a:not(.button) {
     -webkit-box-sizing:border-box;
     box-sizing: border-box;
     top: 3px;
@@ -267,13 +267,13 @@ body {
 }
 
 
-#afui .footer>footer>a:not(.button) .af-badge {
+#afui footer>a:not(.button) .af-badge {
     right:auto;
     margin-left:-16px;
 }
 
 
-#afui .footer>footer>a.icon:not(.button):before {
+#afui footer>a.icon:not(.button):before {
     position:absolute;
     top:2px;
     left:0;
@@ -283,12 +283,12 @@ body {
 }
 
 
-#afui .footer>footer>a.pressed:not(.button) {
+#afui footer>a.pressed:not(.button) {
     
 }
 
 
-#afui .footer>footer>a.icon.pressed:not(.button):before {
+#afui footer>a.icon.pressed:not(.button):before {
     
 }
 
@@ -749,16 +749,16 @@ body {
     box-shadow:none;
 }
 
-#afui .footer>footer>a:not(.button) {
+#afui footer>a:not(.button) {
  
 }
 
-#afui .footer>footer>a.pressed:not(.button) {
+#afui footer>a.pressed:not(.button) {
     border-radius:0;    
     background:#00AEEF;
 }
 
-#afui .footer>footer>a.icon.pressed:not(.button):before {
+#afui footer>a.icon.pressed:not(.button):before {
     color:inherit;
 }
 
@@ -2414,7 +2414,7 @@ body {
     border-color:transparent;
 }
 
-#afui.bb #navbar {
+#afui.bb .footer {
     border:none;
     border-radius:0px;
     background:none;
@@ -2423,14 +2423,14 @@ body {
     box-shadow: none;
 }
 
-#afui.bb #navbar>footer>a:not(.button) {
+#afui.bb .footer>footer>a:not(.button) {
     height:49px;
     top:0px;
     border-top:4px solid #000;
     background:#1e1e1e;
 }
 
-#afui.bb #navbar>footer>a.pressed:not(.button) {
+#afui.bb .footer>footer>a.pressed:not(.button) {
     border:0px;
     border-top:4px solid #0aa9dc;
     border-radius:0px;
@@ -2438,11 +2438,11 @@ body {
     color:white;
 }
 
-#afui.bb #navbar>footer>a:not(:last-of-type):not(.pressed):not(.button){
+#afui.bb .footer>footer>a:not(:last-of-type):not(.pressed):not(.button){
     border-right:1px solid black;
 }
 
-#afui.bb #navbar>footer>a.icon.pressed:not(.button):before {
+#afui.bb .footer>footer>a.icon.pressed:not(.button):before {
     color: white;
 }
 
@@ -3292,8 +3292,8 @@ body {
     margin:8px;
 }
 /** This can be your default scrollbar class.  You must use !important to override the default inline styles */
-.scrollBar {
-    position:absolute !important;
+.scrollBar { 
+    position: absolute !important;
     width: 5px !important;
     height: 20px !important;
     border-radius: 2px !important;
@@ -3301,6 +3301,7 @@ body {
     background: black !important;
     opacity: 0 !important;
 }
+
 	#afModalMask {
 		position:absolute;
 		top:0px;
