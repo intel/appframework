@@ -2027,6 +2027,11 @@ if (!window.af || typeof(af) !== "function") {
             $.feat.cssTransformEnd = !$.os.opera ? ",0)" : ")";
             if ($.os.android && !$.os.webkit)
                 $.os.android = false;
+            var items=["Webkit","Moz","ms","O"];
+            for(var j=0;j<items.length;j++){
+                if(document.documentElement.style[items[j]+"Transform"]==="")
+                    $.feat.cssPrefix=items[j];
+            }
 
         }
 
