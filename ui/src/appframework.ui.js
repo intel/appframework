@@ -108,10 +108,7 @@
             if (that.useOSThemes) {
                 if ($.os.android) $("#afui").addClass("android");
                 else if ($.os.ie) {
-                    $("#afui").addClass("win8");
-                    $("head").append($.create("script", {
-                        src: "plugins/af.8tiles.js"
-                    }));
+                    $("#afui").addClass("win8");                    
                 } else if ($.os.blackberry||$.os.blackberry10||$.os.playbook) {
                     $("#afui").addClass("bb");
                     that.backButtonText = "Back";                
