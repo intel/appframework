@@ -6,14 +6,13 @@ To generate the api pages, we use the following tools.
 
 2) markdown files for examples
 
-3) php script to generate the html file
-
+3) node script to parse dox output
 
 #Source documentation
 
 We use jsdoc style documentation for generating the docs.  Anything you do not want to show in the documentation pages, use the following.
 
-```js
+```
    * @api private
 ```
 
@@ -37,8 +36,21 @@ Exampes are in the "detail" folder in here, which are markdown files.  You can e
 
 #Building
 
-See build.bat - this runs dox to create the needed json file, then docgen.php to create the output.
+Run dox on the files needed.
 
-#Output
+```
+dox < ../appframework.js > appframework.json
+dox <../ui/appframework.ui.js > af.ui.json
 
-The output is found in "index.html" in the documentation page.  This gets uploaded to the App Framework site.
+node docgen.js "appframework.json" "af.ui.json"
+```
+
+This will create the new readme files in the folders
+
+```
+appframework
+  $.ajax.md
+   
+af.ui
+  $.ui.actionSheet.md
+```

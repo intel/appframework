@@ -1,0 +1,3 @@
+dox < ../appframework.js > appframework.json
+dox <../ui/appframework.ui.js > af.ui.json
+node docgen.js "appframework.json" "af.ui.json"

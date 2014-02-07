@@ -138,6 +138,7 @@ if (!window.af || typeof(af) !== "function") {
          * This is also the start of our query selector engine
          * @param {String|Element|Object|Array} selector
          * @param {String|Element|Object} [context]
+         * @api private
          */
         var $afm = function(toSelect, what) {
             this.length = 0;
@@ -181,6 +182,8 @@ if (!window.af || typeof(af) !== "function") {
          * This calls the $afm function
          * @param {String|Element|Object|Array} selector
          * @param {String|Element|Object} [context]
+         * @title $()
+         * @return {Object} an appframework object
          */
         var $ = function(selector, what) {
             return new $afm(selector, what);
@@ -1695,10 +1698,10 @@ if (!window.af || typeof(af) !== "function") {
         * options.data - data to pass into request.  $.param is called on objects
             ```
             var opts={
-            type:"GET",
-            success:function(data){},
-            url:"mypage.php",
-            data:{bar:"bar"},
+                type:"GET",
+                success:function(data){},
+                url:"mypage.php",
+                data:{bar:"bar"},
             }
             $.ajax(opts);
             ```
@@ -2540,6 +2543,7 @@ if (!window.af || typeof(af) !== "function") {
          * @param {String} type
          * @param {Object} [properties]
          * @return {event} a custom event that can then be dispatched
+         * @api private
          * @title $.Event(type,props);
          */
 
