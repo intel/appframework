@@ -1,7 +1,7 @@
 /**
  * af.popup - a popup/alert library for html5 mobile apps
  * @copyright Indiepath 2011 - Tim Fisher
- * Modifications/enhancements by appMobi for App Framework
+ * Modifications/enhancements by Intel for App Framework
  *
  */
 /* EXAMPLE

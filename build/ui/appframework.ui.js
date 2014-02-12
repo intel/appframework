@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-02-05 */
+/*! intel-appframework - v2.1.0 - 2014-02-12 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -758,11 +758,10 @@ if (!Date.now)
 
 /**
  * af.scroller 
- * created by appMobi with modifications by Carlos Ouro @ Badoo and Intel
+ * created by Intel with modifications by Carlos Ouro @ Badoo and Intel
  * Supports iOS native touch scrolling
  * Optimizations and bug improvements by Intel
  * @copyright Intel
- * @param {function} $ Intel App Framework (af)
  */
  /* global numOnly*/
 (function ($) {
@@ -3416,7 +3415,7 @@ if (!Date.now)
 /**
  * af.popup - a popup/alert library for html5 mobile apps
  * @copyright Indiepath 2011 - Tim Fisher
- * Modifications/enhancements by appMobi for App Framework
+ * Modifications/enhancements by Intel for App Framework
  *
  */
 /* EXAMPLE
@@ -3630,7 +3629,7 @@ if (!Date.now)
     "use strict";
 
     if (!$) {
-        throw "This plugin requires jqUi";
+        throw "This plugin requires AFUi";
     }
 
     function wire8Tiles() {
@@ -3782,7 +3781,9 @@ if (!Date.now)
             wire8Tiles();
         });
     } else {
-        wire8Tiles();
+        $.ui.ready(function(){
+            wire8Tiles();
+        });
     }
 })(af);
 
@@ -4417,7 +4418,7 @@ if (!Date.now)
          */
         toggleNavMenu: function(force) {
             if (!this.showNavMenu) return;
-            if ($.query("#navbar").css("display") !== "none" && ((force !== undefined && force !== true) || force === undefined)) {               
+            if ($.query("#navbar").css("display") !== "none" && ((force !== undefined && force !== true) || force === undefined)) {
                 $.query("#navbar").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
                 $.query("#navbar").show();
@@ -4887,7 +4888,7 @@ if (!Date.now)
          */
         modalReference_:null,
         /**
-         * Load a content panel in a modal window.  We set the innerHTML so event binding will not work.  Please use the data-load or panelloaded events to setup any event binding
+         * Load a content panel in a modal window. 
            ```
            $.ui.showModal("#myDiv","fade");
            ```
@@ -5287,7 +5288,7 @@ if (!Date.now)
                 $.query("#navbar #" + what.getAttribute("data-tab")).addClass("pressed");
             }
 
-            var hasMenu = what.getAttribute("data-nav");
+            var hasMenu = what.getAttribute("data-left-menu")||what.getAttribute("data-nav");
             if (hasMenu && this.customMenu !== hasMenu) {
                 this.customMenu = hasMenu;
                 this.updateSideMenuElements(hasMenu);
@@ -5299,7 +5300,7 @@ if (!Date.now)
             }
 
 
-            var hasAside = what.getAttribute("data-aside");
+            var hasAside =what.getAttribute("data-right-menu")|| what.getAttribute("data-aside");
             if(hasAside && this.customAside !== hasAside){
                 this.customAside= hasAside;
                 this.updateAsideElements(hasAside);
@@ -5828,7 +5829,6 @@ if (!Date.now)
                 var id;
                 var prevSibling = el.previousSibling;
                 if (el.parentNode && el.parentNode.id !== "content") {
-                    console.log("Called");
                     if (tmp.getAttribute("selected")) this.firstDiv = el;
                     this.addDivAndScroll(tmp);
                     $.query("#content").append(el);

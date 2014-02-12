@@ -5,7 +5,7 @@
 
 
  * MIT License
- * @author AppMobi
+ * @author Intel
  * @copyright Intel
  * @api private
  */

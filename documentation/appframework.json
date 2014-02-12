@@ -3,7 +3,7 @@
     "tags": [
       {
         "type": "author",
-        "string": "AppMobi"
+        "string": "Intel"
       },
       {
         "type": "copyright",
@@ -27,6 +27,15 @@
     "description": {
       "full": "<p>jshint eqeqeq:false</p>",
       "summary": "<p>jshint eqeqeq:false</p>",
+      "body": ""
+    },
+    "ignore": false
+  },
+  {
+    "tags": [],
+    "description": {
+      "full": "<p>global af: true</p>",
+      "summary": "<p>global af: true</p>",
       "body": ""
     },
     "ignore": false,
@@ -2386,8 +2395,8 @@
       }
     ],
     "description": {
-      "full": "<p>Execute an Ajax call with the given options<br />options.type - Type of request<br />options.beforeSend - function to execute before sending the request<br />options.success - success callback<br />options.error - error callback<br />options.complete - complete callback - callled with a success or error<br />options.timeout - timeout to wait for the request<br />options.url - URL to make request against<br />options.contentType - HTTP Request Content Type<br />options.headers - Object of headers to set<br />options.dataType - Data type of request<br />options.data - data to pass into request.  $.param is called on objects<br />            <div class=\"highlight\"><pre lang=\"\">            var opts={<br />            type:\"GET\",<br />            success:function(data){},<br />            url:\"mypage.php\",<br />            data:{bar:\"bar\"},<br />            }<br />            $.ajax(opts);<br />            </pre></div></p>",
-      "summary": "<p>Execute an Ajax call with the given options<br />options.type - Type of request<br />options.beforeSend - function to execute before sending the request<br />options.success - success callback<br />options.error - error callback<br />options.complete - complete callback - callled with a success or error<br />options.timeout - timeout to wait for the request<br />options.url - URL to make request against<br />options.contentType - HTTP Request Content Type<br />options.headers - Object of headers to set<br />options.dataType - Data type of request<br />options.data - data to pass into request.  $.param is called on objects<br />            <div class=\"highlight\"><pre lang=\"\">            var opts={<br />            type:\"GET\",<br />            success:function(data){},<br />            url:\"mypage.php\",<br />            data:{bar:\"bar\"},<br />            }<br />            $.ajax(opts);<br />            </pre></div></p>",
+      "full": "<p>Execute an Ajax call with the given options<br />options.type - Type of request<br />options.beforeSend - function to execute before sending the request<br />options.success - success callback<br />options.error - error callback<br />options.complete - complete callback - callled with a success or error<br />options.timeout - timeout to wait for the request<br />options.url - URL to make request against<br />options.contentType - HTTP Request Content Type<br />options.headers - Object of headers to set<br />options.dataType - Data type of request<br />options.data - data to pass into request.  $.param is called on objects<br />            <div class=\"highlight\"><pre lang=\"\">            var opts={<br />                type:\"GET\",<br />                success:function(data){},<br />                url:\"mypage.php\",<br />                data:{bar:\"bar\"},<br />            }<br />            $.ajax(opts);<br />            </pre></div></p>",
+      "summary": "<p>Execute an Ajax call with the given options<br />options.type - Type of request<br />options.beforeSend - function to execute before sending the request<br />options.success - success callback<br />options.error - error callback<br />options.complete - complete callback - callled with a success or error<br />options.timeout - timeout to wait for the request<br />options.url - URL to make request against<br />options.contentType - HTTP Request Content Type<br />options.headers - Object of headers to set<br />options.dataType - Data type of request<br />options.data - data to pass into request.  $.param is called on objects<br />            <div class=\"highlight\"><pre lang=\"\">            var opts={<br />                type:\"GET\",<br />                success:function(data){},<br />                url:\"mypage.php\",<br />                data:{bar:\"bar\"},<br />            }<br />            $.ajax(opts);<br />            </pre></div></p>",
       "body": ""
     },
     "isPrivate": false,
@@ -3547,6 +3556,10 @@
         "description": "a custom event that can then be dispatched"
       },
       {
+        "type": "api",
+        "visibility": "private"
+      },
+      {
         "type": "title",
         "string": "$.Event(type,props);"
       }
@@ -3556,7 +3569,7 @@
       "summary": "<p>Creates a custom event to be used internally.</p>",
       "body": ""
     },
-    "isPrivate": false,
+    "isPrivate": true,
     "ignore": false,
     "code": "$.Event = function(type, props) {\n            var event = document.createEvent(\"Events\"),\n                bubbles = true;\n            if (props)\n                for (var name in props)\n                    (name === \"bubbles\") ? (bubbles = !! props[name]) : (event[name] = props[name]);\n            event.initEvent(type, bubbles, true, null, null, null, null, null, null, null, null, null, null, null, null);\n            return event;\n        };"
   },

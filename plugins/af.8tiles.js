@@ -9,7 +9,7 @@
     "use strict";
 
     if (!$) {
-        throw "This plugin requires jqUi";
+        throw "This plugin requires AFUi";
     }
 
     function wire8Tiles() {

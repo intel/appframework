@@ -1,10 +1,9 @@
 /**
  * af.scroller 
- * created by appMobi with modifications by Carlos Ouro @ Badoo and Intel
+ * created by Intel with modifications by Carlos Ouro @ Badoo and Intel
  * Supports iOS native touch scrolling
  * Optimizations and bug improvements by Intel
  * @copyright Intel
- * @param {function} $ Intel App Framework (af)
  */
  /* global numOnly*/
 (function ($) {
