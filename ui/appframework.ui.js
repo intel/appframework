@@ -1099,7 +1099,7 @@
          */
         modalReference_:null,
         /**
-         * Load a content panel in a modal window.  We set the innerHTML so event binding will not work.  Please use the data-load or panelloaded events to setup any event binding
+         * Load a content panel in a modal window. 
            ```
            $.ui.showModal("#myDiv","fade");
            ```
@@ -1499,7 +1499,7 @@
                 $.query("#navbar #" + what.getAttribute("data-tab")).addClass("pressed");
             }
 
-            var hasMenu = what.getAttribute("data-nav");
+            var hasMenu = what.getAttribute("data-left-menu")||what.getAttribute("data-nav");
             if (hasMenu && this.customMenu !== hasMenu) {
                 this.customMenu = hasMenu;
                 this.updateSideMenuElements(hasMenu);
@@ -1511,7 +1511,7 @@
             }
 
 
-            var hasAside = what.getAttribute("data-aside");
+            var hasAside =what.getAttribute("data-right-menu")|| what.getAttribute("data-aside");            
             if(hasAside && this.customAside !== hasAside){
                 this.customAside= hasAside;
                 this.updateAsideElements(hasAside);
