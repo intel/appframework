@@ -215,8 +215,9 @@ module.exports = function (grunt) {
         }
     });
 
-    // NB jshint is disabled for now as it fails with the current code
+    
     grunt.registerTask("default", [
+        "jshint",
         "test",
         "clean",
         "cssmin",
