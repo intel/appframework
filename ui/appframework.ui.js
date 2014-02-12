@@ -629,7 +629,7 @@
          */
         toggleNavMenu: function(force) {
             if (!this.showNavMenu) return;
-            if ($.query("#navbar").css("display") !== "none" && ((force !== undefined && force !== true) || force === undefined)) {               
+            if ($.query("#navbar").css("display") !== "none" && ((force !== undefined && force !== true) || force === undefined)) {
                 $.query("#navbar").hide();
             } else if (force === undefined || (force !== undefined && force === true)) {
                 $.query("#navbar").show();
@@ -1511,7 +1511,7 @@
             }
 
 
-            var hasAside =what.getAttribute("data-right-menu")|| what.getAttribute("data-aside");            
+            var hasAside =what.getAttribute("data-right-menu")|| what.getAttribute("data-aside");
             if(hasAside && this.customAside !== hasAside){
                 this.customAside= hasAside;
                 this.updateAsideElements(hasAside);

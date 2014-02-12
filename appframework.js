@@ -10,6 +10,8 @@
  * @api private
  */
  /* jshint eqeqeq:false */
+  /* global af: true */
+ 
 if (!window.af || typeof(af) !== "function") {
 
     /**

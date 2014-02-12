@@ -85,10 +85,11 @@
             cancelClickMove = true;
         }, true);
     } else { //Win8
-
+        var skipMove=false;
         document.addEventListener("MSPointerDown", function (e) {
 
             mouseDown = true;
+            skipMove=true;
             lastTarget = e.target;
             if (e.target.nodeName.toLowerCase() === "a" && e.target.href.toLowerCase() === "javascript:;")
                 e.target.href = "";
@@ -108,6 +109,10 @@
         }, true);
 
         document.addEventListener("MSPointerMove", function (e) {
+            if(skipMove){
+                skipMove=false;
+                return;
+            }
             if(e.clientX===prevX&&e.clientY===prevY) return;
             if (!mouseDown) return;
             redirectMouseToTouch("touchmove", e, lastTarget);

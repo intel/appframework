@@ -13,7 +13,7 @@
         doMenu = true,
         showHide = false;
     $.ui.slideSideMenu = true;
-    $.ui.fixedSideMenuWidth = 20000;
+    $.ui.fixedSideMenuWidth = 20000; //By default, we want it to always be revealed
     var isAside=false;
     var keepOpen=false;
 
