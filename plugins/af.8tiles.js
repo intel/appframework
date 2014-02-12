@@ -161,6 +161,8 @@
             wire8Tiles();
         });
     } else {
-        wire8Tiles();
+        $.ui.ready(function(){
+            wire8Tiles();
+        });
     }
 })(af);
