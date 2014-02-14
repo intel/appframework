@@ -219,7 +219,7 @@
         },
         /**
          * This enables the tab bar ability to keep pressed states on elements
-         * ```
+           ```
            $.ui.enableTabBar();
            ```
            @title $.ui.enableTabBar
@@ -237,10 +237,10 @@
         },
          /**
          * This disables the tab bar ability to keep pressed states on elements
-         * ```
+           ```
            $.ui.disableTabBar();
            ```
-           @title $.ui.disableTabBar
+         * @title $.ui.disableTabBar
          */
         disableTabBar:function(e){
             $(document).off("click",".button-grouped.tabbed");
@@ -248,10 +248,10 @@
         },
         /**
          * This changes the side menu width
-         * ```
+           ```
            $.ui.setLeftSideMenuWidth('300px');
            ```
-         *@title $.ui.setLeftSideMenuWidth
+         * @title $.ui.setLeftSideMenuWidth
          */
 
         setLeftSideMenuWidth: function(width) {
@@ -275,7 +275,7 @@
         },
         /**
          * This changes the side menu width
-         * ```
+           ```
            $.ui.setRightSideMenuWidth('300px');
            ```
          *@title $.ui.setRightSideMenuWidth
@@ -293,10 +293,9 @@
 
         /**
          * this will disable native scrolling on iOS
-         *
-         ```
-         $.ui.disableNativeScrolling);
-         ```
+            ```
+            $.ui.disableNativeScrolling);
+            ```
          *@title $.ui.disableNativeScrolling
          */
         disableNativeScrolling: function() {
@@ -305,9 +304,9 @@
 
         /**
           * This is a boolean property.   When set to true, we manage history and update the hash
-          ```
-          $.ui.manageHistory=false;//Don't manage for apps using Backbone
-          ```
+             ```
+            $.ui.manageHistory=false;//Don't manage for apps using Backbone
+            ```
           *@title $.ui.manageHistory
           */
         manageHistory: true,

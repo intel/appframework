@@ -79,20 +79,26 @@
   {
     "tags": [],
     "description": {
-      "full": "<p>This enables the tab bar ability to keep pressed states on elements</p>\n\n<div class=\"highlight\"><pre lang=\"\">           $.ui.enableTabBar();\n           </pre></div>\n\n<p>@title $.ui.enableTabBar</p>",
-      "summary": "<p>This enables the tab bar ability to keep pressed states on elements</p>\n\n<div class=\"highlight\"><pre lang=\"\">           $.ui.enableTabBar();\n           </pre></div>\n\n<p>@title $.ui.enableTabBar</p>",
+      "full": "<p>This enables the tab bar ability to keep pressed states on elements<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.enableTabBar();<br />           </pre></div><br />           @title $.ui.enableTabBar</p>",
+      "summary": "<p>This enables the tab bar ability to keep pressed states on elements<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.enableTabBar();<br />           </pre></div><br />           @title $.ui.enableTabBar</p>",
       "body": ""
     },
     "ignore": false,
     "code": "enableTabBar:function(e){\n            $(document).on(\"click\",\".button-grouped.tabbed\",function(e){\n                var $el=$(e.target);\n                $el.closest(\".tabbed\").find(\".button\").data(\"ignore-pressed\",\"true\").removeClass(\"pressed\");\n                //this is a hack, but the touchEvents plugn will remove pressed\n                $el.closest(\".button\").addClass(\"pressed\");\n                setTimeout(function(){\n                    $el.closest(\".button\").addClass(\"pressed\");\n                });\n            });\n        },"
   },
   {
-    "tags": [],
+    "tags": [
+      {
+        "type": "title",
+        "string": "$.ui.disableTabBar"
+      }
+    ],
     "description": {
-      "full": "<p>This disables the tab bar ability to keep pressed states on elements</p>\n\n<div class=\"highlight\"><pre lang=\"\">           $.ui.disableTabBar();\n           </pre></div>\n\n<p>@title $.ui.disableTabBar</p>",
-      "summary": "<p>This disables the tab bar ability to keep pressed states on elements</p>\n\n<div class=\"highlight\"><pre lang=\"\">           $.ui.disableTabBar();\n           </pre></div>\n\n<p>@title $.ui.disableTabBar</p>",
+      "full": "<p>This disables the tab bar ability to keep pressed states on elements<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.disableTabBar();<br />           </pre></div></p>",
+      "summary": "<p>This disables the tab bar ability to keep pressed states on elements<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.disableTabBar();<br />           </pre></div></p>",
       "body": ""
     },
+    "isPrivate": false,
     "ignore": false,
     "code": "disableTabBar:function(e){\n            $(document).off(\"click\",\".button-grouped.tabbed\");\n            $(\".button-grouped.tabbed .button\").removeAttr(\"data-ignore-pressed\");\n        },"
   },
@@ -104,8 +110,8 @@
       }
     ],
     "description": {
-      "full": "<p>This changes the side menu width</p>\n\n<div class=\"highlight\"><pre lang=\"\">           $.ui.setLeftSideMenuWidth('300px');\n           </pre></div>",
-      "summary": "<p>This changes the side menu width</p>\n\n<div class=\"highlight\"><pre lang=\"\">           $.ui.setLeftSideMenuWidth('300px');\n           </pre></div>",
+      "full": "<p>This changes the side menu width<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.setLeftSideMenuWidth('300px');<br />           </pre></div></p>",
+      "summary": "<p>This changes the side menu width<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.setLeftSideMenuWidth('300px');<br />           </pre></div></p>",
       "body": ""
     },
     "isPrivate": false,
@@ -120,8 +126,8 @@
       }
     ],
     "description": {
-      "full": "<p>This changes the side menu width</p>\n\n<div class=\"highlight\"><pre lang=\"\">           $.ui.setRightSideMenuWidth('300px');\n           </pre></div>",
-      "summary": "<p>This changes the side menu width</p>\n\n<div class=\"highlight\"><pre lang=\"\">           $.ui.setRightSideMenuWidth('300px');\n           </pre></div>",
+      "full": "<p>This changes the side menu width<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.setRightSideMenuWidth('300px');<br />           </pre></div></p>",
+      "summary": "<p>This changes the side menu width<br />           <div class=\"highlight\"><pre lang=\"\">           $.ui.setRightSideMenuWidth('300px');<br />           </pre></div></p>",
       "body": ""
     },
     "isPrivate": false,
@@ -136,9 +142,9 @@
       }
     ],
     "description": {
-      "full": "<p>this will disable native scrolling on iOS</p>\n\n<pre><code>     &lt;div class=\"highlight\"&gt;&lt;pre lang=\"\"&gt;         $.ui.disableNativeScrolling);\n     &lt;/pre&gt;&lt;/div&gt;\n</code></pre>",
-      "summary": "<p>this will disable native scrolling on iOS</p>",
-      "body": "<pre><code>     &lt;div class=\"highlight\"&gt;&lt;pre lang=\"\"&gt;         $.ui.disableNativeScrolling);\n     &lt;/pre&gt;&lt;/div&gt;\n</code></pre>"
+      "full": "<p>this will disable native scrolling on iOS<br />            <div class=\"highlight\"><pre lang=\"\">            $.ui.disableNativeScrolling);<br />            </pre></div></p>",
+      "summary": "<p>this will disable native scrolling on iOS<br />            <div class=\"highlight\"><pre lang=\"\">            $.ui.disableNativeScrolling);<br />            </pre></div></p>",
+      "body": ""
     },
     "isPrivate": false,
     "ignore": false,
@@ -152,8 +158,8 @@
       }
     ],
     "description": {
-      "full": "<p>This is a boolean property.   When set to true, we manage history and update the hash<br />          <div class=\"highlight\"><pre lang=\"\">          $.ui.manageHistory=false;//Don't manage for apps using Backbone<br />          </pre></div></p>",
-      "summary": "<p>This is a boolean property.   When set to true, we manage history and update the hash<br />          <div class=\"highlight\"><pre lang=\"\">          $.ui.manageHistory=false;//Don't manage for apps using Backbone<br />          </pre></div></p>",
+      "full": "<p>This is a boolean property.   When set to true, we manage history and update the hash<br />             <div class=\"highlight\"><pre lang=\"\">            $.ui.manageHistory=false;//Don't manage for apps using Backbone<br />            </pre></div></p>",
+      "summary": "<p>This is a boolean property.   When set to true, we manage history and update the hash<br />             <div class=\"highlight\"><pre lang=\"\">            $.ui.manageHistory=false;//Don't manage for apps using Backbone<br />            </pre></div></p>",
       "body": ""
     },
     "isPrivate": false,
