@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-02-12 */
+/*! intel-appframework - v2.1.0 - 2014-02-18 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -2312,7 +2312,7 @@ body {
     font-size: 12pt;
 }
 
-#afui.bb #header {
+#afui.bb .header {
     background:#00609E;
     background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
     background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
@@ -2323,7 +2323,7 @@ body {
     border-color:#009CE1 transparent #004E92 transparent;
 }
 
-#afui.bb #header h1 {
+#afui.bb .header h1 {
     text-shadow:rgba(0,0,0,0.8) 0 1px 0;
     font-weight:normal;
 }
@@ -2407,7 +2407,7 @@ body {
     transform: rotate(10deg);
 }
 
-#afui.bb #header .button {
+#afui.bb .header .button {
     color:#fff;
     background:none;
     text-shadow:0 -1px 0 #333;
@@ -2481,11 +2481,11 @@ body {
 #afui.bb .button-grouped > .button:first-child,
 #afui.bb .button-grouped.vertical *,
 #afui.bb .button-grouped.vertical >  .button:last-child, 
-#afui.bb > #header .button-grouped > .button {
+#afui.bb > .header .button-grouped > .button {
     border-color:#ccc;
 }
 
-#afui.bb > #header .button-grouped > .button.pressed {
+#afui.bb > .header .button-grouped > .button.pressed {
     background:#07a;
 }
 
