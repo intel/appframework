@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-02-12 */
+/*! intel-appframework - v2.1.0 - 2014-02-19 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -4008,7 +4008,7 @@ if (!Date.now)
         },
         /**
          * This enables the tab bar ability to keep pressed states on elements
-         * ```
+           ```
            $.ui.enableTabBar();
            ```
            @title $.ui.enableTabBar
@@ -4026,10 +4026,10 @@ if (!Date.now)
         },
          /**
          * This disables the tab bar ability to keep pressed states on elements
-         * ```
+           ```
            $.ui.disableTabBar();
            ```
-           @title $.ui.disableTabBar
+         * @title $.ui.disableTabBar
          */
         disableTabBar:function(e){
             $(document).off("click",".button-grouped.tabbed");
@@ -4037,10 +4037,10 @@ if (!Date.now)
         },
         /**
          * This changes the side menu width
-         * ```
+           ```
            $.ui.setLeftSideMenuWidth('300px');
            ```
-         *@title $.ui.setLeftSideMenuWidth
+         * @title $.ui.setLeftSideMenuWidth
          */
 
         setLeftSideMenuWidth: function(width) {
@@ -4064,7 +4064,7 @@ if (!Date.now)
         },
         /**
          * This changes the side menu width
-         * ```
+           ```
            $.ui.setRightSideMenuWidth('300px');
            ```
          *@title $.ui.setRightSideMenuWidth
@@ -4082,10 +4082,9 @@ if (!Date.now)
 
         /**
          * this will disable native scrolling on iOS
-         *
-         ```
-         $.ui.disableNativeScrolling);
-         ```
+            ```
+            $.ui.disableNativeScrolling);
+            ```
          *@title $.ui.disableNativeScrolling
          */
         disableNativeScrolling: function() {
@@ -4094,9 +4093,9 @@ if (!Date.now)
 
         /**
           * This is a boolean property.   When set to true, we manage history and update the hash
-          ```
-          $.ui.manageHistory=false;//Don't manage for apps using Backbone
-          ```
+             ```
+            $.ui.manageHistory=false;//Don't manage for apps using Backbone
+            ```
           *@title $.ui.manageHistory
           */
         manageHistory: true,
@@ -4910,7 +4909,7 @@ if (!Date.now)
                 //modalDiv.html($.feat.nativeTouchScroll || !useScroller ? $.query(id).html() : $.query(id).get(0).childNodes[0].innerHTML + '', true);
 
                 var elemsToCopy;
-                if($.feat.nativeTouchScroll || !useScroller ){
+                if($.feat.nativeTouchScroll||$.os.desktop || !useScroller ){
                     elemsToCopy=$panel.contents();
                     modalDiv.append(elemsToCopy);
                 }
@@ -4999,7 +4998,7 @@ if (!Date.now)
                 this.dispatchPanelEvent(fnc,tmp.get(0));
             tmp.trigger("unloadpanel");
             setTimeout(function(){
-                if($.feat.nativeTouchScroll || !useScroller){
+                if($.feat.nativeTouchScroll||$.os.desktop || !useScroller){
                     self.modalReference_.append($("#modalHeader header"));
                     self.modalReference_.append($cnt.contents());
                     self.modalReference_.append($("#modalFooter footer"));
@@ -5113,7 +5112,8 @@ if (!Date.now)
 
             container = container || this.content;
             //sets up scroll when required and not supported
-            if (!$.feat.nativeTouchScroll && hasScroll) tmp.setAttribute("js-scrolling", "true");
+
+            if (!$.feat.nativeTouchScroll && hasScroll&&!$.os.desktop) tmp.setAttribute("js-scrolling", "true");
 
             if (tmp.getAttribute("js-scrolling") && (tmp.getAttribute("js-scrolling").toLowerCase() === "yes" || tmp.getAttribute("js-scrolling").toLowerCase() === "true")) {
                 jsScroll = true;
@@ -5130,7 +5130,7 @@ if (!Date.now)
                 tmp.removeAttribute("js-scrolling");
             }
 
-            if (!jsScroll || $.os.desktop) {
+            if (!jsScroll ) {
                 container.appendChild(tmp);
                 scrollEl = tmp;
                 tmp.style["-webkit-overflow-scrolling"] = "none";
