@@ -12,19 +12,3 @@ Below is a div that we will register "customEvent" for
 ```js
 $("#triggerTest").bind("customEvent",function(){alert("Responding to custom event")});
 ```
-
-<div id="triggerTest">Won't respond to a click</div>
-
-<script>
-$("#triggerTest").bind("customEvent",function(){alert("Responding to custom event")});
-
-function triggerIt(){
-    $("#triggerTest").trigger("customEvent");
-}
-</script>
-
-
-<input type="button" value="Trigger customEvent" onclick="triggerIt()">
-
-
-

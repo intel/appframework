@@ -14,9 +14,3 @@ We then use $().prop along with the property name to get the value and show it i
 ```js
 alert($("#property_content").prop("test_prop"));
 ```
-
-
-</br>
-<div id="property_content"></div>
-<input type="button" value="Set Property" onclick='$("#property_content").prop("test_prop","hello");'>
-<input type="button" value="Get Property" onclick='alert($("#property_content").prop("test_prop"));'>

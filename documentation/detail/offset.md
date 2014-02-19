@@ -23,11 +23,3 @@ Now we will get the offset
 ```js
 $("#offsetTest").offset();
 ```
-
-</br>
-<input type="button" value="Get Offset" onclick='alert(JSON.stringify($("#offsetTest").offset()))'>
-<div style="position:relative;width:100%;height:300px;">
-<div id="offsetTest" style="position:absolute;background:red;width:100px;height:100px;right:100px;top:-50px;">
-    This is content
-</div>
-</div>

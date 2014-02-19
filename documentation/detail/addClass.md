@@ -10,8 +10,3 @@ Then using $().addClass() we can apply the css defined as by greenredclass to th
 ```js
 $("#cssclass_content").addClass("greenredclass");
 ```
- 
-
-</br>   
-<div style='border:1px solid black' id="cssclass_content">This is some content</div>
-<input type="button" value="Add a Class" onclick='$("#cssclass_content").addClass("greenredclass");'>

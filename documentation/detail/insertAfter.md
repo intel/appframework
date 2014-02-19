@@ -14,12 +14,3 @@ We can find all the p tags, then insert after #insertAfterTest
 ```js
 $("p").insertAfter("#insertAfterTest");
 ```
-
-</br>
-<div id="insertAfterW">
-     <p>This is p1</p>
-    <p>This is p2</p>
-    <div id="insertAfterTest">P's will go after me</div>
-   <div>Some stuff</div>
-</div>
-<input type="button" value="Append Content" onclick='$("#insertAfterW p").insertAfter("#insertAfterTest");'>

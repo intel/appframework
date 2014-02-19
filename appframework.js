@@ -52,7 +52,7 @@ if (!window.af || typeof(af) !== "function") {
             isWin8 = (typeof(MSApp) === "object");
 
         /**
-         * internal function used for $().css - checks to see if it's a number and the css property
+         * internal function used for $().css - checks to see if it is a number and the css property
          * needs "px" added to it
          * @api private
          */
@@ -615,10 +615,9 @@ if (!window.af || typeof(af) !== "function") {
             },
             /**
              * Performs a css vendor specific transform:translate operation on the collection.
-             *
-             ```
+                ```
                 $("#main").cssTranslate("200px,0,0");
-             ```
+                ```
              * @param {String} Transform values
              * @return {Object} an appframework object
              * @title $().cssTranslate(value)
@@ -628,10 +627,9 @@ if (!window.af || typeof(af) !== "function") {
             },
             /**
              * Gets the computed style of CSS values
-             *
-            ```
+                ```
                $("#main").computedStyle("display");
-            ```
+                ```
              * @param {String} css property
              * @return {Int|String|Float|} css vlaue
              * @title $().computedStyle()
@@ -755,7 +753,7 @@ if (!window.af || typeof(af) !== "function") {
                 $().attr("foo",{bar:"bar"}) //Adds the object to an internal cache
                 ```
 
-            * @param {String|Object} attribute to act upon.  If it's an object (hashmap), it will set the attributes based off the kvp.
+            * @param {String|Object} attribute to act upon.  If it is an object (hashmap), it will set the attributes based off the kvp.
             * @param {String|Array|Object|function} [value] to set
             * @return {String|Object|Array|Function} If used as a getter, return the attribute value.  If a setter, return an appframework object
             * @title $().attr(attribute,[value])
@@ -822,7 +820,7 @@ if (!window.af || typeof(af) !== "function") {
                 $().prop("foo",{bar:"bar"}) //Adds the object to an internal cache
                 ```
 
-            * @param {String|Object} property to act upon.  If it's an object (hashmap), it will set the attributes based off the kvp.
+            * @param {String|Object} property to act upon.  If it is an object (hashmap), it will set the attributes based off the kvp.
             * @param {String|Array|Object|function} [value] to set
             * @return {String|Object|Array|Function} If used as a getter, return the property value.  If a setter, return an appframework object
             * @title $().prop(property,[value])
@@ -884,14 +882,12 @@ if (!window.af || typeof(af) !== "function") {
             /**
             * Removes elements based off a selector
                 ```
-                $().remove();  //Remove all
-                $().remove(".foo");//Remove off a string selector
-                var element=$("#foo").get(0);
-                $().remove(element); //Remove by an element
-                $().remove($(".foo"));  //Remove by a collection
-
+                    $().remove();  //Remove all
+                    $().remove(".foo");//Remove off a string selector
+                    var element=$("#foo").get(0);
+                    $().remove(element); //Remove by an element
+                    $().remove($(".foo"));  //Remove by a collection
                 ```
-
             * @param {String|Object|Array} selector to filter against
             * @return {Object} appframework object
             * @title $().remove(selector)
@@ -1043,8 +1039,8 @@ if (!window.af || typeof(af) !== "function") {
             /**
             * Appends to the elements
             * We boil everything down to an appframework object and then loop through that.
-            * If it's HTML, we create a dom element so we do not break event bindings.
-            * if it's a script tag, we evaluate it.
+            * If it is HTML, we create a dom element so we do not break event bindings.
+            * if it is a script tag, we evaluate it.
                 ```
                 $().append("<div></div>"); //Creates the object from the string and appends it
                 $().append($("#foo")); //Append an object;
@@ -2541,7 +2537,10 @@ if (!window.af || typeof(af) !== "function") {
         };
 
         /**
-         * Creates a custom event to be used internally.
+         Creates a custom event to be used internally.
+         ```
+         $.Event('MouseEvent');
+         ```
          * @param {String} type
          * @param {Object} [properties]
          * @return {event} a custom event that can then be dispatched
@@ -2559,8 +2558,12 @@ if (!window.af || typeof(af) !== "function") {
             return event;
         };
 
-        /* The following are for events on objects */
         /**
+         * The following are for objects and not DOM nodes
+         * @api private
+         */
+        
+        /*
          * Bind an event to an object instead of a DOM Node
            ```
            $.bind(this,"event",function(){});
@@ -2633,27 +2636,19 @@ if (!window.af || typeof(af) !== "function") {
                 }
             }
         };
-
-
         /**
-         * Creates a proxy function so you can change the "this" context in the function
-         * Update: now also allows multiple argument call or for you to pass your own arguments
-           ```
-            var newObj={foo:bar}
-            $("#main").bind("click",$.proxy(function(evt){console.log(this)},newObj);
-
-            or
-
-            ( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj) )("foo", "bar");
-
-            or
-
-            ( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj, ["foo", "bar"]) )();
-           ```
-         * @param {Function} Callback
-         * @param {Object} Context
+         * Creates a proxy function so you can chane "this" context in the function
+            ```
+                var newObj={foo:bar}
+                $("#main").bind("click",$.proxy(function(evt){console.log(this)},newObj);
+                ( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj) )("foo", "bar");
+                ( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj, ["foo", "bar"]) )();
+            ```
+         * @param {Function} callback
+         * @param {Object} Context         
          * @title $.proxy(callback,context);
          */
+
         $.proxy = function(f, c, args) {
             return function() {
                 if (args) return f.apply(c, args); //use provided arguments

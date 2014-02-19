@@ -22,16 +22,3 @@ $("#prependTest p").prependTo("#paragraphsPrepend");
     <p>Paragraph Two</p>
 </div>
 ```
-
-
-<div id="paragraphsPrepend">
-    <div>This content will stay at the bottom when the &lt;p> tags are moved</div>
-</div>
-<div id="prependTest">
-    <p>Paragraph One</p>
-    <p>Paragraph Two</p>
-</div>
-
-
-
-<input type="button" value="Append Content" onclick='$("#prependTest p").prependTo("#paragraphsPrepend");'>

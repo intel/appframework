@@ -33,20 +33,3 @@ $("ol").unbind("click","li",bindOne);
     <li>Three</li>
 </ol>
 ```
-
-Click one of the items below.
-<ol id="offTest">
-    <li>One</li>
-    <li>Two</li>
-    <li>Three</li>
-</ol>
-
-<script>
-$("#offTest").on("click","li",function(event){alert(this.innerHTML)});
-function offTest(){
-    $("#offTest").off("click","li");
-    alert("Click event removed");
-}
-</script>
-
-<input type="button" value="Undelegate LI events" onclick="offTest()">

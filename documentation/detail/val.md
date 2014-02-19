@@ -14,7 +14,3 @@ Or you can set a default value within your code
 ```js
 $("#value_input").val("Default Value");
 ```
-
-<input type="text" id="value_input" size=15></br>
-<input type="button" value="Get Value" onclick='alert($("#value_input").val());'>
-<input type="button" value="Set Value" onclick='($("#value_input").val("Default Value"));'>

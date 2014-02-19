@@ -67,6 +67,7 @@ cmdArgs.forEach(function(ind){
                 });
 
             }
+            title=title.replace("$()","");
             if(title.length===0) return;
             var summary="```\n"+entry.description.summary;
             //Cleanup the docx html code

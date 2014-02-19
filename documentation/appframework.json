@@ -75,8 +75,8 @@
       }
     ],
     "description": {
-      "full": "<p>internal function used for $().css - checks to see if it's a number and the css property<br />needs \"px\" added to it</p>",
-      "summary": "<p>internal function used for $().css - checks to see if it's a number and the css property<br />needs \"px\" added to it</p>",
+      "full": "<p>internal function used for $().css - checks to see if it is a number and the css property<br />needs \"px\" added to it</p>",
+      "summary": "<p>internal function used for $().css - checks to see if it is a number and the css property<br />needs \"px\" added to it</p>",
       "body": ""
     },
     "isPrivate": true,
@@ -961,9 +961,9 @@
       }
     ],
     "description": {
-      "full": "<p>Performs a css vendor specific transform:translate operation on the collection.</p>\n\n<pre><code>         &lt;div class=\"highlight\"&gt;&lt;pre lang=\"\"&gt;                $(\"#main\").cssTranslate(\"200px,0,0\");\n         &lt;/pre&gt;&lt;/div&gt;\n</code></pre>",
-      "summary": "<p>Performs a css vendor specific transform:translate operation on the collection.</p>",
-      "body": "<pre><code>         &lt;div class=\"highlight\"&gt;&lt;pre lang=\"\"&gt;                $(\"#main\").cssTranslate(\"200px,0,0\");\n         &lt;/pre&gt;&lt;/div&gt;\n</code></pre>"
+      "full": "<p>Performs a css vendor specific transform:translate operation on the collection.<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#main\").cssTranslate(\"200px,0,0\");<br />                </pre></div></p>",
+      "summary": "<p>Performs a css vendor specific transform:translate operation on the collection.<br />                <div class=\"highlight\"><pre lang=\"\">                $(\"#main\").cssTranslate(\"200px,0,0\");<br />                </pre></div></p>",
+      "body": ""
     },
     "isPrivate": false,
     "ignore": false,
@@ -995,9 +995,9 @@
       }
     ],
     "description": {
-      "full": "<p>Gets the computed style of CSS values</p>\n\n<pre><code>        &lt;div class=\"highlight\"&gt;&lt;pre lang=\"\"&gt;               $(\"#main\").computedStyle(\"display\");\n        &lt;/pre&gt;&lt;/div&gt;\n</code></pre>",
-      "summary": "<p>Gets the computed style of CSS values</p>",
-      "body": "<pre><code>        &lt;div class=\"highlight\"&gt;&lt;pre lang=\"\"&gt;               $(\"#main\").computedStyle(\"display\");\n        &lt;/pre&gt;&lt;/div&gt;\n</code></pre>"
+      "full": "<p>Gets the computed style of CSS values<br />                <div class=\"highlight\"><pre lang=\"\">               $(\"#main\").computedStyle(\"display\");<br />                </pre></div></p>",
+      "summary": "<p>Gets the computed style of CSS values<br />                <div class=\"highlight\"><pre lang=\"\">               $(\"#main\").computedStyle(\"display\");<br />                </pre></div></p>",
+      "body": ""
     },
     "isPrivate": false,
     "ignore": false,
@@ -1144,7 +1144,7 @@
           "Object"
         ],
         "name": "attribute",
-        "description": "to act upon. If it's an object (hashmap), it will set the attributes based off the kvp."
+        "description": "to act upon. If it is an object (hashmap), it will set the attributes based off the kvp."
       },
       {
         "type": "param",
@@ -1221,7 +1221,7 @@
           "Object"
         ],
         "name": "property",
-        "description": "to act upon. If it's an object (hashmap), it will set the attributes based off the kvp."
+        "description": "to act upon. If it is an object (hashmap), it will set the attributes based off the kvp."
       },
       {
         "type": "param",
@@ -1314,9 +1314,9 @@
       }
     ],
     "description": {
-      "full": "<p>Removes elements based off a selector<br />                <div class=\"highlight\"><pre lang=\"\">                $().remove();  //Remove all<br />                $().remove(\".foo\");//Remove off a string selector<br />                var element=$(\"#foo\").get(0);<br />                $().remove(element); //Remove by an element<br />                $().remove($(\".foo\"));  //Remove by a collection</p>\n\n<pre><code>            &lt;/pre&gt;&lt;/div&gt;\n</code></pre>",
-      "summary": "<p>Removes elements based off a selector<br />                ```<br />                $().remove();  //Remove all<br />                $().remove(\".foo\");//Remove off a string selector<br />                var element=$(\"#foo\").get(0);<br />                $().remove(element); //Remove by an element<br />                $().remove($(\".foo\"));  //Remove by a collection</p>",
-      "body": "<pre><code>            ```\n</code></pre>"
+      "full": "<p>Removes elements based off a selector<br />                <div class=\"highlight\"><pre lang=\"\">                    $().remove();  //Remove all<br />                    $().remove(\".foo\");//Remove off a string selector<br />                    var element=$(\"#foo\").get(0);<br />                    $().remove(element); //Remove by an element<br />                    $().remove($(\".foo\"));  //Remove by a collection<br />                </pre></div></p>",
+      "summary": "<p>Removes elements based off a selector<br />                <div class=\"highlight\"><pre lang=\"\">                    $().remove();  //Remove all<br />                    $().remove(\".foo\");//Remove off a string selector<br />                    var element=$(\"#foo\").get(0);<br />                    $().remove(element); //Remove by an element<br />                    $().remove($(\".foo\"));  //Remove by a collection<br />                </pre></div></p>",
+      "body": ""
     },
     "isPrivate": false,
     "ignore": false,
@@ -1542,8 +1542,8 @@
       }
     ],
     "description": {
-      "full": "<p>Appends to the elements<br />We boil everything down to an appframework object and then loop through that.<br />If it's HTML, we create a dom element so we do not break event bindings.<br />if it's a script tag, we evaluate it.<br />                <div class=\"highlight\"><pre lang=\"\">                $().append(\"<div></div>\"); //Creates the object from the string and appends it<br />                $().append($(\"#foo\")); //Append an object;<br />                </pre></div></p>",
-      "summary": "<p>Appends to the elements<br />We boil everything down to an appframework object and then loop through that.<br />If it's HTML, we create a dom element so we do not break event bindings.<br />if it's a script tag, we evaluate it.<br />                <div class=\"highlight\"><pre lang=\"\">                $().append(\"<div></div>\"); //Creates the object from the string and appends it<br />                $().append($(\"#foo\")); //Append an object;<br />                </pre></div></p>",
+      "full": "<p>Appends to the elements<br />We boil everything down to an appframework object and then loop through that.<br />If it is HTML, we create a dom element so we do not break event bindings.<br />if it is a script tag, we evaluate it.<br />                <div class=\"highlight\"><pre lang=\"\">                $().append(\"<div></div>\"); //Creates the object from the string and appends it<br />                $().append($(\"#foo\")); //Append an object;<br />                </pre></div></p>",
+      "summary": "<p>Appends to the elements<br />We boil everything down to an appframework object and then loop through that.<br />If it is HTML, we create a dom element so we do not break event bindings.<br />if it is a script tag, we evaluate it.<br />                <div class=\"highlight\"><pre lang=\"\">                $().append(\"<div></div>\"); //Creates the object from the string and appends it<br />                $().append($(\"#foo\")); //Append an object;<br />                </pre></div></p>",
       "body": ""
     },
     "isPrivate": false,
@@ -3565,8 +3565,8 @@
       }
     ],
     "description": {
-      "full": "<p>Creates a custom event to be used internally.</p>",
-      "summary": "<p>Creates a custom event to be used internally.</p>",
+      "full": "<p>Creates a custom event to be used internally.<br />         <div class=\"highlight\"><pre lang=\"\">         $.Event('MouseEvent');<br />         </pre></div></p>",
+      "summary": "<p>Creates a custom event to be used internally.<br />         <div class=\"highlight\"><pre lang=\"\">         $.Event('MouseEvent');<br />         </pre></div></p>",
       "body": ""
     },
     "isPrivate": true,
@@ -3574,12 +3574,18 @@
     "code": "$.Event = function(type, props) {\n            var event = document.createEvent(\"Events\"),\n                bubbles = true;\n            if (props)\n                for (var name in props)\n                    (name === \"bubbles\") ? (bubbles = !! props[name]) : (event[name] = props[name]);\n            event.initEvent(type, bubbles, true, null, null, null, null, null, null, null, null, null, null, null, null);\n            return event;\n        };"
   },
   {
-    "tags": [],
+    "tags": [
+      {
+        "type": "api",
+        "visibility": "private"
+      }
+    ],
     "description": {
-      "full": "<p>The following are for events on objects</p>",
-      "summary": "<p>The following are for events on objects</p>",
+      "full": "<p>The following are for objects and not DOM nodes</p>",
+      "summary": "<p>The following are for objects and not DOM nodes</p>",
       "body": ""
     },
+    "isPrivate": true,
     "ignore": false
   },
   {
@@ -3709,7 +3715,7 @@
         "types": [
           "Function"
         ],
-        "name": "Callback",
+        "name": "callback",
         "description": ""
       },
       {
@@ -3726,9 +3732,9 @@
       }
     ],
     "description": {
-      "full": "<p>Creates a proxy function so you can change the \"this\" context in the function<br />Update: now also allows multiple argument call or for you to pass your own arguments<br />           <div class=\"highlight\"><pre lang=\"\">            var newObj={foo:bar}<br />            $(\"#main\").bind(\"click\",$.proxy(function(evt){console.log(this)},newObj);</p>\n\n<pre><code>        or\n\n        ( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj) )(\"foo\", \"bar\");\n\n        or\n\n        ( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj, [\"foo\", \"bar\"]) )();\n       &lt;/pre&gt;&lt;/div&gt;\n</code></pre>",
-      "summary": "<p>Creates a proxy function so you can change the \"this\" context in the function<br />Update: now also allows multiple argument call or for you to pass your own arguments<br />           ```<br />            var newObj={foo:bar}<br />            $(\"#main\").bind(\"click\",$.proxy(function(evt){console.log(this)},newObj);</p>",
-      "body": "<pre><code>        or\n\n        ( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj) )(\"foo\", \"bar\");\n\n        or\n\n        ( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj, [\"foo\", \"bar\"]) )();\n       ```\n</code></pre>"
+      "full": "<p>Creates a proxy function so you can chane \"this\" context in the function<br />            <div class=\"highlight\"><pre lang=\"\">                var newObj={foo:bar}<br />                $(\"#main\").bind(\"click\",$.proxy(function(evt){console.log(this)},newObj);<br />                ( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj) )(\"foo\", \"bar\");<br />                ( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj, [\"foo\", \"bar\"]) )();<br />            </pre></div></p>",
+      "summary": "<p>Creates a proxy function so you can chane \"this\" context in the function<br />            <div class=\"highlight\"><pre lang=\"\">                var newObj={foo:bar}<br />                $(\"#main\").bind(\"click\",$.proxy(function(evt){console.log(this)},newObj);<br />                ( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj) )(\"foo\", \"bar\");<br />                ( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj, [\"foo\", \"bar\"]) )();<br />            </pre></div></p>",
+      "body": ""
     },
     "isPrivate": false,
     "ignore": false,

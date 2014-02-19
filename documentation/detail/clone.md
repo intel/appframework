@@ -16,24 +16,3 @@ var obj=$("ol li").eq(0).clone();
 
 $("ol li").append(obj);
 ```
-
-Below we can clone and add elements.  You can also change the text of the first element to see how the cloned nodes will reflecct it.
-
-
-<script>
-function changeNode(){
-    $("#cloneTest li").eq(0).html("Updated Text");
-}
-
-function cloneTest(){
-    $("#cloneTest li").eq(0).clone().appendTo("#cloneTest");
-}
-</script>
-
-<ol id="cloneTest">
-    <li>Entry</li>
-</ol>
-
-<input type="button" value="Clone a node" onclick="cloneTest()">
-
-<input type="button" value="Change first LI html" onclick="changeNode()">

@@ -11,7 +11,3 @@ Then using $().replaceClass() you can replace the greenredclass with the blueyel
 $("#replaceclass_content").replaceClass("greenredclass","blueyellowclass");
 ```
  
-
-</br>   
-<div style='border:1px solid black' id="replaceclass_content" class="greenredclass">This is some content</div>
-<input type="button" value="Replace the Class" onclick='$("#replaceclass_content").replaceClass("greenredclass","blueyellowclass");'>
