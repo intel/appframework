@@ -903,7 +903,7 @@
                 //modalDiv.html($.feat.nativeTouchScroll || !useScroller ? $.query(id).html() : $.query(id).get(0).childNodes[0].innerHTML + '', true);
                 modalDiv.empty();
                 var elemsToCopy;
-                if($.feat.nativeTouchScroll || !useScroller ){
+                if($.feat.nativeTouchScroll ||$.os.desktop|| !useScroller ){
                     elemsToCopy=$panel.contents();
                 }
                 else {
@@ -961,7 +961,7 @@
             }
             tmp.trigger("unloadpanel");
             setTimeout(function(){               
-                if($.feat.nativeTouchScroll || !useScroller){
+                if($.feat.nativeTouchScroll ||$.os.desktop|| !useScroller){
                     self.modalReference_.append($cnt.contents());
                 }
                 else {
@@ -1068,7 +1068,7 @@
 
             container = container || this.content;
             //sets up scroll when required and not supported
-            if (!$.feat.nativeTouchScroll && hasScroll) tmp.setAttribute("js-scrolling", "true");
+            if (!$.feat.nativeTouchScroll && hasScroll && !$.os.desktop) tmp.setAttribute("js-scrolling", "true");
 
             if (tmp.getAttribute("js-scrolling") && (tmp.getAttribute("js-scrolling").toLowerCase() == "yes" || tmp.getAttribute("js-scrolling").toLowerCase() == "true")) {
                 jsScroll = true;
