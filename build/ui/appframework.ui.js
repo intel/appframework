@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-02-19 */
+/*! intel-appframework - v2.1.0 - 2014-02-24 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -4048,12 +4048,12 @@ if (!Date.now)
             //override the css style
             width = width + "";
             width = width.replace("px", "") + "px";
+            var theWidth=numOnly(window.innerWidth)-numOnly(width);
             $("head").find("style#afui_sideMenuWidth").remove();
             var css = "@media handheld, only screen and (min-width: 768px) {"+
                         "#afui > #navbar.hasMenu.splitview, #afui > #header.hasMenu.splitview, #afui > #content.hasMenu.splitview  {"+
                         "    margin-left:"+width+" !important;"+
-                        "    width: -webkit-calc(100% -"+width+") !important;"+
-                        "    width: calc(100% - "+width+") !important;"+
+                        "    width: "+(theWidth)+"px !important;"+
                         "}"+
                     "}"+
                     "#afui #menu {width:" + width + "  !important}";
