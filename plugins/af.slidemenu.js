@@ -35,6 +35,8 @@
             openState=0;
             if (!$.ui.isSideMenuEnabled() && !$.ui.isAsideMenuEnabled()) return true;
             if(e.touches.length>1) return;
+            menuWidth = $menu.width();
+            asideWidth = $asideMenu.width();
             startX = e.touches[0].pageX;
             startY = e.touches[0].pageY;
 

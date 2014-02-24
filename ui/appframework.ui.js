@@ -259,12 +259,12 @@
             //override the css style
             width = width + "";
             width = width.replace("px", "") + "px";
+            var theWidth=numOnly(window.innerWidth)-numOnly(width);
             $("head").find("style#afui_sideMenuWidth").remove();
             var css = "@media handheld, only screen and (min-width: 768px) {"+
                         "#afui > #navbar.hasMenu.splitview, #afui > #header.hasMenu.splitview, #afui > #content.hasMenu.splitview  {"+
                         "    margin-left:"+width+" !important;"+
-                        "    width: -webkit-calc(100% -"+width+") !important;"+
-                        "    width: calc(100% - "+width+") !important;"+
+                        "    width: "+(theWidth)+"px !important;"+
                         "}"+
                     "}"+
                     "#afui #menu {width:" + width + "  !important}";
