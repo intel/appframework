@@ -3647,7 +3647,7 @@
                 window.history.pushState(newPage, newPage, startPath + '#' + newPage + hashExtras);
                 $(window).trigger("hashchange", null, {
                     newUrl: startPath + '#' + newPage + hashExtras,
-                    oldURL: startPath + previousPage
+                    oldUrl: startPath + previousPage
                 });
             } catch (e) {}
         },
