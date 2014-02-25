@@ -1694,7 +1694,7 @@ if (!window.af || typeof(af) !== "function") {
                 if (!settings.url)
                     settings.url = window.location;
                 if (!settings.contentType)
-                    settings.contentType = "application/x-www-form-urlencoded";
+                    settings.contentType = "application/x-www-form-urlencoded; charset=UTF-8";
                 if (!settings.headers)
                     settings.headers = {};
 
