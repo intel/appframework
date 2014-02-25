@@ -55,6 +55,7 @@
 		font-size:1em;
 		padding-left:10px;
 		position:relative;
+		padding-right: 35px;
 	}
 
 	.afFakeSelect:after {
