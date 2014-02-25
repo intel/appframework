@@ -1620,7 +1620,8 @@ if (!window.af || typeof(af) !== "function") {
             complete: empty,
             context: undefined,
             timeout: 0,
-            crossDomain: null
+            crossDomain: null,
+            processData: true
         };
         /**
         * Execute a jsonP call, allowing cross domain scripting
@@ -1719,7 +1720,7 @@ if (!window.af || typeof(af) !== "function") {
 
                 if (!settings.url)
                     settings.url = window.location;
-                if (!settings.contentType)
+                if (!settings.contentType && settings.contentType!==false)
                     settings.contentType = "application/x-www-form-urlencoded";
                 if (!settings.headers)
                     settings.headers = {};
@@ -1727,7 +1728,7 @@ if (!window.af || typeof(af) !== "function") {
                 if (!("async" in settings) || settings.async !== false)
                     settings.async = true;
 
-                if ($.isObject(settings.data))
+                if (settings.processData && $.isObject(settings.data))
                     settings.data = $.param(settings.data);
                 if (settings.type.toLowerCase() === "get" && settings.data) {
                     if (settings.url.indexOf("?") === -1)
