@@ -809,6 +809,7 @@
             this.scrollingFinishCB = null;
             this.loggedPcentY = 0;
             this.loggedPcentX = 0;
+            this.androidPerfHack=0.0005;
         };
 
         function createScrollBar(width, height) {
@@ -1249,6 +1250,10 @@
         jsScroller.prototype.calculateTarget = function (scrollInfo) {
             scrollInfo.y = this.lastScrollInfo.y + scrollInfo.deltaY;
             scrollInfo.x = this.lastScrollInfo.x + scrollInfo.deltaX;
+            if(Math.abs(scrollInfo.deltaY)>0)
+                scrollInfo.y+=(scrollInfo.deltaY>0?1:-1)*(this.elementInfo.divHeight*this.androidPerfHack);
+            if(Math.abs(scrollInfo.deltaX)>0)
+                scrollInfo.x+=(scrollInfo.deltaX>0?1:-1)*(this.elementInfo.divWidth*this.androidPerfHack);
         };
         jsScroller.prototype.checkYboundary = function (scrollInfo) {
             var minTop = this.container.clientHeight / 2;
@@ -1310,7 +1315,7 @@
         };
 
         jsScroller.prototype.setMomentum = function (scrollInfo) {
-            var deceleration = 0.0012;
+            var deceleration = 0.0008;
 
             //calculate movement speed
             scrollInfo.speedY = this.divide(scrollInfo.deltaY, scrollInfo.duration);
@@ -1324,14 +1329,14 @@
 
             //set momentum
             if (scrollInfo.absDeltaY > 0) {
-                scrollInfo.deltaY = (scrollInfo.deltaY < 0 ? -1 : 1) * (scrollInfo.absSpeedY * scrollInfo.absSpeedY) / (2 * deceleration);
+                scrollInfo.deltaY += (scrollInfo.deltaY < 0 ? -1 : 1) * (scrollInfo.absSpeedY * scrollInfo.absSpeedY) / (2 * deceleration);
                 scrollInfo.absDeltaY = Math.abs(scrollInfo.deltaY);
                 scrollInfo.duration = scrollInfo.absSpeedY / deceleration;
                 scrollInfo.speedY = scrollInfo.deltaY / scrollInfo.duration;
                 scrollInfo.absSpeedY = Math.abs(scrollInfo.speedY);
                 if (scrollInfo.absSpeedY < deceleration * 100 || scrollInfo.absDeltaY < 5) scrollInfo.deltaY = scrollInfo.absDeltaY = scrollInfo.duration = scrollInfo.speedY = scrollInfo.absSpeedY = 0;
             } else if (scrollInfo.absDeltaX) {
-                scrollInfo.deltaX = (scrollInfo.deltaX < 0 ? -1 : 1) * (scrollInfo.absSpeedX * scrollInfo.absSpeedX) / (2 * deceleration);
+                scrollInfo.deltaX += (scrollInfo.deltaX < 0 ? -1 : 1) * (scrollInfo.absSpeedX * scrollInfo.absSpeedX) / (2 * deceleration);
                 scrollInfo.absDeltaX = Math.abs(scrollInfo.deltaX);
                 scrollInfo.duration = scrollInfo.absSpeedX / deceleration;
                 scrollInfo.speedX = scrollInfo.deltaX / scrollInfo.duration;
@@ -1354,6 +1359,8 @@
                 this.setMomentum(scrollInfo);
             }
             this.calculateTarget(scrollInfo);
+
+            
 
             //get the current top
             var cssMatrix = this.getCSSMatrix(this.el);
