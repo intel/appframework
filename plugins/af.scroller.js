@@ -809,7 +809,7 @@
             this.scrollingFinishCB = null;
             this.loggedPcentY = 0;
             this.loggedPcentX = 0;
-            this.androidPerfHack=0.0005;
+            this.androidPerfHack=0;
         };
 
         function createScrollBar(width, height) {
