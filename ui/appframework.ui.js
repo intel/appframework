@@ -1885,25 +1885,14 @@
                 enterEditEl = el;
             });
             //enter-edit-reshape panel padding and scroll adjust
-            $.bind($.touchLayer, "enter-edit-reshape", function() {
-                //onReshape UI fixes
-                //check if focused element is within active panel
-                var jQel = $(enterEditEl);
-                var jQactive = jQel.closest(that.activeDiv);
-                if (jQactive && jQactive.size() > 0) {
-                    if ($.os.ios || $.os.chrome) {
-                        var paddingTop, paddingBottom;
-                        if (document.body.scrollTop) {
-                            paddingTop = document.body.scrollTop - jQactive.offset().top;
-                        } else {
-                            paddingTop = 0;
-                        }
-                        //not exact, can be a little above the actual value
-                        //but we haven't found an accurate way to measure it and this is the best so far
-                        paddingBottom = jQactive.offset().bottom - jQel.offset().bottom;
-                        that.scrollingDivs[that.activeDiv.id].setPaddings(paddingTop, paddingBottom);
-
-                    } else if ($.os.android || $.os.blackberry) {
+            if($.os.android&&!$.os.androidICS)
+            {
+                $.bind($.touchLayer, "enter-edit-reshape", function() {
+                    //onReshape UI fixes
+                    //check if focused element is within active panel
+                    var jQel = $(enterEditEl);
+                    var jQactive = jQel.closest(that.activeDiv);
+                    if (jQactive && jQactive.size() > 0) {                        
                         var elPos = jQel.offset();
                         var containerPos = jQactive.offset();
                         if (elPos.bottom > containerPos.bottom && elPos.height < containerPos.height) {
@@ -1911,16 +1900,13 @@
                             that.scrollingDivs[that.activeDiv.id].scrollToItem(jQel, "bottom");
                         }
                     }
-                }
-            });
-            if ($.os.ios) {
+                });
                 $.bind($.touchLayer, "exit-edit-reshape", function() {
                     if (that.activeDiv && that.activeDiv.id && that.scrollingDivs.hasOwnProperty(that.activeDiv.id)) {
                         that.scrollingDivs[that.activeDiv.id].setPaddings(0, 0);
                     }
                 });
             }
-
 
             //elements setup
             if (!this.navbar) {
