@@ -2034,6 +2034,7 @@
             var defer = {};
             var contentDivs = this.viewportContainer.get(0).querySelectorAll(".panel");
 
+
             for (var i = 0; i < contentDivs.length; i++) {
                 var el = contentDivs[i];
                 var tmp = el;
@@ -2050,12 +2051,12 @@
                     $(el).insertAfter(prevSibling);
                 }
                 if (el.getAttribute("data-defer")) {
-                    defer[id] = el.getAttribute("data-defer");
+                    defer[el.id] = el.getAttribute("data-defer");
                 }
-                if (!this.firstDiv) this.firstDiv = $.query("#" + id).get(0);
-
+                if (!this.firstDiv) this.firstDiv = el;
                 el = null;
             }
+            
             contentDivs = null;
             var loadingDefer = false;
             var toLoad = Object.keys(defer).length;
@@ -2186,6 +2187,12 @@
                 if (loadingDefer) {
                     $(document).one("defer:loaded", loadFirstDiv);
                 } else loadFirstDiv();
+            }
+            else {
+                //Don't block afui:ready from dispatching, even though there's no content
+                setTimeout(function(){
+                        $(document).trigger("afui:ready");
+                    });
             }
             $.bind(that, "content-loaded", function() {
                 if (that.loadContentQueue.length > 0) {
