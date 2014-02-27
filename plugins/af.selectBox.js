@@ -203,11 +203,11 @@
                 modalMask.append(container);
                 if ($afui.length > 0) $afui.append(modalMask);
                 else document.body.appendChild(modalMask.get(0));
-
                 that.scroller = $.query("#afSelectBoxfix").scroller({
                     scroller: false,
                     verticalScroll: true,
-                    vScrollCSS: "jqselectscrollBarV"
+                    vScrollCSS: "afselectscrollBarV",
+                    hasParent:true
                 });
 
                 $("#afModalMask").on("click",function(e){
