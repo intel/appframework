@@ -423,6 +423,25 @@
         return {};
     };
 
+    //Shim to put touch events on the jQuery special event
+    var oldAdd=$.event.add;
+
+    $.event.add=function(){
+        var oldHandler=arguments[2];
+        var self=this;
+        var handler=function(){
+            var oldArgs=arguments;
+            if(oldArgs[0].originalEvent&&oldArgs[0].originalEvent.touches){
+                oldArgs[0].touches=oldArgs[0].originalEvent.touches;
+                oldArgs[0].changedTouches=oldArgs[0].originalEvent.changedTouches;
+                oldArgs[0].targetTouches=oldArgs[0].originalEvent.targetTouches;
+            }
+            oldHandler.apply(self,oldArgs);
+        };
+        arguments[2]=handler;
+        oldAdd.apply($, arguments);
+    };
+
 
     window.$afm=$;
 
