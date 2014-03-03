@@ -1640,7 +1640,7 @@ if (!window.af || typeof(af) !== "function") {
                 options.type = "get";
                 options.dataType = null;
                 return $.get(options);
-            }
+            }            
             var callbackName = "jsonp_callback" + (++_jsonPID);
             var abortTimeout = "",
                 context, callback;
@@ -1780,8 +1780,8 @@ if (!window.af || typeof(af) !== "function") {
 
                 //ok, we are really using xhr
                 xhr = new window.XMLHttpRequest();
-
-
+                var deferred=$.defer();
+                $.extend(xhr,deferred.promise);                
                 xhr.onreadystatechange = function() {
                     var mime = settings.dataType;
                     if (xhr.readyState === 4) {
@@ -1804,16 +1804,21 @@ if (!window.af || typeof(af) !== "function") {
                             //If we"re looking at a local file, we assume that no response sent back means there was an error
                             if (xhr.status === 0 && result.length === 0)
                                 error = true;
-                            if (error)
-                                settings.error.call(context, xhr, "parsererror", error);
+                            if (error){
+                                settings.error.call(context,[xhr, "parsererror", error]);
+                                deferred.reject([xhr, "parsererror", error]);
+                            }
                             else {
+                                deferred.resolve([xhr, "succes", error]);
                                 settings.success.call(context, result, "success", xhr);
                             }
                         } else {
                             error = true;
+                            deferred.reject([xhr, "error"]);
                             settings.error.call(context, xhr, "error");
                         }
-                        settings.complete.call(context, xhr, error ? "error" : "success");
+                        var respText=error?"error":"success";                        
+                        settings.complete.call(context, xhr,respText);
                     }
                 };
                 xhr.open(settings.type, settings.url, settings.async);
@@ -1838,7 +1843,7 @@ if (!window.af || typeof(af) !== "function") {
                 xhr.send(settings.data);
             } catch (e) {
                 // General errors (e.g. access denied) should also be sent to the error callback
-                console.log(e);
+                deferred.resolve(context,[xhr, "error",e]);
                 settings.error.call(context, xhr, "error", e);
             }
             return xhr;
@@ -2822,6 +2827,14 @@ if (!window.af || typeof(af) !== "function") {
             };
         });
 
+        $.defer = function(){
+            return {
+                promise:{
+                },
+                reject:function(){},
+                resolve:function(){}
+            };
+        };
         /**
          * End of APIS
          * @api private
