@@ -1805,16 +1805,16 @@ if (!window.af || typeof(af) !== "function") {
                             if (xhr.status === 0 && result.length === 0)
                                 error = true;
                             if (error){
-                                settings.error.call(context,[xhr, "parsererror", error]);
-                                deferred.reject([xhr, "parsererror", error]);
+                                settings.error.call(context,xhr, "parsererror", error);
+                                deferred.reject.call(context,xhr, "parsererror", error);
                             }
                             else {
-                                deferred.resolve([xhr, "succes", error]);
+                                deferred.resolve.call(context,result, "succes", error);
                                 settings.success.call(context, result, "success", xhr);
                             }
                         } else {
                             error = true;
-                            deferred.reject([xhr, "error"]);
+                            deferred.reject.call(context,xhr, "error");
                             settings.error.call(context, xhr, "error");
                         }
                         var respText=error?"error":"success";                        
