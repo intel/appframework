@@ -1892,7 +1892,7 @@
                     //check if focused element is within active panel
                     var jQel = $(enterEditEl);
                     var jQactive = jQel.closest(that.activeDiv);
-                    if (jQactive && jQactive.size() > 0) {                        
+                    if (jQactive && jQactive.size() > 0) {
                         var elPos = jQel.offset();
                         var containerPos = jQactive.offset();
                         if (elPos.bottom > containerPos.bottom && elPos.height < containerPos.height) {
