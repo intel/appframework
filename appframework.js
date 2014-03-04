@@ -1786,6 +1786,7 @@ if (!window.af || typeof(af) !== "function") {
                     var mime = settings.dataType;
                     if (xhr.readyState === 4) {
                         clearTimeout(abortTimeout);
+
                         var result, error = false;
                         if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0 && protocol === "file:") {
                             if (mime === "application/json" && !(/^\s*$/.test(xhr.responseText))) {
@@ -2829,10 +2830,12 @@ if (!window.af || typeof(af) !== "function") {
 
         $.defer = function(){
             return {
-                promise:{
-                },
                 reject:function(){},
-                resolve:function(){}
+                resolve:function(){},
+                promise:{
+                    then:function(){},
+                    fail:function(){}
+                }
             };
         };
         /**
