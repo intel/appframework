@@ -177,5 +177,5 @@
     return ayepromise;
 }));
 (function(){
-    $.defer=ayepromise.defer;
+    $.Deferred=ayepromise.defer;
 })(af);

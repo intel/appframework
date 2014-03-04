@@ -1780,7 +1780,7 @@ if (!window.af || typeof(af) !== "function") {
 
                 //ok, we are really using xhr
                 xhr = new window.XMLHttpRequest();
-                var deferred=$.defer();
+                var deferred=$.Deferred();
                 $.extend(xhr,deferred.promise);
                 xhr.onreadystatechange = function() {
                     var mime = settings.dataType;
@@ -2828,7 +2828,7 @@ if (!window.af || typeof(af) !== "function") {
             };
         });
 
-        $.defer = function(){
+        $.Deferred = function(){
             return {
                 reject:function(){},
                 resolve:function(){},
