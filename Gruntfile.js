@@ -149,7 +149,8 @@ module.exports = function (grunt) {
             af:{
                 files:{
                     "build/appframework.js": [
-                        "appframework.js"
+                        "appframework.js",
+                        "ayepromise.js"
                     ]
                 }
             },
@@ -164,7 +165,7 @@ module.exports = function (grunt) {
         "closure-compiler": {
             appframework: {
                 closurePath: "../closure/",
-                js: "appframework.js",
+                js: ["appframework.js","ayepromise.js"],
                 jsOutputFile: "build/appframework.min.js",
                 maxBuffer: 500,
                 options: {
@@ -173,7 +174,7 @@ module.exports = function (grunt) {
             },
             "appframework-ui": {
                 closurePath: "../closure/",
-                js: ["appframework.js","build/ui/appframework.ui.js"],
+                js: ["appframework.js","ayepromise.js","build/ui/appframework.ui.js"],
                 jsOutputFile: "build/ui/appframework.ui.min.js",
                 options: {
                 },
