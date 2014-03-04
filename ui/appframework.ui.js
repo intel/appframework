@@ -2024,7 +2024,7 @@
             for (var i = 0; i < contentDivs.length; i++) {
                 var el = contentDivs[i];
                 var tmp = el;
-                var id;
+                var id = el.id;
                 var prevSibling = el.previousSibling;
                 if (el.parentNode && el.parentNode.id !== "content") {
                     if (tmp.getAttribute("selected")) this.firstDiv = el;
