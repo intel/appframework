@@ -1,9 +1,10 @@
 /**
  * af.popup - a popup/alert library for html5 mobile apps
- * @copyright Indiepath 2011 - Tim Fisher
+ * copyright Indiepath 2011 - Tim Fisher
  * Modifications/enhancements by Intel for App Framework
  *
  */
+ 
 /* EXAMPLE
  $.query("body").popup({
         title:"Alert! Alert!",

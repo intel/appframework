@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-02-24 */
+/*! intel-appframework - v2.1.0 - 2014-03-04 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -505,19 +505,23 @@
 })(af);
 
 
+/**
+  * @license MIT - https://github.com/darius/requestAnimationFrame/commit/4f27a5a21902a883330da4663bea953b2f96cb15#diff-9879d6db96fd29134fc802214163b95a
 
-// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-// http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
-// requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
-// MIT license
-// Adapted from https://gist.github.com/paulirish/1579671 which derived from 
-// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-// http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+    http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+    http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+    requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
+    MIT license
 
-// requestAnimationFrame polyfill by Erik Möller.
-// Fixes from Paul Irish, Tino Zijdel, Andrew Mao, Klemen Slavič, Darius Bacon
+    Adapted from https://gist.github.com/paulirish/1579671 which derived from 
+    http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+    http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
 
-// MIT license
+    requestAnimationFrame polyfill by Erik Möller.
+    Fixes from Paul Irish, Tino Zijdel, Andrew Mao, Klemen Slavič, Darius Bacon
+*/
+
+
 
 if (!Date.now)
     Date.now = function() {
@@ -1567,6 +1571,7 @@ if (!Date.now)
             this.scrollingFinishCB = null;
             this.loggedPcentY = 0;
             this.loggedPcentX = 0;
+            this.androidPerfHack=0;
         };
 
         function createScrollBar(width, height) {
@@ -2007,6 +2012,10 @@ if (!Date.now)
         jsScroller.prototype.calculateTarget = function (scrollInfo) {
             scrollInfo.y = this.lastScrollInfo.y + scrollInfo.deltaY;
             scrollInfo.x = this.lastScrollInfo.x + scrollInfo.deltaX;
+            if(Math.abs(scrollInfo.deltaY)>0)
+                scrollInfo.y+=(scrollInfo.deltaY>0?1:-1)*(this.elementInfo.divHeight*this.androidPerfHack);
+            if(Math.abs(scrollInfo.deltaX)>0)
+                scrollInfo.x+=(scrollInfo.deltaX>0?1:-1)*(this.elementInfo.divWidth*this.androidPerfHack);
         };
         jsScroller.prototype.checkYboundary = function (scrollInfo) {
             var minTop = this.container.clientHeight / 2;
@@ -2068,7 +2077,7 @@ if (!Date.now)
         };
 
         jsScroller.prototype.setMomentum = function (scrollInfo) {
-            var deceleration = 0.0012;
+            var deceleration = 0.0008;
 
             //calculate movement speed
             scrollInfo.speedY = this.divide(scrollInfo.deltaY, scrollInfo.duration);
@@ -2082,14 +2091,14 @@ if (!Date.now)
 
             //set momentum
             if (scrollInfo.absDeltaY > 0) {
-                scrollInfo.deltaY = (scrollInfo.deltaY < 0 ? -1 : 1) * (scrollInfo.absSpeedY * scrollInfo.absSpeedY) / (2 * deceleration);
+                scrollInfo.deltaY += (scrollInfo.deltaY < 0 ? -1 : 1) * (scrollInfo.absSpeedY * scrollInfo.absSpeedY) / (2 * deceleration);
                 scrollInfo.absDeltaY = Math.abs(scrollInfo.deltaY);
                 scrollInfo.duration = scrollInfo.absSpeedY / deceleration;
                 scrollInfo.speedY = scrollInfo.deltaY / scrollInfo.duration;
                 scrollInfo.absSpeedY = Math.abs(scrollInfo.speedY);
                 if (scrollInfo.absSpeedY < deceleration * 100 || scrollInfo.absDeltaY < 5) scrollInfo.deltaY = scrollInfo.absDeltaY = scrollInfo.duration = scrollInfo.speedY = scrollInfo.absSpeedY = 0;
             } else if (scrollInfo.absDeltaX) {
-                scrollInfo.deltaX = (scrollInfo.deltaX < 0 ? -1 : 1) * (scrollInfo.absSpeedX * scrollInfo.absSpeedX) / (2 * deceleration);
+                scrollInfo.deltaX += (scrollInfo.deltaX < 0 ? -1 : 1) * (scrollInfo.absSpeedX * scrollInfo.absSpeedX) / (2 * deceleration);
                 scrollInfo.absDeltaX = Math.abs(scrollInfo.deltaX);
                 scrollInfo.duration = scrollInfo.absSpeedX / deceleration;
                 scrollInfo.speedX = scrollInfo.deltaX / scrollInfo.duration;
@@ -2112,6 +2121,8 @@ if (!Date.now)
                 this.setMomentum(scrollInfo);
             }
             this.calculateTarget(scrollInfo);
+
+            
 
             //get the current top
             var cssMatrix = this.getCSSMatrix(this.el);
@@ -2345,10 +2356,11 @@ if (!Date.now)
 })(af);
 
 /**
- * @copyright: 2011 Intel
- * @description:  This script will replace all drop downs with friendly select controls.  Users can still interact
+ * copyright: 2011 Intel
+ * description:  This script will replace all drop downs with friendly select controls.  Users can still interact
  * with the old drop down box as normal with javascript, and this will be reflected
  */
+
  /* global af*/
  /* global numOnly*/
 (function($) {
@@ -2549,11 +2561,11 @@ if (!Date.now)
                 modalMask.append(container);
                 if ($afui.length > 0) $afui.append(modalMask);
                 else document.body.appendChild(modalMask.get(0));
-
                 that.scroller = $.query("#afSelectBoxfix").scroller({
                     scroller: false,
                     verticalScroll: true,
-                    vScrollCSS: "jqselectscrollBarV"
+                    vScrollCSS: "afselectscrollBarV",
+                    hasParent:true
                 });
 
                 $("#afModalMask").on("click",function(e){
@@ -3414,10 +3426,11 @@ if (!Date.now)
 
 /**
  * af.popup - a popup/alert library for html5 mobile apps
- * @copyright Indiepath 2011 - Tim Fisher
+ * copyright Indiepath 2011 - Tim Fisher
  * Modifications/enhancements by Intel for App Framework
  *
  */
+ 
 /* EXAMPLE
  $.query("body").popup({
         title:"Alert! Alert!",
@@ -4320,7 +4333,7 @@ if (!Date.now)
                 window.history.pushState(newPage, newPage, startPath + "#" + newPage + hashExtras);
                 $(window).trigger("hashchange", null, {
                     newUrl: startPath + "#" + newPage + hashExtras,
-                    oldURL: startPath + previousPage
+                    oldUrl: startPath + previousPage
                 });
             } catch (e) {}
         },
@@ -5674,25 +5687,14 @@ if (!Date.now)
                 enterEditEl = el;
             });
             //enter-edit-reshape panel padding and scroll adjust
-            $.bind($.touchLayer, "enter-edit-reshape", function() {
-                //onReshape UI fixes
-                //check if focused element is within active panel
-                var jQel = $(enterEditEl);
-                var jQactive = jQel.closest(that.activeDiv);
-                if (jQactive && jQactive.size() > 0) {
-                    if ($.os.ios || $.os.chrome) {
-                        var paddingTop, paddingBottom;
-                        if (document.body.scrollTop) {
-                            paddingTop = document.body.scrollTop - jQactive.offset().top;
-                        } else {
-                            paddingTop = 0;
-                        }
-                        //not exact, can be a little above the actual value
-                        //but we haven't found an accurate way to measure it and this is the best so far
-                        paddingBottom = jQactive.offset().bottom - jQel.offset().bottom;
-                        that.scrollingDivs[that.activeDiv.id].setPaddings(paddingTop, paddingBottom);
-
-                    } else if ($.os.android || $.os.blackberry) {
+            if($.os.android&&!$.os.androidICS)
+            {
+                $.bind($.touchLayer, "enter-edit-reshape", function() {
+                    //onReshape UI fixes
+                    //check if focused element is within active panel
+                    var jQel = $(enterEditEl);
+                    var jQactive = jQel.closest(that.activeDiv);
+                    if (jQactive && jQactive.size() > 0) {
                         var elPos = jQel.offset();
                         var containerPos = jQactive.offset();
                         if (elPos.bottom > containerPos.bottom && elPos.height < containerPos.height) {
@@ -5700,16 +5702,13 @@ if (!Date.now)
                             that.scrollingDivs[that.activeDiv.id].scrollToItem(jQel, "bottom");
                         }
                     }
-                }
-            });
-            if ($.os.ios) {
+                });
                 $.bind($.touchLayer, "exit-edit-reshape", function() {
                     if (that.activeDiv && that.activeDiv.id && that.scrollingDivs.hasOwnProperty(that.activeDiv.id)) {
                         that.scrollingDivs[that.activeDiv.id].setPaddings(0, 0);
                     }
                 });
             }
-
 
             //elements setup
             if (!this.navbar) {
@@ -5823,10 +5822,11 @@ if (!Date.now)
             var defer = {};
             var contentDivs = this.viewportContainer.get(0).querySelectorAll(".panel");
 
+
             for (var i = 0; i < contentDivs.length; i++) {
                 var el = contentDivs[i];
                 var tmp = el;
-                var id;
+                var id = el.id;
                 var prevSibling = el.previousSibling;
                 if (el.parentNode && el.parentNode.id !== "content") {
                     if (tmp.getAttribute("selected")) this.firstDiv = el;
@@ -5839,12 +5839,12 @@ if (!Date.now)
                     $(el).insertAfter(prevSibling);
                 }
                 if (el.getAttribute("data-defer")) {
-                    defer[id] = el.getAttribute("data-defer");
+                    defer[el.id] = el.getAttribute("data-defer");
                 }
-                if (!this.firstDiv) this.firstDiv = $.query("#" + id).get(0);
-
+                if (!this.firstDiv) this.firstDiv = el;
                 el = null;
             }
+
             contentDivs = null;
             var loadingDefer = false;
             var toLoad = Object.keys(defer).length;
@@ -5975,6 +5975,12 @@ if (!Date.now)
                 if (loadingDefer) {
                     $(document).one("defer:loaded", loadFirstDiv);
                 } else loadFirstDiv();
+            }
+            else {
+                //Don't block afui:ready from dispatching, even though there's no content
+                setTimeout(function(){
+                        $(document).trigger("afui:ready");
+                    });
             }
             $.bind(that, "content-loaded", function() {
                 if (that.loadContentQueue.length > 0) {

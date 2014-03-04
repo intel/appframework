@@ -1,8 +1,9 @@
 /**
- * @copyright: 2011 Intel
- * @description:  This script will replace all drop downs with friendly select controls.  Users can still interact
+ * copyright: 2011 Intel
+ * description:  This script will replace all drop downs with friendly select controls.  Users can still interact
  * with the old drop down box as normal with javascript, and this will be reflected
  */
+
  /* global af*/
  /* global numOnly*/
 (function($) {

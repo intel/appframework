@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-02-18 */
+/*! intel-appframework - v2.1.0 - 2014-03-04 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -3359,6 +3359,7 @@ body {
 		font-size:1em;
 		padding-left:10px;
 		position:relative;
+		padding-right: 35px;
 	}
 
 	.afFakeSelect:after {

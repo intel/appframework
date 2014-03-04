@@ -70,3 +70,5 @@ App Framework uses code from the following software:
 1) Zepto.js - Thomas Fuchs (MIT X11 License)
 
 2) qUnit - jQuery Foundation (MIT X11 License)
+
+3) ayepromise - Christoph Burgmer (BSD License)
