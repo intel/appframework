@@ -11,7 +11,7 @@
  */
  /* jshint eqeqeq:false */
   /* global af: true */
- 
+
 if (!window.af || typeof(af) !== "function") {
 
     /**
@@ -1640,7 +1640,7 @@ if (!window.af || typeof(af) !== "function") {
                 options.type = "get";
                 options.dataType = null;
                 return $.get(options);
-            }            
+            }
             var callbackName = "jsonp_callback" + (++_jsonPID);
             var abortTimeout = "",
                 context, callback;
@@ -1781,7 +1781,7 @@ if (!window.af || typeof(af) !== "function") {
                 //ok, we are really using xhr
                 xhr = new window.XMLHttpRequest();
                 var deferred=$.defer();
-                $.extend(xhr,deferred.promise);                
+                $.extend(xhr,deferred.promise);
                 xhr.onreadystatechange = function() {
                     var mime = settings.dataType;
                     if (xhr.readyState === 4) {
@@ -1817,7 +1817,7 @@ if (!window.af || typeof(af) !== "function") {
                             deferred.reject.call(context,xhr, "error");
                             settings.error.call(context, xhr, "error");
                         }
-                        var respText=error?"error":"success";                        
+                        var respText=error?"error":"success";
                         settings.complete.call(context, xhr,respText);
                     }
                 };
@@ -2568,7 +2568,7 @@ if (!window.af || typeof(af) !== "function") {
          * The following are for objects and not DOM nodes
          * @api private
          */
-        
+
         /*
          * Bind an event to an object instead of a DOM Node
            ```
