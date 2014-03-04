@@ -31,10 +31,16 @@
         var $asideMenu = $.query("#aside_menu");
         var menuWidth = $menu.width();
         var asideWidth = $asideMenu.width();
+        var inputElements = ["input", "select", "textarea"];
+        var tracking=false;
         $("#afui").bind("touchstart", function(e) {
             openState=0;
             if (!$.ui.isSideMenuEnabled() && !$.ui.isAsideMenuEnabled()) return true;
             if(e.touches.length>1) return;
+            var tagName=e.target.tagName.toLowerCase();            
+            if(tagName&&inputElements.indexOf(tagName) !== -1) return;
+
+            tracking=true;
             menuWidth = $menu.width();
             asideWidth = $asideMenu.width();
             startX = e.touches[0].pageX;
@@ -62,7 +68,7 @@
         });
 
         $("#afui").bind("touchmove", function(e) {
-            if(e.touches.length>1) return;
+            if(e.touches.length>1||!tracking) return;
             if (!$.ui.isSideMenuEnabled() && !$.ui.isAsideMenuEnabled()) return true;
             if (!$.ui.slideSideMenu||keepOpen) return true;
 
@@ -134,7 +140,6 @@
         });
         $("#afui").bind("touchend", function(e) {
             if (!$.ui.isSideMenuEnabled() && !$.ui.isAsideMenuEnabled()) return true;
-
             if (doMenu && checking&&!keepOpen) {
                 $.ui.toggleSideMenu(showHideThresh, function(){
                 }, transTime,isAside);
@@ -142,6 +147,7 @@
             checking = false;
             doMenu = false;
             keepOpen=false;
+            tracking=false;
         });
     });
 })(af);
