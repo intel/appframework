@@ -99,11 +99,11 @@
             //$.ui.animateHeaders=false;
              var search=document.location.search.toLowerCase().replace("?","");
              //if(!search)
-                //$.os.useOSThemes=false;
-            if(search) //Android fix has too many buggy issues on iOS - can't preview with $.os.android
+            $.ui.useOSThemes=false;
+            if(search.length>0) //Android fix has too many buggy issues on iOS - can't preview with $.os.android
             {
 
-               $.os.useOSThemes=true;
+               $.ui.useOSThemes=true;
                 if(search=="win8")
                     $.os.ie=true;
                 $.ui.ready(function(){
@@ -164,7 +164,7 @@
 </head>
 
     <body>
-        <div id="afui" class="">
+        <div id="afui" class="bb">
             <!-- this is the splashscreen you see. -->
             <div id="splashscreen" class='ui-loader heavy'>
                 App Framework
@@ -1078,6 +1078,7 @@ The parent id for this div is "content". Let's verify it.
                 <div id="afforms" title="Form Styles" class="panel" data-footer='footerui'>
                 <div class="formGroupHead">Standard</div>
                 <form>
+                    <input type="range" >
                     <input type="text" placeholder="test">
                     <input type="search" placeholder="search">
                     <textarea rows="6" placeholder="Enter your address"></textarea>
