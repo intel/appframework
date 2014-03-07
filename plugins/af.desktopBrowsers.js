@@ -133,7 +133,16 @@
     document.addEventListener("dragleave", preventAll, true);
     document.addEventListener("dragend", preventAll, true);
     document.addEventListener("drop", preventAll, true);
-    document.addEventListener("selectstart", preventAll, true);
+    //Allow selection of input elements
+    document.addEventListener("selectstart", function(e){
+        var theTarget = e.target;
+        if (theTarget.tagName.toUpperCase().indexOf("SELECT") === -1 &&
+            theTarget.tagName.toUpperCase().indexOf("TEXTAREA") === -1 &&
+            theTarget.tagName.toUpperCase().indexOf("INPUT") === -1) //SELECT, TEXTAREA & INPUT
+        {
+            preventAll(e);
+        }
+    }, true);
     document.addEventListener("click", function (e) {
         if (!e.mouseToTouch && e.target === lastTarget) {
             preventAll(e);
