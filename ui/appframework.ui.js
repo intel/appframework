@@ -577,7 +577,7 @@
          * @param {string} target
          * @param {string} value
          * @param {string=} position
-         * @param {(string|object)=} colro Color or CSS hash
+         * @param {(string=|object)} color Color or CSS hash
          * @title $.ui.updateBadge(target,value,[position],[color])
          */
         updateBadge: function(target, value, position, color) {
@@ -1265,7 +1265,7 @@
            ```
            $.ui.updateContentDiv("#myDiv","This is the new content");
            ```
-         * @param {(string, object)} id
+         * @param {(string|object)} id
          * @param {string} content HTML to update with
          * @title $.ui.updateContentDiv(id, content);
          */
