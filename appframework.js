@@ -1451,16 +1451,18 @@ if (!window.af || typeof(af) !== "function") {
             * @title $().data(key,[value]);
             */
             data: function(key, value) {
-                var retData;
+                var retData, JSON_RE = /^{.*}$/;
                 // setter
-                if (value) {
+                if (value !== undefined && value !== null) {
                     return this.attr('data-' + key, value);
                 }
                 // getter
                 retData = this.attr('data-' + key);
-                try {
-                    retData = $.parseJSON(retData);
-                } catch(ex) {}
+                if (JSON_RE.test(retData)) {
+                    try {
+                        retData = $.parseJSON(retData);
+                    } catch(ex) {}
+                }
                 return retData;
             },
             /**
