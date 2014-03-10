@@ -80,11 +80,6 @@
         false);
 
 
-        $(document).one("intel.xdk.device.ready",function(){
-            that.isIntel=true;
-            $.touchLayer.hideAddressBar(0,1);
-        })
-
 
         if (!("intel" in window)){
             window.intel = {xdk:{}};
@@ -2364,6 +2359,15 @@
 
 (function($) {
     "use strict";
+    $(document).one("intel.xdk.device.ready", function() { //in intel xdk, we need to undo the height stuff since it causes issues.
+        $.ui.isIntel=true;
+        setTimeout(function() {
+            document.getElementById("afui").style.height = "100%";
+            document.body.style.height = "100%";
+            document.documentElement.style.minHeight = window.innerHeight;
+        }, 30);
+
+    });
     //Fix an ios bug where scrolling will not work with rotation
     if ($.feat.nativeTouchScroll) {
         document.addEventListener("orientationchange", function(e) {
