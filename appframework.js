@@ -389,7 +389,7 @@ if (!window.af || typeof(af) !== "function") {
             $.isObject(foo);
             ```
 
-        * @param {Object} element
+        * @param {Object} element obj
         * @return {Boolean}
         * @title $.isObject(param)
         */
@@ -398,10 +398,10 @@ if (!window.af || typeof(af) !== "function") {
         };
 
         /**
-         * Prototype for afm object.  Also extens $.fn
+         * Prototype for afm object.  Also extends $.fn
          */
         $.fn = $afm.prototype = {
-            namepsace:"appframework",
+            namespace: "appframework",
             constructor: $afm,
             forEach: emptyArray.forEach,
             reduce: emptyArray.reduce,
