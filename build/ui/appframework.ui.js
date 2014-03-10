@@ -4149,7 +4149,7 @@ if (!Date.now)
                         handler: function () { alert("goodbye"); }
                     }]");
            ```
-         * @param {String,Array} links
+         * @param {(string|Array.<string>)} links
          * @title $.ui.actionsheet()
          */
         actionsheet: function(opts) {
@@ -4170,7 +4170,7 @@ if (!Date.now)
                       });
            $.ui.popup('Hi there');
            ```
-         * @param {Object|String} options
+         * @param {(object|string)} options
          * @title $.ui.popup(opts)
          */
         popup: function(opts) {
@@ -4182,7 +4182,7 @@ if (!Date.now)
          ```
          $.ui.blockUI(.9)
          ````
-         * @param {Float} opacity
+         * @param {number} opacity
          * @title $.ui.blockUI(opacity)
          */
         blockUI: function(opacity) {
@@ -4255,7 +4255,7 @@ if (!Date.now)
            ```
            $.ui.ready(function(){console.log('afui is ready');});
            ```
-         * @param {Function} function to execute
+         * @param {function} param function to execute
          * @title $.ui.ready
          */
         ready: function(param) {
@@ -4273,7 +4273,7 @@ if (!Date.now)
            ```
            $.ui.setBackButtonStyle('newClass');
            ```
-         * @param {String} new class name
+         * @param {string} className new class name
          * @title $.ui.setBackButtonStyle(class)
          */
         setBackButtonStyle: function(className) {
@@ -4287,7 +4287,7 @@ if (!Date.now)
            ```
 
          * @title $.ui.goBack()
-         * @param {Number} [delta=1]  relative position from the last element (> 0)
+         * @param {number=} delta relative position from the last element (> 0)
          */
         goBack: function(delta) {
             delta = Math.min(Math.abs(~~delta || 1), this.history.length);
@@ -4342,7 +4342,7 @@ if (!Date.now)
         /**
          * Updates the current window hash
          *
-         * @param {String} newHash New Hash value
+         * @param {string} newHash New Hash value
          * @title $.ui.updateHash(newHash)
          * @api private
          */
@@ -4376,10 +4376,10 @@ if (!Date.now)
            ```
            $.ui.updateBadge("#mydiv","3","bl","green");
            ```
-         * @param {String} target
-         * @param {String} Value
-         * @param {String} [position]
-         * @param {String|Object} [color or CSS hash]
+         * @param {string} target
+         * @param {string} value
+         * @param {string=} position
+         * @param {(string=|object)} color Color or CSS hash
          * @title $.ui.updateBadge(target,value,[position],[color])
          */
         updateBadge: function(target, value, position, color) {
@@ -4413,7 +4413,7 @@ if (!Date.now)
            ```
            $.ui.removeBadge("#mydiv");
            ```
-         * @param {String} target
+         * @param {string} target
          * @title $.ui.removeBadge(target)
          */
         removeBadge: function(target) {
@@ -4425,7 +4425,7 @@ if (!Date.now)
            $.ui.toggleNavMenu();//toggle it
            $.ui.toggleNavMenu(true); //force show it
            ```
-         * @param {Boolean} [force]
+         * @param {boolean=} force
          * @title $.ui.toggleNavMenu([force])
          */
         toggleNavMenu: function(force) {
@@ -4442,7 +4442,7 @@ if (!Date.now)
            ```
            $.ui.toggleHeaderMenu();//toggle it
            ```
-         * @param {Boolean} [force]
+         * @param {boolean=} force
          * @title $.ui.toggleHeaderMenu([force])
          */
         toggleHeaderMenu: function(force) {
@@ -4468,9 +4468,10 @@ if (!Date.now)
            ```
            $.ui.toggleSideMenu();//toggle it
            ```
-         * @param {Boolean} [force]
-         * @param {Function} [callback] Callback function to execute after menu toggle is finished
-         * @param {int} [time] Time to run the transition
+         * @param {boolean=} force
+         * @param {function=} callback Callback function to execute after menu toggle is finished
+         * @param {number=} time Time to run the transition
+         * @param {boolean=} aside 
          * @title $.ui.toggleSideMenu([force],[callback],[time])
          */
         toggleLeftSideMenu: function(force, callback, time, aside) {
@@ -4668,7 +4669,7 @@ if (!Date.now)
            ```
            $.ui.updateNavbarElements(elements);
            ```
-         * @param {String|Object} Elements
+         * @param {(string|object)} elems
          * @title $.ui.updateNavbarElements(Elements)
          */
         updateNavbarElements: function(elems) {
@@ -4709,7 +4710,8 @@ if (!Date.now)
            ```
            $.ui.updateHeaderElements(elements);
            ```
-         * @param {String|Object} Elements
+         * @param {(string|object)} elems
+         * @param {boolean} goBack
          * @title $.ui.updateHeaderElements(Elements)
          */
         updateHeaderElements: function(elems, goBack) {
@@ -4811,8 +4813,8 @@ if (!Date.now)
            ```
            $.ui.updateSideMenuElements(elements);
            ```
-         * @param {String|Object} Elements
-         * @title $.ui.updateSideMenuElements(Elements)
+         * @param {...(string|object)} elements
+         * @title $.ui.updateSideMenuElements(elements)
          */
         updateSideMenuElements: function() {
             return this.updateLeftSideMenuElements.apply(this,arguments);
@@ -4843,7 +4845,7 @@ if (!Date.now)
            $.ui.setTitle("new title");
            ```
 
-         * @param {String} value
+         * @param {string} val
          * @title $.ui.setTitle(value)
          */
         setTitle: function(val) {
@@ -4856,8 +4858,8 @@ if (!Date.now)
            $.ui.setBackButtonText("GO...");
            ```
 
-         * @param {String} value
-         * @title $.ui.setBackButtonText(value)
+         * @param {string} text
+         * @title $.ui.setBackButtonText(text)
          */
         setBackButtonText: function(text) {
             if(this._currentHeaderID !== "defaultHeader") return;
@@ -4880,7 +4882,7 @@ if (!Date.now)
            $.ui.showMask('Doing work')
            ```
 
-         * @param {String} [text]
+         * @param {string=} text
          * @title $.ui.showMask(text);
          */
         showMask: function(text) {
@@ -4904,8 +4906,8 @@ if (!Date.now)
            ```
            $.ui.showModal("#myDiv","fade");
            ```
-         * @param {String|Object} panel to show
-         * @param {String} [transition]
+         * @param {(string|object)} id panel to show
+         * @param {string=} trans
          * @title $.ui.showModal();
          */
         showModal: function(id, trans) {
@@ -5031,8 +5033,8 @@ if (!Date.now)
            ```
            $.ui.updatePanel("#myDiv","This is the new content");
            ```
-         * @param {String,Object} panel
-         * @param {String} html to update with
+         * @param {(string|object)} id
+         * @param {string} content HTML to update with
          * @title $.ui.updatePanel(id,content);
          */
         updatePanel: function(id, content) {
@@ -5065,9 +5067,9 @@ if (!Date.now)
            ```
            $.ui.updateContentDiv("#myDiv","This is the new content");
            ```
-         * @param {String,Object} panel
-         * @param {String} html to update with
-         * @title $.ui.updateContentDiv(id,content);
+         * @param {(string|object)} id
+         * @param {string} content HTML to update with
+         * @title $.ui.updateContentDiv(id, content);
          */
         updateContentDiv: function(id, content) {
             return this.updatePanel(id, content);
@@ -5077,10 +5079,12 @@ if (!Date.now)
            ```
            $.ui.addContentDiv("myDiv","This is the new content","Title");
            ```
-         * @param {String|Object} Element to add
-         * @param {String} Content
-         * @param {String} title
-         * @title $.ui.addContentDiv(id,content,title);
+         * @param {(string|object)} el Element to add
+         * @param {string} content
+         * @param {string} title
+         * @param {boolean=} refresh Enable refresh on pull
+         * @param {function=} refreshFunc 
+         * @title $.ui.addContentDiv(id, content, title);
          */
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
             el = typeof(el) !== "string" ? el : el.indexOf("#") === -1 ? "#" + el : el;
@@ -5112,7 +5116,10 @@ if (!Date.now)
            ```
            $.ui.addDivAndScroll(object);
            ```
-         * @param {Object} Element
+         * @param {object} tmp Element
+         * @param {boolean=} refreshPull
+         * @param {function} refreshFunc
+         * @param {object=} container
          * @title $.ui.addDivAndScroll(element);
          * @api private
          */
@@ -5203,8 +5210,8 @@ if (!Date.now)
            ```
            $.ui.scrollToTop(id);
            ```
-         * @param {String} id
-         * @param {string} Time to scroll
+         * @param {string} id
+         * @param {string} time Time to scroll
          * @title $.ui.scrollToTop(id);
          */
         scrollToTop: function(id, time) {
@@ -5219,8 +5226,8 @@ if (!Date.now)
            ```
            $.ui.scrollToBottom(id,time);
            ```
-         * @param {String} id
-         * @param {string} Time to scroll
+         * @param {string} id
+         * @param {string} time Time to scroll
          * @title $.ui.scrollToBottom(id);
          */
         scrollToBottom: function(id, time) {
@@ -5234,11 +5241,12 @@ if (!Date.now)
          *  This is used when a transition fires to do helper events.  We check to see if we need to change the nav menus, footer, and fire
          * the load/onload functions for panels
            ```
-           $.ui.parsePanelFunctions(currentDiv,oldDiv);
+           $.ui.parsePanelFunctions(currentDiv, oldDiv);
            ```
-         * @param {Object} current div
-         * @param {Object} old div
-         * @title $.ui.parsePanelFunctions(currentDiv,oldDiv);
+         * @param {object} what current div
+         * @param {object=} oldDiv old div
+         * @param {boolean=} goBack
+         * @title $.ui.parsePanelFunctions(currentDiv, oldDiv);
          * @api private
          */
         parsePanelFunctions: function(what, oldDiv, goBack) {
@@ -5354,11 +5362,12 @@ if (!Date.now)
            ```
            $.ui.loadContent("#main",false,false,"up");
            ```
-         * @param {String} target
-         * @param {Boolean} newtab (resets history)
-         * @param {Boolean} go back (initiate the back click)
-         * @param {String} transition
-         * @title $.ui.loadContent(target,newTab,goBack,transition);
+         * @param {string} target
+         * @param {boolean=} newtab (resets history)
+         * @param {boolean=} go back (initiate the back click)
+         * @param {string=} transition
+         * @param {object=} anchor
+         * @title $.ui.loadContent(target, newTab, goBack, transition, anchor);
          * @api public
          */
         loadContent: function(target, newTab, back, transition, anchor) {
@@ -5406,10 +5415,10 @@ if (!Date.now)
            ```
            $.ui.loadDiv("#main",false,false,"up");
            ```
-         * @param {String} target
-         * @param {Boolean} newtab (resets history)
-         * @param {Boolean} go back (initiate the back click)
-         * @param {String} transition
+         * @param {string} target
+         * @param {boolean=} newtab (resets history)
+         * @param {boolean=} back Go back (initiate the back click)
+         * @param {string=} transition
          * @title $.ui.loadDiv(target,newTab,goBack,transition);
          * @api private
          */
@@ -5490,10 +5499,10 @@ if (!Date.now)
            ```
            $.ui.loadContentData("#main",false,false,"up");
            ```
-         * @param {String} target
-         * @param {Boolean} newtab (resets history)
-         * @param {Boolean} go back (initiate the back click)
-         * @param {String} transition
+         * @param {string} target
+         * @param {boolean=} newtab (resets history)
+         * @param {boolean=} go back (initiate the back click)
+         * @param {string=} transition
          * @title $.ui.loadDiv(target,newTab,goBack,transition);
          * @api private
          */
@@ -5539,10 +5548,11 @@ if (!Date.now)
            ```
            $.ui.loadDiv("page.html",false,false,"up");
            ```
-         * @param {String} target
-         * @param {Boolean} newtab (resets history)
-         * @param {Boolean} go back (initiate the back click)
-         * @param {String} transition
+         * @param {string} target
+         * @param {boolean=} newtab (resets history)
+         * @param {boolean=} go back (initiate the back click)
+         * @param {string=} transition
+         * @param {object=} anchor
          * @title $.ui.loadDiv(target,newTab,goBack,transition);
          * @api private
          */
@@ -6032,7 +6042,8 @@ if (!Date.now)
         /**
          * This must be called at the end of every transition to hide the old div and reset the doingTransition variable
          *
-         * @param {Object} Div that transitioned out
+         * @param {object} oldDiv Div that transitioned out
+         * @param {object=} currDiv 
          * @title $.ui.finishTransition(oldDiv)
          */
         finishTransition: function(oldDiv, currDiv) {
@@ -6046,7 +6057,7 @@ if (!Date.now)
         /**
          * This must be called at the end of every transition to remove all transforms and transitions attached to the inView object (performance + native scroll)
          *
-         * @param {Object} Div that transitioned out
+         * @param {object} inViewDiv Div that transitioned out
          * @title $.ui.finishTransition(oldDiv)
          */
         clearAnimations: function(inViewDiv) {

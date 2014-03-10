@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-03-04 */
+/*! intel-appframework - v2.1.0 - 2014-03-10 */
 
 /**
  * App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -764,7 +764,7 @@ if (!window.af || typeof(af) !== "function") {
                 if (this.length === 0)
                     return (value === nundefined) ? undefined : this;
                 if (value === nundefined && !$.isObject(attr)) {
-                    var val = (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) ? (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) : this[0].getAttribute(attr);
+                    var val = (this[0].afmCacheId && _attrCache[this[0].afmCacheId] && _attrCache[this[0].afmCacheId][attr]) ? _attrCache[this[0].afmCacheId][attr] : this[0].getAttribute(attr);                      
                     return val;
                 }
                 for (var i = 0; i < this.length; i++) {
@@ -786,6 +786,8 @@ if (!window.af || typeof(af) !== "function") {
                             delete _attrCache[this[i].afmCacheId][attr];
                     } else {
                         this[i].setAttribute(attr, value);
+                        if (this[i].afmCacheId && _attrCache[this[i].afmCacheId][attr])
+                            delete _attrCache[this[i].afmCacheId][attr];
                     }
                 }
                 return this;
@@ -803,7 +805,7 @@ if (!window.af || typeof(af) !== "function") {
             removeAttr: function(attr) {
                 var removeFixer=function(param) {
                     that[i].removeAttribute(param);
-                    if (that[i].afmCacheId && _attrCache[that[i].afmCacheId][attr])
+                    if (that[i].afmCacheId && _attrCache[that[i].afmCacheId])
                         delete _attrCache[that[i].afmCacheId][attr];
                 };
                 var that = this;
@@ -831,8 +833,8 @@ if (!window.af || typeof(af) !== "function") {
                 if (this.length === 0)
                     return (value === nundefined) ? undefined : this;
                 if (value === nundefined && !$.isObject(prop)) {
-                    var res;
-                    var val = (this[0].afmCacheId && _propCache[this[0].afmCacheId][prop]) ? (this[0].afmCacheId && _propCache[this[0].afmCacheId][prop]) : !(res = this[0][prop]) && prop in this[0] ? this[0][prop] : res;
+                    var res;                    
+                    var val = (this[0].afmCacheId && _propCache[this[0].afmCacheId] && _propCache[this[0].afmCacheId][prop]) ? _propCache[this[0].afmCacheId][prop] : !(res = this[0][prop]) && prop in this[0] ? this[0][prop] : res;
                     return val;
                 }
                 for (var i = 0; i < this.length; i++) {
@@ -841,7 +843,6 @@ if (!window.af || typeof(af) !== "function") {
                             $(this[i]).prop(key, prop[key]);
                         }
                     } else if ($.isArray(value) || $.isObject(value) || $.isFunction(value)) {
-
                         if (!this[i].afmCacheId)
                             this[i].afmCacheId = $.uuid();
 
@@ -851,6 +852,8 @@ if (!window.af || typeof(af) !== "function") {
                     } else if (value === null && value !== undefined) {
                         $(this[i]).removeProp(prop);
                     } else {
+                        if(_propCache[this[i].afmCacheId][prop])
+                            _propCache[this[i].afmCacheId][prop]=null;
                         this[i][prop] = value;
                     }
                 }
@@ -870,7 +873,7 @@ if (!window.af || typeof(af) !== "function") {
                 var removePropFn=function(param) {
                     if (that[i][param])
                         that[i][param] = undefined;
-                    if (that[i].afmCacheId && _propCache[that[i].afmCacheId][prop]) {
+                    if (that[i].afmCacheId && _propCache[that[i].afmCacheId]) {
                         delete _propCache[that[i].afmCacheId][prop];
                     }
                 };
@@ -1712,18 +1715,24 @@ if (!window.af || typeof(af) !== "function") {
         */
         $.ajax = function(opts) {
             var xhr;
-            try {
-
-                var settings = opts || {};
-                for (var key in $.ajaxSettings) {
-                    if (typeof(settings[key]) === "undefined")
-                        settings[key] = $.ajaxSettings[key];
-                }
-
+            var deferred=$.Deferred();
+            var url;
+            if(typeof(opts)==="string")
+            {
+                var oldUrl=opts;
+                opts={
+                    url:oldUrl
+                };
+            }
+            var settings = opts || {};
+            for (var key in $.ajaxSettings) {
+                if (typeof(settings[key]) === "undefined")
+                    settings[key] = $.ajaxSettings[key];
+            }            
+            try{
                 if (!settings.url)
                     settings.url = window.location;
-                if (!settings.contentType && settings.contentType!==false)
-                    settings.contentType = "application/x-www-form-urlencoded; charset=UTF-8";
+
                 if (!settings.headers)
                     settings.headers = {};
 
@@ -1737,6 +1746,10 @@ if (!window.af || typeof(af) !== "function") {
                         settings.url += "?" + settings.data;
                     else
                         settings.url += "&" + settings.data;
+                }
+                if(settings.data) {
+                    if (!settings.contentType && settings.contentType!==false)
+                        settings.contentType = "application/x-www-form-urlencoded; charset=UTF-8";
                 }
                 if (!settings.dataType)
                     settings.dataType = "text/html";
@@ -1784,14 +1797,14 @@ if (!window.af || typeof(af) !== "function") {
                 xhr = new window.XMLHttpRequest();
                 var deferred=$.Deferred();
                 $.extend(xhr,deferred.promise);
+
                 xhr.onreadystatechange = function() {
                     var mime = settings.dataType;
                     if (xhr.readyState === 4) {
                         clearTimeout(abortTimeout);
-
                         var result, error = false;
                         if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0 && protocol === "file:") {
-                            if (mime === "application/json" && !(/^\s*$/.test(xhr.responseText))) {
+                            if ((xhr.getResponseHeader("content-type")==="application/json")||(mime === "application/json" && !(/^\s*$/.test(xhr.responseText)))) {
                                 try {
                                     result = JSON.parse(xhr.responseText);
                                 } catch (e) {
@@ -1799,8 +1812,9 @@ if (!window.af || typeof(af) !== "function") {
                                 }
                             } else if (mime === "application/xml, text/xml") {
                                 result = xhr.responseXML;
-                            } else if (mime === "text/html") {
+                            } else if (mime === "text/html") {                              
                                 result = xhr.responseText;
+
                                 $.parseJS(result);
                             } else
                                 result = xhr.responseText;
