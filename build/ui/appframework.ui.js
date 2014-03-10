@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-03-04 */
+/*! intel-appframework - v2.1.0 - 2014-03-10 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -1310,21 +1310,21 @@ if (!Date.now)
             //var scorllTop
             var atTop=(this.el.scrollHeight-this.el.scrollTop)===this.el.clientHeight&&newcY<0;
             var atRight=(this.el.scrollWidth-this.el.scrollLeft)===this.el.clientWidth&&newcX<0;
-
+            var preventDefault=e.target.tagName.toLowerCase()!=="input";
             if(this.verticalScroll){
                 if(this.startTop===0&&this.el.scrollTop===0&&newcY>0)
-                    e.preventDefault();
+                    preventDefault&&e.preventDefault();
             }
             if(this.horizontalScroll&&this.startTop===0&&this.el.scrollLeft===0&&newcX>0){
-                e.preventDefault();
+                preventDefault&&e.preventDefault();
             }
 
             if(this.verticalScroll&&atTop){
-                e.preventDefault();
+                preventDefault&&e.preventDefault();
 
             }
             if(this.horizontalScroll&&atRight){
-                e.preventDefault();
+                preventDefault&&e.preventDefault();
             }
 
             if (!this.moved) {
