@@ -12,7 +12,7 @@
  * @api private
  */
  /* jshint eqeqeq:false */
-  /* global af: true */
+  /* global af: false */
 
 if (!window.af || typeof(af) !== "function") {
 
@@ -764,7 +764,7 @@ if (!window.af || typeof(af) !== "function") {
                 if (this.length === 0)
                     return (value === nundefined) ? undefined : this;
                 if (value === nundefined && !$.isObject(attr)) {
-                    var val = (this[0].afmCacheId && _attrCache[this[0].afmCacheId] && _attrCache[this[0].afmCacheId][attr]) ? _attrCache[this[0].afmCacheId][attr] : this[0].getAttribute(attr);                      
+                    var val = (this[0].afmCacheId && _attrCache[this[0].afmCacheId] && _attrCache[this[0].afmCacheId][attr]) ? _attrCache[this[0].afmCacheId][attr] : this[0].getAttribute(attr);
                     return val;
                 }
                 for (var i = 0; i < this.length; i++) {
@@ -833,7 +833,7 @@ if (!window.af || typeof(af) !== "function") {
                 if (this.length === 0)
                     return (value === nundefined) ? undefined : this;
                 if (value === nundefined && !$.isObject(prop)) {
-                    var res;                    
+                    var res;
                     var val = (this[0].afmCacheId && _propCache[this[0].afmCacheId] && _propCache[this[0].afmCacheId][prop]) ? _propCache[this[0].afmCacheId][prop] : !(res = this[0][prop]) && prop in this[0] ? this[0][prop] : res;
                     return val;
                 }
@@ -852,8 +852,7 @@ if (!window.af || typeof(af) !== "function") {
                     } else if (value === null && value !== undefined) {
                         $(this[i]).removeProp(prop);
                     } else {
-                        if(_propCache[this[i].afmCacheId][prop])
-                            _propCache[this[i].afmCacheId][prop]=null;
+                        $(this[i]).removeProp(prop);
                         this[i][prop] = value;
                     }
                 }
@@ -1728,7 +1727,7 @@ if (!window.af || typeof(af) !== "function") {
             for (var key in $.ajaxSettings) {
                 if (typeof(settings[key]) === "undefined")
                     settings[key] = $.ajaxSettings[key];
-            }            
+            }
             try{
                 if (!settings.url)
                     settings.url = window.location;
@@ -1795,7 +1794,6 @@ if (!window.af || typeof(af) !== "function") {
 
                 //ok, we are really using xhr
                 xhr = new window.XMLHttpRequest();
-                var deferred=$.Deferred();
                 $.extend(xhr,deferred.promise);
 
                 xhr.onreadystatechange = function() {
@@ -1812,7 +1810,7 @@ if (!window.af || typeof(af) !== "function") {
                                 }
                             } else if (mime === "application/xml, text/xml") {
                                 result = xhr.responseXML;
-                            } else if (mime === "text/html") {                              
+                            } else if (mime === "text/html") {
                                 result = xhr.responseText;
 
                                 $.parseJS(result);
@@ -2222,12 +2220,10 @@ if (!window.af || typeof(af) !== "function") {
          * @api private
          */
 
-        function findHandlers(element, event, fn, selector) {
-            event = parse(event);
-            if (event.ns)
-                var matcher = matcherFor(event.ns);
+        function findHandlers(element, event, fn, selector,keepEnd) {
+            event = parse(event,keepEnd);
             return (handlers[afmid(element)] || []).filter(function(handler) {
-                return handler && (!event.e || handler.e === event.e) && (!event.ns || matcher.test(handler.ns)) && (!fn || handler.fn === fn || (typeof handler.fn === "function" && typeof fn === "function" && handler.fn === fn)) && (!selector || handler.sel === selector);
+                return handler && (!event.e || handler.e === event.e) && (!event.ns || handler.ns.indexOf(event.ns)!==0) && (!fn || handler.fn === fn || (typeof handler.fn === "function" && typeof fn === "function" && handler.fn === fn)) && (!selector || handler.sel === selector);
             });
         }
         /**
@@ -2237,11 +2233,13 @@ if (!window.af || typeof(af) !== "function") {
          * @api private
          */
 
-        function parse(event) {
+        function parse(event,skipPop) {
             var parts = ("" + event).split(".");
+            if(skipPop!==true)
+                parts.pop();
             return {
-                e: parts[0],
-                ns: parts.slice(1).sort().join(" ")
+                e: event,
+                ns: parts.join(".")
             };
         }
         /**
@@ -2324,13 +2322,13 @@ if (!window.af || typeof(af) !== "function") {
 
             var id = afmid(element);
             eachEvent(events || "", fn, function(event, fn) {
-                findHandlers(element, event, fn, selector).forEach(function(handler) {
+                findHandlers(element, event, fn, selector,true).forEach(function(handler) {
+                    console.log(handlers[id][handler.i]);
                     delete handlers[id][handler.i];
                     element.removeEventListener(handler.e, handler.proxy, false);
                 });
             });
         }
-
         $.event = {
             add: add,
             remove: remove

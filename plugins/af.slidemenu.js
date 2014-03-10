@@ -37,7 +37,7 @@
             openState=0;
             if (!$.ui.isSideMenuEnabled() && !$.ui.isAsideMenuEnabled()) return true;
             if(e.touches.length>1) return;
-            var tagName=e.target.tagName.toLowerCase();            
+            var tagName=e.target.tagName.toLowerCase();
             if(tagName&&inputElements.indexOf(tagName) !== -1) return;
 
             tracking=true;
