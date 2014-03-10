@@ -1716,6 +1716,7 @@ if (!window.af || typeof(af) !== "function") {
                     switch (settings.dataType) {
                         case "script":
                             settings.dataType = 'text/javascript, application/javascript';
+                            return $.getScript(settings.url, settings.success);
                             break;
                         case "json":
                             settings.dataType = 'application/json';
@@ -1885,6 +1886,49 @@ if (!window.af || typeof(af) !== "function") {
                 dataType: "json"
             });
         };
+
+        /**
+        * get script.
+        * Note: code are borrowed from jQuery.
+            ```
+            $.getScript("some.js",);
+            ```
+
+        * @param {String} url to hit
+        * @param {Function} [success]
+        */
+        $.getScript = function(url, success) {
+            var script,
+                head = document.head || af("head")[0] || document.documentElement;
+
+            script = document.createElement("script");
+
+            script.async = true;
+
+            script.src = url;
+
+            // Attach handlers for all browsers
+            script.onload = script.onreadystatechange = function( _, isAbort ) {
+
+                if ( isAbort || !script.readyState || /loaded|complete/.test( script.readyState ) ) {
+
+                    // Remove the script
+                    if ( script.parentNode ) {
+                        script.parentNode.removeChild( script );
+                    }
+
+                    // Dereference the script
+                    script = null;
+
+                    // Callback if not abort
+                    if ( !isAbort ) {
+                        success && success( 200, "success" );
+                    }
+                }
+            };
+
+            head.insertBefore( script, head.firstChild );
+        }
 
         /**
         * Converts an object into a key/value par with an optional prefix.  Used for converting objects to a query string
