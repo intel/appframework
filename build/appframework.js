@@ -1,5 +1,3 @@
-/*! intel-appframework - v2.1.0 - 2014-03-10 */
-
 /**
  * App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.
  * Since most mobile devices (Android, iOS, webOS) use a WebKit browser, you only need to target one browser.
@@ -2322,8 +2320,7 @@ if (!window.af || typeof(af) !== "function") {
 
             var id = afmid(element);
             eachEvent(events || "", fn, function(event, fn) {
-                findHandlers(element, event, fn, selector,true).forEach(function(handler) {
-                    console.log(handlers[id][handler.i]);
+                findHandlers(element, event, fn, selector,true).forEach(function(handler) {                    
                     delete handlers[id][handler.i];
                     element.removeEventListener(handler.e, handler.proxy, false);
                 });
