@@ -752,7 +752,7 @@ if (!window.af || typeof(af) !== "function") {
                 if (this.length === 0)
                     return (value === nundefined) ? undefined : this;
                 if (value === nundefined && !$.isObject(attr)) {
-                    var val = (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) ? (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) : this[0].getAttribute(attr);
+                    var val = (this[0].afmCacheId && _attrCache[this[0].afmCacheId] && _attrCache[this[0].afmCacheId][attr]) ? _attrCache[this[0].afmCacheId][attr] : this[0].getAttribute(attr);
                     return val;
                 }
                 for (var i = 0; i < this.length; i++) {
@@ -793,7 +793,7 @@ if (!window.af || typeof(af) !== "function") {
                 for (var i = 0; i < this.length; i++) {
                     attr.split(/\s+/g).forEach(function(param) {
                         that[i].removeAttribute(param);
-                        if (that[i].afmCacheId && _attrCache[that[i].afmCacheId][attr])
+                        if (that[i].afmCacheId && _attrCache[that[i].afmCacheId])
                             delete _attrCache[that[i].afmCacheId][attr];
                     });
                 }
@@ -819,7 +819,7 @@ if (!window.af || typeof(af) !== "function") {
                     return (value === nundefined) ? undefined : this;
                 if (value === nundefined && !$.isObject(prop)) {
                     var res;
-                    var val = (this[0].afmCacheId && _propCache[this[0].afmCacheId][prop]) ? (this[0].afmCacheId && _propCache[this[0].afmCacheId][prop]) : !(res = this[0][prop]) && prop in this[0] ? this[0][prop] : res;
+                    var val = (this[0].afmCacheId && _propCache[this[0].afmCacheId] && _propCache[this[0].afmCacheId][prop]) ? _propCache[this[0].afmCacheId][prop] : !(res = this[0][prop]) && prop in this[0] ? this[0][prop] : res;
                     return val;
                 }
                 for (var i = 0; i < this.length; i++) {
@@ -859,7 +859,7 @@ if (!window.af || typeof(af) !== "function") {
                     prop.split(/\s+/g).forEach(function(param) {
                         if (that[i][param])
                             that[i][param] = undefined;
-                        if (that[i].afmCacheId && _propCache[that[i].afmCacheId][prop]) {
+                        if (that[i].afmCacheId && _propCache[that[i].afmCacheId]) {
                             delete _propCache[that[i].afmCacheId][prop];
                         }
                     });
