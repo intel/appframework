@@ -248,6 +248,7 @@ if (!window.af || typeof(af) !== "function") {
             for (var i = 0, iz = nodes.length; i < iz; i++)
                 obj[obj.length++] = nodes[i];
         }
+		
         /**
         * Checks to see if the parameter is a $afm object
             ```
@@ -255,13 +256,14 @@ if (!window.af || typeof(af) !== "function") {
             $.is$(foo);
             ```
 
-        * @param {Object} element
-        * @return {Boolean}
+        * @param {*} obj
+        * @return {boolean}
         * @title $.is$(param)
         */
         $.is$ = function(obj) {
-            return obj instanceof $afm;
+            return (obj instanceof $afm);
         };
+		
         /**
         * Map takes in elements and executes a callback function on each and returns a collection
         ```
@@ -838,7 +840,7 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 for (var i = 0; i < this.length; i++) {
                     if ($.isObject(prop)) {
-                        for (var key in prop) {
+                        for (var key in prop) {i
                             $(this[i]).prop(key, prop[key]);
                         }
                     } else if ($.isArray(value) || $.isObject(value) || $.isFunction(value)) {
