@@ -359,8 +359,8 @@ if (!window.af || typeof(af) !== "function") {
             $.isArray(arr);
             ```
 
-        * @param {Object} element
-        * @return {Boolean}
+        * @param {*} obj
+        * @return {boolean}
         * @example $.isArray([1]);
         * @title $.isArray(param)
         */
@@ -375,28 +375,29 @@ if (!window.af || typeof(af) !== "function") {
             $.isFunction(func);
             ```
 
-        * @param {Object} element
-        * @return {Boolean}
+        * @param {*} obj
+        * @return {boolean}
         * @title $.isFunction(param)
         */
         $.isFunction = function(obj) {
             return typeof obj === "function" && !(obj instanceof RegExp);
         };
+		
         /**
         * Checks to see if the parameter is a object
             ```
             var foo={bar:"bar"};
             $.isObject(foo);
-            ```
-
-        * @param {Object} element obj
-        * @return {Boolean}
+        
+			    ```
+		* @param {*} obj
+		* @returns {boolean}
         * @title $.isObject(param)
-        */
+		*/
         $.isObject = function(obj) {
             return typeof obj === "object" && obj !== null;
         };
-
+		
         /**
          * Prototype for afm object.  Also extends $.fn
          */
