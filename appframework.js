@@ -762,7 +762,7 @@ if (!window.af || typeof(af) !== "function") {
                 if (this.length === 0)
                     return (value === nundefined) ? undefined : this;
                 if (value === nundefined && !$.isObject(attr)) {
-                    var val = (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) ? (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) : this[0].getAttribute(attr);
+                    var val = (this[0].afmCacheId && _attrCache[this[0].afmCacheId] && _attrCache[this[0].afmCacheId][attr]) ? _attrCache[this[0].afmCacheId][attr] : this[0].getAttribute(attr);                      
                     return val;
                 }
                 for (var i = 0; i < this.length; i++) {
@@ -784,6 +784,8 @@ if (!window.af || typeof(af) !== "function") {
                             delete _attrCache[this[i].afmCacheId][attr];
                     } else {
                         this[i].setAttribute(attr, value);
+                        if (this[i].afmCacheId && _attrCache[this[i].afmCacheId][attr])
+                            delete _attrCache[this[i].afmCacheId][attr];
                     }
                 }
                 return this;
@@ -801,7 +803,7 @@ if (!window.af || typeof(af) !== "function") {
             removeAttr: function(attr) {
                 var removeFixer=function(param) {
                     that[i].removeAttribute(param);
-                    if (that[i].afmCacheId && _attrCache[that[i].afmCacheId][attr])
+                    if (that[i].afmCacheId && _attrCache[that[i].afmCacheId])
                         delete _attrCache[that[i].afmCacheId][attr];
                 };
                 var that = this;
@@ -829,8 +831,8 @@ if (!window.af || typeof(af) !== "function") {
                 if (this.length === 0)
                     return (value === nundefined) ? undefined : this;
                 if (value === nundefined && !$.isObject(prop)) {
-                    var res;
-                    var val = (this[0].afmCacheId && _propCache[this[0].afmCacheId][prop]) ? (this[0].afmCacheId && _propCache[this[0].afmCacheId][prop]) : !(res = this[0][prop]) && prop in this[0] ? this[0][prop] : res;
+                    var res;                    
+                    var val = (this[0].afmCacheId && _propCache[this[0].afmCacheId] && _propCache[this[0].afmCacheId][prop]) ? _propCache[this[0].afmCacheId][prop] : !(res = this[0][prop]) && prop in this[0] ? this[0][prop] : res;
                     return val;
                 }
                 for (var i = 0; i < this.length; i++) {
@@ -839,7 +841,6 @@ if (!window.af || typeof(af) !== "function") {
                             $(this[i]).prop(key, prop[key]);
                         }
                     } else if ($.isArray(value) || $.isObject(value) || $.isFunction(value)) {
-
                         if (!this[i].afmCacheId)
                             this[i].afmCacheId = $.uuid();
 
@@ -849,6 +850,8 @@ if (!window.af || typeof(af) !== "function") {
                     } else if (value === null && value !== undefined) {
                         $(this[i]).removeProp(prop);
                     } else {
+                        if(_propCache[this[i].afmCacheId][prop])
+                            _propCache[this[i].afmCacheId][prop]=null;
                         this[i][prop] = value;
                     }
                 }
@@ -868,7 +871,7 @@ if (!window.af || typeof(af) !== "function") {
                 var removePropFn=function(param) {
                     if (that[i][param])
                         that[i][param] = undefined;
-                    if (that[i].afmCacheId && _propCache[that[i].afmCacheId][prop]) {
+                    if (that[i].afmCacheId && _propCache[that[i].afmCacheId]) {
                         delete _propCache[that[i].afmCacheId][prop];
                     }
                 };
