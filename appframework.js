@@ -1713,18 +1713,24 @@ if (!window.af || typeof(af) !== "function") {
         */
         $.ajax = function(opts) {
             var xhr;
-            try {
-
-                var settings = opts || {};
-                for (var key in $.ajaxSettings) {
-                    if (typeof(settings[key]) === "undefined")
-                        settings[key] = $.ajaxSettings[key];
-                }
-
+            var deferred=$.Deferred();
+            var url;
+            if(typeof(opts)==="string")
+            {
+                var oldUrl=opts;
+                opts={
+                    url:oldUrl
+                };
+            }
+            var settings = opts || {};
+            for (var key in $.ajaxSettings) {
+                if (typeof(settings[key]) === "undefined")
+                    settings[key] = $.ajaxSettings[key];
+            }            
+            try{
                 if (!settings.url)
                     settings.url = window.location;
-                if (!settings.contentType && settings.contentType!==false)
-                    settings.contentType = "application/x-www-form-urlencoded; charset=UTF-8";
+
                 if (!settings.headers)
                     settings.headers = {};
 
@@ -1738,6 +1744,10 @@ if (!window.af || typeof(af) !== "function") {
                         settings.url += "?" + settings.data;
                     else
                         settings.url += "&" + settings.data;
+                }
+                if(settings.data) {
+                    if (!settings.contentType && settings.contentType!==false)
+                        settings.contentType = "application/x-www-form-urlencoded; charset=UTF-8";
                 }
                 if (!settings.dataType)
                     settings.dataType = "text/html";
@@ -1785,14 +1795,14 @@ if (!window.af || typeof(af) !== "function") {
                 xhr = new window.XMLHttpRequest();
                 var deferred=$.Deferred();
                 $.extend(xhr,deferred.promise);
+
                 xhr.onreadystatechange = function() {
                     var mime = settings.dataType;
                     if (xhr.readyState === 4) {
                         clearTimeout(abortTimeout);
-
                         var result, error = false;
                         if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0 && protocol === "file:") {
-                            if (mime === "application/json" && !(/^\s*$/.test(xhr.responseText))) {
+                            if ((xhr.getResponseHeader("content-type")==="application/json")||(mime === "application/json" && !(/^\s*$/.test(xhr.responseText)))) {
                                 try {
                                     result = JSON.parse(xhr.responseText);
                                 } catch (e) {
@@ -1800,8 +1810,9 @@ if (!window.af || typeof(af) !== "function") {
                                 }
                             } else if (mime === "application/xml, text/xml") {
                                 result = xhr.responseXML;
-                            } else if (mime === "text/html") {
+                            } else if (mime === "text/html") {                              
                                 result = xhr.responseText;
+
                                 $.parseJS(result);
                             } else
                                 result = xhr.responseText;
