@@ -1095,10 +1095,10 @@
                 scrollEl = tmp.cloneNode(false);
 
 
-                tmp.title = null;                
-                tmp.id = null;
+                tmp.title = null;
+                tmp.id = "";
                 var $tmp = $(tmp);
-                $tmp.removeAttr("data-footer data-aside data-nav data-header selected data-load data-unload data-tab data-crc title data-title");
+                $tmp.removeAttr("data-footer data-aside data-nav data-header selected data-load data-unload data-tab data-crc title data-title title");
 
                 $tmp.replaceClass("panel", "afScrollPanel");
 
