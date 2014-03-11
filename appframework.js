@@ -248,6 +248,7 @@ if (!window.af || typeof(af) !== "function") {
             for (var i = 0, iz = nodes.length; i < iz; i++)
                 obj[obj.length++] = nodes[i];
         }
+		
         /**
         * Checks to see if the parameter is a $afm object
             ```
@@ -255,13 +256,14 @@ if (!window.af || typeof(af) !== "function") {
             $.is$(foo);
             ```
 
-        * @param {Object} element
-        * @return {Boolean}
+        * @param {*} obj
+        * @return {boolean}
         * @title $.is$(param)
         */
         $.is$ = function(obj) {
-            return obj instanceof $afm;
+            return (obj instanceof $afm);
         };
+		
         /**
         * Map takes in elements and executes a callback function on each and returns a collection
         ```
@@ -359,8 +361,8 @@ if (!window.af || typeof(af) !== "function") {
             $.isArray(arr);
             ```
 
-        * @param {Object} element
-        * @return {Boolean}
+        * @param {*} obj
+        * @return {boolean}
         * @example $.isArray([1]);
         * @title $.isArray(param)
         */
@@ -375,33 +377,34 @@ if (!window.af || typeof(af) !== "function") {
             $.isFunction(func);
             ```
 
-        * @param {Object} element
-        * @return {Boolean}
+        * @param {*} obj
+        * @return {boolean}
         * @title $.isFunction(param)
         */
         $.isFunction = function(obj) {
             return typeof obj === "function" && !(obj instanceof RegExp);
         };
+		
         /**
         * Checks to see if the parameter is a object
             ```
             var foo={bar:"bar"};
             $.isObject(foo);
-            ```
-
-        * @param {Object} element
-        * @return {Boolean}
+        
+			    ```
+		* @param {*} obj
+		* @returns {boolean}
         * @title $.isObject(param)
-        */
+		*/
         $.isObject = function(obj) {
             return typeof obj === "object" && obj !== null;
         };
-
+		
         /**
-         * Prototype for afm object.  Also extens $.fn
+         * Prototype for afm object.  Also extends $.fn
          */
         $.fn = $afm.prototype = {
-            namepsace:"appframework",
+            namespace: "appframework",
             constructor: $afm,
             forEach: emptyArray.forEach,
             reduce: emptyArray.reduce,
@@ -837,7 +840,7 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 for (var i = 0; i < this.length; i++) {
                     if ($.isObject(prop)) {
-                        for (var key in prop) {
+                        for (var key in prop) {i
                             $(this[i]).prop(key, prop[key]);
                         }
                     } else if ($.isArray(value) || $.isObject(value) || $.isFunction(value)) {
