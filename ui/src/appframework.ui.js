@@ -2050,8 +2050,7 @@
 //The following functions are utilitiy functions for afui within intel xdk.
 
 (function($) {
-    $(document).one("intel.xdk.device.ready", function() { //in intel xdk, we need to undo the height stuff since it causes issues.
-        console.log("called");
+    $(document).one("intel.xdk.device.ready", function() { //in intel xdk, we need to undo the height stuff since it causes issues.        
         $.ui.isIntel=true;
         setTimeout(function() {
             document.getElementById('afui').style.height = "100%";
