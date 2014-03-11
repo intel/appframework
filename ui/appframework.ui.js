@@ -2342,7 +2342,7 @@
             x = "0x" + table.substr(n * 9, 8);
             crc = (crc >>> 8) ^ x;
         }
-        return crc ^ (-1);
+        return (crc ^ (-1))>>>0;
     };
 
 
