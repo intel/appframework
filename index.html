@@ -44,8 +44,8 @@
       <link rel="stylesheet" type="text/css" href="css/src/ios7.css"  />
       <link rel="stylesheet" type="text/css" href="css/src/ios.css"  />        
 
-        <!-- uncomment for AppMobi apps <script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/appmobi.js"></script>
-<script type="text/javascript" charset="utf-8" src="http://localhost:58888/_appMobi/xhr.js"></script>
+        <!-- uncomment for intel apps <script type="text/javascript" charset="utf-8" src="intelxdk.js"></script>
+<script type="text/javascript" charset="utf-8" src="xhr.js"></script>
 -->
         <script type="text/javascript" charset="utf-8" src="./appframework.js"></script>
         <!-- include af.desktopBrowsers.js on desktop browsers only -->
@@ -120,11 +120,11 @@
             
             /* This code is used to run as soon as appMobi activates */
             var onDeviceReady = function () {
-                AppMobi.device.setRotateOrientation("portrait");
-                AppMobi.device.setAutoRotate(false);
+                intel.xdk.device.setRotateOrientation("portrait");
+                intel.xdk.device.setAutoRotate(false);
                 webRoot = AppMobi.webRoot + "";
                 //hide splash screen
-                AppMobi.device.hideSplashScreen();
+                intel.xdk.device.hideSplashScreen();
                 $.ui.blockPageScroll(); //block the page from scrolling at the header/footer
                 $.ui.launch();
 
