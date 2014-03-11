@@ -752,7 +752,7 @@ if (!window.af || typeof(af) !== "function") {
                 if (this.length === 0)
                     return (value === nundefined) ? undefined : this;
                 if (value === nundefined && !$.isObject(attr)) {
-                    var val = (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) ? (this[0].afmCacheId && _attrCache[this[0].afmCacheId][attr]) : this[0].getAttribute(attr);
+                    var val = (this[0].afmCacheId && _attrCache[this[0].afmCacheId] && _attrCache[this[0].afmCacheId][attr]) ? _attrCache[this[0].afmCacheId][attr] : this[0].getAttribute(attr);
                     return val;
                 }
                 for (var i = 0; i < this.length; i++) {
@@ -793,7 +793,7 @@ if (!window.af || typeof(af) !== "function") {
                 for (var i = 0; i < this.length; i++) {
                     attr.split(/\s+/g).forEach(function(param) {
                         that[i].removeAttribute(param);
-                        if (that[i].afmCacheId && _attrCache[that[i].afmCacheId][attr])
+                        if (that[i].afmCacheId && _attrCache[that[i].afmCacheId])
                             delete _attrCache[that[i].afmCacheId][attr];
                     });
                 }
@@ -819,7 +819,7 @@ if (!window.af || typeof(af) !== "function") {
                     return (value === nundefined) ? undefined : this;
                 if (value === nundefined && !$.isObject(prop)) {
                     var res;
-                    var val = (this[0].afmCacheId && _propCache[this[0].afmCacheId][prop]) ? (this[0].afmCacheId && _propCache[this[0].afmCacheId][prop]) : !(res = this[0][prop]) && prop in this[0] ? this[0][prop] : res;
+                    var val = (this[0].afmCacheId && _propCache[this[0].afmCacheId] && _propCache[this[0].afmCacheId][prop]) ? _propCache[this[0].afmCacheId][prop] : !(res = this[0][prop]) && prop in this[0] ? this[0][prop] : res;
                     return val;
                 }
                 for (var i = 0; i < this.length; i++) {
@@ -859,7 +859,7 @@ if (!window.af || typeof(af) !== "function") {
                     prop.split(/\s+/g).forEach(function(param) {
                         if (that[i][param])
                             that[i][param] = undefined;
-                        if (that[i].afmCacheId && _propCache[that[i].afmCacheId][prop]) {
+                        if (that[i].afmCacheId && _propCache[that[i].afmCacheId]) {
                             delete _propCache[that[i].afmCacheId][prop];
                         }
                     });
@@ -1451,16 +1451,18 @@ if (!window.af || typeof(af) !== "function") {
             * @title $().data(key,[value]);
             */
             data: function(key, value) {
-                var retData;
+                var retData, JSON_RE = /^{.*}$/;
                 // setter
-                if (value) {
+                if (value !== undefined && value !== null) {
                     return this.attr('data-' + key, value);
                 }
                 // getter
                 retData = this.attr('data-' + key);
-                try {
-                    retData = $.parseJSON(retData);
-                } catch(ex) {}
+                if (JSON_RE.test(retData)) {
+                    try {
+                        retData = $.parseJSON(retData);
+                    } catch(ex) {}
+                }
                 return retData;
             },
             /**
@@ -1716,6 +1718,7 @@ if (!window.af || typeof(af) !== "function") {
                     switch (settings.dataType) {
                         case "script":
                             settings.dataType = 'text/javascript, application/javascript';
+                            return $.getScript(settings.url, settings.success);
                             break;
                         case "json":
                             settings.dataType = 'application/json';
@@ -1885,6 +1888,49 @@ if (!window.af || typeof(af) !== "function") {
                 dataType: "json"
             });
         };
+
+        /**
+        * get script.
+        * Note: code are borrowed from jQuery.
+            ```
+            $.getScript("some.js",);
+            ```
+
+        * @param {String} url to hit
+        * @param {Function} [success]
+        */
+        $.getScript = function(url, success) {
+            var script,
+                head = document.head || af("head")[0] || document.documentElement;
+
+            script = document.createElement("script");
+
+            script.async = true;
+
+            script.src = url;
+
+            // Attach handlers for all browsers
+            script.onload = script.onreadystatechange = function( _, isAbort ) {
+
+                if ( isAbort || !script.readyState || /loaded|complete/.test( script.readyState ) ) {
+
+                    // Remove the script
+                    if ( script.parentNode ) {
+                        script.parentNode.removeChild( script );
+                    }
+
+                    // Dereference the script
+                    script = null;
+
+                    // Callback if not abort
+                    if ( !isAbort ) {
+                        success && success( 200, "success" );
+                    }
+                }
+            };
+
+            head.insertBefore( script, head.firstChild );
+        }
 
         /**
         * Converts an object into a key/value par with an optional prefix.  Used for converting objects to a query string
