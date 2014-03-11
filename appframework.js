@@ -1,5 +1,5 @@
 /**
- * App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.
+ * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
  * Since most mobile devices (Android, iOS, webOS) use a WebKit browser, you only need to target one browser.
  * We are able to increase the speed greatly by removing support for legacy desktop browsers and taking advantage of browser features, like native JSON parsing and querySelectorAll
 
@@ -1462,7 +1462,7 @@ if (!window.af || typeof(af) !== "function") {
             },
             /**
             * Gets or set data-* attribute parameters on elements (when a string)
-            * When used as a getter, it"s only the first element
+            * When used as a getter, it's only the first element
                 ```
                 $().data("foo"); //Gets the data-foo attribute for the first element
                 $().data("foo","bar"); //Sets the data-foo attribute for all elements
@@ -1817,7 +1817,7 @@ if (!window.af || typeof(af) !== "function") {
                                 $.parseJS(result);
                             } else
                                 result = xhr.responseText;
-                            //If we"re looking at a local file, we assume that no response sent back means there was an error
+                            //If we're looking at a local file, we assume that no response sent back means there was an error
                             if (xhr.status === 0 && result.length === 0)
                                 error = true;
                             if (error){
@@ -2519,7 +2519,7 @@ if (!window.af || typeof(af) !== "function") {
         };
         /**
         * Removes event listeners for .on()
-        * If selector is undefined or a function, we call unbind, otherwise it"s undelegate
+        * If selector is undefined or a function, we call unbind, otherwise it's undelegate
             ```
             $().off("click","p",callback); //Remove callback function for click events
             $().off("click","p") //Remove all click events
