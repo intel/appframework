@@ -1663,12 +1663,27 @@ if (!window.af || typeof(af) !== "function") {
             if (options.url.indexOf("callback=?") !== -1) {
                 script.src = options.url.replace(/=\?/, "=" + callbackName);
             } else {
-                callback = options.jsonp ? options.jsonp : "callback";
+
+                callback = options.jsonp ? options.jsonp : "callback";                
                 if (options.url.indexOf("?") === -1) {
                     options.url += ("?" + callback + "=" + callbackName);
                 }
                 else {
-                    options.url += ("&" + callback + "=" + callbackName);
+                    if(options.url.indexOf("callback=")!==-1){
+
+                        var searcher="callback=";
+                        var offset=options.url.indexOf(searcher)+searcher.length;
+                        var amp=options.url.indexOf(offset);
+                        if(amp===-1)
+                            amp=options.url.length;
+                        var oldCB=options.url.substr(offset,amp);
+                        options.url=options.url.replace(searcher+oldCB,searcher+callbackName);
+                        oldCB=oldCB.replace("window.","");
+                        options.success=window[oldCB];
+                    }
+                    else {
+                        options.url += ("&" + callback + "=" + callbackName);
+                    }
                 }
                 script.src = options.url;
             }
