@@ -248,7 +248,7 @@ if (!window.af || typeof(af) !== "function") {
             for (var i = 0, iz = nodes.length; i < iz; i++)
                 obj[obj.length++] = nodes[i];
         }
-		
+
         /**
         * Checks to see if the parameter is a $afm object
             ```
@@ -263,7 +263,7 @@ if (!window.af || typeof(af) !== "function") {
         $.is$ = function(obj) {
             return (obj instanceof $afm);
         };
-		
+
         /**
         * Map takes in elements and executes a callback function on each and returns a collection
         ```
@@ -384,14 +384,13 @@ if (!window.af || typeof(af) !== "function") {
         $.isFunction = function(obj) {
             return typeof obj === "function" && !(obj instanceof RegExp);
         };
-		
         /**
         * Checks to see if the parameter is a object
             ```
             var foo={bar:"bar"};
             $.isObject(foo);
         
-			    ```
+            ```
 		* @param {*} obj
 		* @returns {boolean}
         * @title $.isObject(param)
@@ -399,7 +398,7 @@ if (!window.af || typeof(af) !== "function") {
         $.isObject = function(obj) {
             return typeof obj === "object" && obj !== null;
         };
-		
+
         /**
          * Prototype for afm object.  Also extends $.fn
          */
@@ -840,7 +839,7 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 for (var i = 0; i < this.length; i++) {
                     if ($.isObject(prop)) {
-                        for (var key in prop) {i
+                        for (var key in prop) {
                             $(this[i]).prop(key, prop[key]);
                         }
                     } else if ($.isArray(value) || $.isObject(value) || $.isFunction(value)) {
@@ -1802,30 +1801,41 @@ if (!window.af || typeof(af) !== "function") {
                     if (xhr.readyState === 4) {
                         clearTimeout(abortTimeout);
                         var result, error = false;
+                        var contentType=xhr.getResponseHeader("content-type");
                         if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0 && protocol === "file:") {
-                            if ((xhr.getResponseHeader("content-type")==="application/json")||(mime === "application/json" && !(/^\s*$/.test(xhr.responseText)))) {
+                            if ((contentType==="application/json")||(mime === "application/json" && !(/^\s*$/.test(xhr.responseText)))) {
                                 try {
                                     result = JSON.parse(xhr.responseText);
                                 } catch (e) {
                                     error = e;
                                 }
-                            } else if (mime === "application/xml, text/xml") {
+                            }
+                            else if(contentType.indexOf("javascript")!==-1){
+                                try{
+                                    result=xhr.responseText;
+                                    window["eval"](result);
+                                }
+                                catch(e){
+                                    console.log(e);
+                                }
+                            }
+                            else if (mime === "application/xml, text/xml") {
                                 result = xhr.responseXML;
                             } else if (mime === "text/html") {
                                 result = xhr.responseText;
-
                                 $.parseJS(result);
-                            } else
+                            }
+                            else
                                 result = xhr.responseText;
                             //If we're looking at a local file, we assume that no response sent back means there was an error
                             if (xhr.status === 0 && result.length === 0)
                                 error = true;
                             if (error){
-                                settings.error.call(context,xhr, "parsererror", error);
-                                deferred.reject.call(context,xhr, "parsererror", error);
+                                settings.error.call(context, xhr, "parsererror", error);
+                                deferred.reject.call(context, xhr, "parsererror", error);
                             }
                             else {
-                                deferred.resolve.call(context,result, "succes", error);
+                                deferred.resolve.call(context, result, "succes", xhr);
                                 settings.success.call(context, result, "success", xhr);
                             }
                         } else {
@@ -1859,7 +1869,7 @@ if (!window.af || typeof(af) !== "function") {
                 xhr.send(settings.data);
             } catch (e) {
                 // General errors (e.g. access denied) should also be sent to the error callback
-                deferred.resolve(context,[xhr, "error",e]);
+                deferred.resolve(context, xhr, "error",e);
                 settings.error.call(context, xhr, "error", e);
             }
             return xhr;
@@ -1933,6 +1943,23 @@ if (!window.af || typeof(af) !== "function") {
             });
         };
 
+        /**
+        * Shorthand call to an Ajax request that expects a javascript file.
+            ```
+            $.getScript("myscript.js",function(data){});
+            ```
+
+        * @param {String} javascript file to load
+        * @param {Function} [success]
+        * @title $.getScript(url,success)
+        */
+        $.getScript = function(url,success){
+            return this.ajax({
+                url:url,
+                success:success,
+                dataType:"script"
+            });
+        };
         /**
         * Converts an object into a key/value par with an optional prefix.  Used for converting objects to a query string
             ```
@@ -2322,7 +2349,7 @@ if (!window.af || typeof(af) !== "function") {
 
             var id = afmid(element);
             eachEvent(events || "", fn, function(event, fn) {
-                findHandlers(element, event, fn, selector,true).forEach(function(handler) {                    
+                findHandlers(element, event, fn, selector,true).forEach(function(handler) {
                     delete handlers[id][handler.i];
                     element.removeEventListener(handler.e, handler.proxy, false);
                 });
