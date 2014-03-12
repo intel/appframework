@@ -1587,14 +1587,15 @@ if (!window.af || typeof(af) !== "function") {
 
         function empty() {}
         $.ajaxSettings = {
-            type: 'GET',
+            type: "GET",
             beforeSend: empty,
             success: empty,
             error: empty,
             complete: empty,
             context: undefined,
             timeout: 0,
-            crossDomain: null
+            crossDomain: null,
+            processData: true
         };
         /**
         * Execute a jsonP call, allowing cross domain scripting
@@ -1602,7 +1603,7 @@ if (!window.af || typeof(af) !== "function") {
         * options.success - Success function to call
         * options.error - Error function to call
             ```
-            $.jsonP({url:'mysite.php?callback=?&foo=bar',success:function(){},error:function(){}});
+            $.jsonP({url:"mysite.php?callback=?&foo=bar",success:function(){},error:function(){}});
             ```
 
         * @param {Object} options
@@ -1614,7 +1615,7 @@ if (!window.af || typeof(af) !== "function") {
                 options.dataType = null;
                 return $.get(options);
             }
-            var callbackName = 'jsonp_callback' + (++_jsonPID);
+            var callbackName = "jsonp_callback" + (++_jsonPID);
             var abortTimeout = "",
                 context, callback;
             var script = document.createElement("script");
@@ -1629,28 +1630,28 @@ if (!window.af || typeof(af) !== "function") {
                 delete window[callbackName];
                 options.success.call(context, data);
             };
-            if (options.url.indexOf('callback=?') !== -1) {
-                script.src = options.url.replace(/=\?/, '=' + callbackName);
+            if (options.url.indexOf("callback=?") !== -1) {
+                script.src = options.url.replace(/=\?/, "=" + callbackName);
             } else {
-                callback = options.jsonp ? options.jsonp : 'callback';
+                callback = options.jsonp ? options.jsonp : "callback";
                 if (options.url.indexOf("?") === -1) {
-                    options.url += ("?" + callback + '=' + callbackName);
+                    options.url += ("?" + callback + "=" + callbackName);
                 }
                 else {
-                    options.url += ("&" + callback + '=' + callbackName);
+                    options.url += ("&" + callback + "=" + callbackName);
                 }
                 script.src = options.url;
             }
             if (options.error) {
                 script.onerror = function() {
                     clearTimeout(abortTimeout);
-                    options.error.call(context, "", 'error');
+                    options.error.call(context, "", "error");
                 };
             }
-            $('head').append(script);
+            $("head").append(script);
             if (options.timeout > 0)
                 abortTimeout = setTimeout(function() {
-                    options.error.call(context, "", 'timeout');
+                    options.error.call(context, "", "timeout");
                 }, options.timeout);
             return {};
         };
@@ -1670,38 +1671,43 @@ if (!window.af || typeof(af) !== "function") {
         * options.data - data to pass into request.  $.param is called on objects
             ```
             var opts={
-            type:"GET",
-            success:function(data){},
-            url:"mypage.php",
-            data:{bar:'bar'},
+                type:"GET",
+                success:function(data){},
+                url:"mypage.php",
+                data:{bar:"bar"},
             }
             $.ajax(opts);
             ```
 
-        * @param {Object} options
+        * @param {Object} opts Options
         * @title $.ajax(options)
         */
         $.ajax = function(opts) {
-            var xhr;
-            try {
-
-                var settings = opts || {};
-                for (var key in $.ajaxSettings) {
-                    if (typeof(settings[key]) == 'undefined')
-                        settings[key] = $.ajaxSettings[key];
-                }
-
+            var xhr;            
+            var url;
+            if(typeof(opts)==="string")
+            {
+                var oldUrl=opts;
+                opts={
+                    url:oldUrl
+                };
+            }
+            var settings = opts || {};
+            for (var key in $.ajaxSettings) {
+                if (typeof(settings[key]) === "undefined")
+                    settings[key] = $.ajaxSettings[key];
+            }
+            try{
                 if (!settings.url)
                     settings.url = window.location;
-                if (!settings.contentType)
-                    settings.contentType = "application/x-www-form-urlencoded; charset=UTF-8";
+
                 if (!settings.headers)
                     settings.headers = {};
 
-                if (!('async' in settings) || settings.async !== false)
+                if (!("async" in settings) || settings.async !== false)
                     settings.async = true;
-                    
-                if ($.isObject(settings.data))
+
+                if (settings.processData && $.isObject(settings.data))
                     settings.data = $.param(settings.data);
                 if (settings.type.toLowerCase() === "get" && settings.data) {
                     if (settings.url.indexOf("?") === -1)
@@ -1709,94 +1715,110 @@ if (!window.af || typeof(af) !== "function") {
                     else
                         settings.url += "&" + settings.data;
                 }
-
-		if (!settings.dataType)
+                if(settings.data) {
+                    if (!settings.contentType && settings.contentType!==false)
+                        settings.contentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                }
+                if (!settings.dataType)
                     settings.dataType = "text/html";
                 else {
                     switch (settings.dataType) {
-                        case "script":
-                            settings.dataType = 'text/javascript, application/javascript';
-                            break;
-                        case "json":
-                            settings.dataType = 'application/json';
-                            break;
-                        case "xml":
-                            settings.dataType = 'application/xml, text/xml';
-                            break;
-                        case "html":
-                            settings.dataType = 'text/html';
-                            break;
-                        case "text":
-                            settings.dataType = 'text/plain';
-                            break;
-                        case "jsonp":
-                            return $.jsonP(settings);
-                            break;
-                        default:
-                            settings.dataType = "text/html";
-                            break;
+                    case "script":
+                        settings.dataType = "text/javascript, application/javascript";
+                        break;
+                    case "json":
+                        settings.dataType = "application/json";
+                        break;
+                    case "xml":
+                        settings.dataType = "application/xml, text/xml";
+                        break;
+                    case "html":
+                        settings.dataType = "text/html";
+                        break;
+                    case "text":
+                        settings.dataType = "text/plain";
+                        break;
+                    case "jsonp":
+                        return $.jsonP(opts);
+                    default:
+                        settings.dataType = "text/html";
+                        break;
                     }
                 }
-                
+
+
                 if (/=\?/.test(settings.url)) {
                     return $.jsonP(settings);
                 }
                 if (settings.crossDomain === null) settings.crossDomain = /^([\w-]+:)?\/\/([^\/]+)/.test(settings.url) &&
-                        RegExp.$2 != window.location.host;
+                        RegExp.$2 !== window.location.host;
 
                 if (!settings.crossDomain)
                     settings.headers = $.extend({
-                        'X-Requested-With': 'XMLHttpRequest'
+                        "X-Requested-With": "XMLHttpRequest"
                     }, settings.headers);
                 var abortTimeout;
                 var context = settings.context;
                 var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
 
                 //ok, we are really using xhr
-                xhr = new window.XMLHttpRequest();
-
+                xhr = new window.XMLHttpRequest();                
 
                 xhr.onreadystatechange = function() {
                     var mime = settings.dataType;
                     if (xhr.readyState === 4) {
                         clearTimeout(abortTimeout);
                         var result, error = false;
-                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0 && protocol == 'file:') {
-                            if (mime === 'application/json' && !(/^\s*$/.test(xhr.responseText))) {
+                        var contentType=xhr.getResponseHeader("content-type");
+                        if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0 && protocol === "file:") {
+                            if ((contentType==="application/json")||(mime === "application/json" && !(/^\s*$/.test(xhr.responseText)))) {
                                 try {
                                     result = JSON.parse(xhr.responseText);
                                 } catch (e) {
                                     error = e;
                                 }
-                            } else if (mime === 'application/xml, text/xml') {
+                            }
+                            else if(contentType.indexOf("javascript")!==-1){
+                                try{
+                                    result=xhr.responseText;
+                                    window["eval"](result);
+                                }
+                                catch(e){
+                                    console.log(e);
+                                }
+                            }
+                            else if (mime === "application/xml, text/xml") {
                                 result = xhr.responseXML;
-                            } else if (mime == "text/html") {
+                            } else if (mime === "text/html") {
                                 result = xhr.responseText;
                                 $.parseJS(result);
-                            } else
+                            }
+                            else
                                 result = xhr.responseText;
                             //If we're looking at a local file, we assume that no response sent back means there was an error
                             if (xhr.status === 0 && result.length === 0)
                                 error = true;
-                            if (error)
-                                settings.error.call(context, xhr, 'parsererror', error);
-                            else {
-                                settings.success.call(context, result, 'success', xhr);
+                            if (error){
+                                settings.error.call(context, xhr, "parsererror", error);                                
+                            }
+                            else {                                
+                                settings.success.call(context, result, "success", xhr);
                             }
                         } else {
                             error = true;
-                            settings.error.call(context, xhr, 'error');
+                            settings.error.call(context, xhr, "error");
                         }
-                        settings.complete.call(context, xhr, error ? 'error' : 'success');
+                        var respText=error?"error":"success";
+                        settings.complete.call(context, xhr,respText);
                     }
                 };
                 xhr.open(settings.type, settings.url, settings.async);
                 if (settings.withCredentials) xhr.withCredentials = true;
 
                 if (settings.contentType)
-                    settings.headers['Content-Type'] = settings.contentType;
+                    settings.headers["Content-Type"] = settings.contentType;
                 for (var name in settings.headers)
-                    if (typeof settings.headers[name] === 'string')
+                    if (typeof settings.headers[name] === "string")
                         xhr.setRequestHeader(name, settings.headers[name]);
                 if (settings.beforeSend.call(context, xhr, settings) === false) {
                     xhr.abort();
@@ -1807,13 +1829,12 @@ if (!window.af || typeof(af) !== "function") {
                     abortTimeout = setTimeout(function() {
                         xhr.onreadystatechange = empty;
                         xhr.abort();
-                        settings.error.call(context, xhr, 'timeout');
+                        settings.error.call(context, xhr, "timeout");
                     }, settings.timeout);
                 xhr.send(settings.data);
             } catch (e) {
-                // General errors (e.g. access denied) should also be sent to the error callback
-                console.log(e);
-                settings.error.call(context, xhr, 'error', e);
+                // General errors (e.g. access denied) should also be sent to the error callback                
+                settings.error.call(context, xhr, "error", e);
             }
             return xhr;
         };
@@ -1838,7 +1859,7 @@ if (!window.af || typeof(af) !== "function") {
         /**
         * Shorthand call to an Ajax POST request
             ```
-            $.post("mypage.php",{bar:'bar'},function(data){});
+            $.post("mypage.php",{bar:"bar"},function(data){});
             ```
 
         * @param {String} url to hit
@@ -1865,7 +1886,7 @@ if (!window.af || typeof(af) !== "function") {
         /**
         * Shorthand call to an Ajax request that expects a JSON response
             ```
-            $.getJSON("mypage.php",{bar:'bar'},function(data){});
+            $.getJSON("mypage.php",{bar:"bar"},function(data){});
             ```
 
         * @param {String} url to hit
@@ -1883,6 +1904,24 @@ if (!window.af || typeof(af) !== "function") {
                 data: data,
                 success: success,
                 dataType: "json"
+            });
+        };
+
+        /**
+        * Shorthand call to an Ajax request that expects a javascript file.
+            ```
+            $.getScript("myscript.js",function(data){});
+            ```
+
+        * @param {String} javascript file to load
+        * @param {Function} [success]
+        * @title $.getScript(url,success)
+        */
+        $.getScript = function(url,success){
+            return this.ajax({
+                url:url,
+                success:success,
+                dataType:"script"
             });
         };
 
