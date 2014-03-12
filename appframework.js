@@ -1918,11 +1918,27 @@ if (!window.af || typeof(af) !== "function") {
         * @title $.getScript(url,success)
         */
         $.getScript = function(url,success){
-            return this.ajax({
-                url:url,
-                success:success,
-                dataType:"script"
-            });
+            var isCrossDomain=/^([\w-]+:)?\/\/([^\/]+)/.test(url);
+            if(isCrossDomain){
+                //create the script
+                var scr=$.create("script",{async:true,src:url}).get(0);
+                scr.onload=function(){
+                    $(this).remove();
+                    success&&success();
+                };
+                scr.onerror=function(){
+                    $(this).remove();
+                }
+                document.head.appendChild(scr);
+            }
+            else {
+                return this.ajax({
+                    url:url,
+                    success:success,
+                    dataType:"script"
+                });
+            }
+            return this;
         };
 
         /**
