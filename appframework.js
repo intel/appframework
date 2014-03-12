@@ -1954,11 +1954,30 @@ if (!window.af || typeof(af) !== "function") {
         * @title $.getScript(url,success)
         */
         $.getScript = function(url,success){
-            return this.ajax({
-                url:url,
-                success:success,
-                dataType:"script"
-            });
+            var isCrossDomain=/^([\w-]+:)?\/\/([^\/]+)/.test(url);
+            if(isCrossDomain){
+                //create the script
+                var deferred = $.Deferred();
+                var scr=$.create("script",{async:true,src:url}).get(0);
+                scr.onload=function(){                    
+                    success&&success();
+                    deferred.resolve.call(this,"success");
+                    $(this).remove();
+                };
+                scr.onerror=function(){
+                    $(this).remove();
+                    deferred.reject.call(this,"success");
+                }
+                document.head.appendChild(scr);
+                return deferred.promise;
+            }
+            else {
+                return this.ajax({
+                    url:url,
+                    success:success,
+                    dataType:"script"
+                });
+            }
         };
         /**
         * Converts an object into a key/value par with an optional prefix.  Used for converting objects to a query string
