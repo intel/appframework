@@ -1,5 +1,7 @@
+/*! intel-appframework - v2.1.0 - 2014-03-12 */
+
 /**
- * App Framwork  query selector class for HTML5 mobile apps on a WebkitBrowser.
+ * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
  * Since most mobile devices (Android, iOS, webOS) use a WebKit browser, you only need to target one browser.
  * We are able to increase the speed greatly by removing support for legacy desktop browsers and taking advantage of browser features, like native JSON parsing and querySelectorAll
 
@@ -248,6 +250,7 @@ if (!window.af || typeof(af) !== "function") {
             for (var i = 0, iz = nodes.length; i < iz; i++)
                 obj[obj.length++] = nodes[i];
         }
+
         /**
         * Checks to see if the parameter is a $afm object
             ```
@@ -255,13 +258,14 @@ if (!window.af || typeof(af) !== "function") {
             $.is$(foo);
             ```
 
-        * @param {Object} element
-        * @return {Boolean}
+        * @param {*} obj
+        * @return {boolean}
         * @title $.is$(param)
         */
         $.is$ = function(obj) {
-            return obj instanceof $afm;
+            return (obj instanceof $afm);
         };
+
         /**
         * Map takes in elements and executes a callback function on each and returns a collection
         ```
@@ -359,8 +363,8 @@ if (!window.af || typeof(af) !== "function") {
             $.isArray(arr);
             ```
 
-        * @param {Object} element
-        * @return {Boolean}
+        * @param {*} obj
+        * @return {boolean}
         * @example $.isArray([1]);
         * @title $.isArray(param)
         */
@@ -375,8 +379,8 @@ if (!window.af || typeof(af) !== "function") {
             $.isFunction(func);
             ```
 
-        * @param {Object} element
-        * @return {Boolean}
+        * @param {*} obj
+        * @return {boolean}
         * @title $.isFunction(param)
         */
         $.isFunction = function(obj) {
@@ -387,21 +391,21 @@ if (!window.af || typeof(af) !== "function") {
             ```
             var foo={bar:"bar"};
             $.isObject(foo);
+        
             ```
-
-        * @param {Object} element
-        * @return {Boolean}
+		* @param {*} obj
+		* @returns {boolean}
         * @title $.isObject(param)
-        */
+		*/
         $.isObject = function(obj) {
             return typeof obj === "object" && obj !== null;
         };
 
         /**
-         * Prototype for afm object.  Also extens $.fn
+         * Prototype for afm object.  Also extends $.fn
          */
         $.fn = $afm.prototype = {
-            namepsace:"appframework",
+            namespace: "appframework",
             constructor: $afm,
             forEach: emptyArray.forEach,
             reduce: emptyArray.reduce,
@@ -1459,7 +1463,7 @@ if (!window.af || typeof(af) !== "function") {
             },
             /**
             * Gets or set data-* attribute parameters on elements (when a string)
-            * When used as a getter, it"s only the first element
+            * When used as a getter, it's only the first element
                 ```
                 $().data("foo"); //Gets the data-foo attribute for the first element
                 $().data("foo","bar"); //Sets the data-foo attribute for all elements
@@ -1799,30 +1803,41 @@ if (!window.af || typeof(af) !== "function") {
                     if (xhr.readyState === 4) {
                         clearTimeout(abortTimeout);
                         var result, error = false;
+                        var contentType=xhr.getResponseHeader("content-type");
                         if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0 && protocol === "file:") {
-                            if ((xhr.getResponseHeader("content-type")==="application/json")||(mime === "application/json" && !(/^\s*$/.test(xhr.responseText)))) {
+                            if ((contentType==="application/json")||(mime === "application/json" && !(/^\s*$/.test(xhr.responseText)))) {
                                 try {
                                     result = JSON.parse(xhr.responseText);
                                 } catch (e) {
                                     error = e;
                                 }
-                            } else if (mime === "application/xml, text/xml") {
+                            }
+                            else if(contentType.indexOf("javascript")!==-1){
+                                try{
+                                    result=xhr.responseText;
+                                    window["eval"](result);
+                                }
+                                catch(e){
+                                    console.log(e);
+                                }
+                            }
+                            else if (mime === "application/xml, text/xml") {
                                 result = xhr.responseXML;
                             } else if (mime === "text/html") {
                                 result = xhr.responseText;
-
                                 $.parseJS(result);
-                            } else
+                            }
+                            else
                                 result = xhr.responseText;
-                            //If we"re looking at a local file, we assume that no response sent back means there was an error
+                            //If we're looking at a local file, we assume that no response sent back means there was an error
                             if (xhr.status === 0 && result.length === 0)
                                 error = true;
                             if (error){
-                                settings.error.call(context,xhr, "parsererror", error);
-                                deferred.reject.call(context,xhr, "parsererror", error);
+                                settings.error.call(context, xhr, "parsererror", error);
+                                deferred.reject.call(context, xhr, "parsererror", error);
                             }
                             else {
-                                deferred.resolve.call(context,result, "succes", error);
+                                deferred.resolve.call(context, result, "succes", xhr);
                                 settings.success.call(context, result, "success", xhr);
                             }
                         } else {
@@ -1856,7 +1871,7 @@ if (!window.af || typeof(af) !== "function") {
                 xhr.send(settings.data);
             } catch (e) {
                 // General errors (e.g. access denied) should also be sent to the error callback
-                deferred.resolve(context,[xhr, "error",e]);
+                deferred.resolve(context, xhr, "error",e);
                 settings.error.call(context, xhr, "error", e);
             }
             return xhr;
@@ -1930,6 +1945,42 @@ if (!window.af || typeof(af) !== "function") {
             });
         };
 
+        /**
+        * Shorthand call to an Ajax request that expects a javascript file.
+            ```
+            $.getScript("myscript.js",function(data){});
+            ```
+
+        * @param {String} javascript file to load
+        * @param {Function} [success]
+        * @title $.getScript(url,success)
+        */
+        $.getScript = function(url,success){
+            var isCrossDomain=/^([\w-]+:)?\/\/([^\/]+)/.test(url);
+            if(isCrossDomain){
+                //create the script
+                var deferred = $.Deferred();
+                var scr=$.create("script",{async:true,src:url}).get(0);
+                scr.onload=function(){                    
+                    success&&success();
+                    deferred.resolve.call(this,"success");
+                    $(this).remove();
+                };
+                scr.onerror=function(){
+                    $(this).remove();
+                    deferred.reject.call(this,"success");
+                }
+                document.head.appendChild(scr);
+                return deferred.promise;
+            }
+            else {
+                return this.ajax({
+                    url:url,
+                    success:success,
+                    dataType:"script"
+                });
+            }
+        };
         /**
         * Converts an object into a key/value par with an optional prefix.  Used for converting objects to a query string
             ```
@@ -2303,7 +2354,6 @@ if (!window.af || typeof(af) !== "function") {
                 set.push(handler);
                 element.addEventListener(handler.e, proxyfn, false);
             });
-            element=null;
         }
 
         /**
@@ -2320,7 +2370,7 @@ if (!window.af || typeof(af) !== "function") {
 
             var id = afmid(element);
             eachEvent(events || "", fn, function(event, fn) {
-                findHandlers(element, event, fn, selector,true).forEach(function(handler) {                    
+                findHandlers(element, event, fn, selector,true).forEach(function(handler) {
                     delete handlers[id][handler.i];
                     element.removeEventListener(handler.e, handler.proxy, false);
                 });
@@ -2517,7 +2567,7 @@ if (!window.af || typeof(af) !== "function") {
         };
         /**
         * Removes event listeners for .on()
-        * If selector is undefined or a function, we call unbind, otherwise it"s undelegate
+        * If selector is undefined or a function, we call unbind, otherwise it's undelegate
             ```
             $().off("click","p",callback); //Remove callback function for click events
             $().off("click","p") //Remove all click events

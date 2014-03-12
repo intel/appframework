@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-03-10 */
+/*! intel-appframework - v2.1.0 - 2014-03-12 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -1765,7 +1765,7 @@ if (!Date.now)
             this.hasMoved = false;
 
             if(this.elementInfo.maxTop === 0 && this.elementInfo.maxLeft === 0 && this.lockBounce)
-                this.scrollTop(0);
+                this.scrollToTop(0);
             else
                 this.scrollerMoveCSS(this.lastScrollInfo, 0);
 
@@ -6144,7 +6144,7 @@ if (!Date.now)
             x = "0x" + table.substr(n * 9, 8);
             crc = (crc >>> 8) ^ x;
         }
-        return crc ^ (-1);
+        return (crc ^ (-1))>>>0;
     };
 
 
@@ -6162,12 +6162,12 @@ if (!Date.now)
 (function($) {
     "use strict";
     $(document).one("intel.xdk.device.ready", function() { //in intel xdk, we need to undo the height stuff since it causes issues.
-
+        $.ui.isIntel=true;
         setTimeout(function() {
             document.getElementById("afui").style.height = "100%";
             document.body.style.height = "100%";
             document.documentElement.style.minHeight = window.innerHeight;
-        }, 300);
+        }, 30);
 
     });
     //Fix an ios bug where scrolling will not work with rotation
