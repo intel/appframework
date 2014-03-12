@@ -11,7 +11,7 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        clean: [ "build" ],
+        clean: [ "build/cov" ],
 
         // see .jshintrc file for the options;
         // options are explained at http://www.jshint.com/docs/config/
@@ -37,7 +37,7 @@ module.exports = function (grunt) {
                     { src: "test/**/*.test.js" }
                 ],
                 reporter: "html-cov",
-                reportDir: "build"
+                reportDir: "build/cov"
             }
         },
         cssmin: {
@@ -228,7 +228,7 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask("test", ["mochaccino:unit"]);
-    grunt.registerTask("cov", ["clean", "mochaccino:cov"]);
+    grunt.registerTask("cov", ["clean","mochaccino:cov"]);
     grunt.registerTask("rebuild" , ["cssmin","concat","closure-compiler","usebanner"]);
     grunt.registerTask("hint" , ["jshint"]);
 };
