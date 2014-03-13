@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-03-12 */
+/*! intel-appframework - v2.1.0 - 2014-03-13 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -1665,12 +1665,27 @@ if (!window.af || typeof(af) !== "function") {
             if (options.url.indexOf("callback=?") !== -1) {
                 script.src = options.url.replace(/=\?/, "=" + callbackName);
             } else {
-                callback = options.jsonp ? options.jsonp : "callback";
+
+                callback = options.jsonp ? options.jsonp : "callback";                
                 if (options.url.indexOf("?") === -1) {
                     options.url += ("?" + callback + "=" + callbackName);
                 }
                 else {
-                    options.url += ("&" + callback + "=" + callbackName);
+                    if(options.url.indexOf("callback=")!==-1){
+
+                        var searcher="callback=";
+                        var offset=options.url.indexOf(searcher)+searcher.length;
+                        var amp=options.url.indexOf(offset);
+                        if(amp===-1)
+                            amp=options.url.length;
+                        var oldCB=options.url.substr(offset,amp);
+                        options.url=options.url.replace(searcher+oldCB,searcher+callbackName);
+                        oldCB=oldCB.replace("window.","");
+                        options.success=window[oldCB];
+                    }
+                    else {
+                        options.url += ("&" + callback + "=" + callbackName);
+                    }
                 }
                 script.src = options.url;
             }
@@ -1803,7 +1818,7 @@ if (!window.af || typeof(af) !== "function") {
                     if (xhr.readyState === 4) {
                         clearTimeout(abortTimeout);
                         var result, error = false;
-                        var contentType=xhr.getResponseHeader("content-type");
+                        var contentType=xhr.getResponseHeader("content-type")||"";
                         if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0 && protocol === "file:") {
                             if ((contentType==="application/json")||(mime === "application/json" && !(/^\s*$/.test(xhr.responseText)))) {
                                 try {
