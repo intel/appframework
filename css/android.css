@@ -9,15 +9,15 @@
  */
 
 #afui.android {
-    font:14px  'Roboto',sans-serif;
-    background:#000;
-    color:#fff;
+	font:14px  'Roboto',sans-serif;
+ 	background:#000;
+ 	color:#fff;
     border-color:#fff;
 }
 
 #afui.android.light {
-    background:#FDFDFD;
-    color:#000;
+	background:#FDFDFD;
+	color:#000;
 }
 
 #afui.android  .header {
@@ -48,44 +48,44 @@
 
 #afui.android .footer {
     box-shadow: none;
-    background:inherit;
-    border-top:2px solid #33B5E5;
+ 	background:inherit;
+ 	border-top:2px solid #33B5E5;
     border-bottom:none;
     padding:0;
 }
 
 #afui.android .footer>footer>a:not(.button) {
-    color:inherit;
+	color:inherit;
     top:0px;
 }
 
 #afui.android .footer>footer>a.pressed:not(.button) {
-    border:0px;
-    border-top:4px solid #33B5E5;
-    border-radius:0px;
-    background:none;
+ 	border:0px;
+ 	border-top:4px solid #33B5E5;
+ 	border-radius:0px;
+ 	background:none;
 }
 
 #afui.android .footer>footer>a.icon.pressed:not(.button):before {
-    color:inherit;
+	color:inherit;
 }
 
 #afui.android .af-badge {
-    border:none;
+	border:none;
 }
 
 #afui.android .panel, #afui.android #modalContainer {
-    background:inherit;
-    color:inherit;
+ 	background:inherit;
+ 	color:inherit;
 }
 
 #afui.android .list {
-    background:inherit;
-    color:inherit;
-    border-color:#303030;
+ 	background:inherit;
+ 	color:inherit;
+ 	border-color:#303030;
 }
 
-#afui.android .list .divider {  color:black; }
+#afui.android .list .divider {	color:black; }
 
 #afui.android .panel h2 { color:inherit; }
 
@@ -116,8 +116,8 @@
 #afui.android input[type="number"], #afui.android input[type="email"],
 #afui.android input[type="url"], #afui.android input[type="tel"],
 #afui.android input[type="color"], #afui.android .input-group {
-    background:inherit;
-    color:inherit;
+	background:inherit;
+	color:inherit;
 }
 
 #afui.android input.toggle+label:after { color:inherit; }
@@ -125,23 +125,23 @@
 #afui.android input.toggle+label { border-radius:0; }
 
 #afui.android input.toggle+label > span {
-    border-radius:0;
-    top:0;
-    width:27px;
-    height:23px;
+	border-radius:0;
+	top:0;
+	width:27px;
+	height:23px;
 }
 
 #afui.android label { color:inherit; }
 
 #afui.android input[type="radio"]:checked+label:before,#afui.android input[type="checkbox"]:checked+label:before {
-    background: #33B5E5;
+	background: #33B5E5;
 }
 
 #afui.android > #aside_menu,
 #afui.android > #menu {
     border-right:1px solid rgba(128,128,128,0.5);
-    color:inherit;
-    background:inherit;
+	color:inherit;
+	background:inherit;
 }
 
 #afui.android #aside_menu .list li,
@@ -152,9 +152,9 @@
 
 #afui.android #aside_menu .list .divider,
 #afui.android #menu .list .divider {
-    background:inherit;
-    color:inherit;
-    font-size: 1em;
+	background:inherit;
+	color:inherit;
+	font-size: 1em;
 }
 
 #afui.android #aside_menu .list > li > a,
@@ -166,17 +166,17 @@
 
 #afui.android #aside_menu .list,
 #afui.android #menu .list {
-    font-weight: normal;
+	font-weight: normal;
 }
 
 #afui.android .button {
-    border-radius:0;
-    border:none;
-    background:#424343;
-    border-color:transparent;
-    color:inherit;
-    text-shadow:none;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.4);
+	border-radius:0;
+	border:none;
+	background:#424343;
+	border-color:transparent;
+	color:inherit;
+	text-shadow:none;
+	box-shadow: inset 0 1px 0 rgba(255,255,255,.4);
 }
 
 #afui.android.light .button {
@@ -186,23 +186,23 @@
 
 #afui.android .button.pressed,
 #afui.android  .header .button-grouped > .button.pressed {
-    background:#33B5E5;
-    border-color:#33B5E5;
+	background:#33B5E5;
+	border-color:#33B5E5;
 }
 
 #afui.android .button.previous::after {
-    width:20px; height:20px;
-    background-color:inherit;
-    top:5px; left:-12px;
+	width:20px; height:20px;
+	background-color:inherit;
+  	top:5px; left:-12px;
     border-radius:0;
     box-shadow:none;
     border-color:transparent;
 }
 
 #afui.android .button.next::after {
-    width:20px; height:20px;
-    background-color:inherit;
-    top:5px; right:-12px;
+	width:20px; height:20px;
+	background-color:inherit;
+  	top:5px; right:-12px;
     border-radius:0;
     box-shadow:none;
     border-color:transparent;

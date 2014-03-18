@@ -1,0 +1,386 @@
+/** iOS 7 theme */
+
+/** Blue color color:rgba(82,155,234,255); */
+
+/* border rgba(158,158,158,255) */
+
+#afui.ios7 {
+     font-family:'HelveticaNeue', 'Helvetica Neue',Helvetica, Arial, sans-serif;
+}
+
+#afui.ios7 .header {
+    background:rgb(249,249,249);
+    color:inherit;
+    border:none;
+    border-bottom:1px solid rgba(158,158,158,255);
+}
+
+#afui.ios7 .header .button {
+    color:rgba(82,155,234,255);
+    border-color:transparent;
+    font-size:14px;
+    font-weight:normal;
+}
+
+#afui.ios7 .header h1 {
+    color:inherit;
+    text-shadow:none;
+}
+
+#afui.ios7 .panel, #afui.ios7 #modalContainer {
+    background:rgba(238,238,238,255);    
+}
+
+#afui.ios7 .panel h2 { 
+    color:inherit;
+}
+
+#afui.ios7 .footer {
+    background:rgb(249,249,249);
+    color:black;
+    border-top:1px solid rgba(158,158,158,255);
+    box-shadow:none;
+}
+
+#afui.ios7 .footer>footer>a:not(.button) {
+    color:rgba(96,96,96,255);
+}
+
+#afui.ios7 .footer>footer>a.pressed:not(.button) {
+    border-radius:0;    
+    background:transparent;
+}
+
+#afui.ios7 #menubadge:after {
+    border-color:rgba(82,155,234,255);
+}
+
+#afui.ios7 .list {
+    font-weight:normal;
+}
+
+#afui.ios7 > #aside_menu,
+#afui.ios7 > #menu {
+    border-right:1px solid #bbb;
+    background:rgba(238,238,238,255);
+    color:black;
+}
+
+#afui.ios7 #aside_menu .list li,#afui.ios7 #aside_menu .list .divider,#afui.ios7 #aside_menu .list li:first-child,#afui.ios7 #aside_menu .list li:last-child,
+#afui.ios7 #menu .list li,#afui.ios7 #menu .list .divider,#afui.ios7 #menu .list li:first-child,#afui.ios7 #menu .list li:last-child {
+    border-color:rgb(215,215,215);
+    font-weight:normal;
+    box-shadow:none;
+}
+
+#afui.ios7 #aside_menu .list .divider,
+#afui.ios7 #menu .list .divider {
+    background:rgba(238,238,238,255);
+    color:inherit;
+    font-size: 1em;
+    border-bottom:1px solid rgb(215,215,215);
+    color:black;
+}
+
+#afui.ios7 #aside_menu .list a,
+#afui.ios7 #menu .list a {
+    color:black;
+}
+
+#afui.ios7 #aside_menu .list,
+#afui.ios7 #menu .list {
+    background:white;
+    font-weight: normal;
+    color:black;
+}
+
+#afui.ios7 .list > li > a:after{
+    color:rgba(217,217,217,255);
+}
+
+#afui.ios7 .button {
+    background-color:transparent;
+}
+
+#afui.ios7 #backButton {
+    background:rgba(249,249,249,1);
+    color:rgba(82,155,234,255);
+    display: block;
+    position: absolute;
+    line-height:44px;
+    left: 25px;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    padding: 0;
+    text-shadow: none;
+    background-color: transparent;
+    border:none;
+    border-color: transparent;
+    height: 44px;
+    top:0;
+    border-radius: 0;
+    box-shadow:none;
+    margin: 0;
+    padding-left: 0;
+    text-align: center;
+    width:50px;
+    padding:0 !important;
+    margin:0 !important;
+}
+
+#afui.ios7 #backButton::before {
+    z-index: -1;
+    font-size:22px;
+    position: absolute;
+    top: 10px;
+    left: -20px;
+    text-align: center;
+    border-radius: 0;
+    border: none;
+    border-color: transparent;
+    box-shadow: none;
+    -webkit-transform: none;
+    transform: none;
+    font-family: 'chevron';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content: "\f054";
+    -webkit-transform:rotate(180deg);
+    transform:rotate(180deg);
+    background-color: transparent;
+}
+
+#afui.ios7 #backButton::after {
+    content: '';
+    width:0;
+    height:0;
+    border:none;
+}
+
+
+#afui.ios7 .button {
+    box-shadow:none;
+    border-radius: 0;
+    border-color:#ccc;
+    color:rgba(82,155,234,255);
+    text-shadow:none;
+}
+
+#afui.ios7 .button-grouped * ,
+#afui.ios7 .button-grouped >  .button:first-child,
+#afui.ios7 .button-grouped.vertical * ,
+#afui.ios7 .button-grouped.vertical >  .button:last-child, 
+#afui.ios7 .header .button-grouped > .button {
+    border-color:rgba(82,155,234,255);
+}
+
+#afui.ios7 .button-grouped > .button.pressed ,
+#afui.ios7 .header .button-grouped > .button.pressed{
+    color:white;
+    background:rgba(82,155,234,255);
+}
+
+#afui.ios7 .afPopup {
+    border:1px solid rgba(158,158,158,255);
+    border-radius:10px;
+    padding:0;
+    text-align: center;
+    color:inherit;
+    background:rgba(249,249,249,1);
+}
+
+#afui.ios7 .afPopup>HEADER{
+    padding:10px 0;
+}
+
+#afui.ios7 .afPopup>DIV{
+    padding-bottom:10px;
+}
+
+#afui.ios7 .afPopup>FOOTER{
+    border-top:1px solid #aaa;
+}
+
+#afui.ios7 .afPopup>FOOTER>A.center{
+    width:100%!important;
+}
+
+#afui.ios7 .afPopup .button {
+    border: none;
+    width: 50%;
+    margin: 0;
+    background: transparent;
+    color:rgba(82,155,234,255);
+    padding:12px 0;
+}
+
+#afui.ios7 .afPopup .button.pressed {
+    background: transparent;
+}
+
+#afui.ios7 .button.pressed {
+    font-weight:bold;
+    background: white;
+}
+
+#afui.ios7 .afPopup a:not(:first-of-type) {
+    border-left:1px solid rgba(158,158,158,255);
+}
+
+#afui.ios7 #af_actionsheet {
+    background-color:transparent;
+    color:black;
+    padding-left:10px;
+    padding-right:10px;
+    border-top: transparent 1px solid;
+    box-shadow: 0px -1px 2px rgba(0,0,0,0);
+}
+
+#afui.ios7 #af_actionsheet a{
+    background-image:none;
+    text-shadow:none;
+    box-shadow:none;
+    font-weight:normal;
+    border-radius: 0;
+    border:none;
+    -webkit-box-shadow:none;
+    color:rgba(82,155,234,255);
+    background-color:white;
+    cursor:pointer;
+    border-radius:0px;
+    line-height: 40px;
+    font-size: 20px;
+    margin-bottom: 1px;
+}
+
+#afui.ios7 #af_actionsheet a:first-child{
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+}
+
+#afui.ios7 #af_actionsheet a:nth-last-child(2){
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+}
+
+#afui.ios7 #af_actionsheet a.cancel{
+    font-weight:bold;
+    margin: 9px 0;
+    border-radius:5px;
+}
+
+#afui.ios7 #af_actionsheet a.red{
+    color:#f44;
+}
+
+#afui.ios7 .footer>footer>a.pressed:not(.button),.footer>footer>a.icon.pressed:not(.button):before  {
+    color:rgba(82,155,234,255);
+}
+
+#afui.ios7 .button.previous {
+    border:none;
+}
+
+#afui.ios7 .button.next {
+    border:none;   
+}
+
+#afui.ios7 .button.previous::after {
+    color:rgba(82,155,234,255);
+    z-index: -1;
+    font-size:22px;
+    position: absolute;
+    top: 2px;
+    left: -25px;
+    text-align: center;
+    border-radius: 0;
+    border: none;
+    border-color: transparent;
+    box-shadow: none;
+    -webkit-transform: none;
+    transform: none;
+    font-family: 'chevron';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content: "\f054";
+    -webkit-transform:rotate(180deg);
+    transform:rotate(180deg);
+    background-color: transparent;
+}
+
+#afui.ios7 .button.next::after {
+    color:rgba(82,155,234,255);
+    z-index: -1;
+    font-size:22px;
+    position: absolute;
+    top: 6px;
+    right: -25px;
+    text-align: center;
+    border-radius: 0;
+    border: none;
+    border-color: transparent;
+    box-shadow: none;
+    -webkit-transform: none;
+    transform: none;
+    font-family: 'chevron';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content: "\f054";
+    background-color: transparent;
+}
+
+#afui.ios7 .button.gray {
+    color:#999;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.yellow {
+    color:#F1C222;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.red {
+    color:#b20000;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.green {
+    color:#009C0C;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.orange {
+    color:#FF8000;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.black {
+    color:black;
+    background-color:transparent;
+}
+
+#afui.ios7 .button.slate {
+    color:#171F28;
+    background-color:transparent;    
+}
+
+#afui.ios7 .af-badge {
+    border:none;
+    box-shadow:none;
+    font-size:12px;
+}

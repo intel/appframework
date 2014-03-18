@@ -1,0 +1,447 @@
+/* Bg #00ABA9
+
+/* Font header #C6C6C6
+ * reg white-space:
+
+ border 303030
+ hover : #111
+
+ */
+@-ms-viewport{
+  width: device-width;
+}
+@font-face {
+  font-family: 'win8back';
+  src: url(data:application/x-font-woff;charset=utf-8;base64,d09GRk9UVE8AAARUAAsAAAAABmgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABDRkYgAAABCAAAAS4AAAGZpdvO1kZGVE0AAAI4AAAAGgAAABxnmGDwR0RFRgAAAlQAAAAdAAAAIAAwAARPUy8yAAACdAAAAEsAAABgL9zcQGNtYXAAAALAAAAAOgAAAVLgE/LMaGVhZAAAAvwAAAAuAAAANvx5/t1oaGVhAAADLAAAAB4AAAAkBBD/5GhtdHgAAANMAAAADAAAAAwEAAACbWF4cAAAA1gAAAAGAAAABgADUABuYW1lAAADYAAAAOgAAAGPgxEkPHBvc3QAAARIAAAADAAAACAAAwAAeJxtTj1PAkEUnD0WQbwAEomYnEdlDxbGQu0Ua+2sULFAEhIEY0WiNJisITE5G2lo6Iw1/gULKxMTSypLCz+2UMe7A6+ymTczb2bfCkgJIcTkSbm6vLe7X4EwILCm5w1th3RGKjOkTGnHMLedolIBMSOqoh3dCFtoJSwgaaE9bSFqicsUpPdGFAnMIntcLa/ncjl3bLjj70xwDhBtcY6Q1zDwIRD/dPRRmrgo3BK1wRbZcRnrHqsH8h/PD49qQTfwsvyxTyGJZt8mDp6HY/Bls18krxf8RY9s7Qw96HlecQy+9BajiB92a1nyceWGYuL7zf3yw5RB3oWeyPz72QRxeL9KXi1Jstt9UWRtkCQ6m3kXCq8eWyRKpYwKx5VuyC9HO5G4dmZUWpmxXzJhtKEAAHicY2BgYGQAgjO2i86D6LNr4wVgNABJKQZOAAB4nGNgZGBg4ANiCQYQYGJgBEIQyQLmMQAABGAANQAAAHicY2BmYmCcwMDKwMHow5jGwMDgDqW/MkgytDAwMDGwMjPAgQCCyRCQ5prC4PCA4QMD44P/Dxj0GB8wKDQwMDDCFSgAISMAEEIMHwB4nGNgYGBmgGAZBkYGEPAB8hjBfBYGAyDNAYRMIIkHDB8Y/v9HZikwCjBBdYEBIxsDMndEAgDJXAiuAAB4nGNgZGBgAGK+Bx4V8fw2Xxm4mRhA4OzaeAEE/f8BEwPjAyCXgwEsDQAU3gn7AAB4nGNgZGBgfPD/AYMeEwMDwz8GIAkUQQHMAG3nA/YAAAIAAAACAAACAAAAAAAAUAAAAwAAeJx9jjFOw0AQRZ8TJ4BACFHQ0KxEiWzZRomiHMAHSJHeiVaWRWRLm0QpuActZ6DlGByAM3AEvsPQUGSl0b79+2fmA1e8EtGfiHNujQec8Wg85IEX41ied+MRl3waj6V/yxnFF1Jujl09D7jm3nhIyZNxLM+b8Yg7PozH0r840NAyY0XFmmc4NO1sVa1FCzw1ezb6Cnr6er+pBCWdWnbHO8jhcRSkZLrnqv8jf9UpCRNVIV+ucJRduyu7UHtXpJmbu7/FwmkySYosl+lEvKUWB7Yy9HGchvYRWPqwbbrW5Wl2qv0H0Z06yHicY2BmwAsAAH0ABA==) format('woff'),
+     url(data:application/x-font-ttf;charset=utf-8;base64,AAEAAAANAIAAAwBQRkZUTWeYYPAAAAWMAAAAHEdERUYAMgAGAAAFbAAAACBPUy8yL7rcHwAAAVgAAABWY21hcOAV89MAAAHEAAABUmdhc3D//wADAAAFZAAAAAhnbHlmEDC/5gAAAyQAAAB0aGVhZPx5/t0AAADcAAAANmhoZWEEEP/mAAABFAAAACRobXR4BKoAAgAAAbAAAAAUbG9jYQAsADoAAAMYAAAADG1heHAASgAcAAABOAAAACBuYW1lgxEkPAAAA5gAAAGPcG9zdJtVPjcAAAUoAAAAPAABAAAAAQAAWPDPKV8PPPUACwIAAAAAAM2tXxAAAAAAza1fEAAA/+ACAAHgAAAACAACAAAAAAAAAAEAAAHg/+AALgIAAAD+AAIAAAEAAAAAAAAAAAAAAAAAAAAFAAEAAAAFABkAAwAAAAAAAgAAAAEAAQAAAEAAAAAAAAAAAQIAAZAABQAIAUwBZgAAAEcBTAFmAAAA9QAZAIQAAAIABQMAAAAAAAAAAAAAEAAAAAAAAAAAAAAAUGZFZABA4ADwAAHg/+AALgHgACCAAAABAAAAAAAAAgAAAAAAAAAAqgAAAgAAAgAAAAAAAAADAAAAAwAAABwAAQAAAAAATAADAAEAAAAcAAQAMAAAAAgACAACAAAAAOAA8AD//wAAAADgAPAA//8AACADEAQAAQAAAAAAAAAAAAABBgAAAQAAAAAAAAABAgAAAAIAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALAA6AAMAAv/iAf4B3gAHAA8AGAAAACIGFBYyNjQCIiY0NjIWFCU3IwcXMyczNQFp0pWV0pWgvIaGvIb+8Gtkj49ka84B3pXSlZXS/rOGvIaGvIFrjo5rRgAAAAABAAD/4AIAAeAAAgAAEQEhAgD+AAHg/gAAAAAAAAAMAJYAAQAAAAAAAQAIABIAAQAAAAAAAgAHACsAAQAAAAAAAwAjAHsAAQAAAAAABAAIALEAAQAAAAAABQALANIAAQAAAAAABgAIAPAAAwABBAkAAQAQAAAAAwABBAkAAgAOABsAAwABBAkAAwBGADMAAwABBAkABAAQAJ8AAwABBAkABQAWALoAAwABBAkABgAQAN4AdwBpAG4AOABiAGEAYwBrAAB3aW44YmFjawAAUgBlAGcAdQBsAGEAcgAAUmVndWxhcgAARgBvAG4AdABGAG8AcgBnAGUAIAAyAC4AMAAgADoAIAB3AGkAbgA4AGIAYQBjAGsAIAA6ACAANgAtADUALQAyADAAMQAzAABGb250Rm9yZ2UgMi4wIDogd2luOGJhY2sgOiA2LTUtMjAxMwAAdwBpAG4AOABiAGEAYwBrAAB3aW44YmFjawAAVgBlAHIAcwBpAG8AbgAgADEALgAwAABWZXJzaW9uIDEuMAAAdwBpAG4AOABiAGEAYwBrAAB3aW44YmFjawAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQAAAAEAAgECAQMHdW5pRTAwMAd1bmlGMDAwAAAAAf//AAIAAQAAAA4AAAAYAAAAAAACAAEAAwAEAAEABAAAAAIAAAAAAAEAAAAAzD2izwAAAADNrV8QAAAAAM2tXxA=) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+#afui.win8 {
+	font:14px  "Segoe UI Semilight", "HelveticaNeue-light", Helvetica, Arial, sans-serif;
+  font-size:14px;
+ 	background-color:#000;
+ 	color:#fff;
+}
+
+#afui.win8.light {
+    background:#fff;
+    color:#000;
+}
+
+#afui.win8 .header .button {
+    color: inherit;
+    border-color:transparent;
+    font-size:14px;
+}
+
+
+
+#afui.win8 #backButton.pressed {
+    background:inherit;
+}
+
+#afui.win8 #backButton {
+  color:inherit;
+  background:inherit;
+  margin:0;
+  font-family: 'win8back';
+  width:0px;
+  height:0px;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  padding:0px;
+  margin:0px;
+  border:none;
+  position:absolute;
+  left:-185px;
+  -webkit-font-smoothing: antialiased;
+}
+
+#afui.win8 #backButton::before {
+  content: "\e000";
+  font-size:30px;
+  position:absolute;
+  top:10px;
+  right:-225px;
+  left:auto;
+  color:inherit;
+  font-family:inherit;
+  -webkit-transform:none;
+  transform:none;
+}
+
+#afui.win8 .header h1 {
+	text-align: left;
+    color:inherit;
+}
+
+#afui.win8 .header{
+    border:0px;
+	background: inherit;
+	border-bottom:inherit;
+    color:inherit;
+}
+
+#afui.win8 .footer {
+    padding:0px;
+ 	background:inherit;
+ 	text-align: center;
+ 	height:65px;
+ 	background:rgba(33,32,33,.9);
+    border-top:none;
+}
+ 
+#afui.win8.light .footer{
+    background:#F2F2F2;
+    color:black;
+}
+
+#afui.win8 .footer>footer>a:not(.button) {
+  position: relative;
+  width: 56px !important;
+  height: 56px;
+  display: inline-block;
+  font: normal 9px/85px Segoe WP, Segoe UI, Verdana, Helvetica, Sans-Serif;
+  text-decoration: none;
+  color: inherit;
+  text-align: center;
+  text-shadow: 0 0 rgba(0, 0, 0, 0);
+  overflow: hidden;
+  background:inherit;
+  -webkit-backface-visibility: hidden;
+  -webkit-perspective: 1000;
+}
+
+#afui.win8.light .footer>footer>a:not(.button) {
+  text-shadow: 0 0 rgba(0, 0, 0, 0);  
+}
+
+#afui.win8 .footer>footer>a.icon.pressed:not(.button):before {
+	background-color: #00ABA9;
+}
+
+#afui.win8 .footer>footer>a.icon:not(.button):before {
+    top: 0px;
+    left: 10px;
+    font-size:19px;
+    width:auto;
+    padding: 5px;
+    border: 3px solid #fff;
+    border-radius: 20px;
+}
+
+#afui.win8.light .footer>footer>a.icon:not(.button):before {
+    border: 3px solid #000;
+}
+
+#afui.win8 .footer>footer>a:not(:last-of-type):not(.button){
+  	border:none;
+}
+
+#afui.win8 .af-badge {
+	border:none;
+}
+
+#afui.win8 #content,#afui.win8 #content > .panel {
+ 	background:inherit;
+ 	color:inherit;
+}
+
+#afui.win8 .list {
+ 	background:inherit;
+ 	color:inherit;
+ 	border-color:#303030;
+}
+
+#afui.win8 .list .divider,  #afui.win8 #menu.tabletMenu .list .divider  {
+ 	background:#00ABA9;
+ 	padding:5px;
+    display:inline;
+ 	font-size:16px;
+ 	font-weight:normal;
+ 	border-top:none;
+ 	border-bottom:none;
+    color:inherit;
+}
+
+#afui.win8 .list li {
+ 	border-top:none;
+ 	border-bottom:none;
+    font-size:20px;
+}
+
+#afui.win8 .panel h2 {
+ 	color:inherit;
+    font-weight:normal;
+    font-size:34px;
+    line-height:34px;
+    height:auto;
+}
+
+#afui.win8 .collapsed:after {border-top: 6px solid;}
+#afui.win8 .collapsed:before {border:2px solid;}
+#afui.win8 .expanded:after {border-bottom: 6px solid;}
+#afui.win8 .expanded:before {border:2px solid;}
+
+#afui.win8 .collapsed:before,#afui.win8 .expanded:before {
+    border-color: inherit;
+}
+
+#afui.win8 .collapsed:after,
+#afui.win8 .expanded:after{
+    border-top-color:inherit;
+    border-top-color:inherit;
+}
+
+#afui.win8 .afScrollbar {background:white !important;}
+#afui.win8.light .afScrollbar {background:black !important;}
+
+#afui.win8 select, #afui.win8 textarea, #afui.win8 input[type="text"], #afui.win8 input[type="search"], #afui.win8 input[type="password"], #afui.win8 input[type="datetime"], #afui.win8 input[type="datetime-local"], #afui.win8 input[type="date"], #afui.win8 input[type="month"], #afui.win8 input[type="time"], #afui.win8 input[type="week"], #afui.win8 input[type="number"], #afui.win8 input[type="email"], #afui.win8 input[type="url"], #afui.win8 input[type="tel"], #afui.win8 input[type="color"], #afui.win8 .input-group {
+  	background:black;
+    color:inherit;
+}
+
+#afui.win8.light select, #afui.win8.light textarea, #afui.win8.light input[type="text"], #afui.win8.light input[type="search"], #afui.win8.light input[type="password"], #afui.win8.light input[type="datetime"], #afui.win8.light input[type="datetime-local"], #afui.win8.light input[type="date"], #afui.win8.light input[type="month"], #afui.win8.light input[type="time"], #afui.win8.light input[type="week"], #afui.win8.light input[type="number"], #afui.win8.light input[type="email"], #afui.win8.light input[type="url"], #afui.win8.light input[type="tel"], #afui.win8.light input[type="color"], #afui.win8.light .input-group {
+    background:white;
+}
+
+#afui.win8 input.toggle+label:after {
+	color:inherit;
+}
+
+#afui.win8 input.toggle+label {
+	border-radius:0;
+}
+
+#afui.win8 input.toggle:checked+label {
+	background:#00ABA9;
+}
+
+#afui.win8 input.toggle+label > span {
+	border-radius:0;
+	top:0;
+	width:27px;
+	height:23px;
+}
+
+#afui.win8 input[type="radio"]:checked+label:before,#afui.win8 input[type="checkbox"]:checked+label:before {
+	background: #00ABA9;
+}
+
+#afui.win8 > #menu {
+  border-right:1px solid rgba(128,128,128,0.5);
+	color:inherit;
+	background:inherit;
+}
+
+#afui.win8 > #aside_menu {
+  border-left:1px solid rgba(128,128,128,0.5);
+  color:inherit;
+  background:inherit;
+  border-right:0;
+}
+
+#afui.win8 #menu .list .divider {
+    padding:4px;
+    line-height:30px;
+    margin-left:10px;
+}
+
+#afui.win8 #menu .list {
+	font-weight: normal;
+}
+
+#afui.win8 #menu .list li,#afui.win8 #menu .list .divider {
+    box-shadow:none;
+}
+
+#afui.win8 .button {
+	border-radius:0;
+	border:none;
+	background:inherit;
+	border:3px solid #fff;
+	color:inherit;
+	text-shadow:none;
+	box-shadow:none;
+}
+
+#afui.win8.light .button {
+	border:3px solid #000;
+}
+
+#afui.win8 .button.pressed {
+	background:#00ABA9;
+}
+
+#afui.win8 .button.next, #afui.win8 .button.previous {
+    border-color: #fff !important;
+}
+#afui.win8 .button.next::after, #afui.win8 .button.previous::after{
+    border:none;    
+}
+
+#afui.win8 .button-grouped > .button{
+    border:3px solid #fff;
+    border-right:0;
+}
+
+#afui.win8 .button-grouped > .button:last-child {
+    border-right:3px solid #fff;
+}
+
+#afui.win8 .button-grouped > .button:first-child, 
+#afui.win8 .button-grouped > .button:last-child {
+    border-radius:0; 
+}
+
+#afui.win8 .button-grouped.vertical >.button{
+    border:3px solid #fff;
+    border-bottom:0;
+}
+
+#afui.win8 .button-grouped.vertical > .button:last-child {
+    border-bottom:3px solid #fff;
+}
+
+#afui.win8 .header .button-grouped > .button{
+    border-color: #fff;
+}
+
+#afui.win8  .header .button-grouped > .button.pressed{
+    background:#00ABA9;
+}
+
+#afui.win8.light .button-grouped > .button, 
+#afui.win8.light .button-grouped.vertical > .button, 
+#afui.win8.light .header .button-grouped > .button{
+    border-color: #111;
+}
+
+/** 
+ * code specific to WP8
+ */
+@media handheld, only screen and (max-width: 768px){
+  #afui.win8 #menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 1000;
+    width:100%;
+    height: 150px;
+    font-size:20px;
+    top:auto;
+    background:inherit;
+    color:inherit;
+    -webkit-transition-timing-function: linear;
+    transition-timing-function: linear;
+    -webkit-transform:translate3d(0,150px,0);
+    transform:translate3d(0,150px,0);
+  }
+  #afui.win8 .hasMenu,#afui.win8 .hasMenu.on{
+
+   -webkit-transform:translate3d(0,0,0);
+    transform:translate3d(0,0,0);
+  }
+  #afui.win8 .header #menubadge {
+    display:none;
+  }
+}
+
+#afui.win8 .afPopup {
+    width: 100%;
+    border: solid 0px #72767b;
+    left:0px !important;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    -webkit-transform:none;
+    transform:none;
+    -webkit-transition: none;
+    transition:none;
+    top: 0 !important;
+    background:#222;
+    color:inherit;
+    padding:15px;
+}
+
+#afui.win8.light .afPopup {
+    background:#eee;
+}
+
+#afui.win8 .afPopup>HEADER{
+    font-size:20px;
+}
+
+#afui.win8 .afPopup>DIV{
+    font-size:16px;
+    padding:10px 0;
+    margin:0;
+}
+
+#afui.win8 .afPopup>FOOTER{
+    width:100%;
+    text-align:left;    
+    display:block !important;
+}
+
+#afui.win8 .afPopup>FOOTER>A#cancel{
+    float:left;
+    min-width:100px;
+}
+
+#afui.win8 .afPopup>FOOTER>A#action{
+    float:left;
+    min-width:100px;
+    margin-left:10px;
+}
+
+#afui.win8 .afPopup>FOOTER>A.center{
+    width:auto;
+}
+
+#afui.win8 #af_actionsheet {
+    background:#aaa;
+    color:black;
+}
+
+#afui.win8 #af_actionsheet a{
+    border-radius:0;
+    -webkit-border-radius:0;
+    border:0px solid black;
+    background-color:transparent;
+    font-weight:normal;
+    color:black;
+    box-shadow: 0px 1px 1px rgba(255,255,255,0);
+}
+
+#afui.win8 #menu .list > li > a {
+    color:inherit;
+}
+
+@media handheld, only screen and (min-width: 768px){
+
+	#afui.win8 .footer footer #metroMenu {
+		display:none;
+	}
+	#afui.win8 .footer {
+		-webkit-transform:translate3d(0,0,0);
+		transform:translate(0,0);
+	}
+	#afui.win8 #menu  {
+		background:inherit;
+    color:inherit;
+    font-size:18px;
+    left:0;
+    top:0;
+    width:200px;
+	}
+    #afui.win8 #menu .list > li > a:after{
+        margin-top:-11px;
+    }
+}

@@ -1,0 +1,218 @@
+/* iOS theme */
+#afui.ios {
+    color:black;
+}
+
+#afui.ios  .header { 
+    background-color:#889BB3;
+    background-image:-ms-linear-gradient(top, #B3BECD 0%, #889BB3 50%, #6E84A2 51%);
+    background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0, #B3BECD), color-stop(.5, #889BB3), color-stop(.51, #6E84A2));
+    background-image:-webkit-linear-gradient(top, #B3BECD 0%, #889BB3 50%, #6E84A2 51%);
+    background-image:linear-gradient(to bottom, #B3BECD 0%, #889BB3 50%, #6E84A2 51%);
+    border: 1px solid;
+    border-color:#CCD2DA transparent #2D3033 transparent;
+    color:white;
+} 
+
+#afui.ios .header h1 {
+    text-shadow: rgba(0,0,0,0.8) 0 -1px 0;
+}
+
+#afui.ios .af-badge {
+    border:2px solid #fff;
+    box-shadow:0 1px 2px #555;
+    line-height:18px;
+}
+#afui.ios .panel, #afui.ios #modalContainer {
+    background:#e7e7e7;
+}
+
+#afui.ios .panel h2 { color:inherit;}
+
+#afui.ios  .footer {
+    background-color:#000;
+    background-image:-ms-linear-gradient(top, #222 0%, #111 50%, #000 51%);
+    background-image:-webkit-gradient(linear, left top, left bottom, color-stop(0, #222), color-stop(0.5, #111), color-stop(.51, #000));
+    background-image:-webkit-linear-gradient(top, #222 0%, #111 50%, #000 51%);
+    background-image:linear-gradient(to bottom, #222 0%, #111 50%, #000 51%);
+    box-shadow:0 1px 0 #555 inset;
+   
+    border-top:1px solid #000;
+}
+
+#afui.ios .footer>footer>a.pressed:not(.button) {
+    background:rgba(255, 255, 255, 0.13);
+    border-radius:6px;
+}
+
+#afui.ios .footer>footer>a.icon.pressed:not(.button):before {
+    color:#3a9de2;
+}
+
+#afui.ios > #aside_menu,
+#afui.ios > #menu.tabletMenu {
+   border-right:none;
+    background:#000;
+    color:#fff;
+}
+
+#afui.ios #backButton {
+    line-height:15px;
+    width:58px;
+    display:block;
+    position:absolute;
+    top:5px; left:5px;
+    text-overflow:ellipsis;
+    font-size:12px;
+    padding:7px !important;
+    color:#fff;
+    text-shadow:0 -1px 0 #333;
+    background-color:#476999;
+    background-image: none !important;
+    border:1px solid;
+    border-color:#375073 #375073 #375073 transparent;
+    height:32px;
+    border-radius:5px;
+    box-shadow:0 1px 0 #9CABC0;
+    margin:0 0 0 15px !important;
+    padding-left:4px !important;
+} /* Sets up positioning of the back button which appears in the header */
+
+#afui.ios #backButton::before {
+    z-index:-1;
+    content:'';
+    position:absolute;
+    width:24px; height:24px;
+    background-color:#476999;
+    top:2px; left:-11px;
+    border-radius:5px;
+    border:1px solid;
+    border-color:transparent transparent #9CABC0 transparent;
+    box-shadow:1px -1px 0 #375073 inset;
+    -ms-transform:rotate(45deg); -moz-transform:rotate(45deg); -webkit-transform:rotate(45deg); transform:rotate(45deg);
+}
+
+#afui.ios .header .button {
+    color:#fff;
+    text-shadow:0 -1px 0 #333;
+    background-color:#476999;
+    border:1px solid #375073;
+    box-shadow:0 1px 0 #9CABC0;
+    background-image:linear-gradient(to bottom, #9CABC0 0%, #6E84A2 50%, #476999 51%);
+}
+
+#afui.ios .header .button.pressed {
+    background-image:linear-gradient(to bottom, #6E84A2 0%, #476999 50%, #274979 51%);
+}
+
+#afui.ios .footer .button {
+    color:#fff;
+    text-shadow:0 -1px 0 #333;
+    background-color:#444;
+    border:1px solid #222;
+    box-shadow:0 1px 0 #222;
+    background-image:linear-gradient(to bottom, #555 0%, #333 50%, #111 51%);
+}
+
+#afui.ios .footer .button.pressed {
+    background-image:linear-gradient(to bottom, #444 0%, #222 50%, #000 51%);
+}
+
+#afui.ios #aside_menu .list li, 
+#afui.ios #aside_menu .list .divider, 
+#afui.ios #aside_menu .list li:first-child, 
+#afui.ios #aside_menu  .list li:last-child,
+#afui.ios #menu .list li, 
+#afui.ios #menu .list .divider, 
+#afui.ios #menu .list li:first-child, 
+#afui.ios #menu  .list li:last-child {
+    border-color:#101012;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+
+#afui.ios #aside_menu .list > li > a,
+#afui.ios #menu .list > li > a {
+    color:#ccc;   
+}
+
+#afui.ios #aside_menu .list .divider,
+#afui.ios #menu .list .divider {
+    background:#333;
+    color:#fff;   
+}
+
+#afui.ios .afPopup {
+    border: solid 2px #fff;
+    -webkit-box-shadow: 0px 4px 6px #555, 0 0 20px rgba(0,0,0,0.5);
+    -webkit-border-radius: 10px;
+    border-radius:10px;
+    padding: 0;
+    background: #1b294b;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#626c82), to(#1b294b));
+}
+
+#afui.ios .afPopup >* {
+    color:white;
+}
+
+#afui.ios .afPopup>HEADER{
+    font-weight:bold;   
+    text-align:center;
+    text-shadow:0 -1px #000;
+    padding:5px;
+}
+
+#afui.ios .afPopup>DIV{
+    text-align:center;
+}
+
+#afui.ios .afPopup>FOOTER>A{
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#626c82), to(#1b294b));
+    color:white;
+}
+
+#afui.ios .afPopup>FOOTER>A#cancel{
+    width:120px;
+    margin-left:10px;
+}
+
+#afui.ios .afPopup>FOOTER>A#action{
+    width:120px;
+    margin-right:10px;
+}
+
+#afui.ios .afPopup>FOOTER>A.center{
+    float:none!important;
+    width:95%!important;
+    margin:8px!important;
+}
+
+#afui.ios #af_actionsheet {
+    background:#595c61;
+    color:inherit;
+}
+
+#afui.ios #af_actionsheet a{
+    border-radius:10px;
+    -webkit-border-radius:10px;
+    border:3px solid #111;
+    background:#eee;
+    background: linear-gradient(to bottom, #fff 0%,#ccc 100%);
+    color:#111;
+    text-shadow:0 1px 0 #fff;
+}
+
+#afui.ios #af_actionsheet a.cancel{
+    background:#333;
+    background: linear-gradient(to bottom, #666 0%,#333 100%);
+    color:white;
+    text-shadow:0 -1px 0 #000;
+}
+
+#afui.ios #af_actionsheet a.red{
+    background:#d11;
+    background: linear-gradient(to bottom, #d55 0%,#d11 100%);
+    color:white;
+    text-shadow:0 -1px 0 #000;
+}

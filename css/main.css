@@ -222,7 +222,6 @@ body {
 #afui .x-scroll, #afui .panel.x-scroll {
     overflow-x:auto;
     overflow-y:hidden;
-    width:100%;
 }
 #afui .no-scroll, #afui .panel.no-scroll {
     overflow:hidden;
