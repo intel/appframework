@@ -12,7 +12,3 @@ Empty the contents of the above defined div.
 ```js
 $("#empty_content").empty();
 ```
-
-</br>
-<div id="empty_content" style="border:1px solid black">This is the content string we will empty</div>
-<input type="button" value="Empty" onclick="$('#empty_content').empty();">

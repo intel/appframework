@@ -14,6 +14,7 @@
     }
 })();
 </script>
+
         <title>App Framework Kitchen Sink</title>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
@@ -25,28 +26,30 @@
        <!--   
      <link rel="stylesheet" type="text/css" href="css/af.ui.css" title="default" />
   -->
-      <link rel="stylesheet" type="text/css" href="css/src/main.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/appframework.css"  />
+      <link rel="stylesheet" type="text/css" href="css/main.css"  />
+      <link rel="stylesheet" type="text/css" href="css/appframework.css"  />
+      <link rel="stylesheet" type="text/css" href="css/lists.css"  />
+      <link rel="stylesheet" type="text/css" href="css/forms.css"  />
+      <link rel="stylesheet" type="text/css" href="css/buttons.css"  />        
+      <link rel="stylesheet" type="text/css" href="css/badges.css"  />        
+      <link rel="stylesheet" type="text/css" href="css/grid.css"  />
 
-      <link rel="stylesheet" type="text/css" href="css/src/badges.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/buttons.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/lists.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/forms.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/grid.css"  />
-
+      <link rel="stylesheet" type="text/css" href="css/android.css"  />
+      <link rel="stylesheet" type="text/css" href="css/win8.css"  />
+      <link rel="stylesheet" type="text/css" href="css/bb.css"  />
+      <link rel="stylesheet" type="text/css" href="css/ios.css"  />
+      <link rel="stylesheet" type="text/css" href="css/ios7.css"  />
+      <link rel="stylesheet" type="text/css" href="css/tizen.css"  />
+        
       <link rel="stylesheet" type="text/css" href="plugins/css/af.actionsheet.css"  />
       <link rel="stylesheet" type="text/css" href="plugins/css/af.popup.css"  />
-      <link rel="stylesheet" type="text/css" href="plugins/css/af.selectBox.css"  />
+      <link rel="stylesheet" type="text/css" href="plugins/css/af.scroller.css"  />
+      <link rel="stylesheet" type="text/css" href="plugins/css/af.selectBox.css"  />        
         
-      <link rel="stylesheet" type="text/css" href="css/src/android.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/win8.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/bb.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/ios7.css"  />
-      <link rel="stylesheet" type="text/css" href="css/src/ios.css"  />        
-
-        <!-- uncomment for intel apps <script type="text/javascript" charset="utf-8" src="intelxdk.js"></script>
-<script type="text/javascript" charset="utf-8" src="xhr.js"></script>
--->
+        <!-- uncomment for intel.xdk apps 
+        <script type="text/javascript" charset="utf-8" src="intelxdk.js"></script>
+        <script type="text/javascript" charset="utf-8" src="xhr.js"></script>
+        -->
         <script type="text/javascript" charset="utf-8" src="./appframework.js"></script>
         <!-- include af.desktopBrowsers.js on desktop browsers only -->
         <script>
@@ -65,20 +68,22 @@
                 var script = document.createElement("script");
                 script.src = "plugins/af.desktopBrowsers.js";
                 var tag = $("head").append(script);
+                //$.os.desktop=true;
             }
-           
+
+          //  $.feat.nativeTouchScroll=true;
           
-        </script>
+        </script>        
         <script type="text/javascript" charset="utf-8" src="./plugins/af.actionsheet.js"></script>
-         <script type="text/javascript" charset="utf-8" src="./plugins/af.css3animate.js"></script>
-         <script type="text/javascript" charset="utf-8" src="./plugins/af.passwordBox.js"></script>
-          <script type="text/javascript" charset="utf-8" src="./plugins/af.scroller.js"></script>
-           <script type="text/javascript" charset="utf-8" src="./plugins/af.selectBox.js"></script>
-            <script type="text/javascript" charset="utf-8" src="./plugins/af.touchEvents.js"></script>
-          <script type="text/javascript" charset="utf-8" src="./plugins/af.touchLayer.js"></script>
+        <script type="text/javascript" charset="utf-8" src="./plugins/af.css3animate.js"></script>
+        <script type="text/javascript" charset="utf-8" src="./plugins/af.passwordBox.js"></script>          
+        <script type="text/javascript" charset="utf-8" src="./plugins/af.scroller.js"></script>
+        <script type="text/javascript" charset="utf-8" src="./plugins/af.selectBox.js"></script>
+        <script type="text/javascript" charset="utf-8" src="./plugins/af.touchEvents.js"></script>
+        <script type="text/javascript" charset="utf-8" src="./plugins/af.touchLayer.js"></script>
         <script type="text/javascript" charset="utf-8" src="./plugins/af.popup.js"></script>
 
-        <script type="text/javascript" charset="utf-8" src="./ui/src/appframework.ui.js"></script>
+        <script type="text/javascript" charset="utf-8" src="./ui/appframework.ui.js"></script>
         <!-- <script type="text/javascript" charset="utf-8" src="./ui/transitions/all.js"></script> -->
         <script type="text/javascript" charset="utf-8" src="./ui/transitions/fade.js"></script>
         <script type="text/javascript" charset="utf-8" src="./ui/transitions/flip.js"></script>
@@ -87,18 +92,18 @@
         <script type="text/javascript" charset="utf-8" src="./ui/transitions/slideDown.js"></script>
         <script type="text/javascript" charset="utf-8" src="./ui/transitions/slideUp.js"></script>
         <script type="text/javascript" charset="utf-8" src="./plugins/af.slidemenu.js"></script>
+        
 
         <script type="text/javascript">
-            /* This function runs once the page is loaded, but appMobi is not yet active */
+            /* This function runs once the page is loaded, but intel.xdk is not yet active */
             //$.ui.animateHeaders=false;
              var search=document.location.search.toLowerCase().replace("?","");
              //if(!search)
-                //$.os.useOSThemes=false;
-                
-            if(search) //Android fix has too many buggy issues on iOS - can't preview with $.os.android
+            $.ui.useOSThemes=false;
+            if(search.length>0) //Android fix has too many buggy issues on iOS - can't preview with $.os.android
             {
 
-               $.os.useOSThemes=true;
+               $.ui.useOSThemes=true;
                 if(search=="win8")
                     $.os.ie=true;
                 $.ui.ready(function(){
@@ -108,26 +113,24 @@
             
             var webRoot = "./";
             // $.os.android=true;
-            $.ui.autoLaunch = false;
+            //$.ui.autoLaunch = false;
             $.ui.openLinksNewTab = false;
-            //$.ui.resetScrollers=false;
+            $.ui.splitview=false;
             
 
             $(document).ready(function(){
-                   $.ui.launch();
+                  // $.ui.launch();
 
             });
             
-            /* This code is used to run as soon as appMobi activates */
+            /* This code is used to run as soon as intel.xdk activates */
             var onDeviceReady = function () {
                 intel.xdk.device.setRotateOrientation("portrait");
                 intel.xdk.device.setAutoRotate(false);
-                webRoot = AppMobi.webRoot + "";
+                webRoot = intel.xdk.webRoot + "";
                 //hide splash screen
                 intel.xdk.device.hideSplashScreen();
                 $.ui.blockPageScroll(); //block the page from scrolling at the header/footer
-                $.ui.launch();
-
             };
             document.addEventListener("intel.xdk.device.ready", onDeviceReady, false);
 
@@ -155,37 +158,23 @@
                             $el.addClass("light");
                     });
                 });
-            }
+            }                        
         </script>
-        <style>
-           .samplecode {
-                background: #ccc;
-                color: #000;
-                border-radius: 10px;
-                padding: 10px;
-                margin-bottom: 10px;
-                margin-top: 10px;
-           }
 
-           /* for the grid demo */
-           .grid > div {
-            border:1px dashed black;
-           }
-        </style>
 </head>
 
     <body>
-        <div id="afui" class="">
+        <div id="afui">
             <!-- this is the splashscreen you see. -->
             <div id="splashscreen" class='ui-loader heavy'>
                 App Framework
                 <br>
-                <br>	<span class='ui-icon ui-icon-loading spin'></span>
+                <br>    <span class='ui-icon ui-icon-loading spin'></span>
                 <h1>Starting app</h1>
 
             </div>
             <div id="header">
-                <a id='menubadge' onclick='af.ui.toggleSideMenu()' class='menuButton'></a>
+                <a id='menubadge' onclick='af.ui.toggleSideMenu()' class='menuButton'></a>                 
             </div>
             <div id="content">
                 <div title='Welcome' id="main" class="panel" selected="true" data-load="loadedPanel" data-unload="unloadedPanel" data-tab="navbar_home">
@@ -217,13 +206,17 @@
                        <li>
                             <a href="index.html?ios7" data-ignore="true">ios7</a>
                         </li>
+                         <li>
+                            <a href="index.html?tizen" data-ignore="true">tizen</a>
+                        </li>
+
 
                     </ul>
                 </div>
                 <!---------------------------------------------->
                 <div title="AppFramework" id="af" class="panel" data-nav="menu_AppFramework" data-header="testheader">
                     <!-- <header><span>This is an inline header in a panel.  Below is an inline footer</span></header>-->
-                    	<h2 class='expanded' onclick='showHide(this,"AppFramework_info");'>AppFramework</h2>
+                        <h2 class='expanded' onclick='showHide(this,"AppFramework_info");'>AppFramework</h2>
 
                     <p id='AppFramework_info'>AppFramework is a blazingly fast query selector tool that is optmimized for HTML5 browsers.</p>
                     <ul class="list">
@@ -369,7 +362,7 @@
                     </form>
                 </div>
                 <!-- af> af Selector -->
-                <div id="af1" class="panel" title="$()" data-nav="menu_AppFramework">	<span id="aftest2">This is some html</span>
+                <div id="af1" class="panel" title="$()" data-nav="menu_AppFramework">   <span id="aftest2">This is some html</span>
                     <br />
                     <br />
                     <a class="button"  onclick="alert($('#aftest2')[0])">Click to get Object</a>
@@ -683,9 +676,9 @@
                 <!-- af> af serialize() -->
                 <div id="af28" class="panel" title=".param()">$.param() - serializes an object into key/value pairs for a querystring.
                     <br />
-                    <br />	<code>
-									var obj= {foo:"foo",bar:"bar"};
-								</code>
+                    <br />  <code>
+                                    var obj= {foo:"foo",bar:"bar"};
+                                </code>
                     <br />
                     <br />
                     <script>
@@ -705,9 +698,9 @@
                 <!-- af> af parseJSON() -->
                 <div id="af29" class="panel" title=".parseJSON()" data-nav="menu_AppFramework">$.parseJSON() - parses a string and converts it into a JSON object. Uses the native JSON parser, but is added for backwards compatibility.
                     <br>
-                    <br>	<code>
-									var obj='{"foo":"bar"}';
-								</code>
+                    <br>    <code>
+                                    var obj='{"foo":"bar"}';
+                                </code>
 
                     <script>
                         function doParseJson() {
@@ -721,27 +714,27 @@
                 <!-- af> os -->
                 <div id="af30" class="panel" title=".os" data-nav="menu_AppFramework">$.os - holds information about the OS of the device, and if it is a webkit browser
                     <br>
-                    <br>	<div class="samplecode" >
-									$.os.webkit  = <script>document.write($.os.webkit);</script><br>
-									$.os.android = <script>document.write($.os.android);</script><br>
-									$.os.ipad = <script>document.write($.os.ipad);</script><br>
-									$.os.iphone = <script>document.write($.os.iphone);</script><br>
-									$.os.ios = <script>document.write($.os.ios);</script><br>
-									$.os.webos = <script>document.write($.os.webos);</script><br>
-									$.os.touchpad = <script>document.write($.os.touchpad);</script><br>
-									$.os.blackberry = <script>document.write($.os.blackberry);</script><br>
-									$.os.opera = <script>document.write($.os.opera);</script><br>
-									$.os.fennec = <script>document.write($.os.fennec);</script><br>
-								</div>
+                    <br>    <div class="samplecode" >
+                                    $.os.webkit  = <script>document.write($.os.webkit);</script><br>
+                                    $.os.android = <script>document.write($.os.android);</script><br>
+                                    $.os.ipad = <script>document.write($.os.ipad);</script><br>
+                                    $.os.iphone = <script>document.write($.os.iphone);</script><br>
+                                    $.os.ios = <script>document.write($.os.ios);</script><br>
+                                    $.os.webos = <script>document.write($.os.webos);</script><br>
+                                    $.os.touchpad = <script>document.write($.os.touchpad);</script><br>
+                                    $.os.blackberry = <script>document.write($.os.blackberry);</script><br>
+                                    $.os.opera = <script>document.write($.os.opera);</script><br>
+                                    $.os.fennec = <script>document.write($.os.fennec);</script><br>
+                                </div>
 
                 </div>
                 <!-- af> isArray -->
                 <div id="af33" class="panel" title=".isArray()" data-nav="menu_AppFramework">$.isArray(param) - returns a boolean if the parameter is an array.
                     <br>
-                    <br>	<div class="samplecode">var notArrayTest="foo";<br>
-									var isArrayTest=[];
+                    <br>    <div class="samplecode">var notArrayTest="foo";<br>
+                                    var isArrayTest=[];
 
-								</div>
+                                </div>
 
                     <script>
                         var notArrayTest = "foo";
@@ -764,11 +757,11 @@
                 <!-- af> isFunction -->
                 <div id="af34" class="panel" title=".isFunction()" data-nav="menu_AppFramework">$.isFunction(param) - returns a boolean if the parameter is a function.
                     <br>
-                    <br>	<div class="samplecode">
-									var notFunctionTest="foo";<br>
-									var isFunctionTest=function(){};
+                    <br>    <div class="samplecode">
+                                    var notFunctionTest="foo";<br>
+                                    var isFunctionTest=function(){};
 
-								</div>
+                                </div>
 
                     <script>
                         var notFunctionTest = "foo";
@@ -788,9 +781,9 @@
                     <a class="button"  onclick="isAFunction()">test isFunctionTest</a>
                     <br>
                 </div>
-                <div id="afparent" class="panel" title=".parent()" data-nav="menu_AppFramework">This returns the parent elements for the previously found elements in the container	<div class="samplecode">
-									$("#afparent").parent();
-								</div>
+                <div id="afparent" class="panel" title=".parent()" data-nav="menu_AppFramework">This returns the parent elements for the previously found elements in the container <div class="samplecode">
+                                    $("#afparent").parent();
+                                </div>
 The parent id for this div is "content". Let's verify it.
                     <br>
                     <a  onclick="alert($('#afparent').parent().get(0).id);" class="button">Get Parent ID</a>
@@ -799,7 +792,7 @@ The parent id for this div is "content". Let's verify it.
                 <!-- ------------------------------------------ -->
                 <!-- App Framework UI -->
                 <div title="App Framework UI" id="afuidemo" class="panel" data-footer='footerui' data-tab="navbar_ui">
-                    	<h2 class='expanded' onclick='showHide(this,"AFUI_info");'>App Framework UI</h2>
+                        <h2 class='expanded' onclick='showHide(this,"AFUI_info");'>App Framework UI</h2>
                     <p id='AFUI_info'>App Framework UI is the User Interface/User Experience library for mobile applications. It uses HTML5 and CSS3 for animations and transitions. We built the kitchen sink using App Framework UI. It is comprised of components from the Plugins library
                         and additional features.
                         <br>* Fixed navigation bar
@@ -847,7 +840,7 @@ The parent id for this div is "content". Let's verify it.
                     </ul>
                 </div>
                 <div id="uiicons" title="Vector Icons" class="panel">
-                    	<h2 class='expanded' onclick='showHide(this,"icons_info");'>Vector Icons</h2>
+                        <h2 class='expanded' onclick='showHide(this,"icons_info");'>Vector Icons</h2>
                     <p id='icons_info'>App Framework UI provides Vector icons to use throughout your app. Simply add the icon class, along with the image class name and additional sizes you want.
                         <br>.mini -  .7em high
                         <br>.big - 1.5em hight
@@ -1032,7 +1025,7 @@ The parent id for this div is "content". Let's verify it.
                     </ul>
                 </div>
                 <div id="uidefer" title="Defer Loading" class="panel" data-defer="defer.html">Deferred loading requires a web browser for Ajax to work. What we do is load the html after $.ui.ready is called, so you can speed up the initial loading time of your app.</div>
-                <div id="uiside" title="Side Menu Navigation" class="panel" data-footer="footerui">	<b>Side Menu Navigation</b>
+                <div id="uiside" title="Side Menu Navigation" class="panel" data-footer="footerui"> <b>Side Menu Navigation</b>
                     <br>If you are on a tablet, you'll already see the side menu. If you are on a phone, click the "Powered by AppFramework" button to expand it.
                     <br>
                     <Br>Side menu's are created using the &lt;nav&gt; tags. You can set the id and then refer to them on each panel by setting the data-menu='id' property. The side menu's will only show if you have &lt;nav&gt; defined.</div>
@@ -1085,6 +1078,7 @@ The parent id for this div is "content". Let's verify it.
                 <div id="afforms" title="Form Styles" class="panel" data-footer='footerui'>
                 <div class="formGroupHead">Standard</div>
                 <form>
+                    <input type="range" >
                     <input type="text" placeholder="test">
                     <input type="search" placeholder="search">
                     <textarea rows="6" placeholder="Enter your address"></textarea>
@@ -1147,8 +1141,8 @@ The parent id for this div is "content". Let's verify it.
 
                 </div>
                 <div title="Transitions" id="aftransitions" class="panel" data-footer='footerui'>
-                    	<h2 class='expanded' onclick='showHide(this,"AFUI_transitions");'>App Framework UI</h2>
-                    <p id='AFUI_transitions'>	<strong>af.ui transitions</strong> the following are transitions built in. You can easily add/extend with your own. Set the data-transition attribute on an anchor to change the transition.</p>
+                        <h2 class='expanded' onclick='showHide(this,"AFUI_transitions");'>App Framework UI</h2>
+                    <p id='AFUI_transitions'>   <strong>af.ui transitions</strong> the following are transitions built in. You can easily add/extend with your own. Set the data-transition attribute on an anchor to change the transition.</p>
                     <ul class="list">
                         <li>
                             <a href="#transition1" data-transition="slide">Slide</a>
@@ -1169,7 +1163,10 @@ The parent id for this div is "content". Let's verify it.
                             <a href="#transition6" data-transition="fade">Fade</a>
                         </li>
                         <li>
-                            <a href="#transition7">Modal</a>
+                            <a href="#transition7">Default Modal</a>
+                        </li>
+                        <li>
+                            <a href="#transition8">Custom Modal</a>
                         </li>
                     </ul>
                     <br/>
@@ -1259,8 +1256,8 @@ The parent id for this div is "content". Let's verify it.
                         <a class="button">Test</a>
                     </div>
                     <br><br>
-                    Grouped flexbox<br><br>
-                    <div class="button-grouped flex">
+                    Grouped flexbox and tabbed (tabbed keeps pressed state)<br><br>
+                    <div class="button-grouped flex tabbed">
                         <a class="button icon cloud">App Framework Button Groups</a>
                         <a class="button">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</a>
                         <a class="button">Test</a>
@@ -1335,20 +1332,20 @@ The parent id for this div is "content". Let's verify it.
                     </ul>
                 </div>
                 <div id="uibadge" title="updateBadge" class="panel" data-footer='footerui'>Updates a badge with the given value or creates one.
-                    <br>Position can be	<div class="samplecode">
-							bl - bottom left<br>
-							tl - top left<br>
-							br - bottom right<br>
-							tr - top right (default)<br>
-						</div>
+                    <br>Position can be <div class="samplecode">
+                            bl - bottom left<br>
+                            tl - top left<br>
+                            br - bottom right<br>
+                            tr - top right (default)<br>
+                        </div>
 
                     <ul class="list">
                         <li id='libadge'>
                             <a >Badge</a>
                         </li>
-                    </ul>	<div class="samplecode">
-							$.ui.updateBadge("#libadge","Badge Created","bl");
-						</div>
+                    </ul>   <div class="samplecode">
+                            $.ui.updateBadge("#libadge","Badge Created","bl");
+                        </div>
 
                     <a  onclick="$.ui.updateBadge('#libadge','Badge Created','tl');" class="button">Create Badge</a>
                     <br>
@@ -1358,40 +1355,40 @@ The parent id for this div is "content". Let's verify it.
                         <li id='libadge2'>
                             <a >Badge</a>
                         </li>
-                    </ul>	<div class="samplecode">
-							$.ui.removeBadge("#target");
-						</div>
+                    </ul>   <div class="samplecode">
+                            $.ui.removeBadge("#target");
+                        </div>
 
                     <a  onclick="$.ui.updateBadge('#libadge2','2','tl');" class="button">Create Badge</a>
                     <br>
                     <a  onclick="$.ui.removeBadge('#libadge2');" class="button">Remove Badge</a>
                 </div>
-                <div id="uiready" title="Ready" class="panel" data-footer='footerui'>Execute a function when $.ui.launch has completed	<div class="samplecode">
-							$.ui.ready(function(){});
-						</div>
+                <div id="uiready" title="Ready" class="panel" data-footer='footerui'>Execute a function when $.ui.launch has completed  <div class="samplecode">
+                            $.ui.ready(function(){});
+                        </div>
 
                 </div>
-                <div id="uigoback" title="Go Back" class="panel" data-footer='footerui'>You can use this command to go back in history.	<div class="samplecode">
-							$.ui.goBack()
-						</div>
+                <div id="uigoback" title="Go Back" class="panel" data-footer='footerui'>You can use this command to go back in history. <div class="samplecode">
+                            $.ui.goBack()
+                        </div>
 
                     <a  onclick="$.ui.goBack()" class="button">Go Back</a>
                 </div>
-                <div id="uilaunch" title="Launch" class="panel" data-footer='footerui'>You can use this command to launch your App Framework UI app if you set autoLaunch=false;	<div class="samplecode">
-							$.ui.autoLaunch=false;<br>
-							$.ui.golaunch()
-						</div>
+                <div id="uilaunch" title="Launch" class="panel" data-footer='footerui'>You can use this command to launch your App Framework UI app if you set autoLaunch=false;    <div class="samplecode">
+                            $.ui.autoLaunch=false;<br>
+                            $.ui.golaunch()
+                        </div>
 
                 </div>
-                <div id="uiclearhistory" title="Clear History" class="panel" data-footer='footerui'>You can use this command to clear the history stack manually	<div class="samplecode">
-							$.ui.clearHistory()
-						</div>
+                <div id="uiclearhistory" title="Clear History" class="panel" data-footer='footerui'>You can use this command to clear the history stack manually    <div class="samplecode">
+                            $.ui.clearHistory()
+                        </div>
 
                     <a  onclick="$.ui.clearHistory()" class="button">Clear History Stack</a>
                 </div>
-                <div id="uiaddcontentdiv" title="Add Content Div" class="panel" data-footer='footerui'>You can use this command to add a new div programatically. This will setup scrolling, etc.	<div class="samplecode">
-							$.ui.addContentDiv(id, content,title, pullToRefresh, refreshFunc)
-						</div>
+                <div id="uiaddcontentdiv" title="Add Content Div" class="panel" data-footer='footerui'>You can use this command to add a new div programatically. This will setup scrolling, etc.   <div class="samplecode">
+                            $.ui.addContentDiv(id, content,title, pullToRefresh, refreshFunc)
+                        </div>
 
                     <script>
                         function addDiv() {
@@ -1399,29 +1396,29 @@ The parent id for this div is "content". Let's verify it.
                             $("#addContent").show();
                             $("#addContentButton").hide();
                         }
-                    </script>	<span id="addContent" style='display:none'>
-							<a href="#myAddedDiv" class="button">View new div</a>
-							<br/>
-						</span>
+                    </script>   <span id="addContent" style='display:none'>
+                            <a href="#myAddedDiv" class="button">View new div</a>
+                            <br/>
+                        </span>
 
                     <a id='addContentButton'  onclick="addDiv();" class="button">Add Content Div</a>
                 </div>
-                <div id="uisettitle" title="Set Title" class="panel" data-footer='footerui'>This will set the page title of the current page programatically. It will not be retained.	<div class="samplecode">
-							$.ui.setTitle('Title Change');
-						</div>
+                <div id="uisettitle" title="Set Title" class="panel" data-footer='footerui'>This will set the page title of the current page programatically. It will not be retained.  <div class="samplecode">
+                            $.ui.setTitle('Title Change');
+                        </div>
 
                     <a  onclick="$.ui.setTitle('Title Change');" class="button">Change Title</a>
                 </div>
-                <div id="uisetbackbutton" title="Change Back Button Text" class="panel" data-footer='footerui'>This will set the back button text. You can also override this at the start, which we have done.	<div class="samplecode">
-							$.ui.setBackButtonText('GO BACK');<br><br>
+                <div id="uisetbackbutton" title="Change Back Button Text" class="panel" data-footer='footerui'>This will set the back button text. You can also override this at the start, which we have done. <div class="samplecode">
+                            $.ui.setBackButtonText('GO BACK');<br><br>
 
-							$.ui.backButtonText="Back" //override
-						</div>
+                            $.ui.backButtonText="Back" //override
+                        </div>
 
                 </div>
-                <div id="uishowmask" title="Show Mask" class="panel" data-footer='footerui'>This will show the loading mask. You can trigger this manually for long operations.	<div class="samplecode">
-							$.ui.showMask();
-						</div>
+                <div id="uishowmask" title="Show Mask" class="panel" data-footer='footerui'>This will show the loading mask. You can trigger this manually for long operations. <div class="samplecode">
+                            $.ui.showMask();
+                        </div>
 
                     <script>
                         function showMask(text) {
@@ -1434,41 +1431,41 @@ The parent id for this div is "content". Let's verify it.
                     </script>
                     <a  onclick="showMask('Mask will hide in 2 seconds')" class="button">Show Mask</a>
                 </div>
-                <div id="uihidemask" title="Hide Mask" class="panel" data-footer='footerui'>This will hide the loading mask. You can trigger this manually for long operations.	<div class="samplecode">
-							$.ui.hideMask();
-						</div>
+                <div id="uihidemask" title="Hide Mask" class="panel" data-footer='footerui'>This will hide the loading mask. You can trigger this manually for long operations. <div class="samplecode">
+                            $.ui.hideMask();
+                        </div>
 
                     <a  onclick="$.ui.showMask()" class="button">Show Mask</a>|
                     <a  onclick="$.ui.hideMask()" class="button">Hide Mask</a>
                 </div>
-                <div id="uiloadcontent" title="Load Div" class="panel" data-footer='footerui'>This allows you to programatically trigger a page transition/navigation event.	<div class="samplecode">
-							$.ui.loadContent()
-						</div>
+                <div id="uiloadcontent" title="Load Div" class="panel" data-footer='footerui'>This allows you to programatically trigger a page transition/navigation event.    <div class="samplecode">
+                            $.ui.loadContent()
+                        </div>
 
                     <a  onclick="$.ui.loadContent('uiapi',false,false,'flip')" class="button">Load $.ui API page with a flip</a>
                 </div>
-                <div id="uitoggleheader" title="Toggle Header" class="panel" data-footer="footerui">This allows you to hide/show the header bar if you have one. When you do this, the content area will expand up for you.	<div class="samplecode">
-							$.ui.toggleHeaderMenu();
-						</div>
+                <div id="uitoggleheader" title="Toggle Header" class="panel" data-footer="footerui">This allows you to hide/show the header bar if you have one. When you do this, the content area will expand up for you. <div class="samplecode">
+                            $.ui.toggleHeaderMenu();
+                        </div>
 
                     <a  onclick="$.ui.toggleHeaderMenu()" class="button">Toggle Header Menu</a>
                 </div>
                 <div id="uitogglenav" title="Toggle Footer Nav" class="panel" data-footer="footerui">This lets you toggle the footer navigation menu if you have one. when you do this, the content area will expand down for you.
-                    <br>You can also do this by setting data-footer="none" on the panel	<div class="samplecode">
-							$.ui.toggleNavMenu();
-						</div>
+                    <br>You can also do this by setting data-footer="none" on the panel <div class="samplecode">
+                            $.ui.toggleNavMenu();
+                        </div>
 
                     <a  onclick="$.ui.toggleNavMenu()" class="button">Toggle Nav Menu</a>
                 </div>
-                <div id="uitoggleside" title="Toggle Side Nav" class="panel" data-footer="footerui">This lets you toggle the side navigation menu if you have one. On a tablet, this will be persistent by default.	<div class="samplecode">
-							$.ui.toggleSideNav();
-						</div>
+                <div id="uitoggleside" title="Toggle Side Nav" class="panel" data-footer="footerui">This lets you toggle the side navigation menu if you have one. On a tablet, this will be persistent by default. <div class="samplecode">
+                            $.ui.toggleSideNav();
+                        </div>
 
                     <a  onclick="$.ui.toggleSideMenu();" class="button">Toggle Side Menu</a>
                 </div>
-                <div id="uiactionsheet" title="Actionsheet" class="panel" data-footer='footerui'>This is a shortcut to the actionsheet plugin. This will wire it correctly to App Framework UI div	<div class="samplecode">
-							$.ui.actionsheet()
-						</div>
+                <div id="uiactionsheet" title="Actionsheet" class="panel" data-footer='footerui'>This is a shortcut to the actionsheet plugin. This will wire it correctly to App Framework UI div  <div class="samplecode">
+                            $.ui.actionsheet()
+                        </div>
 
                     <br>
                     <br>
@@ -1476,9 +1473,9 @@ The parent id for this div is "content". Let's verify it.
                     <br/>
                     <br/>
                 </div>
-                <div id="uiscrolltotop" title="Scroll to Top" class="panel" data-footer='footerui'>This allows you to scroll to the top of a page. Scroll to the bottom for the link.	<div class="samplecode">
-							$.ui.scrollToTop(div_id)
-						</div>
+                <div id="uiscrolltotop" title="Scroll to Top" class="panel" data-footer='footerui'>This allows you to scroll to the top of a page. Scroll to the bottom for the link.   <div class="samplecode">
+                            $.ui.scrollToTop(div_id)
+                        </div>
 
                     <br>
                     <br>Keep scrolling down.
@@ -1530,9 +1527,9 @@ The parent id for this div is "content". Let's verify it.
                     <br/>
                     <br/>
                 </div>
-                <div id="uiscrolltobottom" title="Scroll to Bottom" class="panel" data-footer='footerui'>This allows you to scroll to the top of a page. Scroll to the bottom for the link.	<div class="samplecode">
-							$.ui.scrollToTop(div_id)
-						</div>
+                <div id="uiscrolltobottom" title="Scroll to Bottom" class="panel" data-footer='footerui'>This allows you to scroll to the top of a page. Scroll to the bottom for the link. <div class="samplecode">
+                            $.ui.scrollToTop(div_id)
+                        </div>
 
                     <a  onclick="$.ui.scrollToBottom('uiscrolltobottom')" class="button">Scroll to Bottom</a>
                     <br>
@@ -1604,18 +1601,34 @@ The parent id for this div is "content". Let's verify it.
                 <div title="Fade" id="transition6" class="panel splashscreen" data-footer='footerui' style="padding-left:0px">
                     <div style="text-align:center;width:100%;color:white;font-size:40px">App Framework Fade Transition</div>
                 </div>
-                <div title="Modal" id="transition7" class="panel" data-modal="true" data-unload="unloadedPanel">I'm a modal window...woot woot
+                <div title="Modal" id="transition7" class="panel" data-modal="true" data-unload="unloadedPanel">
+                    I'm a default modal window, with no footer and header with a close button
+                </div>
+                <div title="Modal" id="transition8" class="panel" data-modal="true" data-unload="unloadedPanel">
+                    <header>
+                        <h1>Custom Modal</h1>
+                    </header>
+                    I'm a custom modal window
+                    <br>
+                    <br>
+                    A button with onclick='$.ui.hideModal()' can to be added on modal to close.
+                    <br>
+                    <br>
+                    data-header="none" on the panel will hide the header in modal
                     <br>
                     <br>
                     <br>Check the input box out below.
                     <br>
                     <input type="text" class="af-ui-forms" id="modal_test">
-                </div>
+                    <footer>
+                        <a href="#" onclick='$.ui.hideModal()' class="icon home">Test</a>
+                    </footer>
+                </div>                        
                 <!-- ------------------------------------------ -->
                 <!-- ------------------------------------------ -->
                 <!-- Plugins -->
                 <div title="Plugins" id="afweb" class="panel" data-header="testheader">
-                    	<h2 class='expanded' onclick='showHide(this,"afweb_info");'>Plugins</h2>
+                        <h2 class='expanded' onclick='showHide(this,"afweb_info");'>Plugins</h2>
                     <p id='afweb_info'>This is our plugin library of widgets to assist you with developing mobile applications. Some of these are used in App Framework UI.</p>
                     <ul class="list">
                         <li>
@@ -1654,6 +1667,7 @@ The parent id for this div is "content". Let's verify it.
                             // myScroller=$.ui.scrollingDivs['webslider'];
                             myScroller.addInfinite();
                             myScroller.addPullToRefresh();
+                            myScroller.runCB=true;
                             $.bind(myScroller, 'scrollend', function () {
                                 console.log("scroll end");
                             });
@@ -1661,15 +1675,16 @@ The parent id for this div is "content". Let's verify it.
                             $.bind(myScroller, 'scrollstart', function () {
                                 console.log("scroll start");
                             });
-                            
+                            $.bind(myScroller,"scroll",function(position){
+                                
+                            })
                             $.bind(myScroller, "refresh-trigger", function () {
-                                console.log("refresh-trigger");
+                                console.log("Refresh trigger");
                             });
-                            
                             var hideClose;
                             $.bind(myScroller, "refresh-release", function () {
-                                console.log("refresh-release");
                                 var that = this;
+                                console.log("Refresh release");
                                 clearTimeout(hideClose);
                                 hideClose = setTimeout(function () {
                                     console.log("hiding manually refresh");
@@ -1679,20 +1694,15 @@ The parent id for this div is "content". Let's verify it.
                             });
 
                             $.bind(myScroller, "refresh-cancel", function () {
-                                console.log("refresh-cancel");
                                 clearTimeout(hideClose);
+                                console.log("cancelled");
                             });
-                            
-                            $.bind(myScroller, "refresh-finish", function () {
-                                console.log("refresh-finish");
-                            });
-                            
                             myScroller.enable();
 
                             $.bind(myScroller, "infinite-scroll", function () {
                                 var self = this;
                                 console.log("infinite triggered");
-                                $(this.el).append("<div id='infinite' style='height:60px;line-height:60px;text-align:center;font-weight:bold'>Fetching content...</div>");
+                                $(this.el).append("<div id='infinite' style='border:2px solid black;margin-top:10px;width:100%;height:20px'>Fetching content...</div>");
                                 $.bind(myScroller, "infinite-scroll-end", function () {
                                     $.unbind(myScroller, "infinite-scroll-end");
                                     self.scrollToBottom();
@@ -1705,9 +1715,12 @@ The parent id for this div is "content". Let's verify it.
                                 });
                             });
                             $("#webslider").css("overflow", "auto");
+                            
+
+                            
                         });
                     </script>
-                    <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue sed convallis elementum, magna diam pharetra magna, id vestibulum est eros
+                                       <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta, lorem sit amet feugiat lacinia, mi dui sodales eros, id lacinia mauris urna eu est. Proin pulvinar, augue sed convallis elementum, magna diam pharetra magna, id vestibulum est eros
                         vitae ante. Ut auctor erat a tellus venenatis eu fermentum lorem scelerisque. Cras dignissim leo ornare massa sollicitudin sit amet pulvinar turpis hendrerit. Morbi hendrerit nunc eget turpis luctus id ultricies lorem consequat. Donec eu lacus sed mauris
                         sollicitudin laoreet. Cras vitae sodales diam. Donec mollis, libero ut pellentesque dignissim, risus orci ornare nisi, sed eleifend enim purus malesuada neque. Nulla tellus sem, scelerisque sed sagittis id, eleifend venenatis ligula. Vivamus placerat
                         neque sit amet metus ultricies facilisis. Nulla a odio magna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed commodo quam eu enim lacinia vitae ultrices nulla mollis. Aenean eget lectus turpis, at ultrices
@@ -1810,68 +1823,68 @@ The parent id for this div is "content". Let's verify it.
                     <br />
                     <div id="selectTest" style="-webkit-transform: translate3d(0, 0, 0)">
                         <!-- content goes here-->
-                        <br>	<span>
-													<select id="test" style="-webkit-appearance: listbox;">
-														<option value="1">One</option>
-														<option value="2">Two</option>
-														<option value="3">Three</option>
-													</select>
-												</span>
+                        <br>    <span>
+                                                    <select id="test" style="-webkit-appearance: listbox;">
+                                                        <option value="1">One</option>
+                                                        <option value="2">Two</option>
+                                                        <option value="3">Three</option>
+                                                    </select>
+                                                </span>
                         <br />
                         <br />
                         <br />
                         <br />
                     </div>
-                    <div id="selectTest2" style="position:relative;top:10;">	<span>
-													<select id="test2">
-														<option value="1">One</option>
-														<option value="2">Two</option>
-														<option value="3">Three</option>
-														<option value="11">1One</option>
-														<option value="22">2Two</option>
-														<option value="33">3Three</option>
-														<option value="43">4Three</option>
-														<option value="53">5Three</option>
-														<option value="63">6Three</option>
-														<option value="73">7Three</option>
-													</select>
-												</span>
+                    <div id="selectTest2" style="position:relative;top:10;">    <span>
+                                                    <select id="test2">
+                                                        <option value="1">One</option>
+                                                        <option value="2">Two</option>
+                                                        <option value="3">Three</option>
+                                                        <option value="11">1One</option>
+                                                        <option value="22">2Two</option>
+                                                        <option value="33">3Three</option>
+                                                        <option value="43">4Three</option>
+                                                        <option value="53">5Three</option>
+                                                        <option value="63">6Three</option>
+                                                        <option value="73">7Three</option>
+                                                    </select>
+                                                </span>
 
                         <br>
                         <br>
                         <br>This is disabled
-                        <br>	<span>
-													<select id="test3" disabled>
-														<option value="1">One</option>
-														<option value="2">Two</option>
-														<option value="3">Three</option>
-														<option value="11">1One</option>
-														<option value="22">2Two</option>
-														<option value="33">3Three</option>
-														<option value="43">4Three</option>
-														<option value="53">5Three</option>
-														<option value="63">6Three</option>
-														<option value="73">7Three</option>
-													</select>
-												</span>
+                        <br>    <span>
+                                                    <select id="test3" disabled>
+                                                        <option value="1">One</option>
+                                                        <option value="2">Two</option>
+                                                        <option value="3">Three</option>
+                                                        <option value="11">1One</option>
+                                                        <option value="22">2Two</option>
+                                                        <option value="33">3Three</option>
+                                                        <option value="43">4Three</option>
+                                                        <option value="53">5Three</option>
+                                                        <option value="63">6Three</option>
+                                                        <option value="73">7Three</option>
+                                                    </select>
+                                                </span>
 
                         <br>
                         <br>
                         <br>This is a multi select box test
-                        <br>	<span>
-													<select id="test4" multiple="multiple">
-														<option value="1">One</option>
-														<option value="2">Two</option>
-														<option value="3">Three</option>
-														<option value="11">1One</option>
-														<option value="22">2Two</option>
-														<option value="33">3Three</option>
-														<option value="43">4Three</option>
-														<option value="53">5Three</option>
-														<option value="63">6Three</option>
-														<option value="73">7Three</option>
-													</select>
-												</span>
+                        <br>    <span>
+                                                    <select id="test4" multiple="multiple">
+                                                        <option value="1">One</option>
+                                                        <option value="2">Two</option>
+                                                        <option value="3">Three</option>
+                                                        <option value="11">1One</option>
+                                                        <option value="22">2Two</option>
+                                                        <option value="33">3Three</option>
+                                                        <option value="43">4Three</option>
+                                                        <option value="53">5Three</option>
+                                                        <option value="63">6Three</option>
+                                                        <option value="73">7Three</option>
+                                                    </select>
+                                                </span>
 
                     </div>
                     <br/>
@@ -1909,9 +1922,9 @@ The parent id for this div is "content". Let's verify it.
                     </script>On android devices, this replaces password boxes with a custom control to fix the Webkit css3 transform3d bug. you can also show/hide passwords.
                     <br />
                     <br />
-                    <div id="selectPassword" style=" -webkit-transform: translate3d(0, 0, 0)">	<span><input type="password" id="one" name="one" placeholder="Password" style="width:200px;color:black;"></span>
+                    <div id="selectPassword" style=" -webkit-transform: translate3d(0, 0, 0)">  <span><input type="password" id="one" name="one" placeholder="Password" style="width:200px;color:black;"></span>
 
-                        <br />	<span id="showPassword" style="display:none">
+                        <br />  <span id="showPassword" style="display:none">
                          <div class="input">
                             <label>Toggle:</label><input type="checkbox" id="showpw" onClick="ShowHidePW()"> <label for="showpw" ></label></span>
                         </div>
@@ -2131,7 +2144,7 @@ The parent id for this div is "content". Let's verify it.
             <!-- ------------------------------------------ -->
             <!-- navbar -->
             
-            <div id="navbar" style='margin: 0;float:left;'>
+            <div id="navbar">
                 <a href="#main/1/3" id='navbar_home' class='icon home'>home <span class='af-badge lr'>3</span></a><a href="#af" id='navbar_js' class="icon target">selectors</a><a href="#afuidemo" id='navbar_ui' class="icon picture">ui</a><a href="#afweb" id='navbar_plugins' class="icon key">plugins</a>
             </div>
         
@@ -2148,9 +2161,9 @@ The parent id for this div is "content". Let's verify it.
                 <a href="#uiapi" id='navbar_plugins' class="icon info">api</a>
             </footer>
             <header id="testheader">
-                <a id="backButton" onclick="$.ui.goBack()" class='button'>Go Back</a>
-                	<h1>Custom Header</h1>
-
+                <a id="backButton" onclick="$.ui.goBack()" class='button'>Back</a>
+                    <h1>Custom Header</h1>
+                <a class="button icon settings" style="float:right">Button</a>
             </header>
             <!-- ------------------------------------------ -->
             <nav>
@@ -2302,6 +2315,9 @@ The parent id for this div is "content". Let's verify it.
                     </li>
                 </ul>
             </nav>
+            <aside>
+                This is a chat aside
+            </aside>
         </div>
 
     </body>

@@ -14,7 +14,7 @@
 
 
 .afPopup {
-     display: block;
+    display: block;
     width: 280px;
     float:left;
     border: solid 1px #72767b;
@@ -35,7 +35,7 @@
     color:white;
 }
 .afPopup >* {
-color:inherit;
+    color:inherit;
 }
 
 .afPopup.hidden {
@@ -50,11 +50,11 @@ color:inherit;
     font-weight:bold;
     font-size:20px;
     margin:0;
-    padding:0;
+    padding:5px;
 }
 
 .afPopup>DIV{
-    font-size:12px;
+    font-size:14px;
     margin:8px;
 }
 
@@ -66,11 +66,12 @@ color:inherit;
 
 .afPopup>FOOTER>A#cancel{
     float:left;
+    margin-left:5px;
 }
 
 .afPopup>FOOTER>A#action{
     float:right;
-    margin-right:4px;
+    margin-right:5px;
 }
 
 .afPopup>FOOTER>A.center{

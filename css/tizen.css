@@ -1,0 +1,236 @@
+/*
+
+313f66*/
+
+#afui.tizen {
+    font:14px  'TizenSans',sans-serif;
+    background:#000;
+    color:#fff;
+    border-color:#fff;
+}
+
+#afui.tizen.light {
+    background:#FDFDFD;
+    color:#000;
+}
+
+#afui.tizen  .header {
+    background:#313f66;
+    color:inherit;
+    border-color:#313f66;
+}
+
+#afui.tizen.light  .header {
+    background:#e9e6df;
+    color:inherit;
+    border-color:#e9e6df;
+}
+
+#afui.tizen .header .button {
+    color: inherit;
+    border-color:transparent;
+    font-size:14px;
+}
+
+#afui.tizen .header .button-grouped>.button {
+    border-color:#aaa;
+}
+
+#afui.tizen  .footer {
+    box-shadow: none;
+    background: none;
+    border-color: #000;
+    padding:0;
+}
+
+#afui.tizen .footer>footer>a:not(.button) {
+    color: inherit;
+    height:49px;
+    top:0px;
+    border-top:4px solid #414f6e;
+    background:#414f6e;
+}
+
+#afui.tizen .footer>footer>a.pressed:not(.button) {
+    border-top:4px solid #316fc6;
+    background:#313f66;
+}
+
+#afui.tizen .footer>footer>a.icon.pressed:not(.button):before {
+    color:inherit;
+}
+
+#afui.tizen.light .footer {
+    border-color: #fff;
+}
+
+#afui.tizen.light .footer>footer>a:not(.button) {
+    border-top:4px solid #dedcd5;
+    background:#dedcd5;
+}
+
+#afui.tizen.light .footer>footer>a.pressed:not(.button) {
+    border-top:4px solid #ceccc5;
+    background:#e9e6df;
+}
+
+#afui.tizen #backButton {
+    background: inherit;
+    color:inherit;
+}
+
+#afui.tizen .menuButton:after {
+    border-color:white;
+}
+
+#afui.tizen.light .menuButton:after {
+    border-color:black;
+}
+
+#afui.tizen .af-badge {
+    border:none;
+}
+
+#afui.tizen .panel, #afui.tizen #modalContainer {
+    background:#000;
+    color:#fff;
+}
+
+#afui.tizen .list {
+    background:inherit;
+    color:inherit;
+    border-color:#303030;
+}
+
+#afui.tizen .list .divider { color:black; }
+
+#afui.tizen .panel h2 { color:inherit; }
+
+
+#afui.tizen .collapsed:after {border-top: 6px solid;}
+#afui.tizen .collapsed:before {border:2px solid;}
+#afui.tizen .expanded:after {border-bottom: 6px solid;}
+#afui.tizen .expanded:before {border:2px solid;}
+
+#afui.tizen .collapsed:before,#afui.tizen .expanded:before {
+    border-color: inherit;
+}
+#afui.tizen .collapsed:after,
+#afui.tizen .expanded:after{
+    border-top-color:inherit;
+    border-top-color:inherit;
+}
+
+#afui.tizen .afScrollbar {background:white !important;}
+#afui.tizen.light .afScrollbar {background:black !important;}
+
+#afui.tizen select, #afui.tizen textarea, #afui.tizen input[type="text"],
+#afui.tizen input[type=search], #afui.tizen input[type="password"],
+#afui.tizen input[type="datetime"], #afui.tizen input[type="datetime-local"],
+#afui.tizen input[type="date"], #afui.tizen input[type="month"],
+#afui.tizen input[type="time"], #afui.tizen input[type="week"],
+#afui.tizen input[type="number"], #afui.tizen input[type="email"],
+#afui.tizen input[type="url"], #afui.tizen input[type="tel"],
+#afui.tizen input[type="color"], #afui.tizen .input-group {
+    background:inherit;
+    color:inherit;
+}
+
+#afui.tizen input.toggle+label:after { color:inherit; }
+
+#afui.tizen input.toggle+label { border-radius:0; }
+
+#afui.tizen input.toggle+label > span {
+    border-radius:0;
+    top:0;
+    width:27px;
+    height:23px;
+}
+
+#afui.tizen label { color:inherit; }
+
+#afui.tizen input[type="radio"]:checked+label:before,#afui.tizen input[type="checkbox"]:checked+label:before {
+    background: #313f66;
+}
+
+#afui.tizen > #aside_menu,
+#afui.tizen > #menu {
+    border-right: 1px solid rgba(128,128,128,0.5);
+    color:inherit;
+    background:inherit;
+}
+
+#afui.tizen #aside_menu .list li,
+#afui.tizen #menu .list li {
+    box-shadow:none;
+    border-color:#ccc;
+}
+
+#afui.tizen #aside_menu .list .divider,
+#afui.tizen #menu .list .divider {
+    background:inherit;
+    color:inherit;
+    font-size: 1em;
+}
+
+#afui.tizen #aside_menu .list > li > a,
+#afui.tizen #menu .list > li > a {
+    background:inherit;
+    color:inherit;
+    font-size: 1em;
+}
+
+#afui.tizen #aside_menu .list,
+#afui.tizen #menu .list {
+    font-weight: normal;
+}
+
+#afui.tizen .afPopup {
+    border: solid 1px #888;
+    padding: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-transform:none;
+    transform:none;
+    -webkit-transition: none;
+    transition:none;
+    background:#313f66;
+    color:inherit;
+}
+
+#afui.tizen.light .afPopup {
+    background:#e9e6df;
+}
+
+#afui.tizen .afPopup>HEADER{   
+    text-align:center;
+    padding:5px;
+}
+
+#afui.tizen .afPopup>DIV{
+    font-size:14px;
+    text-align:center;
+    padding:5px;
+    margin:0;
+}
+
+#afui.tizen .afPopup>FOOTER>A{
+    width:120px;
+}
+
+#afui.tizen #af_actionsheet {
+    background:inherit;
+    color:inherit;
+}
+
+#afui.tizen #af_actionsheet a{
+    border-radius:0;
+    -webkit-border-radius:0;
+    border:1px solid #ccc;
+    background:#313f66;
+    color:inherit;
+}
+
+#afui.tizen.light #af_actionsheet a{
+    background:#e9e6df;
+}

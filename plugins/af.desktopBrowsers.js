@@ -1,8 +1,9 @@
 //desktopBrowsers contributed by Carlos Ouro @ Badoo
 //translates desktop browsers events to touch events and prevents defaults
 //It can be used independently in other apps but it is required for using the touchLayer in the desktop
-
-;(function ($) {
+/* global af*/
+(function ($) {
+    "use strict";
     var cancelClickMove = false;
     var preventAll = function (e) {
         e.preventDefault();
@@ -14,9 +15,9 @@
         var theTarget = newTarget ? newTarget : originalEvent.target;
 
         //stop propagation, and remove default behavior for everything but INPUT, TEXTAREA & SELECT fields
-        if (theTarget.tagName.toUpperCase().indexOf("SELECT") == -1 &&
-            theTarget.tagName.toUpperCase().indexOf("TEXTAREA") == -1 &&
-            theTarget.tagName.toUpperCase().indexOf("INPUT") == -1) //SELECT, TEXTAREA & INPUT
+        if (theTarget.tagName.toUpperCase().indexOf("SELECT") === -1 &&
+            theTarget.tagName.toUpperCase().indexOf("TEXTAREA") === -1 &&
+            theTarget.tagName.toUpperCase().indexOf("INPUT") === -1) //SELECT, TEXTAREA & INPUT
         {
             preventAll(originalEvent);
         }
@@ -25,7 +26,7 @@
 
         touchevt.initEvent(type, true, true);
         touchevt.initMouseEvent(type, true, true, window, originalEvent.detail, originalEvent.screenX, originalEvent.screenY, originalEvent.clientX, originalEvent.clientY, originalEvent.ctrlKey, originalEvent.shiftKey, originalEvent.altKey, originalEvent.metaKey, originalEvent.button, originalEvent.relatedTarget);
-        if (type != 'touchend') {
+        if (type !== "touchend") {
             touchevt.touches = [];
             touchevt.touches[0] = {};
             touchevt.touches[0].pageX = originalEvent.pageX;
@@ -53,14 +54,14 @@
 
     var mouseDown = false,
         lastTarget = null,
-        firstMove = false;
-        prevX=0,prevY=0;
+        prevX=0,
+        prevY=0;
     if (!window.navigator.msPointerEnabled) {
 
         document.addEventListener("mousedown", function (e) {
             mouseDown = true;
             lastTarget = e.target;
-            if (e.target.nodeName.toLowerCase() == "a" && e.target.href.toLowerCase() == "javascript:;")
+            if (e.target.nodeName.toLowerCase() === "a" && e.target.href.toLowerCase() === "javascript:;")
                 e.target.href = "#";
             redirectMouseToTouch("touchstart", e);
             cancelClickMove = false;
@@ -76,7 +77,7 @@
         }, true);
 
         document.addEventListener("mousemove", function (e) {
-             if(e.clientX==prevX&&e.clientY==prevY) return;
+            if(e.clientX===prevX&&e.clientY===prevY) return;
             if (!mouseDown) return;
             redirectMouseToTouch("touchmove", e, lastTarget);
             e.preventDefault();
@@ -84,12 +85,13 @@
             cancelClickMove = true;
         }, true);
     } else { //Win8
-
+        var skipMove=false;
         document.addEventListener("MSPointerDown", function (e) {
 
             mouseDown = true;
+            skipMove=true;
             lastTarget = e.target;
-            if (e.target.nodeName.toLowerCase() == "a" && e.target.href.toLowerCase() == "javascript:;")
+            if (e.target.nodeName.toLowerCase() === "a" && e.target.href.toLowerCase() === "javascript:;")
                 e.target.href = "";
             redirectMouseToTouch("touchstart", e);
             cancelClickMove = false;
@@ -107,7 +109,11 @@
         }, true);
 
         document.addEventListener("MSPointerMove", function (e) {
-            if(e.clientX==prevX&&e.clientY==prevY) return;
+            if(skipMove){
+                skipMove=false;
+                return;
+            }
+            if(e.clientX===prevX&&e.clientY===prevY) return;
             if (!mouseDown) return;
             redirectMouseToTouch("touchmove", e, lastTarget);
             e.preventDefault();
@@ -127,9 +133,18 @@
     document.addEventListener("dragleave", preventAll, true);
     document.addEventListener("dragend", preventAll, true);
     document.addEventListener("drop", preventAll, true);
-    document.addEventListener("selectstart", preventAll, true);
+    //Allow selection of input elements
+    document.addEventListener("selectstart", function(e){
+        var theTarget = e.target;
+        if (theTarget.tagName.toUpperCase().indexOf("SELECT") === -1 &&
+            theTarget.tagName.toUpperCase().indexOf("TEXTAREA") === -1 &&
+            theTarget.tagName.toUpperCase().indexOf("INPUT") === -1) //SELECT, TEXTAREA & INPUT
+        {
+            preventAll(e);
+        }
+    }, true);
     document.addEventListener("click", function (e) {
-        if (!e.mouseToTouch && e.target == lastTarget) {
+        if (!e.mouseToTouch && e.target === lastTarget) {
             preventAll(e);
         }
         if (cancelClickMove) {
@@ -145,4 +160,4 @@
         document.dispatchEvent(touchevt);
     }, false);
 
-})(jq);
+})(af);

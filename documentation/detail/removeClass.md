@@ -10,8 +10,3 @@ Then using $().removeClass() we can remove the css class defined as by greenredc
 ```js
 $("#removeclass_content").removeClass("greenredclass");
 ```
- 
-
-</br>   
-<div style='border:1px solid black' id="removeclass_content" class="greenredclass">This is some content</div>
-<input type="button" value="Remove the Class" onclick='$("#removeclass_content").removeClass("greenredclass");'>

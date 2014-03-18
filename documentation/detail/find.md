@@ -18,24 +18,3 @@ Staring with the div "bar", we will find everything with class "foo"
 ```js
 $("#bar").find(".foo"); 
 ```
-
-The result is a list item and a span.  Below we will alert the node names of the items found.
-
-<div id="bar">
-
-	<ul>
-		<li class="foo">Foo</li>
-		<li>Bar</li>
-	</ul>
-	<span class="foo">Foo</span>
-	<span>Bar</span>
-</div>
-
-<script>
-function findTest(){
-	var elems=$("#bar").find(".foo");
-	alert(elems[0].nodeName+ " "+elems[1].nodeName); 
-}
-</script>
-
-<input type="button" value="Find Test" onclick="findTest()">

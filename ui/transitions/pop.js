@@ -1,8 +1,8 @@
+/* global af*/
 (function ($ui) {
-
+    "use strict";
     function popTransition(oldDiv, currDiv, back) {
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
+        /*jshint validthis:true */
         var that = this;
         if (back) {
             currDiv.style.zIndex = 1;

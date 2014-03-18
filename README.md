@@ -13,13 +13,25 @@ You can contribute to the core code by forking it and make a pull request.  Plea
 You can make changes to the following files.
 
 1. appframework.js
-2. css/src/*.css
-3. ui/src/appframework.ui.js
+2. css/*.css
+3. ui/appframework.ui.js
 4. ui/transitions/*.js
 5. plugins/*.js
-6. plugins/*.css
+6. plugins/css/*.css
 
-Once a pull request is accepted, we will rebuild the necessary files and push them back up to github.
+
+#Building
+
+We use Grunt to build our compiled files.  When you have made a change, run "grunt rebuild" to compile new source and minified files to include in your PR.
+
+grunt-closure-compiler requires the closure compiler jar file.  The path is set in Gruntfile.js, but by default should exist in a directory called "closure" parallel to App Framework
+
+```
+  -- appframework
+  -- closure
+    -- build
+      -- compiler.jar
+```
 
 # Pull Requests
 
@@ -58,3 +70,5 @@ App Framework uses code from the following software:
 1) Zepto.js - Thomas Fuchs (MIT X11 License)
 
 2) qUnit - jQuery Foundation (MIT X11 License)
+
+3) ayepromise - Christoph Burgmer (BSD License)

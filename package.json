@@ -1,6 +1,6 @@
 {
   "name": "intel-appframework",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "App Framework is a Javascript framework targeted at HTML5 browsers with a blazingly fast query selector library that supports W3C queries.",
   "main": "appframework.min.js",
   "scripts": {
@@ -45,11 +45,13 @@
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-cssmin": "~0.4.1",
     "grunt-contrib-concat": "~0.3.0",
-    "grunt-mochaccino": "~0.1.4",
+    "grunt-mochaccino": "~0.1.7",
+    "grunt-banner": "~0.2.0",
+    "grunt-closure-compiler": "~0.0.21",
     "chai": "~1.7.2",
     "blanket": "~1.1.5",
     "grunt-cli": "~0.1.9",
-    "jsdom": "~0.8.4",
+    "jsdom": "~0.8.10",
     "sinon": "~1.7.3",
     "express": "~3.3.7"
   }

@@ -46,15 +46,19 @@
 	}
 
 	.afFakeSelect {
-		width:200px;
-		height:30px;
-		display:inline-block;
-		border:1px solid #ccc;
-		border-radius:5px;
-		line-height:2em;
-		font-size:1em;
-		padding-left:10px;
-		position:relative;
+		width: 200px;
+		height: 30px;
+		display: inline-block;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		line-height: 2em;
+		font-size: 1em;
+		padding-left: 10px;
+		position: relative;
+		padding-right: 35px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;		
 	}
 
 	.afFakeSelect:after {

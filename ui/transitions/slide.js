@@ -1,5 +1,6 @@
+/* global af*/
 (function ($ui) {
-
+    "use strict";
     /**
      * Initiate a sliding transition.  This is a sample to show how transitions are implemented.  These are registered in $ui.availableTransitions and take in three parameters.
      * @param {Object} previous panel
@@ -8,9 +9,7 @@
      * @title $ui.slideTransition(previousPanel,currentPanel,goBack);
      */
     function slideTransition(oldDiv, currDiv, back) {
-
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
+        /*jshint validthis:true */
         var that = this;
         if (back) {
             that.css3animate(oldDiv, {
@@ -55,5 +54,5 @@
         }
     }
     $ui.availableTransitions.slide = slideTransition;
-    $ui.availableTransitions['default'] = slideTransition;
+    $ui.availableTransitions["default"] = slideTransition;
 })(af.ui);

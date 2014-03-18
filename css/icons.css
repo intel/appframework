@@ -51,10 +51,10 @@ li .icon:before {
 	content: "\5f";
 }
 .icon.stack:before {
-	content: "\60";
+	content: "\61";
 }
 .icon.folder:before {
-	content: "\61";
+	content: "\60";
 }
 .icon.tag:before {
 	content: "\62";

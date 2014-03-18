@@ -1,0 +1,239 @@
+#afui.bb {
+    font-family: "Slate Pro",Slate,"Myriad Pro","BBAlpha Sans",Helvetica;
+    font-size: 12pt;
+}
+
+#afui.bb .header {
+    background:#00609E;
+    background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
+    background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    border-style:solid;
+    border-width:1px;
+    border-color:#009CE1 transparent #004E92 transparent;
+}
+
+#afui.bb .header h1 {
+    text-shadow:rgba(0,0,0,0.8) 0 1px 0;
+    font-weight:normal;
+}
+
+#afui.bb .list {
+    font-weight: normal;
+}
+
+#afui.bb #backButton {
+    display: block;
+    position: absolute;
+    line-height:60px;
+    left: 5px;
+    text-overflow: ellipsis;
+    font-size: 10px;
+    padding: 0;
+    color: #fff;
+    text-shadow: none;
+    background-color: transparent;
+    border:none;
+    border-color: transparent;
+    height: 44px;
+    top:0;
+    border-radius: 0;
+    box-shadow:none;
+    margin: 0;
+    padding-left: 0;
+    text-align: center;
+    width:50px;
+    padding:0 !important;
+    margin:0 !important;
+}
+
+#afui.bb #backButton::before {
+    z-index: -1;
+    font-size:22px;
+    position: absolute;
+    top: -15px;
+    left: 15px;
+    text-align: center;
+    border-radius: 0;
+    border: none;
+    border-color: transparent;
+    box-shadow: none;
+    -webkit-transform: none;
+    transform: none;
+    font-family: 'chevron';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    content: "\f054";
+    top:1px;
+    -webkit-transform:rotate(180deg);
+    transform:rotate(180deg);
+    background-color: transparent;
+}
+
+#afui.bb #backButton::after {
+    z-index: -1;
+    font-size:24px;
+    content: ' ';
+    position: absolute;
+    font-weight:bold;
+    background-color: transparent;
+    left:55px;
+    height:48px;
+    top:-5px;
+    width:2px;
+    background: #0aa9dc;
+    margin:auto;
+    text-align: center;
+    border-radius: 0;
+    border: none;
+    border-color: transparent;
+    box-shadow: none;
+    -webkit-transform: rotate(10deg);
+    transform: rotate(10deg);
+}
+
+#afui.bb .header .button {
+    color:#fff;
+    background:none;
+    text-shadow:0 -1px 0 #333;
+    border-color:transparent;
+}
+
+#afui.bb .footer {
+    border:none;
+    border-radius:0px;
+    background:none;
+    padding:0;
+    -webkit-box-shadow:none;
+    box-shadow: none;
+}
+
+#afui.bb .footer>footer>a:not(.button) {
+    height:49px;
+    top:0px;
+    border-top:4px solid #000;
+    background:#1e1e1e;
+}
+
+#afui.bb .footer>footer>a.pressed:not(.button) {
+    border:0px;
+    border-top:4px solid #0aa9dc;
+    border-radius:0px;
+    background:#3a3a3a;
+    color:white;
+}
+
+#afui.bb .footer>footer>a:not(:last-of-type):not(.pressed):not(.button){
+    border-right:1px solid black;
+}
+
+#afui.bb .footer>footer>a.icon.pressed:not(.button):before {
+    color: white;
+}
+
+#afui.bb #aside_menu,
+#afui.bb #menu {
+    border-right:1px solid #bbb;
+    background: #fff;
+    color: #000;
+}
+
+#afui.bb #aside_menu .list > li > a,
+#afui.bb #menu .list > li > a {
+    color:inherit;
+}
+
+#afui.bb #aside_menu .list .divider,
+#afui.bb #menu .list .divider {
+    background:#fafafa;
+    color:black;
+}
+
+#afui.bb .list .divider {
+    background:#fafafa;
+    border-top:none;
+    color:black;
+    border-bottom: 1px solid #0aa9dc !important;
+}
+
+#afui.bb #aside_menu .list li, #afui.bb #aside_menu .list .divider, #afui.bb #aside_menu .list li:first-child, #afui.bb #aside_menu .list li:last-child,
+#afui.bb #menu .list li, #afui.bb #menu .list .divider, #afui.bb #menu .list li:first-child, #afui.bb #menu .list li:last-child {
+    border-bottom-color :#ccc;
+}
+
+#afui.bb .button ,
+#afui.bb .button-grouped *,
+#afui.bb .button-grouped > .button:first-child,
+#afui.bb .button-grouped.vertical *,
+#afui.bb .button-grouped.vertical >  .button:last-child, 
+#afui.bb > .header .button-grouped > .button {
+    border-color:#ccc;
+}
+
+#afui.bb > .header .button-grouped > .button.pressed {
+    background:#07a;
+}
+
+#afui.bb .panel {
+    background:#fff;
+}
+
+#afui.bb .afPopup {
+    border: solid 1px #ccc;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    background:inherit;
+    color:inherit;
+    padding:0;
+}
+
+#afui.bb .afPopup>HEADER{
+    font-weight:normal;
+    font-size:20px;    
+    text-align:center;
+    margin:0;
+    padding:8px;
+    color:white;
+    border-radius: 2px;
+    background:#00609E;
+    background:-ms-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:-webkit-gradient(linear, left bottom, right top, color-stop(0%,#00609E), color-stop(100%,#00AFEE));
+    background:-webkit-linear-gradient(65deg, #00609E 0%,#00AFEE 100%);
+    background:linear-gradient(65deg, #00609E 0%,#00AFEE 100%);    
+}
+
+#afui.bb .afPopup>DIV{
+    text-align:center;
+    padding:10px;
+}
+
+#afui.bb .afPopup>FOOTER{
+    padding:5px;
+}
+
+#afui.bb .afPopup>FOOTER>A#cancel{
+    width:120px;
+}
+
+#afui.bb .afPopup>FOOTER>A#action{
+    width:120px;
+}
+
+#afui.bb #af_actionsheet {
+    background:white;
+    color:inherit;
+}
+
+#afui.bb #af_actionsheet a{
+    border-radius:5px;
+    -webkit-border-radius:5px;
+    border:1px solid #ccc;
+    background:#eee;
+    color:#111;
+}

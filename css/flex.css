@@ -1,0 +1,618 @@
+/**********************************************************
+    GENERAL UI ELEMENTS
+**********************************************************/
+
+* {
+    -webkit-user-select:none; /* Prevent copy paste for all elements except text fields */
+    -webkit-tap-highlight-color:rgba(0, 0, 0, 0); /* set highlight color for user interaction */
+    -moz-tap-highlight-color:rgba(0, 0, 0, 0); /* set highlight color for user interaction */
+    -ms-touch-action:none;
+    -moz-user-select:-moz-none
+    -webkit-touch-callout: none; /* prevent the popup menu on any links*/
+    margin:0;
+    padding:0;
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    box-sizing:border-box;
+}
+
+body {
+    overflow-x:hidden;
+    -webkit-text-size-adjust:none;
+    font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color:#000;
+    font-size:14px;
+    display:-webkit-box;
+    background: #CBD2D8;
+    /* We want to layout our first container vertically */
+    -webkit-box-orient: vertical;
+    /* we want our child elements to stretch to fit the container */
+    -webkit-box-align:stretch;
+} /* General styles that apply to elements not contained within other classes and styles */
+
+
+#afui input,textarea { -webkit-user-select:text; -moz-user-select:-moz-text;-moz-user-select:text;} /* allow users to select text that appears in input fields */
+
+#afui img { border:none; } /* Remove default borders for images */
+
+
+#afui p {
+    display:block;
+    margin:6px 0;
+
+    font-size:14px;
+    line-height:20px;
+    color:inherit
+}
+
+
+#afui #afui_modal {
+    -webkit-backface-visibility: hidden;
+    z-index:9999 !important;
+    width:100%;
+    height:100%;
+    display:none;
+    position:absolute; top:0;
+    overflow:hidden;
+    background:rgba(29,29,28,1) !important;
+    -webkit-perspective: 1000;
+    color:white;
+    
+}
+
+
+#afui #modalContainer { width:100%; }
+
+#afui #modalContainer > * {
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000;
+}
+
+
+
+#afui .afScrollPanel { width:100%; min-height:100%; }
+
+#afui {
+    position:absolute;
+    width:100%;
+    top:0;
+    bottom:0;
+    overflow:hidden;
+    display: -webkit-box;
+    display:    -moz-box;
+    display:         box;
+
+    -webkit-box-orient: vertical;
+       -moz-box-orient: vertical;
+        -ms-box-orient: vertical;
+            box-orient: vertical;
+
+    /* current syntax */
+    display: -webkit-flex;
+    display:    -moz-flex;
+    display:     -ms-flex;
+    display:         flex;
+
+    -webkit-flex-direction: column;
+       -moz-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+}
+
+#afui > #splashscreen {
+    position:absolute;
+    top:0;bottom:0;
+    width:100%;
+    left:0;
+    min-height:100%;
+    background:rgba(29,29,28,1) !important;
+    color:white !important;
+    font-size:30px;
+    text-align:center;
+    z-index:9999;
+    display:block;
+    margin-left: auto !important; margin-right: auto !important;
+    padding-top:80px !important;
+}
+
+
+/**********************************************************
+    header
+**********************************************************/
+#afui > #header {
+    
+    overflow: hidden;
+    display:block;
+    z-index:250;
+    -webkit-box-sizing:border-box; box-sizing:border-box;
+    height:44px;
+    width:100%;
+    
+} /* This is masthead bar that appears at the top of the UI */
+
+
+
+
+#afui #header h1 {
+    
+    position:absolute;
+    width:45%;
+    z-index:1;
+    text-align:center;
+    height:44px;
+    font-size:18px;
+    font-weight:bold;
+    left:27.5%;
+    color:inherit;
+    padding:10px 0;
+    text-shadow:rgba(0,0,0,0.8) 0 -1px 0;
+    text-align:center;
+    white-space:nowrap;
+} /* This is text that appears in the header at the top of the screen */
+
+
+/**********************************************************
+    CONTENT AREA
+**********************************************************/
+
+#afui #content {
+    z-index:180;
+    width:100%;
+    /* previous syntax */
+        -webkit-box-flex: 1;
+           -moz-box-flex: 1;
+            -ms-box-flex: 1;
+                box-flex: 1;
+ 
+        /* current syntax */
+        -webkit-flex: 1;
+           -moz-flex: 1;
+            -ms-flex: 1;
+                flex: 1;
+    overflow:hidden;
+} /* Accounts for positioning of the content area, which is everything below the header and above the navbar. */
+
+
+#afui .panel {
+    z-index:180;
+    width:100%;
+    height:100%;
+    display:none;
+    position:absolute; top:0; left:0;
+    overflow-y:auto;
+    overflow-x:hidden;
+    -webkit-overflow-scrolling:touch;
+    -webkit-backface-visibility: visible;   
+    padding:10px;
+    padding-top:0px;
+} /* This class is applied to the divs that contain the various "views" or pages of the app. */
+
+
+
+
+/**********************************************************
+    Navbar
+**********************************************************/
+/* Nav bar appears locked to the bottom of the screen. It is the primary navigation. can contain text or graphical navigation */
+
+#afui #navbar {
+    z-index:1000;
+    height:49px;
+    display:block;
+    left:0;
+    right:0;
+    padding:0 3px;
+}
+
+
+#afui #navbar>footer>a:not(.button) {
+    -webkit-box-sizing:border-box;
+    box-sizing: border-box;
+    top: 3px;
+    height: 43px;
+    overflow: hidden;
+    font-size:12px;
+    font-weight:normal;
+    text-decoration: none;
+    color: #fff;
+    text-align: center;
+    display: inline-block;
+    width: 25%;
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    line-height: 67px;
+    position: relative;
+    margin: 0;
+}
+
+
+#afui #navbar>footer>a:not(.button) .af-badge {
+    right:auto;
+    margin-left:-16px;
+}
+
+
+#afui #navbar>footer>a.icon:not(.button):before {
+    position:absolute;
+    top:2px;
+    left:0;
+    font-size: 25px;
+    margin:auto;
+    width: 100%;
+}
+
+
+#afui #navbar>footer>a.pressed:not(.button) {
+    
+}
+
+
+#afui #navbar>footer>a.icon.pressed:not(.button):before {
+    
+}
+
+/* Custom footers - always hidden */
+#afui footer, #afui header, #afui nav, #afui aside {    display:none; }
+
+/* Show the active header/footer/navs */
+#afui #navbar footer, #afui #menu nav, #afui #header header, #afui #aside_menu aside {display:block;}
+
+#afui > #menu.tabletMenu {
+    z-index:1;
+    width:200px;
+    bottom:0;
+    height:100%;
+    display:none;
+    position:absolute; top:0; left:0;
+    
+}
+
+#afui > #aside_menu {
+    z-index:1;
+    width:200px;
+    bottom:0;
+    height:100%;
+    display:none;
+    position:absolute; top:0; right:0;
+    
+}
+
+
+#afui #menu_scroller, #afui #aside_menu_scroller {
+    padding-bottom:10px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    -webkit-backface-visibility: hidden;
+    -webkit-overflow-scrolling:touch;
+}
+
+
+#afui #menu_scroller > *,  #afui #aside_menu_scroller > * {
+    -webkit-backface-visibility: hidden;
+    -webkit-perspective: 1000;
+}
+
+
+#afui #menu .list li, 
+#afui #menu .list .divider, 
+#afui #menu .list li:first-child, 
+#afui #menu  .list li:last-child,
+
+#afui #aside_menu .list li, 
+#afui #aside_menu .list .divider, 
+#afui #aside_menu .list li:first-child, 
+#afui #aside_menu  .list li:last-child
+ {
+
+    font-weight:bold;
+    font-size:1em;
+    line-height:1em;
+    border-color:#101012;
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08);
+
+}
+
+#afui #menu .list > li > a,
+#afui #aside_menu .list > li > a    
+{
+    color:#ccc;
+    margin-left:6px;
+    font-weight: normal;
+}
+
+
+#afui #menu .list, 
+#afui #menu .list .divider,
+#afui #aside_menu .list, 
+#afui #aside_menu .list .divider
+{   background:inherit; }
+
+
+#afui #menu .list .divider, #afui #aside_menu .list .divider {
+    background:#333;
+    color:#fff;
+    font-weight:bold;
+    font-size:1em;
+    line-height:1em;
+    padding:6px;
+    top:0px;
+    border:none;
+    -webkit-box-shadow:none; box-shadow: none;
+}
+
+
+#afui #menu .list > li > a:after, #afui #aside_menu .list > li > a:after  { margin-top: -8px; }
+
+/* End side menu css */
+
+
+
+#afui .splashscreen {
+    background:rgba(29,29,28,1) !important;
+    padding-left:40px;
+    padding-top:30px !important;
+    min-height:100%;
+}
+
+
+#afui h2 {
+    display:block;
+    height:34px;
+    font-weight: bold;
+    font-size:18px;
+    color:#000;
+    padding:6px 0;
+    margin-bottom:8px;
+} /* Header class used for non-navigable header bars (h1 is reserved for the header) */
+
+
+#afui .collapsed:after {
+    float:right;
+    content:'';
+    border-left:5px solid transparent;
+    border-right:5px solid transparent;
+    border-top:6px solid #000;
+    display:block;
+    position:absolute;
+    top:14px;right:14px;
+}
+
+#afui .collapsed:before {
+    float:right;
+    content:'';
+    color:transparent;
+    background:transparent;
+    width:14px; height:14px;
+    display:block;
+    border:2px solid #000;
+    border-radius:3px;
+    position:absolute;
+    top:8px;right:10px;
+}
+
+#afui .expanded:after {
+    float:right;content:'';
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 6px solid #000;
+    display:block;
+    position:absolute;
+    top:13px;right:14px;
+}
+
+#afui .expanded:before {
+    float:right;
+    content:'';
+    color:transparent;
+    background:transparent;
+    width:14px; height:14px;
+    display:block;
+    border:2px solid #000;
+    border-radius:3px;
+    position:absolute;
+    top:8px;right:10px;
+}
+
+
+/**********************************************************
+    UI
+**********************************************************/
+
+.ui-icon {
+    background:                         #666;
+    background:                         rgba(0,0,0,.4);
+    background-repeat: no-repeat;
+    border-radius:                      9px;
+}
+
+
+.ui-loader { display: none; position: absolute; opacity: .85; z-index: 100; left: 50%; width: 200px; margin-left: -100px; margin-top: -35px; padding: 10px 30px; background: #666;background:rgba(0,0,0,.4);border-radius:9px;color:white;}
+.ui-loader.heavy {opacity:1;}
+.ui-loader h1 { font-size: 15px; text-align: center; }
+.ui-loader .ui-icon { position: static; display: block; opacity: .9; margin: 0 auto; width: 35px; height: 35px; background-color: transparent; }
+
+
+.spin  {
+    -webkit-transform: rotate(360deg);
+    -webkit-animation-name: spin;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-iteration-count:  infinite;
+}
+@-webkit-keyframes spin {
+    from {-webkit-transform: rotate(0deg);}
+    to {-webkit-transform: rotate(360deg);}
+}
+
+
+.ui-icon-loading {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjBAMAAADs965qAAAAA3NCSVQICAjb4U/gAAAAMFBMVEX////x8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHvvEhiAAAAEHRSTlMAESIzRFVmd4iZqrvM3e7/dpUBFQAAAAlwSFlzAAAK6wAACusBgosNWgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAEaSURBVCiRY2AgATCapaUqoIiIzN5z5syZJiQRltW7gUJ3705C6OraDRG6GwATkli1evdusNBTuKJVq3c4MjBX3733DqqMfdWqFWDbau+9ewIRspy5KgHMYL737g1EX+fMaVAjbN+9KwDLzZxZAHPMu3cXwEbNnAl397p3YDslOmD6GBjs/v8AURodzXAh3v+/QZRHRyNciPP/f4hQA1yIHVMICtzLC9CFzMuL0IXEy0vQhdjK0+BsRqgv0tIMYEKCggJgmbS0QJgiQUEIwy0tVQCmCCokmhYaCFMElWMKDQ01BIkoKcKEGFRDQ1yMlISUgEIwe5iAQi7GxkpKSjBFwMh2cXEGCSkiOVcFLIQswsAgZGxshCpCBgAA0FNYp5zwDegAAAAASUVORK5CYII=);
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background-size: 35px 35px;
+}
+
+
+#afui .ui-corner-all { border-radius:.6em; }
+
+
+#afui_mask { position:absolute;top:45%;z-index:999999; }
+
+
+#afui .hasMenu{
+    position:relative;
+    left:0;
+}
+
+
+#afui .menuButton {
+    position: relative;
+    top: 5px;
+    right: -8px;
+    height: 36px;
+    width: 36px;
+    z-index:2;
+    float:right;
+}
+
+
+#afui .menuButton:after {
+    border-bottom: 9px double white;
+    border-top: 3px solid white;
+    top: 9px;
+    left: 3px;
+    content: "";
+    height: 3px;
+    position: absolute;
+    width: 15px;
+}
+
+#afui .hasMenu.on {
+    -webkit-transform:translate3d(200px,0,0);
+    transform:translate(200px,0);
+}
+
+
+
+
+
+#afui .modalbutton {
+    position:absolute;
+    top:0;
+    right:5px;
+    height:32px;
+    width:58px;
+    line-height:32px;
+    z-index:9999;
+}
+
+
+#afui .closebutton  {
+    position:absolute;
+    top:6px; right:6px;
+    display:block;
+    height:24px ;
+    width:24px ;
+    border-radius:12px;
+    border:1px solid #666;
+    background:#fff;
+    color:#333;
+    font-weight: bold;
+    font-size:21px;
+    line-height:18px;
+    text-align:center;
+    text-decoration:none;
+}
+
+#afui .closebutton:before { content:'x'; }
+
+#afui .closebutton.selected,.closebutton.modalButton.selected {
+    color:#fff;
+    background:#333;
+}
+
+#afui .panel > .list, 
+#afui .panel > .afScrollPanel > .list {
+    margin:0px -10px;
+}
+
+#afui .panel > .list.inset, 
+#afui .panel > .afScrollPanel > .list.inset {
+    margin:0px;
+}
+
+/* Chevrons */
+@font-face {
+    font-family: 'chevron';
+    src: url(data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAAQAAA0AAAAABZgAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABGRlRNAAABMAAAABoAAAAcZ/T02kdERUYAAAFMAAAAHwAAACAAMgAGT1MvMgAAAWwAAABHAAAAVj7i2r5jbWFwAAABtAAAAEMAAAFS8BX0J2dhc3AAAAH4AAAACAAAAAj//wADZ2x5ZgAAAgAAAABsAAAAbMHrMoZoZWFkAAACbAAAADAAAAA2/JaSB2hoZWEAAAKcAAAAHgAAACQDav/GaG10eAAAArwAAAATAAAAFAN1AB1sb2NhAAAC0AAAAAwAAAAMAA4ANm1heHAAAALcAAAAHQAAACAASAAbbmFtZQAAAvwAAADdAAABhigr581wb3N0AAAD3AAAACIAAAA8nFVDO3icY2BgYGQAgjO2i86D6LO3V7LCaABOtwcoAAB4nGNgZGBg4ANiCQYQYGJgZGBmYAGSLGAeAwAEkAA5AHicY2BkVGCcwMDKwMGozGjJwMBgB6WvM4gxFDMwMDGwMjPAgQCCyRCQ5prC4PCB4UMIY8P/AwwajA0MDg0MDIwgOQBg6QqyAHicY2BgYGaAYBkGRgYQ8AHyGMF8FgYDIM0BhEwgiQ8MH0L+/0dmCTDzb4DqAgNGNgY4lxGkh4kBFTAyDHsAAFhbChsAAAAAAf//AAIAAQAA/8ABwAGAAAIAABEBIQHA/kABgP5AAAAAAAEAHf/tARMBcwAXAAAlFA8BBiIvASY1ND8BJyY1ND8BNjIfARYBEwmkCRoJFAkJenoJCRQIHAikCbANCqMJCRMKDQ0JenkKDQ0JEwoKowl4nGNgZGBgAOLcX7xy8fw2Xxm4GQ8ARRjO3l7JiqD/H2A8wNgA5HIwMIFEAUPwC7d4nGNgZGBgbPh/gEGD8QADwz8HIAkUQQGsAIQZBTAAAHicYzzAAAFTIRSjAoMsABVQAZUAAAAAAAAAAAAADgA2eJxjYGRgYGBlkGAA0QwMTEDMCGY7gPkMAAUvAGQAAAB4nHWOTWoCQRBG3+hoCIbgKmTZkE02M3RPwIUHmAO4cC/SjII40P7gSbLKEbL0GB4gR8gx/JzUJgsbin68rqqvgSc+ybidjAfGxj3xu3GfN07Gufy38YARF+Oh/K86s/xR5rmbunFP/Grcp8Yb5/JfxgNeOBsP5X9YsiJyJNGyheUqHlMrmMk2HNiw0Buz2Bw2C0Hd9e27O6kj4qgoleaYqv7v+3NBrwUTVSUKfGhNu93XbWqiq0rvps5yRcEXk6LyQU33/jaXTexYW0bo8pnHtFtrRyj93dkrAWI51wAAAHicY2BiwA9YgZiRgYmRiZGZvTQv083AwABCm5oAACfXBG0AAA==) format('woff'),
+         url(data:application/x-font-ttf;charset=utf-8;base64,AAEAAAANAIAAAwBQRkZUTWf09NoAAAV8AAAAHEdERUYAMgAGAAAFXAAAACBPUy8yPuLavgAAAVgAAABWY21hcPAV9CcAAAHEAAABUmdhc3D//wADAAAFVAAAAAhnbHlmwesyhgAAAyQAAABsaGVhZPyWkgcAAADcAAAANmhoZWEDav/GAAABFAAAACRobXR4A3UAHQAAAbAAAAAUbG9jYQAOADYAAAMYAAAADG1heHAASAAbAAABOAAAACBuYW1lKCvnzQAAA5AAAAGGcG9zdJxVQzsAAAUYAAAAPAABAAAAAQAAbfoNHl8PPPUACwHAAAAAAM3bqQUAAAAAzdupBQAA/8ABwAGAAAAACAACAAAAAAAAAAEAAAGA/8AAKAHAAAD+QAHAAAEAAAAAAAAAAAAAAAAAAAAFAAEAAAAFABgAAQAAAAAAAgAAAAEAAQAAAEAAAAAAAAAAAQEgAZAABQAIASMBOQAAAD4BIwE5AAAA1wAWAHMAAAIABQMAAAAAAAAAAAAAEAAAAAAAAAAAAAAAUGZFZABA8ADwVAGA/8AAKAGAAECAAAABAAAAAAAAAcAAAAAAAAAAlQAAAAAAAAEgAB0AAAADAAAAAwAAABwAAQAAAAAATAADAAEAAAAcAAQAMAAAAAgACAACAAAAAPAA8FT//wAAAADwAPBU//8AABADD7AAAQAAAAAAAAAAAAABBgAAAQAAAAAAAAABAgAAAAIAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgA2AAEAAP/AAcABgAACAAARASEBwP5AAYD+QAAAAAABAB3/7QETAXMAFwAAJRQPAQYiLwEmNTQ/AScmNTQ/ATYyHwEWARMJpAkaCRQJCXp6CQkUCBwIpAmwDQqjCQkTCg0NCXp5Cg0NCRMKCqMJAAAADACWAAEAAAAAAAEABwAQAAEAAAAAAAIABwAoAAEAAAAAAAMAIwB4AAEAAAAAAAQABwCsAAEAAAAAAAUACwDMAAEAAAAAAAYABwDoAAMAAQQJAAEADgAAAAMAAQQJAAIADgAYAAMAAQQJAAMARgAwAAMAAQQJAAQADgCcAAMAAQQJAAUAFgC0AAMAAQQJAAYADgDYAGMAaABlAHYAcgBvAG4AAGNoZXZyb24AAFIAZQBnAHUAbABhAHIAAFJlZ3VsYXIAAEYAbwBuAHQARgBvAHIAZwBlACAAMgAuADAAIAA6ACAAYwBoAGUAdgByAG8AbgAgADoAIAAxADAALQA2AC0AMgAwADEAMwAARm9udEZvcmdlIDIuMCA6IGNoZXZyb24gOiAxMC02LTIwMTMAAGMAaABlAHYAcgBvAG4AAGNoZXZyb24AAFYAZQByAHMAaQBvAG4AIAAxAC4AMAAAVmVyc2lvbiAxLjAAAGMAaABlAHYAcgBvAG4AAGNoZXZyb24AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAAAAQACAQIBAwd1bmlGMDAwB3VuaUYwNTQAAAAB//8AAgABAAAADgAAABgAAAAAAAIAAQADAAQAAQAEAAAAAgAAAAAAAQAAAADMPaLPAAAAAM3bqQUAAAAAzdupBQ==) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#afui .chevron {
+    font-family: 'chevron';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+#afui .chevron:before {
+    content: "\f054";
+}
+
+#afui .chevron.left {
+    -webkit-transform:rotate(180deg);
+    transform:rotate(180deg);
+}
+
+
+@media handheld, only screen and (min-width: 768px) {
+    #afui > #navbar.hasMenu.splitview, #afui > #header.hasMenu.splitview, #afui > #content.hasMenu.splitview  {
+        position:absolute;
+        left:256px;
+        -webkit-transition: transform 0ms;
+        -webkit-transform:none!important;
+        transition:transform 0ms;
+        transform:none !important;
+    }
+    
+        
+    #afui > #menu.tabletMenu.splitview {
+        z-index:200 !important;
+        width:256px !important;
+        bottom:0;
+        height:100% !important;
+        display:block !important;
+        position:absolute !important; top:0;
+        left:0;
+        -webkit-transform:none !important;
+        -webkit-transition:none !important;
+        transform:none !important;
+        transition:none !important;
+    }
+    
+    #afui .splitview .menuButton { display:none;    }
+}
+
+@media print {
+      body {
+          overflow:visible;
+      }
+      #afui #content{
+        overflow: visible;
+        left:0;         
+      }
+      #afui {
+        overflow:visible;
+      }
+      #afui .panel {
+        overflow-x:visible !important;
+        overflow-y:visible !important;
+        overflow:visible !important;
+      }
+}

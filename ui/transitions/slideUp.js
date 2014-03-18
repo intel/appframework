@@ -1,8 +1,8 @@
+/* global af*/
 (function ($ui) {
-
+    "use strict";
     function slideUpTransition(oldDiv, currDiv, back) {
-        oldDiv.style.display = "block";
-        currDiv.style.display = "block";
+        /*jshint validthis:true */
         var that = this;
         if (back) {
             oldDiv.style.zIndex = 2;

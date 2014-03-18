@@ -1,0 +1,30 @@
+
+.samplecode {
+    background: #C0FFC0;
+    color: black;
+    
+    border-left: 5px ridge #c3c3c3;
+    padding: 15px 0px 15px 10px;
+    margin: 5px 0 5px 0;
+
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    box-shadow: 0px 0 15px #c3c3c3;
+    -moz-box-shadow: 0px 0 15px #c3c3c3;
+    -webkit-box-shadow: 0px 0 15px #c3c3c3;
+    
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+}
+.samplecode:hover {
+    color: gray;
+    background-color: #FFFFC0;
+}
+
+/* for the grid demo */
+.grid > div {
+    border:1px dashed black;
+}

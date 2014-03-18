@@ -1,9 +1,16 @@
 /**
- * @copyright: 2011 Intel
- * @description:  This script will replace all drop downs with friendly select controls.  Users can still interact
+ * copyright: 2011 Intel
+ * description:  This script will replace all drop downs with friendly select controls.  Users can still interact
  * with the old drop down box as normal with javascript, and this will be reflected
  */
+
+ /* global af*/
+ /* global numOnly*/
 (function($) {
+    /*jshint camelcase: false,
+    validthis:true
+    */
+    "use strict";
     function updateOption(prop, oldValue, newValue) {
         if (newValue === true) {
             if (!this.getAttribute("multiple"))
@@ -28,18 +35,18 @@
         delete el.linker;
         e.stopPropagation();
     }
-    $['selectBox'] = {
+    $.selectBox = {
         scroller: null,
         currLinker: null,
         getOldSelects: function(elID) {
             if (!$.os.android || $.os.androidICS) return;
-            if (!$.fn['scroller']) {
-                alert("This library requires af.scroller");
+            if (!$.fn.scroller) {
+                window.alert("This library requires af.scroller");
                 return;
             }
             var container = elID && document.getElementById(elID) ? document.getElementById(elID) : document;
             if (!container) {
-                alert("Could not find container element for af.selectBox " + elID);
+                window.alert("Could not find container element for af.selectBox " + elID);
                 return;
             }
             var sels = container.getElementsByTagName("select");
@@ -97,7 +104,7 @@
             }
             $("#afModalMask").show();
             try {
-                if (foundInd > 0 && el.getAttribute("multiple") != "multiple") {
+                if (foundInd > 0 && el.getAttribute("multiple") !== "multiple") {
                     var scrollToPos = 0;
                     var scrollThreshold = numOnly($list.find("li").computedStyle("height"));
                     var theHeight = numOnly($("#afSelectBoxContainer").computedStyle("height"));
@@ -111,7 +118,7 @@
                 console.log("error init dropdown" + e);
             }
 
-            var selClose = $("#afSelectClose").css("display") == "block" ? numOnly($("#afSelectClose").height()) : 0;
+            var selClose = $("#afSelectClose").css("display") === "block" ? numOnly($("#afSelectClose").height()) : 0;
             $("#afSelectWrapper").height((numOnly($("#afSelectBoxContainer").height()) - selClose) + "px");
 
         },
@@ -165,7 +172,7 @@
                         return;
                     that.currLinker = this;
 
-                    if (this.linker.getAttribute("multiple") == "multiple")
+                    if (this.linker.getAttribute("multiple") === "multiple")
                         $("#afSelectClose").show();
                     else
                         $("#afSelectClose").hide();
@@ -197,25 +204,25 @@
                 modalMask.append(container);
                 if ($afui.length > 0) $afui.append(modalMask);
                 else document.body.appendChild(modalMask.get(0));
-
                 that.scroller = $.query("#afSelectBoxfix").scroller({
                     scroller: false,
                     verticalScroll: true,
-                    vScrollCSS: "jqselectscrollBarV"
+                    vScrollCSS: "afselectscrollBarV",
+                    hasParent:true
                 });
 
                 $("#afModalMask").on("click",function(e){
                     var $e=$(e.target);
-                    if($e.closest("#afSelectBoxContainer").length===0)
+                    if($e.closest("#afSelectBoxContainer").length === 0)
                         that.hideDropDown();
-                })
+                });
 
                 $("#afSelectBoxfix").on("click", "li", function(e) {
                     var $el = $(e.target);
                     that.setDropDownValue(that.currLinker.linker, $el.data("ind"));
                 });
                 $("#afSelectBoxContainer").on("click", "a", function(e) {
-                    if (e.target.id == "afSelectCancel")
+                    if (e.target.id === "afSelectCancel")
                         return that.hideDropDown();
                     var $sel = $(that.currLinker.linker);
                     $sel.find("option").prop("selected", false);

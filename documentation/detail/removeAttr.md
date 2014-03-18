@@ -15,8 +15,3 @@ The attribute can then be removed by using $().removeAttribute() and specifying 
 ```js
 $("#removeattr_content").removeAttr("test_attr");
 ```
-
-</br>
-<div id="removeattr_content" test_attr="foo">The test_attr attribute is set to "foo"</div>
-<input type="button" value="Get Attribute" onclick='alert($("#removeattr_content").attr("test_attr"));'>
-<input type="button" value="Remove Attribute" onclick='$("#removeattr_content").removeAttr("test_attr");'>

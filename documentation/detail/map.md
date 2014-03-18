@@ -47,28 +47,3 @@ $('#equalize').bind("click",function(){
  
 </script>
 ```
-
-<div class="sample" style='height:100px'>
-
-<input id="equalize" type="button" value="Equalize">
-<div class='mapsample' style="background:red; height: 40px;width:50px;float:left; "></div>
-<div class='mapsample' style="background:green; height: 70px;width:50px;float:left;"></div>
-<div class='mapsample' style="background:blue; height: 50px;width:50px;float:left; "></div>
- 
- 
-<script>
-$.fn.equalizeHeights = function() {
-  var minHeight = this.map(function(i,e) {
-    return $(e).height();
-  }).get(0);
- 
-  return this.height( Math.min.apply(this, minHeight)+"px" );
-};
- 
-$('#equalize').bind("click",function(){
-  $('.mapsample').equalizeHeights();
-});
- 
-</script>
-
-</div>

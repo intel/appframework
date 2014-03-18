@@ -16,13 +16,3 @@ $("ol li").bind("click",function(event){alert(this.innerHTML)});
     <li>Three</li>
 </ol>
 ```
-Click one of the items below
-<ol id="bindTest">
-    <li>One</li>
-    <li>Two</li>
-    <li>Three</li>
-</ol>
-
-<script>
-$("#bindTest li").bind("click",function(event){alert(this.innerHTML)});
-</script>

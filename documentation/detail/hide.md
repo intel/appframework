@@ -13,7 +13,3 @@ Based upon some event, you can then hide the div
 ```js
 $("#hide_content").hide();
 ```
-
-</br>
-<div id="hide_content" style="border:1px solid green">This is the content we will hide</div>
-<input type="button" value="Hide Div" onclick="$('#hide_content').hide();">

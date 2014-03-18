@@ -15,8 +15,3 @@ The attribute can then be modified by assigning a new value of "bar" to the attr
 ```js
 $("#attr_content").attr("test_attr","bar");
 ```
-
-</br>
-<div id="attr_content" test_attr="foo">The test attribute is initially set to "foo"</div>
-<input type="button" value="Get Attribute" onclick='alert($("#attr_content").attr("test_attr"));'>
-<input type="button" value="Set Attribute" onclick='$("#attr_content").attr("test_attr","bar");'>

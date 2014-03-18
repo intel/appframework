@@ -18,14 +18,3 @@ If you do not have a parameter, it will return the first elements innerText valu
 var text=$("#bar").text();
 $("#foo").text("new content");
 ```
-
-
-
-<div id="text:bar">
-	This is some text <a>Test</a>
-</div>
-<div id="text:foo">
-	<div style='background:red'>This has a red background</div>
-</div>
-
-<input type="button" value="Get Text" onclick="alert($('#text:bar').text())"> <input type="button" value="Set Text" onclick="$('#text:foo').text('New Content')"> 

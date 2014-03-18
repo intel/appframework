@@ -14,9 +14,3 @@ Later you can use $().removeProp using the property name to remove the property 
 ```js
 $("#property_content").removeProp("test_prop");
 ```
-
-</br>
-<div id="property_content"></div>
-<input type="button" value="Set Property" onclick='$("#property_content").prop("test_prop","hello");'>
-<input type="button" value="Get Property" onclick='alert($("#property_content").prop("test_prop"));'>
-<input type="button" value="Remove Property" onclick='$("#property_content").removeProp("test_prop");'>
