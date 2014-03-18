@@ -176,6 +176,6 @@
     };
     return ayepromise;
 }));
-(function(){
+(function($){
     $.Deferred=ayepromise.defer;
 })(af);
