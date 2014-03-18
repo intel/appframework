@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-03-13 */
+/*! intel-appframework - v2.1.0 - 2014-03-18 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -393,10 +393,10 @@ if (!window.af || typeof(af) !== "function") {
             $.isObject(foo);
         
             ```
-		* @param {*} obj
-		* @returns {boolean}
+        * @param {*} obj
+        * @returns {boolean}
         * @title $.isObject(param)
-		*/
+        */
         $.isObject = function(obj) {
             return typeof obj === "object" && obj !== null;
         };
@@ -2946,7 +2946,6 @@ if (!window.af || typeof(af) !== "function") {
         };
     }
 }
-
 /**
  * ayepromise.js
  * @license BSD - https://github.com/cburgmer/ayepromise/commit/299eb65b5ce227873b2f1724c8f5b2bfa723680a
@@ -3125,6 +3124,6 @@ if (!window.af || typeof(af) !== "function") {
     };
     return ayepromise;
 }));
-(function(){
+(function($){
     $.Deferred=ayepromise.defer;
 })(af);

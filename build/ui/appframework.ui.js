@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-03-12 */
+/*! intel-appframework - v2.1.0 - 2014-03-18 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -1810,7 +1810,7 @@ if (!Date.now)
             if(numOnly(newHeight) > this.elementInfo.bottomMargin)
                 newHeight = this.elementInfo.bottomMargin+"px";
             if (newHeight !== this.vscrollBar.style.height)
-				this.vscrollBar.style.height = newHeight;
+                this.vscrollBar.style.height = newHeight;
 
             var pos = (this.elementInfo.bottomMargin - numOnly(this.vscrollBar.style.height)) - (((this.elementInfo.maxTop + scrollInfo.y) / this.elementInfo.maxTop) * (this.elementInfo.bottomMargin - numOnly(this.vscrollBar.style.height)));
             if (pos > this.elementInfo.bottomMargin) pos = this.elementInfo.bottomMargin;
@@ -1826,7 +1826,7 @@ if (!Date.now)
             if (!this.elementInfo.requiresHScrollBar) return false;
             var newWidth = (parseFloat(this.elementInfo.rightMargin / this.elementInfo.divWidth) * this.elementInfo.rightMargin) + "px";
             if (newWidth !== this.hscrollBar.style.width)
-				this.hscrollBar.style.width = newWidth;
+                this.hscrollBar.style.width = newWidth;
 
             var pos = (this.elementInfo.rightMargin - numOnly(this.hscrollBar.style.width)) - (((this.elementInfo.maxLeft + scrollInfo.x) / this.elementInfo.maxLeft) * (this.elementInfo.rightMargin - numOnly(this.hscrollBar.style.width)));
             if (pos > this.elementInfo.rightMargin) pos = this.elementInfo.rightMargin;
@@ -2354,7 +2354,6 @@ if (!Date.now)
         return scroller;
     })();
 })(af);
-
 /**
  * copyright: 2011 Intel
  * description:  This script will replace all drop downs with friendly select controls.  Users can still interact
@@ -2642,7 +2641,8 @@ if (!Date.now)
     }
 })(af);
 
-//Touch events are from zepto/touch.js
+//Touch events are based from zepto/touch.js
+//Many modifications and enhancements made
 /**
  * Simply include this in your project to get access to the following touch events on an element
  * tap
@@ -2748,7 +2748,6 @@ if (!Date.now)
         };
     });
 })(af);
-
 //TouchLayer contributed by Carlos Ouro @ Badoo
 //un-authoritive layer between touches and actions on the DOM
 //(un-authoritive: listeners do not require useCapture)
@@ -2775,7 +2774,7 @@ if (!Date.now)
     "use strict";
     //singleton
     $.touchLayer = function(el) {
-        //	if($.os.desktop||!$.os.webkit) return;
+        //  if($.os.desktop||!$.os.webkit) return;
         $.touchLayer = new touchLayer(el);
         return $.touchLayer;
     };
@@ -2984,7 +2983,7 @@ if (!Date.now)
             if ($.os.android) {
                 return window.innerHeight;
             } else
-				return numOnly(document.documentElement.style.height); //TODO: works well on iPhone, test BB
+                return numOnly(document.documentElement.style.height); //TODO: works well on iPhone, test BB
         },
         onOrientationChange: function(e) {
             //this.log("orientationchange");
@@ -3423,7 +3422,6 @@ if (!Date.now)
     };
 
 })(af);
-
 /**
  * af.popup - a popup/alert library for html5 mobile apps
  * copyright Indiepath 2011 - Tim Fisher
@@ -6188,7 +6186,6 @@ if (!Date.now)
         });
     }
 })(af);
-
 /* global af*/
 (function($ui){
     "use strict";

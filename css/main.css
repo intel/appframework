@@ -571,13 +571,11 @@ body {
     background:#333;
 }
 
-#afui .panel > .list, 
-#afui .panel > .afScrollPanel > .list {
+#afui .panel .list {
     margin:0px -10px;
 }
 
-#afui .panel > .list.inset, 
-#afui .panel > .afScrollPanel > .list.inset {
+#afui .panel .list.inset {
     margin:0px;
 }
 
