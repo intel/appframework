@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-03-12 */
+/*! intel-appframework - v2.1.0 - 2014-03-18 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -224,6 +224,7 @@ body {
 #afui .x-scroll, #afui .panel.x-scroll {
     overflow-x:auto;
     overflow-y:hidden;
+    width:100%;
 }
 #afui .no-scroll, #afui .panel.no-scroll {
     overflow:hidden;
@@ -668,7 +669,7 @@ body {
 
  */
 
-@-ms-viewport {
+ @-ms-viewport {
   width: device-width;
 }
 
@@ -677,14 +678,14 @@ body {
     color:#53575E;
 }
 
-#afui .header{
+#afui > #header{
     background:#0088D1;
     border:none;
     border-bottom:1px solid #0088D1;
     color:white;
 }
 
-#afui  .header h1 {
+#afui  #header h1 {
     text-shadow:none;
     width:45%;
 }
@@ -695,17 +696,18 @@ body {
     display: block;
     position: absolute;
     line-height:44px;
+
     left: 25px;
     text-overflow: ellipsis;
     font-size: 14px;
-    padding:0;
+    padding: 0;
     text-shadow: none;
     background-color: transparent;
     border:none;
-    border-color:transparent;
+    border-color: transparent;
     height: 44px;
     top:0;
-    border-radius:0;
+    border-radius: 0;
     box-shadow:none;
     margin: 0;
     padding-left: 0;
@@ -713,6 +715,7 @@ body {
     width:50px;
     padding:0 !important;
     margin:0 !important;
+
 }
 
 #afui #backButton::before {
@@ -722,9 +725,9 @@ body {
     top: 10px;
     left: -20px;
     text-align: center;
-    border-radius:0;
+    border-radius: 0;
     border: none;
-    border-color:transparent;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
@@ -742,25 +745,26 @@ body {
     background-color: transparent;
 }
 
-#afui  .footer {
-     background:#0088D1;
+#afui > #navbar {
+    background:#0088D1;
     border:none;
     border-top:1px solid #0088D1;
     box-shadow:none;
 }
 
-#afui footer>a:not(.button) {
+#afui #navbar a {
  
 }
 
-#afui footer>a.pressed:not(.button) {
+#afui #navbar a.pressed {
     border-radius:0;    
     background:#00AEEF;
 }
 
-#afui footer>a.icon.pressed:not(.button):before {
+#afui #navbar .icon.pressed:before {
     color:inherit;
 }
+
 
 #afui .af-badge {
     border:none;
@@ -779,12 +783,12 @@ body {
 
 #afui .list .divider { color:black; }
 
-#afui .panel, #afui #modalContainer, #afui #modal {
+#afui .panel {
     color:inherit;
-    background:inherit;
+    background:white;
 }
+ #afui .panel h2 { color:#0088D1;}
 
-#afui .panel h2 { color:#0088D1;}
 
 #afui .collapsed:after {border-top: 6px solid;}
 #afui .collapsed:before {border:2px solid;}
@@ -794,8 +798,8 @@ body {
 #afui .collapsed:before,#afui .expanded:before {
     border-color: inherit;
 }
-
-#afui .collapsed:after, #afui .expanded:after{
+#afui .collapsed:after,
+#afui .expanded:after{
     border-top-color:inherit;
     border-top-color:inherit;
 }
@@ -829,33 +833,30 @@ body {
     background: #33B5E5;
 }
 
-#afui > #aside_menu,
 #afui > #menu.tabletMenu {
     color:white;
     background:#00AEEF;
     border-right:1px solid #006BA4;
 }
 
-#afui #aside_menu .list li,#afui #aside_menu .list .divider,#afui #aside_menu .list li:last-child,
 #afui #menu .list li,#afui #menu .list .divider,#afui #menu .list li:last-child {
     border-color: #4CC6F4;
+    
 }
 
-#afui #aside_menu .list .divider,
 #afui #menu .list .divider {
     background:#0088D1;
     color:inherit;
     font-size: 1em;
+    
 }
 
-#afui #aside_menu .list > li > a,
 #afui #menu .list > li > a {
     background:inherit;
     color:inherit;
     font-size: 1em;
 }
 
-#afui #aside_menu .list,
 #afui #menu .list {
     font-weight: normal;
 }
@@ -865,7 +866,7 @@ body {
     text-shadow:none;
 }
 
-#afui .list > li > a:after{
+.list > li > a:after{
     color:#0088D1;
 }
 
@@ -889,9 +890,9 @@ body {
     top: 2px;
     left: -25px;
     text-align: center;
-    border-radius:0;
+    border-radius: 0;
     border: none;
-    border-color:transparent;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
@@ -917,9 +918,9 @@ body {
     top: 6px;
     right: -25px;
     text-align: center;
-    border-radius:0;
+    border-radius: 0;
     border: none;
-    border-color:transparent;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
@@ -931,20 +932,27 @@ body {
     text-transform: none;
     line-height: 1;
     -webkit-font-smoothing: antialiased;
-    content: "\f054";   
+    content: "\f054";
     background-color: transparent;
 }
 
 #afui .afPopup {
+    display: block;
+    width: 100%;
+    float:left;
     border: solid 1px #33B5E5;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
+    left:0px ;
+    padding: 10px;
+    opacity: 1;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    position: absolute;
+    z-index: 1000000;
+    top: 50%;
+    margin: 0px auto;
     background:inherit;
     color:inherit;
-}
-
-#afui .afPopup>FOOTER>A{
-    width: 120px;
+    padding:30px;
 }
 
 #afui #af_actionsheet {
@@ -1265,29 +1273,33 @@ body {
   color: inherit;
   margin: 16px 0 8px;
 }
+<<<<<<< HEAD:css/src/forms.css
+=======
 
 
 #afui input[type=button],
 #afui input[type=submit], #afui button {
   font-size:inherit;
 } 
-#afui .button {
-    position:relative;
-    display:inline-block;
-    padding:8px 12px;
-    margin:8px 0;
-    font-weight:bold;
-    color:#000;
-    text-align:center;
-    vertical-align:top;
-    cursor:pointer;
-    background-color:#eee;
-    border:1px solid #666;
-    border-radius:6px;
-    /*box-shadow: 0 1px 0 #fff;*/
+>>>>>>> 2.1devtf:css/forms.css
 
-    text-decoration: none;
-    z-index:2;
+#afui .button {
+	position:relative;
+	display:inline-block;
+	padding:8px 12px;
+	margin:8px 0;
+	font-weight:bold;
+	color:#000;
+	text-align:center;
+	vertical-align:top;
+	cursor:pointer;
+	background-color:#eee;
+	border:1px solid #666;
+	border-radius:6px;
+	/*box-shadow: 0 1px 0 #fff;*/
+
+	text-decoration: none;
+	z-index:2;
 }
 
 /* Active */
@@ -1295,211 +1307,232 @@ body {
 
 #afui .button.previous {
 
-    margin-left:16px;
-    padding-left:6px;
-    border-color:#666 #666 transparent transparent !important;
+	margin-left:16px;
+	padding-left:6px;
+	border-color:#666 #666 transparent transparent !important;
 }
 #afui .button.next {
-    border-color:#666 transparent #666 #666 !important;
-    margin-right:16px;
-    padding-right:6px;
+	border-color:#666 transparent #666 #666 !important;
+	margin-right:16px;
+	padding-right:6px;
 }
 
 
 #afui .button.previous::after {
 
     z-index:-1;
-    content:'';
-    position:absolute;
-    width:25px; height:25px;
-    background-color:inherit;
-    top:3px; left:-11px;
+	content:'';
+	position:absolute;
+	width:25px; height:25px;
+	background-color:inherit;
+  	top:3px; left:-11px;
     border-radius:5px;
     border:1px solid;
-    border-color:transparent transparent inherit transparent;
+	border-color:transparent transparent inherit transparent;
      -webkit-transform:rotate(45deg); transform:rotate(45deg);
 }
 #afui .button.next::after {
-    z-index:-1;
-    content:'';
-    position:absolute;
-    width:25px; height:25px;
-    background-color:inherit;
-    top:3px; right:-11px;
+	z-index:-1;
+	content:'';
+	position:absolute;
+	width:25px; height:25px;
+	background-color:inherit;
+  	top:3px; right:-11px;
     border-radius:5px;
     border:1px solid;
     border-color:transparent transparent transparent transparent;
    -webkit-transform:rotate(45deg); transform:rotate(45deg);
 }
 
-#afui .button.block {   display:block; }
+#afui .button.block {	display:block; }
 
 #afui .button.flat {
-    border-radius: 0;
-    box-shadow:none;
+	border-radius: 0;
+	box-shadow:none;
 }
 
+<<<<<<< HEAD:css/src/buttons.css
+#afui #header .button-grouped>.button {
+=======
 #afui .header .button-grouped>.button {
-    margin:0;
+>>>>>>> 2.1devtf:css/buttons.css
+	margin:0;
     border-color:#fff;
 }
 
 #afui .button-grouped { 
+<<<<<<< HEAD:css/src/buttons.css
+	display:inline-block;
+	margin: 5px;
+=======
     display:inline-block;
     margin: 5px;
+>>>>>>> 2.1devtf:css/buttons.css
 }
 #afui .button-grouped * {
-    border-radius:0px;
-    float:left;
-    border-left:0px solid transparent;
-    border-right: 1px solid #666;
-    border-bottom: 1px solid #666;
-    border-top: 1px solid #666;
+	border-radius:0px;
+	float:left;
+	border-left:0px solid transparent;
+	border-right: 1px solid #666;
+	border-bottom: 1px solid #666;
+	border-top: 1px solid #666;
     margin:0;
 }
 #afui .button-grouped > .button:first-child {
-    border-left: 1px solid #666;
-    border-top-left-radius: 6px;
-    border-bottom-left-radius: 6px;
+	border-left: 1px solid #666;
+	border-top-left-radius: 6px;
+	border-bottom-left-radius: 6px;
 }
 #afui .button-grouped > .button:last-child {
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
 }
 
 #afui .button-grouped.flex {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
+	display: -webkit-box;
+  	display: -moz-box;
+  	display: -ms-flexbox;
+  	display: -webkit-flex;
+  	display: flex;
 }
 
 #afui .button-grouped.flex > .button {
-    -webkit-box-flex: 1;
-    -moz-box-flex: 1 auto;
-    -webkit-flex: 1 auto;
-    -ms-flex: 1 auto;
-    flex: 1 auto;
+	-webkit-box-flex: 1;
+  	-moz-box-flex: 1 auto;
+  	-webkit-flex: 1 auto;
+  	-ms-flex: 1 auto;
+  	flex: 1 auto;
 
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 #afui .button-grouped.flex.vertical {
-    display: inline-block;
+	display: inline-block;
 }
 
 #afui .button-grouped.vertical * {
-    border-radius:0px;
-    display:block;
-    float:none;
-    width:100%;
-    border-left: 1px solid #666;
-    border-right: 1px solid #666;
-    border-top: 1px solid #666;
+	border-radius:0px;
+	display:block;
+	float:none;
+	width:100%;
+	border-left: 1px solid #666;
+	border-right: 1px solid #666;
+	border-top: 1px solid #666;
     border-bottom: 0px solid #666;
 }
 
 #afui .button-grouped.vertical > .button:first-child {
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    border-bottom-left-radius:0px;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	border-bottom-left-radius:0px;
     border-bottom-right-radius:0px;
 }
 #afui .button-grouped.vertical > .button:last-child {
-    border-top-right-radius:0px;
+	border-top-right-radius:0px;
     border-top-left-radius:0px;
-    border-bottom-right-radius: 6px;
-    border-bottom-left-radius: 6px;
-    border-bottom:1px solid #666;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+	border-bottom:1px solid #666;
 }
 
 
 #afui .button.gray {
-    background:#999;
-    border-color:#666;
+	background:#999;
+	border-color:#666;
 }
 
 #afui .button.yellow {
-    background-color:#F1C222;
-    border-color:#999;
+	background-color:#F1C222;
+	border-color:#999;
 }
 
 #afui .button.red {
-    color:#fff;
-    text-shadow:0 -1px 0 #666;
-    background:#B20000;
-    border-color:#666;
+	color:#fff;
+	text-shadow:0 -1px 0 #666;
+	background:#B20000;
+	border-color:#666;
 }
 
 #afui .button.green {
-    color:#fff;
-    text-shadow:0 -1px 0 #666;
-    background:#009C0C;
-    border-color:#666;
+	color:#fff;
+	text-shadow:0 -1px 0 #666;
+	background:#009C0C;
+	border-color:#666;
 }
 
 #afui .button.orange {
-    color:#fff;
-    text-shadow:0 -1px 0 #666;
-    background-color:#FF8000;
-    border-color:#666;
+	color:#fff;
+	text-shadow:0 -1px 0 #666;
+	background-color:#FF8000;
+	border-color:#666;
 }
 
 #afui .button.black {
-    color:#fff;
-    text-shadow:none;
-    background:#000;
-    border-color:#666;
+	color:#fff;
+	text-shadow:none;
+	background:#000;
+	border-color:#666;
 }
 
 #afui .button.slate {
-    color:#fff;
-    text-shadow:0 -1px 0 #000;
-    background:#171F28;
-    border-color:#666;
+	color:#fff;
+	text-shadow:0 -1px 0 #000;
+	background:#171F28;
+	border-color:#666;
 }
 
+<<<<<<< HEAD:css/src/buttons.css
+#afui #header .button {
+=======
 #afui .header .button {
+>>>>>>> 2.1devtf:css/buttons.css
     color: #fff;
     background:none;
     border-color: transparent;
-    font-size:12px;
-    padding:7px;
-    height:32px;
-    margin:5px;
+ 	font-size:12px;
+	padding:7px;
+ 	height:32px;
+	margin:5px;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
  
+<<<<<<< HEAD:css/src/buttons.css
+#header .button.icon:before{
+=======
 .header .button.icon:before{
+>>>>>>> 2.1devtf:css/buttons.css
     padding-left:6px;
 }
  
 #afui #backButton {
     text-overflow: ellipsis;
     white-space: nowrap;
+<<<<<<< HEAD:css/src/buttons.css
 }
+=======
+}
+>>>>>>> 2.1devtf:css/buttons.css
 
 #afui .af-badge {
-    position:absolute;
-    top:2px; right:2px;
-    display:inline-block;
-    min-width:20px; max-width:90%; height:20px;
-    padding:0 3px;
-    background-color:red;
-    border-radius:20px;
-    
-    font-size:12px;
-    line-height:19px;
-    font-weight:bold;
-    
-    color:#fff;
-    text-overflow:ellipsis;
-    text-align:center;
-    text-shadow:0 -1px 0 rgba(64,0,0,.6);
+	position:absolute;
+	top:2px; right:2px;
+	display:inline-block;
+	min-width:20px;	max-width:90%; height:20px;
+	padding:0 3px;
+	background-color:red;
+	border-radius:20px;
+	
+	font-size:12px;
+	line-height:19px;
+	font-weight:bold;
+	
+	color:#fff;
+	text-overflow:ellipsis;
+	text-align:center;
+	text-shadow:0 -1px 0 rgba(64,0,0,.6);
 }
 
 #afui .af-badge.br { bottom:2px; right:2px; top:auto; left:auto; }
@@ -1858,7 +1891,6 @@ body {
 #afui.android #af_actionsheet a.cancel{
     margin-bottom: 0px;
 }
-
 /* Bg #00ABA9
 
 /* Font header #C6C6C6
@@ -1881,10 +1913,10 @@ body {
 
 
 #afui.win8 {
-    font:14px  "Segoe UI Semilight", "HelveticaNeue-light", Helvetica, Arial, sans-serif;
+	font:14px  "Segoe UI Semilight", "HelveticaNeue-light", Helvetica, Arial, sans-serif;
   font-size:14px;
-    background-color:#000;
-    color:#fff;
+ 	background-color:#000;
+ 	color:#fff;
 }
 
 #afui.win8.light {
@@ -1892,10 +1924,21 @@ body {
     color:#000;
 }
 
+<<<<<<< HEAD:css/src/win8.css
+#afui.win8 #header .button {
+    color: inherit;
+    border-color:transparent;
+    font-size:14px;
+}
+
+#afui.win8 > #header #menubadge {
+	display:none;
+=======
 #afui.win8 .header .button {
     color: inherit;
     border-color:transparent;
     font-size:14px;
+>>>>>>> 2.1devtf:css/win8.css
 }
 
 
@@ -1937,28 +1980,44 @@ body {
   transform:none;
 }
 
+<<<<<<< HEAD:css/src/win8.css
+#afui.win8 > #header h1 {
+=======
 #afui.win8 .header h1 {
-    text-align: left;
+>>>>>>> 2.1devtf:css/win8.css
+	text-align: left;
     color:inherit;
 }
 
+<<<<<<< HEAD:css/src/win8.css
+#afui.win8 > #header{
+=======
 #afui.win8 .header{
+>>>>>>> 2.1devtf:css/win8.css
     border:0px;
-    background: inherit;
-    border-bottom:inherit;
+	background: inherit;
+	border-bottom:inherit;
     color:inherit;
 }
 
+<<<<<<< HEAD:css/src/win8.css
+#afui.win8 > #navbar {
+=======
 #afui.win8 .footer {
+>>>>>>> 2.1devtf:css/win8.css
     padding:0px;
-    background:inherit;
-    text-align: center;
-    height:65px;
-    background:rgba(33,32,33,.9);
+ 	background:inherit;
+ 	text-align: center;
+ 	height:65px;
+ 	background:rgba(33,32,33,.9);
     border-top:none;
 }
  
+<<<<<<< HEAD:css/src/win8.css
+#afui.win8.light > #navbar{
+=======
 #afui.win8.light .footer{
+>>>>>>> 2.1devtf:css/win8.css
     background:#F2F2F2;
     color:black;
 }
@@ -1979,15 +2038,27 @@ body {
   -webkit-perspective: 1000;
 }
 
+<<<<<<< HEAD:css/src/win8.css
+#afui.win8.light #navbar a {
+  text-shadow: 0 0 rgba(0, 0, 0, 0);  
+}
+
+#afui.win8 #navbar .icon.pressed:before {
+	background-color: #00ABA9;
+}
+
+#afui.win8 #navbar .icon:before {
+=======
 #afui.win8.light .footer>footer>a:not(.button) {
   text-shadow: 0 0 rgba(0, 0, 0, 0);  
 }
 
 #afui.win8 .footer>footer>a.icon.pressed:not(.button):before {
-    background-color: #00ABA9;
+	background-color: #00ABA9;
 }
 
 #afui.win8 .footer>footer>a.icon:not(.button):before {
+>>>>>>> 2.1devtf:css/win8.css
     top: 0px;
     left: 10px;
     font-size:19px;
@@ -1997,48 +2068,56 @@ body {
     border-radius: 20px;
 }
 
+<<<<<<< HEAD:css/src/win8.css
+#afui.win8.light #navbar .icon:before {
+    border: 3px solid #000;
+}
+
+#afui.win8 #navbar a:not(:last-of-type){
+=======
 #afui.win8.light .footer>footer>a.icon:not(.button):before {
     border: 3px solid #000;
 }
 
 #afui.win8 .footer>footer>a:not(:last-of-type):not(.button){
-    border:none;
+>>>>>>> 2.1devtf:css/win8.css
+  	border:none;
 }
 
 #afui.win8 .af-badge {
-    border:none;
+	border:none;
 }
 
 #afui.win8 #content,#afui.win8 #content > .panel {
-    background:inherit;
-    color:inherit;
+ 	background:inherit;
+ 	color:inherit;
 }
 
 #afui.win8 .list {
-    background:inherit;
-    color:inherit;
-    border-color:#303030;
+ 	background:inherit;
+ 	color:inherit;
+ 	border-color:#303030;
 }
 
 #afui.win8 .list .divider,  #afui.win8 #menu.tabletMenu .list .divider  {
-    background:#00ABA9;
-    padding:5px;
+ 	background:#00ABA9;
+ 	padding:5px;
     display:inline;
-    font-size:16px;
-    font-weight:normal;
-    border-top:none;
-    border-bottom:none;
+ 	font-size:16px;
+ 	font-weight:normal;
+ 	border-top:none;
+ 	border-bottom:none;
     color:inherit;
 }
 
 #afui.win8 .list li {
-    border-top:none;
-    border-bottom:none;
+ 	border-top:none;
+ 	border-bottom:none;
     font-size:20px;
 }
 
 #afui.win8 .panel h2 {
-    color:inherit;
+ 	color:inherit;
     font-weight:normal;
     font-size:34px;
     line-height:34px;
@@ -2064,7 +2143,7 @@ body {
 #afui.win8.light .afScrollbar {background:black !important;}
 
 #afui.win8 select, #afui.win8 textarea, #afui.win8 input[type="text"], #afui.win8 input[type="search"], #afui.win8 input[type="password"], #afui.win8 input[type="datetime"], #afui.win8 input[type="datetime-local"], #afui.win8 input[type="date"], #afui.win8 input[type="month"], #afui.win8 input[type="time"], #afui.win8 input[type="week"], #afui.win8 input[type="number"], #afui.win8 input[type="email"], #afui.win8 input[type="url"], #afui.win8 input[type="tel"], #afui.win8 input[type="color"], #afui.win8 .input-group {
-    background:black;
+  	background:black;
     color:inherit;
 }
 
@@ -2073,32 +2152,36 @@ body {
 }
 
 #afui.win8 input.toggle+label:after {
-    color:inherit;
+	color:inherit;
 }
 
 #afui.win8 input.toggle+label {
-    border-radius:0;
+	border-radius:0;
 }
 
 #afui.win8 input.toggle:checked+label {
-    background:#00ABA9;
+	background:#00ABA9;
 }
 
 #afui.win8 input.toggle+label > span {
-    border-radius:0;
-    top:0;
-    width:27px;
-    height:23px;
+	border-radius:0;
+	top:0;
+	width:27px;
+	height:23px;
 }
 
 #afui.win8 input[type="radio"]:checked+label:before,#afui.win8 input[type="checkbox"]:checked+label:before {
-    background: #00ABA9;
+	background: #00ABA9;
 }
 
 #afui.win8 > #menu {
+<<<<<<< HEAD:css/src/win8.css
+    border-right:1px solid rgba(128,128,128,0.5);
+=======
   border-right:1px solid rgba(128,128,128,0.5);
-    color:inherit;
-    background:inherit;
+>>>>>>> 2.1devtf:css/win8.css
+	color:inherit;
+	background:inherit;
 }
 
 #afui.win8 > #aside_menu {
@@ -2115,7 +2198,7 @@ body {
 }
 
 #afui.win8 #menu .list {
-    font-weight: normal;
+	font-weight: normal;
 }
 
 #afui.win8 #menu .list li,#afui.win8 #menu .list .divider {
@@ -2123,21 +2206,21 @@ body {
 }
 
 #afui.win8 .button {
-    border-radius:0;
-    border:none;
-    background:inherit;
-    border:3px solid #fff;
-    color:inherit;
-    text-shadow:none;
-    box-shadow:none;
+	border-radius:0;
+	border:none;
+	background:inherit;
+	border:3px solid #fff;
+	color:inherit;
+	text-shadow:none;
+	box-shadow:none;
 }
 
 #afui.win8.light .button {
-    border:3px solid #000;
+	border:3px solid #000;
 }
 
 #afui.win8 .button.pressed {
-    background:#00ABA9;
+	background:#00ABA9;
 }
 
 #afui.win8 .button.next, #afui.win8 .button.previous {
@@ -2160,6 +2243,48 @@ body {
 #afui.win8 .button-grouped > .button:last-child {
     border-radius:0; 
 }
+<<<<<<< HEAD:css/src/win8.css
+
+#afui.win8 .button-grouped.vertical >.button{
+    border:3px solid #fff;
+    border-bottom:0;
+}
+
+#afui.win8 .button-grouped.vertical > .button:last-child {
+    border-bottom:3px solid #fff;
+}
+
+#afui.win8 > #header .button-grouped > .button{
+    border-color: #fff;
+}
+
+#afui.win8 > #header .button-grouped > .button.pressed{
+    background:#00ABA9;
+}
+
+#afui.win8.light .button-grouped > .button, 
+#afui.win8.light .button-grouped.vertical > .button, 
+#afui.win8.light > #header .button-grouped > .button{
+    border-color: #111;
+}
+
+#afui.win8 #menu {
+  display: none;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+  width:100%;
+  height: 150px;
+  font-size:20px;
+  top:auto;
+  background:inherit;
+  color:inherit;
+  -webkit-transition-timing-function: linear;
+  transition-timing-function: linear;
+  -webkit-transform:translate3d(0,150px,0);
+  transform:translate3d(0,150px,0);
+=======
 
 #afui.win8 .button-grouped.vertical >.button{
     border:3px solid #fff;
@@ -2176,6 +2301,7 @@ body {
 
 #afui.win8  .header .button-grouped > .button.pressed{
     background:#00ABA9;
+>>>>>>> 2.1devtf:css/win8.css
 }
 
 #afui.win8.light .button-grouped > .button, 
@@ -2217,6 +2343,10 @@ body {
 
 #afui.win8 .afPopup {
     width: 100%;
+<<<<<<< HEAD:css/src/win8.css
+    float:left;
+=======
+>>>>>>> 2.1devtf:css/win8.css
     border: solid 0px #72767b;
     left:0px !important;
     -webkit-border-radius: 0;
@@ -2225,7 +2355,14 @@ body {
     transform:none;
     -webkit-transition: none;
     transition:none;
+<<<<<<< HEAD:css/src/win8.css
+    position: absolute;
+    z-index: 1000000;
     top: 0 !important;
+    margin: 0px auto;
+=======
+    top: 0 !important;
+>>>>>>> 2.1devtf:css/win8.css
     background:#222;
     color:inherit;
     padding:15px;
@@ -2236,7 +2373,14 @@ body {
 }
 
 #afui.win8 .afPopup>HEADER{
+<<<<<<< HEAD:css/src/win8.css
+    font-weight:bold;
+    font-size:20px;    
+    margin:0;
+    padding:0;
+=======
     font-size:20px;
+>>>>>>> 2.1devtf:css/win8.css
 }
 
 #afui.win8 .afPopup>DIV{
@@ -2263,7 +2407,13 @@ body {
 }
 
 #afui.win8 .afPopup>FOOTER>A.center{
+<<<<<<< HEAD:css/src/win8.css
+    float:none!important;
     width:auto;
+    margin:8px;
+=======
+    width:auto;
+>>>>>>> 2.1devtf:css/win8.css
 }
 
 #afui.win8 #af_actionsheet {
@@ -2287,25 +2437,40 @@ body {
 
 @media handheld, only screen and (min-width: 768px){
 
-    #afui.win8 .footer footer #metroMenu {
-        display:none;
-    }
-    #afui.win8 .footer {
-        -webkit-transform:translate3d(0,0,0);
-        transform:translate(0,0);
-    }
-    #afui.win8 #menu  {
-        background:inherit;
+	#afui.win8 .footer footer #metroMenu {
+		display:none;
+	}
+<<<<<<< HEAD:css/src/win8.css
+	#afui.win8 #navbar {
+		-webkit-transform:translate3d(0,0,0) !important;
+		transform:translate(0,0) !important;
+	}
+	#afui.win8 #menu  {
+		background:inherit;
+        color:inherit;
+        font-size:18px;
+=======
+	#afui.win8 .footer {
+		-webkit-transform:translate3d(0,0,0);
+		transform:translate(0,0);
+	}
+	#afui.win8 #menu  {
+		background:inherit;
     color:inherit;
     font-size:18px;
     left:0;
     top:0;
     width:200px;
-    }
+>>>>>>> 2.1devtf:css/win8.css
+	}
     #afui.win8 #menu .list > li > a:after{
         margin-top:-11px;
     }
+<<<<<<< HEAD:css/src/win8.css
 }
+=======
+}
+>>>>>>> 2.1devtf:css/win8.css
 
 #afui.bb {
     font-family: "Slate Pro",Slate,"Myriad Pro","BBAlpha Sans",Helvetica;
@@ -2557,14 +2722,22 @@ body {
      font-family:'HelveticaNeue', 'Helvetica Neue',Helvetica, Arial, sans-serif;
 }
 
+<<<<<<< HEAD:css/src/ios7.css
+#afui.ios7 #header {
+=======
 #afui.ios7 .header {
+>>>>>>> 2.1devtf:css/ios7.css
     background:rgb(249,249,249);
     color:inherit;
     border:none;
     border-bottom:1px solid rgba(158,158,158,255);
 }
 
+<<<<<<< HEAD:css/src/ios7.css
+#afui.ios7 #header .button {
+=======
 #afui.ios7 .header .button {
+>>>>>>> 2.1devtf:css/ios7.css
     color:rgba(82,155,234,255);
     border-color:transparent;
     font-size:14px;
@@ -2576,7 +2749,11 @@ body {
     text-shadow:none;
 }
 
+<<<<<<< HEAD:css/src/ios7.css
+#afui.ios7 .panel {
+=======
 #afui.ios7 .panel, #afui.ios7 #modalContainer {
+>>>>>>> 2.1devtf:css/ios7.css
     background:rgba(238,238,238,255);    
 }
 
@@ -2636,7 +2813,10 @@ body {
     color:black;
 }
 
+<<<<<<< HEAD:css/src/ios7.css
+=======
 #afui.ios7 #aside_menu .list,
+>>>>>>> 2.1devtf:css/ios7.css
 #afui.ios7 #menu .list {
     background:white;
     font-weight: normal;
@@ -2724,12 +2904,20 @@ body {
 #afui.ios7 .button-grouped >  .button:first-child,
 #afui.ios7 .button-grouped.vertical * ,
 #afui.ios7 .button-grouped.vertical >  .button:last-child, 
+<<<<<<< HEAD:css/src/ios7.css
+#afui.ios7 #header .button-grouped > .button {
+=======
 #afui.ios7 .header .button-grouped > .button {
+>>>>>>> 2.1devtf:css/ios7.css
     border-color:rgba(82,155,234,255);
 }
 
 #afui.ios7 .button-grouped > .button.pressed ,
+<<<<<<< HEAD:css/src/ios7.css
+#afui.ios7 #header .button-grouped > .button.pressed{
+=======
 #afui.ios7 .header .button-grouped > .button.pressed{
+>>>>>>> 2.1devtf:css/ios7.css
     color:white;
     background:rgba(82,155,234,255);
 }
@@ -2739,8 +2927,18 @@ body {
     border-radius:10px;
     padding:0;
     text-align: center;
+<<<<<<< HEAD:css/src/ios7.css
+    width:280px;
+    position: absolute;
+    z-index: 1000000;
+    top: 50%;
     color:inherit;
     background:rgba(249,249,249,1);
+    text-align:center;
+=======
+    color:inherit;
+    background:rgba(249,249,249,1);
+>>>>>>> 2.1devtf:css/ios7.css
 }
 
 #afui.ios7 .afPopup>HEADER{
@@ -2748,15 +2946,22 @@ body {
 }
 
 #afui.ios7 .afPopup>DIV{
+<<<<<<< HEAD:css/src/ios7.css
+    font-size:14px;
+=======
+>>>>>>> 2.1devtf:css/ios7.css
     padding-bottom:10px;
 }
 
 #afui.ios7 .afPopup>FOOTER{
     border-top:1px solid #aaa;
+<<<<<<< HEAD:css/src/ios7.css
+=======
 }
 
 #afui.ios7 .afPopup>FOOTER>A.center{
     width:100%!important;
+>>>>>>> 2.1devtf:css/ios7.css
 }
 
 #afui.ios7 .afPopup .button {
@@ -2769,7 +2974,11 @@ body {
 }
 
 #afui.ios7 .afPopup .button.pressed {
+<<<<<<< HEAD:css/src/ios7.css
+    background: none;
+=======
     background: transparent;
+>>>>>>> 2.1devtf:css/ios7.css
 }
 
 #afui.ios7 .button.pressed {
@@ -2815,6 +3024,14 @@ body {
 #afui.ios7 #af_actionsheet a:nth-last-child(2){
     border-bottom-left-radius:5px;
     border-bottom-right-radius:5px;
+<<<<<<< HEAD:css/src/ios7.css
+}
+
+#afui.ios7 #af_actionsheet a.cancel{
+    font-weight:bold;
+    margin: 9px 0;
+    border-radius:5px;
+=======
 }
 
 #afui.ios7 #af_actionsheet a.cancel{
@@ -2825,6 +3042,7 @@ body {
 
 #afui.ios7 #af_actionsheet a.red{
     color:#f44;
+>>>>>>> 2.1devtf:css/ios7.css
 }
 
 #afui.ios7 .footer>footer>a.pressed:not(.button),.footer>footer>a.icon.pressed:not(.button):before  {
@@ -2950,7 +3168,11 @@ body {
     color:white;
 } 
 
+<<<<<<< HEAD:css/src/ios.css
+#afui.ios #header h1 {
+=======
 #afui.ios .header h1 {
+>>>>>>> 2.1devtf:css/ios.css
     text-shadow: rgba(0,0,0,0.8) 0 -1px 0;
 }
 
@@ -2976,16 +3198,27 @@ body {
     border-top:1px solid #000;
 }
 
+<<<<<<< HEAD:css/src/ios.css
+#afui.ios #navbar a.pressed {
+=======
 #afui.ios .footer>footer>a.pressed:not(.button) {
+>>>>>>> 2.1devtf:css/ios.css
     background:rgba(255, 255, 255, 0.13);
     border-radius:6px;
 }
 
+<<<<<<< HEAD:css/src/ios.css
+#afui.ios #navbar .icon.pressed:before {
+    color:#3a9de2;
+}
+
+=======
 #afui.ios .footer>footer>a.icon.pressed:not(.button):before {
     color:#3a9de2;
 }
 
 #afui.ios > #aside_menu,
+>>>>>>> 2.1devtf:css/ios.css
 #afui.ios > #menu.tabletMenu {
    border-right:none;
     background:#000;
@@ -3028,7 +3261,11 @@ body {
     -ms-transform:rotate(45deg); -moz-transform:rotate(45deg); -webkit-transform:rotate(45deg); transform:rotate(45deg);
 }
 
+<<<<<<< HEAD:css/src/ios.css
+#afui.ios #header .button {
+=======
 #afui.ios .header .button {
+>>>>>>> 2.1devtf:css/ios.css
     color:#fff;
     text-shadow:0 -1px 0 #333;
     background-color:#476999;
@@ -3037,6 +3274,11 @@ body {
     background-image:linear-gradient(to bottom, #9CABC0 0%, #6E84A2 50%, #476999 51%);
 }
 
+<<<<<<< HEAD:css/src/ios.css
+#afui.ios #header .button.pressed {
+    background-image:linear-gradient(to bottom, #6E84A2 0%, #476999 50%, #274979 51%);
+}
+=======
 #afui.ios .header .button.pressed {
     background-image:linear-gradient(to bottom, #6E84A2 0%, #476999 50%, #274979 51%);
 }
@@ -3053,6 +3295,7 @@ body {
 #afui.ios .footer .button.pressed {
     background-image:linear-gradient(to bottom, #444 0%, #222 50%, #000 51%);
 }
+>>>>>>> 2.1devtf:css/ios.css
 
 #afui.ios #aside_menu .list li, 
 #afui.ios #aside_menu .list .divider, 
@@ -3072,20 +3315,47 @@ body {
     color:#ccc;   
 }
 
+<<<<<<< HEAD:css/src/ios.css
+=======
 #afui.ios #aside_menu .list .divider,
+>>>>>>> 2.1devtf:css/ios.css
 #afui.ios #menu .list .divider {
     background:#333;
     color:#fff;   
 }
 
 #afui.ios .afPopup {
+<<<<<<< HEAD:css/src/ios.css
+     display: block;
+    width: 280px;
+    float:left;
+=======
+>>>>>>> 2.1devtf:css/ios.css
     border: solid 2px #fff;
     -webkit-box-shadow: 0px 4px 6px #555, 0 0 20px rgba(0,0,0,0.5);
     -webkit-border-radius: 10px;
     border-radius:10px;
+<<<<<<< HEAD:css/src/ios.css
+    padding: 10px;
+    opacity: 1;
+    -webkit-transform: scale(1);
+    -webkit-transition: all 0.20s  ease-in-out;
+    transform:scale(1);
+    transition: all 0.20s  ease-in-out;
+    position: absolute;
+    z-index: 1000000;
+    margin-left: auto!important;
+    margin-right: auto!important;
+    background: #1b294b;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#626c82), to(#1b294b));
+}
+#afui.ios .afPopup >* {
+color:white;
+=======
     padding: 0;
     background: #1b294b;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#626c82), to(#1b294b));
+>>>>>>> 2.1devtf:css/ios.css
 }
 
 #afui.ios .afPopup >* {
@@ -3093,6 +3363,20 @@ body {
 }
 
 #afui.ios .afPopup>HEADER{
+<<<<<<< HEAD:css/src/ios.css
+    font-weight:bold;
+    font-size:20px;    
+    text-align:center;
+    text-shadow:0 -1px #000;
+    margin:0;
+    padding:0;
+}
+
+#afui.ios .afPopup>DIV{
+    font-size:14px;
+    text-align:center;
+    margin:8px;
+=======
     font-weight:bold;   
     text-align:center;
     text-shadow:0 -1px #000;
@@ -3101,6 +3385,7 @@ body {
 
 #afui.ios .afPopup>DIV{
     text-align:center;
+>>>>>>> 2.1devtf:css/ios.css
 }
 
 #afui.ios .afPopup>FOOTER>A{
@@ -3109,6 +3394,17 @@ body {
 }
 
 #afui.ios .afPopup>FOOTER>A#cancel{
+<<<<<<< HEAD:css/src/ios.css
+    float:left;
+    width:120px;
+    margin-left:4px;
+}
+
+#afui.ios .afPopup>FOOTER>A#action{
+    float:right;
+    width:120px;
+    margin-right:4px;
+=======
     width:120px;
     margin-left:10px;
 }
@@ -3116,12 +3412,18 @@ body {
 #afui.ios .afPopup>FOOTER>A#action{
     width:120px;
     margin-right:10px;
+>>>>>>> 2.1devtf:css/ios.css
 }
 
 #afui.ios .afPopup>FOOTER>A.center{
     float:none!important;
+<<<<<<< HEAD:css/src/ios.css
+    width:80%;
+    margin:8px;
+=======
     width:95%!important;
     margin:8px!important;
+>>>>>>> 2.1devtf:css/ios.css
 }
 
 #afui.ios #af_actionsheet {
@@ -3144,6 +3446,8 @@ body {
     background: linear-gradient(to bottom, #666 0%,#333 100%);
     color:white;
     text-shadow:0 -1px 0 #000;
+<<<<<<< HEAD:css/src/ios.css
+=======
 }
 
 #afui.ios #af_actionsheet a.red{
@@ -3151,6 +3455,7 @@ body {
     background: linear-gradient(to bottom, #d55 0%,#d11 100%);
     color:white;
     text-shadow:0 -1px 0 #000;
+>>>>>>> 2.1devtf:css/ios.css
 }
 #af_actionsheet {
     position:absolute;
@@ -3301,102 +3606,101 @@ body {
     background: black !important;
     opacity: 0 !important;
 }
+	#afModalMask {
+		position:absolute;
+		top:0px;
+		left:0px;
+		width:100%;
+		height:100%;
+		background:transparent;
+		display:none;
+		z-index:9999;
+	}
 
-    #afModalMask {
-        position:absolute;
-        top:0px;
-        left:0px;
-        width:100%;
-        height:100%;
-        background:transparent;
-        display:none;
-        z-index:9999;
-    }
-
-    #afSelectBoxContainer {
-        position:absolute;
-        display:block;
-        width:90%;
-        max-width:280px;
-        margin-right:auto;
-        min-height:100px;
-        background:#303030;
-        color:white;
-        overflow:hidden;
-        z-index:9999;
-        max-height:300px;
-        margin-top: -150px;
-        top: 50%;
-        left: 50%;
-        margin-left: -138px;
-    }
+	#afSelectBoxContainer {
+		position:absolute;
+		display:block;
+		width:90%;
+		max-width:280px;
+		margin-right:auto;
+		min-height:100px;
+		background:#303030;
+		color:white;
+		overflow:hidden;
+		z-index:9999;
+		max-height:300px;
+		margin-top: -150px;
+		top: 50%;
+		left: 50%;
+		margin-left: -138px;
+	}
 
 
-    #afSelectBoxfix ul {
-        list-style-type:none;
-        padding:0px;
-        margin:0px;
-    }
-    #afSelectBoxfix li {
-        font-size: 1.1em;
-        color: #fff;
-        display: block;
-        line-height: 2.5em;
-        padding: 0 1em;
-        border-bottom: 1px solid #444;
-    }
-    #afSelectBoxfix .selected {
-        background:#33B5E5;
-    }
+	#afSelectBoxfix ul {
+		list-style-type:none;
+		padding:0px;
+		margin:0px;
+	}
+	#afSelectBoxfix li {
+		font-size: 1.1em;
+		color: #fff;
+		display: block;
+		line-height: 2.5em;
+		padding: 0 1em;
+		border-bottom: 1px solid #444;
+	}
+	#afSelectBoxfix .selected {
+		background:#33B5E5;
+	}
 
-    .afFakeSelect {
-        width: 200px;
-        height: 30px;
-        display: inline-block;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        line-height: 2em;
-        font-size: 1em;
-        padding-left: 10px;
-        position: relative;
-        padding-right: 35px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;       
-    }
+	.afFakeSelect {
+		width: 200px;
+		height: 30px;
+		display: inline-block;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		line-height: 2em;
+		font-size: 1em;
+		padding-left: 10px;
+		position: relative;
+		padding-right: 35px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;		
+	}
 
-    .afFakeSelect:after {
-        position:absolute;
-        top:5px;
-        right:5px;
-        border: 14px solid transparent;
-        border-top-color: #ccc;
-        content:'';
-    }
+	.afFakeSelect:after {
+		position:absolute;
+		top:5px;
+		right:5px;
+   		border: 14px solid transparent;
+   		border-top-color: #ccc;
+   		content:'';
+	}
 
-    #afSelectBoxContainer #afSelectDone,#afSelectBoxContainer #afSelectCancel{
-        margin-top:10px;
-        display: inline-block;
-        height: 30px;
-        width: 100px;
-        background:#33B5E5;
-        border: 1px solid #33B5E5;
-        text-align: center;
-        line-height: 2em;
-        float: left;
-        margin-left: 10px;
-    }
-    #afSelectBoxContainer #afSelectCancel {
-        float:right;
-        margin-right:10px;
-    }
-    #afSelectBoxContainer #afSelectClose {
-        overflow: hidden;
-        border-bottom: 1px solid #444;
-        padding-bottom:5px;
-    }
+	#afSelectBoxContainer #afSelectDone,#afSelectBoxContainer #afSelectCancel{
+		margin-top:10px;
+	    display: inline-block;
+	    height: 30px;
+	    width: 100px;
+	    background:#33B5E5;
+	    border: 1px solid #33B5E5;
+	    text-align: center;
+	    line-height: 2em;
+	    float: left;
+	    margin-left: 10px;
+	}
+	#afSelectBoxContainer #afSelectCancel {
+		float:right;
+		margin-right:10px;
+	}
+	#afSelectBoxContainer #afSelectClose {
+		overflow: hidden;
+		border-bottom: 1px solid #444;
+		padding-bottom:5px;
+	}
 
-    select:disabled~.afFakeSelect {
-        background:#ccc;
-        color:black;
-    }
+	select:disabled~.afFakeSelect {
+		background:#ccc;
+		color:black;
+	}

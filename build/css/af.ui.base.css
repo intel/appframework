@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-03-12 */
+/*! intel-appframework - v2.1.0 - 2014-03-18 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -224,6 +224,7 @@ body {
 #afui .x-scroll, #afui .panel.x-scroll {
     overflow-x:auto;
     overflow-y:hidden;
+    width:100%;
 }
 #afui .no-scroll, #afui .panel.no-scroll {
     overflow:hidden;
@@ -668,7 +669,7 @@ body {
 
  */
 
-@-ms-viewport {
+ @-ms-viewport {
   width: device-width;
 }
 
@@ -677,14 +678,14 @@ body {
     color:#53575E;
 }
 
-#afui .header{
+#afui > #header{
     background:#0088D1;
     border:none;
     border-bottom:1px solid #0088D1;
     color:white;
 }
 
-#afui  .header h1 {
+#afui  #header h1 {
     text-shadow:none;
     width:45%;
 }
@@ -695,17 +696,18 @@ body {
     display: block;
     position: absolute;
     line-height:44px;
+
     left: 25px;
     text-overflow: ellipsis;
     font-size: 14px;
-    padding:0;
+    padding: 0;
     text-shadow: none;
     background-color: transparent;
     border:none;
-    border-color:transparent;
+    border-color: transparent;
     height: 44px;
     top:0;
-    border-radius:0;
+    border-radius: 0;
     box-shadow:none;
     margin: 0;
     padding-left: 0;
@@ -713,6 +715,7 @@ body {
     width:50px;
     padding:0 !important;
     margin:0 !important;
+
 }
 
 #afui #backButton::before {
@@ -722,9 +725,9 @@ body {
     top: 10px;
     left: -20px;
     text-align: center;
-    border-radius:0;
+    border-radius: 0;
     border: none;
-    border-color:transparent;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
@@ -742,25 +745,26 @@ body {
     background-color: transparent;
 }
 
-#afui  .footer {
-     background:#0088D1;
+#afui > #navbar {
+    background:#0088D1;
     border:none;
     border-top:1px solid #0088D1;
     box-shadow:none;
 }
 
-#afui footer>a:not(.button) {
+#afui #navbar a {
  
 }
 
-#afui footer>a.pressed:not(.button) {
+#afui #navbar a.pressed {
     border-radius:0;    
     background:#00AEEF;
 }
 
-#afui footer>a.icon.pressed:not(.button):before {
+#afui #navbar .icon.pressed:before {
     color:inherit;
 }
+
 
 #afui .af-badge {
     border:none;
@@ -779,12 +783,12 @@ body {
 
 #afui .list .divider { color:black; }
 
-#afui .panel, #afui #modalContainer, #afui #modal {
+#afui .panel {
     color:inherit;
-    background:inherit;
+    background:white;
 }
+ #afui .panel h2 { color:#0088D1;}
 
-#afui .panel h2 { color:#0088D1;}
 
 #afui .collapsed:after {border-top: 6px solid;}
 #afui .collapsed:before {border:2px solid;}
@@ -794,8 +798,8 @@ body {
 #afui .collapsed:before,#afui .expanded:before {
     border-color: inherit;
 }
-
-#afui .collapsed:after, #afui .expanded:after{
+#afui .collapsed:after,
+#afui .expanded:after{
     border-top-color:inherit;
     border-top-color:inherit;
 }
@@ -829,33 +833,30 @@ body {
     background: #33B5E5;
 }
 
-#afui > #aside_menu,
 #afui > #menu.tabletMenu {
     color:white;
     background:#00AEEF;
     border-right:1px solid #006BA4;
 }
 
-#afui #aside_menu .list li,#afui #aside_menu .list .divider,#afui #aside_menu .list li:last-child,
 #afui #menu .list li,#afui #menu .list .divider,#afui #menu .list li:last-child {
     border-color: #4CC6F4;
+    
 }
 
-#afui #aside_menu .list .divider,
 #afui #menu .list .divider {
     background:#0088D1;
     color:inherit;
     font-size: 1em;
+    
 }
 
-#afui #aside_menu .list > li > a,
 #afui #menu .list > li > a {
     background:inherit;
     color:inherit;
     font-size: 1em;
 }
 
-#afui #aside_menu .list,
 #afui #menu .list {
     font-weight: normal;
 }
@@ -865,7 +866,7 @@ body {
     text-shadow:none;
 }
 
-#afui .list > li > a:after{
+.list > li > a:after{
     color:#0088D1;
 }
 
@@ -889,9 +890,9 @@ body {
     top: 2px;
     left: -25px;
     text-align: center;
-    border-radius:0;
+    border-radius: 0;
     border: none;
-    border-color:transparent;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
@@ -917,9 +918,9 @@ body {
     top: 6px;
     right: -25px;
     text-align: center;
-    border-radius:0;
+    border-radius: 0;
     border: none;
-    border-color:transparent;
+    border-color: transparent;
     box-shadow: none;
     -webkit-transform: none;
     transform: none;
@@ -931,20 +932,27 @@ body {
     text-transform: none;
     line-height: 1;
     -webkit-font-smoothing: antialiased;
-    content: "\f054";   
+    content: "\f054";
     background-color: transparent;
 }
 
 #afui .afPopup {
+    display: block;
+    width: 100%;
+    float:left;
     border: solid 1px #33B5E5;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
+    left:0px ;
+    padding: 10px;
+    opacity: 1;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    position: absolute;
+    z-index: 1000000;
+    top: 50%;
+    margin: 0px auto;
     background:inherit;
     color:inherit;
-}
-
-#afui .afPopup>FOOTER>A{
-    width: 120px;
+    padding:30px;
 }
 
 #afui #af_actionsheet {
@@ -1265,12 +1273,16 @@ body {
   color: inherit;
   margin: 16px 0 8px;
 }
+<<<<<<< HEAD:css/src/forms.css
+=======
 
 
 #afui input[type=button],
 #afui input[type=submit], #afui button {
   font-size:inherit;
 } 
+>>>>>>> 2.1devtf:css/forms.css
+
 #afui .button {
 	position:relative;
 	display:inline-block;
@@ -1339,14 +1351,23 @@ body {
 	box-shadow:none;
 }
 
+<<<<<<< HEAD:css/src/buttons.css
+#afui #header .button-grouped>.button {
+=======
 #afui .header .button-grouped>.button {
+>>>>>>> 2.1devtf:css/buttons.css
 	margin:0;
     border-color:#fff;
 }
 
 #afui .button-grouped { 
+<<<<<<< HEAD:css/src/buttons.css
+	display:inline-block;
+	margin: 5px;
+=======
     display:inline-block;
     margin: 5px;
+>>>>>>> 2.1devtf:css/buttons.css
 }
 #afui .button-grouped * {
 	border-radius:0px;
@@ -1462,7 +1483,11 @@ body {
 	border-color:#666;
 }
 
+<<<<<<< HEAD:css/src/buttons.css
+#afui #header .button {
+=======
 #afui .header .button {
+>>>>>>> 2.1devtf:css/buttons.css
     color: #fff;
     background:none;
     border-color: transparent;
@@ -1474,14 +1499,22 @@ body {
     white-space: nowrap;
 }
  
+<<<<<<< HEAD:css/src/buttons.css
+#header .button.icon:before{
+=======
 .header .button.icon:before{
+>>>>>>> 2.1devtf:css/buttons.css
     padding-left:6px;
 }
  
 #afui #backButton {
     text-overflow: ellipsis;
     white-space: nowrap;
+<<<<<<< HEAD:css/src/buttons.css
 }
+=======
+}
+>>>>>>> 2.1devtf:css/buttons.css
 
 #afui .af-badge {
 	position:absolute;
@@ -1689,7 +1722,6 @@ body {
     background: black !important;
     opacity: 0 !important;
 }
-
 	#afModalMask {
 		position:absolute;
 		top:0px;
