@@ -1985,7 +1985,7 @@
             });
 
             //page title (should optionally be left to developer..)
-            this.titleBar = $.query("#header #pageTitle").get(0);
+            this.titlebar = $.query("#header #pageTitle").get(0);
 
             //setup ajax mask
             this.addContentDiv("afui_ajax", "");

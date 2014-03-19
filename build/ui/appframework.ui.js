@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-03-18 */
+/*! intel-appframework - v2.1.0 - 2014-03-19 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -5785,7 +5785,7 @@ if (!Date.now)
             });
 
             //page title (should optionally be left to developer..)
-            this.titleBar = $.query("#header #pageTitle").get(0);
+            this.titlebar = $.query("#header #pageTitle").get(0);
 
             //setup ajax mask
             this.addContentDiv("afui_ajax", "");
