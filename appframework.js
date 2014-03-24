@@ -1664,7 +1664,7 @@ if (!window.af || typeof(af) !== "function") {
                 script.src = options.url.replace(/=\?/, "=" + callbackName);
             } else {
 
-                callback = options.jsonp ? options.jsonp : "callback";                
+                callback = options.jsonp ? options.jsonp : "callback";
                 if (options.url.indexOf("?") === -1) {
                     options.url += ("?" + callback + "=" + callbackName);
                 }
@@ -1974,7 +1974,7 @@ if (!window.af || typeof(af) !== "function") {
                 //create the script
                 var deferred = $.Deferred();
                 var scr=$.create("script",{async:true,src:url}).get(0);
-                scr.onload=function(){                    
+                scr.onload=function(){
                     success&&success();
                     deferred.resolve.call(this,"success");
                     $(this).remove();
@@ -1982,7 +1982,7 @@ if (!window.af || typeof(af) !== "function") {
                 scr.onerror=function(){
                     $(this).remove();
                     deferred.reject.call(this,"success");
-                }
+                };
                 document.head.appendChild(scr);
                 return deferred.promise;
             }

@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-03-18 */
+/*! intel-appframework - v2.1.0 - 2014-03-24 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -1237,9 +1237,9 @@ if (!window.af || typeof(af) !== "function") {
                 if (val != nundefined)
                     return this.css("height", val);
                 if (this[0] === this[0].window)
-                    return window.innerHeight + "";
+                    return window.innerHeight;
                 if (this[0].nodeType === this[0].DOCUMENT_NODE)
-                    return this[0].documentElement.offsetheight;
+                    return this[0].documentElement.offsetHeight;
                 else {
                     var tmpVal = this.css("height").replace("px", "");
                     if (tmpVal)
@@ -1264,7 +1264,7 @@ if (!window.af || typeof(af) !== "function") {
                 if (this[0] === this[0].window)
                     return window.innerWidth;
                 if (this[0].nodeType === this[0].DOCUMENT_NODE)
-                    return this[0].documentElement.offsetwidth;
+                    return this[0].documentElement.offsetWidth;
                 else {
                     var tmpVal = this.css("width").replace("px", "");
                     if (tmpVal)
@@ -1666,7 +1666,7 @@ if (!window.af || typeof(af) !== "function") {
                 script.src = options.url.replace(/=\?/, "=" + callbackName);
             } else {
 
-                callback = options.jsonp ? options.jsonp : "callback";                
+                callback = options.jsonp ? options.jsonp : "callback";
                 if (options.url.indexOf("?") === -1) {
                     options.url += ("?" + callback + "=" + callbackName);
                 }
@@ -1976,7 +1976,7 @@ if (!window.af || typeof(af) !== "function") {
                 //create the script
                 var deferred = $.Deferred();
                 var scr=$.create("script",{async:true,src:url}).get(0);
-                scr.onload=function(){                    
+                scr.onload=function(){
                     success&&success();
                     deferred.resolve.call(this,"success");
                     $(this).remove();
@@ -1984,7 +1984,7 @@ if (!window.af || typeof(af) !== "function") {
                 scr.onerror=function(){
                     $(this).remove();
                     deferred.reject.call(this,"success");
-                }
+                };
                 document.head.appendChild(scr);
                 return deferred.promise;
             }
@@ -2946,6 +2946,7 @@ if (!window.af || typeof(af) !== "function") {
         };
     }
 }
+
 /**
  * ayepromise.js
  * @license BSD - https://github.com/cburgmer/ayepromise/commit/299eb65b5ce227873b2f1724c8f5b2bfa723680a
