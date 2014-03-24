@@ -91,7 +91,7 @@
             that.isScrolling = true;
             that.scrollingEl_ = el;
             if (!$.feat.nativeTouchScroll)
-                that.scrollerIsScrolling = true;
+                that.scrollerIsScrolling = true;            
             that.fireEvent("UIEvents", "scrollstart", el, false, false);
         });
         $.bind(this, "scrollend", function(el) {
@@ -384,7 +384,7 @@
         },
 
         onTouchStart: function(e) {
-            //setup initial touch position
+            //setup initial touch position            
             this.dX = e.touches[0].pageX;
             this.dY = e.touches[0].pageY;
             this.lastTimestamp = e.timeStamp;
@@ -401,7 +401,6 @@
                 skipTouchEnd = e.touches[0].identifier;
                 cancelClick = false;
             }
-
             if (this.scrollerIsScrolling) {
                 this.moved = true;
                 this.scrollerIsScrolling = false;
@@ -450,7 +449,10 @@
                 this.requiresNativeTap = true;
             }
 
+            //do not prevent default on chrome.  Chrome >=33 has issues with this
+            if($.os.chrome) return;
             //prevent default if possible
+
             if (!this.isPanning_ && !this.requiresNativeTap) {
                 if ((this.isScrolling && !$.feat.nativeTouchScroll) || (!this.isScrolling))
                     e.preventDefault();
