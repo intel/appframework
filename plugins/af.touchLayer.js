@@ -450,7 +450,7 @@
             }
 
             //do not prevent default on chrome.  Chrome >=33 has issues with this
-            if($.os.chrome) return;
+            if($.os.chrome||$.os.fennec) return;
             //prevent default if possible
 
             if (!this.isPanning_ && !this.requiresNativeTap) {

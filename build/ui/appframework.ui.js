@@ -3200,7 +3200,7 @@ if (!Date.now)
             }
 
             //do not prevent default on chrome.  Chrome >=33 has issues with this
-            if($.os.chrome) return;
+            if($.os.chrome||$.os.fennec) return;
             //prevent default if possible
 
             if (!this.isPanning_ && !this.requiresNativeTap) {
@@ -3726,7 +3726,7 @@ if (!Date.now)
 
         //click back event
         window.addEventListener("popstate", function() {
-            if(!that.useInteralRouting) return;
+            if(!that.useInternalRouting) return;
             var id = that.getPanelId(document.location.hash);
             var hashChecker = document.location.href.replace(document.location.origin + "/", "");
             //make sure we allow hash changes outside afui
@@ -3830,7 +3830,7 @@ if (!Date.now)
         useAutoPressed: true,
         horizontalScroll:false,
         _currentHeaderID:"defaultHeader",
-        useInteralRouting:true,
+        useInternalRouting:true,
 
         autoBoot: function() {
             this.hasLaunched = true;
@@ -5519,7 +5519,7 @@ if (!Date.now)
             this.menu = af.query("#menu").get(0);
             //set anchor click handler for UI
             this.viewportContainer.on("click", "a", function(e) {
-                if(that.useInteralRouting)
+                if(that.useInternalRouting)
                     checkAnchorClick(e, e.currentTarget);
             });
 

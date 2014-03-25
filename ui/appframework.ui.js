@@ -93,7 +93,7 @@
 
         //click back event
         window.addEventListener("popstate", function() {
-            if(!that.useInteralRouting) return;
+            if(!that.useInternalRouting) return;
             var id = that.getPanelId(document.location.hash);
             var hashChecker = document.location.href.replace(document.location.origin + "/", "");
             //make sure we allow hash changes outside afui
@@ -197,7 +197,7 @@
         useAutoPressed: true,
         horizontalScroll:false,
         _currentHeaderID:"defaultHeader",
-        useInteralRouting:true,
+        useInternalRouting:true,
 
         autoBoot: function() {
             this.hasLaunched = true;
@@ -1886,7 +1886,7 @@
             this.menu = af.query("#menu").get(0);
             //set anchor click handler for UI
             this.viewportContainer.on("click", "a", function(e) {
-                if(that.useInteralRouting)
+                if(that.useInternalRouting)
                     checkAnchorClick(e, e.currentTarget);
             });
 
