@@ -3769,10 +3769,10 @@ if (!Date.now)
                 $("head").append("<style id='iosBlurrHack'>#afui .y-scroll > *, #afui .x-scroll > * {"+hackStyle+"}</style>");
             }
             else if ($.os.anroid&&!$.os.androidICS){
-                $.ui.transitionTime = "150ms";
+                that.transitionTime = "150ms";
             }
             else if($.os.fennec){
-                $.ui.ready(function(){
+                that.ready(function(){
                     var tmpH=numOnly($("#header").height())+numOnly($("#navbar").height());
                     $("#content").css("height",window.innerHeight-tmpH);
                 });
