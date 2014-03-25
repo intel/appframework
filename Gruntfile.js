@@ -140,9 +140,9 @@ module.exports = function (grunt) {
                         "plugins/af.touchEvents.js",
                         "plugins/af.touchLayer.js",
                         "plugins/af.popup.js",
-                        "plugins/af.8tiles.js",
                         "ui/appframework.ui.js",
-                        "ui/transitions/**/*.js"
+                        "ui/transitions/**/*.js",
+                        "plugins/af.8tiles.js"
                     ]
                 }
             },
