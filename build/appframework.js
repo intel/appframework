@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-03-24 */
+/*! intel-appframework - v2.1.0 - 2014-03-25 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -2955,13 +2955,8 @@ if (!window.af || typeof(af) !== "function") {
 
 // UMD header
 (function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        define(factory);
-    } else if (typeof exports === 'object') {
-        module.exports = factory();
-    } else {
-        root.ayepromise = factory();
-    }
+    //remove AMD code
+    root.ayepromise = factory();
 }(this, function () {
     'use strict';
 

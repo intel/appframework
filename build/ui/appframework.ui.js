@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-03-24 */
+/*! intel-appframework - v2.1.0 - 2014-03-25 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -3834,6 +3834,11 @@ if (!Date.now)
         this.availableTransitions["default"] = this.availableTransitions.none = this.noTransition;
         //setup the menu and boot touchLayer
 
+        //Hack  for AMD/requireJS support
+        //set autolaunch = false
+        if ((typeof define === "function" && define.amd)||(typeof module !== "undefined" && module.exports)) {
+            that.autoLaunch=false;
+        }
 
         if ($("#afui").length === 1) {
             setupCustomTheme();
@@ -6147,14 +6152,11 @@ if (!Date.now)
         return (crc ^ (-1))>>>0;
     };
 
-
     $.ui = new ui();
     $.ui.init=true;
     $(window).trigger("afui:preinit");
     $(window).trigger("afui:init");
-
 })(af);
-
 
 
 //The following functions are utilitiy functions for afui within intel xdk.
