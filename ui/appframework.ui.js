@@ -32,6 +32,11 @@
         this.availableTransitions["default"] = this.availableTransitions.none = this.noTransition;
         //setup the menu and boot touchLayer
 
+        //Hack  for AMD/requireJS support
+        //set autolaunch = false
+        if ((typeof define === "function" && define.amd)||(typeof module !== "undefined" && module.exports)) {
+            that.autoLaunch=false;
+        }
 
         if ($("#afui").length === 1) {
             setupCustomTheme();
@@ -2345,14 +2350,11 @@
         return (crc ^ (-1))>>>0;
     };
 
-
     $.ui = new ui();
     $.ui.init=true;
     $(window).trigger("afui:preinit");
     $(window).trigger("afui:init");
-
 })(af);
-
 
 
 //The following functions are utilitiy functions for afui within intel xdk.
