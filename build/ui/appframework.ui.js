@@ -3688,7 +3688,7 @@ if (!Date.now)
                 }
                 $(document.body).prepend(afui);
             }
-            that.isIntel="intel" in window&&window.intel&&window.intel.xdk&&window.intel.xdk.app;
+            that.isIntel="intel" in window&&window.intel&&window.intel.xdk&&"app" in window.intel.xdk;
             if ($.os.supportsTouch) $.touchLayer(afui);
             setupCustomTheme();
 
@@ -3834,8 +3834,16 @@ if (!Date.now)
 
         autoBoot: function() {
             this.hasLaunched = true;
+            var that=this;
             if (this.autoLaunch) {
-                this.launch();
+                if(this.isIntel){
+                    $(document).one("intel.xdk.device.ready",function(){
+                        that.launch();
+                    });
+                }
+                else {
+                    this.launch();
+                }
             }
         },
         css3animate: function(el, opts) {
