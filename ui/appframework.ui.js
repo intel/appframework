@@ -680,8 +680,11 @@
         toggleLeftSideMenu: function(force, callback, time, aside) {
             if ((!this.isSideMenuEnabled()&&!this.isAsideMenuEnabled()) || this.togglingSideMenu) return;
 
+
             if(!aside&&!this.isSideMenuEnabled()) return;
+            
             if(!aside&&$.ui.splitview && window.innerWidth >= $.ui.handheldMinWidth) return;
+            
             var that = this;
             var menu = $.query("#menu");
             var asideMenu= $.query("#aside_menu");
@@ -705,8 +708,9 @@
             else if(open&&aside&&menuPos>0)
                 open=false;
 
-
+            debugger;
             if (force === 2 || (!open && ((force !== undefined && force !== false) || force === undefined))) {
+                debugger;
                 this.togglingSideMenu = true;
                 if(!aside)
                     menu.show();
@@ -839,7 +843,7 @@
          * @api private
          */
         getSideMenuPosition:function(){
-            return parseFloat($.getCssMatrix($("#content")).e);
+            return numOnly(parseFloat($.getCssMatrix($("#content")).e));
         },
         /**
          * Boolean that will disable the splitview before launch
