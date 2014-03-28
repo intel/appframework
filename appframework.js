@@ -2234,7 +2234,7 @@ if (!window.af || typeof(af) !== "function") {
             return f;
         };
         /**
-         * $.query  - a faster alertnative to $("div");
+         * $.query  - a faster alternative to $("div");
           ```
           $.query(".panel");
           ```

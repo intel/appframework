@@ -140,8 +140,10 @@
             }
             else if($.os.fennec){
                 that.ready(function(){
-                    var tmpH=numOnly($("#header").height())+numOnly($("#navbar").height());
-                    $("#content").css("height",window.innerHeight-tmpH);
+                    window.addEventListener("deviceorientation",function(){
+                        var tmpH=numOnly($("#header").height())+numOnly($("#navbar").height());
+                        $("#content").css("height",window.innerHeight-tmpH);
+                    });
                 });
             }
 

@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-03-25 */
+/*! intel-appframework - v2.1.0 - 2014-03-28 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -2236,7 +2236,7 @@ if (!window.af || typeof(af) !== "function") {
             return f;
         };
         /**
-         * $.query  - a faster alertnative to $("div");
+         * $.query  - a faster alternative to $("div");
           ```
           $.query(".panel");
           ```
