@@ -93,7 +93,7 @@
             cancelOnly: false,
             onShow: null,
             autoCloseDone: true,
-            supressTitle: false,
+            suppressTitle: false,
             show: function () {
                 var self = this;
                 var markup = "<div id='" + this.id + "' class='afPopup hidden "+ this.addCssClass + "'>"+
