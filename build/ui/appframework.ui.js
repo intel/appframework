@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-03-28 */
+/*! intel-appframework - v2.1.0 - 2014-03-30 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -3482,6 +3482,7 @@ if (!Date.now)
                     };
                 this.id = opts.id = opts.id || $.uuid(); //opts is passed by reference
                 this.addCssClass = opts.addCssClass ? opts.addCssClass : "";
+                this.suppressTitle = opts.suppressTitle || this.suppressTitle;
                 this.title = opts.suppressTitle ? "" : (opts.title || "Alert");
                 this.message = opts.message || "";
                 this.cancelText = opts.cancelText || "Cancel";
@@ -3519,7 +3520,7 @@ if (!Date.now)
             cancelOnly: false,
             onShow: null,
             autoCloseDone: true,
-            supressTitle: false,
+            suppressTitle: false,
             show: function () {
                 var self = this;
                 var markup = "<div id='" + this.id + "' class='afPopup hidden "+ this.addCssClass + "'>"+
