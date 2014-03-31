@@ -1724,7 +1724,7 @@ if (!window.af || typeof(af) !== "function") {
             $.ajax(opts);
             ```
 
-        * @param {Object} opts Options
+        * @param {object} opts Options
         * @title $.ajax(options)
         */
         $.ajax = function(opts) {
@@ -1850,7 +1850,7 @@ if (!window.af || typeof(af) !== "function") {
                                 deferred.reject.call(context, xhr, "parsererror", error);
                             }
                             else {
-                                deferred.resolve.call(context, result, "succes", xhr);
+                                deferred.resolve.call(context, result, "success", xhr);
                                 settings.success.call(context, result, "success", xhr);
                             }
                         } else {
