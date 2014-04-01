@@ -2282,10 +2282,12 @@ if (!window.af || typeof(af) !== "function") {
          * @api private
          */
 
-        function findHandlers(element, event, fn, selector,keepEnd) {
-            event = parse(event,keepEnd);
+        function findHandlers(element, event, fn, selector) {
+            event = parse(event);
+            if (event.ns)
+                var matcher = matcherFor(event.ns);
             return (handlers[afmid(element)] || []).filter(function(handler) {
-                return handler && (!event.e || handler.e === event.e) && (!event.ns || handler.ns.indexOf(event.ns)!==0) && (!fn || handler.fn === fn || (typeof handler.fn === "function" && typeof fn === "function" && handler.fn === fn)) && (!selector || handler.sel === selector);
+                return handler && (!event.e || handler.e === event.e) && (!event.ns || matcher.test(handler.ns)) && (!fn || handler.fn === fn || (typeof handler.fn === "function" && typeof fn === "function" && handler.fn === fn)) && (!selector || handler.sel === selector);
             });
         }
         /**
@@ -2295,13 +2297,11 @@ if (!window.af || typeof(af) !== "function") {
          * @api private
          */
 
-        function parse(event,skipPop) {
+        function parse(event) {
             var parts = ("" + event).split(".");
-            if(skipPop!==true)
-                parts.pop();
             return {
-                e: event,
-                ns: parts.join(".")
+                e: parts[0],
+                ns: parts.slice(1).sort().join(" ")
             };
         }
         /**
@@ -2383,12 +2383,14 @@ if (!window.af || typeof(af) !== "function") {
 
             var id = afmid(element);
             eachEvent(events || "", fn, function(event, fn) {
-                findHandlers(element, event, fn, selector,true).forEach(function(handler) {
+                findHandlers(element, event, fn, selector).forEach(function(handler) {
                     delete handlers[id][handler.i];
                     element.removeEventListener(handler.e, handler.proxy, false);
                 });
             });
         }
+
+
         $.event = {
             add: add,
             remove: remove
