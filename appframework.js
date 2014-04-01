@@ -412,6 +412,7 @@ if (!window.af || typeof(af) !== "function") {
             concat: emptyArray.concat,
             selector: _selector,
             oldElement: undefined,
+            sort: emptyArray.sort,
             slice: emptyArray.slice,
             length: 0,
             /**
