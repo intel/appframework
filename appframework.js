@@ -2352,6 +2352,12 @@ if (!window.af || typeof(af) !== "function") {
                 var delegate = getDelegate && getDelegate(fn, event),
                     callback = delegate || fn;
                 var proxyfn = function(event) {
+                    if (event.ns){
+                        var matcher = matcherFor(event.ns);
+                        if(!matcher.test(handler.ns))
+                            return;
+                    }
+
                     var result = callback.apply(element, [event].concat(event.data));
                     if (result === false)
                         event.preventDefault();
@@ -2610,8 +2616,12 @@ if (!window.af || typeof(af) !== "function") {
         * @title $().trigger(event,data);
         */
         $.fn.trigger = function(event, data, props) {
-            if (typeof event === "string")
-                event = $.Event(event, props);
+            if (typeof event === "string"){
+                props=props||{}
+                event = parse(event);
+                props.ns=event.ns;
+                event = $.Event(event.e, props);
+            }
             event.data = data;
             for (var i = 0, len = this.length; i < len; i++) {
                 this[i].dispatchEvent(event);
