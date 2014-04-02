@@ -294,7 +294,7 @@ body {
 #afui footer, #afui header, #afui nav, #afui aside {    display:none; }
 
 /* Show the active header/footer/navs */
-#afui .footer footer, #afui #menu nav, #afui .header header, #afui #aside_menu aside {display:block;}
+#afui .footer footer, #afui #menu nav, #afui .header header, #afui #aside_menu aside {display:block; height:100%;}
 
 #afui > #menu.tabletMenu {
     z-index:1;
