@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-04-01 */
+/*! intel-appframework - v2.1.0 - 2014-04-02 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -414,6 +414,7 @@ if (!window.af || typeof(af) !== "function") {
             concat: emptyArray.concat,
             selector: _selector,
             oldElement: undefined,
+            sort: emptyArray.sort,
             slice: emptyArray.slice,
             length: 0,
             /**
@@ -1726,7 +1727,7 @@ if (!window.af || typeof(af) !== "function") {
             $.ajax(opts);
             ```
 
-        * @param {Object} opts Options
+        * @param {object} opts Options
         * @title $.ajax(options)
         */
         $.ajax = function(opts) {
@@ -1852,7 +1853,7 @@ if (!window.af || typeof(af) !== "function") {
                                 deferred.reject.call(context, xhr, "parsererror", error);
                             }
                             else {
-                                deferred.resolve.call(context, result, "succes", xhr);
+                                deferred.resolve.call(context, result, "success", xhr);
                                 settings.success.call(context, result, "success", xhr);
                             }
                         } else {
@@ -2354,6 +2355,12 @@ if (!window.af || typeof(af) !== "function") {
                 var delegate = getDelegate && getDelegate(fn, event),
                     callback = delegate || fn;
                 var proxyfn = function(event) {
+                    if (event.ns){
+                        var matcher = matcherFor(event.ns);
+                        if(!matcher.test(handler.ns))
+                            return;
+                    }
+
                     var result = callback.apply(element, [event].concat(event.data));
                     if (result === false)
                         event.preventDefault();
@@ -2612,8 +2619,12 @@ if (!window.af || typeof(af) !== "function") {
         * @title $().trigger(event,data);
         */
         $.fn.trigger = function(event, data, props) {
-            if (typeof event === "string")
-                event = $.Event(event, props);
+            if (typeof event === "string"){
+                props=props||{}
+                event = parse(event);
+                props.ns=event.ns;
+                event = $.Event(event.e, props);
+            }
             event.data = data;
             for (var i = 0, len = this.length; i < len; i++) {
                 this[i].dispatchEvent(event);
