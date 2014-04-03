@@ -1240,7 +1240,7 @@ if (!window.af || typeof(af) !== "function") {
                 if (this[0].nodeType === this[0].DOCUMENT_NODE)
                     return this[0].documentElement.offsetHeight;
                 else {
-                    var tmpVal = this.css("height").replace("px", "");
+                    var tmpVal = this.computedStyle("height").replace("px", "");
                     if (tmpVal)
                         return +tmpVal;
                     else
@@ -1265,7 +1265,7 @@ if (!window.af || typeof(af) !== "function") {
                 if (this[0].nodeType === this[0].DOCUMENT_NODE)
                     return this[0].documentElement.offsetWidth;
                 else {
-                    var tmpVal = this.css("width").replace("px", "");
+                    var tmpVal = this.computedStyle("width").replace("px", "");
                     if (tmpVal)
                         return +tmpVal;
                     else
