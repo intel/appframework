@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-04-02 */
+/*! intel-appframework - v2.1.0 - 2014-04-03 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -20,11 +20,13 @@ if (!window.af || typeof(af) !== "function") {
      *  This is our master af object that everything is built upon.
      * $ is a pointer to this object
      * @title appframework
+     * @param {Window} window The global window object
      * @api private
      */
     var af = (function(window) {
         "use strict";
-        var nundefined, document = window.document,
+        var nundefined,
+            document = window.document,
             emptyArray = [],
             slice = emptyArray.slice,
             classCache = {},
@@ -37,6 +39,10 @@ if (!window.af || typeof(af) !== "function") {
             tagSelectorRE = /^[\w-]+$/,
             _attrCache = {},
             _propCache = {},
+            /**
+             * CSS Properties that can be expressed as a number (w/o 'px')
+             * @type {Object}
+             */
             cssNumber = {
                 "columncount": true,
                 "fontweight": true,
@@ -56,9 +62,11 @@ if (!window.af || typeof(af) !== "function") {
         /**
          * internal function used for $().css - checks to see if it is a number and the css property
          * needs "px" added to it
+         * @param {string} prop
+         * @param {string|number} val
+         * @return {boolean}
          * @api private
          */
-
         function _addPx(prop, val) {
             return (typeof(val) === "number") && !cssNumber[prop.toLowerCase()] ? val + "px" : val;
         }
@@ -66,9 +74,11 @@ if (!window.af || typeof(af) !== "function") {
         /**
          * internal function to use domfragments for insertion
          *
+         * @param {$afm} afm An appframework object
+         * @param {Element} container
+         * @param {boolean=} insert Default: false (append)
          * @api private
          */
-
         function _insertFragments(afm, container, insert) {
             var frag = document.createDocumentFragment();
             if (insert) {
@@ -86,15 +96,12 @@ if (!window.af || typeof(af) !== "function") {
             frag = null;
         }
 
-
-
         /**
          * Internal function to test if a class name fits in a regular expression
          * @param {String} name to search against
          * @return {Boolean}
          * @api private
          */
-
         function classRE(name) {
             return name in classCache ? classCache[name] : (classCache[name] = new RegExp("(^|\\s)" + name + "(\\s|$)"));
         }
@@ -118,12 +125,11 @@ if (!window.af || typeof(af) !== "function") {
         /**
          * Given a set of nodes, it returns them as an array.  Used to find
          * siblings of an element
-         * @param {Nodelist} Node list to search
-         * @param {Object} [element] to find siblings off of
-         * @return {Array} array of sibblings
+         * @param {Nodelist} nodes Node list to search
+         * @param {Object=} element [optional] objects to find siblings off of
+         * @return {Array} array of siblings
          * @api private
          */
-
         function siblings(nodes, element) {
             var elems = [];
             if (nodes == nundefined)
@@ -140,8 +146,9 @@ if (!window.af || typeof(af) !== "function") {
         /**
          * This is the internal appframework object that gets extended and added on to it
          * This is also the start of our query selector engine
-         * @param {String|Element|Object|Array} selector
-         * @param {String|Element|Object} [context]
+         * @param {String|Element|Object|Array} toSelect selector
+         * @param {String|Element|Object|undefined} what Context
+         * @typedef {Object} $afm
          * @api private
          */
         var $afm = function(toSelect, what) {
@@ -184,10 +191,10 @@ if (!window.af || typeof(af) !== "function") {
 
         /**
          * This calls the $afm function
-         * @param {String|Element|Object|Array} selector
-         * @param {String|Element|Object} [context]
          * @title $()
-         * @return {Object} an appframework object
+         * @param {(string|Element|Object)=} selector
+         * @param {(string|Element|Object)=} what Context
+         * @return {$afm} an appframework object
          */
         var $ = function(selector, what) {
             return new $afm(selector, what);
@@ -195,9 +202,11 @@ if (!window.af || typeof(af) !== "function") {
 
         /**
          * this is the engine for "all" and is only exposed internally
+         * @param {string|Element|Object|Array} selector
+         * @param {string|Element|Object|undefined} what Context
+         * @return {$afm} an appframework object
          * @api private
          */
-
         function _selectorAll(selector, what) {
             try {
                 return what.querySelectorAll(selector);
@@ -206,13 +215,13 @@ if (!window.af || typeof(af) !== "function") {
                 return [];
             }
         }
+
         /**
          * this is the query selector engine for elements
          * @param {String} selector
-         * @param {String|Element|Object} [context]
+         * @param {String|Element|Object|undefined} what [optional] Context
          * @api private
          */
-
         function _selector(selector, what) {
             /*jshint validthis:true*/
 
@@ -257,7 +266,6 @@ if (!window.af || typeof(af) !== "function") {
             var foo=$("#header");
             $.is$(foo);
             ```
-
         * @param {*} obj
         * @return {boolean}
         * @title $.is$(param)
@@ -271,7 +279,6 @@ if (!window.af || typeof(af) !== "function") {
         ```
         $.map([1,2],function(ind){return ind+1});
         ```
-
         * @param {Array|Object} elements
         * @param {Function} callback
         * @return {array} array with elements
@@ -304,7 +311,6 @@ if (!window.af || typeof(af) !== "function") {
         ```
         $.each([1,2],function(ind){console.log(ind);});
         ```
-
         * @param {Array|Object} elements
         * @param {Function} callback
         * @return {Array} elements
@@ -334,7 +340,6 @@ if (!window.af || typeof(af) !== "function") {
             $.extend({foo:"bar"});
             $.extend(element,{foo:"bar"});
             ```
-
         * @param {Object} [target] element
         * @param any number of additional arguments
         * @return {Object} [target]
@@ -362,7 +367,6 @@ if (!window.af || typeof(af) !== "function") {
             var arr=[];
             $.isArray(arr);
             ```
-
         * @param {*} obj
         * @return {boolean}
         * @example $.isArray([1]);
@@ -391,10 +395,9 @@ if (!window.af || typeof(af) !== "function") {
             ```
             var foo={bar:"bar"};
             $.isObject(foo);
-        
             ```
         * @param {*} obj
-        * @returns {boolean}
+        * @return {boolean}
         * @title $.isObject(param)
         */
         $.isObject = function(obj) {
@@ -435,9 +438,8 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                 $().map(function(){this.value+=ind});
                 ```
-
-            * @param {Function} callback
-            * @return {Object} an appframework object
+            * @param {Function} fn callback
+            * @return {$afm} an appframework object
             * @title $().map(function)
             */
             map: function(fn) {
@@ -455,7 +457,6 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                 $().each(function(){console.log(this.value)});
                 ```
-
             * @param {Function} callback
             * @return {Object} an appframework object
             * @title $().each(function)
@@ -471,7 +472,6 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                 $(document).ready(function(){console.log("I'm ready");});
                 ```
-
             * @param {Function} callback
             * @return {Object} an appframework object
             * @title $().ready(function)
@@ -484,6 +484,7 @@ if (!window.af || typeof(af) !== "function") {
                     document.addEventListener("DOMContentLoaded", callback, false);
                 return this;
             },
+
             /**
             * Searches through the collection and reduces them to elements that match the selector
                 ```
@@ -491,11 +492,10 @@ if (!window.af || typeof(af) !== "function") {
                 $("#foo").find($(".bar"));
                 $("#foo").find($(".bar").get(0));
                 ```
-
-            * @param {String|Object|Array} selector
+            * @param {String|Object|Array} sel Selector
             * @return {Object} an appframework object filtered
+            *
             * @title $().find(selector)
-
             */
             find: function(sel) {
                 if (this.length === 0)
@@ -511,6 +511,7 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return $(unique(elems));
             },
+
             /**
             * Gets or sets the innerHTML for the collection.
             * If used as a get, the first elements innerHTML is returned
@@ -519,10 +520,9 @@ if (!window.af || typeof(af) !== "function") {
                 $("#foo").html("new html");//sets the html
                 $("#foo").html("new html",false); //Do not do memory management cleanup
                 ```
-
             * @param {String} html to set
             * @param {Bool} [cleanup] - set to false for performance tests and if you do not want to execute memory management cleanup
-            * @return {Object} an appframework object
+            * @return {$afm} an appframework object
             * @title $().html([html])
             */
             html: function(html, cleanup) {
@@ -546,7 +546,6 @@ if (!window.af || typeof(af) !== "function") {
                 return this;
             },
 
-
             /**
             * Gets or sets the innerText for the collection.
             * If used as a get, the first elements innerText is returned
@@ -554,9 +553,8 @@ if (!window.af || typeof(af) !== "function") {
                 $("#foo").text(); //gets the first elements text;
                 $("#foo").text("new text"); //sets the text
                 ```
-
             * @param {String} text to set
-            * @return {Object} an appframework object
+            * @return {$afm} an appframework object
             * @title $().text([text])
             */
             text: function(text) {
@@ -577,9 +575,9 @@ if (!window.af || typeof(af) !== "function") {
                 $().css("background"); // Gets the first elements background
                 $().css("background","red")  //Sets the elements background to red
                 ```
-
             * @param {String} attribute The attribute to get
             * @param {String} value Value to set as
+            * @param {Element=} obj
             * @return {Object} obj An appframework object
             * @title $().css(attribute,[value])
             */
@@ -602,53 +600,56 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this;
             },
+
             /**
-             * Gets or sets css vendor specific css properties
+            * Gets or sets css vendor specific css properties
             * If used as a get, the first elements css property is returned
                 ```
                 $().vendorCss("transform"); // Gets the first elements background
                 $().vendorCss("transform","Translate3d(0,40,0)")  //Sets the elements background to red
                 ```
-
-            * @param {String} attribute to get
-            * @param {String} value to set as
-            * @return {Object} an appframework object
+            * @param {string} attribute The attribute to get
+            * @param {string} value Value to set as
+            * @param {Element} obj Value to set as
+            * @return {$afm} An appframework object
             * @title $().vendorCss(attribute,[value])
             */
             vendorCss: function(attribute, value, obj) {
                 return this.css($.feat.cssPrefix + attribute, value, obj);
             },
+
             /**
              * Performs a css vendor specific transform:translate operation on the collection.
                 ```
                 $("#main").cssTranslate("200px,0,0");
                 ```
-             * @param {String} Transform values
+             * @param {string} val Transform values
              * @return {Object} an appframework object
              * @title $().cssTranslate(value)
              */
             cssTranslate: function(val) {
                 return this.vendorCss("Transform", "translate" + $.feat.cssTransformStart + val + $.feat.cssTransformEnd);
             },
+
             /**
              * Gets the computed style of CSS values
                 ```
                $("#main").computedStyle("display");
                 ```
-             * @param {String} css property
-             * @return {Int|String|Float|} css vlaue
+             * @param {String} val CSS property
+             * @return {number|string} CSS value
              * @title $().computedStyle()
              */
             computedStyle: function(val) {
                 if (this.length === 0 || val == nundefined) return;
                 return window.getComputedStyle(this[0], "")[val];
             },
+
             /**
             * Sets the innerHTML of all elements to an empty string
                 ```
                 $().empty();
                 ```
-
             * @return {Object} an appframework object
             * @title $().empty()
             */
@@ -659,13 +660,13 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this;
             },
+
             /**
             * Sets the elements display property to "none".
             * This will also store the old property into an attribute for hide
                 ```
                 $().hide();
                 ```
-
             * @return {Object} an appframework object
             * @title $().hide()
             */
@@ -680,13 +681,13 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this;
             },
+
             /**
             * Shows all the elements by setting the css display property
             * We look to see if we were retaining an old style (like table-cell) and restore that, otherwise we set it to block
                 ```
                 $().show();
                 ```
-
             * @return {Object} an appframework object
             * @title $().show()
             */
@@ -701,13 +702,13 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this;
             },
+
             /**
             * Toggle the visibility of a div
                 ```
                 $().toggle();
                 $().toggle(true); //force showing
                 ```
-
             * @param {Boolean} [show] -force the hiding or showing of the element
             * @return {Object} an appframework object
             * @title $().toggle([show])
@@ -727,6 +728,7 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this;
             },
+
             /**
             * Gets or sets an elements value
             * If used as a getter, we return the first elements value.  If nothing is in the collection, we return undefined
@@ -734,9 +736,8 @@ if (!window.af || typeof(af) !== "function") {
                 $().value; //Gets the first elements value;
                 $().value="bar"; //Sets all elements value to bar
                 ```
-
-            * @param {String} [value] to set
-            * @return {String|Object} A string as a getter, appframework object as a setter
+            * @param {string=} value [optional] Value to set
+            * @return {String|$afm} A string as a getter, appframework object as a setter
             * @title $().val([value])
             */
             val: function(value) {
@@ -749,6 +750,7 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this;
             },
+
             /**
             * Gets or sets an attribute on an element
             * If used as a getter, we return the first elements value.  If nothing is in the collection, we return undefined
@@ -757,10 +759,9 @@ if (!window.af || typeof(af) !== "function") {
                 $().attr("foo","bar");//Sets the elements "foo" attribute to "bar"
                 $().attr("foo",{bar:"bar"}) //Adds the object to an internal cache
                 ```
-
-            * @param {String|Object} attribute to act upon.  If it is an object (hashmap), it will set the attributes based off the kvp.
-            * @param {String|Array|Object|function} [value] to set
-            * @return {String|Object|Array|Function} If used as a getter, return the attribute value.  If a setter, return an appframework object
+            * @param {string|Object} attr Attribute to act upon.  If it is an object (hashmap), it will set the attributes based off the kvp.
+            * @param {string|Array|Object|function|undefined} value [optional] Value to set
+            * @return {string|Object|Array|Function} If used as a getter, return the attribute value.  If a setter, return an appframework object
             * @title $().attr(attribute,[value])
             */
             attr: function(attr, value) {
@@ -795,13 +796,13 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this;
             },
+
             /**
-            * Removes an attribute on the elements
+            * Removes one or several attribute on the elements
                 ```
                 $().removeAttr("foo");
                 ```
-
-            * @param {String} attributes that can be space delimited
+            * @param {string} attr Attributes that can be space delimited
             * @return {Object} appframework object
             * @title $().removeAttr(attribute)
             */
@@ -826,10 +827,9 @@ if (!window.af || typeof(af) !== "function") {
                 $().prop("foo","bar");//Sets the elements "foo" property to "bar"
                 $().prop("foo",{bar:"bar"}) //Adds the object to an internal cache
                 ```
-
-            * @param {String|Object} property to act upon.  If it is an object (hashmap), it will set the attributes based off the kvp.
-            * @param {String|Array|Object|function} [value] to set
-            * @return {String|Object|Array|Function} If used as a getter, return the property value.  If a setter, return an appframework object
+            * @param {string|Object} prop The property to act upon.  If it is an object (hashmap), it will set the attributes based off the kvp.
+            * @param {string|Array|Object|function} [value] to set
+            * @return {string|Object|Array|Function} If used as a getter, return the property value.  If a setter, return an appframework object
             * @title $().prop(property,[value])
             */
             prop: function(prop, value) {
@@ -861,14 +861,14 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this;
             },
+
             /**
-            * Removes a property on the elements
+            * Removes one or several properties on the elements
                 ```
                 $().removeProp("foo");
                 ```
-
-            * @param {String} properties that can be space delimited
-            * @return {Object} appframework object
+            * @param {string} prop Properties that can be space delimited
+            * @return {$afm} appframework object
             * @title $().removeProp(attribute)
             */
             removeProp: function(prop) {
@@ -911,14 +911,14 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this;
             },
+
             /**
             * Adds a css class to elements.
                 ```
                 $().addClass("selected");
                 ```
-
-            * @param {String} classes that are space delimited
-            * @return {Object} appframework object
+            * @param {string} name classes that are space delimited
+            * @return {$afm} appframework object
             * @title $().addClass(name)
             */
             addClass: function(name) {
@@ -938,14 +938,14 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this;
             },
+
             /**
             * Removes a css class from elements.
                 ```
                 $().removeClass("foo"); //single class
                 $().removeClass("foo selected");//remove multiple classess
                 ```
-
-            * @param {String} classes that are space delimited
+            * @param {string} name classes that are space delimited
             * @return {Object} appframework object
             * @title $().removeClass(name)
             */
@@ -972,14 +972,14 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this;
             },
+
             /**
-            * Adds or removes a css class to elements.
+            * Adds or removes one or several css classes to/from elements.
                 ```
                 $().toggleClass("selected");
                 ```
-
-            * @param {String} classes that are space delimited
-            * @param {Boolean} [state] force toggle to add or remove classes
+            * @param {string} name Classes that are space delimited
+            * @param {boolean=} state [optional] Force toggle to add or remove classes
             * @return {Object} appframework object
             * @title $().toggleClass(name)
             */
@@ -993,14 +993,14 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this;
             },
+
             /**
             * Replaces a css class on elements.
                 ```
                 $().replaceClass("on", "off");
                 ```
-
-            * @param {String} classes that are space delimited
-            * @param {String} classes that are space delimited
+            * @param {string} name classes that are space delimited
+            * @param {string} newName classes that are space delimited
             * @return {Object} appframework object
             * @title $().replaceClass(old, new)
             */
@@ -1024,16 +1024,16 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this;
             },
+
             /**
             * Checks to see if an element has a class.
                 ```
                 $().hasClass("foo");
                 $().hasClass("foo",element);
                 ```
-
-            * @param {String} class name to check against
-            * @param {Object} [element] to check against
-            * @return {Boolean}
+            * @param {string} name Class name to check against
+            * @param {Object=} element [optional] Element to check against
+            * @return {boolean}
             * @title $().hasClass(name,[element])
             */
             hasClass: function(name, element) {
@@ -1043,6 +1043,7 @@ if (!window.af || typeof(af) !== "function") {
                     element = this[0];
                 return classRE(name).test(element.className);
             },
+
             /**
             * Appends to the elements
             * We boil everything down to an appframework object and then loop through that.
@@ -1052,14 +1053,15 @@ if (!window.af || typeof(af) !== "function") {
                 $().append("<div></div>"); //Creates the object from the string and appends it
                 $().append($("#foo")); //Append an object;
                 ```
-
-            * @param {String|Object} Element/string to add
-            * @param {String|Object} Element/string to add
-            * @param {Boolean} [insert] insert or append
+            *
+            * @title $().append(element, [insert], [content])
+            *
+            * @param {string|Object} element Element/string to add
+            * @param {string|Object} content Element/string to add
+            * @param {boolean=} insert [optional] insert or append
             * @return {Object} appframework object
-            * @title $().append(element,[insert],[content])
             */
-            append: function(element, content,insert) {
+            append: function(element, content, insert) {
                 if (element && element.length != nundefined && element.length === 0)
                     return this;
                 if ($.isArray(element) || $.isObject(element))
@@ -1092,14 +1094,14 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this;
             },
+
             /**
             * Appends the current collection to the selector
                 ```
                 $().appendTo("#foo"); //Append an object;
                 ```
-
-            * @param {String|Object} Selector to append to
-            * @param {Boolean} [insert] insert or append
+            * @param {string|Object} selector to append to
+            * @param {boolean=} insert [optional] Insert or append
             * @title $().appendTo(element,[insert])
             */
             appendTo: function(selector, insert) {
@@ -1107,13 +1109,14 @@ if (!window.af || typeof(af) !== "function") {
                 tmp.append(this);
                 return this;
             },
+
             /**
             * Prepends the current collection to the selector
                 ```
                 $().prependTo("#foo"); //Prepend an object;
                 ```
-
-            * @param {String|Object} Selector to prepent to
+            * @param {string|Object} selector Selector to prepend to
+            * @return {$afm} 
             * @title $().prependTo(element)
             */
             prependTo: function(selector) {
@@ -1121,6 +1124,7 @@ if (!window.af || typeof(af) !== "function") {
                 tmp.append(this, null,true);
                 return this;
             },
+
             /**
             * Prepends to the elements
             * This simply calls append and sets insert to true
@@ -1128,21 +1132,22 @@ if (!window.af || typeof(af) !== "function") {
                 $().prepend("<div></div>");//Creates the object from the string and appends it
                 $().prepend($("#foo")); //Prepends an object
                 ```
-
-            * @param {String|Object} Element/string to add
-            * @return {Object} appframework object
+            * @param {Object|string} element Element/string to add
+            * @return {$afm} appframework object
             * @title $().prepend(element)
             */
             prepend: function(element) {
                 return this.append(element,null, 1);
             },
+
             /**
              * Inserts collection before the target (adjacent)
                 ```
                 $().insertBefore(af("#target"));
                 ```
-
-             * @param {String|Object} Target
+             * @param {string|Object} target Target
+             * @param {boolean=} after [default=false] When true, do an insert after the target
+             * @return {$afm}
              * @title $().insertBefore(target);
              */
             insertBefore: function(target, after) {
@@ -1156,6 +1161,7 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this;
             },
+
             /**
              * Inserts collection after the target (adjacent)
                 ```
@@ -1167,13 +1173,13 @@ if (!window.af || typeof(af) !== "function") {
             insertAfter: function(target) {
                 this.insertBefore(target, true);
             },
+
             /**
             * Returns the raw DOM element.
                 ```
                 $().get(0); //returns the first element
                 $().get(2);// returns the third element
                 ```
-
             * @param {Int} [index]
             * @return {Object} raw DOM element
             * @title $().get([index])
@@ -1191,12 +1197,12 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return (this[index]) ? this[index] : undefined;
             },
+
             /**
             * Returns the offset of the element, including traversing up the tree
                 ```
                 $().offset();
                 ```
-
             * @return {Object} with left, top, width and height properties
             * @title $().offset()
             */
@@ -1224,12 +1230,14 @@ if (!window.af || typeof(af) !== "function") {
                     height: obj.bottom - obj.top
                 };
             },
+
             /**
-             * returns the height of the element, including padding on IE
+             * Returns the height of the element, including padding on IE
                ```
                $().height();
                ```
-             * @return {string} height
+             * @param {string=} val New Height
+             * @return {number|$afm}
              * @title $().height()
              */
             height: function(val) {
@@ -1242,19 +1250,21 @@ if (!window.af || typeof(af) !== "function") {
                 if (this[0].nodeType === this[0].DOCUMENT_NODE)
                     return this[0].documentElement.offsetHeight;
                 else {
-                    var tmpVal = this.css("height").replace("px", "");
+                    var tmpVal = this.computedStyle("height").replace("px", "");
                     if (tmpVal)
                         return +tmpVal;
                     else
                         return this.offset().height;
                 }
             },
+
             /**
-             * returns the width of the element, including padding on IE
+             * Returns the width of the element, including padding on IE
                ```
                $().width();
                ```
-             * @return {string} width
+             * @param {string=} val New Width
+             * @return {number|$afm}
              * @title $().width()
              */
             width: function(val) {
@@ -1267,22 +1277,23 @@ if (!window.af || typeof(af) !== "function") {
                 if (this[0].nodeType === this[0].DOCUMENT_NODE)
                     return this[0].documentElement.offsetWidth;
                 else {
-                    var tmpVal = this.css("width").replace("px", "");
+                    var tmpVal = this.computedStyle("width").replace("px", "");
                     if (tmpVal)
                         return +tmpVal;
                     else
                         return this.offset().width;
                 }
             },
+
             /**
             * Returns the parent nodes of the elements based off the selector
                 ```
                 $("#foo").parent(".bar");
                 $("#foo").parent($(".bar"));
                 $("#foo").parent($(".bar").get(0));
-                ```
-
-            * @param {String|Array|Object} [selector]
+                ``
+            * @param {String|Array|Object|undefined} selector [optional]
+            * @param {boolean=} recursive
             * @return {Object} appframework object with unique parents
             * @title $().parent(selector)
             */
@@ -1302,6 +1313,7 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this.setupOld($(unique(elems)).filter(selector));
             },
+
             /**
             * Returns the parents of the elements based off the selector (traversing up until html document)
                 ```
@@ -1309,14 +1321,14 @@ if (!window.af || typeof(af) !== "function") {
                 $("#foo").parents($(".bar"));
                 $("#foo").parents($(".bar").get(0));
                 ```
-
-            * @param {String|Array|Object} [selector]
+            * @param {string|Array|Object|undefined} [selector]
             * @return {Object} appframework object with unique parents
             * @title $().parents(selector)
             */
             parents: function(selector) {
                 return this.parent(selector, true);
             },
+
             /**
             * Returns the child nodes of the elements based off the selector
                 ```
@@ -1324,8 +1336,7 @@ if (!window.af || typeof(af) !== "function") {
                 $("#foo").children($(".bar")); //Objects
                 $("#foo").children($(".bar").get(0)); //Single element
                 ```
-
-            * @param {String|Array|Object} [selector]
+            * @param {string|Array|Object|undefined} selector [optional]
             * @return {Object} appframework object with unique children
             * @title $().children(selector)
             */
@@ -1340,6 +1351,7 @@ if (!window.af || typeof(af) !== "function") {
                 return this.setupOld($((elems)).filter(selector));
 
             },
+
             /**
             * Returns the siblings of the element based off the selector
                 ```
@@ -1347,8 +1359,7 @@ if (!window.af || typeof(af) !== "function") {
                 $("#foo").siblings($(".bar")); //Objects
                 $("#foo").siblings($(".bar").get(0)); //Single element
                 ```
-
-            * @param {String|Array|Object} [selector]
+            * @param {string|Array|Object|undefined} selector [optional]
             * @return {Object} appframework object with unique siblings
             * @title $().siblings(selector)
             */
@@ -1362,6 +1373,7 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this.setupOld($(elems).filter(selector));
             },
+
             /**
             * Returns the child nodes of the elements based off the selector and includes text nodes
                 ```
@@ -1369,8 +1381,7 @@ if (!window.af || typeof(af) !== "function") {
                 $("#foo").contents($(".bar")); //Objects
                 $("#foo").contents($(".bar").get(0)); //Single element
                 ```
-
-            * @param {String|Array|Object} [selector]
+            * @param {string|Array|Object|undefined} selector [optional]
             * @return {Object} appframework object with unique children
             * @title $().contents(selector)
             */
@@ -1385,6 +1396,7 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this.setupOld($(elems).filter(selector));
             },
+
             /**
             * Returns the closest element based off the selector and optional context
                 ```
@@ -1392,7 +1404,6 @@ if (!window.af || typeof(af) !== "function") {
                 $("#foo").closest($(".bar")); //Objects
                 $("#foo").closest($(".bar").get(0)); //Single element
                 ```
-
             * @param {String|Array|Object} selector
             * @param {Object} [context]
             * @return {Object} Returns an appframework object with the closest element based off the selector
@@ -1413,6 +1424,7 @@ if (!window.af || typeof(af) !== "function") {
                 return $(cur);
 
             },
+
             /**
             * Filters elements based off the selector
                 ```
@@ -1420,7 +1432,6 @@ if (!window.af || typeof(af) !== "function") {
                 $("#foo").filter($(".bar")); //Objects
                 $("#foo").filter($(".bar").get(0)); //Single element
                 ```
-
             * @param {String|Array|Object} selector
             * @return {Object} Returns an appframework object after the filter was run
             * @title $().filter(selector);
@@ -1439,6 +1450,7 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this.setupOld($(unique(elems)));
             },
+
             /**
             * Basically the reverse of filter.  Return all elements that do NOT match the selector
                 ```
@@ -1446,7 +1458,6 @@ if (!window.af || typeof(af) !== "function") {
                 $("#foo").not($(".bar")); //Objects
                 $("#foo").not($(".bar").get(0)); //Single element
                 ```
-
             * @param {String|Array|Object} selector
             * @return {Object} Returns an appframework object after the filter was run
             * @title $().not(selector);
@@ -1462,6 +1473,7 @@ if (!window.af || typeof(af) !== "function") {
                 }
                 return this.setupOld($(unique(elems)));
             },
+
             /**
             * Gets or set data-* attribute parameters on elements (when a string)
             * When used as a getter, it's only the first element
@@ -1470,35 +1482,34 @@ if (!window.af || typeof(af) !== "function") {
                 $().data("foo","bar"); //Sets the data-foo attribute for all elements
                 $().data("foo",{bar:"bar"});//object as the data
                 ```
-
-            * @param {String} key
-            * @param {String|Array|Object} value
-            * @return {String|Object} returns the value or appframework object
+            * @param {string} key
+            * @param {string|Array|Object|undefined} value [optional]
+            * @return {string|Object} returns the value or appframework object
             * @title $().data(key,[value]);
             */
             data: function(key, value) {
                 return this.attr("data-" + key, value);
             },
+
             /**
             * Rolls back the appframework elements when filters were applied
             * This can be used after .not(), .filter(), .children(), .parent()
                 ```
                 $().filter(".panel").end(); //This will return the collection BEFORE filter is applied
                 ```
-
             * @return {Object} returns the previous appframework object before filter was applied
             * @title $().end();
             */
             end: function() {
                 return this.oldElement != nundefined ? this.oldElement : $();
             },
+
             /**
             * Clones the nodes in the collection.
                 ```
                 $().clone();// Deep clone of all elements
                 $().clone(false); //Shallow clone
                 ```
-
             * @param {Boolean} [deep] - do a deep copy or not
             * @return {Object} appframework object of cloned nodes
             * @title $().clone();
@@ -1514,24 +1525,25 @@ if (!window.af || typeof(af) !== "function") {
 
                 return $(elems);
             },
+
             /**
             * Returns the number of elements in the collection
                 ```
                 $().size();
                 ```
-
             * @return {Int}
             * @title $().size();
             */
             size: function() {
                 return this.length;
             },
+
             /**
-             * Serailizes a form into a query string
+             * Serializes a form into a query string
                ```
                $().serialize();
                ```
-             * @return {String}
+             * @return {string}
              * @title $().serialize()
              */
             serialize: function() {
@@ -1565,44 +1577,47 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                $().eq(index)
                ```
-             * @param {Int} ind Index to filter by. If negative, it will go back from the end
-             * @return {Object} appframework object
+             * @param {number} ind Index to filter by. If negative, it will go back from the end
+             * @return {$afm} appframework object
              * @title $().eq(index)
              */
             eq: function(ind) {
                 return $(this.get(ind));
             },
+
             /**
              * Returns the index of the selected element in the collection
                ```
                $().index(elem)
                ```
-             * @param {String|Object} elem The element to look for. Can be a selector or object
-             * @return integer - index of selected element
+             * @param {string|Object} elem The element to look for. Can be a selector or object
+             * @return {number} Index of selected element
              * @title $().index(elem)
              */
             index: function(elem) {
                 return elem ? this.indexOf($(elem)[0]) : this.parent().children().indexOf(this[0]);
             },
+
             /**
               * Returns boolean if the object is a type of the selector
               ```
               $().is(selector)
               ```
-             * @param {String|Object} selector to act upon
-             * @return boolean
+             * @param {string|Object} selector to act upon
+             * @return {boolean}
              * @title $().is(selector)
              */
             is: function(selector) {
                 return !!selector && this.filter(selector).length > 0;
             },
+
             /**
              * adds a result to an existing AF collection
              ```
              $().add(selector)
              ```
-             * @param {String|Object} selector to act upon
-             * @return {object} appframework object
+             * @param {string|Object} selector to act upon
+             * @return {$afm} appframework object
              * @title $().add(selector)
              */
             add:function(selector){
@@ -1619,6 +1634,7 @@ if (!window.af || typeof(af) !== "function") {
         /* AJAX functions */
 
         function empty() {}
+
         $.ajaxSettings = {
             type: "GET",
             beforeSend: empty,
@@ -1630,15 +1646,16 @@ if (!window.af || typeof(af) !== "function") {
             crossDomain: null,
             processData: true
         };
+
         /**
         * Execute a jsonP call, allowing cross domain scripting
+        *
         * options.url - URL to call
         * options.success - Success function to call
         * options.error - Error function to call
             ```
             $.jsonP({url:"mysite.php?callback=?&foo=bar",success:function(){},error:function(){}});
             ```
-
         * @param {Object} options
         * @title $.jsonP(options)
         */
@@ -1710,7 +1727,7 @@ if (!window.af || typeof(af) !== "function") {
         * options.beforeSend - function to execute before sending the request
         * options.success - success callback
         * options.error - error callback
-        * options.complete - complete callback - callled with a success or error
+        * options.complete - complete callback - called with a success or error
         * options.timeout - timeout to wait for the request
         * options.url - URL to make request against
         * options.contentType - HTTP Request Content Type
@@ -1726,7 +1743,6 @@ if (!window.af || typeof(af) !== "function") {
             }
             $.ajax(opts);
             ```
-
         * @param {object} opts Options
         * @title $.ajax(options)
         */
@@ -1893,14 +1909,12 @@ if (!window.af || typeof(af) !== "function") {
             return xhr;
         };
 
-
         /**
         * Shorthand call to an Ajax GET request
             ```
             $.get("mypage.php?foo=bar",function(data){});
             ```
-
-        * @param {String} url to hit
+        * @param {string} url URL to hit
         * @param {Function} success
         * @title $.get(url,success)
         */
@@ -1910,16 +1924,16 @@ if (!window.af || typeof(af) !== "function") {
                 success: success
             });
         };
+
         /**
         * Shorthand call to an Ajax POST request
             ```
             $.post("mypage.php",{bar:"bar"},function(data){});
             ```
-
-        * @param {String} url to hit
-        * @param {Object} [data] to pass in
-        * @param {Function} success
-        * @param {String} [dataType]
+        * @param {string} url URL to hit
+        * @param {Object|Function|undefined} data Data to pass in or the success callback
+        * @param {Function=} success [optional] Success Callback when data is given
+        * @param {string=} dataType [default="html"] Expected type of data to be returned
         * @title $.post(url,[data],success,[dataType])
         */
         $.post = function(url, data, success, dataType) {
@@ -1937,12 +1951,12 @@ if (!window.af || typeof(af) !== "function") {
                 success: success
             });
         };
+
         /**
         * Shorthand call to an Ajax request that expects a JSON response
             ```
             $.getJSON("mypage.php",{bar:"bar"},function(data){});
             ```
-
         * @param {String} url to hit
         * @param {Object} [data]
         * @param {Function} [success]
@@ -1964,14 +1978,13 @@ if (!window.af || typeof(af) !== "function") {
         /**
         * Shorthand call to an Ajax request that expects a javascript file.
             ```
-            $.getScript("myscript.js",function(data){});
+            $.getScript("myscript.js", function(data) {} );
             ```
-
-        * @param {String} javascript file to load
-        * @param {Function} [success]
-        * @title $.getScript(url,success)
+        * @param {String} url javascript file to load
+        * @param {function(Object)=} [success]
+        * @title $.getScript(url, success)
         */
-        $.getScript = function(url,success){
+        $.getScript = function(url, success){
             var isCrossDomain=/^([\w-]+:)?\/\/([^\/]+)/.test(url);
             if(isCrossDomain){
                 //create the script
@@ -1997,6 +2010,7 @@ if (!window.af || typeof(af) !== "function") {
                 });
             }
         };
+
         /**
         * Converts an object into a key/value par with an optional prefix.  Used for converting objects to a query string
             ```
@@ -2006,10 +2020,9 @@ if (!window.af || typeof(af) !== "function") {
             }
             var kvp=$.param(obj,"data");
             ```
-
-        * @param {Object} object
-        * @param {String} [prefix]
-        * @return {String} Key/value pair representation
+        * @param {Object} obj object
+        * @param {string=} prefix
+        * @return {string} Key/value pair representation
         * @title $.param(object,[prefix];
         */
         $.param = function(obj, prefix) {
@@ -2032,25 +2045,25 @@ if (!window.af || typeof(af) !== "function") {
             }
             return str.join("&");
         };
+
         /**
         * Used for backwards compatibility.  Uses native JSON.parse function
             ```
             var obj=$.parseJSON("{\"bar\":\"bar\"}");
             ```
-
-        * @params {String} string
+        * @param {string} string
         * @return {Object}
         * @title $.parseJSON(string)
         */
         $.parseJSON = function(string) {
             return JSON.parse(string);
         };
+
         /**
         * Helper function to convert XML into  the DOM node representation
             ```
             var xmlDoc=$.parseXML("<xml><foo>bar</foo></xml>");
             ```
-
         * @param {String} string
         * @return {Object} DOM nodes
         * @title $.parseXML(string)
@@ -2063,6 +2076,7 @@ if (!window.af || typeof(af) !== "function") {
             } else
                 return (new DOMParser()).parseFromString(string, "text/xml");
         };
+
         /**
          * Helper function to parse the user agent.  Sets the following
          * .os.webkit
@@ -2080,9 +2094,11 @@ if (!window.af || typeof(af) !== "function") {
          * .os.playbook
          * .os.tizen
          * .feat.nativeTouchScroll
+         *
+         * @param {Object} $ 
+         * @param {string} userAgent
          * @api private
          */
-
         function detectUA($, userAgent) {
             $.os = {};
             $.os.webkit = userAgent.match(/WebKit\/([\d.]+)/) ? true : false;
@@ -2144,8 +2160,10 @@ if (!window.af || typeof(af) !== "function") {
            ```
            $.getCssMatrix(domElement)
            ```
-           @returns matrix with postion
-           */
+
+         * @param {$afm|string|undefined} ele
+         * @return {Object} matrix with postion
+         */
         $.getCssMatrix = function(ele) {
             if ($.is$(ele)) ele = ele.get(0);
 
@@ -2200,14 +2218,14 @@ if (!window.af || typeof(af) !== "function") {
         };
 
         /**
-         * $.create - a faster alertnative to $("<div id="main">this is some text</div>");
+         * $.create - a faster alternative to $("<div id="main">this is some text</div>");
           ```
           $.create("div",{id:"main",innerHTML:"this is some text"});
           $.create("<div id="main">this is some text</div>");
           ```
-          * @param {String} DOM Element type or html
-          * @param [{Object}] properties to apply to the element
-          * @return {Object} Returns an appframework object
+          * @param {string} type DOM Element type or html
+          * @param {Object=} props Properties to apply to the element
+          * @return {$afm} Returns an appframework object
           * @title $.create(type,[params])
           */
         $.create = function(type, props) {
@@ -2236,14 +2254,15 @@ if (!window.af || typeof(af) !== "function") {
             }
             return f;
         };
+
         /**
          * $.query  - a faster alternative to $("div");
           ```
           $.query(".panel");
           ```
-          * @param {String} selector
-          * @param {Object} [context]
-          * @return {Object} Returns an appframework object
+          * @param {string} sel selector
+          * @param {Object=} what Context
+          * @return {$afm} Returns an appframework object
           * @title $.query(selector,[context])
           */
         $.query = function(sel, what) {
@@ -2253,15 +2272,22 @@ if (!window.af || typeof(af) !== "function") {
             var f = new $afm();
             return f.selector(sel, what);
         };
+
         /**
-         Zepto.js events
-         @api private
+         * The following is modified from Zepto.js / events.js
+         * We've removed deprecated  events like .live and allow anonymous functions to be removed
          */
 
-        //The following is modified from Zepto.js / events.js
-        //We've removed depricated  events like .live and allow anonymous functions to be removed
-        var handlers = {},
+        /**
+         * @api private
+         * @type Array.<Function>
+         */
+        var handlers = [],
+            /**
+             * @type {number}
+             */
             _afmid = 1;
+
         /**
          * Gets or sets the expando property on a javascript element
          * Also increments the internal counter for elements;
@@ -2269,22 +2295,22 @@ if (!window.af || typeof(af) !== "function") {
          * @return {Int} afmid
          * @api private
          */
-
         function afmid(element) {
             return element._afmid || (element._afmid = _afmid++);
         }
+
         /**
          * Searches through a local array that keeps track of event handlers for proxying.
          * Since we listen for multiple events, we match up the event, function and selector.
          * This is used to find, execute, remove proxied event functions
+         *
          * @param {Object} element
-         * @param {String} [event]
-         * @param {Function} [function]
-         * @param {String|Object|Array} [selector]
+         * @param {string=} event
+         * @param {function()} fn function [optional]
+         * @param {String|Object|Array|undefined} selector [optional]
          * @return {Function|null} handler function or false if not found
          * @api private
          */
-
         function findHandlers(element, event, fn, selector) {
             event = parse(event);
             if (event.ns)
@@ -2293,13 +2319,13 @@ if (!window.af || typeof(af) !== "function") {
                 return handler && (!event.e || handler.e === event.e) && (!event.ns || matcher.test(handler.ns)) && (!fn || handler.fn === fn || (typeof handler.fn === "function" && typeof fn === "function" && handler.fn === fn)) && (!selector || handler.sel === selector);
             });
         }
+
         /**
          * Splits an event name by "." to look for namespaces (e.g touch.click)
          * @param {String} event
          * @return {Object} an object with the event name and namespace
          * @api private
          */
-
         function parse(event) {
             var parts = ("" + event).split(".");
             return {
@@ -2307,13 +2333,13 @@ if (!window.af || typeof(af) !== "function") {
                 ns: parts.slice(1).sort().join(" ")
             };
         }
+
         /**
          * Regular expression checker for event namespace checking
-         * @param {String} namespace
+         * @param {string} ns namespace
          * @return {Regex} regular expression
          * @api private
          */
-
         function matcherFor(ns) {
             return new RegExp("(?:^| )" + ns.replace(" ", " .* ?") + "(?: |$)");
         }
@@ -2341,12 +2367,11 @@ if (!window.af || typeof(af) !== "function") {
          * This is needed for delegate/on
          * @param {Object} element
          * @param {String|Object} events
-         * @param {Function} function that will be executed when event triggers
-         * @param {String|Array|Object} [selector]
-         * @param {Function} [getDelegate]
+         * @param {Function} fn Function that will be executed when event triggers
+         * @param {String|Array|Object|undefined} selector [optional]
+         * @param {function()=} getDelegate {optional}
          * @api private
          */
-
         function add(element, events, fn, selector, getDelegate) {
 
             var id = afmid(element),
@@ -2381,13 +2406,13 @@ if (!window.af || typeof(af) !== "function") {
         /**
          * Helper function to remove event listeners.  We look through each event and then the proxy handler array to see if it exists
          * If found, we remove the listener and the entry from the proxy array.  If no function is specified, we remove all listeners that match
+         *
          * @param {Object} element
          * @param {String|Object} events
-         * @param {Function} [fn]
-         * @param {String|Array|Object} [selector]
+         * @param {Function= } fn [optional]
+         * @param {String|Array|Object|undefined} selector [optional]
          * @api private
          */
-
         function remove(element, events, fn, selector) {
 
             var id = afmid(element);
@@ -2410,7 +2435,6 @@ if (!window.af || typeof(af) !== "function") {
             ```
             $().bind("click",function(){console.log("I clicked "+this.id);});
             ```
-
         * @param {String|Object} event
         * @param {Function} callback
         * @return {Object} appframework object
@@ -2422,16 +2446,16 @@ if (!window.af || typeof(af) !== "function") {
             }
             return this;
         };
+
         /**
         * Unbinds an event to each element in the collection.  If a callback is passed in, we remove just that one, otherwise we remove all callbacks for those events
             ```
             $().unbind("click"); //Unbinds all click events
             $().unbind("click",myFunc); //Unbinds myFunc
             ```
-
-        * @param {String|Object} event
+        * @param {string|Object} event
         * @param {Function} [callback]
-        * @return {Object} appframework object
+        * @return {$afm} appframework object
         * @title $().unbind(event,[callback]);
         */
         $.fn.unbind = function(event, callback) {
@@ -2446,8 +2470,7 @@ if (!window.af || typeof(af) !== "function") {
             ```
             $().one("click",function(){console.log("I was clicked once");});
             ```
-
-        * @param {String|Object} event
+        * @param {string|Object} event
         * @param {Function} [callback]
         * @return appframework object
         * @title $().one(event,callback);
@@ -2466,20 +2489,26 @@ if (!window.af || typeof(af) !== "function") {
 
         /**
          * internal variables
+         * @return {boolean} always returns true
          * @api private
          */
-
         var returnTrue = function() {
             return true;
         };
+
+        /**
+         * @return {boolean} always returns false
+         */
         var returnFalse = function() {
             return false;
         };
+
         var eventMethods = {
             preventDefault: "isDefaultPrevented",
             stopImmediatePropagation: "isImmediatePropagationStopped",
             stopPropagation: "isPropagationStopped"
         };
+
         /**
          * Creates a proxy function for event handlers.
          * As "some" browsers dont support event.stopPropagation this call is bypassed if it cant be found on the event object.
@@ -2487,7 +2516,6 @@ if (!window.af || typeof(af) !== "function") {
          * @return {Function} proxy
          * @api private
          */
-
         function createProxy(event) {
             var proxy = $.extend({
                 originalEvent: event
@@ -2513,11 +2541,12 @@ if (!window.af || typeof(af) !== "function") {
             $("#div").delegate("p","click",callback);
             ```
 
-        * @param {String|Array|Object} selector
+        * @param {string|Object} element
         * @param {String|Object} event
-        * @param {Object} data
         * @param {Function} callback
-        * @return {Object} appframework object
+        * @param {String|Array|Object|undefined} selector [optional]
+        * @param {Object=} data [optional]
+        * @return {$afm} appframework object
         * @title $().delegate(selector,event,[data],callback)
         */
         function addDelegate(element,event,callback,selector,data){
@@ -2589,6 +2618,7 @@ if (!window.af || typeof(af) !== "function") {
 
             return selector === nundefined || $.isFunction(selector) ? this.bind(event, selector) : this.delegate(selector, event, data,callback);
         };
+
         /**
         * Removes event listeners for .on()
         * If selector is undefined or a function, we call unbind, otherwise it's undelegate
@@ -2613,14 +2643,15 @@ if (!window.af || typeof(af) !== "function") {
         $().trigger("click",{foo:"bar"});//Trigger the click event and pass in data
         ```
 
-        * @param {String|Object} event
-        * @param {Object} [data]
-        * @return {Object} appframework object
+        * @param {string|Object} event
+        * @param {Object=} data
+        * @param {Object=} props
+        * @return {$afm} appframework object
         * @title $().trigger(event,data);
         */
         $.fn.trigger = function(event, data, props) {
             if (typeof event === "string"){
-                props=props||{}
+                props=props || {};
                 event = parse(event);
                 props.ns=event.ns;
                 event = $.Event(event.e, props);
@@ -2637,13 +2668,13 @@ if (!window.af || typeof(af) !== "function") {
          ```
          $.Event('MouseEvent');
          ```
-         * @param {String} type
-         * @param {Object} [properties]
-         * @return {event} a custom event that can then be dispatched
          * @api private
          * @title $.Event(type,props);
+         *
+         * @param {string} type
+         * @param {Object=} props [properties]
+         * @return {event} a custom event that can then be dispatched
          */
-
         $.Event = function(type, props) {
             var event = document.createEvent("Events"),
                 bubbles = true;
@@ -2659,14 +2690,14 @@ if (!window.af || typeof(af) !== "function") {
          * @api private
          */
 
-        /*
+        /**
          * Bind an event to an object instead of a DOM Node
            ```
            $.bind(this,"event",function(){});
            ```
-         * @param {Object} object
-         * @param {String} event name
-         * @param {Function} function to execute
+         * @param {Object} obj Object
+         * @param {string} ev Event name
+         * @param {Function} f Function to execute
          * @title $.bind(object,event,function);
          */
         $.bind = function(obj, ev, f) {
@@ -2684,9 +2715,9 @@ if (!window.af || typeof(af) !== "function") {
            ```
            $.trigger(this,"event",arguments);
            ```
-         * @param {Object} object
-         * @param {String} event name
-         * @param {Array} arguments
+         * @param {Object} obj object
+         * @param {string} ev event name
+         * @param {Array} args arguments
          * @title $.trigger(object,event,argments);
          */
         $.trigger = function(obj, ev, args) {
@@ -2705,14 +2736,15 @@ if (!window.af || typeof(af) !== "function") {
             }
             return ret;
         };
+
         /**
          * Unbind an event to an object instead of a DOM Node
            ```
            $.unbind(this,"event",function(){});
            ```
-         * @param {Object} object
-         * @param {String} event name
-         * @param {Function} function to execute
+         * @param {Object} obj Object
+         * @param {String} ev Event name
+         * @param {Function} f Function to execute
          * @title $.unbind(object,event,function);
          */
         $.unbind = function(obj, ev, f) {
@@ -2732,19 +2764,20 @@ if (!window.af || typeof(af) !== "function") {
                 }
             }
         };
+
         /**
-         * Creates a proxy function so you can chane "this" context in the function
+         * Creates a proxy function so you can change "this" context in the function
             ```
                 var newObj={foo:bar}
                 $("#main").bind("click",$.proxy(function(evt){console.log(this)},newObj);
                 ( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj) )("foo", "bar");
                 ( $.proxy(function(foo, bar){console.log(this+foo+bar)}, newObj, ["foo", "bar"]) )();
             ```
-         * @param {Function} callback
-         * @param {Object} Context         
-         * @title $.proxy(callback,context);
+         * @param {Function} f Callback
+         * @param {Object} c Context
+         * @param {Object=} args [optional] Arguments
+         * @title $.proxy(callback, context, [arguments]);
          */
-
         $.proxy = function(f, c, args) {
             return function() {
                 if (args) return f.apply(c, args); //use provided arguments
@@ -2752,16 +2785,15 @@ if (!window.af || typeof(af) !== "function") {
             };
         };
 
-
         /**
          * Removes listeners on a div and its children recursively
             ```
              cleanUpNode(node,kill)
             ```
-         * @param {HTMLDivElement} the element to clean up recursively
+         * @param {HTMLDivElement} node the element to clean up recursively
+         * @param {boolean} kill
          * @api private
          */
-
         function cleanUpNode(node, kill) {
             //kill it before it lays eggs!
             if (kill && node.dispatchEvent) {
@@ -2800,11 +2832,11 @@ if (!window.af || typeof(af) !== "function") {
         /**
          * Function to clean up node content to prevent memory leaks
            ```
-           $.cleanUpContent(node,itself,kill)
+           $.cleanUpContent(node, itself, kill)
            ```
          * @param {HTMLNode} node
-         * @param {Bool} kill itself
-         * @param {bool} Kill nodes
+         * @param {boolean} itself 
+         * @param {boolean=} kill When set to true, this will emit a non-bubbling "destroy" Event on the node
          * @title $.cleanUpContent(node,itself,kill)
          */
         $.cleanUpContent = function(node, itself, kill) {
@@ -2829,9 +2861,9 @@ if (!window.af || typeof(af) !== "function") {
            ```
            $.asap(function,context,args)
            ```
-         * @param {Function} function
+         * @param {Function} fn function
          * @param {Object} context
-         * @param {Array} arguments
+         * @param {Array} args arguments
          */
         $.asap = function(fn, context, args) {
             if (!$.isFunction(fn)) throw "$.asap - argument is not a valid function";
@@ -2890,10 +2922,7 @@ if (!window.af || typeof(af) !== "function") {
         };
 
 
-        /**
-        //custom events since people want to do $().click instead of $().bind("click")
-        */
-
+        /* custom events since people want to do $().click instead of $().bind("click") */
         ["click", "keydown", "keyup", "keypress", "submit", "load", "resize", "change", "select", "error"].forEach(function(event) {
             $.fn[event] = function(cb) {
                 return cb ? this.bind(event, cb) : this.trigger(event);

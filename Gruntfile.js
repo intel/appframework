@@ -146,6 +146,24 @@ module.exports = function (grunt) {
                     ]
                 }
             },
+            afui_jquery:{
+                files: {
+                    "build/ui/af.ui.jquery.js": [
+                        "jq.appframework.js",
+                        "plugins/af.actionsheet.js",
+                        "plugins/af.css3animate.js",
+                        "plugins/af.passwordBox.js",
+                        "plugins/af.scroller.js",
+                        "plugins/af.selectBox.js",                                                
+                        "plugins/af.touchEvents.js",
+                        "plugins/af.touchLayer.js",
+                        "plugins/af.popup.js",                        
+                        "ui/appframework.ui.js",
+                        "ui/transitions/**/*.js",
+                        "plugins/af.8tiles.js"
+                    ]
+                }
+            },
             af:{
                 files:{
                     "build/appframework.js": [
@@ -176,6 +194,15 @@ module.exports = function (grunt) {
                 closurePath: "../closure/",
                 js: ["appframework.js","ayepromise.js","build/ui/appframework.ui.js"],
                 jsOutputFile: "build/ui/appframework.ui.min.js",
+                options: {
+                },
+                maxBuffer: 500,
+                noreport:true
+            },
+            "af-ui-jquery": {
+                closurePath: "../closure/",
+                js: ["build/ui/appframework.ui.js"],
+                jsOutputFile: "build/ui/af.ui.jquery.min.js",
                 options: {
                 },
                 maxBuffer: 500,
