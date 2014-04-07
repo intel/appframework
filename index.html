@@ -113,18 +113,18 @@
             
             var webRoot = "./";
             // $.os.android=true;
-            //$.ui.autoLaunch = false;
+            $.ui.autoLaunch = false;
             $.ui.openLinksNewTab = false;
             $.ui.splitview=false;
             
 
             $(document).ready(function(){
-                  // $.ui.launch();
-
+                $.ui.launch();
             });
             
             /* This code is used to run as soon as intel.xdk activates */
             var onDeviceReady = function () {
+                $.ui.launch();
                 intel.xdk.device.setRotateOrientation("portrait");
                 intel.xdk.device.setAutoRotate(false);
                 webRoot = intel.xdk.webRoot + "";
