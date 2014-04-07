@@ -2121,6 +2121,25 @@
                     that.defaultFooter = "defaultNav";
                     that.prevFooter = $.query("#defaultNav");
                     that.updateNavbarElements(that.prevFooter);
+                    // set header for menu and asidemenu
+                    $.each($.query("nav"), function(i, nav){
+                        if(nav.getAttribute("title")){
+                            $(nav).prepend(
+                                $.create("header", {className:"header"}).append(
+                                    $.create("h1", {html:nav.getAttribute("title")}).get(0))
+                            );
+                            nav.removeAttribute("title");
+                        }
+                    });
+                    $.each($.query("aside"), function(i, aside){
+                        if(aside.getAttribute("title")){
+                            $(aside).prepend(
+                                $.create("header", {className:"header"}).append(
+                                    $.create("h1", {html:aside.getAttribute("title")}).get(0))
+                            );
+                            aside.removeAttribute("title");
+                        }
+                    });
                     //setup initial menu
                     var firstMenu = $.query("nav").get(0);
                     if (firstMenu) {
