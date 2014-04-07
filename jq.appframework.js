@@ -4,11 +4,10 @@
  * @author Ian Maffett
  * @description A plugin to allow jQuery developers to use App Framework UI
  */
-/* global jquery*/
 /* jshint eqeqeq:false */
 (function($,window){
     "use strict";
-    var nundefined, document = window.document,classCache = {},isWin8=(typeof(MSApp)==="object"),jsonPHandlers = [],_jsonPID = 1;
+    var nundefined, document = window.document,classCache = {},isWin8=(typeof(MSApp)==="object"),_jsonPID = 1;
 
     function classRE(name) {
         return name in classCache ? classCache[name] : (classCache[name] = new RegExp("(^|\\s)" + name + "(\\s|$)"));
@@ -375,7 +374,6 @@
     $.is$ = function (obj) {
         return obj instanceof $;
     };
-    var empty=function(){};
     $.jsonP = function(options) {
         if (isWin8) {
             options.type = "get";
@@ -386,11 +384,6 @@
         var abortTimeout = "",
             context, callback;
         var script = document.createElement("script");
-        var abort = function() {
-            $(script).remove();
-            if (window[callbackName])
-                window[callbackName] = empty;
-        };
         window[callbackName] = function(data) {
             clearTimeout(abortTimeout);
             $(script).remove();

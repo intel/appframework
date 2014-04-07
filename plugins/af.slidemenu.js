@@ -85,7 +85,7 @@
 
             if($.ui.splitview&&window.innerWidth>=parseInt($.ui.handheldMinWidth,10)&& (dx > startX)&&openState===0) return true;
             if (!$.ui.isSideMenuEnabled() && (dx > startX) && openState===0) return true;
-            if (!$.ui.isAsideMenuEnabled() && (dx < startX) && openState===0) return true;            
+            if (!$.ui.isAsideMenuEnabled() && (dx < startX) && openState===0) return true;
             if (Math.abs(dy - startY) > Math.abs(dx - startX)) return true;
 
             if (!checking) {
@@ -109,7 +109,7 @@
                 }
             }
 
-            if (Math.abs(thePlace) > max){                
+            if (Math.abs(thePlace) > max){
                 return true;
             }
 
@@ -148,7 +148,7 @@
 
 
         },true);
-        afui.addEventListener("touchend", function(e) {
+        afui.addEventListener("touchend", function() {
             if (!$.ui.isSideMenuEnabled() && !$.ui.isAsideMenuEnabled()) return true;
             if (doMenu && checking&&!keepOpen) {
                 $.ui.toggleSideMenu(showHideThresh, function(){

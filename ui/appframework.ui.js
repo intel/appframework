@@ -12,7 +12,6 @@
 (function($) {
     "use strict";
 
-    var hasLaunched = false;
     var startPath = window.location.pathname + window.location.search;
     var defaultHash = window.location.hash;
     var previousTarget = defaultHash;
@@ -239,7 +238,7 @@
            ```
            @title $.ui.enableTabBar
          */
-        enableTabBar:function(e){
+        enableTabBar:function(){
             $(document).on("click",".button-grouped.tabbed",function(e){
                 var $el=$(e.target);
                 $el.closest(".tabbed").find(".button").data("ignore-pressed","true").removeClass("pressed");
@@ -257,7 +256,7 @@
            ```
          * @title $.ui.disableTabBar
          */
-        disableTabBar:function(e){
+        disableTabBar:function(){
             $(document).off("click",".button-grouped.tabbed");
             $(".button-grouped.tabbed .button").removeAttr("data-ignore-pressed");
         },
@@ -476,7 +475,7 @@
             if (this.launchCompleted)
                 param();
             else {
-                $(document).on("afui:ready", function(e) {
+                $(document).on("afui:ready", function() {
                     param();
                 });
             }
@@ -774,7 +773,6 @@
             this.disableLeftSideMenu();
         },
         disableLeftSideMenu:function(){
-            var that = this;
             var els = $.query("#content, #header, #navbar");
             if (this.isSideMenuOn()) {
                 this.toggleSideMenu(false, function(canceled) {
@@ -804,7 +802,6 @@
         * @title $.ui.disableSideMenu();
         */
         disableRightSideMenu:function(){
-            var that = this;
             var els = $.query("#content, #header, #navbar");
             if (this.isSideMenuOn()) {
                 this.toggleSideMenu(false, function(canceled) {
@@ -999,7 +996,6 @@
             return this.updateRightSideMenuElements.apply(this,arguments);
         },
         updateRightSideMenuElements:function(elems){
-            var that = this;
             if (elems === undefined || elems === null) return;
             var nb = $.query("#aside_menu_scroller");
 
@@ -1036,7 +1032,6 @@
             return this.updateLeftSideMenuElements.apply(this,arguments);
         },
         updateLeftSideMenuElements:function(elems) {
-            var that = this;
             if (elems === undefined || elems === null) return;
             var nb = $.query("#menu_scroller");
 
@@ -1589,14 +1584,12 @@
         loadContent: function(target, newTab, back, transition, anchor) {
 
             if (this.doingTransition) {
-                var that = this;
                 this.loadContentQueue.push([target, newTab, back, transition, anchor]);
                 return;
             }
             if (target.length === 0) return;
 
 
-            var what = null;
             var loadAjax = true;
             anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
             if (target.indexOf("#") === -1) {
@@ -1718,11 +1711,10 @@
          * @param {string} target
          * @param {boolean=} newtab (resets history)
          * @param {boolean=} go back (initiate the back click)
-         * @param {string=} transition
-         * @title $.ui.loadDiv(target,newTab,goBack,transition);
+         * @title $.ui.loadContentData(target,newTab,goBack);
          * @api private
          */
-        loadContentData: function(what, newTab, back, transition) {
+        loadContentData: function(what, newTab, back) {
             var prevId, el, val, slashIndex;
             if (back) {
                 if (this.history.length > 0) {
@@ -2052,7 +2044,6 @@
             for (var i = 0; i < contentDivs.length; i++) {
                 var el = contentDivs[i];
                 var tmp = el;
-                var id = el.id;
                 var prevSibling = el.previousSibling;
                 if (el.parentNode && el.parentNode.id !== "content") {
                     if (tmp.getAttribute("selected")) this.firstDiv = el;
@@ -2088,7 +2079,7 @@
                             $(document).trigger("defer:loaded");
                         }
                     },
-                    error: function(msg) {
+                    error: function() {
                         //still trigger the file as being loaded to not block $.ui.ready
                         console.log("Error with deferred load " + intel.xdk.webRoot + defer[j]);
                         loaded++;
@@ -2242,7 +2233,7 @@
         /**
          * This is the default transition.  It simply shows the new panel and hides the old
          */
-        noTransition: function(oldDiv, currDiv, back) {
+        noTransition: function(oldDiv, currDiv) {
             currDiv.style.display = "block";
             oldDiv.style.display = "block";
             var that = this;
@@ -2385,7 +2376,7 @@
     });
     //Fix an ios bug where scrolling will not work with rotation
     if ($.feat.nativeTouchScroll) {
-        document.addEventListener("orientationchange", function(e) {
+        document.addEventListener("orientationchange", function() {
             if ($.ui.scrollingDivs[$.ui.activeDiv.id]) {
                 var tmpscroller = $.ui.scrollingDivs[$.ui.activeDiv.id];
                 if(!tmpscroller) return;

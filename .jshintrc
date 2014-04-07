@@ -23,7 +23,7 @@
     "af":false
   },
 
-  "unused": false,
+  "unused": true,
   "browser": true,
   "strict": true,
   "trailing": true,

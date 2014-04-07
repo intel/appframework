@@ -64,7 +64,6 @@
 
                 el.watch("selectedIndex", updateIndex);
                 for (var j = 0; j < el.options.length; j++) {
-                    var currInd = j;
                     el.options[j].watch("selected", updateOption);
                     if (el.options[j].selected)
                         fixer.html(el.options[j].text);
@@ -82,16 +81,13 @@
         },
         initDropDown: function(el) {
 
-            var that = this;
             if (el.disabled) return;
             if (!el || !el.options || el.options.length === 0) return;
-            var htmlTemplate = "";
             var foundInd = 0;
             var $scr = $("#afSelectBoxfix");
             $scr.html("<ul></ul>");
             var $list = $scr.find("ul");
             for (var j = 0; j < el.options.length; j++) {
-                var currInd = j;
                 el.options[j].watch("selected", updateOption);
                 var checked = (el.options[j].selected) ? "selected" : "";
                 if (checked) foundInd = j + 1;
@@ -167,7 +163,7 @@
                 return;
             }
             $(document).ready(function() {
-                $(document).on("click", ".afFakeSelect", function(e) {
+                $(document).on("click", ".afFakeSelect", function() {
                     if (this.linker.disabled)
                         return;
                     that.currLinker = this;
@@ -227,7 +223,7 @@
                     var $sel = $(that.currLinker.linker);
                     $sel.find("option").prop("selected", false);
 
-                    $("#afSelectBoxfix li").each(function(el) {
+                    $("#afSelectBoxfix li").each(function() {
                         var $el = $(this);
                         if ($el.hasClass("selected")) {
                             var ind = parseInt($el.data("ind"), 10);

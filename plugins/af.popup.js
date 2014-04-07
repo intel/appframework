@@ -4,7 +4,6 @@
  * Modifications/enhancements by Intel for App Framework
  *
  */
- 
 /* EXAMPLE
  $.query("body").popup({
         title:"Alert! Alert!",

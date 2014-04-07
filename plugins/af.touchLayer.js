@@ -42,11 +42,6 @@
     var skipTouchEnd = false; //Fix iOS bug with alerts/confirms
     var cancelClick = false;
 
-    function getTime() {
-        var d = new Date();
-        var n = d.getTime();
-        return n;
-    }
     var touchLayer = function(el) {
         this.clearTouchVars();
         el.addEventListener("touchstart", this, false);
@@ -91,7 +86,7 @@
             that.isScrolling = true;
             that.scrollingEl_ = el;
             if (!$.feat.nativeTouchScroll)
-                that.scrollerIsScrolling = true;            
+                that.scrollerIsScrolling = true;
             that.fireEvent("UIEvents", "scrollstart", el, false, false);
         });
         $.bind(this, "scrollend", function(el) {
@@ -235,7 +230,7 @@
             } else
                 return numOnly(document.documentElement.style.height); //TODO: works well on iPhone, test BB
         },
-        onOrientationChange: function(e) {
+        onOrientationChange: function() {
             //this.log("orientationchange");
             //if a resize already happened, fire the orientationchange
             var self=this;
@@ -255,7 +250,7 @@
                 }, time);
             }
         },
-        onResize: function(e) {
+        onResize: function() {
             //avoid infinite loop on iPhone
             if (this.ignoreNextResize_) {
                 //this.log("ignored resize");

@@ -58,7 +58,7 @@
             $.unbind($.touchLayer,"scrollstart",trackScroll);
         };
 
-        var initScrollStart = function(el,pos){
+        var initScrollStart = function(){
             startY=null;
             prevY=0;
         };
