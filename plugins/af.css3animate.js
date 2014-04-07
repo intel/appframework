@@ -442,7 +442,7 @@ if (!Date.now)
         }
         return tmp;
     };
-    $.fn.animate = function(opts) {
+    $.fn.animateCss = function(opts) {
         var tmp = getAnimate(this[0], opts);
         return tmp;
     };

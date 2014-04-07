@@ -200,7 +200,7 @@
                 }
                 //assign self destruct
                 var that = this;
-                var orientationChangeProxy = function (e) {
+                var orientationChangeProxy = function () {
                     //no need to readjust if disabled...
                     if (that.eventsActive && !$.feat.nativeTouchScroll&&(!$.ui || ($.ui.activeDiv === that.container)) ) {
                         that.adjustScroll();
@@ -617,7 +617,7 @@
                 $.trigger(this, "refresh-trigger");
             }
         };
-        nativeScroller.prototype.onTouchEnd = function (e) {
+        nativeScroller.prototype.onTouchEnd = function () {
 
             var triggered = this.el.scrollTop <= -(this.refreshHeight);
             var that=this;
@@ -739,7 +739,7 @@
             this._scrollToBottom(time);
             this.logPos(this.el.scrollLeft, this.el.scrollTop);
         };
-        nativeScroller.prototype.onScroll = function (e) {
+        nativeScroller.prototype.onScroll = function () {
             if (this.infinite && this.touchEndFired) {
                 this.touchEndFired = false;
                 return;
@@ -891,7 +891,7 @@
             this.moved = false;
             this.currentScrollingObject = null;
 
-            $(this.el).animate().stop();
+            $(this.el).animateCss().stop();
 
             if (!this.container) return;
             if (this.refreshCancelCB) {
@@ -985,7 +985,7 @@
                 else
                     this.vscrollBar.style.right = "0px";
                 this.vscrollBar.style[$.feat.cssPrefix + "Transition"] = "";
-                $(this.vscrollBar).animate().stop();
+                $(this.vscrollBar).animateCss().stop();
             }
 
             //horizontal scroll
@@ -995,7 +995,7 @@
                 else
                     this.hscrollBar.style.bottom = numOnly(this.hscrollBar.style.height);
                 this.hscrollBar.style[$.feat.cssPrefix + "Transition"] = "";
-                $(this.hscrollBar).animate().stop();
+                $(this.hscrollBar).animateCss().stop();
             }
 
             //save scrollInfo
@@ -1345,7 +1345,7 @@
             } else scrollInfo.duration = 0;
         };
 
-        jsScroller.prototype.onTouchEnd = function (event) {
+        jsScroller.prototype.onTouchEnd = function () {
 
             if (this.currentScrollingObject === null || !this.moved) return;
 
@@ -1360,7 +1360,7 @@
             }
             this.calculateTarget(scrollInfo);
 
-            
+
 
             //get the current top
             var cssMatrix = this.getCSSMatrix(this.el);
@@ -1527,7 +1527,7 @@
                                 $.trigger($.touchLayer,"scroll",[pos]);
                             };
                         }
-                        $(this.el).animate(opts).start();
+                        $(this.el).animateCss(opts).start();
                     }
                 }
                 // Position should be updated even when the scroller is disabled so we log the change
@@ -1560,7 +1560,7 @@
                     el.style.marginTop = Math.round(distanceToMove.y) + "px";
                     el.style.marginLeft = Math.round(distanceToMove.x) + "px";
                 } else {
-                    $(el).animate({x:distanceToMove.x,y:distanceToMove.y,duration:time,easing:"easeOutSine"}).start();
+                    $(el).animateCss({x:distanceToMove.x,y:distanceToMove.y,duration:time,easing:"easeOutSine"}).start();
                 }
             }
         };
