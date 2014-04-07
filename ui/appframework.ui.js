@@ -475,7 +475,7 @@
             if (this.launchCompleted)
                 param();
             else {
-                $(document).on("afui:ready", function() {
+                $(document).one("afui:ready", function() {
                     param();
                 });
             }
