@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-04-03 */
+/*! intel-appframework - v2.1.0 - 2014-04-07 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -30,13 +30,8 @@ if (!window.af || typeof(af) !== "function") {
             emptyArray = [],
             slice = emptyArray.slice,
             classCache = {},
-            eventHandlers = [],
-            _eventID = 1,
-            jsonPHandlers = [],
             _jsonPID = 1,
             fragmentRE = /<(\w+)[^>]*>/,
-            classSelectorRE = /^\.([\w-]+)$/,
-            tagSelectorRE = /^[\w-]+$/,
             _attrCache = {},
             _propCache = {},
             /**
@@ -586,7 +581,6 @@ if (!window.af || typeof(af) !== "function") {
                 if (this.length === 0)
                     return this;
                 if (value == nundefined && typeof(attribute) === "string") {
-                    var styles = window.getComputedStyle(toAct);
                     return toAct.style[attribute] ? toAct.style[attribute] : window.getComputedStyle(toAct)[attribute];
                 }
                 for (var i = 0; i < this.length; i++) {
@@ -1100,11 +1094,10 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                 $().appendTo("#foo"); //Append an object;
                 ```
-            * @param {string|Object} selector to append to
-            * @param {boolean=} insert [optional] Insert or append
-            * @title $().appendTo(element,[insert])
+            * @param {string|Object} selector to append to            
+            * @title $().appendTo(element)
             */
-            appendTo: function(selector, insert) {
+            appendTo: function(selector) {
                 var tmp = $(selector);
                 tmp.append(this);
                 return this;
@@ -1412,8 +1405,7 @@ if (!window.af || typeof(af) !== "function") {
             closest: function(selector, context) {
                 if (this.length === 0)
                     return this;
-                var elems = [],
-                    cur = this[0];
+                var cur = this[0];
 
                 var start = $(selector, context);
                 if (start.length === 0)
@@ -1669,11 +1661,6 @@ if (!window.af || typeof(af) !== "function") {
             var abortTimeout = "",
                 context, callback;
             var script = document.createElement("script");
-            var abort = function() {
-                $(script).remove();
-                if (window[callbackName])
-                    window[callbackName] = empty;
-            };
             window[callbackName] = function(data) {
                 clearTimeout(abortTimeout);
                 $(script).remove();
@@ -1749,7 +1736,6 @@ if (!window.af || typeof(af) !== "function") {
         $.ajax = function(opts) {
             var xhr;
             var deferred=$.Deferred();
-            var url;
             if(typeof(opts)==="string")
             {
                 var oldUrl=opts;

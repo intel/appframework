@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-03-30 */
+/*! intel-appframework - v2.1.0 - 2014-04-07 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -586,7 +586,7 @@ if (!Date.now)
         }
         return tmp;
     };
-    $.fn.animate = function(opts) {
+    $.fn.animateCss = function(opts) {
         var tmp = getAnimate(this[0], opts);
         return tmp;
     };
@@ -962,7 +962,7 @@ if (!Date.now)
                 }
                 //assign self destruct
                 var that = this;
-                var orientationChangeProxy = function (e) {
+                var orientationChangeProxy = function () {
                     //no need to readjust if disabled...
                     if (that.eventsActive && !$.feat.nativeTouchScroll&&(!$.ui || ($.ui.activeDiv === that.container)) ) {
                         that.adjustScroll();
@@ -1379,7 +1379,7 @@ if (!Date.now)
                 $.trigger(this, "refresh-trigger");
             }
         };
-        nativeScroller.prototype.onTouchEnd = function (e) {
+        nativeScroller.prototype.onTouchEnd = function () {
 
             var triggered = this.el.scrollTop <= -(this.refreshHeight);
             var that=this;
@@ -1501,7 +1501,7 @@ if (!Date.now)
             this._scrollToBottom(time);
             this.logPos(this.el.scrollLeft, this.el.scrollTop);
         };
-        nativeScroller.prototype.onScroll = function (e) {
+        nativeScroller.prototype.onScroll = function () {
             if (this.infinite && this.touchEndFired) {
                 this.touchEndFired = false;
                 return;
@@ -1653,7 +1653,7 @@ if (!Date.now)
             this.moved = false;
             this.currentScrollingObject = null;
 
-            $(this.el).animate().stop();
+            $(this.el).animateCss().stop();
 
             if (!this.container) return;
             if (this.refreshCancelCB) {
@@ -1747,7 +1747,7 @@ if (!Date.now)
                 else
                     this.vscrollBar.style.right = "0px";
                 this.vscrollBar.style[$.feat.cssPrefix + "Transition"] = "";
-                $(this.vscrollBar).animate().stop();
+                $(this.vscrollBar).animateCss().stop();
             }
 
             //horizontal scroll
@@ -1757,7 +1757,7 @@ if (!Date.now)
                 else
                     this.hscrollBar.style.bottom = numOnly(this.hscrollBar.style.height);
                 this.hscrollBar.style[$.feat.cssPrefix + "Transition"] = "";
-                $(this.hscrollBar).animate().stop();
+                $(this.hscrollBar).animateCss().stop();
             }
 
             //save scrollInfo
@@ -2107,7 +2107,7 @@ if (!Date.now)
             } else scrollInfo.duration = 0;
         };
 
-        jsScroller.prototype.onTouchEnd = function (event) {
+        jsScroller.prototype.onTouchEnd = function () {
 
             if (this.currentScrollingObject === null || !this.moved) return;
 
@@ -2122,7 +2122,7 @@ if (!Date.now)
             }
             this.calculateTarget(scrollInfo);
 
-            
+
 
             //get the current top
             var cssMatrix = this.getCSSMatrix(this.el);
@@ -2289,7 +2289,7 @@ if (!Date.now)
                                 $.trigger($.touchLayer,"scroll",[pos]);
                             };
                         }
-                        $(this.el).animate(opts).start();
+                        $(this.el).animateCss(opts).start();
                     }
                 }
                 // Position should be updated even when the scroller is disabled so we log the change
@@ -2322,7 +2322,7 @@ if (!Date.now)
                     el.style.marginTop = Math.round(distanceToMove.y) + "px";
                     el.style.marginLeft = Math.round(distanceToMove.x) + "px";
                 } else {
-                    $(el).animate({x:distanceToMove.x,y:distanceToMove.y,duration:time,easing:"easeOutSine"}).start();
+                    $(el).animateCss({x:distanceToMove.x,y:distanceToMove.y,duration:time,easing:"easeOutSine"}).start();
                 }
             }
         };
@@ -2420,7 +2420,6 @@ if (!Date.now)
 
                 el.watch("selectedIndex", updateIndex);
                 for (var j = 0; j < el.options.length; j++) {
-                    var currInd = j;
                     el.options[j].watch("selected", updateOption);
                     if (el.options[j].selected)
                         fixer.html(el.options[j].text);
@@ -2438,16 +2437,13 @@ if (!Date.now)
         },
         initDropDown: function(el) {
 
-            var that = this;
             if (el.disabled) return;
             if (!el || !el.options || el.options.length === 0) return;
-            var htmlTemplate = "";
             var foundInd = 0;
             var $scr = $("#afSelectBoxfix");
             $scr.html("<ul></ul>");
             var $list = $scr.find("ul");
             for (var j = 0; j < el.options.length; j++) {
-                var currInd = j;
                 el.options[j].watch("selected", updateOption);
                 var checked = (el.options[j].selected) ? "selected" : "";
                 if (checked) foundInd = j + 1;
@@ -2523,7 +2519,7 @@ if (!Date.now)
                 return;
             }
             $(document).ready(function() {
-                $(document).on("click", ".afFakeSelect", function(e) {
+                $(document).on("click", ".afFakeSelect", function() {
                     if (this.linker.disabled)
                         return;
                     that.currLinker = this;
@@ -2583,7 +2579,7 @@ if (!Date.now)
                     var $sel = $(that.currLinker.linker);
                     $sel.find("option").prop("selected", false);
 
-                    $("#afSelectBoxfix li").each(function(el) {
+                    $("#afSelectBoxfix li").each(function() {
                         var $el = $(this);
                         if ($el.hasClass("selected")) {
                             var ind = parseInt($el.data("ind"), 10);
@@ -2792,11 +2788,6 @@ if (!Date.now)
     var skipTouchEnd = false; //Fix iOS bug with alerts/confirms
     var cancelClick = false;
 
-    function getTime() {
-        var d = new Date();
-        var n = d.getTime();
-        return n;
-    }
     var touchLayer = function(el) {
         this.clearTouchVars();
         el.addEventListener("touchstart", this, false);
@@ -2841,7 +2832,7 @@ if (!Date.now)
             that.isScrolling = true;
             that.scrollingEl_ = el;
             if (!$.feat.nativeTouchScroll)
-                that.scrollerIsScrolling = true;            
+                that.scrollerIsScrolling = true;
             that.fireEvent("UIEvents", "scrollstart", el, false, false);
         });
         $.bind(this, "scrollend", function(el) {
@@ -2985,7 +2976,7 @@ if (!Date.now)
             } else
                 return numOnly(document.documentElement.style.height); //TODO: works well on iPhone, test BB
         },
-        onOrientationChange: function(e) {
+        onOrientationChange: function() {
             //this.log("orientationchange");
             //if a resize already happened, fire the orientationchange
             var self=this;
@@ -3005,7 +2996,7 @@ if (!Date.now)
                 }, time);
             }
         },
-        onResize: function(e) {
+        onResize: function() {
             //avoid infinite loop on iPhone
             if (this.ignoreNextResize_) {
                 //this.log("ignored resize");
@@ -3430,7 +3421,6 @@ if (!Date.now)
  * Modifications/enhancements by Intel for App Framework
  *
  */
- 
 /* EXAMPLE
  $.query("body").popup({
         title:"Alert! Alert!",
@@ -3646,7 +3636,6 @@ if (!Date.now)
 (function($) {
     "use strict";
 
-    var hasLaunched = false;
     var startPath = window.location.pathname + window.location.search;
     var defaultHash = window.location.hash;
     var previousTarget = defaultHash;
@@ -3873,7 +3862,7 @@ if (!Date.now)
            ```
            @title $.ui.enableTabBar
          */
-        enableTabBar:function(e){
+        enableTabBar:function(){
             $(document).on("click",".button-grouped.tabbed",function(e){
                 var $el=$(e.target);
                 $el.closest(".tabbed").find(".button").data("ignore-pressed","true").removeClass("pressed");
@@ -3891,7 +3880,7 @@ if (!Date.now)
            ```
          * @title $.ui.disableTabBar
          */
-        disableTabBar:function(e){
+        disableTabBar:function(){
             $(document).off("click",".button-grouped.tabbed");
             $(".button-grouped.tabbed .button").removeAttr("data-ignore-pressed");
         },
@@ -4110,7 +4099,7 @@ if (!Date.now)
             if (this.launchCompleted)
                 param();
             else {
-                $(document).on("afui:ready", function(e) {
+                $(document).on("afui:ready", function() {
                     param();
                 });
             }
@@ -4408,7 +4397,6 @@ if (!Date.now)
             this.disableLeftSideMenu();
         },
         disableLeftSideMenu:function(){
-            var that = this;
             var els = $.query("#content, #header, #navbar");
             if (this.isSideMenuOn()) {
                 this.toggleSideMenu(false, function(canceled) {
@@ -4438,7 +4426,6 @@ if (!Date.now)
         * @title $.ui.disableSideMenu();
         */
         disableRightSideMenu:function(){
-            var that = this;
             var els = $.query("#content, #header, #navbar");
             if (this.isSideMenuOn()) {
                 this.toggleSideMenu(false, function(canceled) {
@@ -4633,7 +4620,6 @@ if (!Date.now)
             return this.updateRightSideMenuElements.apply(this,arguments);
         },
         updateRightSideMenuElements:function(elems){
-            var that = this;
             if (elems === undefined || elems === null) return;
             var nb = $.query("#aside_menu_scroller");
 
@@ -4670,7 +4656,6 @@ if (!Date.now)
             return this.updateLeftSideMenuElements.apply(this,arguments);
         },
         updateLeftSideMenuElements:function(elems) {
-            var that = this;
             if (elems === undefined || elems === null) return;
             var nb = $.query("#menu_scroller");
 
@@ -5223,14 +5208,12 @@ if (!Date.now)
         loadContent: function(target, newTab, back, transition, anchor) {
 
             if (this.doingTransition) {
-                var that = this;
                 this.loadContentQueue.push([target, newTab, back, transition, anchor]);
                 return;
             }
             if (target.length === 0) return;
 
 
-            var what = null;
             var loadAjax = true;
             anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
             if (target.indexOf("#") === -1) {
@@ -5352,11 +5335,10 @@ if (!Date.now)
          * @param {string} target
          * @param {boolean=} newtab (resets history)
          * @param {boolean=} go back (initiate the back click)
-         * @param {string=} transition
-         * @title $.ui.loadDiv(target,newTab,goBack,transition);
+         * @title $.ui.loadContentData(target,newTab,goBack);
          * @api private
          */
-        loadContentData: function(what, newTab, back, transition) {
+        loadContentData: function(what, newTab, back) {
             var prevId, el, val, slashIndex;
             if (back) {
                 if (this.history.length > 0) {
@@ -5686,7 +5668,6 @@ if (!Date.now)
             for (var i = 0; i < contentDivs.length; i++) {
                 var el = contentDivs[i];
                 var tmp = el;
-                var id = el.id;
                 var prevSibling = el.previousSibling;
                 if (el.parentNode && el.parentNode.id !== "content") {
                     if (tmp.getAttribute("selected")) this.firstDiv = el;
@@ -5722,7 +5703,7 @@ if (!Date.now)
                             $(document).trigger("defer:loaded");
                         }
                     },
-                    error: function(msg) {
+                    error: function() {
                         //still trigger the file as being loaded to not block $.ui.ready
                         console.log("Error with deferred load " + intel.xdk.webRoot + defer[j]);
                         loaded++;
@@ -5876,7 +5857,7 @@ if (!Date.now)
         /**
          * This is the default transition.  It simply shows the new panel and hides the old
          */
-        noTransition: function(oldDiv, currDiv, back) {
+        noTransition: function(oldDiv, currDiv) {
             currDiv.style.display = "block";
             oldDiv.style.display = "block";
             var that = this;
@@ -6019,7 +6000,7 @@ if (!Date.now)
     });
     //Fix an ios bug where scrolling will not work with rotation
     if ($.feat.nativeTouchScroll) {
-        document.addEventListener("orientationchange", function(e) {
+        document.addEventListener("orientationchange", function() {
             if ($.ui.scrollingDivs[$.ui.activeDiv.id]) {
                 var tmpscroller = $.ui.scrollingDivs[$.ui.activeDiv.id];
                 if(!tmpscroller) return;

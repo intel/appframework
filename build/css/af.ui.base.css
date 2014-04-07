@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-04-02 */
+/*! intel-appframework - v2.1.0 - 2014-04-07 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -155,19 +155,18 @@ body {
 
 #afui .header h1 {
     
-    position:absolute;
-    width:45%;
-    z-index:1;
-    text-align:center;
-    height:44px;
-    font-size:18px;
-    font-weight:bold;
-    left:27.5%;
-    color:inherit;
-    padding:10px 0;
-    text-shadow:rgba(0,0,0,0.8) 0 -1px 0;
-    text-align:center;
-    white-space:nowrap;
+    position: absolute;
+    width: 45%;
+    z-index: 1;
+    height: 44px;
+    font-size: 18px;
+    font-weight: bold;
+    left: 27.5%;
+    color: inherit;
+    padding: 10px 0;
+    text-shadow: rgba(0,0,0,0.8) 0 -1px 0;
+    text-align: center;
+    white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
 } /* This is text that appears in the header at the top of the screen */
@@ -662,6 +661,7 @@ body {
         overflow:visible !important;
       }
 }
+
 /* blue #0190d6
 
  */
