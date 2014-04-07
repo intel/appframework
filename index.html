@@ -113,18 +113,18 @@
             
             var webRoot = "./";
             // $.os.android=true;
-            //$.ui.autoLaunch = false;
+            $.ui.autoLaunch = false;
             $.ui.openLinksNewTab = false;
             $.ui.splitview=false;
             
 
             $(document).ready(function(){
-                  // $.ui.launch();
-
+                $.ui.launch();
             });
             
             /* This code is used to run as soon as intel.xdk activates */
             var onDeviceReady = function () {
+                $.ui.launch();
                 intel.xdk.device.setRotateOrientation("portrait");
                 intel.xdk.device.setAutoRotate(false);
                 webRoot = intel.xdk.webRoot + "";
@@ -2166,7 +2166,7 @@ The parent id for this div is "content". Let's verify it.
                 <a class="button icon settings" style="float:right">Button</a>
             </header>
             <!-- ------------------------------------------ -->
-            <nav>
+            <nav title="Left Menu">
                 <ul class="list">
                     <li class="divider" class="icon home">Home</li>
                     <li>
@@ -2315,8 +2315,8 @@ The parent id for this div is "content". Let's verify it.
                     </li>
                 </ul>
             </nav>
-            <aside>
-                This is a chat aside
+            <aside title="Right">
+                <p>This is a right side menu</p>
             </aside>
         </div>
 

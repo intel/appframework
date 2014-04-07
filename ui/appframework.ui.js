@@ -1006,6 +1006,14 @@
 
             if (!$.is$(elems)) elems = $.query("#" + elems);
 
+            if($(elems).attr("title")){
+                $(elems).prepend(
+                    $.create("header", {className:"header"}).append(
+                        $.create("h1", {html:$(elems).attr("title")}).get(0))
+                );
+                $(elems).removeAttr("title");
+            }
+
             nb.html("");
             nb.append(elems);
             this.prevAsideMenu = elems;
@@ -1041,6 +1049,14 @@
             }
 
             if (!$.is$(elems)) elems = $.query("#" + elems);
+
+            if($(elems).attr("title")){
+                $(elems).prepend(
+                    $.create("header", {className:"header"}).append(
+                        $.create("h1", {html:$(elems).attr("title")}).get(0))
+                );
+                $(elems).removeAttr("title");
+            }
 
             nb.html("");
             nb.append(elems);
