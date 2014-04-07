@@ -687,7 +687,7 @@ body {
     width:45%;
 }
 
-#afui #backButton {
+#afui .backButton {
     background:rgba(249,249,249,1);
     color:#fff;
     display: block;
@@ -713,7 +713,7 @@ body {
     margin:0 !important;
 }
 
-#afui #backButton::before {
+#afui .backButton::before {
     z-index: -1;
     font-size:22px;
     position: absolute;
@@ -738,6 +738,10 @@ body {
     -webkit-transform:rotate(180deg);
     transform:rotate(180deg);
     background-color: transparent;
+}
+
+#afui header .backButton {
+    position:absolute;
 }
 
 #afui  .footer {
@@ -1476,7 +1480,7 @@ body {
     padding-left:6px;
 }
  
-#afui #backButton {
+#afui .backButton {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -1573,7 +1577,7 @@ body {
     box-shadow:none;
 }
 
-#afui.android #backButton{
+#afui.android .backButton{
     background: inherit;
     color:inherit;
 }
@@ -1898,11 +1902,11 @@ body {
 
 
 
-#afui.win8 #backButton.pressed {
+#afui.win8 .backButton.pressed {
     background:inherit;
 }
 
-#afui.win8 #backButton {
+#afui.win8 .backButton {
   color:inherit;
   background:inherit;
   margin:0;
@@ -1922,7 +1926,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-#afui.win8 #backButton::before {
+#afui.win8 .backButton::before {
   content: "\e000";
   font-size:30px;
   position:absolute;
@@ -2330,7 +2334,7 @@ body {
     font-weight: normal;
 }
 
-#afui.bb #backButton {
+#afui.bb .backButton {
     display: block;
     position: absolute;
     line-height:60px;
@@ -2355,7 +2359,7 @@ body {
     margin:0 !important;
 }
 
-#afui.bb #backButton::before {
+#afui.bb .backButton::before {
     z-index: -1;
     font-size:22px;
     position: absolute;
@@ -2383,7 +2387,7 @@ body {
     background-color: transparent;
 }
 
-#afui.bb #backButton::after {
+#afui.bb .backButton::after {
     z-index: -1;
     font-size:24px;
     content: ' ';
@@ -2649,7 +2653,7 @@ body {
     background-color:transparent;
 }
 
-#afui.ios7 #backButton {
+#afui.ios7 .backButton {
     background:rgba(249,249,249,1);
     color:rgba(82,155,234,255);
     display: block;
@@ -2675,7 +2679,7 @@ body {
     margin:0 !important;
 }
 
-#afui.ios7 #backButton::before {
+#afui.ios7 .backButton::before {
     z-index: -1;
     font-size:22px;
     position: absolute;
@@ -2702,7 +2706,7 @@ body {
     background-color: transparent;
 }
 
-#afui.ios7 #backButton::after {
+#afui.ios7 .backButton::after {
     content: '';
     width:0;
     height:0;
@@ -2990,7 +2994,7 @@ body {
     color:#fff;
 }
 
-#afui.ios #backButton {
+#afui.ios .backButton {
     line-height:15px;
     width:58px;
     display:block;
@@ -3012,7 +3016,7 @@ body {
     padding-left:4px !important;
 } /* Sets up positioning of the back button which appears in the header */
 
-#afui.ios #backButton::before {
+#afui.ios .backButton::before {
     z-index:-1;
     content:'';
     position:absolute;

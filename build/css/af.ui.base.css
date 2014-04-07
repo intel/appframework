@@ -687,7 +687,7 @@ body {
     width:45%;
 }
 
-#afui #backButton {
+#afui .backButton {
     background:rgba(249,249,249,1);
     color:#fff;
     display: block;
@@ -713,7 +713,7 @@ body {
     margin:0 !important;
 }
 
-#afui #backButton::before {
+#afui .backButton::before {
     z-index: -1;
     font-size:22px;
     position: absolute;
@@ -738,6 +738,10 @@ body {
     -webkit-transform:rotate(180deg);
     transform:rotate(180deg);
     background-color: transparent;
+}
+
+#afui header .backButton {
+    position:absolute;
 }
 
 #afui  .footer {
@@ -1476,7 +1480,7 @@ body {
     padding-left:6px;
 }
  
-#afui #backButton {
+#afui .backButton {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
