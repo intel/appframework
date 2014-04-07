@@ -205,7 +205,7 @@
     padding-left:6px;
 }
  
-#afui #backButton {
+#afui .backButton {
     text-overflow: ellipsis;
     white-space: nowrap;
 }

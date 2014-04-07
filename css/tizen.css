@@ -74,7 +74,7 @@
     background:#e9e6df;
 }
 
-#afui.tizen #backButton {
+#afui.tizen .backButton {
     background: inherit;
     color:inherit;
 }

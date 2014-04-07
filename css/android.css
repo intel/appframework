@@ -33,7 +33,7 @@
     box-shadow:none;
 }
 
-#afui.android #backButton{
+#afui.android .backButton{
     background: inherit;
     color:inherit;
 }

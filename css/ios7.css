@@ -102,7 +102,7 @@
     background-color:transparent;
 }
 
-#afui.ios7 #backButton {
+#afui.ios7 .backButton {
     background:rgba(249,249,249,1);
     color:rgba(82,155,234,255);
     display: block;
@@ -128,7 +128,7 @@
     margin:0 !important;
 }
 
-#afui.ios7 #backButton::before {
+#afui.ios7 .backButton::before {
     z-index: -1;
     font-size:22px;
     position: absolute;
@@ -155,7 +155,7 @@
     background-color: transparent;
 }
 
-#afui.ios7 #backButton::after {
+#afui.ios7 .backButton::after {
     content: '';
     width:0;
     height:0;

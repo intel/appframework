@@ -489,7 +489,7 @@
          * @title $.ui.setBackButtonStyle(class)
          */
         setBackButtonStyle: function(className) {
-            $.query("#header #backButton").get(0).className=className;
+            $.query("#header .backButton").get(0).className=className;
 
         },
         /**
@@ -1076,15 +1076,15 @@
             if(this._currentHeaderID !== "defaultHeader") return;
             if (this.trimBackButtonText && text.length >= 7)
                 text = text.substring(0, 5) + "...";
-            if (this.backButtonText.length > 0) $.query("#header header:not(.ignore) #backButton").html(this.backButtonText);
-            else $.query("#header header:not(.ignore)  #backButton").html(text);
+            if (this.backButtonText.length > 0) $.query("#header header:not(.ignore) .backButton").html(this.backButtonText);
+            else $.query("#header header:not(.ignore)  .backButton").html(text);
         },
         /**
          * Toggle visibility of the back button
          */
         setBackButtonVisibility: function(show) {
-            if (!show) $.query("#header #backButton").css("visibility", "hidden");
-            else $.query("#header #backButton").css("visibility", "visible");
+            if (!show) $.query("#header .backButton").css("visibility", "hidden");
+            else $.query("#header .backButton").css("visibility", "visible");
         },
         /**
          * Show the loading mask
@@ -1987,9 +1987,9 @@
 
 
             //insert backbutton (should optionally be left to developer..)
-            $(this.header).html("<a id='backButton' class='button'></a> <h1 id='pageTitle'></h1>" + this.header.innerHTML);
-            this.backButton = $.query("#header #backButton").css("visibility", "hidden");
-            $(document).on("click", "#header #backButton", function(e) {
+            $(this.header).html("<a class='backButton button'></a> <h1 id='pageTitle'></h1>" + this.header.innerHTML);
+            this.backButton = $.query("#header .backButton").css("visibility", "hidden");
+            $(document).on("click", "#header .backButton", function(e) {
                 e.preventDefault();
                 that.goBack();
             });
@@ -2175,7 +2175,7 @@
                         //Need to call after parsePanelFunctions, since new headers can override
                         that.loadContentData(that.firstDiv);
 
-                        $.query("#header #backButton").css("visibility", "hidden");
+                        $.query("#header .backButton").css("visibility", "hidden");
                         if (that.firstDiv.getAttribute("data-modal") === "true" || that.firstDiv.getAttribute("modal") === "true") {
                             that.showModal(that.firstDiv.id);
                         }

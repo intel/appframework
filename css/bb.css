@@ -23,7 +23,7 @@
     font-weight: normal;
 }
 
-#afui.bb #backButton {
+#afui.bb .backButton {
     display: block;
     position: absolute;
     line-height:60px;
@@ -48,7 +48,7 @@
     margin:0 !important;
 }
 
-#afui.bb #backButton::before {
+#afui.bb .backButton::before {
     z-index: -1;
     font-size:22px;
     position: absolute;
@@ -76,7 +76,7 @@
     background-color: transparent;
 }
 
-#afui.bb #backButton::after {
+#afui.bb .backButton::after {
     z-index: -1;
     font-size:24px;
     content: ' ';

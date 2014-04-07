@@ -56,7 +56,7 @@
     color:#fff;
 }
 
-#afui.ios #backButton {
+#afui.ios .backButton {
     line-height:15px;
     width:58px;
     display:block;
@@ -78,7 +78,7 @@
     padding-left:4px !important;
 } /* Sets up positioning of the back button which appears in the header */
 
-#afui.ios #backButton::before {
+#afui.ios .backButton::before {
     z-index:-1;
     content:'';
     position:absolute;

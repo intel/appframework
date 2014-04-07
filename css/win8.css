@@ -39,11 +39,11 @@
 
 
 
-#afui.win8 #backButton.pressed {
+#afui.win8 .backButton.pressed {
     background:inherit;
 }
 
-#afui.win8 #backButton {
+#afui.win8 .backButton {
   color:inherit;
   background:inherit;
   margin:0;
@@ -63,7 +63,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-#afui.win8 #backButton::before {
+#afui.win8 .backButton::before {
   content: "\e000";
   font-size:30px;
   position:absolute;
