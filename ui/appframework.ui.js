@@ -109,12 +109,9 @@
             if (that.useOSThemes) {
                 $("#afui").removeClass("ios,ios7,win8,tizen,bb,android,light,dark");
                 if ($.os.android) $("#afui").addClass("android");
-                else if ($.os.ie) {
+                else if ($.os.ie)
                     $("#afui").addClass("win8");
-                    $("head").append($.create("script", {
-                        src: "plugins/af.8tiles.js"
-                    }));
-                } else if ($.os.blackberry||$.os.blackberry10||$.os.playbook) {
+                else if ($.os.blackberry||$.os.blackberry10||$.os.playbook) {
                     $("#afui").addClass("bb");
                     that.backButtonText = "Back";
                 } else if ($.os.ios7)
