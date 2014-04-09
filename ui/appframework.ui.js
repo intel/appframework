@@ -107,7 +107,7 @@
         function setupCustomTheme() {
 
             if (that.useOSThemes) {
-                $("#afui").removeClass("ios,ios7,win8,tizen,bb,android,light,dark");
+                $("#afui").removeClass("ios ios7 win8 tizen bb android light dark");
                 if ($.os.android) $("#afui").addClass("android");
                 else if ($.os.ie) {
                     $("#afui").addClass("win8");
