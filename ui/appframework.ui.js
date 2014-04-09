@@ -134,7 +134,7 @@
                 //$("head").append("<style id='iosBlurrHack'>#afui .panel  {"+hackStyle+"} #afui .panel > * {-webkit-backface-visibility:hidden;}</style>");
                 $("head").append("<style id='iosBlurrHack'>#afui .y-scroll > *, #afui .x-scroll > * {"+hackStyle+"}</style>");
             }
-            else if ($.os.anroid&&!$.os.androidICS){
+            else if ($.os.android&&!$.os.androidICS){
                 that.transitionTime = "150ms";
             }
             else if($.os.fennec){
