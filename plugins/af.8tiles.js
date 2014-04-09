@@ -11,14 +11,14 @@
     if (!$) {
         throw "This plugin requires AFUi";
     }
-
     function wire8Tiles() {
         $.ui.isWin8 = true;
         if (!$.os.ie) return;
         if (!$.ui.isSideMenuEnabled()) return;
 
         $.ui.ready(function() {
-
+            if($.ui.tilesLoaded) return;
+            $.ui.tilesLoaded=true;
             if(window.innerWidth>$.ui.handheldMinWidth) return true;
 
             if ($.ui.slideSideMenu) $.ui.slideSideMenu = false;
