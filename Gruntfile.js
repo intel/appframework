@@ -201,7 +201,7 @@ module.exports = function (grunt) {
             },
             "af-ui-jquery": {
                 closurePath: "../closure/",
-                js: ["build/ui/appframework.ui.js"],
+                js: ["build/ui/af.ui.jquery.js"],
                 jsOutputFile: "build/ui/af.ui.jquery.min.js",
                 options: {
                 },

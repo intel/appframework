@@ -431,7 +431,7 @@
                 oldArgs[0].changedTouches=oldArgs[0].originalEvent.changedTouches;
                 oldArgs[0].targetTouches=oldArgs[0].originalEvent.targetTouches;
             }
-            oldHandler.apply(self,oldArgs);
+            oldHandler.apply(oldArgs[0].currentTarget,oldArgs);
         };
         arguments[2]=handler;
         oldAdd.apply($, arguments);
