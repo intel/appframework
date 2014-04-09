@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-04-07 */
+/*! intel-appframework - v2.1.0 - 2014-04-09 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -3731,13 +3731,10 @@ if (!Date.now)
         function setupCustomTheme() {
 
             if (that.useOSThemes) {
-                $("#afui").removeClass("ios,ios7,win8,tizen,bb,android,light,dark");
+                $("#afui").removeClass("ios ios7 win8 tizen bb android light dark");
                 if ($.os.android) $("#afui").addClass("android");
                 else if ($.os.ie) {
                     $("#afui").addClass("win8");
-                    $("head").append($.create("script", {
-                        src: "plugins/af.8tiles.js"
-                    }));
                 } else if ($.os.blackberry||$.os.blackberry10||$.os.playbook) {
                     $("#afui").addClass("bb");
                     that.backButtonText = "Back";
@@ -3758,7 +3755,7 @@ if (!Date.now)
                 //$("head").append("<style id='iosBlurrHack'>#afui .panel  {"+hackStyle+"} #afui .panel > * {-webkit-backface-visibility:hidden;}</style>");
                 $("head").append("<style id='iosBlurrHack'>#afui .y-scroll > *, #afui .x-scroll > * {"+hackStyle+"}</style>");
             }
-            else if ($.os.anroid&&!$.os.androidICS){
+            else if ($.os.android&&!$.os.androidICS){
                 that.transitionTime = "150ms";
             }
             else if($.os.fennec){
@@ -4099,7 +4096,7 @@ if (!Date.now)
             if (this.launchCompleted)
                 param();
             else {
-                $(document).on("afui:ready", function() {
+                $(document).one("afui:ready", function() {
                     param();
                 });
             }
@@ -6032,6 +6029,7 @@ if (!Date.now)
         });
     }
 })(af);
+
 /* global af*/
 (function($ui){
     "use strict";
@@ -6409,14 +6407,14 @@ if (!Date.now)
     if (!$) {
         throw "This plugin requires AFUi";
     }
-
     function wire8Tiles() {
         $.ui.isWin8 = true;
         if (!$.os.ie) return;
         if (!$.ui.isSideMenuEnabled()) return;
 
         $.ui.ready(function() {
-
+            if($.ui.tilesLoaded) return;
+            $.ui.tilesLoaded=true;
             if(window.innerWidth>$.ui.handheldMinWidth) return true;
 
             if ($.ui.slideSideMenu) $.ui.slideSideMenu = false;
