@@ -114,9 +114,14 @@
                 } else if ($.os.blackberry||$.os.blackberry10||$.os.playbook) {
                     $("#afui").addClass("bb");
                     that.backButtonText = "Back";
-                } else if ($.os.ios7)
+                } else if ($.os.ios7){
                     $("#afui").addClass("ios7");
-                else if ($.os.ios)
+                    if(that.overlayStatusbar){
+                        that.ready(function(){
+                            $(".header").addClass("overlayStatusbar");
+                        });
+                    }
+                } else if ($.os.ios)
                     $("#afui").addClass("ios");
                 else if($.os.tizen)
                     $("#afui").addClass("tizen");
@@ -190,6 +195,7 @@
         handheldMinWidth: "768",
         trimBackButtonText: true,
         useOSThemes: true,
+        overlayStatusbar: false,
         lockPageBounce: false,
         animateHeaders: true,
         useAutoPressed: true,
