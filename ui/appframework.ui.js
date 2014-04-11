@@ -1182,7 +1182,7 @@
                     modalParent.find("#modalHeader").append(elemsToCopy.filter("header")).show();
                 } else { // add default header with close
                     modalParent.find("#modalHeader").append(
-                        $.create("header", {className:"header"}).append(
+                        $.create("header", {}).append(
                             $.create("h1", {html:$panel.data("title")}).get(0))
                         .append(
                             $.create("a", {className:"button icon close"}).attr("onclick","$.ui.hideModal()").get(0)
