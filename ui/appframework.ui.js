@@ -37,9 +37,9 @@
             that.autoLaunch=false;
         }
 
-        if ($("#afui").length === 1) {
+        /*if ($("#afui").length === 1) {
             setupCustomTheme();
-        }
+        }*/
 
         var setupAFDom=function(){
             //boot touchLayer
