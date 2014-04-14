@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-04-09 */
+/*! intel-appframework - v2.1.0 - 2014-04-14 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -3826,9 +3826,11 @@ if (!Date.now)
             var that=this;
             if (this.autoLaunch) {
                 if(this.isIntel){
-                    $(document).one("intel.xdk.device.ready",function(){
+                    var xdkLaunch=function(){
                         that.launch();
-                    });
+                        document.removeEventListener(xdkLaunch);
+                    };
+                    document.addEventListener("intel.xdk.device.ready",xdkLaunch);
                 }
                 else {
                     this.launch();
@@ -6002,15 +6004,16 @@ if (!Date.now)
 
 (function($) {
     "use strict";
-    $(document).one("intel.xdk.device.ready", function() { //in intel xdk, we need to undo the height stuff since it causes issues.
+    var xdkDeviceReady=function(){
         $.ui.isIntel=true;
         setTimeout(function() {
             document.getElementById("afui").style.height = "100%";
             document.body.style.height = "100%";
             document.documentElement.style.minHeight = window.innerHeight;
         }, 30);
-
-    });
+        document.removeEventListener(xdkDeviceReady);
+    };
+    document.addEventListener("intel.xdk.device.ready",xdkDeviceReady);
     //Fix an ios bug where scrolling will not work with rotation
     if ($.feat.nativeTouchScroll) {
         document.addEventListener("orientationchange", function() {
