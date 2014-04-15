@@ -37,11 +37,7 @@
             that.autoLaunch=false;
         }
 
-        if ($("#afui").length === 1) {
-            setupCustomTheme();
-        }
-
-        var setupAFDom=function(){
+        var setupAFDom = function() {
             //boot touchLayer
             //create afui element if it still does not exist
             var afui = document.getElementById("afui");
