@@ -110,9 +110,14 @@
                 } else if ($.os.blackberry||$.os.blackberry10||$.os.playbook) {
                     $("#afui").addClass("bb");
                     that.backButtonText = "Back";
-                } else if ($.os.ios7)
+                } else if ($.os.ios7){
                     $("#afui").addClass("ios7");
-                else if ($.os.ios)
+                    if(that.overlayStatusbar){
+                        that.ready(function(){
+                            $(".header").addClass("overlayStatusbar");
+                        });
+                    }
+                } else if ($.os.ios)
                     $("#afui").addClass("ios");
                 else if($.os.tizen)
                     $("#afui").addClass("tizen");
@@ -186,6 +191,7 @@
         handheldMinWidth: "768",
         trimBackButtonText: true,
         useOSThemes: true,
+        overlayStatusbar: false,
         lockPageBounce: false,
         animateHeaders: true,
         useAutoPressed: true,
@@ -1174,7 +1180,7 @@
                     modalParent.find("#modalHeader").append(elemsToCopy.filter("header")).show();
                 } else { // add default header with close
                     modalParent.find("#modalHeader").append(
-                        $.create("header", {className:"header"}).append(
+                        $.create("header", {}).append(
                             $.create("h1", {html:$panel.data("title")}).get(0))
                         .append(
                             $.create("a", {className:"button icon close"}).attr("onclick","$.ui.hideModal()").get(0)
