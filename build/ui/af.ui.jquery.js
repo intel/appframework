@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-04-14 */
+/*! intel-appframework - v2.1.0 - 2014-04-17 */
 
 /**
  * jq.appframework.js
@@ -4118,11 +4118,7 @@ if (!Date.now)
             that.autoLaunch=false;
         }
 
-        if ($("#afui").length === 1) {
-            setupCustomTheme();
-        }
-
-        var setupAFDom=function(){
+        var setupAFDom = function() {
             //boot touchLayer
             //create afui element if it still does not exist
             var afui = document.getElementById("afui");
