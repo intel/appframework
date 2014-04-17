@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-04-07 */
+/*! intel-appframework - v2.1.0 - 2014-04-17 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -2566,6 +2566,11 @@ body {
     border-bottom:1px solid rgba(158,158,158,255);
 }
 
+#afui.ios7 .header.overlayStatusbar{
+    padding-top: 20px;
+    height: 64px;
+}
+
 #afui.ios7 .header .button {
     color:rgba(82,155,234,255);
     border-color:transparent;
@@ -2614,7 +2619,7 @@ body {
 #afui.ios7 > #menu {
     border-right:1px solid #bbb;
     background:rgba(238,238,238,255);
-    color:black;
+    color:inherit;
 }
 
 #afui.ios7 #aside_menu .list li,#afui.ios7 #aside_menu .list .divider,#afui.ios7 #aside_menu .list li:first-child,#afui.ios7 #aside_menu .list li:last-child,
@@ -2630,19 +2635,18 @@ body {
     color:inherit;
     font-size: 1em;
     border-bottom:1px solid rgb(215,215,215);
-    color:black;
 }
 
 #afui.ios7 #aside_menu .list a,
 #afui.ios7 #menu .list a {
-    color:black;
+    color:inherit;
 }
 
 #afui.ios7 #aside_menu .list,
 #afui.ios7 #menu .list {
     background:white;
     font-weight: normal;
-    color:black;
+    color:inherit;
 }
 
 #afui.ios7 .list > li > a:after{
@@ -2668,7 +2672,7 @@ body {
     border:none;
     border-color: transparent;
     height: 44px;
-    top:0;
+    top:auto;
     border-radius: 0;
     box-shadow:none;
     margin: 0;
