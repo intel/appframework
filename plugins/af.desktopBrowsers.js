@@ -9,18 +9,26 @@
         e.preventDefault();
         e.stopPropagation();
     };
+    
+    /**
+     * Stop propagation, and remove default behavior for everything but INPUT, TEXTAREA & SELECT fields
+     *
+     * @param {Event} event
+     * @param {HTMLElement} target
+     */
+    var preventAllButInputs = function(event, target) {
+        var tag = target.tagName.toUpperCase();
+
+        if (tag.indexOf("SELECT") > -1 || tag.indexOf("TEXTAREA") > -1 || tag.indexOf("INPUT") > -1) {
+            return;
+        }
+        preventAll(event);
+    };
 
     var redirectMouseToTouch = function (type, originalEvent, newTarget) {
 
         var theTarget = newTarget ? newTarget : originalEvent.target;
-
-        //stop propagation, and remove default behavior for everything but INPUT, TEXTAREA & SELECT fields
-        if (theTarget.tagName.toUpperCase().indexOf("SELECT") === -1 &&
-            theTarget.tagName.toUpperCase().indexOf("TEXTAREA") === -1 &&
-            theTarget.tagName.toUpperCase().indexOf("INPUT") === -1) //SELECT, TEXTAREA & INPUT
-        {
-            preventAll(originalEvent);
-        }
+        preventAllButInputs(originalEvent, theTarget);
 
         var touchevt = document.createEvent("MouseEvent");
 
@@ -135,13 +143,7 @@
     document.addEventListener("drop", preventAll, true);
     //Allow selection of input elements
     document.addEventListener("selectstart", function(e){
-        var theTarget = e.target;
-        if (theTarget.tagName.toUpperCase().indexOf("SELECT") === -1 &&
-            theTarget.tagName.toUpperCase().indexOf("TEXTAREA") === -1 &&
-            theTarget.tagName.toUpperCase().indexOf("INPUT") === -1) //SELECT, TEXTAREA & INPUT
-        {
-            preventAll(e);
-        }
+        preventAllButInputs(e, e.target);
     }, true);
     document.addEventListener("click", function (e) {
         if (!e.mouseToTouch && e.target === lastTarget) {
