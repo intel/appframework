@@ -5228,6 +5228,8 @@ if (!Date.now)
          */
         parseScriptTags: function(div) {
             if (!div) return;
+            if(!$.fn||$.fn.namespace!=="appframework") return;
+
             $.parseJS(div);
         },
         /**
@@ -5378,6 +5380,7 @@ if (!Date.now)
          * @api private
          */
         loadContentData: function(what, newTab, back) {
+
             var prevId, el, val, slashIndex;
             if (back) {
                 if (this.history.length > 0) {
@@ -5477,15 +5480,18 @@ if (!Date.now)
                         } else
                             urlHash = that.addContentDiv(urlHash, xmlhttp.responseText, anchor.title ? anchor.title : target, refresh, refreshFunction);
                     } else {
-                        that.updatePanel("afui_ajax", xmlhttp.responseText);                        
+
+                        that.updatePanel("afui_ajax", xmlhttp.responseText);                                                
                         $.query("#afui_ajax").attr("data-title",anchor.title ? anchor.title : target);
                         that.loadContent("#afui_ajax", newTab, back, transition);
+                        
                         doReturn = true;
                     }
                     //Let's load the content now.
                     //We need to check for any script tags and handle them
                     var div = document.createElement("div");
                     $(div).html(xmlhttp.responseText);
+
                     that.parseScriptTags(div);
 
                     if (doReturn) {
