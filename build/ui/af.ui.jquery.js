@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-04-17 */
+/*! intel-appframework - v2.1.0 - 2014-04-18 */
 
 /**
  * jq.appframework.js
@@ -4969,7 +4969,15 @@ if (!Date.now)
          */
         updateNavbarElements: function(elems) {
             if (this.prevFooter) {
-                if (this.prevFooter.data("parent")) this.prevFooter.appendTo("#" + this.prevFooter.data("parent"));
+                if (this.prevFooter.data("parent")){
+                    var useScroller = this.scrollingDivs.hasOwnProperty(this.prevFooter.data("parent"));
+                    if($.feat.nativeTouchScroll||$.os.desktop || !useScroller ){
+                        this.prevFooter.appendTo("#" + this.prevFooter.data("parent"));
+                    }
+                    else {
+                        this.prevFooter.appendTo($("#" + this.prevFooter.data("parent")).find(".afScrollPanel"));
+                    }
+                }
                 else this.prevFooter.appendTo("#afui");
             }
             if (!$.is$(elems)) //inline footer
@@ -5018,11 +5026,19 @@ if (!Date.now)
             if (elems === this.prevHeader) return;
             this._currentHeaderID=elems.prop("id");
             if (this.prevHeader) {
+                var useScroller = this.scrollingDivs.hasOwnProperty(this.prevHeader.data("parent"));
                 //Let's slide them out
                 $.query("#header").append(elems);
                 //Do not animate - sometimes they act funky
                 if (!$.ui.animateHeaders) {
-                    if (that.prevHeader.data("parent")) that.prevHeader.appendTo("#" + that.prevHeader.data("parent"));
+                    if (that.prevHeader.data("parent")){                        
+                        if($.feat.nativeTouchScroll||$.os.desktop || !useScroller ){
+                            this.prevHeader.appendTo("#" + this.prevHeader.data("parent"));
+                        }
+                        else {
+                            this.prevHeader.appendTo($("#" + this.prevHeader.data("parent")).find(".afScrollPanel"));
+                        }
+                    }
                     else that.prevHeader.appendTo("#afui");
                     that.prevHeader = elems;
                     return;
@@ -5043,7 +5059,14 @@ if (!Date.now)
                     time: that.transitionTime,
                     delay: numOnly(that.transitionTime) / 5 + "ms",
                     complete: function() {
-                        if (that.prevHeader.data("parent")) that.prevHeader.appendTo("#" + that.prevHeader.data("parent"));
+                        if (that.prevHeader.data("parent")){                        
+                            if($.feat.nativeTouchScroll||$.os.desktop || !useScroller ){
+                                that.prevHeader.appendTo("#" + that.prevHeader.data("parent"));
+                            }
+                            else {
+                                that.prevHeader.appendTo($("#" + that.prevHeader.data("parent")).find(".afScrollPanel"));
+                            }
+                        }
                         else that.prevHeader.appendTo("#afui");
                         that.prevHeader.removeClass("ignore");
                         that.css3animate(that.prevHeader, {
@@ -5562,8 +5585,7 @@ if (!Date.now)
             //check for custom footer
             var that = this;
             var hasFooter = what.getAttribute("data-footer");
-            var hasHeader = what.getAttribute("data-header");
-
+            var hasHeader = what.getAttribute("data-header");            
             //$asap removed since animations are fixed in css3animate
             if (hasFooter && hasFooter.toLowerCase() === "none") {
                 that.toggleNavMenu(false);
@@ -5571,7 +5593,7 @@ if (!Date.now)
             } else {
                 that.toggleNavMenu(true);
             }
-            if (hasFooter && that.customFooter !== hasFooter) {
+            if (hasFooter && that.customFooter !== hasFooter) {                
                 that.customFooter = hasFooter;
                 that.updateNavbarElements(hasFooter);
             } else if (hasFooter !== that.customFooter) {
@@ -5598,7 +5620,7 @@ if (!Date.now)
 
             //Load inline footers
             var inlineFooters = $(what).find("footer");
-            if (inlineFooters.length > 0) {
+            if (inlineFooters.length > 0) {                
                 that.customFooter = what.id;
                 inlineFooters.data("parent", what.id);
                 that.updateNavbarElements(inlineFooters);
@@ -5912,8 +5934,8 @@ if (!Date.now)
                         } else
                             urlHash = that.addContentDiv(urlHash, xmlhttp.responseText, anchor.title ? anchor.title : target, refresh, refreshFunction);
                     } else {
-                        that.updatePanel("afui_ajax", xmlhttp.responseText);
-                        $.query("#afui_ajax").get(0).setAttribute("data-title",anchor.title ? anchor.title : target);
+                        that.updatePanel("afui_ajax", xmlhttp.responseText);                        
+                        $.query("#afui_ajax").attr("data-title",anchor.title ? anchor.title : target);
                         that.loadContent("#afui_ajax", newTab, back, transition);
                         doReturn = true;
                     }
