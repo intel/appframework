@@ -33,7 +33,7 @@
     var autoBlurInputTypes = ["button", "radio", "checkbox", "range", "date"];
     var requiresJSFocus = $.os.ios; //devices which require .focus() on dynamic click events
     var verySensitiveTouch = $.os.blackberry; //devices which have a very sensitive touch and touchmove is easily fired even on simple taps
-    var inputElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android && !$.os.chrome); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
+    var inputElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
 //    var selectElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android && !$.os.chrome); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
 //    var focusScrolls = $.os.ios; //devices scrolling on focus instead of resizing
     var requirePanning = $.os.ios&&!$.os.ios7; //devices which require panning feature
@@ -584,6 +584,7 @@
                 itMoved = itMoved && !(Math.abs(this.cX) < 10 && Math.abs(this.cY) < 10);
             }
 
+
             //don't allow document scroll unless a specific click demands it further ahead
             if (!$.os.ios || !this.requiresNativeTap) this.allowDocumentScroll_ = false;
 
@@ -594,6 +595,7 @@
 
                 //a generated click
             } else if (!itMoved && !this.requiresNativeTap) {
+
                 this.scrollerIsScrolling = false;
                 if (!this.trackingClick) {
                     return;
