@@ -206,7 +206,7 @@
                 if(this.isIntel){
                     var xdkLaunch=function(){
                         that.launch();
-                        document.removeEventListener(xdkLaunch);
+                        document.removeEventListener("intel.xdk.device.ready",xdkLaunch);
                     };
                     document.addEventListener("intel.xdk.device.ready",xdkLaunch);
                 }
@@ -950,7 +950,7 @@
                 $.query("#header").append(elems);
                 //Do not animate - sometimes they act funky
                 if (!$.ui.animateHeaders) {
-                    if (that.prevHeader.data("parent")){                        
+                    if (that.prevHeader.data("parent")){
                         if($.feat.nativeTouchScroll||$.os.desktop || !useScroller ){
                             this.prevHeader.appendTo("#" + this.prevHeader.data("parent"));
                         }
@@ -978,7 +978,7 @@
                     time: that.transitionTime,
                     delay: numOnly(that.transitionTime) / 5 + "ms",
                     complete: function() {
-                        if (that.prevHeader.data("parent")){                        
+                        if (that.prevHeader.data("parent")){
                             if($.feat.nativeTouchScroll||$.os.desktop || !useScroller ){
                                 that.prevHeader.appendTo("#" + that.prevHeader.data("parent"));
                             }
@@ -1504,7 +1504,7 @@
             //check for custom footer
             var that = this;
             var hasFooter = what.getAttribute("data-footer");
-            var hasHeader = what.getAttribute("data-header");            
+            var hasHeader = what.getAttribute("data-header");
             //$asap removed since animations are fixed in css3animate
             if (hasFooter && hasFooter.toLowerCase() === "none") {
                 that.toggleNavMenu(false);
@@ -1512,7 +1512,7 @@
             } else {
                 that.toggleNavMenu(true);
             }
-            if (hasFooter && that.customFooter !== hasFooter) {                
+            if (hasFooter && that.customFooter !== hasFooter) {
                 that.customFooter = hasFooter;
                 that.updateNavbarElements(hasFooter);
             } else if (hasFooter !== that.customFooter) {
@@ -1539,7 +1539,7 @@
 
             //Load inline footers
             var inlineFooters = $(what).find("footer");
-            if (inlineFooters.length > 0) {                
+            if (inlineFooters.length > 0) {
                 that.customFooter = what.id;
                 inlineFooters.data("parent", what.id);
                 that.updateNavbarElements(inlineFooters);
@@ -1859,10 +1859,10 @@
                             urlHash = that.addContentDiv(urlHash, xmlhttp.responseText, anchor.title ? anchor.title : target, refresh, refreshFunction);
                     } else {
 
-                        that.updatePanel("afui_ajax", xmlhttp.responseText);                                                
+                        that.updatePanel("afui_ajax", xmlhttp.responseText);
                         $.query("#afui_ajax").attr("data-title",anchor.title ? anchor.title : target);
                         that.loadContent("#afui_ajax", newTab, back, transition);
-                        
+
                         doReturn = true;
                     }
                     //Let's load the content now.
@@ -2419,7 +2419,7 @@
             document.body.style.height = "100%";
             document.documentElement.style.minHeight = window.innerHeight;
         }, 30);
-        document.removeEventListener(xdkDeviceReady);
+        document.removeEventListener("intel.xdk.device.ready",xdkDeviceReady);
     };
     document.addEventListener("intel.xdk.device.ready",xdkDeviceReady);
     //Fix an ios bug where scrolling will not work with rotation
