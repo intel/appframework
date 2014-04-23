@@ -1787,7 +1787,9 @@
                 this.setBackButtonVisibility(false);
                 this.history = [];
                 $("#header #menubadge").css("float", "left");
-            } else if (this.showBackButton && this.showBackbutton) this.setBackButtonVisibility(true);
+            } else {
+                this.setBackButtonVisibility( this.showBackButton && this.showBackbutton );
+            }
             this.activeDiv = what;
             if (this.scrollingDivs[this.activeDiv.id]) {
                 this.scrollingDivs[this.activeDiv.id].enable(this.resetScrollers);
