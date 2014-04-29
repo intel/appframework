@@ -303,6 +303,10 @@
      */
     $.unbind = function (obj, ev, f) {
         if (!obj.__events) return;
+        if(ev==nundefined) { 
+            delete obj.__events;
+            return;
+        }
         if (!$.isArray(ev)) ev = [ev];
         for (var i = 0; i < ev.length; i++) {
             if (obj.__events[ev[i]]) {

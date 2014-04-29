@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-04-07 */
+/*! intel-appframework - v2.1.0 - 2014-04-29 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -2735,6 +2735,10 @@ if (!window.af || typeof(af) !== "function") {
          */
         $.unbind = function(obj, ev, f) {
             if (!obj.__events) return;
+            if(ev==nundefined) { 
+                delete obj.__events;
+                return;
+            }
             if (!$.isArray(ev)) ev = [ev];
             for (var i = 0; i < ev.length; i++) {
                 if (obj.__events[ev[i]]) {
