@@ -12,7 +12,7 @@
         e.preventDefault();
         e.stopPropagation();
     };
-    
+    var ieThreshold=navigator.userAgent.match(/Phone/i)?2:7;
     /**
      * Stop propagation, and remove default behavior for everything but INPUT, TEXTAREA & SELECT fields
      *
@@ -118,13 +118,10 @@
             mouseDown = false;
             //	e.preventDefault();e.stopPropagation();
         }, true);
-
         document.addEventListener("MSPointerMove", function (e) {
-            if(skipMove){
-                skipMove=false;
-                return;
-            }
-            if(e.clientX===prevX&&e.clientY===prevY) return;
+            //IE is very flakey...we need 7 pixel movement before we trigger it
+
+            if(Math.abs(e.clientX-prevX)<=ieThreshold||Math.abs(e.clientY-prevY)<=ieThreshold) return;
             if (!mouseDown) return;
             redirectMouseToTouch("touchmove", e, lastTarget);
             e.preventDefault();
