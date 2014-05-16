@@ -29,7 +29,7 @@
         return $.touchLayer;
     };
     //configuration stuff
-    var inputElements = ["input", "select", "textarea"];
+    var inputElements = ["input", "select", "textarea","range"];
     var autoBlurInputTypes = ["button", "radio", "checkbox", "range", "date"];
     var requiresJSFocus = $.os.ios; //devices which require .focus() on dynamic click events
     var verySensitiveTouch = $.os.blackberry; //devices which have a very sensitive touch and touchmove is easily fired even on simple taps
@@ -384,7 +384,6 @@
             this.dY = e.touches[0].pageY;
             this.lastTimestamp = e.timeStamp;
             this.lastTouchStartX = this.lastTouchStartY = null;
-
             if ($.os.ios) {
 
                 if (skipTouchEnd === e.touches[0].identifier) {
@@ -425,7 +424,7 @@
 
             // We allow forcing native tap in android devices (required in special cases)
             var forceNativeTap = ($.os.android && e && e.target && e.target.getAttribute && e.target.getAttribute("data-touchlayer") === "ignore");
-
+            
             //if on edit mode, allow all native touches
             //(BB10 must still be prevented, always clicks even after move)
             if (forceNativeTap || (this.isFocused_ && !$.os.blackberry10)) {
@@ -537,7 +536,7 @@
             this.scrollTimeoutEl_ = null;
         },
 
-        onTouchMove: function(e) {
+        onTouchMove: function(e) {            
             //set it as moved
             var wasMoving = this.moved;
             this.moved = true;
@@ -566,9 +565,9 @@
             }
             //non-native scroll devices
 
-            if ((!$.os.blackberry10)) {
+            if ((!$.os.blackberry10&&!this.requiresNativeTap)) {
                 //legacy stuff for old browsers
-                if (!this.isScrolling || !$.feat.nativeTouchScroll)
+                if (!this.isScrolling || !$.feat.nativeTouchScroll||!this.requiresNativeTap)
                     e.preventDefault();
                 return;
             }
