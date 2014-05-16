@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-04-23 */
+/*! intel-appframework - v2.1.0 - 2014-05-16 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -1763,7 +1763,6 @@ if (!Date.now)
             //save scrollInfo
             this.lastScrollInfo = scrollInfo;
             this.hasMoved = false;
-
             if(this.elementInfo.maxTop === 0 && this.elementInfo.maxLeft === 0 && this.lockBounce)
                 this.scrollToTop(0);
             else
@@ -1927,7 +1926,7 @@ if (!Date.now)
                     this.lastScrollInfo.x = baseTop + changeX;
                 }
             }
-            if(this.lockBounce||(!this.refresh)){
+            if(this.lockBounce&&(!this.refresh)){
 
                 if(this.lastScrollInfo.x>0){
                     this.lastScrollInfo.x=0;

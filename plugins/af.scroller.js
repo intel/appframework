@@ -1001,7 +1001,6 @@
             //save scrollInfo
             this.lastScrollInfo = scrollInfo;
             this.hasMoved = false;
-
             if(this.elementInfo.maxTop === 0 && this.elementInfo.maxLeft === 0 && this.lockBounce)
                 this.scrollToTop(0);
             else
@@ -1165,7 +1164,7 @@
                     this.lastScrollInfo.x = baseTop + changeX;
                 }
             }
-            if(this.lockBounce||(!this.refresh)){
+            if(this.lockBounce&&(!this.refresh)){
 
                 if(this.lastScrollInfo.x>0){
                     this.lastScrollInfo.x=0;
