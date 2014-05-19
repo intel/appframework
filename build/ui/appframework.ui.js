@@ -3313,7 +3313,7 @@ if (!Date.now)
 
             if ((!$.os.blackberry10&&!this.requiresNativeTap)) {
                 //legacy stuff for old browsers
-                if (!this.isScrolling || !$.feat.nativeTouchScroll||!this.requiresNativeTap)
+                if (!this.isScrolling || (!$.feat.nativeTouchScroll&&!this.requiresNativeTap))
                     e.preventDefault();
                 return;
             }
