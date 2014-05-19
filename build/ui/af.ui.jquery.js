@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-05-16 */
+/*! intel-appframework - v2.1.0 - 2014-05-18 */
 
 /**
  * jq.appframework.js
@@ -4788,7 +4788,7 @@ if (!Date.now)
             var panelMask = $.query(".afui_panel_mask");
             time = time || this.transitionTime;
             var open = this.isSideMenuOn();
-            var toX=aside?"-"+asideMenu.width():menu.width();
+            var toX=aside?"-"+numOnly(asideMenu.css('width')):numOnly(menu.css('width'));
             // add panel mask to block when side menu is open for phone devices
             if(panelMask.length === 0 && window.innerWidth < $.ui.handheldMinWidth){
                 els.append("<div class='afui_panel_mask'></div>");
@@ -6289,7 +6289,7 @@ if (!Date.now)
 
 
                     if($.ui.splitview&&window.innerWidth>parseInt($.ui.handheldMinWidth,10)){
-                        $.ui.sideMenuWidth=$("#menu").width()+"px";
+                        $.ui.sideMenuWidth=$("#menu").css('width')+"px";
                     }
 
                     var firstPanelId = that.getPanelId(defaultHash);
