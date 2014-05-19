@@ -445,3 +445,26 @@
         margin-top:-11px;
     }
 }
+
+
+#afui.win8 input[type="range"] {
+   -webkit-appearance: none;
+   -webkit-appearance: none;
+background-color: #ccc;
+height: 4px;
+position: relative;
+top: -10px;
+margin-top: 15px;
+
+}
+ 
+#afui.win8 input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    position: relative;    
+    z-index: 1;
+    width: 15px;
+    height: 15px;
+    
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ccc), color-stop(100%,#ccc));
+    background-image: gradient(linear, left top, left bottom, color-stop(0%,#ccc), color-stop(100%,#ccc));
+}

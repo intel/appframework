@@ -216,3 +216,26 @@
     color:white;
     text-shadow:0 -1px 0 #000;
 }
+
+#afui.ios input[type="range"] {
+   -webkit-appearance: none;
+background-color: #ccc;
+height: 2px;
+position: relative;
+top: -10px;
+margin-top: 15px;
+}
+ 
+#afui.ios input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    position: relative;
+    
+    z-index: 1;
+    width: 15px;
+    height: 15px;
+ 
+    -webkit-border-radius: 40px;    
+    border-radius: 40px;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ebf1f6), color-stop(50%,#abd3ee), color-stop(51%,#89c3eb), color-stop(100%,#d5ebfb));
+    background-image: gradient(linear, left top, left bottom, color-stop(0%,#ebf1f6), color-stop(50%,#abd3ee), color-stop(51%,#89c3eb), color-stop(100%,#d5ebfb));
+}
