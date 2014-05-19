@@ -1079,7 +1079,7 @@
         jsScroller.prototype.onTouchMove = function (event) {
 
             if (this.currentScrollingObject === null) return;
-            if(event.target.getAttribute('type').toLowerCase().indexOf('range')!==-1) return;
+            if(event.target&&event.target.getAttribute('type')&&event.target.getAttribute('type').toLowerCase().indexOf('range')!==-1) return;
             //event.preventDefault();
             var scrollInfo = this.calculateMovement(event);
             this.calculateTarget(scrollInfo);

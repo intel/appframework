@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-05-18 */
+/*! intel-appframework - v2.1.0 - 2014-05-19 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -1841,7 +1841,7 @@ if (!Date.now)
         jsScroller.prototype.onTouchMove = function (event) {
 
             if (this.currentScrollingObject === null) return;
-            if(event.target.getAttribute('type').toLowerCase().indexOf('range')!==-1) return;
+            if(event.target&&event.target.getAttribute('type')&&event.target.getAttribute('type').toLowerCase().indexOf('range')!==-1) return;
             //event.preventDefault();
             var scrollInfo = this.calculateMovement(event);
             this.calculateTarget(scrollInfo);
@@ -5828,7 +5828,7 @@ if (!Date.now)
 
 
                     if($.ui.splitview&&window.innerWidth>parseInt($.ui.handheldMinWidth,10)){
-                        $.ui.sideMenuWidth=$("#menu").css('width')+"px";
+                        $.ui.sideMenuWidth=$("#menu").css("width")+"px";
                     }
 
                     var firstPanelId = that.getPanelId(defaultHash);
