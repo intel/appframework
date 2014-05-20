@@ -2231,9 +2231,13 @@
                     that.launchCompleted = true;
                     //trigger ui ready
                     $.query("#afui #splashscreen").remove();
-                    setTimeout(function(){
+                    if($.os.fennec){
                         $(document).trigger("afui:ready");
-                    });
+                    }
+                    else
+                        setTimeout(function(){
+                            $(document).trigger("afui:ready");
+                        });
 
                 };
                 if (loadingDefer) {
