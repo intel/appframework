@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-05-20 */
+/*! intel-appframework - v2.1.0 - 2014-05-21 */
 
 /**
  * jq.appframework.js
@@ -1448,6 +1448,7 @@ if (!Date.now)
                         clearInterval(this.scrollTopInterval);
                         this.preventHideRefresh = !this.refreshRunning; // if it's not running why prevent it xD
                         this.moved = false;
+                        if(e.target.getAttribute("no-scroll")) return e.preventDefault();                        
                         this.onTouchStart(e);
                         if(!this.bubbles)
                             e.stopPropagation();
