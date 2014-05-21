@@ -8,6 +8,8 @@
 (function ($) {
     "use strict";
     var cancelClickMove = false;
+    if((window.DocumentTouch && document instanceof DocumentTouch) || 'ontouchstart' in window)
+        return ;
     var preventAll = function (e) {
         e.preventDefault();
         e.stopPropagation();
