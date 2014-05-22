@@ -10,6 +10,7 @@
     var cancelClickMove = false;
     if((window.DocumentTouch && document instanceof DocumentTouch) || 'ontouchstart' in window)
         return ;
+    $.os.supportsTouch=true;
     var preventAll = function (e) {
         e.preventDefault();
         e.stopPropagation();
