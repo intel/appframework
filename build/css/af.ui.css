@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-04-17 */
+/*! intel-appframework - v2.1.0 - 2014-05-22 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -572,13 +572,16 @@ body {
     background:#333;
 }
 
-#afui .panel .list {
+#afui .panel > .list, 
+#afui .panel > .afScrollPanel > .list {
     margin:0px -10px;
 }
 
-#afui .panel .list.inset {
+#afui .panel > .list.inset, 
+#afui .panel > .afScrollPanel > .list.inset {
     margin:0px;
 }
+
 
 /* Chevrons */
 @font-face {
@@ -1664,6 +1667,30 @@ body {
 	color:inherit;
 }
 
+#afui.android input[type="range"] {
+   -webkit-appearance: none;
+background-color: #ccc;
+height: 4px;
+position: relative;
+top: -10px;
+margin-top: 15px;
+}
+ 
+#afui.android input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    position: relative;
+    
+    z-index: 1;
+    width: 11px;
+    height: 21px;
+ 
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ccc), color-stop(100%,#ccc));
+    background-image: gradient(linear, left top, left bottom, color-stop(0%,#ccc), color-stop(100%,#ccc));
+}
+
 #afui.android input.toggle+label:after { color:inherit; }
 
 #afui.android input.toggle+label { border-radius:0; }
@@ -2309,6 +2336,29 @@ body {
     }
 }
 
+
+#afui.win8 input[type="range"] {
+   -webkit-appearance: none;
+   -webkit-appearance: none;
+background-color: #ccc;
+height: 4px;
+position: relative;
+top: -10px;
+margin-top: 15px;
+
+}
+ 
+#afui.win8 input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    position: relative;    
+    z-index: 1;
+    width: 15px;
+    height: 15px;
+    
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ccc), color-stop(100%,#ccc));
+    background-image: gradient(linear, left top, left bottom, color-stop(0%,#ccc), color-stop(100%,#ccc));
+}
+
 #afui.bb {
     font-family: "Slate Pro",Slate,"Myriad Pro","BBAlpha Sans",Helvetica;
     font-size: 12pt;
@@ -2940,6 +2990,29 @@ body {
     font-size:12px;
 }
 
+#afui.ios7 input[type="range"] {
+   -webkit-appearance: none;
+background-color: #333;
+height: 4px;
+position: relative;
+top: -10px;
+margin-top: 15px;
+border-radius:2px;
+}
+ 
+#afui.ios7 input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    position: relative;    
+    z-index: 1;
+    width: 15px;
+    height: 15px;
+    -webkit-border-radius: 40px;    
+    border-radius: 40px;
+    border:1px solid #333;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ccc), color-stop(100%,#ccc));
+    background-image: gradient(linear, left top, left bottom, color-stop(0%,#ccc), color-stop(100%,#ccc));
+}
+
 /* iOS theme */
 #afui.ios {
     color:black;
@@ -3157,6 +3230,29 @@ body {
     background: linear-gradient(to bottom, #d55 0%,#d11 100%);
     color:white;
     text-shadow:0 -1px 0 #000;
+}
+
+#afui.ios input[type="range"] {
+   -webkit-appearance: none;
+background-color: #ccc;
+height: 2px;
+position: relative;
+top: -10px;
+margin-top: 15px;
+}
+ 
+#afui.ios input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    position: relative;
+    
+    z-index: 1;
+    width: 15px;
+    height: 15px;
+ 
+    -webkit-border-radius: 40px;    
+    border-radius: 40px;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ebf1f6), color-stop(50%,#abd3ee), color-stop(51%,#89c3eb), color-stop(100%,#d5ebfb));
+    background-image: gradient(linear, left top, left bottom, color-stop(0%,#ebf1f6), color-stop(50%,#abd3ee), color-stop(51%,#89c3eb), color-stop(100%,#d5ebfb));
 }
 #af_actionsheet {
     position:absolute;

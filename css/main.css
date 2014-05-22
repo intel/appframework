@@ -570,13 +570,16 @@ body {
     background:#333;
 }
 
-#afui .panel .list {
+#afui .panel > .list, 
+#afui .panel > .afScrollPanel > .list {
     margin:0px -10px;
 }
 
-#afui .panel .list.inset {
+#afui .panel > .list.inset, 
+#afui .panel > .afScrollPanel > .list.inset {
     margin:0px;
 }
+
 
 /* Chevrons */
 @font-face {

@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-04-29 */
+/*! intel-appframework - v2.1.0 - 2014-05-22 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -1948,15 +1948,17 @@ if (!window.af || typeof(af) !== "function") {
         * @param {Function} [success]
         * @title $.getJSON(url,data,success)
         */
-        $.getJSON = function(url, data, success) {
+        $.getJSON = function(url, data, success,error) {
             if (typeof(data) === "function") {
                 success = data;
                 data = {};
+                error=success;
             }
             return this.ajax({
                 url: url,
                 data: data,
                 success: success,
+                error:error,
                 dataType: "json"
             });
         };
@@ -2536,6 +2538,7 @@ if (!window.af || typeof(af) !== "function") {
         * @title $().delegate(selector,event,[data],callback)
         */
         function addDelegate(element,event,callback,selector,data){
+            console.log(element,event,callback,selector,data);
             add(element, event, callback, selector, function(fn) {
                     return function(e) {
                         var evt, match = $(e.target).closest(selector, element).get(0);

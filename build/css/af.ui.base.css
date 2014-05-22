@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-04-07 */
+/*! intel-appframework - v2.1.0 - 2014-05-22 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -572,13 +572,16 @@ body {
     background:#333;
 }
 
-#afui .panel .list {
+#afui .panel > .list, 
+#afui .panel > .afScrollPanel > .list {
     margin:0px -10px;
 }
 
-#afui .panel .list.inset {
+#afui .panel > .list.inset, 
+#afui .panel > .afScrollPanel > .list.inset {
     margin:0px;
 }
+
 
 /* Chevrons */
 @font-face {
