@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-05-22 */
+/*! intel-appframework - v2.1.0 - 2014-05-23 */
 
 /**
  * jq.appframework.js
@@ -305,7 +305,7 @@
      */
     $.unbind = function (obj, ev, f) {
         if (!obj.__events) return;
-        if(ev==nundefined) { 
+        if(ev==nundefined) {
             delete obj.__events;
             return;
         }
@@ -427,7 +427,6 @@
 
     $.event.add=function(){
         var oldHandler=arguments[2];
-        var self=this;
         var handler=function(){
             var oldArgs=arguments;
             if(oldArgs[0].originalEvent&&oldArgs[0].originalEvent.touches){
@@ -1448,7 +1447,7 @@ if (!Date.now)
                         clearInterval(this.scrollTopInterval);
                         this.preventHideRefresh = !this.refreshRunning; // if it's not running why prevent it xD
                         this.moved = false;
-                        if(e.target.getAttribute("no-scroll")) return e.preventDefault();                        
+                        if(e.target.getAttribute("no-scroll")) return e.preventDefault();
                         this.onTouchStart(e);
                         if(!this.bubbles)
                             e.stopPropagation();
@@ -2303,7 +2302,7 @@ if (!Date.now)
         jsScroller.prototype.onTouchMove = function (event) {
 
             if (this.currentScrollingObject === null) return;
-            if(event.target&&event.target.getAttribute('type')&&event.target.getAttribute('type').toLowerCase().indexOf('range')!==-1) return;
+            if(event.target&&event.target.getAttribute("type")&&event.target.getAttribute("type").toLowerCase().indexOf("range")!==-1) return;
             //event.preventDefault();
             var scrollInfo = this.calculateMovement(event);
             this.calculateTarget(scrollInfo);
@@ -3744,7 +3743,7 @@ if (!Date.now)
             this.scrollTimeoutEl_ = null;
         },
 
-        onTouchMove: function(e) {            
+        onTouchMove: function(e) {
             //set it as moved
             var wasMoving = this.moved;
             this.moved = true;
@@ -4789,7 +4788,7 @@ if (!Date.now)
             var panelMask = $.query(".afui_panel_mask");
             time = time || this.transitionTime;
             var open = this.isSideMenuOn();
-            var toX=aside?"-"+numOnly(asideMenu.css('width')):numOnly(menu.css('width'));
+            var toX=aside?"-"+numOnly(asideMenu.css("width")):numOnly(menu.css("width"));
             // add panel mask to block when side menu is open for phone devices
             if(panelMask.length === 0 && window.innerWidth < $.ui.handheldMinWidth){
                 els.append("<div class='afui_panel_mask'></div>");
