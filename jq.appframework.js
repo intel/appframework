@@ -303,7 +303,7 @@
      */
     $.unbind = function (obj, ev, f) {
         if (!obj.__events) return;
-        if(ev==nundefined) { 
+        if(ev==nundefined) {
             delete obj.__events;
             return;
         }
@@ -425,7 +425,6 @@
 
     $.event.add=function(){
         var oldHandler=arguments[2];
-        var self=this;
         var handler=function(){
             var oldArgs=arguments;
             if(oldArgs[0].originalEvent&&oldArgs[0].originalEvent.touches){

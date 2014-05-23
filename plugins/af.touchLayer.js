@@ -536,7 +536,7 @@
             this.scrollTimeoutEl_ = null;
         },
 
-        onTouchMove: function(e) {            
+        onTouchMove: function(e) {
             //set it as moved
             var wasMoving = this.moved;
             this.moved = true;

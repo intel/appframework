@@ -5,10 +5,11 @@
  *
  * @param {Function} $ The appframework selector function
  */
+ /* global DocumentTouch*/
 (function ($) {
     "use strict";
     var cancelClickMove = false;
-    if((window.DocumentTouch && document instanceof DocumentTouch) || 'ontouchstart' in window)
+    if((window.DocumentTouch && document instanceof DocumentTouch) || "ontouchstart" in window)
         return ;
     $.os.supportsTouch=true;
     var preventAll = function (e) {
@@ -31,10 +32,11 @@
         preventAll(event);
     };
 
-    var redirectMouseToTouch = function (type, originalEvent, newTarget) {
+    var redirectMouseToTouch = function (type, originalEvent, newTarget,skipPrevent) {
 
         var theTarget = newTarget ? newTarget : originalEvent.target;
-        preventAllButInputs(originalEvent, theTarget);
+        if(!skipPrevent)
+            preventAllButInputs(originalEvent, theTarget);
 
         var touchevt = document.createEvent("MouseEvent");
 
@@ -101,13 +103,12 @@
     } else { //Win8
         var skipMove=false;
         document.addEventListener("MSPointerDown", function (e) {
-
             mouseDown = true;
             skipMove=true;
             lastTarget = e.target;
             if (e.target.nodeName.toLowerCase() === "a" && e.target.href.toLowerCase() === "javascript:;")
                 e.target.href = "";
-            redirectMouseToTouch("touchstart", e);
+            redirectMouseToTouch("touchstart", e,null,true);
             cancelClickMove = false;
             prevX=e.clientX;
             prevY=e.clientY;
@@ -116,7 +117,7 @@
 
         document.addEventListener("MSPointerUp", function (e) {
             if (!mouseDown) return;
-            redirectMouseToTouch("touchend", e, lastTarget); // bind it to initial mousedown target
+            redirectMouseToTouch("touchend", e, lastTarget,true); // bind it to initial mousedown target
             lastTarget = null;
             mouseDown = false;
             //	e.preventDefault();e.stopPropagation();
@@ -126,8 +127,8 @@
 
             if(Math.abs(e.clientX-prevX)<=ieThreshold||Math.abs(e.clientY-prevY)<=ieThreshold) return;
             if (!mouseDown) return;
-            redirectMouseToTouch("touchmove", e, lastTarget);
-            e.preventDefault();
+            redirectMouseToTouch("touchmove", e, lastTarget,true);
+            //e.preventDefault();
             //e.stopPropagation();
 
             cancelClickMove = true;

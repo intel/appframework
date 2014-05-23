@@ -702,7 +702,7 @@
             var panelMask = $.query(".afui_panel_mask");
             time = time || this.transitionTime;
             var open = this.isSideMenuOn();
-            var toX=aside?"-"+numOnly(asideMenu.css('width')):numOnly(menu.css('width'));
+            var toX=aside?"-"+numOnly(asideMenu.css("width")):numOnly(menu.css("width"));
             // add panel mask to block when side menu is open for phone devices
             if(panelMask.length === 0 && window.innerWidth < $.ui.handheldMinWidth){
                 els.append("<div class='afui_panel_mask'></div>");

@@ -225,7 +225,7 @@
                         clearInterval(this.scrollTopInterval);
                         this.preventHideRefresh = !this.refreshRunning; // if it's not running why prevent it xD
                         this.moved = false;
-                        if(e.target.getAttribute("no-scroll")) return e.preventDefault();                        
+                        if(e.target.getAttribute("no-scroll")) return e.preventDefault();
                         this.onTouchStart(e);
                         if(!this.bubbles)
                             e.stopPropagation();
@@ -1080,7 +1080,7 @@
         jsScroller.prototype.onTouchMove = function (event) {
 
             if (this.currentScrollingObject === null) return;
-            if(event.target&&event.target.getAttribute('type')&&event.target.getAttribute('type').toLowerCase().indexOf('range')!==-1) return;
+            if(event.target&&event.target.getAttribute("type")&&event.target.getAttribute("type").toLowerCase().indexOf("range")!==-1) return;
             //event.preventDefault();
             var scrollInfo = this.calculateMovement(event);
             this.calculateTarget(scrollInfo);
