@@ -103,7 +103,7 @@
         function setupCustomTheme() {
 
             if (that.useOSThemes) {
-                $("#afui").removeClass("ios ios7 win8 tizen bb android light dark");
+                $("#afui").removeClass("ios ios7 win8 tizen bb android light dark firefox");
                 if ($.os.android) $("#afui").addClass("android");
                 else if ($.os.ie) {
                     $("#afui").addClass("win8");
@@ -121,7 +121,10 @@
                     $("#afui").addClass("ios");
                 else if($.os.tizen)
                     $("#afui").addClass("tizen");
+                else if($.os.fennec)
+                    $("#afui").addClass("firefox");
             }
+
             if($.os.ios){
                 $("head").find("#iosBlurrHack").remove();
                 var hackStyle="-webkit-backface-visibility: hidden;";
@@ -138,7 +141,7 @@
             else if($.os.fennec){
                 that.ready(function(){
                     window.addEventListener("deviceorientation",function(){
-                        var tmpH=numOnly($("#header").height())+numOnly($("#navbar").height());
+                        var tmpH=numOnly($("#header").css('height'))+numOnly($("#navbar").css('height'));
                         $("#content").css("height",window.innerHeight-tmpH);
                     });
                 });
@@ -2238,7 +2241,6 @@
                         setTimeout(function(){
                             $(document).trigger("afui:ready");
                         });
-
                 };
                 if (loadingDefer) {
                     $(document).one("defer:loaded", loadFirstDiv);
