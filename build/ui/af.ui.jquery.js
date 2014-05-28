@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-05-23 */
+/*! intel-appframework - v2.1.0 - 2014-05-27 */
 
 /**
  * jq.appframework.js
@@ -4189,7 +4189,7 @@ if (!Date.now)
         function setupCustomTheme() {
 
             if (that.useOSThemes) {
-                $("#afui").removeClass("ios ios7 win8 tizen bb android light dark");
+                $("#afui").removeClass("ios ios7 win8 tizen bb android light dark firefox");
                 if ($.os.android) $("#afui").addClass("android");
                 else if ($.os.ie) {
                     $("#afui").addClass("win8");
@@ -4207,7 +4207,10 @@ if (!Date.now)
                     $("#afui").addClass("ios");
                 else if($.os.tizen)
                     $("#afui").addClass("tizen");
+                else if($.os.fennec)
+                    $("#afui").addClass("firefox");
             }
+
             if($.os.ios){
                 $("head").find("#iosBlurrHack").remove();
                 var hackStyle="-webkit-backface-visibility: hidden;";
@@ -4224,7 +4227,7 @@ if (!Date.now)
             else if($.os.fennec){
                 that.ready(function(){
                     window.addEventListener("deviceorientation",function(){
-                        var tmpH=numOnly($("#header").height())+numOnly($("#navbar").height());
+                        var tmpH=numOnly($("#header").css('height'))+numOnly($("#navbar").css('height'));
                         $("#content").css("height",window.innerHeight-tmpH);
                     });
                 });
@@ -6324,7 +6327,6 @@ if (!Date.now)
                         setTimeout(function(){
                             $(document).trigger("afui:ready");
                         });
-
                 };
                 if (loadingDefer) {
                     $(document).one("defer:loaded", loadFirstDiv);
@@ -6702,13 +6704,14 @@ if (!Date.now)
                         that.finishTransition(oldDiv);
                         return;
                     }
-
                     that.css3animate(oldDiv, {
                         x: "-100%",
+                        opacity: 1,
                         complete: function () {
                             that.finishTransition(oldDiv);
                         }
                     });
+
                     currDiv.style.zIndex = 2;
                     oldDiv.style.zIndex = 1;
                 }
