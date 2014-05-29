@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-05-27 */
+/*! intel-appframework - v2.1.0 - 2014-05-29 */
 
 /**
  * jq.appframework.js
@@ -3180,7 +3180,7 @@ if (!Date.now)
             } else if (touch.x2 > 0 || touch.y2 > 0) {
                 (Math.abs(touch.x1 - touch.x2) > 30 || Math.abs(touch.y1 - touch.y2) > 30) &&
                 touch.el.trigger("swipe") &&
-                touch.el.trigger("swipe" + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)));
+                touch.el.trigger("swipe" + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)), touch);
                 touch.x1 = touch.x2 = touch.y1 = touch.y2 = touch.last = 0;
             } else if ("last" in touch) {
                 touch.el.trigger("tap");
@@ -3205,6 +3205,7 @@ if (!Date.now)
         };
     });
 })(af);
+
 //TouchLayer contributed by Carlos Ouro @ Badoo
 //un-authoritive layer between touches and actions on the DOM
 //(un-authoritive: listeners do not require useCapture)
