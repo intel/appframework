@@ -2806,7 +2806,7 @@ if (!window.af || typeof(af) !== "function") {
             //cleanup children
             var children = node.childNodes;
             if (children && children.length > 0) {
-                for (var i; i < children.length; i++) {
+                for (var i=0; i < children.length; i++) {
                     cleanUpContent(children[i], kill);
                 }
             }
