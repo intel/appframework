@@ -39,7 +39,9 @@
             if (!$.ui.isSideMenuEnabled() && !$.ui.isAsideMenuEnabled()) return true;
             if(e.touches.length>1) return;
             if(e.target.tagName.indexOf("input")!==-1) return;
+            if($(e.target).closest("[data-ignore-slide]").length>0) return;
             var tagName=e.target.tagName.toLowerCase();
+
             if(tagName&&inputElements.indexOf(tagName) !== -1) return;
 
             tracking=true;
