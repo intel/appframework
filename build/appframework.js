@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-06-02 */
+/*! intel-appframework - v2.1.0 - 2014-06-04 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -1923,12 +1923,18 @@ if (!window.af || typeof(af) !== "function") {
         * @title $.post(url,[data],success,[dataType])
         */
         $.post = function(url, data, success, dataType) {
-            if (typeof(data) === "function") {
+            if ($.isFunction(data)) {
                 success = data;
                 data = {};
             }
+
+            if(typeof(success)==="string"){
+                dataType=success;
+                success=function(){};
+            }
             if (dataType === nundefined)
                 dataType = "html";
+
             return this.ajax({
                 url: url,
                 type: "POST",
