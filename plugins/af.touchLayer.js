@@ -244,10 +244,6 @@
             } else this.previewReshapeEvent("orientationchange");
             if($.os.android && $.os.chrome) {
                 this.layer.style.height = "100%";
-                var time = didBlur ? 600 : 0;
-                setTimeout(function(){
-                    self.hideAddressBar(0,1);
-                }, time);
             }
         },
         onResize: function() {

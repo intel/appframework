@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-05-29 */
+/*! intel-appframework - v2.1.0 - 2014-06-05 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -2992,10 +2992,6 @@ if (!Date.now)
             } else this.previewReshapeEvent("orientationchange");
             if($.os.android && $.os.chrome) {
                 this.layer.style.height = "100%";
-                var time = didBlur ? 600 : 0;
-                setTimeout(function(){
-                    self.hideAddressBar(0,1);
-                }, time);
             }
         },
         onResize: function() {
