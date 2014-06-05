@@ -9,8 +9,14 @@
 (function ($) {
     "use strict";
     var cancelClickMove = false;
-    if((window.DocumentTouch && document instanceof DocumentTouch) || "ontouchstart" in window)
-        return ;
+    //See if we can create a touch event
+    var tmp;
+    try {
+        tmp = document.createEvent("TouchEvent");
+        return;
+    } catch (ex) {
+
+    }
     $.os.supportsTouch=true;
     var preventAll = function (e) {
         e.preventDefault();
@@ -28,9 +34,37 @@
         if (tag.indexOf("SELECT") > -1 || tag.indexOf("TEXTAREA") > -1 || tag.indexOf("INPUT") > -1) {
             return;
         }
-        
         preventAll(event);
     };
+    function TouchList(){
+        this.length=0;
+    }
+    TouchList.prototype = {
+        item:function(ind){
+            return this[ind];
+        },
+        _add:function(touch){
+            this[this.length]=touch;
+            this.length++;            
+        }
+    };
+
+    var touchIdentifier=1000;
+    function Touch() {
+        this.touchIdentifier=touchIdentifier++;
+    }
+
+    Touch.prototye = {
+        "clientX":0,
+        "clientY":0,
+        "screenX":0,
+        "screenY":0,
+        "pageX":0,
+        "pageY":0,
+        "identifier":0
+    }
+
+
 
     var redirectMouseToTouch = function (type, originalEvent, newTarget,skipPrevent) {
 
@@ -42,16 +76,18 @@
 
         touchevt.initEvent(type, true, true);
         touchevt.initMouseEvent(type, true, true, window, originalEvent.detail, originalEvent.screenX, originalEvent.screenY, originalEvent.clientX, originalEvent.clientY, originalEvent.ctrlKey, originalEvent.shiftKey, originalEvent.altKey, originalEvent.metaKey, originalEvent.button, originalEvent.relatedTarget);
+        touchevt.touches=  new TouchList();
+        touchevt.changedTouches = new TouchList();
+        touchevt.targetTouches = new TouchList();
+        var thetouch=new Touch();
+        thetouch.pageX=originalEvent.pageX;
+        thetouch.pageY=originalEvent.pageY;
+        thetouch.target=originalEvent.target;
+        touchevt.changedTouches._add(thetouch);
         if (type !== "touchend") {
-            touchevt.touches = [];
-            touchevt.touches[0] = {};
-            touchevt.touches[0].pageX = originalEvent.pageX;
-            touchevt.touches[0].pageY = originalEvent.pageY;
-            //target
-            touchevt.touches[0].target = theTarget;
-            touchevt.changedTouches = touchevt.touches;
-            touchevt.targetTouches = touchevt.touches;
-        }
+            touchevt.touches = touchevt.changedTouches;
+            touchevt.targetTouches = touchevt.changedTouches;
+        }        
         //target
 
         touchevt.mouseToTouch = true;
@@ -96,8 +132,6 @@
             if(e.clientX===prevX&&e.clientY===prevY) return;
             if (!mouseDown) return;
             redirectMouseToTouch("touchmove", e, lastTarget);
-            e.preventDefault();
-
             cancelClickMove = true;
         }, true);
     } else { //Win8
@@ -112,7 +146,6 @@
             cancelClickMove = false;
             prevX=e.clientX;
             prevY=e.clientY;
-            //  e.preventDefault();e.stopPropagation();
         }, true);
 
         document.addEventListener("MSPointerUp", function (e) {
@@ -120,7 +153,6 @@
             redirectMouseToTouch("touchend", e, lastTarget,true); // bind it to initial mousedown target
             lastTarget = null;
             mouseDown = false;
-            //	e.preventDefault();e.stopPropagation();
         }, true);
         document.addEventListener("MSPointerMove", function (e) {
             //IE is very flakey...we need 7 pixel movement before we trigger it
@@ -128,8 +160,6 @@
             if(Math.abs(e.clientX-prevX)<=ieThreshold||Math.abs(e.clientY-prevY)<=ieThreshold) return;
             if (!mouseDown) return;
             redirectMouseToTouch("touchmove", e, lastTarget,true);
-            //e.preventDefault();
-            //e.stopPropagation();
 
             cancelClickMove = true;
 

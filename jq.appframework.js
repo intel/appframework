@@ -7,6 +7,9 @@
 /* jshint eqeqeq:false */
 (function($,window){
     "use strict";
+    jQuery.event.props.push("touches");
+    jQuery.event.props.push("originalTouches");
+    jQuery.event.props.push("changedTouches");
     var nundefined, document = window.document,classCache = {},isWin8=(typeof(MSApp)==="object"),_jsonPID = 1;
 
     function classRE(name) {
@@ -421,23 +424,6 @@
     };
 
     //Shim to put touch events on the jQuery special event
-    var oldAdd=$.event.add;
-
-    $.event.add=function(){
-        var oldHandler=arguments[2];
-        var handler=function(){
-            var oldArgs=arguments;
-            if(oldArgs[0].originalEvent&&oldArgs[0].originalEvent.touches){
-                oldArgs[0].touches=oldArgs[0].originalEvent.touches;
-                oldArgs[0].changedTouches=oldArgs[0].originalEvent.changedTouches;
-                oldArgs[0].targetTouches=oldArgs[0].originalEvent.targetTouches;
-            }
-            oldHandler.apply(oldArgs[0].currentTarget,oldArgs);
-        };
-        arguments[2]=handler;
-        oldAdd.apply($, arguments);
-    };
-
 
     window.$afm=$;
 
