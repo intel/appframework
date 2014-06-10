@@ -14,6 +14,7 @@
         showHide = false;
     $.ui.slideSideMenu = true;
     $.ui.fixedSideMenuWidth = 20000; //By default, we want it to always be revealed
+    $.ui.slideMenuXThreshold=0;
     var isAside=false;
     var keepOpen=false;
 
@@ -61,7 +62,14 @@
             else
                 doMenu = true;
 
-            var sidePos=$.ui.getSideMenuPosition();
+            var sidePos=$.ui.getSideMenuPosition();            
+            if($.ui.slideMenuXThreshold!==0&&sidePos===0){
+                if(e.pageX>$.ui.slideMenuXThreshold&&window.innerWidth-e.pageX>$.ui.slideMenuXThreshold){ 
+                    doMenu=false;
+                    tracking=false;
+                    return;
+                }
+            }
             if(sidePos>0){
                 openState=1;
                 max = menuWidth;
