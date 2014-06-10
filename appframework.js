@@ -2048,6 +2048,9 @@ if (!window.af || typeof(af) !== "function") {
         * @title $.parseJSON(string)
         */
         $.parseJSON = function(string) {
+            if (typeof string === 'object') {
+                return object;
+            }
             return JSON.parse(string);
         };
 
