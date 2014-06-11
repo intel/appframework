@@ -64,7 +64,7 @@
 
             var sidePos=$.ui.getSideMenuPosition();            
             if($.ui.slideMenuXThreshold!==0&&sidePos===0){
-                if(e.pageX>$.ui.slideMenuXThreshold&&window.innerWidth-e.pageX>$.ui.slideMenuXThreshold){ 
+                if(e.touches[0].pageX>$.ui.slideMenuXThreshold&&window.innerWidth-e.touches[0].pageX>$.ui.slideMenuXThreshold){ 
                     doMenu=false;
                     tracking=false;
                     return;
