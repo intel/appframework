@@ -1255,6 +1255,7 @@
                 scrollInfo.y+=(scrollInfo.deltaY>0?1:-1)*(this.elementInfo.divHeight*this.androidPerfHack);
             if(Math.abs(scrollInfo.deltaX)>0)
                 scrollInfo.x+=(scrollInfo.deltaX>0?1:-1)*(this.elementInfo.divWidth*this.androidPerfHack);
+           
         };
         jsScroller.prototype.checkYboundary = function (scrollInfo) {
             var minTop = this.container.clientHeight / 2;
@@ -1316,7 +1317,7 @@
         };
 
         jsScroller.prototype.setMomentum = function (scrollInfo) {
-            var deceleration = 0.0008;
+            var deceleration = 0.0012;
 
             //calculate movement speed
             scrollInfo.speedY = this.divide(scrollInfo.deltaY, scrollInfo.duration);
@@ -1328,21 +1329,25 @@
             scrollInfo.absDeltaY = Math.abs(scrollInfo.deltaY);
             scrollInfo.absDeltaX = Math.abs(scrollInfo.deltaX);
 
+
+
             //set momentum
             if (scrollInfo.absDeltaY > 0) {
-                scrollInfo.deltaY += (scrollInfo.deltaY < 0 ? -1 : 1) * (scrollInfo.absSpeedY * scrollInfo.absSpeedY) / (2 * deceleration);
+                scrollInfo.deltaY = (scrollInfo.deltaY < 0 ? -1 : 1) * (scrollInfo.absSpeedY * scrollInfo.absSpeedY) / (2 * deceleration);
                 scrollInfo.absDeltaY = Math.abs(scrollInfo.deltaY);
                 scrollInfo.duration = scrollInfo.absSpeedY / deceleration;
                 scrollInfo.speedY = scrollInfo.deltaY / scrollInfo.duration;
-                scrollInfo.absSpeedY = Math.abs(scrollInfo.speedY);
-                if (scrollInfo.absSpeedY < deceleration * 100 || scrollInfo.absDeltaY < 5) scrollInfo.deltaY = scrollInfo.absDeltaY = scrollInfo.duration = scrollInfo.speedY = scrollInfo.absSpeedY = 0;
+                scrollInfo.absSpeedY = Math.abs(scrollInfo.speedY);                
+                if (scrollInfo.absSpeedY < deceleration * 100 || scrollInfo.absDeltaY < 5) 
+                    scrollInfo.deltaY = scrollInfo.absDeltaY = scrollInfo.duration = scrollInfo.speedY = scrollInfo.absSpeedY = 0;
             } else if (scrollInfo.absDeltaX) {
-                scrollInfo.deltaX += (scrollInfo.deltaX < 0 ? -1 : 1) * (scrollInfo.absSpeedX * scrollInfo.absSpeedX) / (2 * deceleration);
+                scrollInfo.deltaX = (scrollInfo.deltaX < 0 ? -1 : 1) * (scrollInfo.absSpeedX * scrollInfo.absSpeedX) / (2 * deceleration);
                 scrollInfo.absDeltaX = Math.abs(scrollInfo.deltaX);
                 scrollInfo.duration = scrollInfo.absSpeedX / deceleration;
                 scrollInfo.speedX = scrollInfo.deltaX / scrollInfo.duration;
                 scrollInfo.absSpeedX = Math.abs(scrollInfo.speedX);
-                if (scrollInfo.absSpeedX < deceleration * 100 || scrollInfo.absDeltaX < 5) scrollInfo.deltaX = scrollInfo.absDeltaX = scrollInfo.duration = scrollInfo.speedX = scrollInfo.absSpeedX = 0;
+                if (scrollInfo.absSpeedX < deceleration * 100 || scrollInfo.absDeltaX < 5) 
+                    scrollInfo.deltaX = scrollInfo.absDeltaX = scrollInfo.duration = scrollInfo.speedX = scrollInfo.absSpeedX = 0;
             } else scrollInfo.duration = 0;
         };
 
