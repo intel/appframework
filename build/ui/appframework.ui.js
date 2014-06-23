@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-06-11 */
+/*! intel-appframework - v2.1.0 - 2014-06-23 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -1216,6 +1216,8 @@ if (!Date.now)
             //set current scroll
 
             if (!firstExecution) this.adjustScroll();
+            else
+                this.scrollToTop(0);
             //set events
 
             this.el.addEventListener("touchstart", this, false);
@@ -4093,7 +4095,7 @@ if (!Date.now)
            ```
          * @title $.ui.resetScrollers
          */
-        resetScrollers: true,
+        resetScrollers: false,
         /**
          * function to fire when afui is ready and completed launch
            ```
@@ -4821,6 +4823,7 @@ if (!Date.now)
                 $(that.modalWindow).css("display","");
                 $(that.modalWindow).addClass("display","flexContainer");
                 if (useScroller) {
+
                     this.scrollingDivs.modal_container.enable(that.resetScrollers);
                 }
                 else {
