@@ -465,7 +465,7 @@
            ```
          * @title $.ui.resetScrollers
          */
-        resetScrollers: true,
+        resetScrollers: false,
         /**
          * function to fire when afui is ready and completed launch
            ```
@@ -1193,6 +1193,7 @@
                 $(that.modalWindow).css("display","");
                 $(that.modalWindow).addClass("display","flexContainer");
                 if (useScroller) {
+
                     this.scrollingDivs.modal_container.enable(that.resetScrollers);
                 }
                 else {

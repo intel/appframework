@@ -454,6 +454,8 @@
             //set current scroll
 
             if (!firstExecution) this.adjustScroll();
+            else
+                this.scrollToTop(0);
             //set events
 
             this.el.addEventListener("touchstart", this, false);
