@@ -195,7 +195,7 @@
         trimBackButtonText: true,
         useOSThemes: true,
         overlayStatusbar: false,
-        lockPageBounce: false,
+        lockPageBounce: true,
         animateHeaders: true,
         useAutoPressed: true,
         horizontalScroll:false,

@@ -33,7 +33,7 @@
     var autoBlurInputTypes = ["button", "radio", "checkbox", "range", "date"];
     var requiresJSFocus = $.os.ios; //devices which require .focus() on dynamic click events
     var verySensitiveTouch = $.os.blackberry; //devices which have a very sensitive touch and touchmove is easily fired even on simple taps
-    var inputElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
+    var inputElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android&&!$.os.androidICS); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
 //    var selectElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android && !$.os.chrome); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
 //    var focusScrolls = $.os.ios; //devices scrolling on focus instead of resizing
     var requirePanning = $.os.ios&&!$.os.ios7; //devices which require panning feature
@@ -440,7 +440,7 @@
             }
 
             //do not prevent default on chrome.  Chrome >=33 has issues with this
-            if($.os.chrome||$.os.fennec) return;
+            if($.os.chrome||$.os.fennec||$.os.androidICS) return;
             //prevent default if possible
 
             if (!this.isPanning_ && !this.requiresNativeTap) {

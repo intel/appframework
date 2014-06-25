@@ -1355,6 +1355,7 @@
 
         jsScroller.prototype.onTouchEnd = function () {
 
+            var self=this;
             if (this.currentScrollingObject === null || !this.moved) return;
 
             //event.preventDefault();
@@ -1412,7 +1413,10 @@
             if ((scrollInfo.x === scrollInfo.left && scrollInfo.y === scrollInfo.top) || this.androidFormsMode)
                 scrollInfo.duration = 0;
 
-            this.scrollerMoveCSS(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
+            //hack for android 4.3
+            setTimeout(function(){
+                self.scrollerMoveCSS(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
+            });
             this.setVScrollBar(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
             this.setHScrollBar(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
             this.setFinishCalback(scrollInfo.duration);
