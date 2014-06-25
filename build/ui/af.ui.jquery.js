@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-06-23 */
+/*! intel-appframework - v2.1.0 - 2014-06-25 */
 
 /**
  * jq.appframework.js
@@ -2563,6 +2563,7 @@ if (!Date.now)
 
         jsScroller.prototype.onTouchEnd = function () {
 
+            var self=this;
             if (this.currentScrollingObject === null || !this.moved) return;
 
             //event.preventDefault();
@@ -2620,7 +2621,10 @@ if (!Date.now)
             if ((scrollInfo.x === scrollInfo.left && scrollInfo.y === scrollInfo.top) || this.androidFormsMode)
                 scrollInfo.duration = 0;
 
-            this.scrollerMoveCSS(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
+            //hack for android 4.3
+            setTimeout(function(){
+                self.scrollerMoveCSS(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
+            });
             this.setVScrollBar(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
             this.setHScrollBar(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
             this.setFinishCalback(scrollInfo.duration);
@@ -3234,7 +3238,7 @@ if (!Date.now)
     var autoBlurInputTypes = ["button", "radio", "checkbox", "range", "date"];
     var requiresJSFocus = $.os.ios; //devices which require .focus() on dynamic click events
     var verySensitiveTouch = $.os.blackberry; //devices which have a very sensitive touch and touchmove is easily fired even on simple taps
-    var inputElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
+    var inputElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android&&!$.os.androidICS); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
 //    var selectElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android && !$.os.chrome); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
 //    var focusScrolls = $.os.ios; //devices scrolling on focus instead of resizing
     var requirePanning = $.os.ios&&!$.os.ios7; //devices which require panning feature
@@ -3641,7 +3645,7 @@ if (!Date.now)
             }
 
             //do not prevent default on chrome.  Chrome >=33 has issues with this
-            if($.os.chrome||$.os.fennec) return;
+            if($.os.chrome||$.os.fennec||$.os.androidICS) return;
             //prevent default if possible
 
             if (!this.isPanning_ && !this.requiresNativeTap) {
@@ -4271,7 +4275,7 @@ if (!Date.now)
         trimBackButtonText: true,
         useOSThemes: true,
         overlayStatusbar: false,
-        lockPageBounce: false,
+        lockPageBounce: true,
         animateHeaders: true,
         useAutoPressed: true,
         horizontalScroll:false,
