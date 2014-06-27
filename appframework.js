@@ -2621,9 +2621,9 @@ if (!window.af || typeof(af) !== "function") {
 
         * @param {String|Object} event
         * @param {String|Array|Object} selector
-        * @param {Sunction} callback
+        * @param {Function()=} [optional] callback 
         * @return {Object} appframework object
-        * @title $().off(event,selector,[callback])
+        * @title $().off(event, selector, [callback])
         */
         $.fn.off = function(event, selector, callback) {
             return selector === nundefined || $.isFunction(selector) ? this.unbind(event, selector) : this.undelegate(selector, event, callback);

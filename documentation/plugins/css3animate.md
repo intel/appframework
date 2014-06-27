@@ -1,6 +1,6 @@
 #CSS3 Animate
 
-This plugin wraps CSS3 animation CSS settings.  It supports setting any of the Transform properties and others.  It also allows chaning for callbacks and queuing.
+This plugin wraps CSS3 animation CSS settings. It supports setting any of the Transform properties and others. It also allows chaining for callbacks and queuing.
 
 ```
 $(selector).css3Animate()
