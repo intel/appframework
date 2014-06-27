@@ -1,6 +1,6 @@
 #Desktop Browsers
 
-This plugin translate mouse events to touch events on desktop browsers, and MSPointer events to touch events for WP8 and Win8 touch devices.  We do not emulate multi touch.  
+This plugin translates mouse events to touch events on desktop browsers, and MSPointer events to touch events for WP8 and Win8 touch devices.  We do not emulate multi touch.  
 
 ##Events
 
