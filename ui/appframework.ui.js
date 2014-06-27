@@ -121,8 +121,10 @@
                     $("#afui").addClass("ios");
                 else if($.os.tizen)
                     $("#afui").addClass("tizen");
-                else if($.os.fennec)
+                else if($.os.fennec){
                     $("#afui").addClass("firefox");
+                    that.animateHeaders=false;
+                }
             }
 
             if($.os.ios){
