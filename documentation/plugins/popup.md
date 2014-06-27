@@ -13,7 +13,7 @@ $(selector).popup(options) // returns a reference to the popup object
 You can pass in a string or an object to the popup function.  If you pass in a string, it will emulate an alert box.
 
 ```
-id                            (string) ID of DOM elemenet for the popup container
+id                            (string) ID of DOM element for the popup container
 title                         (string) Title to show for the popup
 message                       (string) Text to display in the popup
 cancelText                    (string) Text to display for the cancel button
@@ -22,7 +22,7 @@ cancelOnly                    (bool/false) When true, only the cancel button wil
 cancelClass                   (string) CSS class for the cancel button
 doneClass                     (string) CSS Class for the done button
 autoCloseDone                 (bool/false) When true, the popup will auto hide when the done button is pressed
-supressTitle                  (bool/false) When true, the title will not be shown in the popup
+suppressTitle                 (bool/false) When true, the title will not be shown in the popup
 
 ```
 
