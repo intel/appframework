@@ -8,10 +8,10 @@ This plugin handles a lot of OS fixes for apps, and is core to App Framework UI.
 * dispatching scroll events
 * handling orientation change and updating the viewport
 
-Simply include the plugin and then call $.touchLayer on the dom node you want to use it on (this can be doucment).
+Simply include the plugin and then call $.touchLayer on the dom node you want to use it on (this can be `document`).
 
 ```
-//App Framework UI Touch layer
+// App Framework UI Touch layer
 $.touchLayer($("#afui").get(0));
 ```
 
@@ -22,7 +22,7 @@ Any references to $.touchLayer will return an object now that you can bind event
 ```
 scrollstart            Scroll started on an element in the touch layer
 scrollend              Scroll finished on an eelement in the touch layer
-enter-edit             A form element recieved focus
+enter-edit             A form element received focus
 exit-edit              A form element lost focus
 ```
 
