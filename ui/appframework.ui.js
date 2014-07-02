@@ -2415,10 +2415,13 @@
         return (crc ^ (-1))>>>0;
     };
 
-    $.ui = new ui();
+    $.ui = $.extend($.ui || {}, new ui());
     $.ui.init=true;
-    $(window).trigger("afui:preinit");
-    $(window).trigger("afui:init");
+
+    setTimeout(function() {
+        $(window).trigger("afui:preinit");
+        $(window).trigger("afui:init");
+    }, 0);
 })(af);
 
 
