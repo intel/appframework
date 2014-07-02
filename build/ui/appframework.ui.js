@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-06-25 */
+/*! intel-appframework - v2.1.0 - 2014-07-02 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -3755,8 +3755,10 @@ if (!Date.now)
                     $("#afui").addClass("ios");
                 else if($.os.tizen)
                     $("#afui").addClass("tizen");
-                else if($.os.fennec)
+                else if($.os.fennec){
                     $("#afui").addClass("firefox");
+                    that.animateHeaders=false;
+                }
             }
 
             if($.os.ios){
@@ -5944,6 +5946,11 @@ if (!Date.now)
         finishTransition: function(oldDiv, currDiv) {
             oldDiv.style.display = "none";
             this.doingTransition = false;
+            if(oldDiv)
+                $(oldDiv).trigger("unloadpanelcomplete");
+            if(currDiv)
+                $(currDiv).trigger("loadpanelcomplete");
+
             if (currDiv) this.clearAnimations(currDiv);
             if (oldDiv) this.clearAnimations(oldDiv);
             $.trigger(this, "content-loaded");

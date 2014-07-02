@@ -2312,6 +2312,11 @@
         finishTransition: function(oldDiv, currDiv) {
             oldDiv.style.display = "none";
             this.doingTransition = false;
+            if(oldDiv)
+                $(oldDiv).trigger("unloadpanelcomplete");
+            if(currDiv)
+                $(currDiv).trigger("loadpanelcomplete");
+
             if (currDiv) this.clearAnimations(currDiv);
             if (oldDiv) this.clearAnimations(oldDiv);
             $.trigger(this, "content-loaded");
