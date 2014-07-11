@@ -1344,8 +1344,17 @@
          * @title $.ui.addContentDiv(id, content, title);
          */
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
-            el = typeof(el) !== "string" ? el : el.indexOf("#") === -1 ? "#" + el : el;
-            var myEl = $.query(el).get(0);
+            var myEl;
+            if(typeof(el) === "string") {
+                if(el.lastIndexOf("#", 1) === -1) el = "#" + el;
+                myEl = $.query(el).get(0);
+            } else if($.is$(el)) {
+                myEl = el.get(0);
+                el = myEl.id;
+            } else {
+                myEl = el;
+                el = myEl.id;
+            }
             var newDiv, newId;
             if (!myEl) {
                 newDiv = $.create("div", {
