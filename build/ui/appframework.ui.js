@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-07-14 */
+/*! intel-appframework - v2.1.0 - 2014-07-28 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -3746,11 +3746,7 @@ if (!Date.now)
                     that.backButtonText = "Back";
                 } else if ($.os.ios7){
                     $("#afui").addClass("ios7");
-                    if(that.overlayStatusbar){
-                        that.ready(function(){
-                            $(".header").addClass("overlayStatusbar");
-                        });
-                    }
+                   
                 } else if ($.os.ios)
                     $("#afui").addClass("ios");
                 else if($.os.tizen)
@@ -3781,6 +3777,16 @@ if (!Date.now)
                         $("#content").css("height",window.innerHeight-tmpH);
                     });
                 });
+            }
+
+            if($.os.ios7&&$("#afui").hasClass("ios7")){
+                if(that.overlayStatusbar){
+                    that.ready(function(){
+                        $("#afui").addClass("overlayStatusbar");
+                    });
+
+                    $(document.body).css("background","rgb(249,249,249)");
+                }
             }
 
         }
