@@ -112,11 +112,7 @@
                     that.backButtonText = "Back";
                 } else if ($.os.ios7){
                     $("#afui").addClass("ios7");
-                    if(that.overlayStatusbar){
-                        that.ready(function(){
-                            $(".header").addClass("overlayStatusbar");
-                        });
-                    }
+                   
                 } else if ($.os.ios)
                     $("#afui").addClass("ios");
                 else if($.os.tizen)
@@ -147,6 +143,14 @@
                         $("#content").css("height",window.innerHeight-tmpH);
                     });
                 });
+            }
+
+            if($.os.ios7&&$("#afui").hasClass("ios7")){
+                if(that.overlayStatusbar){
+                    that.ready(function(){
+                        $(".header").addClass("overlayStatusbar");
+                    });
+                }
             }
 
         }
