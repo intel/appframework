@@ -148,8 +148,10 @@
             if($.os.ios7&&$("#afui").hasClass("ios7")){
                 if(that.overlayStatusbar){
                     that.ready(function(){
-                        $(".header").addClass("overlayStatusbar");
+                        $("#afui").addClass("overlayStatusbar");
                     });
+
+                    $(document.body).css("background","rgb(249,249,249)");
                 }
             }
 
