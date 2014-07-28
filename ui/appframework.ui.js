@@ -1849,7 +1849,7 @@
                     var refreshFunction;
                     var doReturn = false;
                     var retainDiv = $.query("#" + urlHash);
-                    var contentClassList = [];
+                    var contentClasses = [];
                     //Here we check to see if we are retaining the div, if so update it
                     if (retainDiv.length > 0) {
                         that.updatePanel(urlHash, xmlhttp.responseText);
@@ -1866,13 +1866,12 @@
                         var contents = $(xmlhttp.responseText);
 
                         if (contents.hasClass("panel")) {
-                            contentClassList = contents.get(0).classList;
-                            contentClassList.remove("panel");
+                            contentClasses = contents.get(0).className;
                             urlHash=contents.attr("id");
                             contents = contents.get(0).innerHTML;
                         }
                         else {
-                            contentClassList = contents.classList;
+                            contentClasses = contents.className;
                             contents = contents.html();
                         }
                         if ($("#" + urlHash).length > 0) {
@@ -1902,9 +1901,12 @@
                         return;
                     }
 
-                    if (contentClassList){
+                    if (contentClasses){
+                        var contentClassList = contentClasses.split(" ");
                         for (var i=0; i < contentClassList.length; i++){
-                            $("#" + urlHash).addClass(contentClassList[i]);
+                            if (contentClassList[i].trim() !== "panel"){
+                                $("#" + urlHash).addClass(contentClassList[i]);
+                            }
                         }
                     }
 
