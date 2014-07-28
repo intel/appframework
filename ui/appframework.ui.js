@@ -1849,6 +1849,7 @@
                     var refreshFunction;
                     var doReturn = false;
                     var retainDiv = $.query("#" + urlHash);
+                    var contentClassList = [];
                     //Here we check to see if we are retaining the div, if so update it
                     if (retainDiv.length > 0) {
                         that.updatePanel(urlHash, xmlhttp.responseText);
@@ -1864,13 +1865,16 @@
                         //that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
                         var contents = $(xmlhttp.responseText);
 
-                        if (contents.hasClass("panel"))
-                        {
+                        if (contents.hasClass("panel")) {
+                            contentClassList = contents.get(0).classList;
+                            contentClassList.remove("panel");
                             urlHash=contents.attr("id");
                             contents = contents.get(0).innerHTML;
                         }
-                        else
+                        else {
+                            contentClassList = contents.classList;
                             contents = contents.html();
+                        }
                         if ($("#" + urlHash).length > 0) {
                             that.updatePanel("#" + urlHash, contents);
                         } else if ($("div.panel[data-crc='" + urlHash + "']").length > 0) {
@@ -1896,6 +1900,12 @@
                     if (doReturn) {
                         if (that.showLoading) that.hideMask();
                         return;
+                    }
+
+                    if (contentClassList){
+                        for (var i=0; i < contentClassList.length; i++){
+                            $("#" + urlHash).addClass(contentClassList[i]);
+                        }
                     }
 
                     that.loadContent("#" + urlHash, newTab, back, transition);
