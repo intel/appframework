@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-07-28 */
+/*! intel-appframework - v2.1.0 - 2014-07-30 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -1821,7 +1821,9 @@ if (!window.af || typeof(af) !== "function") {
                     if (xhr.readyState === 4) {
                         clearTimeout(abortTimeout);
                         var result, error = false;
-                        var contentType=xhr.getResponseHeader("content-type")||"";
+                        var contentType=xhr.getResponseHeader("content-type");
+                        if(!contentType)
+                            contentType="";
                         if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 0 && protocol === "file:") {
                             if ((contentType==="application/json")||(mime === "application/json" && !(/^\s*$/.test(xhr.responseText)))) {
                                 try {
