@@ -17,7 +17,10 @@
 
 
 #afui.ios7.overlayStatusbar{
-    margin-top:20px;  
+   margin-top: 20px;
+background: #f9f9f9;
+margin-bottom: -20px;
+padding-bottom: 20px;
 }
 
 #afui.ios7 .header .button {

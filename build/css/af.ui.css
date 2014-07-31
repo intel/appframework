@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-07-28 */
+/*! intel-appframework - v2.1.0 - 2014-07-31 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -2618,7 +2618,10 @@ margin-top: 15px;
 
 
 #afui.ios7.overlayStatusbar{
-    margin-top:20px;  
+   margin-top: 20px;
+background: #f9f9f9;
+margin-bottom: -20px;
+padding-bottom: 20px;
 }
 
 #afui.ios7 .header .button {
