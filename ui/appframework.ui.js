@@ -1849,6 +1849,7 @@
                     var refreshFunction;
                     var doReturn = false;
                     var retainDiv = $.query("#" + urlHash);
+                    var contentClasses = [];
                     //Here we check to see if we are retaining the div, if so update it
                     if (retainDiv.length > 0) {
                         that.updatePanel(urlHash, xmlhttp.responseText);
@@ -1864,13 +1865,15 @@
                         //that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
                         var contents = $(xmlhttp.responseText);
 
-                        if (contents.hasClass("panel"))
-                        {
+                        if (contents.hasClass("panel")) {
+                            contentClasses = contents.get(0).className;
                             urlHash=contents.attr("id");
                             contents = contents.get(0).innerHTML;
                         }
-                        else
+                        else {
+                            contentClasses = contents.className;
                             contents = contents.html();
+                        }
                         if ($("#" + urlHash).length > 0) {
                             that.updatePanel("#" + urlHash, contents);
                         } else if ($("div.panel[data-crc='" + urlHash + "']").length > 0) {
@@ -1896,6 +1899,15 @@
                     if (doReturn) {
                         if (that.showLoading) that.hideMask();
                         return;
+                    }
+
+                    if (contentClasses){
+                        var contentClassList = contentClasses.split(" ");
+                        for (var i=0; i < contentClassList.length; i++){
+                            if (contentClassList[i].trim() !== "panel"){
+                                $("#" + urlHash).addClass(contentClassList[i]);
+                            }
+                        }
                     }
 
                     that.loadContent("#" + urlHash, newTab, back, transition);
