@@ -1985,7 +1985,7 @@
                 enterEditEl = el;
             });
             //enter-edit-reshape panel padding and scroll adjust
-            if($.os.android&&!$.os.androidICS)
+            if($.os.android)
             {
                 $.bind($.touchLayer, "enter-edit-reshape", function() {
                     //onReshape UI fixes
