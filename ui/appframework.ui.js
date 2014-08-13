@@ -112,7 +112,7 @@
                     that.backButtonText = "Back";
                 } else if ($.os.ios7){
                     $("#afui").addClass("ios7");
-                   
+
                 } else if ($.os.ios)
                     $("#afui").addClass("ios");
                 else if($.os.tizen)
@@ -695,7 +695,7 @@
          * @param {boolean=} force
          * @param {function=} callback Callback function to execute after menu toggle is finished
          * @param {number=} time Time to run the transition
-         * @param {boolean=} aside 
+         * @param {boolean=} aside
          * @title $.ui.toggleSideMenu([force],[callback],[time])
          */
         toggleLeftSideMenu: function(force, callback, time, aside) {
@@ -1019,7 +1019,7 @@
                 this.prevHeader = elems;
             }
         },
-        /** 
+        /**
          * @api private
          */
         previAsideMenu:null,
@@ -1164,7 +1164,7 @@
          */
         modalReference_:null,
         /**
-         * Load a content panel in a modal window. 
+         * Load a content panel in a modal window.
            ```
            $.ui.showModal("#myDiv","fade");
            ```
@@ -1346,7 +1346,7 @@
          * @param {string} content
          * @param {string} title
          * @param {boolean=} refresh Enable refresh on pull
-         * @param {function=} refreshFunc 
+         * @param {function=} refreshFunc
          * @title $.ui.addContentDiv(id, content, title);
          */
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
@@ -1981,6 +1981,11 @@
                     var jQel = $(enterEditEl);
                     var jQactive = jQel.closest(that.activeDiv);
                     if (jQactive && jQactive.size() > 0) {
+                        if($.os.androidICS) {
+                            paddingBottom = jQactive.offset().bottom - jQel.offset().bottom;
+                            that.scrollingDivs[that.activeDiv.id].scrollBy({x:0,y:paddingBottom});
+                            return;
+                        }
                         var elPos = jQel.offset();
                         var containerPos = jQactive.offset();
                         if (elPos.bottom > containerPos.bottom && elPos.height < containerPos.height) {
@@ -2321,7 +2326,7 @@
          * This must be called at the end of every transition to hide the old div and reset the doingTransition variable
          *
          * @param {object} oldDiv Div that transitioned out
-         * @param {object=} currDiv 
+         * @param {object=} currDiv
          * @title $.ui.finishTransition(oldDiv)
          */
         finishTransition: function(oldDiv, currDiv) {

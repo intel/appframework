@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-07-28 */
+/*! intel-appframework - v2.1.0 - 2014-08-13 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -2790,7 +2790,7 @@ if (!Date.now)
     //configuration stuff
     var inputElements = ["input", "select", "textarea","range"];
     var autoBlurInputTypes = ["button", "radio", "checkbox", "range", "date"];
-    var requiresJSFocus = $.os.ios; //devices which require .focus() on dynamic click events
+    var requiresJSFocus = $.os.ios||($.os.androidICS&&$.os.chrome); //devices which require .focus() on dynamic click events
     var verySensitiveTouch = $.os.blackberry; //devices which have a very sensitive touch and touchmove is easily fired even on simple taps
     var inputElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android&&!$.os.androidICS); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
 //    var selectElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android && !$.os.chrome); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
@@ -3134,7 +3134,7 @@ if (!Date.now)
         },
 
         onTouchStart: function(e) {
-            //setup initial touch position            
+            //setup initial touch position
             this.dX = e.touches[0].pageX;
             this.dY = e.touches[0].pageY;
             this.lastTimestamp = e.timeStamp;
@@ -3179,7 +3179,7 @@ if (!Date.now)
 
             // We allow forcing native tap in android devices (required in special cases)
             var forceNativeTap = ($.os.android && e && e.target && e.target.getAttribute && e.target.getAttribute("data-touchlayer") === "ignore");
-            
+
             //if on edit mode, allow all native touches
             //(BB10 must still be prevented, always clicks even after move)
             if (forceNativeTap || (this.isFocused_ && !$.os.blackberry10)) {
@@ -3746,7 +3746,7 @@ if (!Date.now)
                     that.backButtonText = "Back";
                 } else if ($.os.ios7){
                     $("#afui").addClass("ios7");
-                   
+
                 } else if ($.os.ios)
                     $("#afui").addClass("ios");
                 else if($.os.tizen)
@@ -4329,7 +4329,7 @@ if (!Date.now)
          * @param {boolean=} force
          * @param {function=} callback Callback function to execute after menu toggle is finished
          * @param {number=} time Time to run the transition
-         * @param {boolean=} aside 
+         * @param {boolean=} aside
          * @title $.ui.toggleSideMenu([force],[callback],[time])
          */
         toggleLeftSideMenu: function(force, callback, time, aside) {
@@ -4653,7 +4653,7 @@ if (!Date.now)
                 this.prevHeader = elems;
             }
         },
-        /** 
+        /**
          * @api private
          */
         previAsideMenu:null,
@@ -4798,7 +4798,7 @@ if (!Date.now)
          */
         modalReference_:null,
         /**
-         * Load a content panel in a modal window. 
+         * Load a content panel in a modal window.
            ```
            $.ui.showModal("#myDiv","fade");
            ```
@@ -4980,7 +4980,7 @@ if (!Date.now)
          * @param {string} content
          * @param {string} title
          * @param {boolean=} refresh Enable refresh on pull
-         * @param {function=} refreshFunc 
+         * @param {function=} refreshFunc
          * @title $.ui.addContentDiv(id, content, title);
          */
         addContentDiv: function(el, content, title, refresh, refreshFunc) {
@@ -5615,6 +5615,11 @@ if (!Date.now)
                     var jQel = $(enterEditEl);
                     var jQactive = jQel.closest(that.activeDiv);
                     if (jQactive && jQactive.size() > 0) {
+                        if($.os.androidICS) {
+                            paddingBottom = jQactive.offset().bottom - jQel.offset().bottom;
+                            that.scrollingDivs[that.activeDiv.id].scrollBy({x:0,y:paddingBottom});
+                            return;
+                        }
                         var elPos = jQel.offset();
                         var containerPos = jQactive.offset();
                         if (elPos.bottom > containerPos.bottom && elPos.height < containerPos.height) {
@@ -5955,7 +5960,7 @@ if (!Date.now)
          * This must be called at the end of every transition to hide the old div and reset the doingTransition variable
          *
          * @param {object} oldDiv Div that transitioned out
-         * @param {object=} currDiv 
+         * @param {object=} currDiv
          * @title $.ui.finishTransition(oldDiv)
          */
         finishTransition: function(oldDiv, currDiv) {

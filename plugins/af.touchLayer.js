@@ -31,7 +31,7 @@
     //configuration stuff
     var inputElements = ["input", "select", "textarea","range"];
     var autoBlurInputTypes = ["button", "radio", "checkbox", "range", "date"];
-    var requiresJSFocus = $.os.ios; //devices which require .focus() on dynamic click events
+    var requiresJSFocus = $.os.ios||($.os.androidICS&&$.os.chrome); //devices which require .focus() on dynamic click events
     var verySensitiveTouch = $.os.blackberry; //devices which have a very sensitive touch and touchmove is easily fired even on simple taps
     var inputElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android&&!$.os.androidICS); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
 //    var selectElementRequiresNativeTap = $.os.blackberry||$.os.fennec || ($.os.android && !$.os.chrome); //devices which require the touchstart event to bleed through in order to actually fire the click on select elements
@@ -375,7 +375,7 @@
         },
 
         onTouchStart: function(e) {
-            //setup initial touch position            
+            //setup initial touch position
             this.dX = e.touches[0].pageX;
             this.dY = e.touches[0].pageY;
             this.lastTimestamp = e.timeStamp;
@@ -420,7 +420,7 @@
 
             // We allow forcing native tap in android devices (required in special cases)
             var forceNativeTap = ($.os.android && e && e.target && e.target.getAttribute && e.target.getAttribute("data-touchlayer") === "ignore");
-            
+
             //if on edit mode, allow all native touches
             //(BB10 must still be prevented, always clicks even after move)
             if (forceNativeTap || (this.isFocused_ && !$.os.blackberry10)) {
