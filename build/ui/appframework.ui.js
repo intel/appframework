@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-08-13 */
+/*! intel-appframework - v2.1.0 - 2014-08-14 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -5628,8 +5628,7 @@ if (!Date.now)
                     var jQactive = jQel.closest(that.activeDiv);
                     if (jQactive && jQactive.size() > 0) {
                         if($.os.androidICS) {
-                            paddingBottom = jQactive.offset().bottom - jQel.offset().bottom;
-                            that.scrollingDivs[that.activeDiv.id].scrollBy({x:0,y:paddingBottom});
+                            document.activeElement.scrollIntoView();
                             return;
                         }
                         var elPos = jQel.offset();
