@@ -1993,15 +1993,21 @@
                     var jQel = $(enterEditEl);
                     var jQactive = jQel.closest(that.activeDiv);
                     if (jQactive && jQactive.size() > 0) {
-                        if($.os.androidICS) {
-                            document.activeElement.scrollIntoView();
-                            return;
-                        }
-                        var elPos = jQel.offset();
-                        var containerPos = jQactive.offset();
-                        if (elPos.bottom > containerPos.bottom && elPos.height < containerPos.height) {
-                            //apply fix
-                            that.scrollingDivs[that.activeDiv.id].scrollToItem(jQel, "bottom");
+                        if($.os.androidICS){
+                            //get the top
+                            var scroller=that.scrollingDivs[that.activeDiv.id];
+                            var top=scroller.scrollTop;
+                            scroller.scrollBy({
+                                x:0,
+                                y:((jQel.offset().top-jQactive.offset().top+top)/2)
+                            });
+                        } else if ($.os.android || $.os.blackberry) {
+                            var elPos = jQel.offset();
+                            var containerPos = jQactive.offset();
+                            if (elPos.bottom > containerPos.bottom && elPos.height < containerPos.height) {
+                                //apply fix
+                                that.scrollingDivs[that.activeDiv.id].scrollToItem(jQel, 'bottom');
+                            }
                         }
                     }
                 });
