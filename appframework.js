@@ -1092,7 +1092,7 @@ if (!window.af || typeof(af) !== "function") {
                 ```
                 $().appendTo("#foo"); //Append an object;
                 ```
-            * @param {string|Object} selector to append to            
+            * @param {string|Object} selector to append to
             * @title $().appendTo(element)
             */
             appendTo: function(selector) {
@@ -1107,7 +1107,7 @@ if (!window.af || typeof(af) !== "function") {
                 $().prependTo("#foo"); //Prepend an object;
                 ```
             * @param {string|Object} selector Selector to prepend to
-            * @return {$afm} 
+            * @return {$afm}
             * @title $().prependTo(element)
             */
             prependTo: function(selector) {
@@ -1956,9 +1956,9 @@ if (!window.af || typeof(af) !== "function") {
         */
         $.getJSON = function(url, data, success,error) {
             if (typeof(data) === "function") {
-                success = data;
-                data = {};
                 error=success;
+                success=data;
+                data = {};
             }
             return this.ajax({
                 url: url,
@@ -2089,7 +2089,7 @@ if (!window.af || typeof(af) !== "function") {
          * .os.tizen
          * .feat.nativeTouchScroll
          *
-         * @param {Object} $ 
+         * @param {Object} $
          * @param {string} userAgent
          * @api private
          */
@@ -2623,7 +2623,7 @@ if (!window.af || typeof(af) !== "function") {
 
         * @param {String|Object} event
         * @param {String|Array|Object} selector
-        * @param {Function()=} [optional] callback 
+        * @param {Function()=} [optional] callback
         * @return {Object} appframework object
         * @title $().off(event, selector, [callback])
         */
@@ -2833,7 +2833,7 @@ if (!window.af || typeof(af) !== "function") {
            $.cleanUpContent(node, itself, kill)
            ```
          * @param {HTMLNode} node
-         * @param {boolean} itself 
+         * @param {boolean} itself
          * @param {boolean=} kill When set to true, this will emit a non-bubbling "destroy" Event on the node
          * @title $.cleanUpContent(node,itself,kill)
          */
