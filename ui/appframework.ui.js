@@ -1315,12 +1315,12 @@
             if (el.getAttribute("js-scrolling") && (el.getAttribute("js-scrolling").toLowerCase() === "yes" || el.getAttribute("js-scrolling").toLowerCase() === "true")) {
                 $.cleanUpContent(el.childNodes[0], false, true);
                 $(el.childNodes[0]).html(content);
+                var scr=this.scrollingDivs[el.id];
+                if(scr&&scr.refresh)
+                    scr.addPullToRefresh();                
             } else {
                 $.cleanUpContent(el, false, true);
                 $(el).html(content);
-                var scr=this.scrollingDivs[el.id];
-                if(scr&&scr.refresh)
-                    scr.addPullToRefresh();
             }
             if (newDiv.getAttribute("data-title"))
                 el.setAttribute("data-title",newDiv.getAttribute("data-title"));
@@ -1849,7 +1849,7 @@
                     var refreshFunction;
                     var doReturn = false;
                     var retainDiv = $.query("#" + urlHash);
-                    var contentClasses = [];
+                    var contentClasses = '';
                     //Here we check to see if we are retaining the div, if so update it
                     if (retainDiv.length > 0) {
                         that.updatePanel(urlHash, xmlhttp.responseText);
