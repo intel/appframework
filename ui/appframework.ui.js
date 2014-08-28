@@ -1473,7 +1473,7 @@
                         if (trigger) {
                             refreshFunc();
                             return false;
-						}						
+                        }						
                     });
                 if(jsScroll){
                     $(tmp).children().eq(0).addClass("afScrollPanel");
@@ -1860,7 +1860,7 @@
                         var scr = that.scrollingDivs[urlHash];
                         if (scr && scr.refresh)
                             scr.hideRefresh();					
-					};					
+                    };					
 					
                     //Here we check to see if we are retaining the div, if so update it
                     if (retainDiv.length > 0) {
