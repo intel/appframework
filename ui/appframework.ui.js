@@ -1857,7 +1857,7 @@
                     var contentClasses = '';
 					
                     var hideRefresh = function(scrid) {
-                        var scr = that.scrollingDivs[urlHash];
+                        var scr = that.scrollingDivs[scrid];
                         if (scr && scr.refresh)
                             scr.hideRefresh();					
                     };					
