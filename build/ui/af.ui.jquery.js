@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-08-27 */
+/*! intel-appframework - v2.1.0 - 2014-08-29 */
 
 /**
  * jq.appframework.js
@@ -2942,6 +2942,7 @@ if (!Date.now)
             var $el = $(el);
 
             value = parseInt(value, 10);
+            if(isNaN(value)) return;
             if (!el.getAttribute("multiple")) {
                 el.selectedIndex = value;
                 $el.find("option").prop("selected", false);

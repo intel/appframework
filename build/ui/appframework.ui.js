@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-08-15 */
+/*! intel-appframework - v2.1.0 - 2014-08-29 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -2496,6 +2496,7 @@ if (!Date.now)
             var $el = $(el);
 
             value = parseInt(value, 10);
+            if(isNaN(value)) return;
             if (!el.getAttribute("multiple")) {
                 el.selectedIndex = value;
                 $el.find("option").prop("selected", false);
