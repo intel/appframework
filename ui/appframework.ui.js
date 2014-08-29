@@ -1318,10 +1318,12 @@
             } else {
                 $.cleanUpContent(el, false, true);
                 $(el).html(content);
-                var scr=this.scrollingDivs[el.id];
-                if(scr&&scr.refresh)
-                    scr.addPullToRefresh();
             }
+            
+            var scr=this.scrollingDivs[el.id];
+            if(scr&&scr.refresh)
+                scr.addPullToRefresh();              
+            
             if (newDiv.getAttribute("data-title"))
                 el.setAttribute("data-title",newDiv.getAttribute("data-title"));
         },
@@ -1468,7 +1470,10 @@
                     $(tmp).addClass("x-scroll");
                 if (refreshFunc)
                     $.bind(this.scrollingDivs[scrollEl.id], "refresh-release", function(trigger) {
-                        if (trigger) refreshFunc();
+                        if (trigger) {
+                            refreshFunc();
+                            return false;
+                        }						
                     });
                 if(jsScroll){
                     $(tmp).children().eq(0).addClass("afScrollPanel");
@@ -1849,18 +1854,28 @@
                     var refreshFunction;
                     var doReturn = false;
                     var retainDiv = $.query("#" + urlHash);
-                    var contentClasses = [];
+                    var contentClasses = '';
+					
+                    var hideRefresh = function(scrid) {
+                        var scr = that.scrollingDivs[urlHash];
+                        if (scr && scr.refresh)
+                            scr.hideRefresh();					
+                    };					
+					
                     //Here we check to see if we are retaining the div, if so update it
                     if (retainDiv.length > 0) {
+                        hideRefresh(urlHash);
                         that.updatePanel(urlHash, xmlhttp.responseText);
                         retainDiv.get(0).setAttribute("data-title",anchor.title ? anchor.title : target);
                     } else if (anchor.getAttribute("data-persist-ajax") || that.isAjaxApp) {
 
                         var refresh = (anchor.getAttribute("data-pull-scroller") === "true") ? true : false;
                         refreshFunction = refresh ? function() {
-                            anchor.refresh = true;
-                            that.loadContent(target, newTab, back, transition, anchor);
-                            anchor.refresh = false;
+                            setTimeout(function() {
+                                anchor.refresh = true;
+                                that.loadContent(target, newTab, back, transition, anchor);
+                                anchor.refresh = false;
+                            }, 500);
                         } : null;
                         //that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
                         var contents = $(xmlhttp.responseText);
@@ -1874,6 +1889,9 @@
                             contentClasses = contents.className;
                             contents = contents.html();
                         }
+						
+                        hideRefresh(urlHash);
+						
                         if ($("#" + urlHash).length > 0) {
                             that.updatePanel("#" + urlHash, contents);
                         } else if ($("div.panel[data-crc='" + urlHash + "']").length > 0) {
