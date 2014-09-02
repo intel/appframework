@@ -45,7 +45,7 @@
         },
         _add:function(touch){
             this[this.length]=touch;
-            this.length++;            
+            this.length++;
         }
     };
 
@@ -87,7 +87,7 @@
         if (type !== "touchend") {
             touchevt.touches = touchevt.changedTouches;
             touchevt.targetTouches = touchevt.changedTouches;
-        }        
+        }
         //target
 
         touchevt.mouseToTouch = true;
@@ -188,10 +188,6 @@
         }
     }, true);
 
-    window.addEventListener("resize", function () {
-        var touchevt = document.createEvent("Event");
-        touchevt.initEvent("orientationchange", true, true);
-        document.dispatchEvent(touchevt);
-    }, false);
+
 
 })(this.af);
