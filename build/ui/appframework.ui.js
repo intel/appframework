@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-09-02 */
+/*! intel-appframework - v2.1.0 - 2014-09-16 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -2682,7 +2682,7 @@ if (!Date.now)
         }
     }
 
-    var longTapDelay = 750;
+    var longTapDelay = 750,touchThreshold = 3;
     function longTap() {
         if (touch.last && (Date.now() - touch.last >= longTapDelay)) {
             touch.el.trigger("longTap");
@@ -2690,6 +2690,7 @@ if (!Date.now)
         }
     }
     var longTapTimer;
+
     $(document).ready(function() {
         var prevEl;
         $(document.body).bind("touchstart", function(e) {
@@ -2718,7 +2719,8 @@ if (!Date.now)
                 e = e.originalEvent;
             touch.x2 = e.touches[0].pageX;
             touch.y2 = e.touches[0].pageY;
-            clearTimeout(longTapTimer);
+            if(Math.abs(touch.x2-touch.x1)>touchThreshold||Math.abs(touch.y2-touch.y1)>touchThreshold)
+                clearTimeout(longTapTimer);
         }).bind("touchend", function(e) {
             if(e.originalEvent)
                 e=e.originalEvent;

@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-09-02 */
+/*! intel-appframework - v2.1.0 - 2014-09-16 */
 
 /**
  * jq.appframework.js
@@ -91,7 +91,7 @@
         $.os.androidICS = $.os.android && userAgent.match(/(Android)\s4/) ? true : false;
         $.os.ipad = userAgent.match(/(iPad).*OS\s([\d_]+)/) ? true : false;
         $.os.iphone = !$.os.ipad && userAgent.match(/(iPhone\sOS)\s([\d_]+)/) ? true : false;
-        $.os.ios7 = ($.os.ipad||$.os.iphone)&&userAgent.match(/7_/) ? true : false;
+        $.os.ios7 = ($.os.ipad||$.os.iphone)&&userAgent.match(/7_/)||($.os.ipad||$.os.iphone)&&userAgent.match(/8_/) ? true : false;
         $.os.webos = userAgent.match(/(webOS|hpwOS)[\s\/]([\d.]+)/) ? true : false;
         $.os.touchpad = $.os.webos && userAgent.match(/TouchPad/) ? true : false;
         $.os.ios = $.os.ipad || $.os.iphone;
@@ -3128,7 +3128,7 @@ if (!Date.now)
         }
     }
 
-    var longTapDelay = 750;
+    var longTapDelay = 750,touchThreshold = 3;
     function longTap() {
         if (touch.last && (Date.now() - touch.last >= longTapDelay)) {
             touch.el.trigger("longTap");
@@ -3136,6 +3136,7 @@ if (!Date.now)
         }
     }
     var longTapTimer;
+
     $(document).ready(function() {
         var prevEl;
         $(document.body).bind("touchstart", function(e) {
@@ -3164,7 +3165,8 @@ if (!Date.now)
                 e = e.originalEvent;
             touch.x2 = e.touches[0].pageX;
             touch.y2 = e.touches[0].pageY;
-            clearTimeout(longTapTimer);
+            if(Math.abs(touch.x2-touch.x1)>touchThreshold||Math.abs(touch.y2-touch.y1)>touchThreshold)
+                clearTimeout(longTapTimer);
         }).bind("touchend", function(e) {
             if(e.originalEvent)
                 e=e.originalEvent;

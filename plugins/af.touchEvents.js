@@ -30,7 +30,7 @@
         }
     }
 
-    var longTapDelay = 750;
+    var longTapDelay = 750,touchThreshold = 3;
     function longTap() {
         if (touch.last && (Date.now() - touch.last >= longTapDelay)) {
             touch.el.trigger("longTap");
@@ -38,6 +38,7 @@
         }
     }
     var longTapTimer;
+
     $(document).ready(function() {
         var prevEl;
         $(document.body).bind("touchstart", function(e) {
@@ -66,7 +67,8 @@
                 e = e.originalEvent;
             touch.x2 = e.touches[0].pageX;
             touch.y2 = e.touches[0].pageY;
-            clearTimeout(longTapTimer);
+            if(Math.abs(touch.x2-touch.x1)>touchThreshold||Math.abs(touch.y2-touch.y1)>touchThreshold)
+                clearTimeout(longTapTimer);
         }).bind("touchend", function(e) {
             if(e.originalEvent)
                 e=e.originalEvent;
