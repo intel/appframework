@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-09-16 */
+/*! intel-appframework - v2.1.0 - 2014-09-22 */
 
 /**
  * jq.appframework.js
@@ -3409,7 +3409,10 @@ if (!Date.now)
             }
 
             //this.log("hiding address bar");
-            if ($.os.desktop || $.os.kindle) {
+            if($.os.ios7){
+                window.scrollTo(1, 1);
+            }
+            else if ($.os.desktop || $.os.kindle) {
                 this.layer.style.height = "100%";
             } else if ($.os.android) {
                 //on some phones its immediate
@@ -3611,7 +3614,9 @@ if (!Date.now)
             if (requirePanning || $.feat.nativeTouchScroll) this.checkDOMTree(e.target, this.layer);
             //scrollend check
             if (this.isScrolling) {
+
                 //remove prev timeout
+
                 if (this.scrollTimeout_ !== null) {
                     clearTimeout(this.scrollTimeout_);
                     this.scrollTimeout_ = null;
@@ -3619,11 +3624,13 @@ if (!Date.now)
                     if (this.scrollTimeoutEl_ !== this.scrollingEl_) this.scrollEnded(false);
                     else this.blockPossibleClick_ = true;
                     //check if event was already set
-                } else if (this.scrollTimeoutEl_) {
+
+                } else  {
                     //trigger
                     this.scrollEnded(true);
-                    this.blockPossibleClick_ = true;
+                    this.blockPossibleClick_ = false;
                 }
+
             }
 
             // We allow forcing native tap in android devices (required in special cases)
@@ -3680,6 +3687,7 @@ if (!Date.now)
         ignoreScrolling: function(el) {
             if (el.scrollWidth === undefined || el.clientWidth === undefined) return true;
             if (el.scrollHeight === undefined || el.clientHeight === undefined) return true;
+
             return false;
         },
 
@@ -3708,7 +3716,6 @@ if (!Date.now)
 
             //check native scroll
             if ($.feat.nativeTouchScroll) {
-
                 //prevent errors
                 if (this.ignoreScrolling(el)) {
                     return;
@@ -3722,10 +3729,12 @@ if (!Date.now)
                     this.isScrolling = true;
                     return;
                 } else if (this.allowsHorizontalScroll(el, styles)) {
+
                     this.isScrollingVertical_ = false;
                     this.scrollingEl_ = null;
                     this.isScrolling = true;
                 }
+
             }
             //check recursive up to top element
             var isTarget = (el === parentTarget);
@@ -3791,6 +3800,7 @@ if (!Date.now)
             //don't allow document scroll unless a specific click demands it further ahead
             if (!$.os.ios || !this.requiresNativeTap) this.allowDocumentScroll_ = false;
 
+
             //panning action
             if (this.isPanning_ && itMoved) {
                 //wait 2 secs and cancel
@@ -3809,6 +3819,7 @@ if (!Date.now)
 
                 //fire click
                 if (!this.blockClicks && !this.blockPossibleClick_) {
+
                     var theTarget = e.target;
                     var changedTouches = e.changedTouches ? e.changedTouches[0] : e.touches[0];
                     if (theTarget.nodeType === 3) theTarget = theTarget.parentNode;
@@ -4017,7 +4028,7 @@ if (!Date.now)
                 $el.find("header").show();
                 $el.find("footer").show();
                 setTimeout(function(){
-                    $el.removeClass("hidden");
+                    $el.removeClass("hidden").addClass("show");
                     self.onShow(self);
                 },50);
             },

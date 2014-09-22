@@ -23,9 +23,7 @@
     padding: 10px;
     opacity: 1;
     -webkit-transform: scale(1);
-    -webkit-transition: all  0.20s  ease-in-out;
     transform:scale(1);
-    transition: all 0.20s  ease-in-out;
     position: absolute;
     z-index: 1000000;
     top: 50%;
@@ -40,10 +38,13 @@
 
 .afPopup.hidden {
     opacity: 0;
-    -webkit-transform: scale(0);
-    top: 50%;
-    left: 50%;
-    margin: 0px auto;
+    -webkit-transform: scale(0.1);
+
+}
+
+.afPopup.show {
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .afPopup>HEADER{
