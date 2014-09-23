@@ -222,7 +222,7 @@ if (!window.af || typeof(af) !== "function") {
 
             if (selector[0] === "#" && selector.indexOf(".") === -1 &&selector.indexOf(",") === -1 && selector.indexOf(" ") === -1 && selector.indexOf(">") === -1) {
                 if (what === document)
-                    _shimNodes(what.getElementById(selector.replace("#", "")), this);
+                    _shimNodes(what.getElementById(selector.slice(1)), this);
                 else
                     _shimNodes(_selectorAll(selector, what), this);
             } else if ((selector[0] === "<" && selector[selector.length - 1] === ">") || (selector.indexOf("<") !== -1 && selector.indexOf(">") !== -1)) //html
