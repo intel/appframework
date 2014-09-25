@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-09-22 */
+/*! intel-appframework - v2.1.0 - 2014-09-25 */
 
 /**
  * jq.appframework.js
@@ -5358,6 +5358,7 @@ if (!Date.now)
             var self = this;
             var $cnt=$.query("#modalContainer");
 
+            if(!this.modalReference_) return;
             var useScroller = this.scrollingDivs.hasOwnProperty(this.modalReference_.attr("id"));
 
 
@@ -5380,7 +5381,7 @@ if (!Date.now)
                     $(self.modalReference_.get(0).childNodes[0]).append($cnt.children().eq(0).contents());
                     self.modalReference_.children().eq(0).append($("#modalFooter footer"));
                 }
-
+                self.modalReference_=null;
                // $cnt.html("", true);
             },this.transitionTime);
         },
@@ -5413,11 +5414,11 @@ if (!Date.now)
                 $.cleanUpContent(el, false, true);
                 $(el).html(content);
             }
-            
+
             var scr=this.scrollingDivs[el.id];
             if(scr&&scr.refresh)
-                scr.addPullToRefresh();              
-            
+                scr.addPullToRefresh();
+
             if (newDiv.getAttribute("data-title"))
                 el.setAttribute("data-title",newDiv.getAttribute("data-title"));
         },
@@ -5567,7 +5568,7 @@ if (!Date.now)
                         if (trigger) {
                             refreshFunc();
                             return false;
-                        }						
+                        }
                     });
                 if(jsScroll){
                     $(tmp).children().eq(0).addClass("afScrollPanel");
@@ -5949,13 +5950,13 @@ if (!Date.now)
                     var doReturn = false;
                     var retainDiv = $.query("#" + urlHash);
                     var contentClasses = '';
-					
+
                     var hideRefresh = function(scrid) {
                         var scr = that.scrollingDivs[scrid];
                         if (scr && scr.refresh)
-                            scr.hideRefresh();					
-                    };					
-					
+                            scr.hideRefresh();
+                    };
+
                     //Here we check to see if we are retaining the div, if so update it
                     if (retainDiv.length > 0) {
                         hideRefresh(urlHash);
@@ -5983,9 +5984,9 @@ if (!Date.now)
                             contentClasses = contents.className;
                             contents = contents.html();
                         }
-						
+
                         hideRefresh(urlHash);
-						
+
                         if ($("#" + urlHash).length > 0) {
                             that.updatePanel("#" + urlHash, contents);
                         } else if ($("div.panel[data-crc='" + urlHash + "']").length > 0) {
