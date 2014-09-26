@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+
+<head>
+
+    <title>Form Example Template</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" type="text/css" href="../build/icons.css" />
+    <link rel="stylesheet" type="text/css" href="../build/af.ui.css" />
+
+
+     <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../build/appframework.ui.js"></script>
+
+</head>
+
+<body>
+
+    <div id="splashscreen" class='ui-loader heavy'>
+        App Framework - Form
+        <br>
+        <br>
+        <span class='ui-icon ui-icon-loading spin'></span>
+        <h1>Starting app</h1>
+    </div>
+
+    <div class="view" id="mainview">
+        <header>
+            <h1>Form Example</h1>
+        </header>
+
+        <div class="pages">
+
+
+
+
+             <!--List of Form Elements-->
+            <div class="panel" data-title="Form" id="list" data-selected="true">
+
+              <div class="formGroupHead">Standard</div>
+              <form>
+                <input type="range">
+                <input type="text" placeholder="test">
+                <input type="search" placeholder="search">
+                <textarea rows="6" placeholder="Enter your address"></textarea>
+              </form>
+
+            <div class="formGroupHead">Grouping</div>
+            <form>
+              <div class="input-group">
+                <input type="text" placeholder="test">
+                <input type="search" placeholder="search">
+                <textarea rows="6" placeholder="Enter your address"></textarea>
+              </div>
+            </form>
+
+            <div class="formGroupHead">Labeled</div>
+            <form>
+              <label for="test1">First Name</label>
+              <input id="test1" type="text" placeholder="test">
+              <label for="test2">Search</label>
+              <input id="test2" type="search" placeholder="search">
+              <label for="test3">Info Name</label>
+              <textarea id="test3" rows="6" placeholder="Enter your address"></textarea>
+            </form>
+
+            <form>
+              <div class="input-group">
+                <label for="test1">First Name</label>
+                <input id="test1" type="text" placeholder="test">
+                <label for="test2">Search</label>
+                <input id="test2" type="search" placeholder="search">
+                <label for="test3">Info Name</label>
+                <textarea id="test3" rows="6" placeholder="Enter your address"></textarea>
+                <input type="submit" class="button" value="Submit" style='float:right;'>
+              </div>
+            </form>
+
+    <div class="formGroupHead">Radios</div>
+    <form>
+        <div class="input-group">
+            <label>Gender</label>
+            <input id="aaaa" type="radio" name="test" value="1">
+            <label for="aaaa">Male</label>
+            <input id="bbbb" type="radio" name="test" value="2">
+            <label for="bbbb">Female</label>
+            <input id="cccc" type="radio" name="test" value="3">
+            <label for="cccc">N/A</label>
+            <br style="clear:both">
+            <input type="submit" class="button" value="Submit" style='float:right;'>
+        </div>
+    </form>
+    <div class="formGroupHead">Checkbox and Button</div>
+    <form>
+        <div class="input-group">
+            <label>Gender</label>
+            <input id="aaaaa" type="checkbox" name="test2" value="1">
+            <label for="aaaaa">Male</label>
+            <input id="bbbbb" type="checkbox" name="test2" value="2">
+            <label for="bbbbb">Female</label>
+            <input id="ccccc" type="checkbox" name="test2" value="3">
+            <label for="ccccc">N/A</label>
+            <br style="clear:both">
+            <input type="submit" class="button" value="Submit" style='float:right;'>
+        </div>
+    </form>
+
+    <div class="formGroupHead">Toggle Switches</div>
+    <form>
+        <div class="input-group">
+            <label>Gender</label>
+            <input id="toggle1" type="checkbox" name="toggle1" value="1" class="toggle">
+            <label for="toggle1" data-on="On" data-off="Off"><span></span>
+            </label>
+            <input id="toggle2" type="radio" name="toggle2" value="1" class="toggle">
+            <label for="toggle2" data-on="Yes" data-off="No"><span></span>
+            </label>
+            <input id="toggle3" type="radio" name="toggle2" value="1" class="toggle">
+            <label for="toggle3" data-on="Yes" data-off="No"><span></span>
+            </label>
+
+        </div>
+    </form>
+            </div>
+
+        <!--Detail View Pages for each list item-->
+        <div class="panel" data-title="Item 1" id="item1" data-footer="none">
+            <p>This is detail view for Item 1</p>
+        </div>
+
+        <div class="panel" data-title="Item 2" id="item2" data-footer="none">
+            <p>This is detail view for Item 2</p>
+        </div>
+
+        <div class="panel" data-title="Item 3" id="item3" data-footer="none">
+            <p>This is detail view for Item 3</p>
+        </div>
+
+        <div class="panel" data-title="Item 4" id="item4" data-footer="none">
+            <p>This is detail view for Item 4</p>
+        </div>
+
+        <div class="panel" data-title="Item 5" id="item5" data-footer="none">
+            <p>This is detail view for Item 5</p>
+        </div>
+
+        <div class="panel" data-title="Item 6" id="item6" data-footer="none">
+            <p>This is detail view for Item 6</p>
+        </div>
+
+        <div class="panel" data-title="Item 7" id="item7" data-footer="none">
+            <p>This is detail view for Item 7</p>
+        </div>
+
+        <div class="panel" data-title="Item 8" id="item8" data-footer="none">
+            <p>This is detail view for Item 8</p>
+        </div>
+
+        <div class="panel" data-title="Item 9" id="item9" data-footer="none">
+            <p>This is detail view for Item 9</p>
+        </div>
+
+        <div class="panel" data-title="Item 10" id="item10" data-footer="none">
+            <p>This is detail view for Item 10</p>
+        </div>
+
+        <div class="panel" data-title="Item 11" id="item11" data-footer="none">
+            <p>This is detail view for Item 11</p>
+        </div>
+
+        <div class="panel" data-title="Item 12" id="item12" data-footer="none">
+            <p>This is detail view for Item 12</p>
+        </div>
+
+        </div>
+    </div>
+
+
+</body>
+
+</html>

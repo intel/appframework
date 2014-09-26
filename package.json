@@ -1,0 +1,59 @@
+{
+  "name": "intel-appframework",
+  "version": "3.0.0",
+  "description": "App Framework is a Javascript framework targeted at HTML5 browsers with a blazingly fast query selector library that supports W3C queries.",
+  "main": "build/appframework.ui.min.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/01org/appframework.git"
+  },
+  "authors": [
+    {
+      "name": "Ian Maffett",
+      "email": "ian.maffett@intel.com"
+    }
+  ],
+  "engines": {
+    "node": ">=0.8.14 <0.11"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/01org/appframework/issues"
+  },
+  "keywords": [
+    "mobile",
+    "app",
+    "html5",
+    "hybrid",
+    "cordova",
+    "phonegap",
+    "tablet",
+    "touch"
+  ],
+  "devDependencies": {
+    "blanket": "~1.1.5",
+    "chai": "~1.7.2",
+    "express": "~3.3.7",
+    "grunt": "~0.4.1",
+    "grunt-banner": "~0.2.0",
+    "grunt-cli": "~0.1.9",
+    "grunt-closure-compiler": "~0.0.21",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-cssmin": "~0.4.1",
+    "grunt-contrib-jshint": "~0.6.2",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-karma": "^0.8.3",
+    "grunt-mochaccino": "~0.1.7",
+    "karma": "^0.12.17",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-coverage": "^0.2.4",
+    "karma-html2js-preprocessor": "^0.1.0",
+    "karma-htmlfile-reporter": "^0.1.2",
+    "karma-mocha": "^0.1.6",
+    "mocha": "^1.20.1",
+    "grunt-contrib-less": "latest",
+    "grunt-contrib-watch": "latest"
+  }
+}

@@ -1,0 +1,2 @@
+dox <../src/af.ui.js > af.ui.json
+node docgen.js  "af.ui.json"
