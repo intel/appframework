@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+
+<head>
+
+    <title>AF/React</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" type="text/css" href="../../build/af.ui.css" />
+    <link rel="stylesheet" type="text/css" href="../../build/icons.css" />
+
+
+   <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js"></script>
+    <script src="../../build/appframework.ui.min.js"></script>
+    <script src="http://fb.me/react-0.11.2.js"></script>
+    <script src="http://fb.me/JSXTransformer-0.11.2.js"></script>
+
+
+</head>
+
+<body id="todoaf">
+    <div id="splashscreen" class='ui-loader heavy'>
+        App Framework
+        <br>
+        <br>
+        <span class='ui-icon ui-icon-loading spin'></span>
+        <h1>Starting app</h1>
+
+    </div>
+    <div class="view" id="mainview">
+        <header>
+            <h1>Welcome</h1>
+        </header>
+        <div class="pages">
+            <div class="panel active" id="main" data-title="Welcome" data-selected="true">
+
+                <h1>Todo</h1>
+                <div id="todoform"></div>
+                <hr>
+                <h3 style="font-size:10px">Long press to delete</h3>
+                <div id="todolist"></div>
+            </div>
+            <div class="panel" id="about" data-title="About">
+                This basic demo shows how to use React and App Framework UI together.
+            </div>
+        </div>
+        <footer>
+            <a href="#main" class="icon home" data-transition="slide">todo</a>
+            <a href="#about" class="icon settings" data-transition="slide">about</a>
+        </footer>
+    </div>
+
+
+</body>
+<script  type="text/jsx" charset="utf-8" src="js/app.jsx"></script>
+
+
+</html>

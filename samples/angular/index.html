@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+
+<head>
+
+    <title>AF/Angular</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" type="text/css" href="../../build/af.ui.css" />
+    <link rel="stylesheet" type="text/css" href="../../build/icons.css" />
+
+
+   <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js"></script>
+    <script src="../../build/appframework.ui.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js"></script>
+
+
+</head>
+
+<body id="todoaf">
+    <div id="splashscreen" class='ui-loader heavy'>
+        App Framework
+        <br>
+        <br>
+        <span class='ui-icon ui-icon-loading spin'></span>
+        <h1>Starting app</h1>
+
+    </div>
+    <div class="view" id="mainview">
+        <header>
+            <h1>Welcome</h1>
+        </header>
+        <div class="pages">
+            <div class="panel active" id="main" data-title="Welcome" data-selected="true"  ng-controller="TodoCtrl" data-include="partials/todo.html">
+            </div>
+            <div class="panel" id="about" data-title="About">
+                This basic demo shows how to use Angular and App Framework UI together.
+            </div>
+        </div>
+        <footer>
+            <a href="#main" class="icon home" data-transition="slide">todo</a>
+            <a href="#about" class="icon settings" data-transition="slide">about</a>
+        </footer>
+    </div>
+</body>
+<script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/controllers.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/directives.js"></script>
+
+</html>
