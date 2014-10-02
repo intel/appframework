@@ -667,15 +667,13 @@
 
             var slashIndex = newDiv.indexOf("/");
             var hashLink = "";
-            var what=target;
             if (slashIndex !== -1) {
                 // Ignore everything after the slash for loading
-                hashLink = what.substr(slashIndex);
-                newDiv = what.substr(0, slashIndex);
+                hashLink = newDiv.substr(slashIndex);
+                newDiv = newDiv.substr(0, slashIndex);
             }
 
             newDiv = $.query("#" + newDiv).get(0);
-
             if (!newDiv) {
                 $(document).trigger("missingpanel", null, {missingTarget: target});
                 this.doingTransition=false;

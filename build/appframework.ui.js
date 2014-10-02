@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2014-08-08 */
+/*! intel-appframework - v3.0.0 - 2014-10-02 */
 
 /**
  * af.shim.js
@@ -964,15 +964,13 @@ window.af=window.jq=jQuery;
 
             var slashIndex = newDiv.indexOf("/");
             var hashLink = "";
-            var what=target;
             if (slashIndex !== -1) {
                 // Ignore everything after the slash for loading
-                hashLink = what.substr(slashIndex);
-                newDiv = what.substr(0, slashIndex);
+                hashLink = newDiv.substr(slashIndex);
+                newDiv = newDiv.substr(0, slashIndex);
             }
 
             newDiv = $.query("#" + newDiv).get(0);
-
             if (!newDiv) {
                 $(document).trigger("missingpanel", null, {missingTarget: target});
                 this.doingTransition=false;
@@ -1021,6 +1019,7 @@ window.af=window.jq=jQuery;
                 //Need to transition the view
                 newView=currentView||newView;
                 this.runViewTransition(transition,view,newView,newDiv,back);
+
                 this.updateViewHistory(view,newDiv,transition,target);
                 isNewView=true;
             }
@@ -1759,10 +1758,25 @@ window.af=window.jq=jQuery;
             touch.y2 = e.touches[0].pageY;
             if(!didParentCheck&&(Math.abs(touch.x2-touch.x1)>5||Math.abs(touch.y2-touch.y1)>5))
             {
+                var moveX=Math.abs(touch.x2-touch.x1)>5;
+                var moveY=Math.abs(touch.y2-touch.y1)>5;
+
                 didParentCheck=true;
                 touch.el.trigger("swipeStart",[e]);
                 touch.el.trigger("swipeStart" + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)), [touch,e]);
-                parentChecker=touch.el.closest(".swipe,.swipe-x,.swipe-y, .swipe-reveal").length!==0;
+                var parentContainers=touch.el.closest(".swipe, .swipe-reveal, .swipe-x, .swipe-y");
+                var elScroller=touch.el.closest(".x-scroll, .y-scroll, .scroll");
+
+
+                parentChecker=touch.el.closest(".swipe, .swipe-reveal").length!==0;
+                if(elScroller.parent(parentContainers).length!==0)
+                {
+                    parentChecker=false;
+                }
+                else if(moveX&&touch.el.closest(".swipe-x").length!==0)
+                    parentChecker=true;
+                else if(moveY&&touch.el.closest(".swipe-y").length!==0)
+                    parentChecker=true;
             }
 
             if($.os.android){
@@ -1782,8 +1796,25 @@ window.af=window.jq=jQuery;
                 touch = {};
             } else if (touch.x2 > 0 || touch.y2 > 0) {
                 (Math.abs(touch.x1 - touch.x2) > 30 || Math.abs(touch.y1 - touch.y2) > 30) &&
-                touch.el.trigger("swipe") &&
-                touch.el.trigger("swipe" + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)), touch);
+                touch.el.trigger("swipe");
+                //touch.el.trigger("swipe" + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)), touch);
+                //@TODO - don't dispatch when you need to block it (scrolling areas)
+                var direction= (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2));
+                var scrollDir=".x-scroll";
+                var swipeDir=".swipe-x";
+                if(direction.toLowerCase()==="up"||direction.toLowerCase()==="down"){
+                    scrollDir=".y-scroll";
+                    swipeDir=".swipe-y";
+                }
+                var swipe=touch.el.closest(swipeDir);
+                var scroller=touch.el.closest(scrollDir);
+
+                if((swipe.length===0||scroller.length===0)||swipe.find(scroller).length==0)
+                {
+
+                    touch.el.trigger("swipe"+direction);
+                }
+
                 touch.x1 = touch.x2 = touch.y1 = touch.y2 = touch.last = 0;
             } else if ("last" in touch) {
                 touch.el.trigger("tap");

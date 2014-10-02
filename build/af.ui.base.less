@@ -455,6 +455,68 @@ h2 {
     0% { transform:translate3d(-200px,0,0)}
 }
 
+.slide-full-in {
+    -webkit-animation: slide-full-inAnimation 300ms forwards;
+    animation: slide-full-inAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes slide-full-inAnimation {
+    0% { -webkit-transform:translate3d(100%,0,0)}
+    100% { -webkit-transform:translate3d(0,0,0)}
+}
+
+@keyframes slide-full-inAnimation {
+    0% { transform:translate3d(100%,0,0)}
+    100% { transform:translate3d(0,0,0)}
+}
+
+.slide-full-in.animation-reverse {
+    -webkit-animation: slide-full-inAnimationReverse 450ms forwards;
+    animation: slide-full-inAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes slide-full-inAnimationReverse {
+    100% { -webkit-transform:translate3d(100%,0,0)}
+    0% { -webkit-transform:translate3d(0,0,0)}
+}
+
+@keyframes slide-full-inAnimationReverse {
+    100% { transform:translate3d(100%,0,0)}
+    0% { transform:translate3d(0,0,0)}
+}
+
+.slide-full-out {
+    -webkit-animation: slide-full-outAnimation 300ms forwards;
+    animation: slide-full-outAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes slide-full-outAnimation {
+    0% { -webkit-transform:translate3d(0%,0,0)}
+    100% { -webkit-transform:translate3d(-100%,0,0)}
+}
+
+@keyframes slide-full-outAnimation {
+    0% { transform:translate3d(0%,0,0)}
+    100% { transform:translate3d(-100%,0,0)}
+}
+
+.slide-full-out.animation-reverse {
+    -webkit-animation: slide-full-outAnimationReverse 450ms forwards;
+    animation: slide-full-outAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes slide-full-outAnimationReverse {
+    100% { -webkit-transform:translate3d(0%,0,0)}
+    0% { -webkit-transform:translate3d(-100%,0,0)}
+}
+
+@keyframes slide-full-outAnimationReverse {
+    100% { transform:translate3d(0%,0,0)}
+    0% { transform:translate3d(-100%,0,0)}
+}
+
 .pop-in {
     -webkit-animation: pop-inAnimation 300ms forwards;
     animation: pop-inAnimation 300ms forwards;
@@ -910,65 +972,65 @@ h2 {
 }
 
 .header-load {
-    -webkit-animation: header-loadAnimation 500ms forwards;
-    animation: header-loadAnimation 500ms forwards;
+    -webkit-animation: header-loadAnimation 300ms forwards;
+    animation: header-loadAnimation 300ms forwards;
     
 }
 
 @-webkit-keyframes header-loadAnimation {
     0% { -webkit-transform: translate3d(0%, 0, 0);}
-    100% { -webkit-transform: translate3d(-20%, 0, 0);opacity:0.5}
+    100% { -webkit-transform: translate3d(-90px, 0, 0);opacity:0.1}
 }
 
 @keyframes header-loadAnimation {
     0% { transform: translate3d(0%, 0, 0);}
-    100% { transform: translate3d(-20%, 0, 0);opacity:0.5}
+    100% { transform: translate3d(-90px, 0, 0);opacity:0.1}
 }
 
 .header-load.animation-reverse {
-    -webkit-animation: header-loadAnimationReverse 750ms forwards;
-    animation: header-loadAnimationReverse 750ms forwards;
+    -webkit-animation: header-loadAnimationReverse 450ms forwards;
+    animation: header-loadAnimationReverse 450ms forwards;
 }
 
 @-webkit-keyframes header-loadAnimationReverse {
     100% { -webkit-transform: translate3d(0%, 0, 0);}
-    0% { -webkit-transform: translate3d(-20%, 0, 0);opacity:0.5}
+    0% { -webkit-transform: translate3d(-90px, 0, 0);opacity:0.1}
 }
 
 @keyframes header-loadAnimationReverse {
     100% { transform: translate3d(0%, 0, 0);}
-    0% { transform: translate3d(-20%, 0, 0);opacity:0.5}
+    0% { transform: translate3d(-90px, 0, 0);opacity:0.1}
 }
 
 .header-unload {
-    -webkit-animation: header-unloadAnimation 500ms forwards;
-    animation: header-unloadAnimation 500ms forwards;
+    -webkit-animation: header-unloadAnimation 300ms forwards;
+    animation: header-unloadAnimation 300ms forwards;
     
 }
 
 @-webkit-keyframes header-unloadAnimation {
     0% { -webkit-transform: translate3d(0%, 0, 0);}
-    100% { -webkit-transform: translate3d(20%, 0, 0);opacity:0.5}
+    100% { -webkit-transform: translate3d(90px, 0, 0);opacity:0.1}
 }
 
 @keyframes header-unloadAnimation {
     0% { transform: translate3d(0%, 0, 0);}
-    100% { transform: translate3d(20%, 0, 0);opacity:0.5}
+    100% { transform: translate3d(90px, 0, 0);opacity:0.1}
 }
 
 .header-unload.animation-reverse {
-    -webkit-animation: header-unloadAnimationReverse 750ms forwards;
-    animation: header-unloadAnimationReverse 750ms forwards;
+    -webkit-animation: header-unloadAnimationReverse 450ms forwards;
+    animation: header-unloadAnimationReverse 450ms forwards;
 }
 
 @-webkit-keyframes header-unloadAnimationReverse {
     100% { -webkit-transform: translate3d(0%, 0, 0);}
-    0% { -webkit-transform: translate3d(20%, 0, 0);opacity:0.5}
+    0% { -webkit-transform: translate3d(90px, 0, 0);opacity:0.1}
 }
 
 @keyframes header-unloadAnimationReverse {
     100% { transform: translate3d(0%, 0, 0);}
-    0% { transform: translate3d(20%, 0, 0);opacity:0.5}
+    0% { transform: translate3d(90px, 0, 0);opacity:0.1}
 }
 
 .header-load-to {
@@ -978,12 +1040,12 @@ h2 {
 }
 
 @-webkit-keyframes header-load-toAnimation {
-    0% { -webkit-transform: translate3d(20%, 0, 0);opacity:0.5}
+    0% { -webkit-transform: translate3d(90px, 0, 0);opacity:0.1}
     100% { -webkit-transform: translate3d(0%, 0, 0);opacity:1}
 }
 
 @keyframes header-load-toAnimation {
-    0% { transform: translate3d(20%, 0, 0);opacity:0.5}
+    0% { transform: translate3d(90px, 0, 0);opacity:0.1}
     100% { transform: translate3d(0%, 0, 0);opacity:1}
 }
 
@@ -993,12 +1055,12 @@ h2 {
 }
 
 @-webkit-keyframes header-load-toAnimationReverse {
-    100% { -webkit-transform: translate3d(20%, 0, 0);opacity:0.5}
+    100% { -webkit-transform: translate3d(90px, 0, 0);opacity:0.1}
     0% { -webkit-transform: translate3d(0%, 0, 0);opacity:1}
 }
 
 @keyframes header-load-toAnimationReverse {
-    100% { transform: translate3d(20%, 0, 0);opacity:0.5}
+    100% { transform: translate3d(90px, 0, 0);opacity:0.1}
     0% { transform: translate3d(0%, 0, 0);opacity:1}
 }
 
@@ -1009,12 +1071,12 @@ h2 {
 }
 
 @-webkit-keyframes header-unload-toAnimation {
-    0% { -webkit-transform: translate3d(-20%, 0, 0);opacity:0.5}
+    0% { -webkit-transform: translate3d(-90px, 0, 0);opacity:0.1}
     100% { -webkit-transform: translate3d(0%, 0, 0);opacity:1}
 }
 
 @keyframes header-unload-toAnimation {
-    0% { transform: translate3d(-20%, 0, 0);opacity:0.5}
+    0% { transform: translate3d(-90px, 0, 0);opacity:0.1}
     100% { transform: translate3d(0%, 0, 0);opacity:1}
 }
 
@@ -1024,12 +1086,12 @@ h2 {
 }
 
 @-webkit-keyframes header-unload-toAnimationReverse {
-    100% { -webkit-transform: translate3d(-20%, 0, 0);opacity:0.5}
+    100% { -webkit-transform: translate3d(-90px, 0, 0);opacity:0.1}
     0% { -webkit-transform: translate3d(0%, 0, 0);opacity:1}
 }
 
 @keyframes header-unload-toAnimationReverse {
-    100% { transform: translate3d(-20%, 0, 0);opacity:0.5}
+    100% { transform: translate3d(-90px, 0, 0);opacity:0.1}
     0% { transform: translate3d(0%, 0, 0);opacity:1}
 }
 
@@ -1665,7 +1727,6 @@ input[type="radio"]:checked+label:before, input[type="checkbox"]:checked+label:b
     cursor:pointer;
     background-color:#eee;
     border:1px solid #666;
-    border-radius:6px;
     text-decoration: none;
     z-index:2;
 }
@@ -1687,7 +1748,7 @@ input[type="radio"]:checked+label:before, input[type="checkbox"]:checked+label:b
     content:'';
     position:absolute;
     width:25px;
-    height:25px;
+    height:27px;
     background-color:inherit;
     top:3px;
     left:-11px;
@@ -1702,7 +1763,7 @@ input[type="radio"]:checked+label:before, input[type="checkbox"]:checked+label:b
     content:'';
     position:absolute;
     width:25px;
-    height:25px;
+    height:27px;
     background-color:inherit;
     top:3px;
     right:-11px;
@@ -1755,12 +1816,12 @@ input[type="radio"]:checked+label:before, input[type="checkbox"]:checked+label:b
     }
     & > .button:first-child {
         border-left: 1px solid #666;
-        border-top-left-radius: 6px;
-        border-bottom-left-radius: 6px;
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
     }
     & > .button:last-child {
-        border-top-right-radius: 6px;
-        border-bottom-right-radius: 6px;
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
     }
 }
 .button-grouped.flex {
@@ -1795,16 +1856,16 @@ input[type="radio"]:checked+label:before, input[type="checkbox"]:checked+label:b
         border-bottom: 0px solid #666;
     }
     & > .button:first-child {
-        border-top-left-radius: 6px;
-        border-top-right-radius: 6px;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
         border-bottom-left-radius:0px;
         border-bottom-right-radius:0px;
     }
     & > .button:last-child {
         border-top-right-radius:0px;
         border-top-left-radius:0px;
-        border-bottom-right-radius: 6px;
-        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 3px;
+        border-bottom-left-radius: 3px;
         border-bottom:1px solid #666;
     }
 }
