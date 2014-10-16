@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2014-10-02 */
+/*! intel-appframework - v3.0.0 - 2014-10-16 */
 
 /**
  * af.shim.js
@@ -1409,7 +1409,9 @@ window.af=window.jq=jQuery;
 
             $(document).on("click","footer a:not(.button)",function(e){
                 var $item=$(e.target);
+                var footer=$item.closest("footer");
                 $item.parent().find("a:not(.button)").attr("data-ignore-pressed","true").removeClass("pressed");
+                if(footer.attr("data-ignore-pressed")==="true") return;
                 $item.addClass("pressed");
             });
         }
