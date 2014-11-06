@@ -1849,9 +1849,13 @@
             }
 
             anchor = anchor || document.createElement("a");
-            xmlhttp.onreadystatechange = function() {
-                if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                    this.doingTransition = false;
+            this.ajaxUrl = target;
+            var newtarget = this.useAjaxCacheBuster ? target + (target.split("?")[1] ? "&" : "?") + "cache=" + Math.random() * 10000000000000000 : target;
+
+            $.ajax({
+                url: newtarget,
+                success:function(responseText){
+                    that.doingTransition = false;
                     var refreshFunction;
                     var doReturn = false;
                     var retainDiv = $.query("#" + urlHash);
@@ -1866,7 +1870,7 @@
                     //Here we check to see if we are retaining the div, if so update it
                     if (retainDiv.length > 0) {
                         hideRefresh(urlHash);
-                        that.updatePanel(urlHash, xmlhttp.responseText);
+                        that.updatePanel(urlHash, responseText);
                         retainDiv.get(0).setAttribute("data-title",anchor.title ? anchor.title : target);
                     } else if (anchor.getAttribute("data-persist-ajax") || that.isAjaxApp) {
 
@@ -1878,8 +1882,8 @@
                                 anchor.refresh = false;
                             }, 500);
                         } : null;
-                        //that.addContentDiv(urlHash, xmlhttp.responseText, refresh, refreshFunction);
-                        var contents = $(xmlhttp.responseText);
+                        //that.addContentDiv(urlHash, responseText, refresh, refreshFunction);
+                        var contents = $(responseText);
 
                         if (contents.hasClass("panel")) {
                             contentClasses = contents.get(0).className;
@@ -1899,10 +1903,10 @@
                             that.updatePanel($("div.panel[data-crc='" + urlHash + "']").get(0).id, contents);
                             urlHash = $("div.panel[data-crc='" + urlHash + "']").get(0).id;
                         } else
-                            urlHash = that.addContentDiv(urlHash, xmlhttp.responseText, anchor.title ? anchor.title : target, refresh, refreshFunction);
+                            urlHash = that.addContentDiv(urlHash, responseText, anchor.title ? anchor.title : target, refresh, refreshFunction);
                     } else {
 
-                        that.updatePanel("afui_ajax", xmlhttp.responseText);
+                        that.updatePanel("afui_ajax", responseText);
                         $.query("#afui_ajax").attr("data-title",anchor.title ? anchor.title : target);
                         that.loadContent("#afui_ajax", newTab, back, transition);
 
@@ -1911,7 +1915,7 @@
                     //Let's load the content now.
                     //We need to check for any script tags and handle them
                     var div = document.createElement("div");
-                    $(div).html(xmlhttp.responseText);
+                    $(div).html(responseText);
 
                     that.parseScriptTags(div);
 
@@ -1932,16 +1936,11 @@
                     that.loadContent("#" + urlHash, newTab, back, transition);
                     if (that.showLoading) that.hideMask();
                     return null;
-                }
-                else if(xmlhttp.readyState === 4) {
+                },
+                error:function(){
                     $.ui.hideMask();
                 }
-            };
-            this.ajaxUrl = target;
-            var newtarget = this.useAjaxCacheBuster ? target + (target.split("?")[1] ? "&" : "?") + "cache=" + Math.random() * 10000000000000000 : target;
-            xmlhttp.open("GET", newtarget, true);
-            xmlhttp.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-            xmlhttp.send();
+            });
             // show Ajax Mask
             if (this.showLoading) this.showMask();
         },

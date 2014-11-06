@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-08-27 */
+/*! intel-appframework - v2.1.0 - 2014-11-06 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -1666,6 +1666,7 @@ if (!window.af || typeof(af) !== "function") {
                 $(script).remove();
                 delete window[callbackName];
                 options.success.call(context, data);
+                options.complete.call(context, data);
             };
             if (options.url.indexOf("callback=?") !== -1) {
                 script.src = options.url.replace(/=\?/, "=" + callbackName);
