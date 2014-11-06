@@ -1664,6 +1664,7 @@ if (!window.af || typeof(af) !== "function") {
                 $(script).remove();
                 delete window[callbackName];
                 options.success.call(context, data);
+                options.complete.call(context, data);
             };
             if (options.url.indexOf("callback=?") !== -1) {
                 script.src = options.url.replace(/=\?/, "=" + callbackName);
