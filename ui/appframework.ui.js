@@ -2353,7 +2353,7 @@
                 x: "0%",
                 y: 0
             });
-            that.finishTransition(oldDiv);
+            that.finishTransition(oldDiv,currDiv);
             currDiv.style.zIndex = 2;
             oldDiv.style.zIndex = 1;
         },
