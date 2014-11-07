@@ -865,8 +865,12 @@ if (!window.af || typeof(af) !== "function") {
             */
             removeProp: function(prop) {
                 var removePropFn=function(param) {
-                    if (that[i][param])
-                        that[i][param] = undefined;
+                    try {
+                        if (that[i][param]) {
+                            that[i][param] = undefined;
+                        }
+                    } catch(e) {}
+
                     if (that[i].afmCacheId && _propCache[that[i].afmCacheId]) {
                         delete _propCache[that[i].afmCacheId][prop];
                     }
