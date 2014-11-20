@@ -1886,6 +1886,7 @@ if (!window.af || typeof(af) !== "function") {
                         xhr.onreadystatechange = empty;
                         xhr.abort();
                         settings.error.call(context, xhr, "timeout");
+                        settings.complete.call(context, xhr, "timeout");
                     }, settings.timeout);
                 xhr.send(settings.data);
             } catch (e) {

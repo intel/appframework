@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-11-06 */
+/*! intel-appframework - v2.1.0 - 2014-11-20 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -1888,6 +1888,7 @@ if (!window.af || typeof(af) !== "function") {
                         xhr.onreadystatechange = empty;
                         xhr.abort();
                         settings.error.call(context, xhr, "timeout");
+                        settings.complete.call(context, xhr, "timeout");
                     }, settings.timeout);
                 xhr.send(settings.data);
             } catch (e) {
