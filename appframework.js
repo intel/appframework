@@ -2107,6 +2107,7 @@ if (!window.af || typeof(af) !== "function") {
             $.os.ipad = userAgent.match(/(iPad).*OS\s([\d_]+)/) ? true : false;
             $.os.iphone = !$.os.ipad && userAgent.match(/(iPhone\sOS)\s([\d_]+)/) ? true : false;
             $.os.ios7 = ($.os.ipad||$.os.iphone)&&userAgent.match(/7_/)||($.os.ipad||$.os.iphone)&&userAgent.match(/8_/) ? true : false;
+
             $.os.webos = userAgent.match(/(webOS|hpwOS)[\s\/]([\d.]+)/) ? true : false;
             $.os.touchpad = $.os.webos && userAgent.match(/TouchPad/) ? true : false;
             $.os.ios = $.os.ipad || $.os.iphone;
@@ -2128,6 +2129,10 @@ if (!window.af || typeof(af) !== "function") {
             $.feat.cssPrefix = $.os.webkit ? "Webkit" : $.os.fennec ? "Moz" : $.os.ie ? "ms" : $.os.opera ? "O" : "";
             $.feat.cssTransformStart = !$.os.opera ? "3d(" : "(";
             $.feat.cssTransformEnd = !$.os.opera ? ",0)" : ")";
+            if($.os.ios) {
+                if(Promise&&Promise.toString().indexOf("native")!==-1)
+                    $.os.ios7=true;
+            }
             if ($.os.android && !$.os.webkit)
                 $.os.android = false;
             var items=["Webkit","Moz","ms","O"];

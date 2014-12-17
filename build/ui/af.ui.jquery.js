@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-11-06 */
+/*! intel-appframework - v2.1.0 - 2014-12-17 */
 
 /**
  * jq.appframework.js
@@ -106,6 +106,10 @@
         $.os.tizen = userAgent.match(/Tizen/i)?true:false;
         $.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || "ontouchstart" in window);
         $.os.kindle=userAgent.match(/Silk-Accelerated/)?true:false;
+        if($.os.ios) {
+            if(Promise&&Promise.toString().indexOf("native")!==-1)
+                $.os.ios7=true;
+        }
         //features
         $.feat = {};
         var head = document.documentElement.getElementsByTagName("head")[0];
@@ -6447,7 +6451,7 @@ if (!Date.now)
                 x: "0%",
                 y: 0
             });
-            that.finishTransition(oldDiv);
+            that.finishTransition(oldDiv,currDiv);
             currDiv.style.zIndex = 2;
             oldDiv.style.zIndex = 1;
         },

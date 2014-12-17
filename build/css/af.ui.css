@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-09-22 */
+/*! intel-appframework - v2.1.0 - 2014-12-17 */
 
 /**********************************************************
     GENERAL UI ELEMENTS
@@ -2619,9 +2619,7 @@ margin-top: 15px;
 
 #afui.ios7.overlayStatusbar{
    margin-top: 20px;
-background: #f9f9f9;
-margin-bottom: -20px;
-padding-bottom: 20px;
+    background: #f9f9f9;
 }
 
 #afui.ios7 .header .button {
@@ -2637,10 +2635,10 @@ padding-bottom: 20px;
 }
 
 #afui.ios7 .panel, #afui.ios7 #modalContainer {
-    background:rgba(238,238,238,255);    
+    background:rgba(238,238,238,255);
 }
 
-#afui.ios7 .panel h2 { 
+#afui.ios7 .panel h2 {
     color:inherit;
 }
 
@@ -2656,7 +2654,7 @@ padding-bottom: 20px;
 }
 
 #afui.ios7 .footer>footer>a.pressed:not(.button) {
-    border-radius:0;    
+    border-radius:0;
     background:transparent;
 }
 
@@ -2782,7 +2780,7 @@ padding-bottom: 20px;
 #afui.ios7 .button-grouped * ,
 #afui.ios7 .button-grouped >  .button:first-child,
 #afui.ios7 .button-grouped.vertical * ,
-#afui.ios7 .button-grouped.vertical >  .button:last-child, 
+#afui.ios7 .button-grouped.vertical >  .button:last-child,
 #afui.ios7 .header .button-grouped > .button {
     border-color:rgba(82,155,234,255);
 }
@@ -2895,7 +2893,7 @@ padding-bottom: 20px;
 }
 
 #afui.ios7 .button.next {
-    border:none;   
+    border:none;
 }
 
 #afui.ios7 .button.previous::after {
@@ -2984,7 +2982,7 @@ padding-bottom: 20px;
 
 #afui.ios7 .button.slate {
     color:#171F28;
-    background-color:transparent;    
+    background-color:transparent;
 }
 
 #afui.ios7 .af-badge {
@@ -3002,14 +3000,14 @@ top: -10px;
 margin-top: 15px;
 border-radius:2px;
 }
- 
+
 #afui.ios7 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    position: relative;    
+    position: relative;
     z-index: 1;
     width: 15px;
     height: 15px;
-    -webkit-border-radius: 40px;    
+    -webkit-border-radius: 40px;
     border-radius: 40px;
     border:1px solid #333;
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ccc), color-stop(100%,#ccc));

@@ -104,6 +104,10 @@
         $.os.tizen = userAgent.match(/Tizen/i)?true:false;
         $.os.supportsTouch = ((window.DocumentTouch && document instanceof window.DocumentTouch) || "ontouchstart" in window);
         $.os.kindle=userAgent.match(/Silk-Accelerated/)?true:false;
+        if($.os.ios) {
+            if(Promise&&Promise.toString().indexOf("native")!==-1)
+                $.os.ios7=true;
+        }
         //features
         $.feat = {};
         var head = document.documentElement.getElementsByTagName("head")[0];

@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-11-06 */
+/*! intel-appframework - v2.1.0 - 2014-12-17 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -6001,7 +6001,7 @@ if (!Date.now)
                 x: "0%",
                 y: 0
             });
-            that.finishTransition(oldDiv);
+            that.finishTransition(oldDiv,currDiv);
             currDiv.style.zIndex = 2;
             oldDiv.style.zIndex = 1;
         },
