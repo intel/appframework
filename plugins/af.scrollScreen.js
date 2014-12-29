@@ -14,12 +14,9 @@
         _hideHeaderOnScroll:false,
         _hideFooterOnScroll:false,
         hideHeaderOnScroll:function(){
-            console.log(this);
-            this._hideHeaderOnScroll=true;
             this.setupScrollStart();
         },
         hideFooterOnScroll:function(){
-            this._hideFooterOnScroll=true;
             this.setupScrollStart();
         }
     });
