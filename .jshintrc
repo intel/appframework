@@ -1,0 +1,34 @@
+{
+  "camelcase": true,
+  "curly": false,
+  "eqeqeq": true,
+  "forin": false,
+  "immed": true,
+  "indent": 4,
+  "noempty": true,
+  "quotmark": "double",
+  "evil": true,
+
+  "undef": true,
+  "globals": {
+    "module": false,
+    "define": false,
+    "process": false,
+    "__dirname": false,
+    "console": false,
+    "WebKitCSSMatrix": false,
+    "MSCSSMatrix": false,
+    "MSApp": false,
+    "jQuery": false,
+    "af":false
+  },
+
+  "unused": true,
+  "browser": true,
+  "strict": true,
+  "trailing": true,
+  "maxdepth": 5,
+  "newcap": false,
+  "expr": true,
+  "scripturl": true
+}
