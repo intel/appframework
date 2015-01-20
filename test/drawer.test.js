@@ -28,9 +28,10 @@ describe("drawerTests",function(){
         //$("#leftcover").trigger("click");
         $.afui.drawer.show("#left","left","cover");
         setTimeout(function(){
+
             expect($("#left").hasClass("active")).to.be.true;
             done();
-        },400);
+        },500);
     });
 
     it("should close the left menu",function(done){
@@ -38,7 +39,7 @@ describe("drawerTests",function(){
         setTimeout(function(){
             expect($("#left").hasClass("active")).to.be.false;
             done();
-        },400);
+        },500);
     });
     it("should show left menu by push data directive",function(done){
         $("#leftpush").trigger("click");
@@ -46,7 +47,7 @@ describe("drawerTests",function(){
             expect($("#left").hasClass("active")).to.be.true;
             expect($($.afui.activeDiv).closest('.view').find('.slide-left-out').length===3).to.be.true
             done();
-        },400);
+        },500);
     });
 
     it("should close the left menu by data directive",function(done){
@@ -54,7 +55,7 @@ describe("drawerTests",function(){
         setTimeout(function(){
             expect($("#left").hasClass("active")).to.be.false;
             done();
-        },400);
+        },500);
     });
 
     it("should show right menu by cover js call",function(done){
@@ -64,7 +65,7 @@ describe("drawerTests",function(){
             expect($("#right").hasClass("active")).to.be.true;
             expect($($.afui.activeDiv).closest('.view').find('.slide-right-out').length===3).to.be.true
             done();
-        },400);
+        },500);
     });
 
     it("should close the right menu",function(done){
@@ -72,7 +73,7 @@ describe("drawerTests",function(){
         setTimeout(function(){
             expect($("#right").hasClass("active")).to.be.false;
             done();
-        },400);
+        },500);
     });
 
      it("should show left menu and auto hide",function(done){
@@ -84,8 +85,8 @@ describe("drawerTests",function(){
             setTimeout(function(){
                 expect($("#left").hasClass("active")).to.be.false;
                 done();
-            },400);
-        },400);
+            },500);
+        },500);
     });
 
     it("should show left",function(done){
@@ -93,7 +94,7 @@ describe("drawerTests",function(){
         $.afui.drawer.show("#left","left","reveal");
         setTimeout(function(){
                 done();
-        },400);
+        },500);
     });
     it("should hide left when showing right",function(done){
         //$("#leftcover").trigger("click");
@@ -103,7 +104,7 @@ describe("drawerTests",function(){
                 expect($("#right").hasClass("active")).to.be.true;
                 expect($("#left").hasClass("active")).to.be.false;
                 done();
-        },400);
+        },500);
     });
 
      it("should  do nothing when already shown",function(done){
@@ -112,6 +113,6 @@ describe("drawerTests",function(){
         setTimeout(function(){
                 $.afui.drawer.show("#left","left","reveal");
                 done();
-        },400);
+        },500);
     });
 });
