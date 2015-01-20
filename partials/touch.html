@@ -22,12 +22,12 @@ function showMoreSheet(){
    $.afui.actionsheet(
         [{
             text: 'Stuff',
-            cssClasses: ''            
+            cssClasses: ''
         }]);
 }
 </script>
     <h2>Touch Events</h2>
-     <a class='button' href='#main' data-transition='up-reveal:dismiss'>Back</a> 
+     <a class='button' href='#main' data-transition='up-reveal:dismiss'>Back</a>
 
     <ul class="list">
         <li><a id='taptest' >Tap <br>Test</a></li>
@@ -36,7 +36,7 @@ function showMoreSheet(){
         <li><a id='doubletaptest' >Double Tap Test</a></li>
         <li class="swipe-x swipe-y"><a id='swipetest' >Swipe Test</a></li>
         <li class="swipe-reveal">
-            <div class="swipe-content">Swipe to reveal with some </div>
+            <div class="swipe-content">Swipe to reveal options </div>
             <div class="swipe-hidden">
                 <a class="button more" onclick="showMoreSheet()">More</a>
                 <a class="button archive" onclick="$(this).closest('.swipe-reveal').remove()">Archive</a>

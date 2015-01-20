@@ -122,9 +122,8 @@
                 var swipe=touch.el.closest(swipeDir);
                 var scroller=touch.el.closest(scrollDir);
 
-                if((swipe.length===0||scroller.length===0)||swipe.find(scroller).length==0)
+                if((swipe.length===0||scroller.length===0)||swipe.find(scroller).length===0)
                 {
-
                     touch.el.trigger("swipe"+direction);
                 }
 

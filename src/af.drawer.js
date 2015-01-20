@@ -12,7 +12,6 @@
         return this;
     }
 
-    var isTransitioning=false;
     var transitionTypes = {
         push:function(elem,reverse,position){
             var item=$(elem).closest(".view").children().filter(":not(nav):not(aside)");
@@ -39,6 +38,7 @@
     Drawer.prototype= {
         defaultTransition:"slide",
         defaultAnimation:"cover",
+        isTransitioning:false,
         autoHide:function(event){
             event.preventDefault();
             this.hide();

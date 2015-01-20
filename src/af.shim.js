@@ -85,6 +85,7 @@
     });
     function detectUA($, userAgent) {
         $.os = {};
+
         $.os.webkit = userAgent.match(/WebKit\/([\d.]+)/) ? true : false;
         $.os.android = userAgent.match(/(Android)\s+([\d.]+)/) || userAgent.match(/Silk-Accelerated/) ? true : false;
         $.os.androidICS = $.os.android && userAgent.match(/(Android)\s4/) ? true : false;
@@ -110,9 +111,18 @@
         $.feat.cssPrefix = $.os.webkit ? "Webkit" : $.os.fennec ? "Moz" : $.os.ie ? "ms" : $.os.opera ? "O" : "";
         $.feat.cssTransformStart = !$.os.opera ? "3d(" : "(";
         $.feat.cssTransformEnd = !$.os.opera ? ",0)" : ")";
-
         if ($.os.android && !$.os.webkit)
             $.os.android = false;
+
+
+        //IE tries to be webkit
+        if(userAgent.match(/IEMobile/i)){
+            $.each($.os,function(ind){
+                $.os[ind]=false;
+            });
+            $.os.ie=true;
+            $.os.ieTouch=true;
+        }
 
     }
 

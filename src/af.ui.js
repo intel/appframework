@@ -82,6 +82,7 @@
         function setupCustomTheme() {
 
             if (that.useOSThemes) {
+
                 var $el=$(document.body);
                 $el.removeClass("ios ios7 win8 tizen bb android light dark firefox");
                 if ($.os.android)
@@ -712,7 +713,7 @@
             var isNewView=false;
             //check nested views
             if(!isSplitViewParent)
-                isSplitViewParent=currentView.parent().closest('.view').length===1;
+                isSplitViewParent=currentView.parent().closest(".view").length===1;
 
             if(isSplitViewParent&&currentView&&currentView.get(0)!==view.get(0))
                 $(currentView).trigger("nestedviewunload");
