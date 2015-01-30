@@ -108,7 +108,7 @@
         $.os.kindle=userAgent.match(/Silk-Accelerated/)?true:false;
         //features
         $.feat = {};
-        $.feat.cssPrefix = $.os.webkit ? "Webkit" : $.os.fennec ? "Moz" : $.os.ie ? "ms" : $.os.opera ? "O" : "";
+
         $.feat.cssTransformStart = !$.os.opera ? "3d(" : "(";
         $.feat.cssTransformEnd = !$.os.opera ? ",0)" : ")";
         if ($.os.android && !$.os.webkit)
@@ -122,6 +122,11 @@
             });
             $.os.ie=true;
             $.os.ieTouch=true;
+        }
+        var items=["Webkit","Moz","ms","O"];
+        for(var j=0;j<items.length;j++){
+            if(document.documentElement.style[items[j]+"Transform"]==="")
+                $.feat.cssPrefix=items[j];
         }
 
     }

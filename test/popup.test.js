@@ -15,7 +15,7 @@ describe("popup",function(){
         $("#popuptest").remove();
     });
 
-    
+
     it("should display a popup and dismiss it",function(done){
 
         var msg="Hello 1";
@@ -52,7 +52,7 @@ describe("popup",function(){
         });
         setTimeout(function(){
             $('#myTestPopup').length.should.eql(1);
-            $("#myTestPopup #action").trigger("click");            
+            $("#myTestPopup #action").trigger("click");
             setTimeout(function(){
                 $('#myTestPopup').length.should.eql(0);
                 expect(what).to.be.true;
@@ -84,7 +84,7 @@ describe("popup",function(){
         });
         setTimeout(function(){
             $('#myTestPopup').length.should.eql(1);
-            $("#myTestPopup #cancel").trigger("click");            
+            $("#myTestPopup #cancel").trigger("click");
             setTimeout(function(){
                 $('#myTestPopup').length.should.eql(0);
                 expect(what).to.be.true;
@@ -113,14 +113,15 @@ describe("popup",function(){
 
         $.afui.ready(function(){
             done();
-        });        
+        });
         $.afui.launch();
 
     });
-    
+
     /// data directives
+    /*
     it("should display a data directive popup and dismiss it",function(done){
-        
+
         $("#popuptest a").trigger("click");
         setTimeout(function(){
             $('.afPopup').length.should.eql(1);
@@ -132,4 +133,5 @@ describe("popup",function(){
 
         },200);
     });
+*/
 });
