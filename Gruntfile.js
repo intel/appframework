@@ -32,18 +32,6 @@ module.exports = function (grunt) {
                   configFile: 'karma.conf.js'
                     }
         },
-        mochaccino: {
-            unit: [ "test/**/*.test.js" ],
-
-            // unit tests with coverage report in build/
-            cov: {
-                files: [
-                    { src: "test/**/*.test.js" }
-                ],
-                reporter: "html-cov",
-                reportDir: "build/cov"
-            }
-        },
 
         concat: {
             afui:{
