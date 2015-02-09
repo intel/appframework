@@ -1,0 +1,702 @@
+.slide-in {
+    -webkit-animation: slide-inAnimation 300ms forwards;
+    animation: slide-inAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes slide-inAnimation {
+    0% { -webkit-transform:translate3d(100%,0,0)}
+    100% { -webkit-transform:translate3d(0,0,0)}
+}
+
+@keyframes slide-inAnimation {
+    0% { transform:translate3d(100%,0,0)}
+    100% { transform:translate3d(0,0,0)}
+}
+
+.slide-in.animation-reverse {
+    -webkit-animation: slide-inAnimationReverse 450ms forwards;
+    animation: slide-inAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes slide-inAnimationReverse {
+    100% { -webkit-transform:translate3d(100%,0,0)}
+    0% { -webkit-transform:translate3d(0,0,0)}
+}
+
+@keyframes slide-inAnimationReverse {
+    100% { transform:translate3d(100%,0,0)}
+    0% { transform:translate3d(0,0,0)}
+}
+
+.slide-out {
+    -webkit-animation: slide-outAnimation 300ms forwards;
+    animation: slide-outAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes slide-outAnimation {
+    0% { -webkit-transform:translate3d(0%,0,0)}
+    100% { -webkit-transform:translate3d(-200px,0,0)}
+}
+
+@keyframes slide-outAnimation {
+    0% { transform:translate3d(0%,0,0)}
+    100% { transform:translate3d(-200px,0,0)}
+}
+
+.slide-out.animation-reverse {
+    -webkit-animation: slide-outAnimationReverse 450ms forwards;
+    animation: slide-outAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes slide-outAnimationReverse {
+    100% { -webkit-transform:translate3d(0%,0,0)}
+    0% { -webkit-transform:translate3d(-200px,0,0)}
+}
+
+@keyframes slide-outAnimationReverse {
+    100% { transform:translate3d(0%,0,0)}
+    0% { transform:translate3d(-200px,0,0)}
+}
+
+.slide-full-in {
+    -webkit-animation: slide-full-inAnimation 300ms forwards;
+    animation: slide-full-inAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes slide-full-inAnimation {
+    0% { -webkit-transform:translate3d(100%,0,0)}
+    100% { -webkit-transform:translate3d(0,0,0)}
+}
+
+@keyframes slide-full-inAnimation {
+    0% { transform:translate3d(100%,0,0)}
+    100% { transform:translate3d(0,0,0)}
+}
+
+.slide-full-in.animation-reverse {
+    -webkit-animation: slide-full-inAnimationReverse 450ms forwards;
+    animation: slide-full-inAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes slide-full-inAnimationReverse {
+    100% { -webkit-transform:translate3d(100%,0,0)}
+    0% { -webkit-transform:translate3d(0,0,0)}
+}
+
+@keyframes slide-full-inAnimationReverse {
+    100% { transform:translate3d(100%,0,0)}
+    0% { transform:translate3d(0,0,0)}
+}
+
+.slide-full-out {
+    -webkit-animation: slide-full-outAnimation 300ms forwards;
+    animation: slide-full-outAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes slide-full-outAnimation {
+    0% { -webkit-transform:translate3d(0%,0,0)}
+    100% { -webkit-transform:translate3d(-100%,0,0)}
+}
+
+@keyframes slide-full-outAnimation {
+    0% { transform:translate3d(0%,0,0)}
+    100% { transform:translate3d(-100%,0,0)}
+}
+
+.slide-full-out.animation-reverse {
+    -webkit-animation: slide-full-outAnimationReverse 450ms forwards;
+    animation: slide-full-outAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes slide-full-outAnimationReverse {
+    100% { -webkit-transform:translate3d(0%,0,0)}
+    0% { -webkit-transform:translate3d(-100%,0,0)}
+}
+
+@keyframes slide-full-outAnimationReverse {
+    100% { transform:translate3d(0%,0,0)}
+    0% { transform:translate3d(-100%,0,0)}
+}
+
+.pop-in {
+    -webkit-animation: pop-inAnimation 300ms forwards;
+    animation: pop-inAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes pop-inAnimation {
+    0% { opacity: 0; -webkit-transform: scale(0.5)}
+    100% { opacity: 1; -webkit-transform: scale(1)}
+}
+
+@keyframes pop-inAnimation {
+    0% { opacity: 0; transform: scale(0.5)}
+    100% { opacity: 1; transform: scale(1)}
+}
+
+.pop-in.animation-reverse {
+    -webkit-animation: pop-inAnimationReverse 450ms forwards;
+    animation: pop-inAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes pop-inAnimationReverse {
+    100% { opacity: 0; -webkit-transform: scale(0.5)}
+    0% { opacity: 1; -webkit-transform: scale(1)}
+}
+
+@keyframes pop-inAnimationReverse {
+    100% { opacity: 0; transform: scale(0.5)}
+    0% { opacity: 1; transform: scale(1)}
+}
+
+.pop-out {
+    -webkit-animation: noTransition 300ms forwards;
+    animation: noTransition 300ms forwards;
+    
+}
+
+.fade-in {
+    -webkit-animation: fade-inAnimation 300ms forwards;
+    animation: fade-inAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes fade-inAnimation {
+    0% { opacity: 0;}
+    100% { opacity: 1;}
+}
+
+@keyframes fade-inAnimation {
+    0% { opacity: 0;}
+    100% { opacity: 1;}
+}
+
+.fade-in.animation-reverse {
+    -webkit-animation: fade-inAnimationReverse 450ms forwards;
+    animation: fade-inAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes fade-inAnimationReverse {
+    100% { opacity: 0;}
+    0% { opacity: 1;}
+}
+
+@keyframes fade-inAnimationReverse {
+    100% { opacity: 0;}
+    0% { opacity: 1;}
+}
+
+.fade-out {
+    -webkit-animation: noTransition 300ms forwards;
+    animation: noTransition 300ms forwards;
+    
+}
+
+.up-in {
+    -webkit-animation: up-inAnimation 300ms forwards;
+    animation: up-inAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes up-inAnimation {
+    0% { -webkit-transform: translate3d(0%, 100%, 0)}
+    100% { -webkit-transform: translate3d(0%, 0%, 0)}
+}
+
+@keyframes up-inAnimation {
+    0% { transform: translate3d(0%, 100%, 0)}
+    100% { transform: translate3d(0%, 0%, 0)}
+}
+
+.up-in.animation-reverse {
+    -webkit-animation: up-inAnimationReverse 450ms forwards;
+    animation: up-inAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes up-inAnimationReverse {
+    100% { -webkit-transform: translate3d(0%, 100%, 0)}
+    0% { -webkit-transform: translate3d(0%, 0%, 0)}
+}
+
+@keyframes up-inAnimationReverse {
+    100% { transform: translate3d(0%, 100%, 0)}
+    0% { transform: translate3d(0%, 0%, 0)}
+}
+
+.up-out {
+    -webkit-animation: up-outAnimation 300ms forwards;
+    animation: up-outAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes up-outAnimation {
+    0% { -webkit-transform: translate3d(0%, 0, 0)}
+    100% { -webkit-transform: translate3d(0%, -200px, 0)}
+}
+
+@keyframes up-outAnimation {
+    0% { transform: translate3d(0%, 0, 0)}
+    100% { transform: translate3d(0%, -200px, 0)}
+}
+
+.up-out.animation-reverse {
+    -webkit-animation: up-outAnimationReverse 450ms forwards;
+    animation: up-outAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes up-outAnimationReverse {
+    100% { -webkit-transform: translate3d(0%, 0, 0)}
+    0% { -webkit-transform: translate3d(0%, -200px, 0)}
+}
+
+@keyframes up-outAnimationReverse {
+    100% { transform: translate3d(0%, 0, 0)}
+    0% { transform: translate3d(0%, -200px, 0)}
+}
+
+.down-in {
+    -webkit-animation: down-inAnimation 300ms forwards;
+    animation: down-inAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes down-inAnimation {
+    0% { -webkit-transform: translate3d(0%, -100%, 0)}
+    100% { -webkit-transform: translate3d(0%, 0%, 0)}
+}
+
+@keyframes down-inAnimation {
+    0% { transform: translate3d(0%, -100%, 0)}
+    100% { transform: translate3d(0%, 0%, 0)}
+}
+
+.down-in.animation-reverse {
+    -webkit-animation: down-inAnimationReverse 450ms forwards;
+    animation: down-inAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes down-inAnimationReverse {
+    100% { -webkit-transform: translate3d(0%, -100%, 0)}
+    0% { -webkit-transform: translate3d(0%, 0%, 0)}
+}
+
+@keyframes down-inAnimationReverse {
+    100% { transform: translate3d(0%, -100%, 0)}
+    0% { transform: translate3d(0%, 0%, 0)}
+}
+
+.down-out {
+    -webkit-animation: down-outAnimation 300ms forwards;
+    animation: down-outAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes down-outAnimation {
+    0% { -webkit-transform: translate3d(0%, 0%, 0)}
+    100% { -webkit-transform: translate3d(0%, 200px, 0)}
+}
+
+@keyframes down-outAnimation {
+    0% { transform: translate3d(0%, 0%, 0)}
+    100% { transform: translate3d(0%, 200px, 0)}
+}
+
+.down-out.animation-reverse {
+    -webkit-animation: down-outAnimationReverse 450ms forwards;
+    animation: down-outAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes down-outAnimationReverse {
+    100% { -webkit-transform: translate3d(0%, 0%, 0)}
+    0% { -webkit-transform: translate3d(0%, 200px, 0)}
+}
+
+@keyframes down-outAnimationReverse {
+    100% { transform: translate3d(0%, 0%, 0)}
+    0% { transform: translate3d(0%, 200px, 0)}
+}
+
+.flip-in {
+    -webkit-animation: flip-inAnimation 300ms forwards;
+    animation: flip-inAnimation 300ms forwards;
+    z-index:5;backface-visibility: hidden;-webkit-backface-visibility: hidden;
+}
+
+@-webkit-keyframes flip-inAnimation {
+    0% { -webkit-transform:rotateY(180deg); }
+    100% { -webkit-transform:rotateY(0deg);}
+}
+
+@keyframes flip-inAnimation {
+    0% { transform:rotateY(180deg); }
+    100% { transform:rotateY(0deg);}
+}
+
+.flip-in.animation-reverse {
+    -webkit-animation: flip-inAnimationReverse 450ms forwards;
+    animation: flip-inAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes flip-inAnimationReverse {
+    100% { -webkit-transform:rotateY(180deg); }
+    0% { -webkit-transform:rotateY(0deg);}
+}
+
+@keyframes flip-inAnimationReverse {
+    100% { transform:rotateY(180deg); }
+    0% { transform:rotateY(0deg);}
+}
+
+.flip-out {
+    -webkit-animation: flip-outAnimation 300ms forwards;
+    animation: flip-outAnimation 300ms forwards;
+    z-index:4;backface-visibility: hidden;-webkit-backface-visibility: hidden;
+}
+
+@-webkit-keyframes flip-outAnimation {
+    0% { -webkit-transform:rotateY(0deg);}
+    100% { -webkit-transform:rotateY(180deg);}
+}
+
+@keyframes flip-outAnimation {
+    0% { transform:rotateY(0deg);}
+    100% { transform:rotateY(180deg);}
+}
+
+.flip-out.animation-reverse {
+    -webkit-animation: flip-outAnimationReverse 450ms forwards;
+    animation: flip-outAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes flip-outAnimationReverse {
+    100% { -webkit-transform:rotateY(0deg);}
+    0% { -webkit-transform:rotateY(180deg);}
+}
+
+@keyframes flip-outAnimationReverse {
+    100% { transform:rotateY(0deg);}
+    0% { transform:rotateY(180deg);}
+}
+
+.slide-left-in {
+    -webkit-animation: slide-left-inAnimation 300ms forwards;
+    animation: slide-left-inAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes slide-left-inAnimation {
+    0% { -webkit-transform:translate3d(-100%,0,0)}
+    100% { -webkit-transform:translate3d(0,0,0)}
+}
+
+@keyframes slide-left-inAnimation {
+    0% { transform:translate3d(-100%,0,0)}
+    100% { transform:translate3d(0,0,0)}
+}
+
+.slide-left-in.animation-reverse {
+    -webkit-animation: slide-left-inAnimationReverse 450ms forwards;
+    animation: slide-left-inAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes slide-left-inAnimationReverse {
+    100% { -webkit-transform:translate3d(-100%,0,0)}
+    0% { -webkit-transform:translate3d(0,0,0)}
+}
+
+@keyframes slide-left-inAnimationReverse {
+    100% { transform:translate3d(-100%,0,0)}
+    0% { transform:translate3d(0,0,0)}
+}
+
+.slide-left-out {
+    -webkit-animation: slide-left-outAnimation 300ms forwards;
+    animation: slide-left-outAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes slide-left-outAnimation {
+    0% { -webkit-transform:translate3d(0%,0,0)}
+    100% { -webkit-transform:translate3d(200px,0,0)}
+}
+
+@keyframes slide-left-outAnimation {
+    0% { transform:translate3d(0%,0,0)}
+    100% { transform:translate3d(200px,0,0)}
+}
+
+.slide-left-out.animation-reverse {
+    -webkit-animation: slide-left-outAnimationReverse 450ms forwards;
+    animation: slide-left-outAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes slide-left-outAnimationReverse {
+    100% { -webkit-transform:translate3d(0%,0,0)}
+    0% { -webkit-transform:translate3d(200px,0,0)}
+}
+
+@keyframes slide-left-outAnimationReverse {
+    100% { transform:translate3d(0%,0,0)}
+    0% { transform:translate3d(200px,0,0)}
+}
+
+.slide-right-in {
+    -webkit-animation: slide-right-inAnimation 300ms forwards;
+    animation: slide-right-inAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes slide-right-inAnimation {
+    0% { -webkit-transform:translate3d(100%,0,0)}
+    100% { -webkit-transform:translate3d(0,0,0)}
+}
+
+@keyframes slide-right-inAnimation {
+    0% { transform:translate3d(100%,0,0)}
+    100% { transform:translate3d(0,0,0)}
+}
+
+.slide-right-in.animation-reverse {
+    -webkit-animation: slide-right-inAnimationReverse 450ms forwards;
+    animation: slide-right-inAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes slide-right-inAnimationReverse {
+    100% { -webkit-transform:translate3d(100%,0,0)}
+    0% { -webkit-transform:translate3d(0,0,0)}
+}
+
+@keyframes slide-right-inAnimationReverse {
+    100% { transform:translate3d(100%,0,0)}
+    0% { transform:translate3d(0,0,0)}
+}
+
+.slide-right-out {
+    -webkit-animation: slide-right-outAnimation 300ms forwards;
+    animation: slide-right-outAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes slide-right-outAnimation {
+    0% { -webkit-transform:translate3d(0%,0,0)}
+    100% { -webkit-transform:translate3d(-200px,0,0)}
+}
+
+@keyframes slide-right-outAnimation {
+    0% { transform:translate3d(0%,0,0)}
+    100% { transform:translate3d(-200px,0,0)}
+}
+
+.slide-right-out.animation-reverse {
+    -webkit-animation: slide-right-outAnimationReverse 450ms forwards;
+    animation: slide-right-outAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes slide-right-outAnimationReverse {
+    100% { -webkit-transform:translate3d(0%,0,0)}
+    0% { -webkit-transform:translate3d(-200px,0,0)}
+}
+
+@keyframes slide-right-outAnimationReverse {
+    100% { transform:translate3d(0%,0,0)}
+    0% { transform:translate3d(-200px,0,0)}
+}
+
+.invoke-out {
+    -webkit-animation: invoke-outAnimation 500ms forwards;
+    animation: invoke-outAnimation 500ms forwards;
+    z-index:11
+}
+
+@-webkit-keyframes invoke-outAnimation {
+    0% { -webkit-transform:scale(1.0) translate3d(0%,0,0)}
+    50% { -webkit-transform: scale(0.8) translate3d(10%,0,0)}
+    100% { -webkit-transform: scale(0.8) translate3d(100%,0,0)}
+}
+
+@keyframes invoke-outAnimation {
+    0% { transform:scale(1.0) translate3d(0%,0,0)}
+    50% { transform: scale(0.8) translate3d(10%,0,0)}
+    100% { transform: scale(0.8) translate3d(100%,0,0)}
+}
+
+.invoke-out.animation-reverse {
+    -webkit-animation: invoke-outAnimationReverse 750ms forwards;
+    animation: invoke-outAnimationReverse 750ms forwards;
+}
+
+@-webkit-keyframes invoke-outAnimationReverse {
+    100% { -webkit-transform:scale(1.0) translate3d(0%,0,0)}
+    50% { -webkit-transform: scale(0.8) translate3d(10%,0,0)}
+    0% { -webkit-transform: scale(0.8) translate3d(100%,0,0)}
+}
+
+@keyframes invoke-outAnimationReverse {
+    100% { transform:scale(1.0) translate3d(0%,0,0)}
+    50% { transform: scale(0.8) translate3d(10%,0,0)}
+    0% { transform: scale(0.8) translate3d(100%,0,0)}
+}
+
+.invoke-in {
+    -webkit-animation: invoke-inAnimation 500ms forwards;
+    animation: invoke-inAnimation 500ms forwards;
+    z-index:10
+}
+
+@-webkit-keyframes invoke-inAnimation {
+    0% { -webkit-transform:scale(0.6) translate3d(-130%,0,0)}
+    50% { -webkit-transform: scale(0.8) translate3d(-110%,0,0)}
+    100% { -webkit-transform: scale(1) translate3d(0,0,0)}
+}
+
+@keyframes invoke-inAnimation {
+    0% { transform:scale(0.6) translate3d(-130%,0,0)}
+    50% { transform: scale(0.8) translate3d(-110%,0,0)}
+    100% { transform: scale(1) translate3d(0,0,0)}
+}
+
+.invoke-in.animation-reverse {
+    -webkit-animation: invoke-inAnimationReverse 750ms forwards;
+    animation: invoke-inAnimationReverse 750ms forwards;
+}
+
+@-webkit-keyframes invoke-inAnimationReverse {
+    100% { -webkit-transform:scale(0.6) translate3d(-130%,0,0)}
+    50% { -webkit-transform: scale(0.8) translate3d(-110%,0,0)}
+    0% { -webkit-transform: scale(1) translate3d(0,0,0)}
+}
+
+@keyframes invoke-inAnimationReverse {
+    100% { transform:scale(0.6) translate3d(-130%,0,0)}
+    50% { transform: scale(0.8) translate3d(-110%,0,0)}
+    0% { transform: scale(1) translate3d(0,0,0)}
+}
+
+.header-load {
+    -webkit-animation: header-loadAnimation 300ms forwards;
+    animation: header-loadAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes header-loadAnimation {
+    0% { -webkit-transform: translate3d(0%, 0, 0);}
+    100% { -webkit-transform: translate3d(-90px, 0, 0);opacity:0.1}
+}
+
+@keyframes header-loadAnimation {
+    0% { transform: translate3d(0%, 0, 0);}
+    100% { transform: translate3d(-90px, 0, 0);opacity:0.1}
+}
+
+.header-load.animation-reverse {
+    -webkit-animation: header-loadAnimationReverse 450ms forwards;
+    animation: header-loadAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes header-loadAnimationReverse {
+    100% { -webkit-transform: translate3d(0%, 0, 0);}
+    0% { -webkit-transform: translate3d(-90px, 0, 0);opacity:0.1}
+}
+
+@keyframes header-loadAnimationReverse {
+    100% { transform: translate3d(0%, 0, 0);}
+    0% { transform: translate3d(-90px, 0, 0);opacity:0.1}
+}
+
+.header-unload {
+    -webkit-animation: header-unloadAnimation 300ms forwards;
+    animation: header-unloadAnimation 300ms forwards;
+    
+}
+
+@-webkit-keyframes header-unloadAnimation {
+    0% { -webkit-transform: translate3d(0%, 0, 0);}
+    100% { -webkit-transform: translate3d(90px, 0, 0);opacity:0.1}
+}
+
+@keyframes header-unloadAnimation {
+    0% { transform: translate3d(0%, 0, 0);}
+    100% { transform: translate3d(90px, 0, 0);opacity:0.1}
+}
+
+.header-unload.animation-reverse {
+    -webkit-animation: header-unloadAnimationReverse 450ms forwards;
+    animation: header-unloadAnimationReverse 450ms forwards;
+}
+
+@-webkit-keyframes header-unloadAnimationReverse {
+    100% { -webkit-transform: translate3d(0%, 0, 0);}
+    0% { -webkit-transform: translate3d(90px, 0, 0);opacity:0.1}
+}
+
+@keyframes header-unloadAnimationReverse {
+    100% { transform: translate3d(0%, 0, 0);}
+    0% { transform: translate3d(90px, 0, 0);opacity:0.1}
+}
+
+.header-load-to {
+    -webkit-animation: header-load-toAnimation 500ms forwards;
+    animation: header-load-toAnimation 500ms forwards;
+    
+}
+
+@-webkit-keyframes header-load-toAnimation {
+    0% { -webkit-transform: translate3d(90px, 0, 0);opacity:0.1}
+    100% { -webkit-transform: translate3d(0%, 0, 0);opacity:1}
+}
+
+@keyframes header-load-toAnimation {
+    0% { transform: translate3d(90px, 0, 0);opacity:0.1}
+    100% { transform: translate3d(0%, 0, 0);opacity:1}
+}
+
+.header-load-to.animation-reverse {
+    -webkit-animation: header-load-toAnimationReverse 750ms forwards;
+    animation: header-load-toAnimationReverse 750ms forwards;
+}
+
+@-webkit-keyframes header-load-toAnimationReverse {
+    100% { -webkit-transform: translate3d(90px, 0, 0);opacity:0.1}
+    0% { -webkit-transform: translate3d(0%, 0, 0);opacity:1}
+}
+
+@keyframes header-load-toAnimationReverse {
+    100% { transform: translate3d(90px, 0, 0);opacity:0.1}
+    0% { transform: translate3d(0%, 0, 0);opacity:1}
+}
+
+.header-unload-to {
+    -webkit-animation: header-unload-toAnimation 500ms forwards;
+    animation: header-unload-toAnimation 500ms forwards;
+    
+}
+
+@-webkit-keyframes header-unload-toAnimation {
+    0% { -webkit-transform: translate3d(-90px, 0, 0);opacity:0.1}
+    100% { -webkit-transform: translate3d(0%, 0, 0);opacity:1}
+}
+
+@keyframes header-unload-toAnimation {
+    0% { transform: translate3d(-90px, 0, 0);opacity:0.1}
+    100% { transform: translate3d(0%, 0, 0);opacity:1}
+}
+
+.header-unload-to.animation-reverse {
+    -webkit-animation: header-unload-toAnimationReverse 750ms forwards;
+    animation: header-unload-toAnimationReverse 750ms forwards;
+}
+
+@-webkit-keyframes header-unload-toAnimationReverse {
+    100% { -webkit-transform: translate3d(-90px, 0, 0);opacity:0.1}
+    0% { -webkit-transform: translate3d(0%, 0, 0);opacity:1}
+}
+
+@keyframes header-unload-toAnimationReverse {
+    100% { transform: translate3d(-90px, 0, 0);opacity:0.1}
+    0% { transform: translate3d(0%, 0, 0);opacity:1}
+}
+

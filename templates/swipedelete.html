@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+
+<head>
+
+    <title>Swipe Delete Template</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" type="text/css" href="../build/icons.css" />
+    <link rel="stylesheet" type="text/css" href="../build/af.ui.css" />
+
+
+     <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../build/appframework.ui.js"></script>
+
+    <style>
+    .messageDate {
+        float:right;
+        color:#ccc;
+        margin-top: -8px;
+    }
+    .list li {
+        -webkit-transition: -webkit-transform 0.2s ease-out; transition: transform 0.2s ease-out;
+        position:absolute;
+        width:100%;
+        margin-left:0px !important;
+    }
+    .list li:nth-child(1){ -webkit-transform: translate3d(0, 0%, 0); transform: translate3d(0, 0%, 0); }
+    .list li:nth-child(2){ -webkit-transform: translate3d(0, 100%, 0); transform: translate3d(0, 100%, 0); }
+    .list li:nth-child(3){ -webkit-transform: translate3d(0, 200%, 0); transform: translate3d(0, 200%, 0); }
+    .list li:nth-child(4){ -webkit-transform: translate3d(0, 300%, 0); transform: translate3d(0, 300%, 0); }
+    .list li:nth-child(5){ -webkit-transform: translate3d(0, 400%, 0); transform: translate3d(0, 400%, 0); }
+    .list li:nth-child(6){ -webkit-transform: translate3d(0, 500%, 0); transform: translate3d(0, 500%, 0); }
+    .list li:nth-child(7){ -webkit-transform: translate3d(0, 600%, 0); transform: translate3d(0, 600%, 0); }
+    .list li:nth-child(8){ -webkit-transform: translate3d(0, 700%, 0); transform: translate3d(0, 700%, 0); }
+    .list li:nth-child(9){ -webkit-transform: translate3d(0, 800%, 0); transform: translate3d(0, 800%, 0); }
+    .list li:nth-child(10){ -webkit-transform: translate3d(0, 900%, 0); transform: translate3d(0, 900%, 0); }
+    </style>
+    <script>
+    function showMoreSheet(){
+        $.afui.actionsheet(
+        [{
+                text: 'Delete',
+                cssClasses: 'red'
+        }]);
+    }
+
+    function deleter(obj){
+
+    }
+
+    $(document).ready(function(){
+        $(".list").on("click",".archive",function(obj){
+            var $li=$(obj.target).closest("li");
+            $li.remove();
+
+        });
+    });
+
+    </script>
+</head>
+
+<body>
+
+    <div id="splashscreen" class='ui-loader heavy'>
+        App Framework - List View
+        <br>
+        <br>
+        <span class='ui-icon ui-icon-loading spin'></span>
+        <h1>Starting app</h1>
+    </div>
+
+    <div class="view" id="mainview">
+        <header>
+            <h1>List View Example</h1>
+        </header>
+
+        <div class="pages">
+
+             <!--Initial List of items-->
+            <div class="panel" data-title="List" id="list" data-selected="true">
+              <ul class="list">
+                <li class="swipe-reveal ">
+
+                    <div class="swipe-content">
+                        <b>Joe Smith</b><br>
+                        Did you run your TPS reports?
+                        <div class="messageDate chevron">11:11 am</div>
+                    </a>
+                    </div>
+                    <div class="swipe-hidden">
+                        <a class="button more" onclick="showMoreSheet()">More</a>
+                        <a class="button archive" >Archive</a>
+                    </div>
+                </li>
+                 <li class="swipe-reveal">
+                    <div class="swipe-content">
+                        <b>Glayds Astin</b><br>
+                        How about dinner at 3?
+                        <div class="messageDate chevron">9:14 am</div>
+                    </div>
+                    <div class="swipe-hidden">
+                        <a class="button more" onclick="showMoreSheet()">More</a>
+                        <a class="button archive" >Archive</a>
+                    </div>
+                </li>
+                 <li class="swipe-reveal">
+                    <div class="swipe-content">
+                        <b>Randall Naron</b><br>
+                        Don't forget the big game tonight
+                        <div class="messageDate chevron">yesterday</div>
+                    </div>
+                    <div class="swipe-hidden">
+                        <a class="button more" onclick="showMoreSheet()">More</a>
+                        <a class="button archive" >Archive</a>
+                    </div>
+                </li>
+                 <li class="swipe-reveal">
+                    <div class="swipe-content">
+                        <b>Vern Capell</b><br>
+                        Fantasy draft is Friday.
+                        <div class="messageDate chevron">yesterday</div>
+                    </div>
+                    <div class="swipe-hidden">
+                        <a class="button more" onclick="showMoreSheet()">More</a>
+                        <a class="button archive" >Archive</a>
+                    </div>
+                </li>
+                 <li class="swipe-reveal">
+                    <div class="swipe-content">
+                        <b>Phylicia Manor</b><br>
+                        Urgent message from ....
+                        <div class="messageDate chevron">Tuesday</div>
+                    </div>
+                    <div class="swipe-hidden">
+                        <a class="button more" onclick="showMoreSheet()">More</a>
+                        <a class="button archive" >Archive</a>
+                    </div>
+                </li>
+                 <li class="swipe-reveal">
+                    <div class="swipe-content">
+                        <b>Charles Seat</b><br>
+                        Go local sports team!
+                        <div class="messageDate chevron">Tuesday</div>
+                    </div>
+                    <div class="swipe-hidden">
+                        <a class="button more" onclick="showMoreSheet()">More</a>
+                        <a class="button archive" >Archive</a>
+                    </div>
+                </li>
+                 <li class="swipe-reveal">
+                    <div class="swipe-content">
+                        <b>Sebastian Schmid</b><br>
+                        Thanks for scrolling this far
+                        <div class="messageDate chevron">Monday</div>
+                    </div>
+                    <div class="swipe-hidden">
+                        <a class="button more" onclick="showMoreSheet()">More</a>
+                        <a class="button archive" >Archive</a>
+                    </div>
+                </li>
+                 <li class="swipe-reveal">
+                    <div class="swipe-content">
+                        <b>Patsy Lenzi</b><br>
+                        This is just filler content.
+                        <div class="messageDate chevron">Saturday</div>
+                    </div>
+                    <div class="swipe-hidden">
+                        <a class="button more" onclick="showMoreSheet()">More</a>
+                        <a class="button archive" >Archive</a>
+                    </div>
+                </li>
+                 <li class="swipe-reveal">
+                    <div class="swipe-content">
+                        <b>Aretha Walk</b><br>
+                        Almost to the bottom
+                        <div class="messageDate chevron">Saturday</div>
+                    </div>
+                    <div class="swipe-hidden">
+                        <a class="button more" onclick="showMoreSheet()">More</a>
+                        <a class="button archive" >Archive</a>
+                    </div>
+                </li>
+                 <li class="swipe-reveal">
+                    <div class="swipe-content">
+                        <b>Natalie White</b><br>
+                          Thanks for scrolling to the bottom.
+                        <div class="messageDate chevron">Friday</div>
+                    </div>
+                    <div class="swipe-hidden">
+                        <a class="button more" onclick="showMoreSheet()">More</a>
+                        <a class="button archive" >Archive</a>
+                    </div>
+                </li>
+              </ul>
+            </div>
+        </div>
+
+         <!--Footer to add tabs if desired-->
+        <footer>
+            <a href="#main" class="" id='tab1' ></a>
+        </footer>
+    </div>
+
+
+</body>
+
+</html>

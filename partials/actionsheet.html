@@ -1,0 +1,33 @@
+<script>
+    function showCustomHtmlSheet() {
+        $.afui.actionsheet('<a  >Back</a><a  onclick="alert(\'hi\');" >Show Alert 3</a><a  onclick="alert(\'goodbye\');">Show Alert 4</a>');
+    }
+
+    function showCustomJsonSheet() {
+        $.afui.actionsheet(
+        [{
+            text: 'back',
+            cssClasses: 'red',
+            handler: function () {
+                $.afui.goBack();
+            }
+        }, {
+            text: 'show alert 5',
+            cssClasses: 'blue',
+            handler: function () {
+                alert("hi");
+            }
+        }, {
+            text: 'show alert 6',
+            cssClasses: '',
+            handler: function () {
+                alert("goodbye");
+            }
+        }]);
+    }
+</script>
+This creates a slide in action sheet from the bottom.
+<br />
+<br />
+<a class="button"  onClick="showCustomHtmlSheet()">Show Custom Html Sheet</a>
+<a class="button"  onClick="showCustomJsonSheet()">Show Custom Json Sheet</a>

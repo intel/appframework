@@ -1,0 +1,219 @@
+[
+    {
+        "name": "slide-in",
+        "time": "300ms",
+        "easing": "linear",
+        "steps": {
+            "0": "transform:translate3d(100%,0,0)",
+            "100": "transform:translate3d(0,0,0)"
+        }
+    },
+    {
+        "name": "slide-out",
+        "time": "300ms",
+        "easing": "linear",
+        "steps": {
+            "0": "transform:translate3d(0%,0,0)",
+            "100": "transform:translate3d(-200px,0,0)"
+        }
+    },
+    {
+        "name": "slide-full-in",
+        "time": "300ms",
+        "easing": "linear",
+        "steps": {
+            "0": "transform:translate3d(100%,0,0)",
+            "100": "transform:translate3d(0,0,0)"
+        }
+    },
+    {
+        "name": "slide-full-out",
+        "time": "300ms",
+        "easing": "linear",
+        "steps": {
+            "0": "transform:translate3d(0%,0,0)",
+            "100": "transform:translate3d(-100%,0,0)"
+        }
+    },
+    {
+        "name": "pop-in",
+        "time": "300ms",
+        "easing": "linear",
+        "steps": {
+            "0": "opacity: 0; transform: scale(0.5)",
+            "100": "opacity: 1; transform: scale(1)"
+        }
+    },
+    {
+        "name": "pop-out",
+        "time": "300ms",
+        "noTrans":"true"
+    },
+     {
+        "name": "fade-in",
+        "time": "300ms",
+        "easing": "linear",
+        "steps": {
+            "0": "opacity: 0;",
+            "100": "opacity: 1;"
+        }
+    },
+    {
+        "name": "fade-out",
+        "time": "300ms",
+        "noTrans":"true"
+    },
+
+    {
+        "name": "up-in",
+        "time": "300ms",
+        "easing": "linear",
+        "steps": {
+            "0": "transform: translate3d(0%, 100%, 0)",
+            "100": "transform: translate3d(0%, 0%, 0)"
+        }
+    },
+    {
+        "name": "up-out",
+        "time": "300ms",
+        "easing": "linear",
+        "steps": {
+            "0": "transform: translate3d(0%, 0, 0)",
+            "100": "transform: translate3d(0%, -200px, 0)"
+        }
+    },
+    {
+        "name": "down-in",
+        "time": "300ms",
+        "easing": "linear",
+        "steps": {
+            "0": "transform: translate3d(0%, -100%, 0)",
+            "100": "transform: translate3d(0%, 0%, 0)"
+        }
+    },
+    {
+        "name": "down-out",
+        "time": "300ms",
+        "easing": "linear",
+        "steps": {
+            "0": "transform: translate3d(0%, 0%, 0)",
+            "100": "transform: translate3d(0%, 200px, 0)"
+        }
+    },
+    {
+        "name": "flip-in",
+        "time": "300ms",
+        "easing": "linear",
+        "css":"z-index:5;backface-visibility: hidden;-webkit-backface-visibility: hidden;",
+        "steps": {
+            "0": "transform:rotateY(180deg); ",
+            "100": "transform:rotateY(0deg);"
+        }
+    },
+    {
+        "name": "flip-out",
+        "time": "300ms",
+        "easing": "linear",
+        "css":"z-index:4;backface-visibility: hidden;-webkit-backface-visibility: hidden;",
+        "steps": {
+            "0": "transform:rotateY(0deg);",
+            "100": "transform:rotateY(180deg);"
+        }
+    },
+    {
+        "name": "slide-left-in",
+        "time": "300ms",
+        "easing": "linear",
+        "steps": {
+            "0": "transform:translate3d(-100%,0,0)",
+            "100": "transform:translate3d(0,0,0)"
+        }
+    },
+    {
+        "name": "slide-left-out",
+        "time": "300ms",
+        "easing": "linear",
+        "steps": {
+            "0": "transform:translate3d(0%,0,0)",
+            "100": "transform:translate3d(200px,0,0)"
+        }
+    },
+    {
+        "name": "slide-right-in",
+        "time": "300ms",
+        "easing": "linear",
+        "steps": {
+            "0": "transform:translate3d(100%,0,0)",
+            "100": "transform:translate3d(0,0,0)"
+        }
+    },
+    {
+        "name": "slide-right-out",
+        "time": "300ms",
+        "easing": "linear",
+        "steps": {
+            "0": "transform:translate3d(0%,0,0)",
+            "100": "transform:translate3d(-200px,0,0)"
+        }
+    },
+    {
+        "name":"invoke-out",
+        "time":"500ms",
+        "easing":"linear",
+        "css":"z-index:11",
+        "steps":{
+            "0": "transform:scale(1.0) translate3d(0%,0,0)",
+            "50":"transform: scale(0.8) translate3d(10%,0,0)",
+            "100":"transform: scale(0.8) translate3d(100%,0,0)"
+
+        }
+    },
+    {
+        "name":"invoke-in",
+        "time":"500ms",
+        "easing":"linear",
+        "css":"z-index:10",
+        "steps":{
+            "0": "transform:scale(0.6) translate3d(-130%,0,0)",
+            "50":"transform: scale(0.8) translate3d(-110%,0,0)",
+            "100":"transform: scale(1) translate3d(0,0,0)"
+
+        }
+    },
+    {
+        "name":"header-load",
+        "time":"300ms",
+        "easing":"linear",
+        "steps":{
+            "0": "transform: translate3d(0%, 0, 0);",
+            "100":"transform: translate3d(-90px, 0, 0);opacity:0.1"
+        }
+    },
+    {
+        "name":"header-unload",
+        "time":"300ms",
+        "easing":"linear",
+        "steps":{
+            "0": "transform: translate3d(0%, 0, 0);",
+            "100":"transform: translate3d(90px, 0, 0);opacity:0.1"
+        }
+    },
+    {
+        "name":"header-load-to",
+        "time":"500ms",
+        "easing":"linear",
+        "steps":{
+            "0": "transform: translate3d(90px, 0, 0);opacity:0.1",
+            "100":"transform: translate3d(0%, 0, 0);opacity:1"
+        }
+    },
+    {
+        "name":"header-unload-to",
+        "time":"500ms",
+        "easing":"linear",
+        "steps":{
+            "0": "transform: translate3d(-90px, 0, 0);opacity:0.1",
+            "100":"transform: translate3d(0%, 0, 0);opacity:1"
+        }
+    }
+]

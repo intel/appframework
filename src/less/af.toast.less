@@ -1,0 +1,81 @@
+.afToast {
+    width: auto;
+    border: solid 1px #72767b;
+    z-index: 1000000;
+    margin: 0px auto;
+    background: #464646;
+    color:white;
+    opacity:0.95;
+    height:auto;
+    font-size:20px;
+    -webkit-transition: all  0.3s;
+    transition: all  0.3s;
+    text-align: left;
+    line-height:46px;
+    margin:5px 10px;
+    border-radius:5px;
+    overflow:hidden;
+    & > * {
+        color:inherit;
+    }
+    & > DIV {
+        font-size:16px;
+        margin:8px;
+    }
+}
+.afToast.hidden {
+    opacity:0.1;
+    height:5px;
+    overflow:hidden;
+}
+.afToastContainer {
+    position:absolute;
+    top:0px;
+    left:0px;
+    z-index:99999;
+}
+.afToast.success {
+    background:#499349;
+}
+.afToast.error {
+    background:#AA312A;
+}
+.afToast.warning {
+    background:#DF8505;
+}
+.afToastContainer.br {
+    bottom:0px;
+    right:0px;
+    top:auto;
+    left:auto;
+}
+.afToastContainer.bl {
+    bottom:0px;
+    left:0px;
+    top:auto;
+    right:auto;
+}
+.afToastContainer.tl {
+    top:0px;
+    left:0px;
+    right:auto;
+    bottom:auto;
+}
+.afToastContainer.tr {
+    top:0px;
+    right:0px;
+    left:auto;
+    bottom:auto;
+}
+.afToastContainer.tc {
+    top:0px;
+    right:0px;
+    bottom:auto;
+    left:0px;
+}
+.afToastContainer.bc {
+    top:auto;
+    right:0px;
+    bottom:0px;
+    left:0px;
+}

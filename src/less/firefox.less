@@ -1,0 +1,293 @@
+/* Bg #33B5E5/* Font header #C6C6C6* reg white-space:border 303030hover : #111*/.firefox, .firefox .view {
+    font:14px  'Roboto',sans-serif;
+    background:#fff;
+    color:#000;
+    border-color:#000;
+}
+.firefox {
+    .view {
+        .panel {
+            color:#5E5E5E;
+            background:white;
+        }
+        .panel.light {
+            background:#FDFDFD;
+            color:#000;
+        }
+        header {
+            background:#F57E02;
+            color:#ffffff;
+            border-color:transparent;
+            height: 44px;
+            h1 {
+                left: 23px;
+                text-align: left;
+                padding-left:3px;
+            }
+            .button {
+                color: white;
+                background:none;
+                font-size:14px;
+                box-shadow:none;
+            }
+            .backButton {
+                background: inherit;
+                color:inherit;
+                left:-60px;
+            }
+            .backButton::before {
+                left:54px;
+            }
+            .menuButton {
+                right:0px;
+            }
+            .menuButton:after {
+                border-color:#AE5900;
+            }
+        }
+        footer {
+            box-shadow: none;
+            background:inherit;
+            color:inherit;
+            border-top:1px solid #5E5E5E;
+            border-bottom:none;
+            padding:0;
+            & > a:not(.button) {
+                color:#5E5E5E;
+                padding-top:3px;
+            }
+            & > a.pressed:not(.button) {
+                border:0px;
+                border-bottom:4px solid #33B5E5;
+                border-radius:0px;
+                color:#00adcd;
+                background:none;
+            }
+            & > a.icon.pressed:not(.button):before {
+                color:inherit;
+            }
+            & > a.icon:not(.button):before {
+                font-size: 21px;
+            }
+        }
+    }
+    .af-badge {
+        border:none;
+    }
+    .list {
+        background:inherit;
+        color:inherit;
+        border-color:#303030;
+        margin: 10px;
+        .divider {
+            color:black;
+        }
+    }
+    .panel {
+        h2 {
+            color:inherit;
+        }
+    }
+    .collapsed:after {
+        border-top: 6px solid;
+    }
+    .collapsed:before {
+        border:2px solid;
+    }
+    .expanded:after {
+        border-bottom: 6px solid;
+    }
+    .expanded:before {
+        border:2px solid;
+    }
+    label {
+        color:inherit;
+    }
+    input.toggle:checked + label {
+                background:#00CAF2;
+            }
+
+
+    .button {
+        border-radius:0;
+        background:#d4d4d4;
+        border-color:#A6A6A6;
+        color:inherit;
+        text-shadow:none;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.4);
+    }
+    .button[disabled="disabled"] {
+        opacity:0.6;
+    }
+    .button.previous::after {
+        width:20px;
+        height:20px;
+        background-color:inherit;
+        top:5px;
+        left:-12px;
+        border-radius:0;
+        box-shadow:none;
+        border-color:transparent;
+    }
+    .button.next::after {
+        width:20px;
+        height:20px;
+        background-color:inherit;
+        top:5px;
+        right:-12px;
+        border-radius:0;
+        box-shadow:none;
+        border-color:transparent;
+    }
+    header {
+        .button-grouped {
+            & > .button {
+                border-color:#777;
+            }
+        }
+    }
+    .button-grouped {
+        * {
+            border:1px solid rgba(255,255,255,.25);
+            border-left-width:0;
+            box-shadow:none;
+        }
+    }
+    .button-grouped.vertical {
+        * {
+            border-left:1px solid rgba(255,255,255,.25);
+            border-bottom-width:0;
+        }
+        .button:last-child {
+            border-bottom:1px solid rgba(255,255,255,.25);
+        }
+    }
+    .afPopup {
+        border: solid 1px #aaa;
+        padding: 0;
+        border-radius: 0;
+        -webkit-transform:none;
+        transform:none;
+        -webkit-transition: none;
+        transition:none;
+        background:inherit;
+        background-color:#373737;
+        color:white;
+        position:absolute;
+        top:0px !important;
+        right:0px !important;
+        bottom:0px !important;
+        left:0px !important;
+        width:100%;
+        & > HEADER {
+            font-weight:normal;
+            font-size:20px;
+            text-align:left;
+            margin:10px 20px;
+            margin-top: 140px;
+        }
+        & > DIV {
+            font-size:20px;
+            text-align:left;
+            padding:10px;
+            margin:10px 15px;
+            border-top: solid 1px #aaa;
+        }
+        & > FOOTER {
+            height:70px;
+            position:absolute;
+            bottom:0px;
+            background:#2A2A2A;
+            & > A#cancel {
+                margin-left:10px;
+                width:140px;
+                background:#EB3020;
+                color:white;
+            }
+            & > A#action {
+                margin-right:10px;
+                background:#D8D8D8;
+            }
+        }
+    }
+    #af_actionsheet {
+        border: #2c2c2c 1px solid;
+        border-top: #2c2c2c 3px solid;
+        background:#2c2c2c;
+        color:inherit;
+        padding:0px;
+        a {
+            border-radius:0;
+            background:#424343;
+            color:white;
+            line-height: 50px;
+            margin-bottom: 1px;
+            margin:10px 20px;
+            box-shadow: none;
+            text-align: left;
+            padding-left:20px;
+            font-style: italic;
+            font-weight:normal;
+        }
+        a.cancel {
+            margin-bottom: 10px;
+            background:#f7f7f7;
+            color:black;
+            text-align: center;
+            padding:0;
+            border-radius:30px;
+        }
+    }
+}
+.firefox.light {
+    .view {
+        header {
+            .menuButton:after {
+                border-color:black;
+            }
+        }
+    }
+    .button {
+        background:#eee;
+        border-color:#D1D1D1;
+    }
+    .afPopup {
+        background-color:#373737;
+    }
+    #af_actionsheet {
+        border: #bbb 1px solid;
+        border-top: #33B5E5 3px solid;
+        background:#bbb;
+        a {
+            background:#fff;
+        }
+    }
+}
+.firefox .collapsed:before,.firefox .expanded:before {
+    border-color: inherit;
+}
+.firefox .collapsed:after,.firefox .expanded:after {
+    border-top-color:inherit;
+    border-top-color:inherit;
+}
+.firefox select, .firefox textarea, .firefox input[type="text"],.firefox input[type=search], .firefox input[type="password"],.firefox input[type="datetime"], .firefox input[type="datetime-local"],.firefox input[type="date"], .firefox input[type="month"],.firefox input[type="time"], .firefox input[type="week"],.firefox input[type="number"], .firefox input[type="email"],.firefox input[type="url"], .firefox input[type="tel"],.firefox input[type="color"], .firefox .input-group {
+    background:inherit;
+    color:inherit;
+    border-radius:0;
+}
+
+.firefox input[type="radio"]:not(.toggle):checked+label:before,.firefox input[type="checkbox"]:not(.toggle):checked+label:before {
+    background:#00CAF2;
+    color:white;
+    border-color:#00CAF2;
+}
+.firefox .afPopup &>FOOTER &>A, .firefox.light .afPopup &>FOOTER &>A {
+    background:#D8D8D8;
+    color:black;
+    border-radius:30px;
+    height:40px;
+    line-height:22px;
+    margin-top:15px;
+    font-size:18px;
+    font-style: italic;
+}

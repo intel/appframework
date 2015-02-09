@@ -1,16 +1,8 @@
 {
   "name": "intel-appframework",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "App Framework is a Javascript framework targeted at HTML5 browsers with a blazingly fast query selector library that supports W3C queries.",
-  "main": "appframework.min.js",
-  "scripts": {
-    "test": "grunt test",
-    "blanket": {
-      "pattern": [
-        "appframework.js"
-      ]
-    }
-  },
+  "main": "build/appframework.ui.min.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/01org/appframework.git"
@@ -39,20 +31,29 @@
     "touch"
   ],
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-uglify": "~0.2.2",
-    "grunt-contrib-jshint": "~0.6.2",
-    "grunt-contrib-clean": "~0.5.0",
-    "grunt-contrib-cssmin": "~0.4.1",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-mochaccino": "~0.1.7",
-    "grunt-banner": "~0.2.0",
-    "grunt-closure-compiler": "~0.0.21",
-    "chai": "~1.7.2",
     "blanket": "~1.1.5",
-    "grunt-cli": "~0.1.9",
-    "sinon": "~1.7.3",
+    "chai": "~1.7.2",
     "express": "~3.3.7",
-    "jsdom": "~1.2.0"
+    "grunt": "~0.4.1",
+    "grunt-banner": "~0.2.0",
+    "grunt-cli": "~0.1.9",
+    "grunt-closure-compiler": "~0.0.21",
+    "grunt-contrib-clean": "~0.5.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-cssmin": "~0.4.1",
+    "grunt-contrib-jshint": "~0.6.2",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-karma": "^0.8.3",
+    "grunt-mochaccino": "~0.1.7",
+    "karma": "^0.12.17",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-coverage": "^0.2.4",
+    "karma-html2js-preprocessor": "^0.1.0",
+    "karma-htmlfile-reporter": "^0.1.2",
+    "karma-mocha": "^0.1.6",
+    "mocha": "^1.20.1",
+    "grunt-contrib-less": "latest",
+    "grunt-contrib-watch": "latest"
   }
 }

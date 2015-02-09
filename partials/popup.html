@@ -1,0 +1,40 @@
+<script>
+                       
+function showPopup2() {
+    $.afui.popup({
+        title: "Alert! Alert!",
+        message: "This is a test of the emergency alert system!! Don't PANIC!",
+        cancelText: "Cancel me",
+        cancelCallback: function () {
+            console.log("cancelled");
+        },
+        doneText: "I'm done!",
+        doneCallback: function () {
+            console.log("Done for!");
+        },
+        cancelOnly: false
+    });
+}
+
+function showPopup3() {
+    $.afui.popup({
+        title: "Login",
+        message: "Username: <input type='text' class='af-ui-forms'><br>Password: <input type='text' class='af-ui-forms' style='webkit-text-security:disc'>",
+        cancelText: "Cancel",
+        cancelCallback: function () {},
+        doneText: "Login",
+        doneCallback: function () {
+            alert("Logging in")
+        },
+        cancelOnly: false
+    });
+}
+</script>This creates a popup dialog to interact with users. You can pass in an HTML string, which acts (and replaces) an alert dialog. You can also pass in an object to get more interaction.
+<br>
+<br>
+<a class="button" data-alert data-message="I'm replacing an alert">Alert style diaglog</a>
+<br>
+<a class="button" onClick="showPopup2()">Detailed ineraction</a>
+<br>
+<a class="button" onClick="showPopup3()">HTML markup</a>
+<br>
