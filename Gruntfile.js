@@ -8,6 +8,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-mochaccino");
     grunt.loadNpmTasks("grunt-closure-compiler");
     grunt.loadNpmTasks("grunt-banner");
+    grunt.loadNpmTasks('grunt-karma');
+    grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -20,13 +24,13 @@ module.exports = function (grunt) {
                 jshintrc: ".jshintrc"
             },
 
-            core: [ "appframework.js" ],
+            core: [ "src/*.js" ],
 
-            jq: [ "jq.appframework.js" ],
-
-            plugins: [ "plugins/**/*.js" ],
-
-            ui: ["ui/appframework.ui.js", "ui/transitions/**/*.js" ]
+        },
+        karma: {
+            unit: {
+                  configFile: 'karma.conf.js'
+                    }
         },
         mochaccino: {
             unit: [ "test/**/*.test.js" ],
@@ -40,193 +44,69 @@ module.exports = function (grunt) {
                 reportDir: "build/cov"
             }
         },
-        cssmin: {
-            all: {
-                files: {
-                    "build/css/af.ui.min.css": [
-                        "css/main.css",
-                        "css/appframework.css",
-                        "css/lists.css",
-                        "css/forms.css",
-                        "css/buttons.css",
-                        "css/badges.css",
-                        "css/grid.css",
-                        "css/android.css",
-                        "css/win8.css",
-                        "css/bb.css",
-                        "css/ios7.css",
-                        "css/ios.css",
-                        "css/tizen.css",
-                        "plugins/css/af.actionsheet.css",
-                        "plugins/css/af.popup.css",
-                        "plugins/css/af.scroller.css",
-                        "plugins/css/af.selectbox.css"
-                    ]
-                }
-            },
-            base: {
-                files: {
-                    "build/css/af.ui.base.min.css": [
-                        "css/main.css",
-                        "css/appframework.css",
-                        "css/lists.css",
-                        "css/forms.css",
-                        "css/buttons.css",
-                        "css/badges.css",
-                        "css/grid.css",
-                        "plugins/css/af.actionsheet.css",
-                        "plugins/css/af.popup.css",
-                        "plugins/css/af.scroller.css",
-                        "plugins/css/af.selectbox.css"
-                    ]
-                }
-            },
-            icons: {
-                files: {
-                    "build/css/icons.min.css": [
-                        "css/icons.css"
-                    ]
-                }
-            }
-        },
+
         concat: {
-            cssall: {
-                files: {
-                    "build/css/af.ui.css": [
-                        "css/main.css",
-                        "css/appframework.css",
-                        "css/lists.css",
-                        "css/forms.css",
-                        "css/buttons.css",
-                        "css/badges.css",
-                        "css/grid.css",
-                        "css/android.css",
-                        "css/win8.css",
-                        "css/bb.css",
-                        "css/ios7.css",
-                        "css/ios.css",
-                        "plugins/css/af.actionsheet.css",
-                        "plugins/css/af.popup.css",
-                        "plugins/css/af.scroller.css",
-                        "plugins/css/af.selectbox.css"
-                    ]
-                }
-            },
-            cssbase: {
-                files: {
-                    "build/css/af.ui.base.css": [
-                        "css/main.css",
-                        "css/appframework.css",
-                        "css/lists.css",
-                        "css/forms.css",
-                        "css/buttons.css",
-                        "css/badges.css",
-                        "css/grid.css",
-                        "plugins/css/af.actionsheet.css",
-                        "plugins/css/af.popup.css",
-                        "plugins/css/af.scroller.css",
-                        "plugins/css/af.selectbox.css"
-                    ]
-                }
-            },
             afui:{
                 files: {
-                    "build/ui/appframework.ui.js": [
-                        "plugins/af.actionsheet.js",
-                        "plugins/af.css3animate.js",
-                        "plugins/af.passwordBox.js",
-                        "plugins/af.scroller.js",
-                        "plugins/af.selectBox.js",                                                
-                        "plugins/af.touchEvents.js",
-                        "plugins/af.touchLayer.js",
-                        "plugins/af.popup.js",
-                        "ui/appframework.ui.js",
-                        "ui/transitions/**/*.js",
-                        "plugins/af.8tiles.js"
+                    "build/appframework.ui.js": [
+                        "src/af.shim.js",
+                        "src/af.ui.js",
+                        "src/af.actionsheet.js",
+                        "src/af.grower.js",
+                        "src/af.touchEvents.js",
+                        "src/af.animateheader.js",
+                        "src/af.popup.js",
+                        "src/af.animation.js",
+                        "src/af.splashscreen.js",
+                        "src/af.drawer.js",
+                        "src/af.swipereveal.js",
+                        "src/af.desktopBrowsers.js",
+                        "src/af.toast.js"
                     ]
                 }
             },
-            afui_jquery:{
+            less: {
                 files: {
-                    "build/ui/af.ui.jquery.js": [
-                        "jq.appframework.js",
-                        "plugins/af.actionsheet.js",
-                        "plugins/af.css3animate.js",
-                        "plugins/af.passwordBox.js",
-                        "plugins/af.scroller.js",
-                        "plugins/af.selectBox.js",                                                
-                        "plugins/af.touchEvents.js",
-                        "plugins/af.touchLayer.js",
-                        "plugins/af.popup.js",                        
-                        "ui/appframework.ui.js",
-                        "ui/transitions/**/*.js",
-                        "plugins/af.8tiles.js"
+                    "build/af.ui.less":[
+                        "src/less/main.less",
+                        "src/less/anim2.less",
+                        "src/less/animation.less",
+                        "src/less/*.less"
                     ]
                 }
             },
-            af:{
-                files:{
-                    "build/appframework.js": [
-                        "appframework.js",
-                        "ayepromise.js"
-                    ]
-                }
-            },
-            icons:{
-                files:{
-                    "build/css/icons.css": [
-                        "css/icons.css"
+            lessBase: {
+                files: {
+                    "./build/af.ui.base.less": [
+                    "src/less/main.less",
+                    "src/less/anim2.less",
+                    "src/less/animation.less",
+                    "src/less/appframework.less",
+                    "src/less/af.actionsheet.less",
+                    "src/less/af.popup.less",
+                    "src/less/af.splashscreen.less",
+                    "src/less/af.swipereveal.less",
+                    "src/less/af.toast.less",
+                    "src/less/badges.less",
+                    "src/less/buttons.less",
+                    "src/less/forms.less",
+                    "src/less/grid.less",
+                    "src/less/lists.less",
+                    "src/less/splitview.less"
                     ]
                 }
             }
         },
         "closure-compiler": {
-            appframework: {
-                closurePath: "../closure/",
-                js: ["appframework.js","ayepromise.js"],
-                jsOutputFile: "build/appframework.min.js",
-                maxBuffer: 500,
-                options: {
-                },
-                noreport:true
-            },
             "appframework-ui": {
                 closurePath: "../closure/",
-                js: ["appframework.js","ayepromise.js","build/ui/appframework.ui.js"],
-                jsOutputFile: "build/ui/appframework.ui.min.js",
+                js: ["build/appframework.ui.js"],
+                jsOutputFile: "build/appframework.ui.min.js",
                 options: {
                 },
                 maxBuffer: 500,
                 noreport:true
             },
-            "af-ui-jquery": {
-                closurePath: "../closure/",
-                js: ["build/ui/af.ui.jquery.js"],
-                jsOutputFile: "build/ui/af.ui.jquery.min.js",
-                options: {
-                },
-                maxBuffer: 500,
-                noreport:true
-            },
-            plugins: {
-                closurePath: "../closure/",
-                js:"plugins/*.js",
-                jsOutputFile:"build/af.plugins.min.js",
-                options: {
-                },
-                maxBuffer: 500,
-                noreport:true
-            },
-            jq: {
-                closurePath: "../closure/",
-                js:"jq.appframework.js",
-                jsOutputFile:"build/jq.appframework.min.js",
-                options: {
-                },
-                maxBuffer: 500,
-                noreport:true
-            }
-
         },
         usebanner: {
             taskName: {
@@ -237,25 +117,64 @@ module.exports = function (grunt) {
                     linebreak: true
                 },
                 files: {
-                    src: [ "build/*.js","build/ui/*.js","build/css/*.css" ]
+                    src: [ "build/*.js","build/*.js","build/css/*.css" ]
                 }
             }
+        },
+        less: {
+            development: {
+                options: {
+                    paths: ["./src/less"],
+                    yuicompress: false
+                },
+                files: {
+                    "./build/af.ui.css": "./src/less/*.less"
+                }
+            },
+            base: {
+                options: {
+                    paths: ["./src/less"],
+                    yuicompress: false
+                },
+                files: {
+                    "./build/af.ui.base.css": [
+                    "src/less/main.less",
+                    "src/less/anim2.less",
+                    "src/less/animation.less",
+                    "src/less/appframework.less",
+                    "src/less/af.actionsheet.less",
+                    "src/less/af.popup.less",
+                    "src/less/af.splashscreen.less",
+                    "src/less/af.swipereveal.less",
+                    "src/less/af.toast.less",
+                    "src/less/badges.less",
+                    "src/less/buttons.less",
+                    "src/less/forms.less",
+                    "src/less/grid.less",
+                    "src/less/lists.less",
+                    "src/less/splitview.less"
+                    ]
+                }
+            }
+        },
+        watch: {
+            files: "./src/less/*.less",
+            tasks: ["less"]
         }
     });
 
-    
+
     grunt.registerTask("default", [
         "jshint",
         "test",
         "clean",
-        "cssmin",
-        "concat",
         "closure-compiler",
-        "usebanner"
+        "usebanner",
+        "watch"
     ]);
 
-    grunt.registerTask("test", ["mochaccino:unit"]);
-    grunt.registerTask("cov", ["clean","mochaccino:cov"]);
-    grunt.registerTask("rebuild" , ["cssmin","concat","closure-compiler","usebanner"]);
+    grunt.registerTask("rebuild" , ["concat","closure-compiler","usebanner"]);
     grunt.registerTask("hint" , ["jshint"]);
+    grunt.registerTask("test" , ["karma"]);
+
 };

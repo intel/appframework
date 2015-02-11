@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+
+<head>
+
+    <title>Grid View Template</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" type="text/css" href="../build/icons.css" />
+    <link rel="stylesheet" type="text/css" href="../build/af.ui.css" />
+
+
+     <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../build/appframework.ui.js"></script>
+
+
+    <script>
+    $(document).ready(function(){
+        //$.afui.splitview.enable();
+    })
+    </script>
+
+    <style>
+    /* CSS responsive square grid */
+    .grid-photo {margin:3px -1px;}
+    .grid-photo:after {content:'';display:block;clear:both;}
+    .grid-photo li {position: relative; display:block; float:left; width: 10%; padding-bottom: 10%;}
+    .grid-photo .grid-photo-box {position: absolute;left: 3px;right: 3px;top: 3px;bottom: 3px; background-color: rgba(128,128,128,0.2);}
+    .grid-photo img {width:100%;height:100%}
+    @media only screen and (max-width : 1024px) {
+    .grid-photo li {width: 12.5%; padding-bottom: 12.5%;}
+    }
+    @media only screen and (max-width : 768px) {
+    .grid-photo li {width: 16.6%; padding-bottom: 16.6%;}
+    }
+    @media only screen and (max-width : 480px) {
+    .grid-photo li {width: 25%; padding-bottom: 25%;}
+    }
+    @media only screen and (max-width : 320px) {
+    .grid-photo li {width: 33.3%; padding-bottom: 33.3%;}
+    }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="splashscreen" class='ui-loader heavy'>
+        App Framework - Grid View
+        <br>
+        <br>
+        <span class='ui-icon ui-icon-loading spin'></span>
+        <h1>Starting app</h1>
+    </div>
+
+    <div class="view" id="mainview">
+        <header>
+            <h1>Grid View Example</h1>
+        </header>
+
+        <div class="pages">
+
+             <!--Initial Grid of items-->
+            <div class="panel grid" data-title="Grid" id="grid" data-selected="true">
+              <div class="grid grid-photo">
+                <li><div class="grid-photo-box"><a href="#item1"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item2"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item3"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item4"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item5"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item6"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item7"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item8"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item9"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item10"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item11"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item12"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item13"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item14"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item15"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item16"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item17"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item18"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item19"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item20"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item21"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item22"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item23"><img src="" /></a></div></li>
+                <li><div class="grid-photo-box"><a href="#item24"><img src="" /></a></div></li>
+            </div>
+            <a id="more" class="button block">Load More</a>
+            </div>
+
+        <!--Detail View Pages for each grid item-->
+        <div class="panel" data-title="Item 1" id="item1">
+            <p>This is detail view for Item 1</p>
+        </div>
+
+        <div class="panel" data-title="Item 2" id="item2">
+            <p>This is detail view for Item 2</p>
+        </div>
+
+        <div class="panel" data-title="Item 3" id="item3">
+            <p>This is detail view for Item 3</p>
+        </div>
+
+        <div class="panel" data-title="Item 4" id="item4">
+            <p>This is detail view for Item 4</p>
+        </div>
+
+        <div class="panel" data-title="Item 5" id="item5">
+            <p>This is detail view for Item 5</p>
+        </div>
+
+        <div class="panel" data-title="Item 6" id="item6">
+            <p>This is detail view for Item 6</p>
+        </div>
+
+        <div class="panel" data-title="Item 7" id="item7">
+            <p>This is detail view for Item 7</p>
+        </div>
+
+        <div class="panel" data-title="Item 8" id="item8">
+            <p>This is detail view for Item 8</p>
+        </div>
+
+        <div class="panel" data-title="Item 9" id="item9">
+            <p>This is detail view for Item 9</p>
+        </div>
+
+        <div class="panel" data-title="Item 10" id="item10">
+            <p>This is detail view for Item 10</p>
+        </div>
+
+        <div class="panel" data-title="Item 11" id="item11">
+            <p>This is detail view for Item 11</p>
+        </div>
+
+        <div class="panel" data-title="Item 12" id="item12">
+            <p>This is detail view for Item 12</p>
+        </div>
+
+        <div class="panel" data-title="Item 13" id="item13">
+            <p>This is detail view for Item 13</p>
+        </div>
+
+        <div class="panel" data-title="Item 14" id="item14">
+            <p>This is detail view for Item 14</p>
+        </div>
+
+        <div class="panel" data-title="Item 15" id="item15">
+            <p>This is detail view for Item 15</p>
+        </div>
+
+        <div class="panel" data-title="Item 16" id="item16">
+            <p>This is detail view for Item 16</p>
+        </div>
+
+        <div class="panel" data-title="Item 17" id="item17">
+            <p>This is detail view for Item 17</p>
+        </div>
+
+        <div class="panel" data-title="Item 18" id="item18">
+            <p>This is detail view for Item 18</p>
+        </div>
+
+        <div class="panel" data-title="Item 19" id="item19">
+            <p>This is detail view for Item 19</p>
+        </div>
+
+        <div class="panel" data-title="Item 20" id="item20">
+            <p>This is detail view for Item 20</p>
+        </div>
+
+        <div class="panel" data-title="Item 21" id="item21">
+            <p>This is detail view for Item 11</p>
+        </div>
+
+        <div class="panel" data-title="Item 22" id="item22">
+            <p>This is detail view for Item 12</p>
+        </div>
+
+        <div class="panel" data-title="Item 23" id="item23">
+            <p>This is detail view for Item 13</p>
+        </div>
+
+        <div class="panel" data-title="Item 24" id="item24">
+            <p>This is detail view for Item 14</p>
+        </div>
+
+        </div>
+
+         <!--Footer to add tabs if desired-->
+        <footer>
+            <a href="#main" class="" id='tab1' ></a>
+        </footer>
+    </div>
+
+
+</body>
+
+</html>

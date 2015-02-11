@@ -1,0 +1,10 @@
+<h1>Todo</h1>
+
+<input type="text" placeholder="Enter Todo" id="todoVal" ng-model="todoVal">  <a class="button addBtn" ng-href='#' ng-click='addTodo()'>Add</a>
+<hr>
+
+<ul class="list inset">
+    <li ng-repeat="todo in todos" long-press="removeTodo(todo)">
+        {{todo.title}}
+    </li>
+</ul>

@@ -1,0 +1,395 @@
+@bluecolor:rgb(21, 125, 251);
+@greyborder:rgb(200,199,204);
+
+
+.overlayStatusbar > .view {
+    padding-top: 20px;
+}
+
+.overlayStatusbar {
+    background:#f8f8f8;
+}
+.ios7 {
+    font-family:'HelveticaNeue', 'Helvetica Neue',Helvetica, Arial, sans-serif;
+    .view {
+        header {
+            background:rgb(248,248,248);
+            color:inherit;
+            border:none;
+            border-bottom:1px solid @greyborder;
+            .button {
+                color:@bluecolor;
+                border-color:transparent;
+                font-size:14px;
+                font-weight:normal;
+            }
+            h1 {
+                color:inherit;
+                text-shadow:none;
+            }
+            .backButton {
+                background:rgba(248,248,248,1);
+                color:@bluecolor;
+                display: block;
+                position: absolute;
+                line-height:44px;
+                left: 25px;
+                text-overflow: ellipsis;
+                font-size: 14px;
+                padding: 0;
+                text-shadow: none;
+                background-color: transparent;
+                border:none;
+                border-color: transparent;
+                height: 44px;
+                top:auto;
+                border-radius: 0;
+                box-shadow:none;
+                margin: 0;
+                padding-left: 0;
+                text-align: center;
+                width:50px;
+                padding:0 !important;
+                margin:0 !important;
+            }
+        }
+        footer {
+            background:rgb(248,248,248);
+            color:black;
+            border-top:1px solid @greyborder;
+            box-shadow:none;
+            & > a:not(.button) {
+                color:rgba(96,96,96,255);
+            }
+            & > a.pressed:not(.button) {
+                border-radius:0;
+                background:transparent;
+            }
+        }
+    }
+    .panel {
+        background:rgba(238,238,238,255);
+        h2 {
+            color:inherit;
+        }
+    }
+    .menuButton:after {
+        border-color:@bluecolor;
+    }
+    .list {
+        font-weight:normal;
+        li {
+            margin-left: 10px;
+        }
+        & > li {
+            & > a:after {
+                color:rgba(217,217,217,255);
+            }
+        }
+    }
+    .button {
+        background-color:transparent;
+        box-shadow:none;
+        border-radius: 5px;
+        border-color:@bluecolor;
+        color:@bluecolor;
+        text-shadow:none;
+    }
+    .backButton::before {
+        z-index: -1;
+        font-size:22px;
+        position: absolute;
+        left: -20px;
+        text-align: center;
+        border-radius: 0;
+        border: none;
+        border-color: transparent;
+        box-shadow: none;
+        -webkit-transform: none;
+        transform: none;
+        font-family: 'chevron';
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        content: "\f054";
+        -webkit-transform:rotate(180deg);
+        transform:rotate(180deg);
+        background-color: transparent;
+    }
+    .backButton::after {
+        content: '';
+        width:0;
+        height:0;
+        border:none;
+    }
+    .afPopup {
+        border:1px solid @greyborder;
+        border-radius:10px;
+        padding:0px;
+        text-align: center;
+        color:inherit;
+        background:rgba(248,248,248,1);
+        & > HEADER {
+            padding:10px 0;
+        }
+        & > DIV {
+            padding-bottom:10px;
+        }
+        & > FOOTER {
+            border-top:1px solid #aaa;
+            & > A.center {
+                width:100%!important;
+            }
+        }
+        .button {
+            border: none;
+            width: 50%;
+            margin: 0;
+            background: transparent;
+            color:@bluecolor;
+            padding:12px 0;
+            border-radius:0;
+        }
+        .button.pressed {
+            background: transparent;
+        }
+        a:not(:first-of-type) {
+            border-left:1px solid @greyborder;
+        }
+    }
+    .button.pressed {
+        font-weight:bold;
+        background: white;
+    }
+    #af_actionsheet {
+        background-color:transparent;
+        color:black;
+        padding-left:10px;
+        padding-right:10px;
+        border-top: transparent 1px solid;
+        box-shadow: 0px -1px 2px rgba(0,0,0,0);
+        a:first-child {
+            border-top-left-radius:5px;
+            border-top-right-radius:5px;
+        }
+        a:nth-last-child(2) {
+            border-bottom-left-radius:5px;
+            border-bottom-right-radius:5px;
+        }
+        a.cancel {
+            font-weight:bold;
+            margin: 9px 0;
+            border-radius:5px;
+            background-color:white;
+            color:@bluecolor;
+        }
+        a.red {
+            background-color:white;
+            color:red;
+        }
+    }
+    .button.previous {
+        border:none;
+    }
+    .button.next {
+        border:none;
+    }
+    .button.previous::after {
+        color:@bluecolor;
+        z-index: -1;
+        font-size:22px;
+        position: absolute;
+        top: 2px;
+        left: -25px;
+        text-align: center;
+        border-radius: 0;
+        border: none;
+        border-color: transparent;
+        box-shadow: none;
+        -webkit-transform: none;
+        transform: none;
+        font-family: 'chevron';
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        content: "\f054";
+        -webkit-transform:rotate(180deg);
+        transform:rotate(180deg);
+        background-color: transparent;
+    }
+    .button.next::after {
+        color:@bluecolor;
+        z-index: -1;
+        font-size:22px;
+        position: absolute;
+        top: 6px;
+        right: -25px;
+        text-align: center;
+        border-radius: 0;
+        border: none;
+        border-color: transparent;
+        box-shadow: none;
+        -webkit-transform: none;
+        transform: none;
+        font-family: 'chevron';
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        content: "\f054";
+        background-color: transparent;
+    }
+    .button.gray {
+        color:#999;
+        background-color:transparent;
+    }
+    .button.yellow {
+        color:#F1C222;
+        background-color:transparent;
+    }
+    .button.red {
+        color:#b20000;
+        background-color:transparent;
+    }
+    .button.green {
+        color:#009C0C;
+        background-color:transparent;
+    }
+    .button.orange {
+        color:#FF8000;
+        background-color:transparent;
+    }
+    .button.black {
+        color:black;
+        background-color:transparent;
+    }
+    .button.slate {
+        color:#171F28;
+        background-color:transparent;
+    }
+    .af-badge {
+        border:none;
+        box-shadow:none;
+        font-size:12px;
+    }
+    input[type="range"] {
+        -webkit-appearance: none;
+        background-color: #c7c7c7;
+        height: 2px;
+        position: relative;
+        top: -10px;
+        margin-top: 15px;
+        border-radius:2px;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        position: relative;
+        z-index: 1;
+        width: 25px;
+        height: 25px;
+        border-radius: 60px;
+        border:1px solid #c7c7c7;
+        background:white;
+    }
+    input.toggle:checked {
+
+         +   label {
+                background: #4cd964;
+                line-height: -1em;
+                -webkit-transition:background 150ms;
+                transition:background 150ms;
+                & > span {
+                    transform: translate3d(24px, 0, 0);
+                    -webkit-transform: translate3d(24px, 0, 0);
+                }
+            }
+    }
+    input.toggle {
+        +
+            label:after {
+                content: '';
+            }
+         +   label {
+                position: relative;
+                margin: 5px;
+                border-radius: 50px;
+                display: block;
+                height: 28px;
+                width: 50px;
+                border: 1px solid #c7c7c7;
+                left: 33%;
+                float: none;
+                & > span {
+                    background: white;
+                    border: 1px solid #c7c7c7;
+                    top:-1px;
+                    left:-1px;
+                    height:29px;
+                }
+            }
+
+    }
+
+    .button-grouped:not(.vertical) > .button:first-child {
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+    }
+    .button-grouped:not(.vertical) > .button:last-child {
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
+    }
+}
+.ios7 .button-grouped * ,.ios7 .button-grouped &>.button:first-child,.ios7 .button-grouped.vertical * ,.ios7 .button-grouped.vertical &>.button:last-child,.ios7 header .button-grouped &>.button {
+    border-color:@bluecolor;
+}
+.ios7 .button-grouped &>.button{
+    border-radius:0;
+}
+.ios7 .button-grouped &>.button.pressed ,.ios7 header .button-grouped &>.button.pressed {
+    color:white;
+    background:@bluecolor;
+}
+
+
+.ios7 #af_actionsheet a,.ios7 #af_actionsheet a.cance {
+    background-image:none;
+    text-shadow:none;
+    box-shadow:none;
+    font-weight:normal;
+    border-radius: 0;
+    border:none;
+    -webkit-box-shadow:none;
+    color:@bluecolor;
+    background-color:white;
+    cursor:pointer;
+    border-radius:0px;
+    line-height: 40px;
+    font-size: 20px;
+    margin-bottom: 1px;
+}
+.ios7 footer &>a.pressed:not(.button),.ios7 footer &>a.icon.pressed:not(.button):before {
+    color:@bluecolor;
+}
+.ios7 input.toggle + label:before,.ios7  input.toggle:checked + label:before {
+    content: '';
+}
+.ios7 input[type="radio"]:checked:not(.toggle) + label:before, .ios7 input[type="checkbox"]:checked:not(.toggle) + label:before {
+    background:#007aff;
+    color:white;
+}
+.ios7 input[type="radio"]:not(.toggle) + label:before, .ios7 input[type="checkbox"]:not(.toggle) + label:before {
+    background: white;
+    border: 1px solid #c7c7c7;
+    border-radius:30px;
+}

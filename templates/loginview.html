@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+
+<head>
+
+    <title>Login View Template</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" type="text/css" href="../build/icons.css" />
+    <link rel="stylesheet" type="text/css" href="../build/af.ui.css" />
+
+
+     <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../build/appframework.ui.js"></script>
+
+
+    <script>
+
+        $(document).ready(function(){
+
+            $("#main").bind("panelbeforeload", startApp);
+            // setup signin and signup button events
+            $("#login").on("click", function(){
+                signIn();
+            });
+
+            $("#register").on("click", function(){
+                signUp();
+            });
+
+        });
+
+        function signIn(){
+
+
+            // SIGNIN SERVER CALL CODE GOES HERE
+
+            valid_login = false;
+
+            if(valid_login){
+                $.afui.loadContent("#main", null, null, "fade");
+            }
+            else
+            {
+                //Example use of the error toast api
+                var opts={
+                    message:"Invalid Login Combination",
+                    position:"tc",
+                    delay:2000,
+                    autoClose:true,
+                    type:"error"
+                };
+                $.afui.toast(opts);
+            }
+        }
+
+        function signUp(){
+
+            //example client side validation
+            if ($("#password").val() === $("#confirmpassword").val())
+            {
+                // SIGNUP SERVER CALL CODE GOES HERE
+
+                //render main view
+                $.afui.loadContent("#main", null, null, "fade");
+
+                //Example use of the success toast
+                var opts={
+                    message:"Account Created",
+                    position:"tc",
+                    delay:2000,
+                    autoClose:true,
+                    type:"success"
+                };
+                $.afui.toast(opts);
+
+            }
+            else
+            {
+                //Example use of the error toast
+                var opts={
+                    message:"Passwords Don't Match",
+                    position:"tc",
+                    delay:2000,
+                    autoClose:true,
+                    type:"error"
+                };
+                $.afui.toast(opts);
+            }
+
+
+        }
+
+        function startApp(){
+            // clears all back button history
+            $.afui.clearHistory();
+
+            // your app code here
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+    <div id="splashscreen" class='ui-loader heavy'>
+        App Framework - Login View
+        <br>
+        <br>
+        <span class='ui-icon ui-icon-loading spin'></span>
+        <h1>Starting app</h1>
+    </div>
+
+    <div class="view" id="mainview">
+        <header>
+            <h1>Login View Example</h1>
+        </header>
+
+        <div class="pages">
+
+            <!-- Welcome View -->
+            <div class="panel" data-title="Welcome" id="page1" data-header="none" data-footer="none" selected="true">
+                <div style="text-align:center">
+                    <br>
+                    <br>
+                    <p>This is space for welcome message</p>
+                    <br>
+                    <br>
+                </div>
+                <ul class="list inset">
+                    <li><a href="#signin" class="icon user" style="text-align:center">Login</a></li>
+                    <li><a href="#signup" class="icon pencil" style="text-align:center">Register</a></li>
+                </ul>
+            </div>
+
+            <!-- Login View -->
+            <div class="panel" data-title="Login" id="signin" data-footer="none">
+                <div style="text-align:center">
+                    <br>
+                    <br>
+                    <p>This is space for login message</p>
+                    <br>
+                    <br>
+                </div>
+                <input name="username" type="text" placeholder="username" />
+                <input name="password" type="password" placeholder="password" />
+                <a class="button block green" href="#" id="login">Login</a>
+            </div>
+
+            <!-- Register View -->
+            <div class="panel" data-title="Register" id="signup" data-footer="none">
+                <div style="text-align:center">
+                    <br>
+                    <br>
+                    <p>This is space for register message</p>
+                    <br>
+                    <br>
+                </div>
+                <input name="name" type="text" placeholder="Name" id="name" />
+                <input name="email" type="text" placeholder="Email" id="email" />
+                <input name="username" type="text" placeholder="Username" id="username" />
+                <input name="password" type="password" placeholder="Password" id="password" />
+                <input name="password2" type="password" placeholder="Confirm Password" id="confirmpassword" />
+                <a class="button block green" href="#" id="register">Register</a>
+            </div>
+
+            <!-- Main App View -->
+            <div class="panel" data-title="Start" id="main">
+                <p>This is App page after user has signed in...</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

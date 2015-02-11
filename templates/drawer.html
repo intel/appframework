@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+
+<head>
+
+    <title>App Framework Kitchen Sink</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" type="text/css" href="../build/icons.css" />
+    <link rel="stylesheet" type="text/css" href="../build/af.ui.css" />
+
+
+    <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../build/appframework.ui.js"></script>
+     <script>
+    $(document).ready(function(){
+        //$.afui.splitview.enable();
+    })
+    </script>
+
+</head>
+
+<body>
+    <div id="splashscreen" class='ui-loader heavy'>
+        App Framework
+        <br>
+        <br>
+        <span class='ui-icon ui-icon-loading spin'></span>
+        <h1>Starting app</h1>
+
+    </div>
+    <div class="view splitview" id="mainview">
+        <header>
+            <h1>What</h1>
+            <a class="menuButton" data-left-menu="left" data-transition="cover"></a>
+        </header>
+        <div class="pages">
+            <div class="panel" id="main" data-title="Main" data-selected="true">
+                Splitview Demo
+
+
+            </div>
+            <div data-left-drawer="left" class="panel" id="foobar" data-title="Foobar">
+                Foobar stuff goes here
+            </div>
+
+        </div>
+        <footer>
+            <a href="#main" class="icon home">Main</a>
+            <a href="#foobar" class="icon trash">Foobar</a>
+        </footer>
+
+        <nav id="left">
+            <div class="view active" id="navView1">
+                <header>
+                    <h1>Left</h1>
+                </header>
+                <div class="pages">
+                    <div class="panel active" id="navPage1" data-title="Foobar">
+                        Splitview page 1
+                        <a href="#navPage2">Page 2</a>
+                    </div>
+                    <div class="panel" id="navPage2" data-title="Foobar">
+                        Splitview Page 2
+                    </div>
+                </div>
+                <footer>
+                    <a href="#navPage1" class="icon home">Page 1</a>
+                    <a href="#foobar" class="icon trash" data-menu-close>Main</a>
+                </footer>
+            </div>
+
+        </nav>
+
+    </div>
+</body>
+
+</html>
