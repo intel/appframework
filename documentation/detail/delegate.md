@@ -1,1 +1,0 @@
-$().delegate() is provided for backwards compatibility only.  You should use $().on instead.

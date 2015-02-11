@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+
+<head>
+
+    <title>Lancaster</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" type="text/css" href="lancaster.css" />
+    <link rel="stylesheet" type="text/css" href="../build/af.ui.base.css" />
+
+
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/fastclick.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../build/appframework.ui.js"></script>
+    <script type="text/javascript" charset="utf-8" src="quizpanel.js"></script>
+
+
+
+
+    <script>
+    $.afui.loadDefaultHash=false;
+    $(document).ready(function(){
+        //$.afui.splitview.enable();
+        window.scrollTo(0,0);
+    })
+
+    </script>
+</head>
+
+<body>
+    <div style="visibility:hidden">
+        <span class="transitionView addition"></span>
+        <span class="transitionView subtraction"></span>
+        <span class="transitionView multiplication"></span>
+        <span class="transitionView division"></span>
+        <span class="transitionView shapes"></span>
+        <span class="transitionView colors"></span>
+    </div>
+    <div class='view active' id='main_view'>
+        <header class='main_header'>
+            Andrew Student:  <span id='points'>0</span> Points
+        </header>
+        <div class='pages'>
+            <div id='main' data-title='main' class='panel active'>
+                <div class="grid">
+                    <div class="category  col1 addition" data-category='addition'>
+                        <div>
+                            Addition
+                        </div>
+                    </div>
+                    <div class="category  col2 subtraction" data-category='subtraction'>
+                        <div>
+                            Subtraction
+                        </div>
+                    </div>
+                    <div class="category  col1 multiplication" data-category='multiplication'>
+                        <div>
+                            Multiplication
+                        </div>
+                    </div>
+
+                    <div class="category  col2 division" data-category='division'>
+
+                        <div>
+                            Division
+                        </div>
+                    </div>
+                 <!--   <div class="category  col1 shapes" data-category='shapes'>
+                        <div>
+                            Shapes
+                        </div>
+                    </div>
+                    <div class="category  col2 colors" data-category='colors'>
+                        <div>
+                            Colors
+                        </div>
+                    </div>
+                -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="view" id="profile_view">
+        <div class="pages">
+            <div id="profile" class="panel">
+                <div class="card">
+                    <h3>Your Profile</h3>
+                    <input type='text' placeholder='First Name'>
+                    <br>
+                    <input type='text' placeholder='Last Name'>
+
+                    <br>
+                    <h3>Avatar</h3>
+                    <div class='y-scroll'>
+                        Pick your avatar
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <div style='float:left'>Sign Out</div>
+            <div style='float:right'><a href='#main' data-transition='up-reveal:dismiss'>Sign In</a></div>
+
+        </footer>
+    </div>
+
+    <div class="view" id="question_view">
+        <div id="transitionView" class="transitionView"></div>
+        <div class="pages">
+            <div class="panel" id="quiz">
+                <div class="card" id="quiz_content">
+
+                    <h3>Quiz content stuff</h3>
+                    <div class="answerArrow">&#10003;</div>
+                    <h2>(0/0)</h2>
+
+                    <div class="questionTitle">What is 0+1?</div>
+
+                    <ul class='answerList'>
+                        <li>One</li>
+                        <li>Three</li>
+                        <li>Two</li>
+                        <li>Four</li>
+                    </ul>
+
+                </div>
+
+
+            </div>
+        </div>
+        <footer>
+            <a href="#" data-grower-back class='home'>Home</a>
+        </footer>
+
+    </div>
+
+</body>
+
+</html>

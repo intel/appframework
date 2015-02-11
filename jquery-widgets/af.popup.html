@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+
+<head>
+
+    <title>App Framework Kitchen Sink</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" type="text/css" href="../build/icons.css" />
+
+    <link rel="stylesheet" type="text/css" href="../build/af.ui.css" />
+
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/jquery-ui.min.js"></script>
+
+
+    <script src="src/af.desktopBrowsers.js"></script>
+    <script type="text/javascript" charset="utf-8" src="af.popup.js"></script>
+
+
+    <script>
+    $(document).ready(function(){
+        $("#test").on("click",function(){
+            $(document.body).popup({
+                title:"jQueryTest",
+                message:"jQuery Test Message",
+                doneText:"Done",
+                cancel:function(){
+                    console.log("called cancel");
+                },
+                done:function(){
+                    console.log("done done");
+                }
+            });
+            //get access to DOM element
+            //$(document.body).popup("widget");
+        })
+    })
+    </script>
+</head>
+
+<body >
+    <a href="#" id="test" class="button">Test</a>
+</body>
+
+</html>
