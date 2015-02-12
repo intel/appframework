@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-12-17 */
+/*! intel-appframework - v2.2.0 - 2015-02-12 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.

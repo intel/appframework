@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.1.0 - 2014-12-17 */
+/*! intel-appframework - v2.2.0 - 2015-02-12 */
 
 /**
  * af.actionsheet - an actionsheet for html5 mobile apps
@@ -4891,7 +4891,7 @@ if (!Date.now)
                     modalParent.find("#modalFooter").hide();
                 }
 
-                this.scrollToTop("modal");
+                this.scrollToTop("modal_container");
                 modalDiv.data("panel", id);
                 var myPanel=$panel.get(0);
                 var fnc = myPanel.getAttribute("data-load");
