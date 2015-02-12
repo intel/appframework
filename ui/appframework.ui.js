@@ -1243,7 +1243,7 @@
                     modalParent.find("#modalFooter").hide();
                 }
 
-                this.scrollToTop("modal");
+                this.scrollToTop("modal_container");
                 modalDiv.data("panel", id);
                 var myPanel=$panel.get(0);
                 var fnc = myPanel.getAttribute("data-load");
