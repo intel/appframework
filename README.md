@@ -5,7 +5,7 @@ App Framework is a UI framework targeted at HTML5 browsers.
 Visit <http://app-framework-software.intel.com/index.php> for more information, documentation, and support.
 
 #2.2 support
-Visit <http://app-framework-software.intel.com/2.2/index.php> for App Framework 2.2 documentation.
+Visit <http://app-framework-software.intel.com/af22/index.php> for App Framework 2.2 documentation.
 
 #3.0 version
 
