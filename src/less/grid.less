@@ -1,0 +1,30 @@
+.grid {
+    width: 100%;
+    overflow:hidden;
+}
+.col2,.col3,.col1-3,.col2-3 {
+    float: none;
+    width: 100%;
+}
+.grid:after {
+    content: '';
+    clear: both;
+}
+@media handheld, only screen and (min-width: 768px) {
+    .col2 {
+    width: 50%;
+    float: left;
+  }
+   .col3 {
+    width: 33.3%;
+    float: left;
+  }
+   .col1-3 {
+    width: 33.3%;
+    float: left;
+  }
+   .col2-3 {
+    width: 66.6%;
+    float: left;
+  }
+}

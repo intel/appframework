@@ -1,0 +1,51 @@
+.panel.active, .panel.animation-active {
+  display:block !important;
+  z-index:100;
+  -webkit-animation-timing-function: linear !important;
+  animation-timing-function: linear !important;
+}
+
+.animation-active {
+  -webkit-animation-timing-function: linear !important;
+  animation-timing-function: linear !important;
+}
+
+.panel.animation-active {
+  -webkit-transition-duration: 300ms;
+  transition-duration: 300ms;
+}
+
+.fast {
+  -webkit-transition-duration: 100ms !important;
+  transition-duration: 100ms !important;
+}
+
+
+.none-in,.none-out {
+  -webkit-animation: noTransition 1ms forwards;
+  animation: noTransition 1ms forwards;
+}
+
+.blank-in,.blank-out,.blank {
+  -webkit-animation: noTransition 300ms forwards;
+  animation: noTransition 300ms forwards;
+}
+
+
+@-webkit-keyframes noTransition {
+  from {
+   opacity:1.0;
+  }
+  to {
+    opacity:0.99
+  }
+}
+@keyframes noTransition {
+  from {
+    opacity:1.0;
+  }
+  to {
+    opacity:0.99;
+  }
+}
+

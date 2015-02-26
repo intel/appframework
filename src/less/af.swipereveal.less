@@ -1,0 +1,36 @@
+.swipe-reveal {
+    .swipe-hidden {
+        position:absolute;
+        right:0px;
+        top:0px;
+        z-index:1;
+        bottom:0px;
+    }
+    .swipe-content {
+        display: block;
+        position: relative;
+        display: block;
+        color: inherit;
+        margin: -20px -20px -20px -10px;
+        text-decoration: none;
+        padding: 20px 20px 20px 10px;
+        background:inherit;
+        z-index:2;
+    }    
+}
+.swipe-hidden .button, .swipe-hidden .button.pressed {
+    display:inline-block;
+    height:100%;
+    background:#ccc !important;
+    color:white;
+    border-radius:0 !important;
+    border:none;
+    padding: 20px 15px;
+    margin:0;
+    float:left;
+    color:white !important;
+}
+.swipe-hidden .archive, .swipe-hidden .archive.pressed {
+    background:red !important;
+ 
+}

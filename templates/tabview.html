@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+
+<head>
+
+    <title>Tab View Template</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" type="text/css" href="../build/icons.css" />
+    <link rel="stylesheet" type="text/css" href="../build/af.ui.css" />
+
+
+     <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="http://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../build/appframework.ui.js"></script>
+
+</head>
+
+<body>
+
+    <div id="splashscreen" class='ui-loader heavy'>
+        App Framework - Tab View
+        <br>
+        <br>
+        <span class='ui-icon ui-icon-loading spin'></span>
+        <h1>Starting app</h1>
+    </div>
+
+    <div class="view" id="mainview">
+        <header>
+            <h1>Tab View</h1>
+        </header>
+
+        <div class="pages">
+
+         <!--Tab View Pages-->
+        <div class="panel" data-title="Home" id="main" data-selected="true">
+            This is view for first Tab
+        </div>
+
+        <div class="panel" data-title="Favorites" id="foobar" >
+            This is view for second Tab
+            <br>
+            <br>
+             <a href="#about" class="button" data-tab='tab3' data-transition="slide-left">About</a>
+        </div>
+
+        <div class="panel" data-title="Messages" id="about">
+            This is view for third Tab
+        </div>
+
+        <div class="panel" data-title="Profile" id="test">
+            This is view for fourth Tab
+        </div>
+
+        </div>
+
+        <footer>
+            <a href="#main" class="icon home" id='tab1' >Main</a>
+            <a href="#foobar" class="icon heart" id='tab2' data-transition="up-reveal">Foobar</a>
+            <a href="#about" class="icon html5" id='tab3' data-transition="slide-left">About</a>
+            <a href="#test" class="icon trash" id='tab4' data-transition="none">test</a>
+        </footer>
+    </div>
+
+
+</body>
+
+</html>

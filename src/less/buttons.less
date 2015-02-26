@@ -1,0 +1,196 @@
+.button {
+    position:relative;
+    display:inline-block;
+    padding:8px 12px;
+    margin:8px 0;
+    font-weight:bold;
+    color:#000;
+    text-align:center;
+    vertical-align:top;
+    cursor:pointer;
+    background-color:#eee;
+    border:1px solid #666;
+    text-decoration: none;
+    z-index:2;
+}
+.button.pressed {
+    background:#fff;
+}
+.button.previous {
+    margin-left:16px;
+    padding-left:6px;
+    border-color:#666 #666 transparent transparent !important;
+}
+.button.next {
+    border-color:#666 transparent #666 #666 !important;
+    margin-right:16px;
+    padding-right:6px;
+}
+.button.previous::after {
+    z-index:-1;
+    content:'';
+    position:absolute;
+    width:25px;
+    height:27px;
+    background-color:inherit;
+    top:3px;
+    left:-11px;
+    border-radius:5px;
+    border:1px solid;
+    border-color:transparent transparent inherit transparent;
+    -webkit-transform:rotate(45deg);
+    transform:rotate(45deg);
+}
+.button.next::after {
+    z-index:-1;
+    content:'';
+    position:absolute;
+    width:25px;
+    height:27px;
+    background-color:inherit;
+    top:3px;
+    right:-11px;
+    border-radius:5px;
+    border:1px solid;
+    border-color:transparent transparent transparent transparent;
+    -webkit-transform:rotate(45deg);
+    transform:rotate(45deg);
+}
+.button.block {
+    display:block;
+}
+.button.flat {
+    border-radius: 0;
+    box-shadow:none;
+}
+.header {
+    .button-grouped {
+        & > .button {
+            margin:0;
+            border-color:#fff;
+        }
+    }
+    .button {
+        color: #fff;
+        background:none;
+        border-color: transparent;
+        font-size:12px;
+        padding:7px;
+        height:32px;
+        margin:5px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .button.icon:before {
+        padding-left:6px;
+    }
+}
+.button-grouped {
+    display:inline-block;
+    margin: 5px;
+    * {
+        border-radius:0px;
+        float:left;
+        border-left:0px solid transparent;
+        border-right: 1px solid #666;
+        border-bottom: 1px solid #666;
+        border-top: 1px solid #666;
+        margin:0;
+    }
+    & > .button:first-child {
+        border-left: 1px solid #666;
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+    }
+    & > .button:last-child {
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+    }
+}
+.button-grouped.flex {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    & > .button {
+        -webkit-box-flex: 1;
+        -moz-box-flex: 1 auto;
+        -webkit-flex: 1 auto;
+        -ms-flex: 1 auto;
+        flex: 1 auto;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+.button-grouped.flex.vertical {
+    display: inline-block;
+}
+.button-grouped.vertical {
+    * {
+        border-radius:0px;
+        display:block;
+        float:none;
+        width:100%;
+        border-left: 1px solid #666;
+        border-right: 1px solid #666;
+        border-top: 1px solid #666;
+        border-bottom: 0px solid #666;
+    }
+    & > .button:first-child {
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        border-bottom-left-radius:0px;
+        border-bottom-right-radius:0px;
+    }
+    & > .button:last-child {
+        border-top-right-radius:0px;
+        border-top-left-radius:0px;
+        border-bottom-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-bottom:1px solid #666;
+    }
+}
+.button.gray {
+    background:#999;
+    border-color:#666;
+}
+.button.yellow {
+    background-color:#F1C222;
+    border-color:#999;
+}
+.button.red {
+    color:#fff;
+    text-shadow:0 -1px 0 #666;
+    background:#B20000;
+    border-color:#666;
+}
+.button.green {
+    color:#fff;
+    text-shadow:0 -1px 0 #666;
+    background:#009C0C;
+    border-color:#666;
+}
+.button.orange {
+    color:#fff;
+    text-shadow:0 -1px 0 #666;
+    background-color:#FF8000;
+    border-color:#666;
+}
+.button.black {
+    color:#fff;
+    text-shadow:none;
+    background:#000;
+    border-color:#666;
+}
+.button.slate {
+    color:#fff;
+    text-shadow:0 -1px 0 #000;
+    background:#171F28;
+    border-color:#666;
+}
+.backButton {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

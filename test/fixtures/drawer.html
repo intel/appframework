@@ -1,0 +1,55 @@
+
+<div class="view" id="touchView">
+    <header><h1></h1></header>
+    <div class="pages">
+        <div class="panel" data-title="hello" id="hello">
+            Hello world
+        </div>
+        <div class="panel" id="foobar" data-title="foobar">
+        </div>
+    </div>
+    <footer>
+        <a href="#hello">Hello</a>
+        <a href="#foobar"></a>
+    </footer>
+    <nav id="left">
+        <div class="view active" id="navView1">
+            <header>
+                <h1>What</h1>
+            </header>
+            <div class="pages">
+               <div class="panel active" id="drawer" data-title="Drawer">
+                <a href="#" class="button" onclick="$.afui.drawer.hide('#left')">Hide Left</a>
+                <a href="#" id="hideactive" class="button" data-menu-close>Hide Active</a>
+                <a href="#" id="hideright" class="button" data-menu-close data-right-menu="right">Hide Right</a>
+                <br>
+                <a href="#" id="leftcover" class="button" data-left-menu="left" >Cover Left</a>
+                <br>
+                <a href="#" id="rightcover" class="button" onclick="$.afui.drawer.show('#right','right')">Cover Right</a>
+                <br>
+                <a href="#" id="leftpush" class="button" data-left-menu="left" data-transition="push">Left Push</a>
+                <br>
+                <a href="#" id="leftreveal" class="button" onclick="$.afui.drawer.show('#left','left','reveal')">Left Reveal</a>
+                <br>
+                <a href="#" id="rightpush" class="button" onclick="$.afui.drawer.show('#right','right','push')">Right Push</a>
+                <br>
+                <a href="#" id="rightreveal" class="button" onclick="$.afui.drawer.show('#right','right','reveal')">Right Reveal</a>
+            </div>
+            </div>            
+        </div>  
+    </nav>
+    <nav id="right">
+        <div class="view active" id="navView2">
+            <header>
+                <h1>What</h1>
+            </header>
+            <div class="pages">
+               
+                <div class="panel active" id="rightNav" data-title="Foobar">
+                    This is the right nav
+                </div>
+            </div>               
+        </div>
+    </nav>
+</div>
+

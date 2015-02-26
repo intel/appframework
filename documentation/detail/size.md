@@ -1,1 +1,0 @@
-$().size() returns the number of elements in the collection.  This is the same as $().length;

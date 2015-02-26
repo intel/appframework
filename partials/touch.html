@@ -1,0 +1,46 @@
+
+<script>
+$(document).ready(function(){
+    $("#taptest").bind("tap",function(){
+        alert("I was tapped");
+    })
+    $("#singletaptest").bind("singleTap",function(){
+        alert("I was single tapped");
+    })
+    $("#longtaptest").bind("longTap",function(){
+        alert("I was a long tap");
+    })
+    $("#doubletaptest").bind("doubleTap",function(){
+        alert("I was a double tap");
+    })
+    $("#swipetest").bind("swipe",function(){
+        alert("I was a swiped");
+    });
+
+});
+function showMoreSheet(){
+   $.afui.actionsheet(
+        [{
+            text: 'Stuff',
+            cssClasses: ''
+        }]);
+}
+</script>
+    <h2>Touch Events</h2>
+     <a class='button' href='#main' data-transition='up-reveal:dismiss'>Back</a>
+
+    <ul class="list">
+        <li><a id='taptest' >Tap <br>Test</a></li>
+        <li><a id='longtaptest' >Long Tap Test</a></li>
+        <li><a id='singletaptest' >Single Tap Test</a></li>
+        <li><a id='doubletaptest' >Double Tap Test</a></li>
+        <li class="swipe-x swipe-y"><a id='swipetest' >Swipe Test</a></li>
+        <li class="swipe-reveal">
+            <div class="swipe-content">Swipe to reveal options </div>
+            <div class="swipe-hidden">
+                <a class="button more" onclick="showMoreSheet()">More</a>
+                <a class="button archive" onclick="$(this).closest('.swipe-reveal').remove()">Archive</a>
+            </div>
+        </li>
+    </ul>
+</div>
