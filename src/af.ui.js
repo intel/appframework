@@ -483,7 +483,7 @@
         * @title $.afui.setBackButtonText(title)
         */
         setBackButtonText:function(text){
-            $(this.activeDiv).parent().find("header .backButton").html(text);
+            $(this.activeDiv).closest(".view").find("header .backButton").html(text);
         },
         /**
          * Set the title of the active header from

@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2014-10-16 */
+/*! intel-appframework - v3.0.0 - 2015-03-16 */
 
 /**
  * af.shim.js
@@ -87,6 +87,7 @@
     });
     function detectUA($, userAgent) {
         $.os = {};
+
         $.os.webkit = userAgent.match(/WebKit\/([\d.]+)/) ? true : false;
         $.os.android = userAgent.match(/(Android)\s+([\d.]+)/) || userAgent.match(/Silk-Accelerated/) ? true : false;
         $.os.androidICS = $.os.android && userAgent.match(/(Android)\s4/) ? true : false;
@@ -109,12 +110,26 @@
         $.os.kindle=userAgent.match(/Silk-Accelerated/)?true:false;
         //features
         $.feat = {};
-        $.feat.cssPrefix = $.os.webkit ? "Webkit" : $.os.fennec ? "Moz" : $.os.ie ? "ms" : $.os.opera ? "O" : "";
+
         $.feat.cssTransformStart = !$.os.opera ? "3d(" : "(";
         $.feat.cssTransformEnd = !$.os.opera ? ",0)" : ")";
-
         if ($.os.android && !$.os.webkit)
             $.os.android = false;
+
+
+        //IE tries to be webkit
+        if(userAgent.match(/IEMobile/i)){
+            $.each($.os,function(ind){
+                $.os[ind]=false;
+            });
+            $.os.ie=true;
+            $.os.ieTouch=true;
+        }
+        var items=["Webkit","Moz","ms","O"];
+        for(var j=0;j<items.length;j++){
+            if(document.documentElement.style[items[j]+"Transform"]==="")
+                $.feat.cssPrefix=items[j];
+        }
 
     }
 
@@ -379,6 +394,7 @@ window.af=window.jq=jQuery;
         function setupCustomTheme() {
 
             if (that.useOSThemes) {
+
                 var $el=$(document.body);
                 $el.removeClass("ios ios7 win8 tizen bb android light dark firefox");
                 if ($.os.android)
@@ -779,7 +795,7 @@ window.af=window.jq=jQuery;
         * @title $.afui.setBackButtonText(title)
         */
         setBackButtonText:function(text){
-            $(this.activeDiv).parent().find("header .backButton").html(text);
+            $(this.activeDiv).closest(".view").find("header .backButton").html(text);
         },
         /**
          * Set the title of the active header from
@@ -1009,7 +1025,7 @@ window.af=window.jq=jQuery;
             var isNewView=false;
             //check nested views
             if(!isSplitViewParent)
-                isSplitViewParent=currentView.parent().closest('.view').length===1;
+                isSplitViewParent=currentView.parent().closest(".view").length===1;
 
             if(isSplitViewParent&&currentView&&currentView.get(0)!==view.get(0))
                 $(currentView).trigger("nestedviewunload");
@@ -1811,9 +1827,8 @@ window.af=window.jq=jQuery;
                 var swipe=touch.el.closest(swipeDir);
                 var scroller=touch.el.closest(scrollDir);
 
-                if((swipe.length===0||scroller.length===0)||swipe.find(scroller).length==0)
+                if((swipe.length===0||scroller.length===0)||swipe.find(scroller).length===0)
                 {
-
                     touch.el.trigger("swipe"+direction);
                 }
 
@@ -2290,7 +2305,6 @@ window.af=window.jq=jQuery;
         return this;
     }
 
-    var isTransitioning=false;
     var transitionTypes = {
         push:function(elem,reverse,position){
             var item=$(elem).closest(".view").children().filter(":not(nav):not(aside)");
@@ -2317,6 +2331,7 @@ window.af=window.jq=jQuery;
     Drawer.prototype= {
         defaultTransition:"slide",
         defaultAnimation:"cover",
+        isTransitioning:false,
         autoHide:function(event){
             event.preventDefault();
             this.hide();
