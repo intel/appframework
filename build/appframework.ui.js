@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2015-03-16 */
+/*! intel-appframework - v3.0.0 - 2015-03-18 */
 
 /**
  * af.shim.js
@@ -1282,6 +1282,12 @@ window.af=window.jq=jQuery;
 
                 setTimeout(function(){
                     active.removeClass("active");
+                    //Try to add the active class again (even though in most cases the class will already be set).
+                    //This solves an issue when swapping panels A->B->A by QUICKLY tapping footer buttons on slow devices.
+                    //Under these circumstances the timeout sometimes comes after the active classes to panels A and B have been set.
+                    //You may end up having no active panels (blank page).
+                    view.addClass("active");
+                    $(newDiv).addClass("active");
                 },50);
 
                 return;
