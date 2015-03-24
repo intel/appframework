@@ -789,10 +789,10 @@
                 elementId=$(ele).prop("id");
             /*
             Check if an item exists:
-            Note that footer hrefs' may point to elements preceded by a # when trying to load a div (f.ex.: <footer href="#panelId">.
+            Note that footer hrefs' may point to elements preceded by a # when trying to load a div (f.ex.: <footer><a href="#panelId">).
             But in some other cases footer hrefs' may point to elements not preceded by a #
-                F.ex.: <footer href="ajaxRequest"> when doing ajax calls
-                F.ex.: <footer href="listX/itemY"> when using pushState routers - read more here: https://github.com/01org/appframework/issues/837
+                F.ex.: <footer><a href="ajaxRequest"> when doing ajax calls
+                F.ex.: <footer><a href="listX/itemY"> when using pushState routers - read more here: https://github.com/01org/appframework/issues/837
             We check whether an item exists including both options here (note the &&):
             */
             if((view.find("footer").find("a").filter("[href='"+elementId+"']").length===0)&&(view.find("footer").find("a").filter("[href='#"+elementId+"']").length===0)) return;
