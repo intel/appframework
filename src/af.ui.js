@@ -787,10 +787,12 @@
             var hash;
             if(typeof(ele)!=="string")
                 hash=$(ele).prop("id");
+            var tmp = view.find("footer").find("a").removeClass("pressed").attr("data-ignore-pressed","true");
+            //In case of a loadAjax being done:
+            tmp.filter("[href='"+hash+"']").addClass("pressed");
+            //In case of a loadDiv being done:
             hash="#"+hash;
-            //check if an item exists
-            if(view.find("footer").find("a").filter("[href='"+hash+"']").length===0) return;
-            view.find("footer").find("a").removeClass("pressed").attr("data-ignore-pressed","true").filter("[href='"+hash+"']").addClass("pressed");
+            tmp.filter("[href='"+hash+"']").addClass("pressed");
         },
 
          /**
