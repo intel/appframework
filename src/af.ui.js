@@ -787,19 +787,19 @@
             var elementId;
             if(typeof(ele)!=="string")
                 elementId=$(ele).prop("id");
-			/*
-			Check if an item exists:
-			Note that footer hrefs' may point to elements preceded by a # when trying to load a div (f.ex.: <footer href="#panelId">.
-			But in some other cases footer hrefs' may point to elements not preceded by a #
-				F.ex.: <footer href="ajaxRequest"> when doing ajax calls
-				F.ex.: <footer href="listX/itemY"> when using pushState routers - read more here: https://github.com/01org/appframework/issues/837
-			We check whether an item exists including both options here (note the &&):
-			*/
-			if((view.find("footer").find("a").filter("[href='"+elementId+"']").length===0)&&(view.find("footer").find("a").filter("[href='#"+elementId+"']").length===0)) return;
+            /*
+            Check if an item exists:
+            Note that footer hrefs' may point to elements preceded by a # when trying to load a div (f.ex.: <footer href="#panelId">.
+            But in some other cases footer hrefs' may point to elements not preceded by a #
+                F.ex.: <footer href="ajaxRequest"> when doing ajax calls
+                F.ex.: <footer href="listX/itemY"> when using pushState routers - read more here: https://github.com/01org/appframework/issues/837
+            We check whether an item exists including both options here (note the &&):
+            */
+            if((view.find("footer").find("a").filter("[href='"+elementId+"']").length===0)&&(view.find("footer").find("a").filter("[href='#"+elementId+"']").length===0)) return;
             var tmp = view.find("footer").find("a").removeClass("pressed").attr("data-ignore-pressed","true");
-			/*
-			Now we need to activate the elementId. We have to do this twice again. Once in case of loading a div using AF's router and once again in case of pushState routers or loading Ajax.
-			*/
+            /*
+            Now we need to activate the elementId. We have to do this twice again. Once in case of loading a div using AF's router and once again in case of pushState routers or loading Ajax.
+            */
             //In case of an Ajax call or if using a pushState router:
             tmp.filter("[href='"+elementId+"']").addClass("pressed");
             //In case of an loading a div with AF's internal router:
