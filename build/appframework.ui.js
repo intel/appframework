@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2015-03-18 */
+/*! intel-appframework - v3.0.0 - 2015-03-24 */
 
 /**
  * af.shim.js
@@ -1100,6 +1100,8 @@ window.af=window.jq=jQuery;
             if(typeof(ele)!=="string")
                 hash=$(ele).prop("id");
             hash="#"+hash;
+            //check if an item exists
+            if(view.find("footer").find("a").filter("[href='"+hash+"']").length===0) return;
             view.find("footer").find("a").removeClass("pressed").attr("data-ignore-pressed","true").filter("[href='"+hash+"']").addClass("pressed");
         },
 

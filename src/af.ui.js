@@ -788,6 +788,8 @@
             if(typeof(ele)!=="string")
                 hash=$(ele).prop("id");
             hash="#"+hash;
+            //check if an item exists
+            if(view.find("footer").find("a").filter("[href='"+hash+"']").length===0) return;
             view.find("footer").find("a").removeClass("pressed").attr("data-ignore-pressed","true").filter("[href='"+hash+"']").addClass("pressed");
         },
 
