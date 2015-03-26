@@ -1106,7 +1106,10 @@
                 }
             });
 
-            $(document).on("click", ".backButton, [data-back]", that.goBack.bind(that));
+            $(document).on("click", ".backButton, [data-back]", function() { 
+                if(that.useInternalRouting)
+                    that.goBack.bind(that);
+            });
             //Check for includes
 
             var items=$("[data-include]");
