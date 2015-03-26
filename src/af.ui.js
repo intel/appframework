@@ -528,7 +528,7 @@
          * @title $.afui.setBackButtonVisbility
          */
         setBackButtonVisibility:function(what){
-            var visibility=what?"visibile":"hidden";
+            var visibility=what?"visible":"hidden";
             $(this.activeDiv).closest(".view").children("header").find(".backButton").css("visibility",visibility);
         },
 
