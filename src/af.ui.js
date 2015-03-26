@@ -664,15 +664,19 @@
          */
         loadDiv: function(target, newView, back, transition,anchor) {
             // load a div
-            var newDiv = target.replace("#", "");
+            var newDiv = target;
 
+            var hashIndex = newDiv.indexOf("#");
             var slashIndex = newDiv.indexOf("/");
-            var hashLink = "";
-            if (slashIndex !== -1) {
-                // Ignore everything after the slash for loading
-                hashLink = newDiv.substr(slashIndex);
-                newDiv = newDiv.substr(0, slashIndex);
+            if ((slashIndex !== -1)&&(hashIndex !== -1)) {
+                //Ignore everything after the slash in the hash part of a URL
+                //For example: app.com/#panelid/option1/option2  will become -> app.com/#panelid
+                //For example: app.com/path/path2/path3  will still be -> app.com/path/path2/path3
+                if (slashIndex > hashIndex) {
+                    newDiv = newDiv.substr(0, slashIndex);
+                }
             }
+            newDiv = newDiv.replace("#", "");
 
             newDiv = $.query("#" + newDiv).get(0);
             if (!newDiv) {
