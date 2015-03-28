@@ -1112,7 +1112,7 @@
 
             $(document).on("click", ".backButton, [data-back]", function() { 
                 if(that.useInternalRouting)
-                   return that.goBack.bind(that);
+                  that.goBack.bind(that)();
             });
             //Check for includes
 
