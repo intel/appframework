@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2015-03-26 */
+/*! intel-appframework - v3.0.0 - 2015-03-29 */
 
 /**
  * af.shim.js
@@ -1422,9 +1422,9 @@ window.af=window.jq=jQuery;
                 }
             });
 
-            $(document).on("click", ".backButton, [data-back]", function() { 
+            $(document).on("click", ".backButton, [data-back]", function() {
                 if(that.useInternalRouting)
-                    that.goBack.bind(that);
+                    that.goBack(that);
             });
             //Check for includes
 
