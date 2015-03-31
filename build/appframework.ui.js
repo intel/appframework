@@ -1,5 +1,3 @@
-/*! intel-appframework - v3.0.0 - 2015-03-29 */
-
 /**
  * af.shim.js
  * @copyright Intel 2014
@@ -1473,7 +1471,12 @@ window.af=window.jq=jQuery;
         if (theTarget === document) {
             return;
         }
+        var custom = (typeof $.afui.customClickHandler === "function") ? $.afui.customClickHandler : false;
+        if (custom !== false) {
+            if ($.afui.customClickHandler(theTarget.getAttribute("href"),e)) return e.preventDefault();
 
+        }
+        
         //this technique fails when considerable content exists inside anchor, should be recursive ?
         if (theTarget.tagName.toLowerCase() !== "a" && theTarget.parentNode) return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
         //anchors
