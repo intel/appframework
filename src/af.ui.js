@@ -1043,10 +1043,12 @@
             //get first div, defer
 
             var first=$(".view[data-default='true']");
-            if(first.length===0)
+            if(first.length===0) {
                 first=$(".view").eq(0);
-            else
-                throw ("You need to create a view");
+                
+                if(first.length===0)
+                    throw ("You need to create a view");
+            }
 
             first.addClass("active");
             //history
