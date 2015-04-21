@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.2.0 - 2015-02-12 */
+/*! intel-appframework - v2.2.0 - 2015-04-21 */
 
 /**
  * App Framework  query selector class for HTML5 mobile apps on a WebkitBrowser.
@@ -2132,7 +2132,7 @@ if (!window.af || typeof(af) !== "function") {
             $.feat.cssTransformStart = !$.os.opera ? "3d(" : "(";
             $.feat.cssTransformEnd = !$.os.opera ? ",0)" : ")";
             if($.os.ios) {
-                if(Promise&&Promise.toString().indexOf("native")!==-1)
+                if('Promise' in window&&Promise.toString().indexOf("native")!==-1)
                     $.os.ios7=true;
             }
             if ($.os.android && !$.os.webkit)

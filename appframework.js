@@ -2130,7 +2130,7 @@ if (!window.af || typeof(af) !== "function") {
             $.feat.cssTransformStart = !$.os.opera ? "3d(" : "(";
             $.feat.cssTransformEnd = !$.os.opera ? ",0)" : ")";
             if($.os.ios) {
-                if(Promise&&Promise.toString().indexOf("native")!==-1)
+                if('Promise' in window&&Promise.toString().indexOf("native")!==-1)
                     $.os.ios7=true;
             }
             if ($.os.android && !$.os.webkit)
