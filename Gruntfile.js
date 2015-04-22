@@ -49,7 +49,8 @@ module.exports = function (grunt) {
                         "src/af.drawer.js",
                         "src/af.swipereveal.js",
                         "src/af.desktopBrowsers.js",
-                        "src/af.toast.js"
+                        "src/af.toast.js",
+                        "src/af.lockscreen.js"
                     ]
                 }
             },
@@ -80,7 +81,8 @@ module.exports = function (grunt) {
                     "src/less/forms.less",
                     "src/less/grid.less",
                     "src/less/lists.less",
-                    "src/less/splitview.less"
+                    "src/less/splitview.less",
+                    "src/less/af.lockscreen.less"
                     ]
                 }
             }
@@ -140,7 +142,8 @@ module.exports = function (grunt) {
                     "src/less/forms.less",
                     "src/less/grid.less",
                     "src/less/lists.less",
-                    "src/less/splitview.less"
+                    "src/less/splitview.less",
+                    "src/less/af.lockscreen.less"
                     ]
                 }
             }
@@ -161,7 +164,7 @@ module.exports = function (grunt) {
         "watch"
     ]);
 
-    grunt.registerTask("rebuild" , ["concat","closure-compiler","usebanner"]);
+    grunt.registerTask("rebuild" , ["less","concat","closure-compiler","usebanner"]);
     grunt.registerTask("hint" , ["jshint"]);
     grunt.registerTask("test" , ["karma"]);
 
