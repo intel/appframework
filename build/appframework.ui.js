@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2015-04-07 */
+/*! intel-appframework - v3.0.0 - 2015-04-02 */
 
 /**
  * af.shim.js
@@ -1165,47 +1165,28 @@ window.af=window.jq=jQuery;
             var forceRefresh=anchor.getAttribute("data-refresh");
 
             if(found.length>0){
+
                 if(forceRefresh){
                     that.showLoading&&that.showMask("Loading Content");
                     $.ajax(target).then(function(res){
-						if(!$(res).hasClass('panel')) {
-							// cmwong 20150404
-							// do not hv panel, just replace everything
-							// use append so that the js in panel will execute
-							found.empty().append(res);
-						} else {
-							// cmwong 20150404
-							// only the first panel
-							// only take childnodes under panel (do not want the panel node)
-							var $res=$.create("div",{html:res});
-							found.empty().append( $( $res.find(".panel")[0] ).html() );
-						}
+                        found.html(res);
                         that.showLoading&&that.hideMask();
-                        that.loadContent("#"+found.prop("id"),newTab,back,transition,anchor);
+                        return that.loadContent("#"+found.prop("id"),newTab,back,transition,anchor);
                     });
-					// cmwong 20150404
-					// return move here, if not it with fire 2 times ajax
-					return;
-                } else {
-                    that.loadContent("#"+found.prop("id"),newTab,back,transition,anchor);
-					return;
-				}
+                }
+                else
+                    return that.loadContent("#"+found.prop("id"),newTab,back,transition,anchor);
             }
             that.showLoading&&that.showMask("Loading Content");
             $.ajax(target).then(function(res){
                 var $res=$.create("div",{html:res});
-				//cmwong 20150404
-				//the first node hasClass panel
-				if(!$(res).hasClass('panel')) {
+                if(!$res.hasClass(".panel")){
                     $res=$res.attr("data-title",(target));
                     $res.prop("id",crc);
                     $res.addClass("panel");
-                } else {
-					// only take the first found panel
-                    $res=$( $res.find(".panel")[0] );
-					if(!$res.prop('id')) {
-						$res.prop("id",crc);
-					} 
+                }
+                else {
+                    $res=$res.find(".panel");
                 }
                 $(that.activeDiv).closest(".pages").append($res);
                 $res.attr("data-crc",crc);
@@ -1215,6 +1196,7 @@ window.af=window.jq=jQuery;
                 that.showLoading&&that.hideMask();
                 console.log("Error with ajax request",res);
             });
+
         },
         /**
          * This executes the transition for the panel
