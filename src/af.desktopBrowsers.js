@@ -32,7 +32,7 @@
      */
     var preventAllButInputs = function(event, target) {
         var tag = target.tagName.toUpperCase();
-        if (tag.indexOf("SELECT") > -1 || tag.indexOf("TEXTAREA") > -1 || tag.indexOf("INPUT") > -1) {
+        if (tag.indexOf("SELECT") > -1 || tag.indexOf("OPTION") > -1 || tag.indexOf("TEXTAREA") > -1 || tag.indexOf("INPUT") > -1) {
             return;
         }
         preventAll(event);
