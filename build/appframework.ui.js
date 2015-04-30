@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2015-04-22 */
+/*! intel-appframework - v3.0.0 - 2015-04-30 */
 
 /**
  * af.shim.js
@@ -320,6 +320,8 @@ window.af=window.jq=jQuery;
 /* global FastClick*/
 
  /* jshint camelcase:false*/
+ 
+
 (function($) {
     "use strict";
     var startPath = window.location.pathname + window.location.search;
@@ -380,7 +382,7 @@ window.af=window.jq=jQuery;
             if (id === "" && that.history.length === 1) //Fix going back to first panel and an empty hash
                 id = "#" + that.firstPanel.id;
             if (id === "") return;
-            if (af(id).filter(".panel").length === 0) return;
+            if ($(id).filter(".panel").length === 0) return;
 
             if (id !== "#" + that.activeDiv.id) that.goBack();
 
@@ -2854,8 +2856,12 @@ window.af=window.jq=jQuery;
 
 /**
  * af.lockscreen - a lockscreen for html5 mobile apps
- * Copyright 2014 - Intel
+ * Copyright 2015 - Intel
  */
+ 
+ /* global FastClick*/
+
+ /* jshint camelcase:false*/
 
 
 (function($){
@@ -2864,19 +2870,19 @@ window.af=window.jq=jQuery;
     $.fn.lockScreen = function(opts) {
         var tmp;
         for (var i = 0; i < this.length; i++) {
-            tmp = new lockScreen(this[i], opts);
+            tmp = new LockScreen(this[i], opts);
         }
         return this.length === 1 ? tmp : this;
     };
 
-    var lockScreen = function (containerEl, opts) {
+    var LockScreen = function (containerEl, opts) {
         if (typeof(opts) === "object") {
             for (var j in opts) {
                 this[j] = opts[j];
             }
         }
-    }
-    lockScreen.prototype= {
+    };
+    LockScreen.prototype= {
         logo:"<div class='icon database big'></div>",
         roundKeyboard:false,
         validatePassword:function(){},
