@@ -8,6 +8,8 @@
 /* global FastClick*/
 
  /* jshint camelcase:false*/
+ 
+
 (function($) {
     "use strict";
     var startPath = window.location.pathname + window.location.search;
@@ -68,7 +70,7 @@
             if (id === "" && that.history.length === 1) //Fix going back to first panel and an empty hash
                 id = "#" + that.firstPanel.id;
             if (id === "") return;
-            if (af(id).filter(".panel").length === 0) return;
+            if ($(id).filter(".panel").length === 0) return;
 
             if (id !== "#" + that.activeDiv.id) that.goBack();
 

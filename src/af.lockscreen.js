@@ -1,7 +1,11 @@
 /**
  * af.lockscreen - a lockscreen for html5 mobile apps
- * Copyright 2014 - Intel
+ * Copyright 2015 - Intel
  */
+ 
+ /* global FastClick*/
+
+ /* jshint camelcase:false*/
 
 
 (function($){
@@ -10,19 +14,19 @@
     $.fn.lockScreen = function(opts) {
         var tmp;
         for (var i = 0; i < this.length; i++) {
-            tmp = new lockScreen(this[i], opts);
+            tmp = new LockScreen(this[i], opts);
         }
         return this.length === 1 ? tmp : this;
     };
 
-    var lockScreen = function (containerEl, opts) {
+    var LockScreen = function (containerEl, opts) {
         if (typeof(opts) === "object") {
             for (var j in opts) {
                 this[j] = opts[j];
             }
         }
-    }
-    lockScreen.prototype= {
+    };
+    LockScreen.prototype= {
         logo:"<div class='icon database big'></div>",
         roundKeyboard:false,
         validatePassword:function(){},
