@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2015-04-30 */
+/*! intel-appframework - v3.0.0 - 2015-05-22 */
 
 /**
  * af.shim.js
@@ -320,7 +320,7 @@ window.af=window.jq=jQuery;
 /* global FastClick*/
 
  /* jshint camelcase:false*/
- 
+
 
 (function($) {
     "use strict";
@@ -836,10 +836,10 @@ window.af=window.jq=jQuery;
          /**
          * Set the visibility of the back button for the current header
          ```
-         $.afui.setBackButtonVisbility(true)
+         $.afui.setBackButtonVisibility(true)
          ```
          * @param {boolean} Boolean to set the visibility. true show, false hide
-         * @title $.afui.setBackButtonVisbility
+         * @title $.afui.setBackButtonVisibility
          */
         setBackButtonVisibility:function(what){
             var visibility=what?"visible":"hidden";
@@ -858,7 +858,7 @@ window.af=window.jq=jQuery;
          * @param {string} target
          * @param {string} value
          * @param {string=} position
-         * @param {(string=|object)} color Color or CSS hash
+         * @param {string=} color Color or CSS hash
          * @title $.afui.updateBadge(target,value,[position],[color])
          */
         updateBadge: function(target, value, position, color) {
@@ -955,7 +955,7 @@ window.af=window.jq=jQuery;
             if (this.doingTransition) {
                 return;
             }
-
+            anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
             if (target.length === 0) return;
             if(target.indexOf("#")!==-1){
                 this.loadDiv(target, newView, back, transition,anchor);
@@ -1376,7 +1376,7 @@ window.af=window.jq=jQuery;
             var first=$(".view[data-default='true']");
             if(first.length===0) {
                 first=$(".view").eq(0);
-                
+
                 if(first.length===0)
                     throw ("You need to create a view");
             }
@@ -1482,7 +1482,7 @@ window.af=window.jq=jQuery;
             if ($.afui.customClickHandler(theTarget.getAttribute("href"),e)) return e.preventDefault();
 
         }
-        
+
         //this technique fails when considerable content exists inside anchor, should be recursive ?
         if (theTarget.tagName.toLowerCase() !== "a" && theTarget.parentNode) return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
         //anchors
@@ -1941,7 +1941,6 @@ window.af=window.jq=jQuery;
             $.afui.setTitle=oldTitle;
         }
     };
-
 })(jQuery);
 /**
  * af.popup - a popup/alert library for html5 mobile apps
@@ -1975,10 +1974,10 @@ window.af=window.jq=jQuery;
 (function ($) {
     "use strict";
     $.fn.popup = function (opts) {
-        return new popup(this[0], opts);
+        return new Popup(this[0], opts);
     };
     var queue = [];
-    var popup = function (containerEl, opts) {
+    var Popup = function (containerEl, opts) {
 
         if (typeof containerEl === "string" || containerEl instanceof String) {
             this.container = document.getElementById(containerEl);
@@ -2023,7 +2022,7 @@ window.af=window.jq=jQuery;
 
     };
 
-    popup.prototype = {
+    Popup.prototype = {
         id: null,
         addCssClass: null,
         title: null,

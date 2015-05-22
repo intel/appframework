@@ -8,7 +8,7 @@
 /* global FastClick*/
 
  /* jshint camelcase:false*/
- 
+
 
 (function($) {
     "use strict";
@@ -524,10 +524,10 @@
          /**
          * Set the visibility of the back button for the current header
          ```
-         $.afui.setBackButtonVisbility(true)
+         $.afui.setBackButtonVisibility(true)
          ```
          * @param {boolean} Boolean to set the visibility. true show, false hide
-         * @title $.afui.setBackButtonVisbility
+         * @title $.afui.setBackButtonVisibility
          */
         setBackButtonVisibility:function(what){
             var visibility=what?"visible":"hidden";
@@ -546,7 +546,7 @@
          * @param {string} target
          * @param {string} value
          * @param {string=} position
-         * @param {(string=|object)} color Color or CSS hash
+         * @param {string=} color Color or CSS hash
          * @title $.afui.updateBadge(target,value,[position],[color])
          */
         updateBadge: function(target, value, position, color) {
@@ -643,7 +643,7 @@
             if (this.doingTransition) {
                 return;
             }
-
+            anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
             if (target.length === 0) return;
             if(target.indexOf("#")!==-1){
                 this.loadDiv(target, newView, back, transition,anchor);
@@ -1064,7 +1064,7 @@
             var first=$(".view[data-default='true']");
             if(first.length===0) {
                 first=$(".view").eq(0);
-                
+
                 if(first.length===0)
                     throw ("You need to create a view");
             }
@@ -1170,7 +1170,7 @@
             if ($.afui.customClickHandler(theTarget.getAttribute("href"),e)) return e.preventDefault();
 
         }
-        
+
         //this technique fails when considerable content exists inside anchor, should be recursive ?
         if (theTarget.tagName.toLowerCase() !== "a" && theTarget.parentNode) return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
         //anchors
