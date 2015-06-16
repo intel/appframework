@@ -145,6 +145,7 @@
          * @api private
          */
         blockPageBounce:function(enable){
+            if(!$.os.ios) return;
             if(enable===false){
                 window.removeEventListener("touchmove",this.handlePageBounce,false);
                 window.removeEventListener("touchstart",this.handlePageBounce,false);
