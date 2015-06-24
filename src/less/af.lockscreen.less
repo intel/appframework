@@ -1,0 +1,163 @@
+
+#lockScreen {
+    position: absolute;
+    top:0px;
+    bottom:0px;
+    width:100%;
+    height:100%;
+    left:0px;
+    z-index:99999999999999;
+    background: #ccc;
+
+    .flexContainer {
+        display: -webkit-box;
+        display: -moz-box;
+        display: box;
+
+        -webkit-box-orient: vertical;
+        -moz-box-orient: vertical;
+        box-orient: vertical;
+
+        -webkit-box-align: center;
+        -moz-box-align: center;
+        box-align: center;
+        -webkit-box-pack: center;
+        -moz-box-pack: center;
+        box-pack: center;
+    }
+
+    .keyboard {
+        width:100%;
+        position:absolute;
+        bottom:0px;
+        .row {
+            display: block;
+            width:100%;
+            text-align: center;
+            height:50px;
+            line-height:50px;
+            font-size:1.3em;
+            font-weight: bold;
+            div {
+                display: block;
+                width:33.33%;
+                float:left;
+                border:1px solid #000;
+                justify-content: center;
+                 text-align: center;
+            }
+            div.grey {
+                background:white;
+            }
+        }
+    }
+
+    .content {
+        position:absolute;
+        top:0px;
+        bottom:170px;
+        width:100%;
+        text-align:center;
+        -moz-box-flex: 0;
+        -webkit-box-flex: 0;
+        -ms-box-flex: 0;
+        box-flex: 0;
+        -moz-box-ordinal-group: 1;
+        -webkit-box-ordinal-group: 1;
+        -ms-box-ordinal-group: 1;
+        box-ordinal-group: 1;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    .touched {
+        background-color: white;
+    }
+
+    input[type="password"] {
+        height:50px;
+        font-size:40px;
+        width:200px;
+        text-align: center;
+    }
+
+    .icon {
+        font-size:50px;
+        color:white;
+        margin-bottom: 10px;
+    }
+    .error {
+        padding-top:10px;
+        visibility: hidden;
+        color:red;
+        font-weight:bold;
+        font-size:1.3em;
+    }
+
+    &.round{
+        .content {
+            bottom:250px;
+        }
+        .keyboard{
+            bottom:10px;
+            .row {
+                display: -webkit-box;
+                display: -moz-box;
+                display: box;
+
+                -webkit-box-align: center;
+                -moz-box-align: center;
+                box-align: center;
+
+                -webkit-box-pack: center;
+                -moz-box-pack: center;
+                box-pack: center;
+                margin-bottom:20px;
+                div {
+                    -moz-box-flex: 0;
+                    -webkit-box-flex: 0;
+                    -ms-box-flex: 0;
+                    box-flex: 0;
+                    -moz-box-ordinal-group: 1;
+                    -webkit-box-ordinal-group: 1;
+                    -ms-box-ordinal-group: 1;
+                    box-ordinal-group: 1;
+                    float:none;
+                    width:60px;
+                    height:60px;
+                    border-radius:60px;
+                    line-height:60px;
+                    margin:10px;
+                    cursor:pointer;
+                }
+                div.grey {
+                    background:transparent;
+                    border:none;
+                }
+            }
+        }
+        input[type="password"] {
+            height:50px;
+            font-size:40px;
+            width:200px;
+            text-align: center;
+            background: transparent;
+            color:white;
+        }
+
+
+        input[type="password"]::-webkit-input-placeholder {
+           color: white;
+        }
+
+
+        input[type="password"]::-moz-placeholder {  /* Firefox 19+ */
+           color: white;
+        }
+
+        input[type="password"]:-ms-input-placeholder {
+           color: white;
+        }
+    }
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+
+<head>
+
+    <title>App Framework Kitchen Sink</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" type="text/css" href="../build/icons.css" />
+
+    <link rel="stylesheet" type="text/css" href="../build/af.ui.css" />
+    <link rel="stylesheet" type="text/css" href="af.lockscreen.css" />
+
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../3rdparty/jquery-ui.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://rawgit.com/ftlabs/fastclick/master/lib/fastclick.js"></script>
+
+    <script src="src/af.desktopBrowsers.js"></script>
+    <script type="text/javascript" charset="utf-8" src="af.lockscreen.js"></script>
+
+
+    <script>
+    $(document).ready(function(){
+        FastClick.attach(document.body);
+        var screen=$(document.body).lockscreen({
+            validatePassword:doValidate,
+            roundKeyboard:true
+        });
+        screen.lockscreen('show');
+
+        function doValidate(val){
+            val=parseInt(val,10);
+            console.log(val===1111);
+            if(val===1111)
+                return true;
+            return false;
+        }
+
+        $(document).on("resume",function(){
+            screen.lockscreen('show');
+        });
+    })
+    </script>
+</head>
+
+<body >
+    <a href="#" id="test" class="button">Test</a>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+<script>
+
+function showLockScreen(round) {
+   var lock=$(document.body).lockScreen({
+        validatePassword:function(pass){
+            return pass==1111;
+        },
+        roundKeyboard:round
+   });
+   lock.show();
+}
+
+
+</script>
+This creates a modal window asking users to enter a 4 digit password.  You can have boxed keys or rounded.  The password is 1111
+<br>
+<br>
+<br>
+<a class="button" onClick="showLockScreen()">Show Lock Screen</a>
+<br>
+<a class="button" onClick="showLockScreen(true)">Show Lock Screen (rounded)</a>
+<br>

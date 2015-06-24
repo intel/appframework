@@ -30,10 +30,10 @@
 (function ($) {
     "use strict";
     $.fn.popup = function (opts) {
-        return new popup(this[0], opts);
+        return new Popup(this[0], opts);
     };
     var queue = [];
-    var popup = function (containerEl, opts) {
+    var Popup = function (containerEl, opts) {
 
         if (typeof containerEl === "string" || containerEl instanceof String) {
             this.container = document.getElementById(containerEl);
@@ -78,7 +78,7 @@
 
     };
 
-    popup.prototype = {
+    Popup.prototype = {
         id: null,
         addCssClass: null,
         title: null,

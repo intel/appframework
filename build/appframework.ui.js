@@ -1,3 +1,5 @@
+/*! intel-appframework - v3.0.0 - 2015-06-16 */
+
 /**
  * af.shim.js
  * @copyright Intel 2014
@@ -91,7 +93,7 @@
         $.os.androidICS = $.os.android && userAgent.match(/(Android)\s4/) ? true : false;
         $.os.ipad = userAgent.match(/(iPad).*OS\s([\d_]+)/) ? true : false;
         $.os.iphone = !$.os.ipad && userAgent.match(/(iPhone\sOS)\s([\d_]+)/) ? true : false;
-        $.os.ios7 = ($.os.ipad||$.os.iphone)&&(userAgent.match(/7_/)||userAgent.match(/8_/)) ? true : false;
+        $.os.ios7 = ($.os.ipad||$.os.iphone);
         $.os.webos = userAgent.match(/(webOS|hpwOS)[\s\/]([\d.]+)/) ? true : false;
         $.os.touchpad = $.os.webos && userAgent.match(/TouchPad/) ? true : false;
         $.os.ios = $.os.ipad || $.os.iphone;
@@ -318,6 +320,8 @@ window.af=window.jq=jQuery;
 /* global FastClick*/
 
  /* jshint camelcase:false*/
+
+
 (function($) {
     "use strict";
     var startPath = window.location.pathname + window.location.search;
@@ -378,7 +382,7 @@ window.af=window.jq=jQuery;
             if (id === "" && that.history.length === 1) //Fix going back to first panel and an empty hash
                 id = "#" + that.firstPanel.id;
             if (id === "") return;
-            if (af(id).filter(".panel").length === 0) return;
+            if ($(id).filter(".panel").length === 0) return;
 
             if (id !== "#" + that.activeDiv.id) that.goBack();
 
@@ -453,6 +457,7 @@ window.af=window.jq=jQuery;
          * @api private
          */
         blockPageBounce:function(enable){
+            if(!$.os.ios) return;
             if(enable===false){
                 window.removeEventListener("touchmove",this.handlePageBounce,false);
                 window.removeEventListener("touchstart",this.handlePageBounce,false);
@@ -832,10 +837,10 @@ window.af=window.jq=jQuery;
          /**
          * Set the visibility of the back button for the current header
          ```
-         $.afui.setBackButtonVisbility(true)
+         $.afui.setBackButtonVisibility(true)
          ```
          * @param {boolean} Boolean to set the visibility. true show, false hide
-         * @title $.afui.setBackButtonVisbility
+         * @title $.afui.setBackButtonVisibility
          */
         setBackButtonVisibility:function(what){
             var visibility=what?"visible":"hidden";
@@ -854,7 +859,7 @@ window.af=window.jq=jQuery;
          * @param {string} target
          * @param {string} value
          * @param {string=} position
-         * @param {(string=|object)} color Color or CSS hash
+         * @param {string=} color Color or CSS hash
          * @title $.afui.updateBadge(target,value,[position],[color])
          */
         updateBadge: function(target, value, position, color) {
@@ -951,7 +956,7 @@ window.af=window.jq=jQuery;
             if (this.doingTransition) {
                 return;
             }
-
+            anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
             if (target.length === 0) return;
             if(target.indexOf("#")!==-1){
                 this.loadDiv(target, newView, back, transition,anchor);
@@ -1370,10 +1375,12 @@ window.af=window.jq=jQuery;
             //get first div, defer
 
             var first=$(".view[data-default='true']");
-            if(first.length===0)
+            if(first.length===0) {
                 first=$(".view").eq(0);
-            else
-                throw ("You need to create a view");
+
+                if(first.length===0)
+                    throw ("You need to create a view");
+            }
 
             first.addClass("active");
             //history
@@ -1476,7 +1483,7 @@ window.af=window.jq=jQuery;
             if ($.afui.customClickHandler(theTarget.getAttribute("href"),e)) return e.preventDefault();
 
         }
-        
+
         //this technique fails when considerable content exists inside anchor, should be recursive ?
         if (theTarget.tagName.toLowerCase() !== "a" && theTarget.parentNode) return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
         //anchors
@@ -1843,8 +1850,7 @@ window.af=window.jq=jQuery;
             if (touch.isDoubleTap) {
                 touch.el.trigger("doubleTap");
                 touch = {};
-            } else if (touch.x2 > 0 || touch.y2 > 0) {
-                (Math.abs(touch.x1 - touch.x2) > 30 || Math.abs(touch.y1 - touch.y2) > 30) &&
+            } else if ((touch.x2 > 0 || touch.y2 > 0) && (Math.abs(touch.x1 - touch.x2) > 30 || Math.abs(touch.y1 - touch.y2) > 30)) {
                 touch.el.trigger("swipe");
                 //touch.el.trigger("swipe" + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)), touch);
                 //@TODO - don't dispatch when you need to block it (scrolling areas)
@@ -1936,7 +1942,6 @@ window.af=window.jq=jQuery;
             $.afui.setTitle=oldTitle;
         }
     };
-
 })(jQuery);
 /**
  * af.popup - a popup/alert library for html5 mobile apps
@@ -1970,10 +1975,10 @@ window.af=window.jq=jQuery;
 (function ($) {
     "use strict";
     $.fn.popup = function (opts) {
-        return new popup(this[0], opts);
+        return new Popup(this[0], opts);
     };
     var queue = [];
-    var popup = function (containerEl, opts) {
+    var Popup = function (containerEl, opts) {
 
         if (typeof containerEl === "string" || containerEl instanceof String) {
             this.container = document.getElementById(containerEl);
@@ -2018,7 +2023,7 @@ window.af=window.jq=jQuery;
 
     };
 
-    popup.prototype = {
+    Popup.prototype = {
         id: null,
         addCssClass: null,
         title: null,
@@ -2847,4 +2852,102 @@ window.af=window.jq=jQuery;
         $(document.body).toast(opts);
     });
 
+})(jQuery);
+
+/**
+ * af.lockscreen - a lockscreen for html5 mobile apps
+ * Copyright 2015 - Intel
+ */
+ 
+ /* global FastClick*/
+
+ /* jshint camelcase:false*/
+
+
+(function($){
+    "use strict";
+
+    $.fn.lockScreen = function(opts) {
+        var tmp;
+        for (var i = 0; i < this.length; i++) {
+            tmp = new LockScreen(this[i], opts);
+        }
+        return this.length === 1 ? tmp : this;
+    };
+
+    var LockScreen = function (containerEl, opts) {
+        if (typeof(opts) === "object") {
+            for (var j in opts) {
+                this[j] = opts[j];
+            }
+        }
+    };
+    LockScreen.prototype= {
+        logo:"<div class='icon database big'></div>",
+        roundKeyboard:false,
+        validatePassword:function(){},
+        renderKeyboard:function(){
+            var html="";
+            for(var i=0;i<8;i=i+3){
+                html+="<div class='row'>";
+                for(var j=1;j<=3;j++){
+                    var num=i+j;
+                    html+="<div data-key='"+num+"'>"+num+"</div>";
+                }
+                html+="</div>";
+            }
+            html+="<div class='row'><div data-key='' class='grey blank'>&nbsp;</div><div data-key='0'>0</div><div data-key='delete' class='grey'><=</div></div>";
+            return html;
+        },
+        show: function () {
+            if(this.visible) return;
+            var logo=this.logo;
+            var container="<div class='content flexContainer'><div class='password'>"+logo+"<input maxlength=4 type='password' placeholder='****' disabled></div><div class='error'>Invalid Password</div></div>";
+            container+="<div class='keyboard flexContainer'>"+this.renderKeyboard()+"</div>";
+            var item=$("<div id='lockScreen'/>");
+            item.html(container);
+            if(this.roundKeyboard){
+                item.addClass("round");
+                item.find("input[type='password']").attr("placeholder",("◌◌◌◌"));
+            }
+            this.lockscreen=item;
+            $(document.body).append(item);
+            var pass=$("#lockScreen input[type='password']");
+            var self=this;
+            $(item).on("click",function(evt){
+                var target=$(evt.target);
+                if(target.length===0) return;
+                var key=target.attr("data-key");
+                if(!key) return;
+                if(key==="delete"){
+                    pass.val(pass.val().substring(0,pass.val().length-1));
+                    return;
+                }
+                var len=pass.val().length;
+
+                if(len<4)
+                    pass.val(pass.val()+key);
+                if(pass.val().length===4){
+                    if(self.validatePassword(pass.val()))
+                        self.hide();
+                    else {
+                        self.lockscreen.find(".error").css("visibility","visible");
+                        setTimeout(function(){
+                            self.lockscreen.find(".error").css("visibility","hidden");
+                            pass.val("");
+                        },1000);
+                    }
+                }
+            });
+            $(item).on("touchstart",function(evt){
+                $(evt.target).addClass("touched");
+            }).on("touchend",function(evt){
+                 $(evt.target).removeClass("touched");
+            });
+        },
+        hide:function(){
+            if(this.lockscreen)
+                this.lockscreen.remove();
+        }
+    };
 })(jQuery);

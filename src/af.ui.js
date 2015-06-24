@@ -8,6 +8,8 @@
 /* global FastClick*/
 
  /* jshint camelcase:false*/
+
+
 (function($) {
     "use strict";
     var startPath = window.location.pathname + window.location.search;
@@ -68,7 +70,7 @@
             if (id === "" && that.history.length === 1) //Fix going back to first panel and an empty hash
                 id = "#" + that.firstPanel.id;
             if (id === "") return;
-            if (af(id).filter(".panel").length === 0) return;
+            if ($(id).filter(".panel").length === 0) return;
 
             if (id !== "#" + that.activeDiv.id) that.goBack();
 
@@ -143,6 +145,7 @@
          * @api private
          */
         blockPageBounce:function(enable){
+            if(!$.os.ios) return;
             if(enable===false){
                 window.removeEventListener("touchmove",this.handlePageBounce,false);
                 window.removeEventListener("touchstart",this.handlePageBounce,false);
@@ -522,10 +525,10 @@
          /**
          * Set the visibility of the back button for the current header
          ```
-         $.afui.setBackButtonVisbility(true)
+         $.afui.setBackButtonVisibility(true)
          ```
          * @param {boolean} Boolean to set the visibility. true show, false hide
-         * @title $.afui.setBackButtonVisbility
+         * @title $.afui.setBackButtonVisibility
          */
         setBackButtonVisibility:function(what){
             var visibility=what?"visible":"hidden";
@@ -544,7 +547,7 @@
          * @param {string} target
          * @param {string} value
          * @param {string=} position
-         * @param {(string=|object)} color Color or CSS hash
+         * @param {string=} color Color or CSS hash
          * @title $.afui.updateBadge(target,value,[position],[color])
          */
         updateBadge: function(target, value, position, color) {
@@ -641,7 +644,7 @@
             if (this.doingTransition) {
                 return;
             }
-
+            anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
             if (target.length === 0) return;
             if(target.indexOf("#")!==-1){
                 this.loadDiv(target, newView, back, transition,anchor);
@@ -1060,10 +1063,12 @@
             //get first div, defer
 
             var first=$(".view[data-default='true']");
-            if(first.length===0)
+            if(first.length===0) {
                 first=$(".view").eq(0);
-            else
-                throw ("You need to create a view");
+
+                if(first.length===0)
+                    throw ("You need to create a view");
+            }
 
             first.addClass("active");
             //history
@@ -1166,7 +1171,7 @@
             if ($.afui.customClickHandler(theTarget.getAttribute("href"),e)) return e.preventDefault();
 
         }
-        
+
         //this technique fails when considerable content exists inside anchor, should be recursive ?
         if (theTarget.tagName.toLowerCase() !== "a" && theTarget.parentNode) return checkAnchorClick(e, theTarget.parentNode); //let's try the parent (recursive)
         //anchors
