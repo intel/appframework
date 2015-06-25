@@ -40,8 +40,10 @@
         target=$(e.target).closest(".swipe-content");
 
         width=target.closest(".swipe-reveal").find(".swipe-hidden").width();
-        if($.getCssMatrix(e.target).e===0)
-            return ;
+        if ($(e.target).parents('.swipe-content').length===0) {
+            if($.getCssMatrix(e.target).e===0)
+                return ;
+        }
         pos=touch.x2+width;
         target.bind("touchmove",tracker);
         target.one("touchend",function(){
