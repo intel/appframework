@@ -644,7 +644,7 @@
             if (this.doingTransition) {
                 return;
             }
-            anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
+            anchor = anchor || null; //Hack to allow passing in no anchor
             if (target.length === 0) return;
             if(target.indexOf("#")!==-1){
                 this.loadDiv(target, newView, back, transition,anchor);

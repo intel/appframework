@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2015-06-16 */
+/*! intel-appframework - v3.0.0 - 2015-06-30 */
 
 /**
  * af.shim.js
@@ -956,7 +956,7 @@ window.af=window.jq=jQuery;
             if (this.doingTransition) {
                 return;
             }
-            anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
+            anchor = anchor || null; //Hack to allow passing in no anchor
             if (target.length === 0) return;
             if(target.indexOf("#")!==-1){
                 this.loadDiv(target, newView, back, transition,anchor);
@@ -1942,6 +1942,7 @@ window.af=window.jq=jQuery;
             $.afui.setTitle=oldTitle;
         }
     };
+
 })(jQuery);
 /**
  * af.popup - a popup/alert library for html5 mobile apps
