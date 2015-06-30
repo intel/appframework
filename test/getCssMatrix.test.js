@@ -5,7 +5,7 @@ describe("getCssMatrix", function () {
     var oldMS=window.MSCSSMatrix;
     beforeEach(function () {
         $(document.body).append("<div id=\"moo\"></div>");
-
+        
     });
     afterEach(function(){
         window.WebKitCSSMatrix=oldWK;
@@ -27,16 +27,16 @@ describe("getCssMatrix", function () {
 
     it("should use the MSCSSMatrix function if present", function () {
         var elt = document.getElementById("moo");
-
+       
         var matrix = $.getCssMatrix(elt);
                 var computedStyle = window.getComputedStyle(elt);
 
         var transform = computedStyle.webkitTransform ||
                         computedStyle.transform ||
                         computedStyle[$.feat.cssPrefix + "Transform"];
+        
 
-
-        matrix.should.eql(new WebKitCSSMatrix(transform));
+        matrix.should.eql(new WebKitCSSMatrix(transform));        
     });
 
 
