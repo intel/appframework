@@ -35,7 +35,7 @@
         });
     });
 
-     $(document).on("swipeStartRight",".swipe-reveal",function(e,touch,originalE){
+    $(document).on("swipeStartRight",".swipe-reveal",function(e,touch,originalE){
         originalE.preventDefault();
         target=$(e.target).closest(".swipe-content");
 
