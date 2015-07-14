@@ -872,7 +872,12 @@
             $.ajax(target).then(function(res){
                 var $res=$.create("div",{html:res});
                 if(!$res.hasClass(".panel")){
-                    $res=$res.attr("data-title",(target));
+                    if($(anchor).attr("data-title"))
+                        $res=$res.attr("data-title",anchor.getAttribute("data-title"));
+                    else if($(anchor).attr("title"))
+                        $res=$res.attr("data-title",anchor.getAttribute("title"));
+                    else
+                        $res=$res.attr("data-title",(target));
                     $res.prop("id",crc);
                     $res.addClass("panel");
                 }
