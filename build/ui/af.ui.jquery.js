@@ -1,4 +1,4 @@
-/*! intel-appframework - v2.2.0 - 2015-02-12 */
+/*! intel-appframework - v2.2.0 - 2015-10-06 */
 
 /**
  * jq.appframework.js
@@ -1211,7 +1211,7 @@ if (!Date.now)
 })(af);
 
 /**
- * af.scroller 
+ * af.scroller
  * created by Intel with modifications by Carlos Ouro @ Badoo and Intel
  * Supports iOS native touch scrolling
  * Optimizations and bug improvements by Intel
@@ -2469,7 +2469,7 @@ if (!Date.now)
                 scrollInfo.y+=(scrollInfo.deltaY>0?1:-1)*(this.elementInfo.divHeight*this.androidPerfHack);
             if(Math.abs(scrollInfo.deltaX)>0)
                 scrollInfo.x+=(scrollInfo.deltaX>0?1:-1)*(this.elementInfo.divWidth*this.androidPerfHack);
-           
+
         };
         jsScroller.prototype.checkYboundary = function (scrollInfo) {
             var minTop = this.container.clientHeight / 2;
@@ -2551,8 +2551,8 @@ if (!Date.now)
                 scrollInfo.absDeltaY = Math.abs(scrollInfo.deltaY);
                 scrollInfo.duration = scrollInfo.absSpeedY / deceleration;
                 scrollInfo.speedY = scrollInfo.deltaY / scrollInfo.duration;
-                scrollInfo.absSpeedY = Math.abs(scrollInfo.speedY);                
-                if (scrollInfo.absSpeedY < deceleration * 100 || scrollInfo.absDeltaY < 5) 
+                scrollInfo.absSpeedY = Math.abs(scrollInfo.speedY);
+                if (scrollInfo.absSpeedY < deceleration * 100 || scrollInfo.absDeltaY < 5)
                     scrollInfo.deltaY = scrollInfo.absDeltaY = scrollInfo.duration = scrollInfo.speedY = scrollInfo.absSpeedY = 0;
             } else if (scrollInfo.absDeltaX) {
                 scrollInfo.deltaX = (scrollInfo.deltaX < 0 ? -1 : 1) * (scrollInfo.absSpeedX * scrollInfo.absSpeedX) / (2 * deceleration);
@@ -2560,12 +2560,12 @@ if (!Date.now)
                 scrollInfo.duration = scrollInfo.absSpeedX / deceleration;
                 scrollInfo.speedX = scrollInfo.deltaX / scrollInfo.duration;
                 scrollInfo.absSpeedX = Math.abs(scrollInfo.speedX);
-                if (scrollInfo.absSpeedX < deceleration * 100 || scrollInfo.absDeltaX < 5) 
+                if (scrollInfo.absSpeedX < deceleration * 100 || scrollInfo.absDeltaX < 5)
                     scrollInfo.deltaX = scrollInfo.absDeltaX = scrollInfo.duration = scrollInfo.speedX = scrollInfo.absSpeedX = 0;
             } else scrollInfo.duration = 0;
         };
 
-        jsScroller.prototype.onTouchEnd = function () {
+        jsScroller.prototype.onTouchEnd = function (e) {
 
             var self=this;
             if (this.currentScrollingObject === null || !this.moved) return;
@@ -2624,6 +2624,13 @@ if (!Date.now)
             }
             if ((scrollInfo.x === scrollInfo.left && scrollInfo.y === scrollInfo.top) || this.androidFormsMode)
                 scrollInfo.duration = 0;
+
+            var time=e.time?e.time:e.timeStamp;
+            var skipper=time-this.lastEventInfo.time;
+            if(skipper>=200)
+            {
+                return this.setFinishCalback(0);
+            }
 
             //hack for android 4.3
             setTimeout(function(){
