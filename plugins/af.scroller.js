@@ -1,5 +1,5 @@
 /**
- * af.scroller 
+ * af.scroller
  * created by Intel with modifications by Carlos Ouro @ Badoo and Intel
  * Supports iOS native touch scrolling
  * Optimizations and bug improvements by Intel
@@ -1360,7 +1360,7 @@
             }
             this.calculateTarget(scrollInfo);
 
-            
+
 
             //get the current top
             var cssMatrix = this.getCSSMatrix(this.el);
@@ -1403,6 +1403,13 @@
             }
             if ((scrollInfo.x === scrollInfo.left && scrollInfo.y === scrollInfo.top) || this.androidFormsMode)
                 scrollInfo.duration = 0;
+
+            var time=event.time?e.time:event.timeStamp;
+            var skipper=time-this.lastEventInfo.time;
+
+            if(skipper>=200) {
+                return this.setFinishCalback(0);
+            }
 
             this.scrollerMoveCSS(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");
             this.setVScrollBar(scrollInfo, scrollInfo.duration, "cubic-bezier(0.33,0.66,0.66,1)");

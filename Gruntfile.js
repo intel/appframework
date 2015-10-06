@@ -136,7 +136,7 @@ module.exports = function (grunt) {
                         "plugins/af.css3animate.js",
                         "plugins/af.passwordBox.js",
                         "plugins/af.scroller.js",
-                        "plugins/af.selectBox.js",                                                
+                        "plugins/af.selectBox.js",
                         "plugins/af.touchEvents.js",
                         "plugins/af.touchLayer.js",
                         "plugins/af.popup.js",
@@ -216,7 +216,7 @@ module.exports = function (grunt) {
         }
     });
 
-    
+
     grunt.registerTask("default", [
         "jshint",
         "test",
@@ -229,6 +229,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask("test", ["mochaccino:unit"]);
     grunt.registerTask("cov", ["clean","mochaccino:cov"]);
-    grunt.registerTask("rebuild" , ["cssmin","concat","closure-compiler","usebanner"]);
+    grunt.registerTask("rebuild" , ["concat","closure-compiler","usebanner"]);
     grunt.registerTask("hint" , ["jshint"]);
 };
