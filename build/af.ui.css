@@ -724,6 +724,10 @@
 .android.light #af_actionsheet a {
   background: #fff;
 }
+.android.light .view header h1 {
+  color: black;
+  text-shadow: none;
+}
 .android .view .panel {
   background: inherit;
   color: inherit;
