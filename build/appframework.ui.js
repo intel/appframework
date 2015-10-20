@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2015-10-13 */
+/*! intel-appframework - v3.0.0 - 2015-10-20 */
 
 /**
  * af.shim.js
@@ -428,6 +428,7 @@ window.af=window.jq=jQuery;
     AFUi.prototype = {
         init:false,
         showLoading: true,
+        showingMask: false,
         loadingText: "Loading Content",
         remotePages: {},
         history: [],
@@ -914,6 +915,15 @@ window.af=window.jq=jQuery;
             if (!text) text = this.loadingText || "";
             $.query("#afui_mask>h1").html(text);
             $.query("#afui_mask").show();
+            this.showingMask = true;
+
+            var self = this;
+            //set another timeout to auto-hide the mask if something goes wrong after 15 secs
+            setTimeout(function() {
+                 if(self.showingMask) {
+                    self.hideMask();
+                 }
+            }, 15000);
         },
         /**
          * Hide the loading mask
@@ -924,6 +934,7 @@ window.af=window.jq=jQuery;
          */
         hideMask: function() {
             $.query("#afui_mask").hide();
+            this.showingMask = false;
         },
         /**
          * @api private
