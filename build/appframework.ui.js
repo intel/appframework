@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2015-10-20 */
+/*! intel-appframework - v3.0.0 - 2015-10-23 */
 
 /**
  * af.shim.js
@@ -447,6 +447,7 @@ window.af=window.jq=jQuery;
         overlayStatusbar: false,
         useAutoPressed: true,
         useInternalRouting:true,
+        backButtonText: "Back",
         autoBoot: function() {
             this.hasLaunched = true;
             if (this.autoLaunch) {
@@ -1153,7 +1154,7 @@ window.af=window.jq=jQuery;
             if(items>=2&&isNewView!==true){
                 //Add the back button if it's not there
                 if(hdr.find(".backButton").length===1) return;
-                hdr.prepend("<a class='backButton back'>Back</a>");
+                hdr.prepend("<a class='backButton back'>" + this.backButtonText + "</a>");
             }
             else {
                 hdr.find(".backButton").remove();
