@@ -957,6 +957,7 @@
             }
             else {
                 if(!back){
+                    $(hide).removeClass("active");
                     $(hide).trigger("panelunload");
                 }
                 else{
