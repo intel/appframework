@@ -7,7 +7,7 @@
 
   $(document.body).actionsheet('<a >Back</a><a onclick="alert(\'hi\');" >Show Alert 3</a><a onclick="alert(\'goodbye\');">Show Alert 4</a>');
 
-  You can also use an arra of objects to show each item.  There are three propertyes
+  You can also use an array of objects to show each item.  There are three properties
     text - the text to display
     cssClasses - extra css classes
     handler - click handler function
