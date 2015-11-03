@@ -3,9 +3,9 @@
  * Copyright 2015 - Intel
  */
  
- /* global FastClick*/
+/** global FastClick **/
 
- /* jshint camelcase:false*/
+/** jshint camelcase:false **/
 
 
 (function($){
@@ -86,7 +86,7 @@
             $(item).on("touchstart",function(evt){
                 $(evt.target).addClass("touched");
             }).on("touchend",function(evt){
-                 $(evt.target).removeClass("touched");
+                $(evt.target).removeClass("touched");
             });
         },
         hide:function(){

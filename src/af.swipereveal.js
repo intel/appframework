@@ -40,7 +40,7 @@
         target=$(e.target).closest(".swipe-content");
 
         width=target.closest(".swipe-reveal").find(".swipe-hidden").width();
-        if ($(e.target).parents('.swipe-content').length===0) {
+        if ($(e.target).parents(".swipe-content").length===0) {
             if($.getCssMatrix(e.target).e===0)
                 return ;
         }
