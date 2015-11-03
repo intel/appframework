@@ -981,31 +981,27 @@
                     that.doingTransition=false;
                 }).run(transition+"-out");
             }
-            else {
-                if(!back){
-                    //If 'hide' is view, then find active panel and remove active from it
-                    var activePanel = $(hide).find(".active").get(0);
-                    if (undefined !== activePanel) {
-                        activePanel.classList.remove("active");
-                    }
-                    $(hide).trigger("panelunload", [back]);
-                }
-                else{
-                    $(hide).trigger("panelload", [back]);
-                    $(hide).addClass("active");
-                }
-            }
 
             var to=$(show).animation().remove(transition+"-out");
             if(back) {
                 to.reverse();
             }
             to.end(function(){
+
                 that.doingTransition=false;
                 if(!back){
                     this.classList.add("active");
                     $(this).trigger("panelload", [back]);
                     $(noTrans).trigger("panelload", [back]);
+
+                    //Previous panel needs to be hidden after animation
+                    //Fixes #850, #860, #873
+                    var tmpActive = $(hide).find(".active").get(0);
+                    if (undefined !== tmpActive) {
+                        tmpActive.classList.remove("active");
+
+                    }
+                    $(hide).trigger("panelunload", [back]);
                 }
                 else{
                     if(noTrans){
@@ -1017,8 +1013,11 @@
                     if (undefined !== activePanel) {
                         activePanel.classList.remove("active");
                     }
+                    $(hide).trigger("panelload", [back]);
+                    $(hide).addClass("active");
                     $(this).trigger("panelunload", [back]);
                 }
+
             }).run(transition+"-in");
         },
 
