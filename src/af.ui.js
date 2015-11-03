@@ -960,6 +960,9 @@
             $(noTrans).css("zIndex","1").addClass("active");
 
             var from=$(hide).animation().remove(transition+"-in");
+            //Handle animating the reverse when there is one.
+            //In the push case, it's static and needs to stay available until
+            //the other view finishes animation.
             if(!doPush&&from){
                 if(back) {
                     from.reverse();

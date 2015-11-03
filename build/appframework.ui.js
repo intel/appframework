@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2015-10-23 */
+/*! intel-appframework - v3.0.0 - 2015-11-03 */
 
 /**
  * af.shim.js
@@ -383,8 +383,13 @@ window.af=window.jq=jQuery;
                 id = "#" + that.firstPanel.id;
             if (id === "") return;
             if ($(id).filter(".panel").length === 0) return;
-
-            if (id !== "#" + that.activeDiv.id) that.goBack();
+            if (id !== "#" + that.activeDiv.id) {
+                //Make a custom event object for goBack
+                var evt = {
+                    "target" : $(id)
+                };
+                that.goBack(evt);
+            }
 
         }, false);
 
@@ -688,27 +693,39 @@ window.af=window.jq=jQuery;
          */
         goBack: function(e) {
             //find the view
-            var view=$(this.activeDiv).closest(".view");
-            if(e&&e.target)
-                view=$(e.target).closest(".view");
+            var isSameView = true;
+            var currentView=$(this.activeDiv).closest(".view");
+            var targetView=currentView;
+            if(e&&e.target) {
+                targetView=$(e.target).closest(".view");
+                isSameView = targetView.prop("id") === (currentView.prop("id"));
+            }
 
-            if(view.length===0) return;
+            if(targetView.length===0) return;
 
             //history entry
-            if(!this.views[view.prop("id")]) return;
-            var hist=this.views[view.prop("id")];
+            if(!this.views[targetView.prop("id")]) return;
+            var hist=this.views[targetView.prop("id")];
 
             if(hist.length===0) return;
             var item=hist.pop();
-
+            //If not in same view, just push back to keep last states
+            if (!isSameView) {
+                hist.push(item);
+            }
             if(item.length===0) return;
             if(hist.length>0){
-
-                var toTarget=hist[hist.length-1].target;
-                if(!toTarget||item.target===toTarget) return;
-                this.runTransition(item.transition,item.target,toTarget,true);
-                this.loadContentData(toTarget,view,true);
-
+                var toTarget = hist[hist.length-1].target;
+                if(!toTarget) return;
+                if(isSameView && (item.target===toTarget)) return;
+                if (!isSameView) {
+                    this.clearHistory(); //Clear current view history
+                    this.runViewTransition(this.transitionType, targetView, currentView, item.target, true);
+                }
+                else {
+                    this.runTransition(item.transition, item.target, toTarget, true);
+                }
+                this.loadContentData(toTarget, targetView, true);
                 this.updateHash(toTarget.id);
             }
             else {
@@ -921,9 +938,9 @@ window.af=window.jq=jQuery;
             var self = this;
             //set another timeout to auto-hide the mask if something goes wrong after 15 secs
             setTimeout(function() {
-                 if(self.showingMask) {
+                if(self.showingMask) {
                     self.hideMask();
-                 }
+                }
             }, 15000);
         },
         /**
@@ -1155,6 +1172,11 @@ window.af=window.jq=jQuery;
                 //Add the back button if it's not there
                 if(hdr.find(".backButton").length===1) return;
                 hdr.prepend("<a class='backButton back'>" + this.backButtonText + "</a>");
+                //Fix device click no response issue
+                hdr.on("click", ".backButton", function() {
+                    if(this.useInternalRouting)
+                        this.goBack(this);
+                });
             }
             else {
                 hdr.find(".backButton").remove();
@@ -1245,59 +1267,72 @@ window.af=window.jq=jQuery;
                 doPush=true;
             }
 
-
             $(show).css("zIndex","10");
             $(hide).css("zIndex","1");
             $(noTrans).css("zIndex","1").addClass("active");
 
             var from=$(hide).animation().remove(transition+"-in");
+            //Handle animating the reverse when there is one.
+            //In the push case, it's static and needs to stay available until
+            //the other view finishes animation.
             if(!doPush&&from){
-                if(back)
+                if(back) {
                     from.reverse();
+                }
                 from.end(function(){
                     if(!back){
                         this.classList.remove("active");
-                        $(this).trigger("panelunload");
+                        //If 'this' is view, then find active panel and remove active from it
+                        var activePanel = $(this).find(".active").get(0);
+                        if (undefined !== activePanel) {
+                            activePanel.classList.remove("active");
+                        }
+                        $(this).trigger("panelunload", [back]);
                     }
                     else{
-
                         this.classList.add("active");
-                        $(this).trigger("panelload");
+                        $(this).trigger("panelload", [back]);
                     }
                     that.doingTransition=false;
                 }).run(transition+"-out");
             }
-            else {
-                if(!back){
-                    $(hide).trigger("panelunload");
-                }
-                else{
-                    $(hide).trigger("panelload");
-                    $(hide).addClass("activeDiv");
-
-                }
-            }
 
             var to=$(show).animation().remove(transition+"-out");
-            if(back)
+            if(back) {
                 to.reverse();
+            }
             to.end(function(){
+
                 that.doingTransition=false;
                 if(!back){
-
                     this.classList.add("active");
-                    $(this).trigger("panelload");
-                    $(noTrans).trigger("panelload");
+                    $(this).trigger("panelload", [back]);
+                    $(noTrans).trigger("panelload", [back]);
+
+                    //Previous panel needs to be hidden after animation
+                    //Fixes #850, #860, #873
+                    var tmpActive = $(hide).find(".active").get(0);
+                    if (undefined !== tmpActive) {
+                        tmpActive.classList.remove("active");
+
+                    }
+                    $(hide).trigger("panelunload", [back]);
                 }
                 else{
                     if(noTrans){
                         $(noTrans).css("zIndex","10");
-
                     }
-
                     this.classList.remove("active");
-                    $(this).trigger("panelunload");
+                    //If 'hide' is view, then find active panel and remove active from it
+                    var activePanel = $(this).find(".active").get(0);
+                    if (undefined !== activePanel) {
+                        activePanel.classList.remove("active");
+                    }
+                    $(hide).trigger("panelload", [back]);
+                    $(hide).addClass("active");
+                    $(this).trigger("panelunload", [back]);
                 }
+
             }).run(transition+"-in");
         },
 
@@ -1313,7 +1348,6 @@ window.af=window.jq=jQuery;
             //find the active
 
             view.addClass("active");
-            //view.find(".panel").removeClass("active");
             $(newDiv).addClass("active");
 
             if(transition==="none"){
@@ -2551,7 +2585,7 @@ window.af=window.jq=jQuery;
         target=$(e.target).closest(".swipe-content");
 
         width=target.closest(".swipe-reveal").find(".swipe-hidden").width();
-        if ($(e.target).parents('.swipe-content').length===0) {
+        if ($(e.target).parents(".swipe-content").length===0) {
             if($.getCssMatrix(e.target).e===0)
                 return ;
         }
@@ -2879,9 +2913,9 @@ window.af=window.jq=jQuery;
  * Copyright 2015 - Intel
  */
  
- /* global FastClick*/
+/** global FastClick **/
 
- /* jshint camelcase:false*/
+/** jshint camelcase:false **/
 
 
 (function($){
@@ -2962,7 +2996,7 @@ window.af=window.jq=jQuery;
             $(item).on("touchstart",function(evt){
                 $(evt.target).addClass("touched");
             }).on("touchend",function(evt){
-                 $(evt.target).removeClass("touched");
+                $(evt.target).removeClass("touched");
             });
         },
         hide:function(){
