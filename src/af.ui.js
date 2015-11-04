@@ -860,10 +860,11 @@
                 //Add the back button if it's not there
                 if(hdr.find(".backButton").length===1) return;
                 hdr.prepend("<a class='backButton back'>" + this.backButtonText + "</a>");
-                //Fix device click no response issue
+                //Fix device click no response issue, just register an event and do nothing
                 hdr.on("click", ".backButton", function() {
-                    if(this.useInternalRouting)
-                        this.goBack(this);
+                    /**Do nothing, event will be called later in
+                     * $(document).on("click", ".backButton, [data-back]", function(){...});
+                     */
                 });
             }
             else {
