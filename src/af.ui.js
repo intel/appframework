@@ -972,11 +972,13 @@
                     if(!back){
                         this.classList.remove("active");
                         //If 'this' is view, then find active panel and remove active from it
-                        var activePanel = $(this).find(".active").get(0);
-                        if (undefined !== activePanel) {
-                            activePanel.classList.remove("active");
+                        var tmpActive = $(this).find(".active").get(0);
+                        if (undefined !== tmpActive) {
+                            $(tmpActive).trigger("panelunload", [back]);
+                            tmpActive.classList.remove("active");
                         }
-                        $(this).trigger("panelunload", [back]);
+                        //Below trigger will be called when 'to animation' done
+                        //$(this).trigger("panelunload", [back]);
                     }
                     else{
                         this.classList.add("active");
@@ -1002,6 +1004,7 @@
                     //Fixes #850, #860, #873
                     var tmpActive = $(hide).find(".active").get(0);
                     if (undefined !== tmpActive) {
+                        $(tmpActive).trigger("panelunload", [back]);
                         tmpActive.classList.remove("active");
 
                     }
@@ -1013,9 +1016,10 @@
                     }
                     this.classList.remove("active");
                     //If 'hide' is view, then find active panel and remove active from it
-                    var activePanel = $(this).find(".active").get(0);
-                    if (undefined !== activePanel) {
-                        activePanel.classList.remove("active");
+                    var tmpActive = $(this).find(".active").get(0);
+                    if (undefined !== tmpActive) {
+                        $(tmpActive).trigger("panelunload", [back]);
+                        tmpActive.classList.remove("active");
                     }
                     $(hide).trigger("panelload", [back]);
                     $(hide).addClass("active");
