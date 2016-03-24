@@ -604,13 +604,16 @@
         "type": "param",
         "types": [
           "string="
+          "number="
         ],
         "name": "text",
         "description": ""
+        "name": "timeout_max",
+        "description": "timeout to auto-hide in milliseconds"
       },
       {
         "type": "title",
-        "string": "$.afui.showMask(text);"
+        "string": "$.afui.showMask(text, timeout_max);"
       }
     ],
     "description": {
