@@ -613,7 +613,7 @@
       },
       {
         "type": "title",
-        "string": "$.afui.showMask(text, timeout);"
+        "string": "$.afui.showMask(text, timeout_max);"
       }
     ],
     "description": {
