@@ -603,14 +603,17 @@
       {
         "type": "param",
         "types": [
-          "string="
+          "string=",
+          "number="
         ],
         "name": "text",
-        "description": ""
+        "description": "",
+        "name": "timeout",
+        "description": timeout to auto-hide in milliseconds"
       },
       {
         "type": "title",
-        "string": "$.afui.showMask(text);"
+        "string": "$.afui.showMask(text, timeout);"
       }
     ],
     "description": {
