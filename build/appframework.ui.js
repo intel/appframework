@@ -929,19 +929,20 @@ window.af=window.jq=jQuery;
          * @param {string=} text
          * @title $.afui.showMask(text);
          */
-        showMask: function(text) {
+        showMask: function(text, timeout) {
             if (!text) text = this.loadingText || "";
+            if (!timeout || typeof timeout !== "number") timeout = 15000;
             $.query("#afui_mask>h1").html(text);
             $.query("#afui_mask").show();
             this.showingMask = true;
 
             var self = this;
-            //set another timeout to auto-hide the mask if something goes wrong after 15 secs
+            //set another timeout to auto-hide the mask if something goes wrong, default is 15 sec
             setTimeout(function() {
                 if(self.showingMask) {
                     self.hideMask();
                 }
-            }, 15000);
+            }, timeout);
         },
         /**
          * Hide the loading mask
