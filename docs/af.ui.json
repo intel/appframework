@@ -609,7 +609,7 @@
         "name": "text",
         "description": "",
         "name": "timeout",
-        "description": timeout to auto-hide in milliseconds"
+        "description": "timeout to auto-hide in milliseconds"
       },
       {
         "type": "title",
