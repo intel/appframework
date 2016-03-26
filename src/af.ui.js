@@ -1004,7 +1004,8 @@
                         tmpActive.classList.remove("active");
 
                     }
-                    $(hide).trigger("panelunload", [back]);
+                    //fix #903
+                    //$(hide).trigger("panelunload", [back]);
                 }
                 else{
                     if(noTrans){
