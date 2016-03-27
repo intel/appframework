@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2016-03-24 */
+/*! intel-appframework - v3.0.0 - 2016-03-26 */
 
 /**
  * af.shim.js
@@ -929,9 +929,9 @@ window.af=window.jq=jQuery;
          * @param {string=} text
          * @title $.afui.showMask(text);
          */
-        showMask: function(text, timeout) {
+        showMask: function(text, value) {
             if (!text) text = this.loadingText || "";
-            if (!timeout || typeof timeout !== "number") timeout = 15000;
+            if (!value || typeof value !== "number") timeout = 15000;
             $.query("#afui_mask>h1").html(text);
             $.query("#afui_mask").show();
             this.showingMask = true;
@@ -942,7 +942,7 @@ window.af=window.jq=jQuery;
                 if(self.showingMask) {
                     self.hideMask();
                 }
-            }, timeout);
+            }, value);
         },
         /**
          * Hide the loading mask
@@ -1316,7 +1316,8 @@ window.af=window.jq=jQuery;
                         tmpActive.classList.remove("active");
 
                     }
-                    $(hide).trigger("panelunload", [back]);
+                    //fix #903
+                    //$(hide).trigger("panelunload", [back]);
                 }
                 else{
                     if(noTrans){
