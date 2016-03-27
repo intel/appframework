@@ -608,12 +608,12 @@
         ],
         "name": "text",
         "description": "",
-        "name": "timeout",
-        "description": "timeout to auto-hide in milliseconds"
+        "name": "value",
+        "description": "maximum number of milliseconds to display the mask"
       },
       {
         "type": "title",
-        "string": "$.afui.showMask(text, timeout_max);"
+        "string": "$.afui.showMask(text, value);"
       }
     ],
     "description": {
