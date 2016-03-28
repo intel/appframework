@@ -603,14 +603,17 @@
       {
         "type": "param",
         "types": [
-          "string="
+          "string=",
+          "number="
         ],
         "name": "text",
-        "description": ""
+        "description": "",
+        "name": "value",
+        "description": "maximum number of milliseconds to display the mask"
       },
       {
         "type": "title",
-        "string": "$.afui.showMask(text);"
+        "string": "$.afui.showMask(text, value);"
       }
     ],
     "description": {
