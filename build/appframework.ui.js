@@ -931,18 +931,20 @@ window.af=window.jq=jQuery;
          */
         showMask: function(text, value) {
             if (!text) text = this.loadingText || "";
-            if (!value || typeof value !== "number") timeout = 15000;
+
             $.query("#afui_mask>h1").html(text);
             $.query("#afui_mask").show();
             this.showingMask = true;
 
             var self = this;
             //set another timeout to auto-hide the mask if something goes wrong, default is 15 sec
-            setTimeout(function() {
-                if(self.showingMask) {
-                    self.hideMask();
-                }
-            }, value);
+            if (value) {
+                setTimeout(function() {
+                    if (self.showingMask) {
+                        self.hideMask();
+                    }
+                }, value);
+            }
         },
         /**
          * Hide the loading mask
@@ -1244,66 +1246,67 @@ window.af=window.jq=jQuery;
          * @api private
          * @title $.afui.runTransition(transition,oldDiv,currDiv,back)
          */
-        runTransition: function(transition,previous,target, back,noTrans) {
+        runTransition: function(transition, previous, target, back, noTrans) {
 
-            if(!transition)
-                transition="slide";
+            if (!transition)
+                transition = "slide";
 
-            if(transition.indexOf(":back")!==-1){
-                transition=transition.replace(":back","");
-                back=true;
+            if (transition.indexOf(":back") !== -1) {
+                transition = transition.replace(":back", "");
+                back = true;
             }
 
-            var that=this;
-            var show=back?previous:target;
-            var hide=back?target:previous;
-            var doPush=false;
-            if(transition.indexOf("-reveal")!==-1){
-                transition=transition.replace("-reveal","");
-                doPush=true;
+            var that = this;
+            var show = back ? previous : target;
+            var hide = back ? target : previous;
+            var doPush = false;
+            if (transition.indexOf("-reveal") !== -1) {
+                transition = transition.replace("-reveal", "");
+                doPush = true;
             }
 
-            $(show).css("zIndex","10");
-            $(hide).css("zIndex","1");
-            $(noTrans).css("zIndex","1").addClass("active");
+            $(show).css("zIndex", "10");
+            $(hide).css("zIndex", "1");
+            $(noTrans).css("zIndex", "1").addClass("active");
 
-            var from=$(hide).animation().remove(transition+"-in");
+            var from = $(hide).animation().remove(transition + "-in");
             //Handle animating the reverse when there is one.
             //In the push case, it's static and needs to stay available until
             //the other view finishes animation.
-            if(!doPush&&from){
-                if(back) {
+            if (!doPush && from) {
+                if (back) {
                     from.reverse();
                 }
-                from.end(function(){
-                    if(!back){
+                from.end(function() {
+                    if (!back) {
                         this.classList.remove("active");
                         //If 'this' is view, then find active panel and remove active from it
                         var tmpActive = $(this).find(".active").get(0);
                         if (undefined !== tmpActive) {
                             $(tmpActive).trigger("panelunload", [back]);
                             tmpActive.classList.remove("active");
+                        } else {
+                            $(this).trigger("panelunload", [back]);
                         }
                         //Below trigger will be called when 'to animation' done
                         //$(this).trigger("panelunload", [back]);
-                    }
-                    else{
+                    } else {
                         this.classList.add("active");
                         $(this).trigger("panelload", [back]);
                     }
-                    that.doingTransition=false;
-                }).run(transition+"-out");
+                    that.doingTransition = false;
+                }).run(transition + "-out");
             }
 
-            var to=$(show).animation().remove(transition+"-out");
-            if(back) {
+            var to = $(show).animation().remove(transition + "-out");
+            if (back) {
                 to.reverse();
             }
-            to.end(function(){
+            to.end(function() {
 
-                that.doingTransition=false;
+                that.doingTransition = false;
                 var tmpActive;
-                if(!back){
+                if (!back) {
                     this.classList.add("active");
                     $(this).trigger("panelload", [back]);
                     $(noTrans).trigger("panelload", [back]);
@@ -1318,10 +1321,9 @@ window.af=window.jq=jQuery;
                     }
                     //fix #903
                     //$(hide).trigger("panelunload", [back]);
-                }
-                else{
-                    if(noTrans){
-                        $(noTrans).css("zIndex","10");
+                } else {
+                    if (noTrans) {
+                        $(noTrans).css("zIndex", "10");
                     }
                     this.classList.remove("active");
                     //If 'hide' is view, then find active panel and remove active from it
@@ -1330,12 +1332,11 @@ window.af=window.jq=jQuery;
                         $(tmpActive).trigger("panelunload", [back]);
                         tmpActive.classList.remove("active");
                     }
-                    $(hide).trigger("panelload", [back]);
                     $(hide).addClass("active");
                     $(this).trigger("panelunload", [back]);
                 }
 
-            }).run(transition+"-in");
+            }).run(transition + "-in");
         },
 
          /**
