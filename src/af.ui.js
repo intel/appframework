@@ -977,7 +977,7 @@
                     }
                     else{
                         this.classList.add("active");
-                        $(this).trigger("panelload", [back]);
+                        // $(this).trigger("panelload", [back]);
                     }
                     that.doingTransition=false;
                 }).run(transition+"-out");
