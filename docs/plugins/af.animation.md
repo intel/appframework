@@ -1,4 +1,4 @@
-#animation
+# animation
 
 This plugin lets you run class based animations and keep the class, reverse them, run a function after it's finished, etc.
 

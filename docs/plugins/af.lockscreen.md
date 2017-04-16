@@ -1,4 +1,4 @@
-#Lockscreen
+# Lockscreen
 
 The lockscreen enables developers of hybrid apps to present a lock screen to users.
 Users are required to enter a 4 digit pin to unlock it.  This can easily be bypassed

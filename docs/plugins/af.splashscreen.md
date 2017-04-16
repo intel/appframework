@@ -1,4 +1,4 @@
-#Splashscreen
+# Splashscreen
 
 This plugin will hide a splashscreen when the $.afui.ready has triggered.  Simply include the script and it will remove the div with id="splashscreen"
 

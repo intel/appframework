@@ -4,10 +4,10 @@ App Framework is a UI framework targeted at HTML5 browsers.
 
 Visit <http://app-framework-software.intel.com/index.php> for more information, documentation, and support.
 
-#2.2 support
+# 2.2 support
 Visit <http://app-framework-software.intel.com/af22/index.php> for App Framework 2.2 documentation.
 
-#3.0 version
+# 3.0 version
 
 The 3.0 version of App Framework removes the following
 
@@ -16,7 +16,7 @@ The 3.0 version of App Framework removes the following
 3. No longer provides a "Touchlayer", use Fastclick (https://github.com/ftlabs/fastclick) instead.
 4. Native scrolling is only used.  If you need a JS scroller, use an existing one like FTScroller (https://github.com/ftlabs/ftscroller) or iScroll
 
-##Note
+## Note
 You can still use App Framework 2 if you need Android <4 support or the query selector library.  The old query selector library *may* work with AF 3.0, but we do not test or support it.
 
 # Contribute
@@ -27,7 +27,7 @@ You can make changes to any of the files in the "src" directory
 
 
 
-#Building
+# Building
 
 We use Grunt to build our compiled files.  When you have made a change, run "grunt rebuild" to compile new source and minified files to include in your PR.
 

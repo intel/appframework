@@ -1,4 +1,4 @@
-#Toast
+# Toast
 
 The toast plugin enables developers to deliver toast style messages to users
 
@@ -79,7 +79,7 @@ Just display a message
 $.afui.toast("Hello World");
 ```
 
-###Directive example
+### Directive example
 
 Here we will dismiss the actionsheet in 5 seconds if there is no response from the user
 
