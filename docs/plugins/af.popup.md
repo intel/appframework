@@ -1,4 +1,4 @@
-#Popup
+# Popup
 
 The popup plugin allows you to creat your own stylized popup with App Framework.  It is non-blocking and allows more flexibility then native dialogs.  You can use this plugin to show messages, options, or even login forms.
 
@@ -185,7 +185,7 @@ setTimeout(function(){
 },3000);
 ```
 
-###Directive example
+### Directive example
 
 
 ```

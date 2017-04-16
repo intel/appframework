@@ -1,11 +1,11 @@
-#Touch Events
+# Touch Events
 
 This plugin adds additional touch events that you can register to listen for.  Simply include the plugin and it will do the rest.  We do not call preventDefault or stopPropagation on any events.
 
-##NOTE
+## NOTE
 
 
-##Events
+## Events
 
 ```
 tap                  Tap on the element
@@ -23,7 +23,7 @@ swipeUpStart         A swipe up has been started
 swipeDownStart       A swipe down has been started
 ```
 
-##Listening
+## Listening
 
 You can listen for any of the events like any other event
 

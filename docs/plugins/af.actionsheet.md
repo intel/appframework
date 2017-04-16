@@ -1,4 +1,4 @@
-#actionsheet
+# actionsheet
 
 The actionsheet plugin enables developers create an action sheet for the user to interact with.  We always add a last "Cancel" option to the actionsheet.
 

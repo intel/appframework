@@ -1,4 +1,4 @@
-#drawer
+# drawer
 
 This plugin enables drawers (side menus) in your application.  The drawers must be &lt;nav> items in the same view.
 
