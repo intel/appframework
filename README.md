@@ -2,10 +2,7 @@
 
 App Framework is a UI framework targeted at HTML5 browsers.
 
-Visit <http://app-framework-software.intel.com/index.php> for more information, documentation, and support.
-
-#2.2 support
-Visit <http://app-framework-software.intel.com/af22/index.php> for App Framework 2.2 documentation.
+DISCONTINUATION OF PROJECT.  This project will no longer be maintained by Intel.  Intel will not provide or guarantee development of or support for this project, including but not limited to, maintenance, bug fixes, new releases or updates.  Patches to this project are no longer accepted by Intel.  In an effort to support the developer community, Intel has made this project available under the terms of the MIT X11 License. If you have an ongoing need to use this project, are interested in independently developing it, or would like to maintain patches for the community, please create your own fork of the project.
 
 #3.0 version
 
