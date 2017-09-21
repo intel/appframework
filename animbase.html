@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<!--HTML5 doctype-->
+<html>
+
+<head>
+
+    <title>App Framework Kitchen Sink</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="stylesheet" type="text/css" href="src/css/icons.css" />
+
+    <link rel="stylesheet" type="text/css" href="../build/af.ui.css" />
+
+    <script type="text/javascript" charset="utf-8" src="./jquery.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="3rdparty/fastclick.js"></script>
+    <script type="text/javascript" charset="utf-8" src="src/af.shim.js"></script>
+    <script type="text/javascript" charset="utf-8" src="src/af.ui.js"></script>
+
+
+    <script src="src/af.desktopBrowsers.js"></script>
+    <script type="text/javascript" charset="utf-8" src="src/af.actionsheet.js"></script>
+    <script type="text/javascript" charset="utf-8" src="src/af.animation.js"></script>
+    <script type="text/javascript" charset="utf-8" src="src/af.touchEvents.js"></script>
+    <script type="text/javascript" charset="utf-8" src="src/af.popup.js"></script>
+    <script type="text/javascript" charset="utf-8" src="src/af.drawer.js"></script>
+    <script type="text/javascript" charset="utf-8" src="src/af.toast.js"></script>
+    <script type="text/javascript" charset="utf-8" src="src/af.animateheader.js"></script>
+    <script type="text/javascript" charset="utf-8" src="src/af.splashscreen.js"></script>
+    <script type="text/javascript" charset="utf-8" src="src/af.swipereveal.js"></script>
+    
+
+    <script>
+    $.afui.useOSThemes=true;
+    $.afui.loadDefaultHash=true;
+    $(document).ready(function(){
+        //$.afui.splitview.enable();    
+    })    
+
+    if($.os.ios)
+        $.afui.animateHeader();
+
+    </script>
+</head>
+
+<body >
+    <div id="splashscreen" class='ui-loader heavy'>
+                App Framework
+                <br>
+                <br> 
+                <span class='ui-icon ui-icon-loading spin'></span>
+                <h1>Starting app</h1>
+
+            </div>
+    <div class="view" id="mainview">
+        <header>
+            <h1>What</h1>
+        </header>
+        <div class="pages">
+            <div data-left-drawer="left" class="panel" id="main" data-title="Main" data-selected="true">
+                
+                <ul class="list">
+                    <li><a href="#login" data-transition="up-reveal">Login View (modal)</a></li>                
+                    <li><a href="#drawer" >Drawer</a></li>
+                    <li><a href="ajax.html" data-refresh="true"  >Ajax</a></li>
+                    <li><a href="#toast" data-transition="flip">Toast</a></li>
+                    <li><a href="#afforms" >Form Elements</a></li>
+                    <li><a href="#popup">Popup</a></li>
+                    <li><a href="#actionsheet">Actionsheet</a></li>
+                    <li><a href="#foobar">Button Groups</a></li>
+                    <li><a href="#cards">cards</a></li>
+                </ul>            
+            </div>
+            <div class="panel" id="popup" data-title="Popup Plugin" data-include="partials/popup.html">                              
+            </div>
+            <div class="panel" id="actionsheet" data-title="Actionsheet Plugin" data-include="partials/actionsheet.html">                              
+            </div>
+            <div class="panel" id="toast" data-title="Toast Plugin" data-include="partials/toast.html">        
+            </div>
+            <div data-left-drawer="left" class="panel" id="foobar" data-title="Foobar">
+                Foobar stuff goes here
+
+                 <div class='button-grouped tabbed'>
+                        <a class='button'>One</a>
+                        <a class='button'>two</a>
+                        <a class='button'>three</a>
+                    </div>
+            </div>
+            <div data-left-drawer="left" class="panel" id="cards" data-title="Cards">                
+                <br>
+                <div class="card">
+                    <h1>Card One</h1>
+                    <h2>Card Two</h2>
+                </div>
+                <div class="card">
+                    <h1 class='info'>Meeting</h1>
+                    <p>This is card content</p>
+                </div>
+            </div>
+            <div class="panel" id="drawer" data-title="Drawer">
+                <a href="#" class="button" onclick="$.afui.drawer.hide('#left')">Hide Left</a>
+                <a href="#" class="button" data-menu-close>Hide Active</a>
+                <a href="#" class="button" data-menu-close data-right-menu="right">Hide Right</a>
+                <br>
+                <a href="#" class="button" data-left-menu="left" >Cover Left</a>
+                <br>
+                <a href="#" class="button" onclick="$.afui.drawer.show('#right','right')">Cover Right</a>
+                <br>
+                <a href="#" class="button" data-left-menu="left" data-transition="push">Left Push</a>
+                <br>
+                <a href="#" class="button" onclick="$.afui.drawer.show('#left','left','reveal')">Left Reveal</a>
+                <br>
+                <a href="#" class="button" onclick="$.afui.drawer.show('#right','right','push')">Right Push</a>
+                <br>
+                <a href="#" class="button" onclick="$.afui.drawer.show('#right','right','reveal')">Right Reveal</a>
+            </div>
+
+            <div id="afforms" title="Form Styles" class="panel" data-include="partials/forms.html"></div>
+
+        </div>
+        <footer>
+            <a href="#main" class="icon home">Main</a>
+            
+            <a href="#about" class="icon html5" data-transition="up-reveal">About</a>
+            <a href="#test" class="icon trash">test</a>            
+            <a href="#touchevents" class="icon trash">Touch Events</a>
+        </footer>
+        <nav id="left" data-include="partials/leftnav.html">
+            
+        </nav>
+        <nav id="right">
+            <div class="view active" id="navView2">
+                <header>
+                    <h1>What</h1>
+                </header>
+                <div class="pages">
+                   
+                    <div class="panel active" id="rightNav" data-title="Foobar">
+                        This is the right nav
+                    </div>
+                </div>               
+            </div>
+        </nav>
+    </div>
+
+    <div class="view" id="touchView">
+        <header><h1></h1></header>
+        <div class="pages">
+            <div class="panel" data-title="touch events" id="touchevents" data-include="partials/touch.html">
+            </div>
+        </div>
+    </div>
+    <div class="view" id="aboutView">
+        <header>
+            <h1>Bar</h1>
+        </header>
+        <div class="pages">
+            <div class="panel" id="about" data-title="Bar">
+                About
+            </div>
+        </div>
+        <footer>
+            <a href="#" class="icon home" data-back >Home</a>
+            <a href="#test" class="icon home">Test</a>
+        </footer>
+    </div>
+
+    <div class="view" id="testView">
+        <header>
+            <h1>Bar</h1>
+        </header>
+        
+        <div class="pages">
+            <div class="panel" id="test" data-title="Test Tabbar">
+                About
+            </div>
+        </div>
+        <footer>
+            <a class="button" href="#main">Something</a>
+        </footer>
+    </div>
+
+    <div class="view" id="loginView">
+        <div class="pages">
+            <div class="panel" id="login">
+                <h1>Login</h1>
+                <div style="height:300px">
+                    
+                </div>
+                <label>Test<input type="text" placeholder="Username">
+                        <br>
+                <a class='button' href='#' data-message='Hi There' data-alert>Alert</a>                
+                <a class='button' href='#main' data-transition='up-reveal:dismiss'>Back</a> 
+                <div style="height:300px;background:green;">
+                    asdf    
+                </div>
+                more stuff
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

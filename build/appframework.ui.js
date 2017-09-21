@@ -1,4 +1,4 @@
-/*! intel-appframework - v3.0.0 - 2014-10-16 */
+/*! intel-appframework - v3.0.0 - 2016-03-26 */
 
 /**
  * af.shim.js
@@ -87,12 +87,13 @@
     });
     function detectUA($, userAgent) {
         $.os = {};
+
         $.os.webkit = userAgent.match(/WebKit\/([\d.]+)/) ? true : false;
         $.os.android = userAgent.match(/(Android)\s+([\d.]+)/) || userAgent.match(/Silk-Accelerated/) ? true : false;
         $.os.androidICS = $.os.android && userAgent.match(/(Android)\s4/) ? true : false;
         $.os.ipad = userAgent.match(/(iPad).*OS\s([\d_]+)/) ? true : false;
         $.os.iphone = !$.os.ipad && userAgent.match(/(iPhone\sOS)\s([\d_]+)/) ? true : false;
-        $.os.ios7 = ($.os.ipad||$.os.iphone)&&(userAgent.match(/7_/)||userAgent.match(/8_/)) ? true : false;
+        $.os.ios7 = ($.os.ipad||$.os.iphone);
         $.os.webos = userAgent.match(/(webOS|hpwOS)[\s\/]([\d.]+)/) ? true : false;
         $.os.touchpad = $.os.webos && userAgent.match(/TouchPad/) ? true : false;
         $.os.ios = $.os.ipad || $.os.iphone;
@@ -109,12 +110,26 @@
         $.os.kindle=userAgent.match(/Silk-Accelerated/)?true:false;
         //features
         $.feat = {};
-        $.feat.cssPrefix = $.os.webkit ? "Webkit" : $.os.fennec ? "Moz" : $.os.ie ? "ms" : $.os.opera ? "O" : "";
+
         $.feat.cssTransformStart = !$.os.opera ? "3d(" : "(";
         $.feat.cssTransformEnd = !$.os.opera ? ",0)" : ")";
-
         if ($.os.android && !$.os.webkit)
             $.os.android = false;
+
+
+        //IE tries to be webkit
+        if(userAgent.match(/IEMobile/i)){
+            $.each($.os,function(ind){
+                $.os[ind]=false;
+            });
+            $.os.ie=true;
+            $.os.ieTouch=true;
+        }
+        var items=["Webkit","Moz","ms","O"];
+        for(var j=0;j<items.length;j++){
+            if(document.documentElement.style[items[j]+"Transform"]==="")
+                $.feat.cssPrefix=items[j];
+        }
 
     }
 
@@ -305,6 +320,8 @@ window.af=window.jq=jQuery;
 /* global FastClick*/
 
  /* jshint camelcase:false*/
+
+
 (function($) {
     "use strict";
     var startPath = window.location.pathname + window.location.search;
@@ -365,9 +382,14 @@ window.af=window.jq=jQuery;
             if (id === "" && that.history.length === 1) //Fix going back to first panel and an empty hash
                 id = "#" + that.firstPanel.id;
             if (id === "") return;
-            if (af(id).filter(".panel").length === 0) return;
-
-            if (id !== "#" + that.activeDiv.id) that.goBack();
+            if ($(id).filter(".panel").length === 0) return;
+            if (id !== "#" + that.activeDiv.id) {
+                //Make a custom event object for goBack
+                var evt = {
+                    "target" : $(id)
+                };
+                that.goBack(evt);
+            }
 
         }, false);
 
@@ -379,6 +401,7 @@ window.af=window.jq=jQuery;
         function setupCustomTheme() {
 
             if (that.useOSThemes) {
+
                 var $el=$(document.body);
                 $el.removeClass("ios ios7 win8 tizen bb android light dark firefox");
                 if ($.os.android)
@@ -410,6 +433,7 @@ window.af=window.jq=jQuery;
     AFUi.prototype = {
         init:false,
         showLoading: true,
+        showingMask: false,
         loadingText: "Loading Content",
         remotePages: {},
         history: [],
@@ -428,6 +452,7 @@ window.af=window.jq=jQuery;
         overlayStatusbar: false,
         useAutoPressed: true,
         useInternalRouting:true,
+        backButtonText: "Back",
         autoBoot: function() {
             this.hasLaunched = true;
             if (this.autoLaunch) {
@@ -439,6 +464,7 @@ window.af=window.jq=jQuery;
          * @api private
          */
         blockPageBounce:function(enable){
+            if(!$.os.ios) return;
             if(enable===false){
                 window.removeEventListener("touchmove",this.handlePageBounce,false);
                 window.removeEventListener("touchstart",this.handlePageBounce,false);
@@ -667,27 +693,39 @@ window.af=window.jq=jQuery;
          */
         goBack: function(e) {
             //find the view
-            var view=$(this.activeDiv).closest(".view");
-            if(e&&e.target)
-                view=$(e.target).closest(".view");
+            var isSameView = true;
+            var currentView=$(this.activeDiv).closest(".view");
+            var targetView=currentView;
+            if(e&&e.target) {
+                targetView=$(e.target).closest(".view");
+                isSameView = targetView.prop("id") === (currentView.prop("id"));
+            }
 
-            if(view.length===0) return;
+            if(targetView.length===0) return;
 
             //history entry
-            if(!this.views[view.prop("id")]) return;
-            var hist=this.views[view.prop("id")];
+            if(!this.views[targetView.prop("id")]) return;
+            var hist=this.views[targetView.prop("id")];
 
             if(hist.length===0) return;
             var item=hist.pop();
-
+            //If not in same view, just push back to keep last states
+            if (!isSameView) {
+                hist.push(item);
+            }
             if(item.length===0) return;
             if(hist.length>0){
-
-                var toTarget=hist[hist.length-1].target;
-                if(!toTarget||item.target===toTarget) return;
-                this.runTransition(item.transition,item.target,toTarget,true);
-                this.loadContentData(toTarget,view,true);
-
+                var toTarget = hist[hist.length-1].target;
+                if(!toTarget) return;
+                if(isSameView && (item.target===toTarget)) return;
+                if (!isSameView) {
+                    this.clearHistory(); //Clear current view history
+                    this.runViewTransition(this.transitionType, targetView, currentView, item.target, true);
+                }
+                else {
+                    this.runTransition(item.transition, item.target, toTarget, true);
+                }
+                this.loadContentData(toTarget, targetView, true);
                 this.updateHash(toTarget.id);
             }
             else {
@@ -779,7 +817,7 @@ window.af=window.jq=jQuery;
         * @title $.afui.setBackButtonText(title)
         */
         setBackButtonText:function(text){
-            $(this.activeDiv).parent().find("header .backButton").html(text);
+            $(this.activeDiv).closest(".view").find("header .backButton").html(text);
         },
         /**
          * Set the title of the active header from
@@ -818,13 +856,13 @@ window.af=window.jq=jQuery;
          /**
          * Set the visibility of the back button for the current header
          ```
-         $.afui.setBackButtonVisbility(true)
+         $.afui.setBackButtonVisibility(true)
          ```
          * @param {boolean} Boolean to set the visibility. true show, false hide
-         * @title $.afui.setBackButtonVisbility
+         * @title $.afui.setBackButtonVisibility
          */
         setBackButtonVisibility:function(what){
-            var visibility=what?"visibile":"hidden";
+            var visibility=what?"visible":"hidden";
             $(this.activeDiv).closest(".view").children("header").find(".backButton").css("visibility",visibility);
         },
 
@@ -840,7 +878,7 @@ window.af=window.jq=jQuery;
          * @param {string} target
          * @param {string} value
          * @param {string=} position
-         * @param {(string=|object)} color Color or CSS hash
+         * @param {string=} color Color or CSS hash
          * @title $.afui.updateBadge(target,value,[position],[color])
          */
         updateBadge: function(target, value, position, color) {
@@ -891,10 +929,20 @@ window.af=window.jq=jQuery;
          * @param {string=} text
          * @title $.afui.showMask(text);
          */
-        showMask: function(text) {
+        showMask: function(text, value) {
             if (!text) text = this.loadingText || "";
+            if (!value || typeof value !== "number") timeout = 15000;
             $.query("#afui_mask>h1").html(text);
             $.query("#afui_mask").show();
+            this.showingMask = true;
+
+            var self = this;
+            //set another timeout to auto-hide the mask if something goes wrong, default is 15 sec
+            setTimeout(function() {
+                if(self.showingMask) {
+                    self.hideMask();
+                }
+            }, value);
         },
         /**
          * Hide the loading mask
@@ -905,6 +953,7 @@ window.af=window.jq=jQuery;
          */
         hideMask: function() {
             $.query("#afui_mask").hide();
+            this.showingMask = false;
         },
         /**
          * @api private
@@ -937,7 +986,7 @@ window.af=window.jq=jQuery;
             if (this.doingTransition) {
                 return;
             }
-
+            anchor = anchor || document.createElement("a"); //Hack to allow passing in no anchor
             if (target.length === 0) return;
             if(target.indexOf("#")!==-1){
                 this.loadDiv(target, newView, back, transition,anchor);
@@ -960,15 +1009,19 @@ window.af=window.jq=jQuery;
          */
         loadDiv: function(target, newView, back, transition,anchor) {
             // load a div
-            var newDiv = target.replace("#", "");
+            var newDiv = target;
 
+            var hashIndex = newDiv.indexOf("#");
             var slashIndex = newDiv.indexOf("/");
-            var hashLink = "";
-            if (slashIndex !== -1) {
-                // Ignore everything after the slash for loading
-                hashLink = newDiv.substr(slashIndex);
-                newDiv = newDiv.substr(0, slashIndex);
+            if ((slashIndex !== -1)&&(hashIndex !== -1)) {
+                //Ignore everything after the slash in the hash part of a URL
+                //For example: app.com/#panelid/option1/option2  will become -> app.com/#panelid
+                //For example: app.com/path/path2/path3  will still be -> app.com/path/path2/path3
+                if (slashIndex > hashIndex) {
+                    newDiv = newDiv.substr(0, slashIndex);
+                }
             }
+            newDiv = newDiv.replace("#", "");
 
             newDiv = $.query("#" + newDiv).get(0);
             if (!newDiv) {
@@ -1009,7 +1062,7 @@ window.af=window.jq=jQuery;
             var isNewView=false;
             //check nested views
             if(!isSplitViewParent)
-                isSplitViewParent=currentView.parent().closest('.view').length===1;
+                isSplitViewParent=currentView.parent().closest(".view").length===1;
 
             if(isSplitViewParent&&currentView&&currentView.get(0)!==view.get(0))
                 $(currentView).trigger("nestedviewunload");
@@ -1080,11 +1133,26 @@ window.af=window.jq=jQuery;
          @title $.afui.setActiveTab
          */
         setActiveTab:function(ele,view){
-            var hash;
+            var elementId;
             if(typeof(ele)!=="string")
-                hash=$(ele).prop("id");
-            hash="#"+hash;
-            view.find("footer").find("a").removeClass("pressed").attr("data-ignore-pressed","true").filter("[href='"+hash+"']").addClass("pressed");
+                elementId=$(ele).prop("id");
+            /*
+            Check if an item exists:
+            Note that footer hrefs' may point to elements preceded by a # when trying to load a div (f.ex.: <footer><a href="#panelId">).
+            But in some other cases footer hrefs' may point to elements not preceded by a #
+                F.ex.: <footer><a href="ajaxRequest"> when doing ajax calls
+                F.ex.: <footer><a href="listX/itemY"> when using pushState routers - read more here: https://github.com/01org/appframework/issues/837
+            We check whether an item exists including both options here (note the &&):
+            */
+            if((view.find("footer").find("a").filter("[href='"+elementId+"']").length===0)&&(view.find("footer").find("a").filter("[href='#"+elementId+"']").length===0)) return;
+            var tmp = view.find("footer").find("a").removeClass("pressed").attr("data-ignore-pressed","true");
+            /*
+            Now we need to activate the elementId. We have to do this twice again. Once in case of loading a div using AF's router and once again in case of pushState routers or loading Ajax.
+            */
+            //In case of an Ajax call or if using a pushState router:
+            tmp.filter("[href='"+elementId+"']").addClass("pressed");
+            //In case of an loading a div with AF's internal router:
+            tmp.filter("[href='#"+elementId+"']").addClass("pressed");
         },
 
          /**
@@ -1104,7 +1172,7 @@ window.af=window.jq=jQuery;
             if(items>=2&&isNewView!==true){
                 //Add the back button if it's not there
                 if(hdr.find(".backButton").length===1) return;
-                hdr.prepend("<a class='backButton back'>Back</a>");
+                hdr.prepend("<a class='backButton back'>" + this.backButtonText + "</a>");
             }
             else {
                 hdr.find(".backButton").remove();
@@ -1146,7 +1214,12 @@ window.af=window.jq=jQuery;
             $.ajax(target).then(function(res){
                 var $res=$.create("div",{html:res});
                 if(!$res.hasClass(".panel")){
-                    $res=$res.attr("data-title",(target));
+                    if($(anchor).attr("data-title"))
+                        $res=$res.attr("data-title",anchor.getAttribute("data-title"));
+                    else if($(anchor).attr("title"))
+                        $res=$res.attr("data-title",anchor.getAttribute("title"));
+                    else
+                        $res=$res.attr("data-title",(target));
                     $res.prop("id",crc);
                     $res.addClass("panel");
                 }
@@ -1190,59 +1263,78 @@ window.af=window.jq=jQuery;
                 doPush=true;
             }
 
-
             $(show).css("zIndex","10");
             $(hide).css("zIndex","1");
             $(noTrans).css("zIndex","1").addClass("active");
 
             var from=$(hide).animation().remove(transition+"-in");
+            //Handle animating the reverse when there is one.
+            //In the push case, it's static and needs to stay available until
+            //the other view finishes animation.
             if(!doPush&&from){
-                if(back)
+                if(back) {
                     from.reverse();
+                }
                 from.end(function(){
                     if(!back){
                         this.classList.remove("active");
-                        $(this).trigger("panelunload");
+                        //If 'this' is view, then find active panel and remove active from it
+                        var tmpActive = $(this).find(".active").get(0);
+                        if (undefined !== tmpActive) {
+                            $(tmpActive).trigger("panelunload", [back]);
+                            tmpActive.classList.remove("active");
+                        }
+                        //Below trigger will be called when 'to animation' done
+                        //$(this).trigger("panelunload", [back]);
                     }
                     else{
-
                         this.classList.add("active");
-                        $(this).trigger("panelload");
+                        $(this).trigger("panelload", [back]);
                     }
                     that.doingTransition=false;
                 }).run(transition+"-out");
             }
-            else {
-                if(!back){
-                    $(hide).trigger("panelunload");
-                }
-                else{
-                    $(hide).trigger("panelload");
-                    $(hide).addClass("activeDiv");
-
-                }
-            }
 
             var to=$(show).animation().remove(transition+"-out");
-            if(back)
+            if(back) {
                 to.reverse();
+            }
             to.end(function(){
-                that.doingTransition=false;
-                if(!back){
 
+                that.doingTransition=false;
+                var tmpActive;
+                if(!back){
                     this.classList.add("active");
-                    $(this).trigger("panelload");
-                    $(noTrans).trigger("panelload");
+                    $(this).trigger("panelload", [back]);
+                    $(noTrans).trigger("panelload", [back]);
+
+                    //Previous panel needs to be hidden after animation
+                    //Fixes #850, #860, #873
+                    tmpActive = $(hide).find(".active").get(0);
+                    if (undefined !== tmpActive) {
+                        $(tmpActive).trigger("panelunload", [back]);
+                        tmpActive.classList.remove("active");
+
+                    }
+                    //fix #903
+                    //$(hide).trigger("panelunload", [back]);
                 }
                 else{
                     if(noTrans){
                         $(noTrans).css("zIndex","10");
-
                     }
-
                     this.classList.remove("active");
-                    $(this).trigger("panelunload");
+                    //If 'hide' is view, then find active panel and remove active from it
+                    tmpActive = $(this).find(".active").get(0);
+                    if (undefined !== tmpActive) {
+                        $(tmpActive).trigger("panelunload", [back]);
+                        tmpActive.classList.remove("active");
+                    }
+                    $(hide).trigger("panelload", [back]);
+                    $(hide).addClass("active");
+                    $(this).trigger("panelunload", [back]);
                 }
+
             }).run(transition+"-in");
         },
 
@@ -1258,7 +1350,6 @@ window.af=window.jq=jQuery;
             //find the active
 
             view.addClass("active");
-            //view.find(".panel").removeClass("active");
             $(newDiv).addClass("active");
 
             if(transition==="none"){
@@ -1266,6 +1357,12 @@ window.af=window.jq=jQuery;
 
                 setTimeout(function(){
                     active.removeClass("active");
+                    //Try to add the active class again (even though in most cases the class will already be set).
+                    //This solves an issue when swapping panels A->B->A by QUICKLY tapping footer buttons on slow devices.
+                    //Under these circumstances the timeout sometimes comes after the active classes to panels A and B have been set.
+                    //You may end up having no active panels (blank page).
+                    view.addClass("active");
+                    $(newDiv).addClass("active");
                 },50);
 
                 return;
@@ -1331,10 +1428,12 @@ window.af=window.jq=jQuery;
             //get first div, defer
 
             var first=$(".view[data-default='true']");
-            if(first.length===0)
+            if(first.length===0) {
                 first=$(".view").eq(0);
-            else
-                throw ("You need to create a view");
+
+                if(first.length===0)
+                    throw ("You need to create a view");
+            }
 
             first.addClass("active");
             //history
@@ -1381,7 +1480,10 @@ window.af=window.jq=jQuery;
                 }
             });
 
-            $(document).on("click", ".backButton, [data-back]", that.goBack.bind(that));
+            $(document).on("click", ".backButton, [data-back]", function() {
+                if(that.useInternalRouting)
+                    that.goBack(that);
+            });
             //Check for includes
 
             var items=$("[data-include]");
@@ -1428,6 +1530,11 @@ window.af=window.jq=jQuery;
         theTarget=theTarget||e.currentTarget;
         if (theTarget === document) {
             return;
+        }
+        var custom = (typeof $.afui.customClickHandler === "function") ? $.afui.customClickHandler : false;
+        if (custom !== false) {
+            if ($.afui.customClickHandler(theTarget.getAttribute("href"),e)) return e.preventDefault();
+
         }
 
         //this technique fails when considerable content exists inside anchor, should be recursive ?
@@ -1796,8 +1903,7 @@ window.af=window.jq=jQuery;
             if (touch.isDoubleTap) {
                 touch.el.trigger("doubleTap");
                 touch = {};
-            } else if (touch.x2 > 0 || touch.y2 > 0) {
-                (Math.abs(touch.x1 - touch.x2) > 30 || Math.abs(touch.y1 - touch.y2) > 30) &&
+            } else if ((touch.x2 > 0 || touch.y2 > 0) && (Math.abs(touch.x1 - touch.x2) > 30 || Math.abs(touch.y1 - touch.y2) > 30)) {
                 touch.el.trigger("swipe");
                 //touch.el.trigger("swipe" + (swipeDirection(touch.x1, touch.x2, touch.y1, touch.y2)), touch);
                 //@TODO - don't dispatch when you need to block it (scrolling areas)
@@ -1811,9 +1917,8 @@ window.af=window.jq=jQuery;
                 var swipe=touch.el.closest(swipeDir);
                 var scroller=touch.el.closest(scrollDir);
 
-                if((swipe.length===0||scroller.length===0)||swipe.find(scroller).length==0)
+                if((swipe.length===0||scroller.length===0)||swipe.find(scroller).length===0)
                 {
-
                     touch.el.trigger("swipe"+direction);
                 }
 
@@ -1924,10 +2029,10 @@ window.af=window.jq=jQuery;
 (function ($) {
     "use strict";
     $.fn.popup = function (opts) {
-        return new popup(this[0], opts);
+        return new Popup(this[0], opts);
     };
     var queue = [];
-    var popup = function (containerEl, opts) {
+    var Popup = function (containerEl, opts) {
 
         if (typeof containerEl === "string" || containerEl instanceof String) {
             this.container = document.getElementById(containerEl);
@@ -1972,7 +2077,7 @@ window.af=window.jq=jQuery;
 
     };
 
-    popup.prototype = {
+    Popup.prototype = {
         id: null,
         addCssClass: null,
         title: null,
@@ -2290,7 +2395,6 @@ window.af=window.jq=jQuery;
         return this;
     }
 
-    var isTransitioning=false;
     var transitionTypes = {
         push:function(elem,reverse,position){
             var item=$(elem).closest(".view").children().filter(":not(nav):not(aside)");
@@ -2317,6 +2421,7 @@ window.af=window.jq=jQuery;
     Drawer.prototype= {
         defaultTransition:"slide",
         defaultAnimation:"cover",
+        isTransitioning:false,
         autoHide:function(event){
             event.preventDefault();
             this.hide();
@@ -2482,8 +2587,10 @@ window.af=window.jq=jQuery;
         target=$(e.target).closest(".swipe-content");
 
         width=target.closest(".swipe-reveal").find(".swipe-hidden").width();
-        if($.getCssMatrix(e.target).e===0)
-            return ;
+        if ($(e.target).parents(".swipe-content").length===0) {
+            if($.getCssMatrix(e.target).e===0)
+                return ;
+        }
         pos=touch.x2+width;
         target.bind("touchmove",tracker);
         target.one("touchend",function(){
@@ -2546,7 +2653,7 @@ window.af=window.jq=jQuery;
      */
     var preventAllButInputs = function(event, target) {
         var tag = target.tagName.toUpperCase();
-        if (tag.indexOf("SELECT") > -1 || tag.indexOf("TEXTAREA") > -1 || tag.indexOf("INPUT") > -1) {
+        if (tag.indexOf("SELECT") > -1 || tag.indexOf("OPTION") > -1 || tag.indexOf("TEXTAREA") > -1 || tag.indexOf("INPUT") > -1) {
             return;
         }
         preventAll(event);
@@ -2801,4 +2908,102 @@ window.af=window.jq=jQuery;
         $(document.body).toast(opts);
     });
 
+})(jQuery);
+
+/**
+ * af.lockscreen - a lockscreen for html5 mobile apps
+ * Copyright 2015 - Intel
+ */
+ 
+/** global FastClick **/
+
+/** jshint camelcase:false **/
+
+
+(function($){
+    "use strict";
+
+    $.fn.lockScreen = function(opts) {
+        var tmp;
+        for (var i = 0; i < this.length; i++) {
+            tmp = new LockScreen(this[i], opts);
+        }
+        return this.length === 1 ? tmp : this;
+    };
+
+    var LockScreen = function (containerEl, opts) {
+        if (typeof(opts) === "object") {
+            for (var j in opts) {
+                this[j] = opts[j];
+            }
+        }
+    };
+    LockScreen.prototype= {
+        logo:"<div class='icon database big'></div>",
+        roundKeyboard:false,
+        validatePassword:function(){},
+        renderKeyboard:function(){
+            var html="";
+            for(var i=0;i<8;i=i+3){
+                html+="<div class='row'>";
+                for(var j=1;j<=3;j++){
+                    var num=i+j;
+                    html+="<div data-key='"+num+"'>"+num+"</div>";
+                }
+                html+="</div>";
+            }
+            html+="<div class='row'><div data-key='' class='grey blank'>&nbsp;</div><div data-key='0'>0</div><div data-key='delete' class='grey'><=</div></div>";
+            return html;
+        },
+        show: function () {
+            if(this.visible) return;
+            var logo=this.logo;
+            var container="<div class='content flexContainer'><div class='password'>"+logo+"<input maxlength=4 type='password' placeholder='****' disabled></div><div class='error'>Invalid Password</div></div>";
+            container+="<div class='keyboard flexContainer'>"+this.renderKeyboard()+"</div>";
+            var item=$("<div id='lockScreen'/>");
+            item.html(container);
+            if(this.roundKeyboard){
+                item.addClass("round");
+                item.find("input[type='password']").attr("placeholder",("◌◌◌◌"));
+            }
+            this.lockscreen=item;
+            $(document.body).append(item);
+            var pass=$("#lockScreen input[type='password']");
+            var self=this;
+            $(item).on("click",function(evt){
+                var target=$(evt.target);
+                if(target.length===0) return;
+                var key=target.attr("data-key");
+                if(!key) return;
+                if(key==="delete"){
+                    pass.val(pass.val().substring(0,pass.val().length-1));
+                    return;
+                }
+                var len=pass.val().length;
+
+                if(len<4)
+                    pass.val(pass.val()+key);
+                if(pass.val().length===4){
+                    if(self.validatePassword(pass.val()))
+                        self.hide();
+                    else {
+                        self.lockscreen.find(".error").css("visibility","visible");
+                        setTimeout(function(){
+                            self.lockscreen.find(".error").css("visibility","hidden");
+                            pass.val("");
+                        },1000);
+                    }
+                }
+            });
+            $(item).on("touchstart",function(evt){
+                $(evt.target).addClass("touched");
+            }).on("touchend",function(evt){
+                $(evt.target).removeClass("touched");
+            });
+        },
+        hide:function(){
+            if(this.lockscreen)
+                this.lockscreen.remove();
+        }
+    };
 })(jQuery);

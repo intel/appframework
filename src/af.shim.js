@@ -91,7 +91,7 @@
         $.os.androidICS = $.os.android && userAgent.match(/(Android)\s4/) ? true : false;
         $.os.ipad = userAgent.match(/(iPad).*OS\s([\d_]+)/) ? true : false;
         $.os.iphone = !$.os.ipad && userAgent.match(/(iPhone\sOS)\s([\d_]+)/) ? true : false;
-        $.os.ios7 = ($.os.ipad||$.os.iphone)&&(userAgent.match(/7_/)||userAgent.match(/8_/)) ? true : false;
+        $.os.ios7 = ($.os.ipad||$.os.iphone);
         $.os.webos = userAgent.match(/(webOS|hpwOS)[\s\/]([\d.]+)/) ? true : false;
         $.os.touchpad = $.os.webos && userAgent.match(/TouchPad/) ? true : false;
         $.os.ios = $.os.ipad || $.os.iphone;
